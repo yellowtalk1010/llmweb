@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+<!--<h2>WebSocket 测试</h2>-->
+<input type="text" id="msgInput" placeholder="输入">
+<button onclick="sendMessage()">发送</button>
+<pre id="chatBox"></pre>
+
+<script>
+    const socket = new WebSocket("ws://localhost:8080/ws");
+
+    socket.onopen = function () {
+        log("连接成功");
+    };
+
+    socket.onmessage = function (event) {
+        //log("收到消息: " + event.data);
+
+        document.getElementById("md-input").value = document.getElementById("md-input").value + event.data
+
+        const input = document.getElementById("md-input").value;
+        const html = marked.parse(input);
+        console.info(html)
+        document.getElementById("output").innerHTML = html;
+
+        // const chatBox = document.getElementById("llm").innerHTML;
+        //
+        //  const html = event.data
+        // //const html = marked.parse(event.data);
+        //
+        // console.log(event.data)
+        // console.log(html)
+        // document.getElementById("llm").innerHTML = document.getElementById("llm").innerHTML + "<span>" + html + "</span>";
+
+        // chatBox.innerHTML += `<span>${html} </span>`;
+        // chatBox.scrollLeft = chatBox.scrollWidth;
+    };
+
+    socket.onclose = function () {
+        log("连接关闭");
+    };
+
+    function sendMessage() {
+        const msg = document.getElementById("msgInput").value;
+        socket.send(msg);
+        log("发送: " + msg);
+    }
+
+    function log(msg) {
+        document.getElementById("chatBox").textContent += msg + "\n";
+    }
+</script>
+
+<textarea id="md-input" placeholder="输入 Markdown 内容..." hidden="hidden">
+</textarea>
+
+<div id = "output"  >
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markdown Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!--    <script src="marked.min.js"></script>-->
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        #output { border: 1px solid #ddd; padding: 15px; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+<h2>Markdown 渲染示例</h2>
+<textarea id="markdown" rows="10" cols="80"># Hello Markdown 👋
+
+这是 **加粗**、*斜体* 和 `代码`。
+
+- 项目1
+- 项目2
+
+[点击我](https://www.example.com)
+</textarea>
+<br>
+<button onclick="renderMarkdown()">渲染 Markdown</button>
+
+<h3>渲染结果：</h3>
+<div id="output"></div>
+
+<script>
+    function renderMarkdown() {
+        const input = document.getElementById("markdown").value;
+        const html = marked.parse(input);
+        console.info(html)
+        document.getElementById("output").innerHTML = html;
+    }
+
+    // 自动渲染初始内容
+    renderMarkdown();
+</script>
+</body>
+</html>
