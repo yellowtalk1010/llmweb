@@ -47,15 +47,34 @@ public class SocketTest {
 
         LLMSocket.init();
 
+//        FileUtils.readLines(new File("src/test/resources/socketInfo.log"), "UTF-8")
+//                .forEach(line -> {
+//                    try {
+//                        line = line.trim();
+//                        if(StringUtils.isNotEmpty(line) && line.startsWith("_handleLine:")){
+//                            line = line.substring("_handleLine:".length());
+//                            System.out.println(line);
+//
+//                            LLMSocket.writer.write(line + "\r\n");
+//                            LLMSocket.writer.flush();
+//                            Thread.sleep(2000);
+//                        }
+//                    }
+//                    catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                });
+
         for(String line: getStr().split("\n")){
             line = line.trim();
             if(StringUtils.isNotEmpty(line) && line.startsWith("_handleLine:")){
                 line = line.substring("_handleLine:".length());
-                System.out.println(line);
+                System.out.println("发送：" + line);
 
                 LLMSocket.writer.write(line + "\r\n");
                 LLMSocket.writer.flush();
-                Thread.sleep(200);
+                Thread.sleep(2000);
             }
         }
 
@@ -64,10 +83,20 @@ public class SocketTest {
 
 
     private static String getStr() {
-        return """
+        String str =  """
                 _handleLine:{"messageId":"aee25250-ea5d-426a-80f6-1f2bef0f84de","messageType":"llm/streamChat","data":{"completionOptions":{},"title":"DeepSeek Coder (1)","messages":[{"role":"system","content":"\\u003cimportant_rules\\u003e\\n  Always include the language and file name in the info string when you write code blocks. If you are editing \\"src/main.py\\" for example, your code block should start with \\u0027```python src/main.py\\u0027.\\n\\u003c/important_rules\\u003e"},{"role":"user","content":[{"type":"text","text":"\\n\\n```java SocketTest.java (40-40)\\nThread.sleep(200);\\n```\\n什么意思？"}]},{"role":"assistant","content":""}]}}
                 
                 """;
+
+        str =  """
+
+                _handleLine:{"messageId":"8c1106de-1ffd-44a1-a547-7023817d247c","messageType":"config/getSerializedProfileInfo"}
+                
+                
+                _handleLine:{"messageId":"da2d76c6-474a-4308-9def-810ec626b558","messageType":"llm/streamChat","data":{"completionOptions":{},"title":"DeepSeek Coder","messages":[{"role":"system","content":"\\u003cimportant_rules\\u003e\\n  Always include the language and file name in the info string when you write code blocks. If you are editing \\"src/main.py\\" for example, your code block should start with \\u0027```python src/main.py\\u0027.\\n\\u003c/important_rules\\u003e"},{"role":"user","content":[{"type":"text","text":"hello"}]},{"role":"assistant","content":""}]}}
+                """;
+
+        return str;
     }
 
     /***

@@ -35,6 +35,7 @@ public class LLMSocket {
                         while (true) {
                             try {
                                 String line = reader.readLine();
+                                System.out.println("接收到：" + line);
                                 if(line!=null && StringUtils.isNotEmpty(line)){
                                     try {
                                         LLMReponse llmReponse = JSONObject.parseObject(line, LLMReponse.class);
