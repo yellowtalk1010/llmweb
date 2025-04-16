@@ -56,8 +56,7 @@ public class SourceCodeUtil {
                         + dto.getLine() + "/" + dto.getVtId() + "/" + dto.getRule() + "/" + dto.getDefectLevel() + "/" + dto.getDefectType() + "/" + "<br>"
                         + dto.getRuleDesc() + "<br>"
                         + dto.getIssueDesc() + "<br>"
-//                        + "<button class='btn'>AI审计</button>" + "<br>"
-                        + "<a class='btn' id='"+dto.getId()+"'>AI审计</a>"
+//                        + "<a class='btn' id='"+dto.getId()+"'>AI审计</a>"
                         + "</div>";
                 newLines.add(index, divStr);
                 insertTime++;
