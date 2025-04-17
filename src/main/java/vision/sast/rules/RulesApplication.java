@@ -65,16 +65,6 @@ public class RulesApplication {
                 FileUtils.readLines(file, Charset.forName("utf-8")).stream().map(line->line+"\n").forEach(stringBuilder::append);
                 IssueResult issueResult = JSONObject.parseObject(stringBuilder.toString(), IssueResult.class);
 
-                String systemConstraintsPath = file.getParent() + File.separator + "system_constraint.json";
-                File systemConstraintsFile = new File(systemConstraintsPath);
-                System.out.println(systemConstraintsFile.getAbsolutePath() + "，" + systemConstraintsFile.exists());
-                if(systemConstraintsFile.exists()){
-                    StringBuilder sb = new StringBuilder();
-                    FileUtils.readLines(systemConstraintsFile, Charset.forName("utf-8")).stream().map(line->line+"\n").forEach(sb::append);
-                    IssueResult systemConstraintsIssueResult = JSONObject.parseObject(sb.toString(), IssueResult.class);
-                    issueResult.getResult().addAll(systemConstraintsIssueResult.getResult());
-                }
-
                 return issueResult;
             }
             catch (Exception e){
