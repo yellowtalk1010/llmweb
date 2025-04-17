@@ -60,13 +60,14 @@ public class RulesApplication {
         if(file!=null && file.exists()){
             try {
                 ISSUE_FILEPATH = file.getAbsolutePath().replaceAll("\\\\", "/");
-                System.out.println(ISSUE_FILEPATH);
+                System.out.println(ISSUE_FILEPATH + ", " + file.exists());
                 StringBuilder stringBuilder = new StringBuilder();
                 FileUtils.readLines(file, Charset.forName("utf-8")).stream().map(line->line+"\n").forEach(stringBuilder::append);
                 IssueResult issueResult = JSONObject.parseObject(stringBuilder.toString(), IssueResult.class);
 
                 String systemConstraintsPath = file.getParent() + File.separator + "system_constraint.json";
                 File systemConstraintsFile = new File(systemConstraintsPath);
+                System.out.println(systemConstraintsFile.getAbsolutePath() + "，" + systemConstraintsFile.exists());
                 if(systemConstraintsFile.exists()){
                     StringBuilder sb = new StringBuilder();
                     FileUtils.readLines(systemConstraintsFile, Charset.forName("utf-8")).stream().map(line->line+"\n").forEach(sb::append);

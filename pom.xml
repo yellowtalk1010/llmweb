@@ -94,6 +94,35 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+
+
+        <!-- DJL Core -->
+<!--        <dependency>-->
+<!--            <groupId>ai.djl</groupId>-->
+<!--            <artifactId>api</artifactId>-->
+<!--            <version>0.32.0</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; DJL Engine: PyTorch &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>ai.djl.pytorch</groupId>-->
+<!--            <artifactId>pytorch-engine</artifactId>-->
+<!--            <version>0.32.0</version>-->
+<!--        </dependency>-->
+
+        <!-- DJL HuggingFace Translations -->
+<!--        <dependency>-->
+<!--            <groupId>ai.djl.huggingface</groupId>-->
+<!--            <artifactId>huggingface</artifactId>-->
+<!--            <version>0.32.0</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/ai.djl.huggingface/tokenizers -->
+        <dependency>
+            <groupId>ai.djl.huggingface</groupId>
+            <artifactId>tokenizers</artifactId>
+            <version>0.32.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
