@@ -14,12 +14,14 @@ import java.util.stream.Collectors;
 @RestController
 public class RuleController {
 
-    //规则总数
+    //根据规则vtid统计规则总数
     public static List<String> vtidList;
+    //获取规则的基本信息，IssueDto中主要使用规则信息
     public static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
+    //获取规则vtid这种规则的总数
     public static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
 
-    //规则与issue集合关系
+    //规则与文件的关系集合关系
     public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
 
     public synchronized static void loadInitList() {
