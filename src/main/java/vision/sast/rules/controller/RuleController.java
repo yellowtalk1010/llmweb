@@ -40,14 +40,14 @@ public class RuleController {
     public String rules(){
         loadInitList();
         StringBuilder stringBuilder = new StringBuilder();
-        vtidList.stream().map(e->{
-            IssueDto dto = vtidIssueMap.get(e);
-            if(vtidIssueCountMap.get(e)==null){
-                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(e)).count();
-                vtidIssueCountMap.put(e, count);
+        vtidList.stream().map(vtid->{
+            IssueDto dto = vtidIssueMap.get(vtid);
+            if(vtidIssueCountMap.get(vtid)==null){
+                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
+                vtidIssueCountMap.put(vtid, count);
             }
-            long size = vtidIssueCountMap.get(e);
-            String str = "<a href='rule?vtid="+e+"'>"+e+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
+            long size = vtidIssueCountMap.get(vtid);
+            String str = "<a href='rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
             return str + "<br>";
         }).forEach(stringBuilder::append);
         return stringBuilder.toString();
