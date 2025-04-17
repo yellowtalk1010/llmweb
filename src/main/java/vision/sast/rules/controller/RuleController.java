@@ -15,21 +15,22 @@ import java.util.stream.Collectors;
 public class RuleController {
 
     //规则总数
-    public static List<String> ruleList;
-    public static Map<String, IssueDto> issueMap = new ConcurrentHashMap<>();
+    public static List<String> vtidList;
+    public static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
+    public static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
 
     //规则与issue集合关系
     public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
 
     public synchronized static void loadInitList() {
-        if(ruleList ==null){
+        if(vtidList ==null){
             Set<String> set = RulesApplication.ISSUE_RESULT.getResult().stream().map(dto->{
-                if(issueMap.get(dto.getVtId())==null){
-                    issueMap.put(dto.getVtId(), dto);
+                if(vtidIssueMap.get(dto.getVtId())==null){
+                    vtidIssueMap.put(dto.getVtId(), dto);
                 }
                 return dto.getVtId();
             }).collect(Collectors.toSet());
-            ruleList = set.stream().toList().stream().sorted().toList();
+            vtidList = set.stream().toList().stream().sorted().toList();
         }
     }
 
@@ -37,9 +38,14 @@ public class RuleController {
     public String rules(){
         loadInitList();
         StringBuilder stringBuilder = new StringBuilder();
-        ruleList.stream().map(e->{
-            IssueDto dto = issueMap.get(e);
-            String str = "<a href='rule?vtid="+e+"'>"+e+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "/" + dto.getRuleDesc();
+        vtidList.stream().map(e->{
+            IssueDto dto = vtidIssueMap.get(e);
+            if(vtidIssueCountMap.get(e)==null){
+                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(e)).count();
+                vtidIssueCountMap.put(e, count);
+            }
+            long size = vtidIssueCountMap.get(e);
+            String str = "<a href='rule?vtid="+e+"'>"+e+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
             return str + "<br>";
         }).forEach(stringBuilder::append);
         return stringBuilder.toString();
@@ -53,7 +59,7 @@ public class RuleController {
                     .stream().toList().stream().sorted().toList();
             vtidFilesMap.put(vtid, filepaths);
         }
-        IssueDto dto = issueMap.get(vtid);
+        IssueDto dto = vtidIssueMap.get(vtid);
         StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
         vtidFilesMap.get(vtid).stream().map(file->{
             int size = SourceCodeController.init(vtid, file);
