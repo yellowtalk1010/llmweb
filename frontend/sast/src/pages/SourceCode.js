@@ -4,12 +4,21 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
+import './resources/float_win.js'
+
 import '../float_window.css'
 import '../cpp.css'
 // import '../marked.min.js'
 // import '../float_window.js'
 
 function SourceCode() {
+
+  //引入网络js
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.async = true;
+  script.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
+  document.head.appendChild(script);    
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -48,6 +57,7 @@ function SourceCode() {
   return (
     <>
         <div id="SourceCode">
+
             <ol>
 
                 {sourceCodeData.list.map((line, index) => (
