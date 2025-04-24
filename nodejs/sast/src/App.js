@@ -2,8 +2,8 @@ import {Fragment, useState } from "react"
 
 import { BrowserRouter ,Routes,  Router, Route, Link  } from 'react-router-dom';
 
-import Page1 from './pages/Page1';
-import Page2 from "./pages/Page2";
+import Files from "./pages/Files";
+import Rules from "./pages/Rules";
 import IssueResultFile from "./pages/IssueResultFile"; //issue结果文件
 
 function App() {
@@ -48,8 +48,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<IssueResultFile />} />
-          <Route path="/pages/Page1" element={<Page1 />} />
-          <Route path="/pages/Page2" element={<Page2 />}/>
+          <Route path="/pages/Rules" element={<Rules />} />
+          <Route path="/pages/Files" element={<Files />}/>
         </Routes>
       </BrowserRouter>
     </div>
