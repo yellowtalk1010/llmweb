@@ -42,10 +42,8 @@ function MymainPage() {
       <br></br>
         issue 总数：{issueFileData.issueNum}
         <br></br>
-        
         {rulesPage}
         <br></br>
-        
         {rulesPage}
     </div>
   );
