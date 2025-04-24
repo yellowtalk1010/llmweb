@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -51,6 +49,28 @@ public class RuleController {
             return str + "<br>";
         }).forEach(stringBuilder::append);
         return stringBuilder.toString();
+    }
+
+    @GetMapping("rules_list")
+    public List<Map<String, Object>> rules_list(){
+        loadInitList();
+        List<Map<String, Object>> list = new ArrayList<>();
+        vtidList.stream().forEach(vtid->{
+            IssueDto dto = vtidIssueMap.get(vtid);
+            if(vtidIssueCountMap.get(vtid)==null){
+                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
+                vtidIssueCountMap.put(vtid, count);
+            }
+            long size = vtidIssueCountMap.get(vtid);
+            String str = "<a href='rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
+            Map<String, Object> map = new HashMap<>();
+            map.put("vtid", vtid);
+            map.put("defectLevel", dto.getDefectLevel());
+            map.put("size", size);
+            map.put("ruleDesc", dto.getRuleDesc());
+            list.add(map);
+        });
+        return list;
     }
 
     @GetMapping("rule")

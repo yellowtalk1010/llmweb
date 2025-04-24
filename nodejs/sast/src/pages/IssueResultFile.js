@@ -41,7 +41,7 @@ function IssueResultFile() {
       <br></br>
         issue 总数：{issueFileData.issueNum}
         <br></br>
-        {issueFileData.rulesPage}
+        {issueFileData.filesPage}
         <br></br>
         {issueFileData.rulesPage}
     </div>
