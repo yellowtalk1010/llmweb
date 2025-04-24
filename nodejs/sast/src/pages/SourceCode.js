@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
-
+import '../float_window.css'
 import '../cpp.css'
 import '../marked.min.js'
 // import './resources/float_window.js'
@@ -21,13 +21,11 @@ function SourceCode() {
   console.info(vtid)
   console.info(file)
 
-  const [ruleData, setRuleData] = useState({
+  const [sourceCodeData, setSourceCodeData] = useState({
     list:[],
-    defectLevel: '',
-    ruleDesc: '',
     status: 0
   })
-  if(ruleData.status==0){
+  if(sourceCodeData.status==0){
     fetch('/sourceCode_list?vtid='+vtid + '&file='+file, {
       method: 'GET',
       headers: {
@@ -40,8 +38,8 @@ function SourceCode() {
     }).then(data =>{
       console.log("rule_vtid 的数据")
       console.log(data)
-      setRuleData({
-        ...data,
+      setSourceCodeData({
+        list: data,
         status: 200
       })
     }).catch(e =>{
@@ -52,13 +50,18 @@ function SourceCode() {
   return (
     <>
         <div id="SourceCode">
-        
-            hello world.
-            <br></br>
-            {vtid}
-            <br></br>
-            {file}
+            <ol>
 
+                {sourceCodeData.list.map((line, index) => (
+                    <li
+                    key={index}
+                    dangerouslySetInnerHTML={{ __html: line }}
+                    />
+                ))}
+
+                
+
+            </ol>
         </div>
     </>
   );

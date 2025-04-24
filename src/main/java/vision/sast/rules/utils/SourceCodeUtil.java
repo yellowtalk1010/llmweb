@@ -83,28 +83,28 @@ public class SourceCodeUtil {
         List<String> newLines = lines.stream().map(line -> {
 //            line = StringEscapeUtils.escapeHtml4(line);
             line = highlighterUtil.highlightLine(line);
-            line = "<li>" + line + "</li>";
+//            line = "<li>" + line + "</li>";
 
             return line;
         }).collect(Collectors.toList());
 
 
-        int insertTime = 0;
-        for (IssueDto dto : sortedList) {
-            int line = dto.getLine();
-            int index = line + insertTime;
-            if (index > 0) {
-                String divStr = "<div style='background-color: pink'>"
-                        + dto.getName() + "<br>"
-                        + dto.getLine() + "/" + dto.getVtId() + "/" + dto.getRule() + "/" + dto.getDefectLevel() + "/" + dto.getDefectType() + "/" + "<br>"
-                        + dto.getRuleDesc() + "<br>"
-                        + dto.getIssueDesc() + "<br>"
-                        + "<a class='btn' id='" + dto.getId() + "'>AI审计</a>"
-                        + "</div>";
-                newLines.add(index, divStr);
-                insertTime++;
-            }
-        }
+//        int insertTime = 0;
+//        for (IssueDto dto : sortedList) {
+//            int line = dto.getLine();
+//            int index = line + insertTime;
+//            if (index > 0) {
+//                String divStr = "<div style='background-color: pink'>"
+//                        + dto.getName() + "<br>"
+//                        + dto.getLine() + "/" + dto.getVtId() + "/" + dto.getRule() + "/" + dto.getDefectLevel() + "/" + dto.getDefectType() + "/" + "<br>"
+//                        + dto.getRuleDesc() + "<br>"
+//                        + dto.getIssueDesc() + "<br>"
+//                        + "<a class='btn' id='" + dto.getId() + "'>AI审计</a>"
+//                        + "</div>";
+//                newLines.add(index, divStr);
+//                insertTime++;
+//            }
+//        }
         return newLines;
     }
 }
