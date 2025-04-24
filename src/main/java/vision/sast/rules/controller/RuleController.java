@@ -62,7 +62,6 @@ public class RuleController {
                 vtidIssueCountMap.put(vtid, count);
             }
             long size = vtidIssueCountMap.get(vtid);
-            String str = "<a href='rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
             Map<String, Object> map = new HashMap<>();
             map.put("vtid", vtid);
             map.put("defectLevel", dto.getDefectLevel());
