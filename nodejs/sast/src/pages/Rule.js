@@ -40,7 +40,7 @@ function Rule() {
   }
 
   return (
-    <div id="rules">
+    <div id="rule">
       
       <ul>
         <li>{ruleData.defectLevel}/{ruleData.ruleDesc}</li>
