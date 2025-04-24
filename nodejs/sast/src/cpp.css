@@ -3,6 +3,11 @@ li {
     margin-bottom: 0px;
 }
 
+.token {
+    white-space: pre;
+}
+  
+
 span {
     color: black;
 
