@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import vision.sast.rules.dto.IssueResult;
 import vision.sast.rules.utils.PropertiesKey;
 
@@ -12,6 +13,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 
 @SpringBootApplication
+@ComponentScan(basePackages = "vision.sast")
 public class RulesApplication {
 
     public static String ISSUE_FILEPATH;
