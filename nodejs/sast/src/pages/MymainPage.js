@@ -5,10 +5,10 @@ function MymainPage() {
   const navigate = useNavigate();
 
   const [issueFileData, setIssueFileData] = useState({
-    issueResultFilePath: 'loading',
-    issueNum: '',
-    rulesPage: '',
-    filesPage: ''
+    issueResultFilePath: 'loading', //加载的issue文件路径
+    issueNum: '', //issue个数
+    rulesPage: '', //规则集跳转
+    filesPage: '' //文件集跳转
   })
 
   if(issueFileData.issueNum==''){
