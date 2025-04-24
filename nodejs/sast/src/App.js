@@ -48,7 +48,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<IssueResultFile />} />
+          
           <Route path="/pages/Rules" element={<Rules />} />
+          <Route path="/pages/Rule" element={<Rule />} />
+
           <Route path="/pages/Files" element={<Files />}/>
         </Routes>
       </BrowserRouter>
