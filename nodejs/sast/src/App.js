@@ -1,23 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import { 
+  // Fragment,
+   useState } from "react"
+
+// import axios from 'axios';
+
 
 function App() {
+
+  const [data, setData] = useState({
+    title: '默认标题',
+    content: '默认内容'
+  })
+  function handleClick(event){
+
+    fetch('/get', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((response) => {
+      console.info(response)
+    }).catch((error) => {
+      console.error(error)
+    })
+ 
+
+    console.info(event)
+
+    setData({
+      ...data,
+      title: "新标题"
+    })
+  }
+
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" >
+      
+      {data.title}-{data.content}
+      <button onClick={handleClick}>按钮</button>
     </div>
   );
 }
