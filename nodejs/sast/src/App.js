@@ -6,6 +6,7 @@ import Files from "./pages/Files";
 import Rules from "./pages/Rules";
 import Rule from "./pages/Rule";
 import IssueResultFile from "./pages/IssueResultFile"; //issue结果文件
+import SourceCode from "./pages/SourceCode"
 
 function App() {
 
@@ -54,6 +55,8 @@ function App() {
           <Route path="/pages/Rule" element={<Rule />} />
 
           <Route path="/pages/Files" element={<Files />}/>
+
+          <Route path="/pages/SourceCode" element={<SourceCode />} />
         </Routes>
       </BrowserRouter>
     </div>
