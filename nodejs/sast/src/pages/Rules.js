@@ -29,12 +29,10 @@ function Rules() {
 
   return (
     <div id="rules">
-      <h1>规则集</h1>
-
       <ul>
         {rulesData.list.map((rule, index) => (
           <li>
-          <a href={`rule?vtid=${rule.vtid}`}>{rule.vtid}</a> &nbsp;&nbsp;&nbsp;{rule.defectLevel}-{rule.size}&nbsp;/&nbsp;{rule.ruleDesc}<br></br>
+            <a href={`rule?vtid=${rule.vtid}`}>{rule.vtid}</a> &nbsp;&nbsp;&nbsp;{rule.defectLevel}-{rule.size}&nbsp;/&nbsp;{rule.ruleDesc}
           </li>
         ))}
       </ul>
