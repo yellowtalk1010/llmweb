@@ -9,6 +9,7 @@ import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.PropertiesKey;
 import vision.sast.rules.utils.SourceCodeUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,6 +64,41 @@ public class SourceCodeController {
         }
         else {
             return "null";
+        }
+
+    }
+
+    @GetMapping("sourceCode_list")
+    public synchronized List<String> sourceCode_list(String vtid, String file) {
+        if (vtid != null && file != null) {
+            try {
+                int size = init(vtid, file);
+                String key = getKey(vtid, file);
+                List<IssueDto> issueDtos = issuesMap.get(key);
+                List<String> line = SourceCodeUtil.show1(file, issueDtos);
+
+//                html = "<html>" +
+//                        "<head>" +
+//                        "<link rel='stylesheet' href='cpp.css'>" +
+//                        "<link rel='stylesheet' href='float_window.css'>" +
+//                        "<script src='float_window.js'></script>" +
+//                        "<script src='https://cdn.jsdelivr.net/npm/marked/marked.min.js'></script>" +
+//                        "</head>" +
+//                        "<body>" +
+//                        "<a href='highLight?file=" + file + "'>源代码</a><br>" +
+//                        "<pre><code class='language-cpp'>" +
+//                        html +
+//                        "</code></pre>" +
+//                        "</body>" +
+//                        "</html>";
+                return line;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return new ArrayList<>();
+            }
+        }
+        else {
+            return new ArrayList<>();
         }
 
     }

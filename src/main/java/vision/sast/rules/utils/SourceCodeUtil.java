@@ -72,4 +72,39 @@ public class SourceCodeUtil {
         sb.append("</ol>");
         return sb.toString();
     }
+
+    public static List<String> show1(String fileName, List<IssueDto> dtoList) throws Exception {
+
+        System.out.println("fileName = " + fileName + ", dtoList = " + dtoList.size());
+        List<IssueDto> sortedList = dtoList.stream().sorted(Comparator.comparing(IssueDto::getLine)).toList();
+
+        List<String> lines = openFile(fileName);
+        HighLightUtil highlighterUtil = new HighLightUtil();
+        List<String> newLines = lines.stream().map(line -> {
+//            line = StringEscapeUtils.escapeHtml4(line);
+            line = highlighterUtil.highlightLine(line);
+            line = "<li>" + line + "</li>";
+
+            return line;
+        }).collect(Collectors.toList());
+
+
+        int insertTime = 0;
+        for (IssueDto dto : sortedList) {
+            int line = dto.getLine();
+            int index = line + insertTime;
+            if (index > 0) {
+                String divStr = "<div style='background-color: pink'>"
+                        + dto.getName() + "<br>"
+                        + dto.getLine() + "/" + dto.getVtId() + "/" + dto.getRule() + "/" + dto.getDefectLevel() + "/" + dto.getDefectType() + "/" + "<br>"
+                        + dto.getRuleDesc() + "<br>"
+                        + dto.getIssueDesc() + "<br>"
+                        + "<a class='btn' id='" + dto.getId() + "'>AI审计</a>"
+                        + "</div>";
+                newLines.add(index, divStr);
+                insertTime++;
+            }
+        }
+        return newLines;
+    }
 }
