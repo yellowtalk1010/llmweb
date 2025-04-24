@@ -8,38 +8,38 @@ import MymainPage from "./pages/MymainPage";
 
 function App() {
 
-  const [data, setData] = useState({
-    title: '默认标题',
-    content: '默认内容'
-  })
-  function handleClick(event){
+  // const [data, setData] = useState({
+  //   title: '默认标题',
+  //   content: '默认内容'
+  // })
+  // function handleClick(event){
 
-    console.info(Page1)
+  //   console.info(Page1)
 
-    fetch('/get1', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(res =>{
-      // console.info(res.json)
-      return res.json();
-  }).then(data =>{
-      console.log("get请求的数据")
-      console.log(data)
-      console.log(data.name)
-  }).catch(e =>{
-      console.log(e)
-  })
+  //   fetch('/get1', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }).then(res =>{
+  //     // console.info(res.json)
+  //     return res.json();
+  // }).then(data =>{
+  //     console.log("get请求的数据")
+  //     console.log(data)
+  //     console.log(data.name)
+  // }).catch(e =>{
+  //     console.log(e)
+  // })
  
 
-    console.info(event)
+  //   console.info(event)
 
-    setData({
-      ...data,
-      title: "新标题"
-    })
-  }
+  //   setData({
+  //     ...data,
+  //     title: "新标题"
+  //   })
+  // }
 
   
 
