@@ -4,6 +4,7 @@ import { BrowserRouter ,Routes,  Router, Route, Link  } from 'react-router-dom';
 
 import Files from "./pages/Files";
 import Rules from "./pages/Rules";
+import Rule from "./pages/Rule";
 import IssueResultFile from "./pages/IssueResultFile"; //issue结果文件
 
 function App() {
