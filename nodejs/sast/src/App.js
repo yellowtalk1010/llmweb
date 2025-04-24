@@ -1,5 +1,11 @@
 import {Fragment, useState } from "react"
 
+import { BrowserRouter ,Routes,  Router, Route, Link  } from 'react-router-dom';
+
+import Page1 from './pages/Page1';
+import Page2 from "./pages/Page2";
+import MymainPage from "./pages/MymainPage";
+
 function App() {
 
   const [data, setData] = useState({
@@ -7,6 +13,8 @@ function App() {
     content: '默认内容'
   })
   function handleClick(event){
+
+    console.info(Page1)
 
     fetch('/get1', {
       method: 'GET',
@@ -37,9 +45,13 @@ function App() {
 
   return (
     <div className="App" >
-      
-      {data.title}-{data.content}
-      <button onClick={handleClick}>按钮</button>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MymainPage />} />
+          <Route path="/pages/Page1" element={<Page1 />} />
+          <Route path="/pages/Page2" element={<Page2 />}/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
