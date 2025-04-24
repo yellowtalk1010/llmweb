@@ -4,7 +4,7 @@ import { BrowserRouter ,Routes,  Router, Route, Link  } from 'react-router-dom';
 
 import Page1 from './pages/Page1';
 import Page2 from "./pages/Page2";
-import MymainPage from "./pages/MymainPage";
+import IssueResultFile from "./pages/IssueResultFile"; //issue结果文件
 
 function App() {
 
@@ -47,7 +47,7 @@ function App() {
     <div className="App" >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MymainPage />} />
+          <Route path="/" element={<IssueResultFile />} />
           <Route path="/pages/Page1" element={<Page1 />} />
           <Route path="/pages/Page2" element={<Page2 />}/>
         </Routes>
