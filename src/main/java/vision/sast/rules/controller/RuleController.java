@@ -90,4 +90,22 @@ public class RuleController {
         return stringBuilder.toString();
     }
 
+    @GetMapping("rule_vtid")
+    public String rule_vtid(String vtid){
+        if(vtidFilesMap.get(vtid)==null){
+            List<String> filepaths = RulesApplication.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
+                    .map(dto->dto.getFilePath()).collect(Collectors.toSet())
+                    .stream().toList().stream().sorted().toList();
+            vtidFilesMap.put(vtid, filepaths);
+        }
+        IssueDto dto = vtidIssueMap.get(vtid);
+        StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
+        vtidFilesMap.get(vtid).stream().map(file->{
+            int size = SourceCodeController.init(vtid, file);
+            String str = "<a href='sourceCode?vtid=" + vtid + "&file=" + file + "'>" + file + "</a> &nbsp;&nbsp;&nbsp;" + size;
+            return str + "<br>";
+        }).forEach(stringBuilder::append);
+        return stringBuilder.toString();
+    }
+
 }
