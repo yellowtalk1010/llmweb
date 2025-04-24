@@ -1,9 +1,4 @@
-import { 
-  // Fragment,
-   useState } from "react"
-
-// import axios from 'axios';
-
+import {Fragment, useState } from "react"
 
 function App() {
 
@@ -13,16 +8,21 @@ function App() {
   })
   function handleClick(event){
 
-    fetch('/get', {
+    fetch('/get1', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then((response) => {
-      console.info(response)
-    }).catch((error) => {
-      console.error(error)
-    })
+    }).then(res =>{
+      // console.info(res.json)
+      return res.json();
+  }).then(data =>{
+      console.log("get请求的数据")
+      console.log(data)
+      console.log(data.name)
+  }).catch(e =>{
+      console.log(e)
+  })
  
 
     console.info(event)

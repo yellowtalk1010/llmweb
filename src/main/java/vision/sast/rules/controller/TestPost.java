@@ -31,4 +31,14 @@ public class TestPost {
         return JSONObject.toJSONString(map);
     }
 
+    @GetMapping("get1")
+    public  Map get1(){
+        System.out.println("get");
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1);
+        map.put("name", "小王");
+        map.put("method", "get");
+        return map;
+    }
+
 }
