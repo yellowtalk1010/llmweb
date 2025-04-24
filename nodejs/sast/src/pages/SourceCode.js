@@ -6,11 +6,8 @@ import { useEffect } from 'react';
 
 import '../float_window.css'
 import '../cpp.css'
-import '../marked.min.js'
-import '../float_window.js'
-// import './resources/float_window.js'
-// import '../../public/resources/cpp.css'
-// import './resources/marked.min.js'
+// import '../marked.min.js'
+// import '../float_window.js'
 
 function SourceCode() {
 
