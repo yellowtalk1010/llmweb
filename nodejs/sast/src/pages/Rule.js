@@ -46,7 +46,7 @@ function Rule() {
         <li>{ruleData.defectLevel}/{ruleData.ruleDesc}</li>
         {ruleData.list.map((rule, index) => (
             <li>
-              <a href="sourceCode?vtid=SYSTEM_CONSTRAINTS_01&amp;file=D:/development/github/engine/standardCheckers/cj2000a/src/test/resources/cj2000a/Rule2.c">{rule.file}</a> &nbsp;&nbsp;&nbsp;{rule.size}
+              <a href={`sourceCode?vtid=${rule.vtid}&file=${rule.file}`}>{rule.file}</a> &nbsp;&nbsp;&nbsp;{rule.size}
             </li>
         ))}
       </ul>
