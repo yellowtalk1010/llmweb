@@ -1,12 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-function Rules() {
-  const navigate = useNavigate();
+function Rule() {
 
-  const [rulesData, setRulesData] = useState({list:[], status: 0})
-  if(rulesData.status==0){
-    fetch('/rule_vtid', {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const vtid = queryParams.get('vtid');
+
+  console.info(vtid)
+
+  const [ruleData, setRuleData] = useState({
+    list:[],
+    defectLevel: '',
+    ruleDesc: '',
+    status: 0
+  })
+  if(ruleData.status==0){
+    fetch('/rule_vtid?vtid='+vtid, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -16,10 +28,10 @@ function Rules() {
       // console.info(json)
       return json
     }).then(data =>{
-      console.log("rules_list的数据")
+      console.log("rule_vtid 的数据")
       console.log(data)
-      setRulesData({
-        list: data,
+      setRuleData({
+        ...data,
         status: 200
       })
     }).catch(e =>{
@@ -29,11 +41,12 @@ function Rules() {
 
   return (
     <div id="rules">
+      {ruleData.defectLevel}/{ruleData.ruleDesc}
       <ul>
-        {rulesData.list.map((rule, index) => (
-          <li>
-            <a href={`rule?vtid=${rule.vtid}`}>{rule.vtid}</a> &nbsp;&nbsp;&nbsp;{rule.defectLevel}-{rule.size}&nbsp;/&nbsp;{rule.ruleDesc}
-          </li>
+        {ruleData.list.map((rule, index) => (
+            <li>
+              <a href="sourceCode?vtid=SYSTEM_CONSTRAINTS_01&amp;file=D:/development/github/engine/standardCheckers/cj2000a/src/test/resources/cj2000a/Rule2.c">{rule.file}</a> &nbsp;&nbsp;&nbsp;{rule.size}
+            </li>
         ))}
       </ul>
 
@@ -41,4 +54,4 @@ function Rules() {
   );
 }
 
-export default Rules;
+export default Rule;
