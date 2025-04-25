@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Marked } from "marked"; 
 import React, { useRef } from 'react';
-import { ArcherContainer, ArcherElement } from 'react-archer';
+import { ArcherContainer, ArcherElement } from 'react-archer'; //用来自动化划线
  
 import '../float_window.css'
 import '../cpp.css' 
@@ -132,17 +132,17 @@ function SourceCode() {
     
   }
 
-  //
-  var lineRelations = []
-  function generateRelations(id){
-    lineRelations.push(id)
+  //自动装载划线
+  const [currentRelation, setCurrentRelation] = useState([]);
+  const generateRelations = (id) => {
+    currentRelation.forEach(item=>{
+      console.info(">>>>" + item)
+    })
     const relations = [];
-    if(lineRelations.length>1){
-      console.info("generateRelations,lineRelations=" + lineRelations)
-      
+    if(currentRelation.length>1){
       relations.push({
-        sourceId: lineRelations[1],
-        targetId: lineRelations[0],
+        sourceId: currentRelation[0],
+        targetId: currentRelation[1],
         sourceAnchor: 'bottom',
         targetAnchor: 'bottom',
         curve: 0.5
@@ -152,11 +152,15 @@ function SourceCode() {
     return relations
   }
 
-  function link(issueId, traceId, filePath){
-    if(issueId!=null && traceId!=null && issueId!=traceId){
-      console.info(issueId)
-      console.info(traceId)
-      console.info(filePath)
+  //触发划线功能
+  function link(fromId, toId, filePath){
+    if(fromId!=null && toId!=null && fromId!=toId){
+      var array = []
+      setCurrentRelation(array)
+      array.push(fromId)
+      array.push(toId)
+      setCurrentRelation(array)
+
     }
   }
 
