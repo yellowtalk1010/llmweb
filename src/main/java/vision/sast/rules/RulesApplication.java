@@ -1,16 +1,22 @@
 package vision.sast.rules;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import org.apache.commons.io.FileUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.IssueResult;
 import vision.sast.rules.utils.PropertiesKey;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "vision.sast")
@@ -66,6 +72,31 @@ public class RulesApplication {
                 StringBuilder stringBuilder = new StringBuilder();
                 FileUtils.readLines(file, Charset.forName("utf-8")).stream().map(line->line+"\n").forEach(stringBuilder::append);
                 IssueResult issueResult = JSONObject.parseObject(stringBuilder.toString(), IssueResult.class);
+
+                AtomicInteger count = new AtomicInteger();
+                Map<String, IssueDto> map = new HashMap<>();
+                issueResult.getResult().stream().forEach(issueDto -> {
+                    String key = issueDto.getVtId() + "/" + issueDto.getFilePath() + "/" + issueDto.getLine() + "/" + issueDto.getName();
+                    if(map.get(key)==null){
+                        map.put(key, issueDto);
+                    }
+                    else {
+                        System.out.println("issue重复位置:" + JSONObject.toJSONString(issueDto, JSONWriter.Feature.LargeObject));
+                    }
+                });
+                issueResult.getResult().stream().forEach(issueDto->{
+                    List<IssueDto.Trace> traces = issueDto.getTraces();
+                    traces.stream().forEach(trace -> {
+                        String key = issueDto.getVtId() + "/" + trace.getFile() + "/" + trace.getLine() + "/" + trace.getMessage();
+                        if(map.get(key)!=null){
+                            IssueDto dto = map.get(key);
+                            trace.setId(dto.getId()); //关联
+                        }
+                        else {
+                            System.out.println(issueDto.getVtId() + "，trace不存在位置:" + JSONObject.toJSONString(trace, JSONWriter.Feature.LargeObject));
+                        }
+                    });
+                });
 
                 return issueResult;
             }
