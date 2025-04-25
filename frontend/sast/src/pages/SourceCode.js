@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { Marked } from "marked"; 
 import React, { useRef } from 'react';
 
-import './resources/float_win.js'
+// import './resources/float_win.js'
 
 import '../float_window.css'
 import '../cpp.css'
@@ -103,6 +103,32 @@ import '../cpp.css'
 
 function SourceCode() {
 
+  var aiCheckIssueID = null
+  var socket = null;
+  if(socket==null){
+    socket = new WebSocket("ws://localhost:8080/ws");
+
+    socket.addEventListener('open', () => {
+        console.log('✅ WebSocket 连接已打开');
+    });
+
+    socket.addEventListener('error', (err) => {
+        console.error('❌ WebSocket 连接出错', err);
+    });
+
+    socket.onmessage = function (event) {
+      console.log("收到消息: " + event.data);
+      //将数据写入到隐藏输入框中
+      document.getElementById("textarea_hidden_" + aiCheckIssueID).value
+          = document.getElementById("textarea_hidden_" + aiCheckIssueID).value + event.data
+      const input = document.getElementById("textarea_hidden_" + aiCheckIssueID).value;
+      const markedInstance = new Marked();
+      const html = markedInstance.parse(input);
+      console.info("html:" + html)
+      document.getElementById("result_" + aiCheckIssueID).innerHTML = html;
+    };
+  }
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const vtid = queryParams.get('vtid');
@@ -141,8 +167,9 @@ function SourceCode() {
     
   }
   
-  function clickAiCheck(event) {
-
+  //打开悬浮窗口
+  function openAiCheck(event) {
+    console.info("打开悬浮窗口")
     const id = event.target.id
     console.info(id)
     var aiCheckDiv = document.getElementById("aiCheckId_" + id)
@@ -153,7 +180,10 @@ function SourceCode() {
     console.info("修改后class的值:" + aiCheckDiv.className)
   }
 
+  //关闭悬浮窗口
   function closeAiCheck(event){
+    aiCheckIssueID = null
+    console.info("关闭悬浮窗口")
     const closeBut = event.target
     console.info(closeBut)
 
@@ -162,7 +192,24 @@ function SourceCode() {
     console.info("修改前class的值:" + aiCheckDiv.className)
     aiCheckDiv.className = "aiCheck aiCheckHidden"
     console.info("修改后class的值:" + aiCheckDiv.className)
+  }
 
+  function aiCheck(id) {
+    console.info(id)
+    //获取多文本输入的内容部
+    const textareaDom = document.getElementById("textarea_" + id)
+    console.info(textareaDom)
+    const code = textareaDom.value
+    if(code==null || code.trim().length == 0){
+      alert("没有输入数据")
+    }
+    else{
+      aiCheckIssueID = id
+      const str = id + "#####---#####" + code  // ########## 后端切割符号
+      console.info(str)
+      socket.send(str);
+    }
+    
   }
 
 
@@ -180,18 +227,20 @@ function SourceCode() {
         </div>
         <div>{issue.ruleDesc}</div>
         <div>{issue.issueDesc}</div>
-        <a class="btn" onClick={clickAiCheck} id={issue.id}>AI审计</a>
+        <a class="btn" onClick={openAiCheck} id={issue.id}>AI审计</a>
         
         {/* 添加人工AI check交互框 */}
         <div id={"aiCheckId_" + issue.id} class="aiCheck aiCheckHidden">
-          <textarea placeholder="请输入..." rows="4" class="textarea"></textarea>
+          <textarea placeholder="请输入..." rows="4" class="textarea" id={"textarea_" + issue.id}></textarea>
           <br></br>
-          <button class="check-btn">审计</button> 
+          <button class="check-btn" onClick={()=>aiCheck(issue.id)}>审计</button> 
           <button class="close-btn" onClick={closeAiCheck}>关闭</button>
           <br></br>
-          <textarea class="textarea_hidden" id="textarea_hidden-${issueId}" hidden="hidden"></textarea>
+
+          {/* 隐藏的 textarea 用来转markdown格式 */}
+          <textarea class="textarea" id={"textarea_hidden_" + issue.id} hidden="hidden"></textarea>
           <br></br>
-          <div class="result" id="result-${issueId}"></div>
+          <div class="result" id={"result_" + issue.id}></div>
         </div>
 
       </div>
