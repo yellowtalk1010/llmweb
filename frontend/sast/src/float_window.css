@@ -33,7 +33,7 @@
     cursor: pointer;
 }
 
-.popup textarea {
+.textarea {
     width: 900px;
     height: 100px;
 }
