@@ -46,3 +46,11 @@
 .floatDiv {
     font-size: 12px;
 }
+
+.aiCheckShow {
+    display: block;
+}
+
+.aiCheckHidden {
+    display: none;
+}

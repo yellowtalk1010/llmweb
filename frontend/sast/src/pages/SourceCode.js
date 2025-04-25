@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Marked } from "marked"; 
+import React, { useRef } from 'react';
 
 import './resources/float_win.js'
 
@@ -107,8 +108,8 @@ function SourceCode() {
   const vtid = queryParams.get('vtid');
   const file = queryParams.get('file');
 
-  console.info(vtid)
-  console.info(file)
+  // console.info(vtid)
+  // console.info(file)
 
   const [sourceCodeData, setSourceCodeData] = useState({
     lines:[],
@@ -126,25 +127,44 @@ function SourceCode() {
       // console.info(json)
       return json
     }).then(data =>{
-      console.log("rule_vtid 的数据")
-      console.log(data)
+      // console.log("rule_vtid 的数据")
+      // console.log(data)
       setSourceCodeData({
         lines: data.lines,
         issues: data.issues,
         status: 200
       })
-      console.info("渲染完成后执行")
+      // console.info("渲染完成后执行")
     }).catch(e =>{
       console.log(e)
     })
     
   }
-
   
-  function clickAiCheck() {
-    console.log("点击了链接！");
-    alert("aaa")
+  function clickAiCheck(event) {
+
+    const id = event.target.id
+    console.info(id)
+    var aiCheckDiv = document.getElementById("aiCheckId_" + id)
+    console.info(aiCheckDiv)
+
+    console.info("修改前class的值:" + aiCheckDiv.className)
+    aiCheckDiv.className = 'aiCheck aiCheckShow';
+    console.info("修改后class的值:" + aiCheckDiv.className)
   }
+
+  function closeAiCheck(event){
+    const closeBut = event.target
+    console.info(closeBut)
+
+    const aiCheckDiv = closeBut.closest('div[class*="aiCheck"]');
+    console.info(aiCheckDiv)
+    console.info("修改前class的值:" + aiCheckDiv.className)
+    aiCheckDiv.className = "aiCheck aiCheckHidden"
+    console.info("修改后class的值:" + aiCheckDiv.className)
+
+  }
+
 
   //渲染issue列表
   function renderIssue1(lineIssues) {
@@ -160,7 +180,20 @@ function SourceCode() {
         </div>
         <div>{issue.ruleDesc}</div>
         <div>{issue.issueDesc}</div>
-        <button onClick={clickAiCheck} id={issue.id}>AI审计</button>
+        <a class="btn" onClick={clickAiCheck} id={issue.id}>AI审计</a>
+        
+        {/* 添加人工AI check交互框 */}
+        <div id={"aiCheckId_" + issue.id} class="aiCheck aiCheckHidden">
+          <textarea placeholder="请输入..." rows="4" class="textarea"></textarea>
+          <br></br>
+          <button class="check-btn">审计</button> 
+          <button class="close-btn" onClick={closeAiCheck}>关闭</button>
+          <br></br>
+          <textarea class="textarea_hidden" id="textarea_hidden-${issueId}" hidden="hidden"></textarea>
+          <br></br>
+          <div class="result" id="result-${issueId}"></div>
+        </div>
+
       </div>
     ));
   }
