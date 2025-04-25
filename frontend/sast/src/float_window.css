@@ -2,6 +2,7 @@
 * 悬浮窗口样式
 **/
 
+/* 闪烁动画 */
 @keyframes flash-border {
     0%   { border-color: red; }
     10%  { border-color: transparent; }
@@ -14,18 +15,12 @@
     80%  { border-color: red; }
     90%  { border-color: transparent; }
     100% { border-color: red; }
-    /* 0%   { border-color: greenyellow; }
-    25%  { border-color: transparent; }
-    50%  { border-color: greenyellow; }
-    75%  { border-color: transparent; }
-    100% { border-color: greenyellow; }  */
-  }
-  
+}
 
-  .flash-border {
-    border: 6px solid red;
-    animation: flash-border 6s ease-in-out;
-  }
+.flash-border {
+border: 6px solid red;
+animation: flash-border 6s ease-in-out;
+}
   
 
 
@@ -83,3 +78,4 @@
 .aiCheckHidden {
     display: none;
 }
+

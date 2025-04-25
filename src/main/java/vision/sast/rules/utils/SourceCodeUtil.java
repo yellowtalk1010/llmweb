@@ -94,4 +94,20 @@ public class SourceCodeUtil {
         Pair<List<String>, List<IssueDto>> pair = new ImmutablePair<>(newLines, sortedList);
         return pair;
     }
+
+    public static List<String> show2(String fileName) throws Exception {
+
+        System.out.println("fileName = " + fileName + "");
+        List<String> lines = openFile(fileName);
+        HighLightUtil highlighterUtil = new HighLightUtil();
+        AtomicInteger lineNumber = new AtomicInteger(1);
+        List<String> newLines = lines.stream().map(line -> {
+//            line = StringEscapeUtils.escapeHtml4(line);
+            line = highlighterUtil.highlightLine(line);
+            line = "<li id='otherfileline_" + lineNumber.getAndIncrement() + "'>" + line + "</li>";
+            return line;
+        }).collect(Collectors.toList());
+
+        return newLines;
+    }
 }

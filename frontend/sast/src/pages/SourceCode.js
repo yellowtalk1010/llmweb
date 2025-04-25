@@ -6,9 +6,11 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Marked } from "marked"; 
 import React, { useRef } from 'react';
+import { Rnd } from 'react-rnd';
  
 import '../float_window.css'
-import '../cpp.css' 
+import '../float_file.css'
+import '../cpp.css'
 
 function SourceCode() {
 
@@ -103,6 +105,7 @@ function SourceCode() {
     console.info("修改后class的值:" + aiCheckDiv.className)
   }
 
+  //执行AI check
   function aiCheck(id) {
 
     document.getElementById("textarea_hidden_" + id).value = ""
@@ -152,11 +155,84 @@ function SourceCode() {
         el.classList.remove('flash-border');
       }, 6000);
 
+
     }
-    else {
-      //打开一个新文件，展示在div中
+    else{
+      //不同文件中打开
+      // openFloatingFile()
     }
 
+    openFloatingFile(trace)
+      
+  }
+
+  const [otherSourceCodeData, setOtherSourceCodeData] = useState({
+    lines:[]
+  })
+  function openFloatingFile(trace){
+    const file = trace.file
+    //打开一个新文件，展示在div中
+    var floatingFileDom = document.getElementById("floating-file")
+    console.info(floatingFileDom)
+    floatingFileDom.classList.remove("floating-file-hidden")
+    floatingFileDom.classList.add("floating-file-show")
+
+    const filePath = document.getElementById("floating-file-name")
+    if(filePath=="" || filePath!=file){
+      setOtherSourceCodeData({
+        lines: [],
+        status: 200
+      })
+      document.getElementById("floating-file-name").innerText = file
+      //加载源文件
+      fetch('/otherSourceCode_list?file='+file, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res =>{
+        const json = res.json();
+        // console.info(json)
+        return json
+      }).then(data =>{
+        // console.log("rule_vtid 的数据")
+        console.log(data)
+        setOtherSourceCodeData({
+          lines: data,
+          status: 200
+        })
+        // console.info("渲染完成后执行")
+
+        console.info("otherfileline_" + trace.line)
+        const el = document.getElementById("otherfileline_" + trace.line)
+        if(!el){
+          console.info("null........")
+        }
+        console.info(el)
+        el.scrollIntoView({
+          behavior: 'smooth',      // 平滑滚动
+          block: 'center',         // 垂直方向：滚动到中间
+          inline: 'center'         // 水平方向：滚动到中间
+        });
+
+        el.classList.add('flash-border');
+
+        // 两秒后移除动画 class（避免永久保留）
+        setTimeout(() => {
+          el.classList.remove('flash-border');
+        }, 6000);
+
+      }).catch(e =>{
+        console.log(e)
+      })
+    }
+
+  }
+
+  function closeFloatingFile(event){
+    var floatingFileDom = document.getElementById("floating-file")
+    floatingFileDom.classList.remove("floating-file-show")
+    floatingFileDom.classList.add("floating-file-hidden")
   }
 
   //渲染issue列表
@@ -242,6 +318,52 @@ function SourceCode() {
             
             }
           </ol>
+
+
+          {(
+            <div id="floating-file" className=" floating-file-hidden">
+                  <Rnd
+                    default={{
+                      x: window.innerWidth / 2 - 400,
+                      y: window.innerHeight / 2 - 200,
+                      width: 800,
+                      height: 400,
+                    }}
+                    minWidth={800}
+                    minHeight={400}
+                    bounds="window"
+                    enableResizing={{
+                      top: true,
+                      right: true,
+                      bottom: true,
+                      left: true,
+                      topRight: true,
+                      bottomRight: true,
+                      bottomLeft: true,
+                      topLeft: true,
+                    }}
+                    className="floating-file"
+                  >
+                   
+              <button className="floating-file-close-btn" onClick={closeFloatingFile}>X</button>
+              <div className="floating-file-file-btn" id="floating-file-name">文件名</div> 
+              <ol className="floating-file-content">
+                {
+                  otherSourceCodeData.lines.map((lineHtml, index) => {
+                    const newLiElement = (
+                      <span
+                      key={index}
+                      dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
+                      />
+                    );
+                    return newLiElement
+                  })
+                }
+              </ol>
+              </Rnd>
+            </div>
+          )}
+
         </div>
     </>
   );

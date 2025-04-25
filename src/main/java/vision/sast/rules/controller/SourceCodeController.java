@@ -95,4 +95,17 @@ public class SourceCodeController {
 
     }
 
+    @GetMapping("otherSourceCode_list")
+    public synchronized List<String> otherSourceCode_list(String file) {
+        if ( file != null) {
+            try {
+                List<String> lines = SourceCodeUtil.show2(file);
+                return lines;
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return new ArrayList<>();
+    }
+
 }
