@@ -9,6 +9,7 @@ import vision.sast.rules.webSocket.llm.LLMReponse;
 import vision.sast.rules.webSocket.llm.LLMRequest;
 import vision.sast.rules.webSocket.llm.LLMSocket;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,43 +29,53 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String messageStr = message.getPayload();
         System.out.println("收到消息：" + messageStr);
-        int index = messageStr.indexOf("##########");
-        if(index!=-1){
-            String issueId = messageStr.substring(0, index);
-            String code = messageStr.substring(index + "##########".length());
-            System.out.println(issueId + ":" + code);
 
-            LLMSocket.init();
-            sessionMap.put(session.getId(), session);
-            //TODO 接受前端发送的代码数据，以及 rule id
-            Set<String> set = RulesApplication.ISSUE_RESULT.getResult().stream().filter(issueDto -> issueDto.getId().equals(issueId)).map(dto->dto.getVtId()).collect(Collectors.toSet());
-            if(set.size()>0 &&  LLMPrompt.map.get(set.stream().toList().get(0))!=null){
-                String prompt = LLMPrompt.map.get(set.stream().toList().get(0));
+        try {
+            Map<String,String> map = JSONObject.parseObject(messageStr, Map.class);
+            System.out.println("收到消息map：" + JSONObject.toJSONString(map));
+            map.put("sessionId", session.getId());
+            if(map.get("issueId")!=null && map.get("content")!=null){
 
-                String content = "\n\n```c语言代码\n" + code + "\n```\n" + prompt + "用中文回复";
-                System.out.println(content);
-                //TODO 将 rule id与prompt建立关系，提交给llm
-                LLMRequest request = new LLMRequest(content);
-                request.setMessageId(session.getId());
-                String json = JSONObject.toJSONString(request);
-                LLMSocket.writer.write(json + "\r\n");
-                LLMSocket.writer.flush();
+                String issueId = map.get("issueId");
+                String code = map.get("content");
+                System.out.println(issueId + ":" + code);
+
+                LLMSocket.init();
+                sessionMap.put(session.getId(), session);
+                //TODO 接受前端发送的代码数据，以及 rule id
+                Set<String> set = RulesApplication.ISSUE_RESULT.getResult().stream().filter(issueDto -> issueDto.getId().equals(issueId)).map(dto->dto.getVtId()).collect(Collectors.toSet());
+                if(set.size()>0 &&  LLMPrompt.map.get(set.stream().toList().get(0))!=null){
+                    String prompt = LLMPrompt.map.get(set.stream().toList().get(0));
+
+                    String content = "\n\n```c语言代码\n" + code + "\n```\n" + prompt + "用中文回复";
+                    System.out.println(content);
+                    //TODO 将 rule id与prompt建立关系，提交给llm
+                    LLMRequest request = new LLMRequest(content);
+                    request.setMessageId(session.getId());
+                    String json = JSONObject.toJSONString(request);
+                    LLMSocket.writer.write(json + "\r\n");
+                    LLMSocket.writer.flush();
+                }
+                else {
+                    session.sendMessage(new TextMessage("AI暂时支持该规则审计"));
+                }
+
             }
             else {
-                session.sendMessage(new TextMessage("AI暂时支持该规则审计"));
+                Map<String,String> map1 = new HashMap<>();
+                map1.put("issueId", "issueId");
+                map1.put("content", "内容");
+                session.sendMessage(new TextMessage("格式：" + JSONObject.toJSONString(map1)));
             }
-
-
+        }catch (Exception e) {
+            Map<String,String> map = new HashMap<>();
+            map.put("issueId", "issueId");
+            map.put("content", "内容");
+            session.sendMessage(new TextMessage(e.getMessage() + "，格式：" + JSONObject.toJSONString(map)));
         }
 
-        else {
-            // 原样返回消息
-            int times = 10;
-            for (int i = 0; i < times; i++) {
-                session.sendMessage(new TextMessage( "收到：" + messageStr + " : " + i));
-            }
 
-        }
+
 
 
 

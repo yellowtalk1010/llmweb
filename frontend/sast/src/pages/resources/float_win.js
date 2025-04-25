@@ -10,6 +10,8 @@ import { Marked } from "marked";
 
 console.info("float window.")
 
+
+
 document.addEventListener('DOMContentLoaded',  function () {
 
     console.log("DOM加载完成");
