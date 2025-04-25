@@ -132,10 +132,13 @@ function SourceCode() {
   }
 
   //触发划线功能
-  function link(fromId, fromFile, toId, toFile){
-    if(fromFile==toFile){
+  function link(currentFile, trace){
+    console.info(trace)
+    const toId = trace.id
+    const toFile = trace.file
+    if(currentFile==toFile){
       //同一个文件中
-      const el = document.getElementById(toId)
+      const el = document.getElementById("line_" + trace.line)
       el.scrollIntoView({
         behavior: 'smooth',      // 平滑滚动
         block: 'center',         // 垂直方向：滚动到中间
@@ -169,7 +172,7 @@ function SourceCode() {
         {
           issue.traces.map((trace, traceIndex) => (
             <div>
-              <a onClick={()=>link(issue.id, issue.filePath, trace.id, trace.file)} >{trace.file} # {trace.line} # {trace.message}</a>
+              <a onClick={()=>link(issue.filePath, trace)} >{trace.file} # {trace.line} # {trace.message}</a>
             </div>
           ))
         }
