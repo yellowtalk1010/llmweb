@@ -195,13 +195,19 @@ function SourceCode() {
   }
 
   function aiCheck(id) {
+
+    document.getElementById("textarea_hidden_" + id).value = ""
+    document.getElementById("result_" + id).innerHTML = ""
+
     console.info(id)
     //获取多文本输入的内容部
     const textareaDom = document.getElementById("textarea_" + id)
     console.info(textareaDom)
     const code = textareaDom.value
     if(code==null || code.trim().length == 0){
-      alert("没有输入数据")
+      console.info(document.getElementById("result_" + id))
+      document.getElementById("textarea_hidden_" + id).value = "没有输入数据"
+      document.getElementById("result_" + id).innerHTML = "没有输入数据"
     }
     else{
       aiCheckIssueID = id
