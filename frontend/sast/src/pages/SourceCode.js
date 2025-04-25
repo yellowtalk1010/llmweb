@@ -142,16 +142,11 @@ function SourceCode() {
 
   
   function clickAiCheck() {
-    // event.preventDefault(); // 阻止跳转（如果需要）
     console.log("点击了链接！");
     alert("aaa")
   }
 
-  const handleClick = () => {
-    console.log("按钮点击成功！");
-    alert("点击了按钮！");
-  };
-
+  //渲染issue列表
   function renderIssue1(lineIssues) {
     return lineIssues.map((issue, index) => (
       <div
@@ -203,7 +198,7 @@ function SourceCode() {
                   return (
                     <span
                     key={index}
-                    dangerouslySetInnerHTML={{ __html: lineHtml }}
+                    dangerouslySetInnerHTML={{ __html: lineHtml }}  //将字符串转成 react元素
                     />
                   )
                 }
