@@ -20,10 +20,10 @@ public class LLMSocket {
     /***
      * 初始化大模型连接器
      */
-    public static synchronized void init(){
+    public static synchronized boolean init(){
         try {
             if(writer != null || reader != null){
-                return;
+                return false;
             }
             Socket socket = new Socket("127.0.0.1", 3000);
             writer = new PrintWriter(socket.getOutputStream(), true);
@@ -70,8 +70,10 @@ public class LLMSocket {
                     }
                 }
             });
+            return true;
         }catch (Exception e){
             e.printStackTrace();
+            return false;
         }
 
     }

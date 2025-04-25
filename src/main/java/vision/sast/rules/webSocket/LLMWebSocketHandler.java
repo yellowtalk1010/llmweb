@@ -40,7 +40,12 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
                 String code = map.get("content");
                 System.out.println(issueId + ":" + code);
 
-                LLMSocket.init();
+                boolean status = LLMSocket.init();
+                if(status){
+                    session.sendMessage(new TextMessage("AI网络连接失败"));
+                    return;
+                }
+
                 sessionMap.put(session.getId(), session);
                 //TODO 接受前端发送的代码数据，以及 rule id
                 Set<String> set = RulesApplication.ISSUE_RESULT.getResult().stream().filter(issueDto -> issueDto.getId().equals(issueId)).map(dto->dto.getVtId()).collect(Collectors.toSet());
