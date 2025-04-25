@@ -196,58 +196,10 @@ function SourceCode() {
                   )
                 }
                  
-                
-
-                // const lineIssues = issueMap.get(lineNumber) || [];
-      
-                // return (
-                //   <li key={index} id={`line_${lineNumber}`}>
-                //     <div dangerouslySetInnerHTML={{ __html: lineHtml }} />
-                //     {lineIssues.map((issue, i) => (
-                //       <div
-                //         key={i}
-                //         style={{ color: "red", marginLeft: "1em", fontSize: "0.9em" }}
-                //       >
-                //         ⚠️ {issue.message}
-                //       </div>
-                //     ))}
-                //   </li>
-                // );
               })
             
             }
           </ol>
-          {
-           
-          //  useEffect(() => {
-          //   sourceCodeData.issues.forEach((issue) => {
-          //     // const liDom = document.getElementById(`line_${issue.line}`);
-          //     const liDom = document.getElementById("line_" + issue.line)
-          //     console.log("找到 liDom:", liDom);
-          
-          //     if (liDom) {
-          //       liDom.insertAdjacentHTML(
-          //         'afterend',
-          //         `<div style="color: red;">⚠️ ${issue.line}</div>`
-          //       );
-          //     }
-          //   });
-          // }, [])
-
-          //  sourceCodeData.issues.map((issue, index) => {
-          //     const liDom = document.getElementById("line_" + issue.line)
-          //     console.info(issue)
-          
-          //     if (liDom!=null) {
-          //       console.info("找到liDom：" + liDom)
-          //       console.info(liDom)
-          //       liDom.insertAdjacentHTML(
-          //         'afterend',
-          //         `<div style="color: red;">hahaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>`
-          //       );
-          //     }
-          //   })
-          }
         </div>
     </>
   );
