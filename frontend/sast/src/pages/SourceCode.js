@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Marked } from "marked"; 
 import React, { useRef } from 'react';
+import { ArcherContainer, ArcherElement } from 'react-archer';
  
 import '../float_window.css'
 import '../cpp.css' 
@@ -131,6 +132,25 @@ function SourceCode() {
     
   }
 
+  //收集连接线
+  var lineRelations = []
+  function generateRelations(id){
+    lineRelations.push(id)
+    const relations = [];
+    if(lineRelations.length>1){
+      console.info("generateRelations,lineRelations=" + lineRelations)
+      
+      relations.push({
+        sourceId: lineRelations[1],
+        targetId: lineRelations[0],
+        sourceAnchor: 'bottom',
+        targetAnchor: 'bottom',
+        curve: 0.5
+      });
+    }
+
+    return relations
+  }
 
   //渲染issue列表
   function renderIssue1(lineIssues) {
@@ -140,7 +160,11 @@ function SourceCode() {
         className="floatDiv"
         style={{ backgroundColor: "pink", marginBottom: "8px" }}
       >
-        <div>{issue.name}</div>
+        <div>
+        <ArcherElement key={issue.id} id={issue.id} relations={generateRelations(issue.id)}>
+          <span>{issue.name}</span>
+        </ArcherElement>
+        </div>
         <div>
           {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
         </div>
@@ -168,12 +192,21 @@ function SourceCode() {
   
   return (
     <>
+      <ArcherContainer strokeColor="red" strokeWidth={3} style={{ height: '100%' }} >
         <div id="SourceCode">
           <ol>
             {
               sourceCodeData.lines.map((lineHtml, index) => {
                 const lineNumber = index + 1;
                 const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
+
+                const newLiElement = (
+                  <span
+                  key={index}
+                  dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
+                  />
+                );
+
                 if(lineIssues!=null && lineIssues.length > 0){
                 
                   const divDoms = renderIssue1(lineIssues) //渲染issue列表,将issue对象编程react元素列表（不是dom元素列表）
@@ -196,12 +229,7 @@ function SourceCode() {
                   return divDoms
                 }
                 else {
-                  return (
-                    <span
-                    key={index}
-                    dangerouslySetInnerHTML={{ __html: lineHtml }}  //将字符串转成 react元素
-                    />
-                  )
+                  return newLiElement
                 }
                  
               })
@@ -209,6 +237,7 @@ function SourceCode() {
             }
           </ol>
         </div>
+      </ArcherContainer>  
     </>
   );
 }
