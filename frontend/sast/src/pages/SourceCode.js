@@ -110,7 +110,8 @@ function SourceCode() {
   console.info(file)
 
   const [sourceCodeData, setSourceCodeData] = useState({
-    list:[],
+    lines:[],
+    issues:[],
     status: 0
   })
   if(sourceCodeData.status==0){
@@ -127,32 +128,126 @@ function SourceCode() {
       console.log("rule_vtid 的数据")
       console.log(data)
       setSourceCodeData({
-        list: data,
+        lines: data.lines,
+        issues: data.issues,
         status: 200
       })
       console.info("渲染完成后执行")
-      renderFinished()
     }).catch(e =>{
       console.log(e)
     })
+    
   }
+
+
+  useEffect(() => {
+    // 页面加载完成后执行的 JS
+    console.log('页面已加载，开始执行 JS');
+    renderFinished()
+    // 例如：初始化第三方插件
+    // window.initSomething();
+
+  }, []);
+  
 
   return (
     <>
         <div id="SourceCode">
-
-            <ol>
-
-                {sourceCodeData.list.map((line, index) => (
+          <ol>
+            {
+              sourceCodeData.lines.map((lineHtml, index) => {
+                const lineNumber = index + 1;
+                const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
+                if(lineIssues!=null && lineIssues.length > 0){
+                  // console.info(lineIssues)
+                  var divStr = ""
+                  //将行号中对应的issue列表转成字符串，叠加在一起
+                  lineIssues.map((issue, index1) => {
+                    //issue对象穿div html
+                    const div =  "<div style='background-color: pink' class='floatDiv'>" 
+                    + issue.name + "<br>"
+                    + issue.line + "/" + issue.vtId + "/" + issue.rule + "/" + issue.defectLevel + "/" + issue.defectType + "/" + "<br>"
+                    + issue.ruleDesc + "<br>"
+                    + issue.issueDesc + "<br>"
+                    + "<a class='btn' id='" + issue.id + "'>AI审计</a>" + "<br>"
+                    + "</div>";
+                    return div
+                  }).forEach(l=>{
+                    //叠加
+                    divStr = divStr + l
+                  })
+                  // console.info(divList)
+                  
+                  const newLineHtml = lineHtml + divStr
+                  return (
                     <span
                     key={index}
-                    dangerouslySetInnerHTML={{ __html: line }}
+                    dangerouslySetInnerHTML={{ __html: newLineHtml }}
                     />
-                ))}
-
+                    
+                  )
+                }
+                else {
+                  return (
+                    <span
+                    key={index}
+                    dangerouslySetInnerHTML={{ __html: lineHtml }}
+                    />
+                  )
+                }
+                 
                 
 
-            </ol>
+                // const lineIssues = issueMap.get(lineNumber) || [];
+      
+                // return (
+                //   <li key={index} id={`line_${lineNumber}`}>
+                //     <div dangerouslySetInnerHTML={{ __html: lineHtml }} />
+                //     {lineIssues.map((issue, i) => (
+                //       <div
+                //         key={i}
+                //         style={{ color: "red", marginLeft: "1em", fontSize: "0.9em" }}
+                //       >
+                //         ⚠️ {issue.message}
+                //       </div>
+                //     ))}
+                //   </li>
+                // );
+              })
+            
+            }
+          </ol>
+          {
+           
+          //  useEffect(() => {
+          //   sourceCodeData.issues.forEach((issue) => {
+          //     // const liDom = document.getElementById(`line_${issue.line}`);
+          //     const liDom = document.getElementById("line_" + issue.line)
+          //     console.log("找到 liDom:", liDom);
+          
+          //     if (liDom) {
+          //       liDom.insertAdjacentHTML(
+          //         'afterend',
+          //         `<div style="color: red;">⚠️ ${issue.line}</div>`
+          //       );
+          //     }
+          //   });
+          // }, [])
+
+          //  sourceCodeData.issues.map((issue, index) => {
+          //     const liDom = document.getElementById("line_" + issue.line)
+          //     console.info(issue)
+          
+          //     if (liDom!=null) {
+          //       console.info("找到liDom：" + liDom)
+          //       console.info(liDom)
+          //       liDom.insertAdjacentHTML(
+          //         'afterend',
+          //         `<div style="color: red;">hahaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>`
+          //       );
+          //     }
+          //   })
+          }
         </div>
     </>
   );

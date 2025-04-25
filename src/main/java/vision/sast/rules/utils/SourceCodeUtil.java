@@ -1,6 +1,8 @@
 package vision.sast.rules.utils;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.text.StringEscapeUtils;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
@@ -8,6 +10,7 @@ import vision.sast.rules.dto.IssueDto;
 import java.io.File;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class SourceCodeUtil {
@@ -73,37 +76,22 @@ public class SourceCodeUtil {
         return sb.toString();
     }
 
-    public static List<String> show1(String fileName, List<IssueDto> dtoList) throws Exception {
+    public static Pair<List<String>, List<IssueDto>> show1(String fileName, List<IssueDto> dtoList) throws Exception {
 
         System.out.println("fileName = " + fileName + ", dtoList = " + dtoList.size());
         List<IssueDto> sortedList = dtoList.stream().sorted(Comparator.comparing(IssueDto::getLine)).toList();
 
         List<String> lines = openFile(fileName);
         HighLightUtil highlighterUtil = new HighLightUtil();
+        AtomicInteger lineNumber = new AtomicInteger(1);
         List<String> newLines = lines.stream().map(line -> {
 //            line = StringEscapeUtils.escapeHtml4(line);
             line = highlighterUtil.highlightLine(line);
-            line = "<li>" + line + "</li>";
+            line = "<li id='line_" + lineNumber.getAndIncrement() + "'>" + line + "</li>";
             return line;
         }).collect(Collectors.toList());
 
-
-        int insertTime = 0;
-        for (IssueDto dto : sortedList) {
-            int line = dto.getLine();
-            int index = line + insertTime;
-            if (index > 0) {
-                String divStr = "<div style='background-color: pink' class='floatDiv'>"
-                        + dto.getName() + "<br>"
-                        + dto.getLine() + "/" + dto.getVtId() + "/" + dto.getRule() + "/" + dto.getDefectLevel() + "/" + dto.getDefectType() + "/" + "<br>"
-                        + dto.getRuleDesc() + "<br>"
-                        + dto.getIssueDesc() + "<br>"
-//                        + "<a class='btn' id='" + dto.getId() + "'>AI审计</a>" //移除ai审计
-                        + "</div>";
-                newLines.add(index, divStr);
-                insertTime++;
-            }
-        }
-        return newLines;
+        Pair<List<String>, List<IssueDto>> pair = new ImmutablePair<>(newLines, sortedList);
+        return pair;
     }
 }

@@ -1,6 +1,7 @@
 package vision.sast.rules.controller;
 
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.RulesApplication;
@@ -10,6 +11,7 @@ import vision.sast.rules.utils.PropertiesKey;
 import vision.sast.rules.utils.SourceCodeUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -69,37 +71,27 @@ public class SourceCodeController {
     }
 
     @GetMapping("sourceCode_list")
-    public synchronized List<String> sourceCode_list(String vtid, String file) {
+    public synchronized Map<String, Object> sourceCode_list(String vtid, String file) {
         if (vtid != null && file != null) {
             try {
                 int size = init(vtid, file);
                 String key = getKey(vtid, file);
                 List<IssueDto> issueDtos = issuesMap.get(key);
-                List<String> line = SourceCodeUtil.show1(file, issueDtos);
+                Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);
 
-//                html = "<html>" +
-//                        "<head>" +
-//                        "<link rel='stylesheet' href='cpp.css'>" +
-//                        "<link rel='stylesheet' href='float_window.css'>" +
-//                        "<script src='float_window.js'></script>" +
-//                        "<script src='https://cdn.jsdelivr.net/npm/marked/marked.min.js'></script>" +
-//                        "</head>" +
-//                        "<body>" +
-//                        "<a href='highLight?file=" + file + "'>源代码</a><br>" +
-//                        "<pre><code class='language-cpp'>" +
-//                        html +
-//                        "</code></pre>" +
-//                        "</body>" +
-//                        "</html>";
-                return line;
+                Map<String, Object> map = new HashMap<>();
+                map.put("lines", pair.getLeft()); //文件行列表
+                map.put("issues", pair.getRight()); //文件对应的issue 列表
+                return map;
             }catch (Exception e) {
                 e.printStackTrace();
-                return new ArrayList<>();
             }
         }
-        else {
-            return new ArrayList<>();
-        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("lines", new ArrayList<>());
+        map.put("issues", new ArrayList<>());
+        return map;
 
     }
 
