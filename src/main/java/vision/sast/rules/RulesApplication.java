@@ -22,8 +22,8 @@ public class RulesApplication {
 
     public static void main(String[] args) {
 
-        //System.setProperty("java.awt.headless", "true");
-
+        System.getProperties().put("spring.http.encoding.charset", "UTF-8");
+        System.getProperties().put("file.encoding", "UTF-8");
 
         if(args!=null && args.length>0){
             String issuePath = args[0];
