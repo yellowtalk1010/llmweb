@@ -41,7 +41,7 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
                 System.out.println(issueId + ":" + code);
 
                 boolean status = LLMSocket.init();
-                if(status){
+                if(!status){
                     session.sendMessage(new TextMessage("AI网络连接失败"));
                     return;
                 }
