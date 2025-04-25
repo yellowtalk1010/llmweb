@@ -40,11 +40,7 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
                 String code = map.get("content");
                 System.out.println(issueId + ":" + code);
 
-                boolean status = LLMSocket.init();
-                if(!status){
-                    session.sendMessage(new TextMessage("AI网络连接失败"));
-                    return;
-                }
+                LLMSocket.init();
 
                 sessionMap.put(session.getId(), session);
                 //TODO 接受前端发送的代码数据，以及 rule id
@@ -64,7 +60,6 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
                 else {
                     session.sendMessage(new TextMessage("AI暂时支持该规则审计"));
                 }
-
             }
             else {
                 Map<String,String> map1 = new HashMap<>();
@@ -78,11 +73,6 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
             map.put("content", "内容");
             session.sendMessage(new TextMessage(e.getMessage() + "，格式：" + JSONObject.toJSONString(map)));
         }
-
-
-
-
-
 
 
     }
