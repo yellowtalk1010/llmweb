@@ -54,8 +54,15 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
                     LLMRequest request = new LLMRequest(content);
                     request.setMessageId(session.getId());
                     String json = JSONObject.toJSONString(request);
-                    LLMSocket.writer.write(json + "\r\n");
-                    LLMSocket.writer.flush();
+                    if(LLMSocket.socket==null || !LLMSocket.socket.isConnected() || LLMSocket.writer==null){
+                        session.sendMessage(new TextMessage("AI网络连接失败"));
+                    }
+                    else {
+                        //向AI发送数据
+                        LLMSocket.writer.write(json + "\r\n");
+                        LLMSocket.writer.flush();
+                    }
+
                 }
                 else {
                     session.sendMessage(new TextMessage("AI暂时支持该规则审计"));

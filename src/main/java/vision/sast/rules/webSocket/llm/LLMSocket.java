@@ -17,7 +17,7 @@ public class LLMSocket {
     private static ExecutorService pool = Executors.newSingleThreadExecutor();
     public static PrintWriter writer = null;
     private static BufferedReader reader = null;
-    private static Socket socket = null;
+    public static Socket socket = null;
     private static AtomicInteger count = new AtomicInteger(0);
 
     /***
