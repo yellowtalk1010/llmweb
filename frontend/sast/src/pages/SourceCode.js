@@ -1,5 +1,5 @@
 'use client';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -213,7 +213,13 @@ function SourceCode() {
       aiCheckIssueID = id
       const str = id + "#####---#####" + code  // ########## 后端切割符号
       console.info(str)
-      socket.send(str);
+      const json = {
+        issueId: id,
+        content: code
+      }
+      const jsonString = JSON.stringify(json, null, 2);
+      console.info(jsonString)
+      socket.send(jsonString);
     }
     
   }
