@@ -159,10 +159,10 @@ function SourceCode() {
     }
     else{
       //不同文件中打开
-      // openFloatingFile()
+      openFloatingFile(trace)
     }
 
-    openFloatingFile(trace)
+    
       
   }
 
