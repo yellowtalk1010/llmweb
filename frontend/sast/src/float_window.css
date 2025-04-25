@@ -45,6 +45,8 @@
 
 .floatDiv {
     font-size: 12px;
+    background-color: pink;
+    margin-bottom: 8px;
 }
 
 .aiCheckShow {

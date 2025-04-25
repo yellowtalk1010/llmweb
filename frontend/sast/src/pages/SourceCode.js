@@ -132,7 +132,7 @@ function SourceCode() {
     
   }
 
-  //收集连接线
+  //
   var lineRelations = []
   function generateRelations(id){
     lineRelations.push(id)
@@ -152,24 +152,39 @@ function SourceCode() {
     return relations
   }
 
+  function link(issueId, traceId, filePath){
+    if(issueId!=null && traceId!=null && issueId!=traceId){
+      console.info(issueId)
+      console.info(traceId)
+      console.info(filePath)
+    }
+  }
+
   //渲染issue列表
   function renderIssue1(lineIssues) {
     return lineIssues.map((issue, index) => (
       <div
         key={issue.id}
-        className="floatDiv"
-        style={{ backgroundColor: "pink", marginBottom: "8px" }}
+        class="floatDiv"
       >
         <div>
         <ArcherElement key={issue.id} id={issue.id} relations={generateRelations(issue.id)}>
-          <span>{issue.name}</span>
+          <span class="floatDiv">{issue.name}</span>
         </ArcherElement>
         </div>
         <div>
           {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
         </div>
         <div>{issue.ruleDesc}</div>
-        <div>{issue.issueDesc}</div>
+        <div>
+        {
+          issue.traces.map((trace, traceIndex) => (
+            <div>
+              <a href="#" onClick={()=>link(issue.id, trace.id, trace.file)} >{trace.file} # {trace.line} # {trace.message}</a>
+            </div>
+          ))
+        }
+        </div>
         <a class="btn" onClick={openAiCheck} id={issue.id}>AI审计</a>
         
         {/* 添加人工AI check交互框 */}
