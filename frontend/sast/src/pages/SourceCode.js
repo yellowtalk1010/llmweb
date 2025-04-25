@@ -172,12 +172,8 @@ function SourceCode() {
   function openFloatingFile(trace){
     const file = trace.file
     //打开一个新文件，展示在div中
-    var floatingFileDom = document.getElementById("floating-file")
-    console.info(floatingFileDom)
-    floatingFileDom.classList.remove("floating-file-hidden")
-    floatingFileDom.classList.add("floating-file-show")
-
-    const filePath = document.getElementById("floating-file-name")
+    const filePath = document.getElementById("floating-file-name").textContent
+    console.info("filePath:" + filePath)
     if(filePath=="" || filePath!=file){
       setOtherSourceCodeData({
         lines: [],
@@ -202,29 +198,32 @@ function SourceCode() {
           status: 200
         })
         // console.info("渲染完成后执行")
-
-        console.info("otherfileline_" + trace.line)
-        const el = document.getElementById("otherfileline_" + trace.line)
-        if(!el){
-          console.info("null........")
-        }
-        console.info(el)
-        el.scrollIntoView({
-          behavior: 'smooth',      // 平滑滚动
-          block: 'center',         // 垂直方向：滚动到中间
-          inline: 'center'         // 水平方向：滚动到中间
-        });
-
-        el.classList.add('flash-border');
-
-        // 两秒后移除动画 class（避免永久保留）
-        setTimeout(() => {
-          el.classList.remove('flash-border');
-        }, 6000);
-
       }).catch(e =>{
         console.log(e)
       })
+    }
+
+    
+    var floatingFileDom = document.getElementById("floating-file")
+    console.info(floatingFileDom)
+    floatingFileDom.classList.remove("floating-file-hidden")
+    floatingFileDom.classList.add("floating-file-show")
+
+    console.info(document.getElementById("otherfileline_26"))
+    const el = document.getElementById("otherfileline_" + trace.line)
+    if(el){
+      el.scrollIntoView({
+        behavior: 'smooth',      // 平滑滚动
+        block: 'center',         // 垂直方向：滚动到中间
+        inline: 'center'         // 水平方向：滚动到中间
+      });
+
+      el.classList.add('flash-border');
+
+      // 两秒后移除动画 class（避免永久保留）
+      setTimeout(() => {
+        el.classList.remove('flash-border');
+      }, 6000);
     }
 
   }
@@ -321,29 +320,8 @@ function SourceCode() {
 
 
           {(
-            <div id="floating-file" className=" floating-file-hidden">
-                  <Rnd
-                    default={{
-                      x: window.innerWidth / 2 - 400,
-                      y: window.innerHeight / 2 - 200,
-                      width: 800,
-                      height: 400,
-                    }}
-                    minWidth={800}
-                    minHeight={400}
-                    bounds="window"
-                    enableResizing={{
-                      top: true,
-                      right: true,
-                      bottom: true,
-                      left: true,
-                      topRight: true,
-                      bottomRight: true,
-                      bottomLeft: true,
-                      topLeft: true,
-                    }}
-                    className="floating-file"
-                  >
+            <div id="floating-file" className="floating-file floating-file-hidden">
+              
                    
               <button className="floating-file-close-btn" onClick={closeFloatingFile}>X</button>
               <div className="floating-file-file-btn" id="floating-file-name">文件名</div> 
@@ -360,7 +338,6 @@ function SourceCode() {
                   })
                 }
               </ol>
-              </Rnd>
             </div>
           )}
 
