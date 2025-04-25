@@ -131,7 +131,6 @@ function SourceCode() {
     
   }
 
-  const canvasRef = useRef(null);
   //触发划线功能
   function link(fromId, fromFile, toId, toFile){
     if(fromFile==toFile){
@@ -142,6 +141,14 @@ function SourceCode() {
         block: 'center',         // 垂直方向：滚动到中间
         inline: 'center'         // 水平方向：滚动到中间
       });
+
+      el.classList.add('flash-border');
+
+      // 两秒后移除动画 class（避免永久保留）
+      setTimeout(() => {
+        el.classList.remove('flash-border');
+      }, 6000);
+
     }
     else {
       //打开一个新文件，展示在div中
