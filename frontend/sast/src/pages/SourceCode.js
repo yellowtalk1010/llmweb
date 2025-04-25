@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Marked } from "marked"; 
 import React, { useRef } from 'react';
-import { ArcherContainer, ArcherElement } from 'react-archer'; //用来自动化划线
  
 import '../float_window.css'
 import '../cpp.css' 
@@ -132,50 +131,29 @@ function SourceCode() {
     
   }
 
-  //自动装载划线
-  const [currentRelation, setCurrentRelation] = useState([]);
-  const generateRelations = (id) => {
-    currentRelation.forEach(item=>{
-      console.info(">>>>" + item)
-    })
-    const relations = [];
-    if(currentRelation.length>1){
-      relations.push({
-        sourceId: currentRelation[0],
-        targetId: currentRelation[1],
-        sourceAnchor: 'bottom',
-        targetAnchor: 'bottom',
-        curve: 0.5
+  const canvasRef = useRef(null);
+  //触发划线功能
+  function link(fromId, fromFile, toId, toFile){
+    if(fromFile==toFile){
+      //同一个文件中
+      const el = document.getElementById(toId)
+      el.scrollIntoView({
+        behavior: 'smooth',      // 平滑滚动
+        block: 'center',         // 垂直方向：滚动到中间
+        inline: 'center'         // 水平方向：滚动到中间
       });
     }
-
-    return relations
-  }
-
-  //触发划线功能
-  function link(fromId, toId, filePath){
-    if(fromId!=null && toId!=null && fromId!=toId){
-      var array = []
-      setCurrentRelation(array)
-      array.push(fromId)
-      array.push(toId)
-      setCurrentRelation(array)
-
+    else {
+      //打开一个新文件，展示在div中
     }
+
   }
 
   //渲染issue列表
   function renderIssue1(lineIssues) {
     return lineIssues.map((issue, index) => (
-      <div
-        key={issue.id}
-        class="floatDiv"
-      >
-        <div>
-        <ArcherElement key={issue.id} id={issue.id} relations={generateRelations(issue.id)}>
-          <span class="floatDiv">{issue.name}</span>
-        </ArcherElement>
-        </div>
+      <div id={issue.id} class="floatDiv">
+        <div>{issue.name}</div>
         <div>
           {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
         </div>
@@ -184,7 +162,7 @@ function SourceCode() {
         {
           issue.traces.map((trace, traceIndex) => (
             <div>
-              <a href="#" onClick={()=>link(issue.id, trace.id, trace.file)} >{trace.file} # {trace.line} # {trace.message}</a>
+              <a onClick={()=>link(issue.id, issue.filePath, trace.id, trace.file)} >{trace.file} # {trace.line} # {trace.message}</a>
             </div>
           ))
         }
@@ -211,7 +189,6 @@ function SourceCode() {
   
   return (
     <>
-      <ArcherContainer strokeColor="red" strokeWidth={3} style={{ height: '100%' }} >
         <div id="SourceCode">
           <ol>
             {
@@ -256,7 +233,6 @@ function SourceCode() {
             }
           </ol>
         </div>
-      </ArcherContainer>  
     </>
   );
 }
