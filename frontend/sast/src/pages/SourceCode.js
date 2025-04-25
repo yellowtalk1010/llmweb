@@ -12,7 +12,7 @@ import '../cpp.css'
 
 function SourceCode() {
 
-  var aiCheckIssueID = null
+  var aiCheckIssueID = null //保存当前打开的 ai check 交互界面
   var socket = null;
   if(socket==null){
     socket = new WebSocket("ws://localhost:8080/ws");
@@ -119,9 +119,7 @@ function SourceCode() {
       document.getElementById("result_" + id).innerHTML = "没有输入数据"
     }
     else{
-      aiCheckIssueID = id
-      const str = id + "#####---#####" + code  // ########## 后端切割符号
-      console.info(str)
+      aiCheckIssueID = id //保存当前打开的 ai check 交互界面
       const json = {
         issueId: id,
         content: code
