@@ -150,6 +150,28 @@ function SourceCode() {
   }, []);
   
 
+  function renderIssue(lineIssues) {
+    //渲染issue问题
+    var divStr = ""
+    //将行号中对应的issue列表转成字符串，叠加在一起
+    lineIssues.map((issue, index1) => {
+      //issue对象穿div html
+      const div =  "<div style='background-color: pink' class='floatDiv'>" 
+      + issue.name + "<br>"
+      + issue.line + "/" + issue.vtId + "/" + issue.rule + "/" + issue.defectLevel + "/" + issue.defectType + "/" + "<br>"
+      + issue.ruleDesc + "<br>"
+      + issue.issueDesc + "<br>"
+      + "<a class='btn' id='" + issue.id + "'>AI审计</a>" + "<br>"
+      + "</div>";
+      return div
+    }).forEach(l=>{
+      //叠加
+      divStr = divStr + l
+    })
+    console.info("ss:" + divStr)
+    return divStr
+  }
+
   return (
     <>
         <div id="SourceCode">
@@ -160,24 +182,7 @@ function SourceCode() {
                 const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
                 if(lineIssues!=null && lineIssues.length > 0){
                   // console.info(lineIssues)
-                  var divStr = ""
-                  //将行号中对应的issue列表转成字符串，叠加在一起
-                  lineIssues.map((issue, index1) => {
-                    //issue对象穿div html
-                    const div =  "<div style='background-color: pink' class='floatDiv'>" 
-                    + issue.name + "<br>"
-                    + issue.line + "/" + issue.vtId + "/" + issue.rule + "/" + issue.defectLevel + "/" + issue.defectType + "/" + "<br>"
-                    + issue.ruleDesc + "<br>"
-                    + issue.issueDesc + "<br>"
-                    + "<a class='btn' id='" + issue.id + "'>AI审计</a>" + "<br>"
-                    + "</div>";
-                    return div
-                  }).forEach(l=>{
-                    //叠加
-                    divStr = divStr + l
-                  })
-                  // console.info(divList)
-                  
+                  const divStr = renderIssue(lineIssues) //渲染issue列表
                   const newLineHtml = lineHtml + divStr
                   return (
                     <span
