@@ -134,14 +134,19 @@ function SourceCode() {
     
   }
 
-  //触发划线功能
+  //点击 trace a 标签
   const [top, setTop] = useState(0);
   function link(event, currentFile, trace){
     console.info(trace)
-    document.getElementById("SourceCode").querySelectorAll('div a.fake-link-click').forEach(li => {
-      li.classList.remove('fake-link-click');
+    document.getElementById("sourcecode_file").querySelectorAll('div a.trace_a_click').forEach(li => {
+      li.classList.remove('trace_a_click');
     });
-    event.target.classList.add('fake-link-click')
+    document.getElementById("sourcecode_file").querySelectorAll('div li.other-sourcecode-li').forEach(li => {
+      li.classList.remove('other-sourcecode-li');
+    });
+
+    event.target.classList.add('trace_a_click')
+
     const toId = trace.id
     const toFile = trace.file
     if(currentFile==toFile){
@@ -154,12 +159,13 @@ function SourceCode() {
         inline: 'center'         // 水平方向：滚动到中间
       });
 
-      el.classList.add('flash-border');
+      // el.classList.add('flash-border');
+      // // 两秒后移除动画 class（避免永久保留）
+      // setTimeout(() => {
+      //   el.classList.remove('flash-border');
+      // }, 6000);
 
-      // 两秒后移除动画 class（避免永久保留）
-      setTimeout(() => {
-        el.classList.remove('flash-border');
-      }, 6000);
+      el.classList.add('other-sourcecode-li')
 
 
     }
@@ -264,7 +270,7 @@ function SourceCode() {
         {
           issue.traces.map((trace, traceIndex) => (
             <div>
-              <a className="fake-link" onClick={(event)=>link(event, issue.filePath, trace)} >{trace.file} # {trace.line} # {trace.message}</a>
+              <a className="trace_a" onClick={(event)=>link(event, issue.filePath, trace)} >{trace.file} # {trace.line} # {trace.message}</a>
             </div>
           ))
         }
@@ -292,49 +298,50 @@ function SourceCode() {
   return (
     <>
         <div id="SourceCode">
-          <ol>
-            {
-              sourceCodeData.lines.map((lineHtml, index) => {
-                const lineNumber = index + 1;
-                const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
+          <div id="sourcecode_file">
+            <ol>
+              {
+                sourceCodeData.lines.map((lineHtml, index) => {
+                  const lineNumber = index + 1;
+                  const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
 
-                const newLiElement = (
-                  <span
-                  key={index}
-                  dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
-                  />
-                );
-
-                if(lineIssues!=null && lineIssues.length > 0){
-                
-                  const divDoms = renderIssue1(lineIssues) //渲染issue列表,将issue对象编程react元素列表（不是dom元素列表）
-                  // console.info("divDoms:")
-                  // console.info(divDoms)
-                   
-                  const span = document.createElement('span'); //
-                  span.innerHTML = lineHtml;
-                  // console.info("span:")
-                  //console.info(span.firstChild) //将html字符串转成dom元素
- 
                   const newLiElement = (
                     <span
                     key={index}
                     dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
                     />
                   );
-                  divDoms.unshift(newLiElement); //将新元素加入到列表中
 
-                  return divDoms
-                }
-                else {
-                  return newLiElement
-                }
-                 
-              })
-            
-            }
-          </ol>
+                  if(lineIssues!=null && lineIssues.length > 0){
+                  
+                    const divDoms = renderIssue1(lineIssues) //渲染issue列表,将issue对象编程react元素列表（不是dom元素列表）
+                    // console.info("divDoms:")
+                    // console.info(divDoms)
+                    
+                    const span = document.createElement('span'); //
+                    span.innerHTML = lineHtml;
+                    // console.info("span:")
+                    //console.info(span.firstChild) //将html字符串转成dom元素
+  
+                    const newLiElement = (
+                      <span
+                      key={index}
+                      dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
+                      />
+                    );
+                    divDoms.unshift(newLiElement); //将新元素加入到列表中
 
+                    return divDoms
+                  }
+                  else {
+                    return newLiElement
+                  }
+                  
+                })
+              
+              }
+            </ol>
+          </div>
 
           {(
             <div id="floating-file" className="floating-file floating-file-hidden" style={{ top: `${top}px` }}>

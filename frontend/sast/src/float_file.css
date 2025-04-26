@@ -2,7 +2,7 @@
 /* 悬浮文件展示 */
 
 /*trace 路径 a 标签路径*/
-.fake-link {
+.trace_a {
     color: #0000EE;
     text-decoration: underline;
     cursor: pointer;
@@ -10,16 +10,15 @@
     font-size: 14px;
   }
   
-  .fake-link:visited {
+  .trace_a:visited {
     color: #551A8B;
   }
   
-  .fake-link:hover {
+  .trace_a:hover {
     color: #EE0000;
     font-weight: bold;
-    font-size: 20px;
   }
-.fake-link-click {
+.trace_a_click {
     color: #EE0000;
     font-weight: bold;
     font-size: 20px;
