@@ -9,7 +9,6 @@ import React, { useRef } from 'react';
 import { Rnd } from 'react-rnd';
  
 import '../float_window.css'
-import '../float_file.css'
 import '../cpp.css'
 
 function SourceCode() {
@@ -159,14 +158,7 @@ function SourceCode() {
         inline: 'center'         // 水平方向：滚动到中间
       });
 
-      // el.classList.add('flash-border');
-      // // 两秒后移除动画 class（避免永久保留）
-      // setTimeout(() => {
-      //   el.classList.remove('flash-border');
-      // }, 6000);
-
       el.classList.add('sourcecode-li')
-
 
     }
     else{
