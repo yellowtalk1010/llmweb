@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Marked } from "marked"; 
 import React, { useRef } from 'react';
-import { Rnd } from 'react-rnd';
  
 import '../float_window.css'
 import '../cpp.css'
