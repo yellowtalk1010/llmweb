@@ -141,8 +141,8 @@ function SourceCode() {
     document.getElementById("sourcecode_file").querySelectorAll('div a.trace_a_click').forEach(li => {
       li.classList.remove('trace_a_click');
     });
-    document.getElementById("sourcecode_file").querySelectorAll('div li.other-sourcecode-li').forEach(li => {
-      li.classList.remove('other-sourcecode-li');
+    document.getElementById("sourcecode_file").querySelectorAll('div li.sourcecode-li').forEach(li => {
+      li.classList.remove('sourcecode-li');
     });
 
     event.target.classList.add('trace_a_click')
@@ -165,7 +165,7 @@ function SourceCode() {
       //   el.classList.remove('flash-border');
       // }, 6000);
 
-      el.classList.add('other-sourcecode-li')
+      el.classList.add('sourcecode-li')
 
 
     }
@@ -238,7 +238,7 @@ function SourceCode() {
       });
 
       //将li标签加粗
-      otherFileLiDom.classList.add('other-sourcecode-li');
+      otherFileLiDom.classList.add('sourcecode-li');
  
     }
 
@@ -249,11 +249,11 @@ function SourceCode() {
     floatingFileDom.classList.remove("floating-file-show")
     floatingFileDom.classList.add("floating-file-hidden")
 
-    //将div下面所有含 other-sourcecode-li class 的全部移除
-    const liList = floatingFileDom.querySelectorAll('div li.other-sourcecode-li');
-    // 遍历并删除 class 中的 "other-sourcecode-li"
+    //将div下面所有含 sourcecode-li class 的全部移除
+    const liList = floatingFileDom.querySelectorAll('div li.sourcecode-li');
+    // 遍历并删除 class 中的 "sourcecode-li"
     liList.forEach(li => {
-      li.classList.remove('other-sourcecode-li');
+      li.classList.remove('sourcecode-li');
     }); 
   }
 
