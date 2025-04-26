@@ -135,11 +135,17 @@ function SourceCode() {
   }
 
   //触发划线功能
-  function link(currentFile, trace){
+  const [top, setTop] = useState(0);
+  function link(event, currentFile, trace){
     console.info(trace)
+    document.getElementById("SourceCode").querySelectorAll('div a.fake-link-click').forEach(li => {
+      li.classList.remove('fake-link-click');
+    });
+    event.target.classList.add('fake-link-click')
     const toId = trace.id
     const toFile = trace.file
     if(currentFile==toFile){
+      closeFloatingFile()
       //同一个文件中
       const el = document.getElementById("line_" + trace.line)
       el.scrollIntoView({
@@ -159,7 +165,7 @@ function SourceCode() {
     }
     else{
       //不同文件中打开
-      openFloatingFile(trace)
+      openFloatingFile(event, trace)
     }
 
     
@@ -169,7 +175,7 @@ function SourceCode() {
   const [otherSourceCodeData, setOtherSourceCodeData] = useState({
     lines:[]
   })
-  function openFloatingFile(trace){
+  function openFloatingFile(event, trace){
     const file = trace.file
     //打开一个新文件，展示在div中
     const filePath = document.getElementById("floating-file-name").textContent
@@ -203,27 +209,31 @@ function SourceCode() {
       })
     }
 
-    
+    const rect = event.target.getBoundingClientRect();
+    setTop(rect.bottom + window.scrollY + 5); // 按钮下方 +10px
+
     var floatingFileDom = document.getElementById("floating-file")
     console.info(floatingFileDom)
     floatingFileDom.classList.remove("floating-file-hidden")
     floatingFileDom.classList.add("floating-file-show")
 
     console.info(document.getElementById("otherfileline_26"))
-    const el = document.getElementById("otherfileline_" + trace.line)
-    if(el){
-      el.scrollIntoView({
-        behavior: 'smooth',      // 平滑滚动
-        block: 'center',         // 垂直方向：滚动到中间
-        inline: 'center'         // 水平方向：滚动到中间
+    const otherFileLiDom = document.getElementById("otherfileline_" + trace.line)
+    if(otherFileLiDom){
+      const containerHeight = floatingFileDom.clientHeight;
+      const liOffsetTop = otherFileLiDom.offsetTop;
+      const liHeight = otherFileLiDom.offsetHeight;
+      // 计算 li 要滚动到的位置，使其垂直居中
+      const scrollTop = liOffsetTop - (containerHeight / 2) + (liHeight / 2);
+      // 平滑滚动到目标位置
+      floatingFileDom.scrollTo({
+        top: scrollTop,
+        behavior: 'smooth'
       });
 
-      el.classList.add('flash-border');
-
-      // 两秒后移除动画 class（避免永久保留）
-      setTimeout(() => {
-        el.classList.remove('flash-border');
-      }, 6000);
+      //将li标签加粗
+      otherFileLiDom.classList.add('other-sourcecode-li');
+ 
     }
 
   }
@@ -232,6 +242,13 @@ function SourceCode() {
     var floatingFileDom = document.getElementById("floating-file")
     floatingFileDom.classList.remove("floating-file-show")
     floatingFileDom.classList.add("floating-file-hidden")
+
+    //将div下面所有含 other-sourcecode-li class 的全部移除
+    const liList = floatingFileDom.querySelectorAll('div li.other-sourcecode-li');
+    // 遍历并删除 class 中的 "other-sourcecode-li"
+    liList.forEach(li => {
+      li.classList.remove('other-sourcecode-li');
+    }); 
   }
 
   //渲染issue列表
@@ -247,7 +264,7 @@ function SourceCode() {
         {
           issue.traces.map((trace, traceIndex) => (
             <div>
-              <a onClick={()=>link(issue.filePath, trace)} >{trace.file} # {trace.line} # {trace.message}</a>
+              <a className="fake-link" onClick={(event)=>link(event, issue.filePath, trace)} >{trace.file} # {trace.line} # {trace.message}</a>
             </div>
           ))
         }
@@ -320,9 +337,8 @@ function SourceCode() {
 
 
           {(
-            <div id="floating-file" className="floating-file floating-file-hidden">
-              
-                   
+            <div id="floating-file" className="floating-file floating-file-hidden" style={{ top: `${top}px` }}>
+
               <button className="floating-file-close-btn" onClick={closeFloatingFile}>X</button>
               <div className="floating-file-file-btn" id="floating-file-name">文件名</div> 
               <ol className="floating-file-content">

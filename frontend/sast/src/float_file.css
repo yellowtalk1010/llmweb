@@ -1,6 +1,36 @@
 
 /* 悬浮文件展示 */
 
+/*trace 路径 a 标签路径*/
+.fake-link {
+    color: #0000EE;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: normal;
+    font-size: 14px;
+  }
+  
+  .fake-link:visited {
+    color: #551A8B;
+  }
+  
+  .fake-link:hover {
+    color: #EE0000;
+    font-weight: bold;
+    font-size: 20px;
+  }
+.fake-link-click {
+    color: #EE0000;
+    font-weight: bold;
+    font-size: 20px;
+}
+  
+
+.other-sourcecode-li {
+    border: 6px solid red;
+}  
+  
+
 .floating-file-show {
     display: block;
 }
@@ -11,19 +41,17 @@
 
 
 .floating-file {
-    position: fixed;
-    top: 50%;
+    position: absolute;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50%;
-    max-height: 80vh;
-    overflow-y: auto;
+    transform: translateX(-50%);
+    width: 60%;
+    max-height: 60vh;
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     border: 2px solid black;
-    z-index: 9999;
+    padding: 16px;
+    overflow: auto;
+    z-index: 1000;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   }
   
   .floating-file-close-btn {
