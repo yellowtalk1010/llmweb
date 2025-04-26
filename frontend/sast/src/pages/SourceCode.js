@@ -260,7 +260,7 @@ function SourceCode() {
   //渲染issue列表
   function renderIssue1(lineIssues) {
     return lineIssues.map((issue, index) => (
-      <div id={issue.id} class="floatDiv">
+      <div id={issue.id} class="issueDiv">
         <div>{issue.name}</div>
         <div>
           {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
@@ -275,7 +275,7 @@ function SourceCode() {
           ))
         }
         </div>
-        <a class="btn" onClick={openAiCheck} id={issue.id}>AI审计</a>
+        <a class="ai_check" onClick={openAiCheck} id={issue.id}>AI审计</a>
         
         {/* 添加人工AI check交互框 */}
         <div id={"aiCheckId_" + issue.id} class="aiCheck aiCheckHidden">
