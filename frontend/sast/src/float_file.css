@@ -30,6 +30,8 @@
 }  
   
 
+/************div中悬浮展示文件*************/
+
 .floating-file-show {
     display: block;
 }
@@ -37,8 +39,6 @@
 .floating-file-hidden {
     display: none;
 }
-
-
 .floating-file {
     position: absolute;
     left: 50%;
