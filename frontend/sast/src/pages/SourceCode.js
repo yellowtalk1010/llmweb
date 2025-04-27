@@ -257,6 +257,7 @@ function SourceCode() {
           {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
         </div>
         <div>{issue.ruleDesc}</div>
+        <div>{issue.issueDesc}</div>
         <div>
         {
           issue.traces.map((trace, traceIndex) => (
