@@ -30,6 +30,10 @@ public class RulesApplication {
 
         System.getProperties().put("spring.http.encoding.charset", "UTF-8");
         System.getProperties().put("file.encoding", "UTF-8");
+        System.getProperties().put("spring.servlet.multipart.max-file-size", 1024*2 + "MB");
+        System.getProperties().put("spring.servlet.multipart.max-request-size", 1024*2 + "MB");
+
+
 
         if(args!=null && args.length>0){
             String issuePath = args[0];
