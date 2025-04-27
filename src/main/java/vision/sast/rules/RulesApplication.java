@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ComponentScan(basePackages = "vision.sast")
 public class RulesApplication {
 
-    public static String ISSUE_FILEPATH;
+    public static String ISSUE_FILEPATH = "";
     public static IssueResult ISSUE_RESULT;
     public static Properties PROPERTIES = new Properties();
 

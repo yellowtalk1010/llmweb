@@ -5,9 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.RulesApplication;
-import vision.sast.rules.controller.html.HTML;
 import vision.sast.rules.dto.IssueDto;
-import vision.sast.rules.utils.PropertiesKey;
 import vision.sast.rules.utils.SourceCodeUtil;
 
 import java.util.ArrayList;
