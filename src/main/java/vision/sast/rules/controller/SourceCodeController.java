@@ -17,7 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 public class SourceCodeController {
 
-    private static Map<String, List<IssueDto>> issuesMap = new ConcurrentHashMap<>();
+    public static Map<String, List<IssueDto>> issuesMap = new ConcurrentHashMap<>();
+
+    public static void clear(){
+        issuesMap.clear();
+    }
 
     private static String getKey(String vtid, String file){
         String key = vtid + ":" + file;

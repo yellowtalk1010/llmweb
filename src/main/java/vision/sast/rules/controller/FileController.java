@@ -13,10 +13,14 @@ import java.util.stream.Collectors;
 public class FileController {
 
     //文件总数
-    public static List<String> fileList;
-
+    public static List<String> fileList = null;
     //文件与issue集合关系
     public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
+
+    public static void clear(){
+        fileList = null;
+        fileIssuesMap = null;
+    }
 
     public synchronized static void loadInitList() {
         if(fileList ==null){

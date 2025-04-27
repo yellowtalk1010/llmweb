@@ -18,9 +18,15 @@ public class RuleController {
     public static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
     //获取规则vtid这种规则的总数
     public static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
-
     //规则与文件的关系集合关系
     public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
+
+    public static void clear(){
+        vtidList = null;
+        vtidIssueMap.clear();
+        vtidIssueCountMap.clear();
+        vtidFilesMap.clear();
+    }
 
     public synchronized static void loadInitList() {
         if(vtidList ==null){

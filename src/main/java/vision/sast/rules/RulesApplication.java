@@ -46,6 +46,7 @@ public class RulesApplication {
 
     public static void loadProperties() {
         try {
+            PROPERTIES.clear();
             String configFileName = "config.properties";
             File propertiesFile = new File(configFileName);
             if(!propertiesFile.exists()){

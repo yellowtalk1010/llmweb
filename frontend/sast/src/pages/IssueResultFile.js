@@ -35,16 +35,66 @@ function IssueResultFile() {
   }
   
 
+  //文件上传功能
+  const [file, setFile] = useState(null);
+  const [message, setMessage] = useState("");
+
+  const onFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const onUpload = async () => {
+    if (!file) {
+      setMessage("请先选择文件！");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const text = await response.text();
+        setMessage(text);
+      } else {
+        setMessage("上传失败！");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("上传出错！");
+    }
+  };
+
   return (
+    
     <div class='IssueResultFile'>
-      {issueFileData.issueResultFilePath}
-      <br></br>
+
+      <div className="upload">
+        <input type="file" onChange={onFileChange} className="mb-4" />
+        <button onClick={onUpload} className="bg-blue-500 text-white px-4 py-2 rounded">上传</button>
+        <div className="mt-4">{message}</div>
+      </div>
+
+      <hr></hr>
+
+      <div>
+        {issueFileData.issueResultFilePath}
+        <br></br>
         issue 总数：{issueFileData.issueNum}
         <br></br>
         {issueFileData.filesPage}
         <br></br>
         {issueFileData.rulesPage}
+      </div>
+
+      
     </div>
+    
   );
 }
 
