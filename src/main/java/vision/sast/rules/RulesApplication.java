@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RulesApplication {
 
     public static String ISSUE_FILEPATH = "";
-    public static IssueResult ISSUE_RESULT;
+    public static IssueResult ISSUE_RESULT = new IssueResult();
     public static Properties PROPERTIES = new Properties();
 
     public static void main(String[] args) {
@@ -35,10 +35,7 @@ public class RulesApplication {
             String issuePath = args[0];
             ISSUE_RESULT = buildIssueResult(new File(issuePath));
         }
-        if(ISSUE_RESULT==null){
-            System.out.println("issue result is null");
-            System.exit(0);
-        }
+        System.out.println(ISSUE_FILEPATH + "，" + ISSUE_RESULT.getResult().size());
         loadProperties();
         SpringApplication.run(RulesApplication.class, args);
 
