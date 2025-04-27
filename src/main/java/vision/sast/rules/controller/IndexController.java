@@ -10,7 +10,6 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("name", "Spring User");
-        System.out.println("Hello Spring User");
         return "index"; // 这将返回templates目录下的index.html文件
     }
 }
