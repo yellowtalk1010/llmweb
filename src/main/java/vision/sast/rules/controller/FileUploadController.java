@@ -30,10 +30,10 @@ public class FileUploadController {
             ).lines().collect(Collectors.joining("\n"));
 
             // 可以在这里处理 content，比如解析、打印、返回等
-            System.out.println("收到文件内容：");
-            System.out.println(content);
+//            System.out.println("收到文件内容：");
+//            System.out.println(content);
             RulesApplication.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
-
+            System.out.println(RulesApplication.ISSUE_RESULT.getResult().size());
             return ResponseEntity.ok("上传成功，issue数量：" + RulesApplication.ISSUE_RESULT.getResult().size());
         } catch (Exception e) {
             e.printStackTrace();
