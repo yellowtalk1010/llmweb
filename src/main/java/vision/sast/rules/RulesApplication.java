@@ -73,31 +73,6 @@ public class RulesApplication {
                 FileUtils.readLines(file, Charset.forName("utf-8")).stream().map(line->line+"\n").forEach(stringBuilder::append);
                 IssueResult issueResult = JSONObject.parseObject(stringBuilder.toString(), IssueResult.class);
 
-                AtomicInteger count = new AtomicInteger();
-                Map<String, IssueDto> map = new HashMap<>();
-                issueResult.getResult().stream().forEach(issueDto -> {
-                    String key = issueDto.getVtId() + "/" + issueDto.getFilePath() + "/" + issueDto.getLine() + "/" + issueDto.getName();
-                    if(map.get(key)==null){
-                        map.put(key, issueDto);
-                    }
-                    else {
-                        System.out.println("issue重复位置:" + JSONObject.toJSONString(issueDto, JSONWriter.Feature.LargeObject));
-                    }
-                });
-                issueResult.getResult().stream().forEach(issueDto->{
-                    List<IssueDto.Trace> traces = issueDto.getTraces();
-                    traces.stream().forEach(trace -> {
-                        String key = issueDto.getVtId() + "/" + trace.getFile() + "/" + trace.getLine() + "/" + trace.getMessage();
-                        if(map.get(key)!=null){
-                            IssueDto dto = map.get(key);
-                            trace.setId(dto.getId()); //关联
-                        }
-                        else {
-                            System.out.println(issueDto.getVtId() + "，trace不存在位置:" + JSONObject.toJSONString(trace, JSONWriter.Feature.LargeObject));
-                        }
-                    });
-                });
-
                 return issueResult;
             }
             catch (Exception e){
