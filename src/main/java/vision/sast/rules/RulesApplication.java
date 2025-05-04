@@ -28,7 +28,7 @@ public class RulesApplication {
 
     public static void main(String[] args) {
 
-        System.getProperties().put("spring.http.encoding.charset", "UTF-8");
+//        System.getProperties().put("spring.http.encoding.charset", "UTF-8");
         System.getProperties().put("file.encoding", "UTF-8");
         System.getProperties().put("spring.servlet.multipart.max-file-size", 1024*2 + "MB"); //上传文件最大2G
         System.getProperties().put("spring.servlet.multipart.max-request-size", 1024*2 + "MB"); //上传文件最大2G

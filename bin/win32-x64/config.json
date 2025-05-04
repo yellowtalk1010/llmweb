@@ -6,6 +6,11 @@
       "contextLength": 128000,
       "apiKey": "sk-c23b09fcc4704c9c910a28a28a600318",
       "provider": "deepseek"
+    },
+    {
+      "model": "AUTODETECT",
+      "title": "Autodetect",
+      "provider": "ollama"
     }
   ],
   "contextProviders": [
