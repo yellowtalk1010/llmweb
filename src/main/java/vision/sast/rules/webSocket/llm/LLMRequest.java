@@ -47,7 +47,8 @@ public class LLMRequest {
     @Data
     public static class DataRequest {
         private Map completionOptions = new HashMap();
-        private String title = "DeepSeek Coder (1)";
+//        private String title = "DeepSeek Coder"; //使用deepseek
+        private String title = "Autodetect"; //使用本地ollama
         private List<MessagesDto> messages = new ArrayList<>();
         public DataRequest(List<Map<String, String>> content){
             messages.add(new MessagesDto("system", "\u003cimportant_rules\u003e\n  Always include the language and file name in the info string when you write code blocks. If you are editing \"src/main.py\" for example, your code block should start with \u0027```python src/main.py\u0027.\n\u003c/important_rules\u003e"));
