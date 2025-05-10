@@ -1,50 +1,40 @@
 package vision.sast.rules;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
-import org.apache.commons.io.FileUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.IssueResult;
 import vision.sast.rules.utils.PropertiesKey;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "vision.sast")
 public class RulesApplication {
 
-    public static String ISSUE_FILEPATH = "";
+    //issue文件路径
+    @Deprecated
+    public static String ISSUE_FILEPATH = ""; //统一改为文件上传的方式
+    //issue结果保存
     public static IssueResult ISSUE_RESULT = new IssueResult();
+    //property中文件加载
     public static Properties PROPERTIES = new Properties();
 
     public static void main(String[] args) {
 
-//        System.getProperties().put("spring.http.encoding.charset", "UTF-8");
         System.getProperties().put("file.encoding", "UTF-8");
-        System.getProperties().put("spring.servlet.multipart.max-file-size", 1024*2 + "MB"); //上传文件最大2G
-        System.getProperties().put("spring.servlet.multipart.max-request-size", 1024*2 + "MB"); //上传文件最大2G
+        System.getProperties().put("spring.servlet.multipart.max-file-size", 1024*10 + "MB"); //上传文件最大10G
+        System.getProperties().put("spring.servlet.multipart.max-request-size", 1024*10 + "MB"); //上传文件最大10G
 
-
-
-        if(args!=null && args.length>0){
-            String issuePath = args[0];
-            ISSUE_RESULT = buildIssueResult(new File(issuePath));
-        }
-        System.out.println(ISSUE_FILEPATH + "，" + ISSUE_RESULT.getResult().size());
         loadProperties();
         SpringApplication.run(RulesApplication.class, args);
 
     }
 
+    /***
+     * 加载config.properties文件
+     */
     public static void loadProperties() {
         try {
             PROPERTIES.clear();
@@ -64,28 +54,6 @@ public class RulesApplication {
         }catch (Exception exception) {
             exception.printStackTrace();
         }
-    }
-
-    public static IssueResult buildIssueResult(File file){
-        if(file!=null && file.exists()){
-            try {
-                ISSUE_FILEPATH = file.getAbsolutePath().replaceAll("\\\\", "/");
-                System.out.println(ISSUE_FILEPATH + ", " + file.exists());
-                StringBuilder stringBuilder = new StringBuilder();
-                FileUtils.readLines(file, Charset.forName("utf-8")).stream().map(line->line+"\n").forEach(stringBuilder::append);
-                IssueResult issueResult = JSONObject.parseObject(stringBuilder.toString(), IssueResult.class);
-
-                return issueResult;
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            System.out.println("issue file is not exist");
-            System.exit(0);
-        }
-        return new IssueResult();
     }
 
 }
