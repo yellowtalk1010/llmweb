@@ -25,7 +25,6 @@ public class IssueResultController {
      */
     @GetMapping("getIssueResult")
     public Map getIssueResult(){
-        System.out.print(".");
         Map<String, Object> map = new HashMap<>();
         map.put("issueResultFilePath", RulesApplication.ISSUE_FILEPATH);
         map.put("issueNum", RulesApplication.ISSUE_RESULT.getResult().size());

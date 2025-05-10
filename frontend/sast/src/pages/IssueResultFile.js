@@ -4,14 +4,16 @@ import {Fragment, useState } from "react"
 function IssueResultFile() {
   const navigate = useNavigate();
 
+  //获取上传的issue文件信息
   const [issueFileData, setIssueFileData] = useState({
-    issueResultFilePath: 'loading', //加载的issue文件路径
+    issueResultFilePath: '', //加载的issue文件路径
     issueNum: '', //issue个数
     rulesPage: '', //规则集跳转
     filesPage: '' //文件集跳转
   })
 
-  if(issueFileData.issueNum==''){
+  function loadIssue() {
+    console.info("loadIssue")
     fetch('/getIssueResult', {
       method: 'GET',
       headers: {
@@ -33,7 +35,6 @@ function IssueResultFile() {
       console.log(e)
     })
   }
-  
 
   //文件上传功能
   const [file, setFile] = useState(null);
@@ -61,6 +62,8 @@ function IssueResultFile() {
       if (response.ok) {
         const text = await response.text();
         setMessage(text);
+
+        loadIssue();
       } else {
         setMessage("上传失败！");
       }
