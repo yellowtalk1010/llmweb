@@ -60,7 +60,7 @@ public class IssueResultController {
             return ResponseEntity.ok("上传成功，issue数量：" + RulesApplication.ISSUE_RESULT.getResult().size());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("读取文件失败！");
+            return ResponseEntity.internalServerError().body("读取文件失败！" + e.getMessage());
         }
     }
 
