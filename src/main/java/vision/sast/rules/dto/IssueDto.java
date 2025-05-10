@@ -25,11 +25,5 @@ public class IssueDto {
     private String issueDesc;
     private List<Trace> traces;
 
-    @Data
-    static public class Trace {
-        private String id;
-        private String file;
-        private Integer line;
-        private String message;
-    }
+
 }
