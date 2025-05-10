@@ -17,6 +17,7 @@
     <properties>
         <java.version>17</java.version>
         <maven.compile.encoding>UTF-8</maven.compile.encoding>
+        <exec.args>-Dspring.native.additional-build-args=--initialize-at-build-time=com.alibaba.fastjson2</exec.args>
     </properties>
     <dependencies>
 <!--        <dependency>-->
@@ -117,11 +118,13 @@
 <!--            <version>0.32.0</version>-->
 <!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/ai.djl.huggingface/tokenizers -->
-        <dependency>
-            <groupId>ai.djl.huggingface</groupId>
-            <artifactId>tokenizers</artifactId>
-            <version>0.32.0</version>
-        </dependency>
+
+
+        <!--        <dependency>-->
+<!--            <groupId>ai.djl.huggingface</groupId>-->
+<!--            <artifactId>tokenizers</artifactId>-->
+<!--            <version>0.32.0</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
@@ -131,6 +134,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+            </plugin>
+
+
         </plugins>
     </build>
 
