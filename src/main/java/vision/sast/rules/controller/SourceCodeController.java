@@ -47,7 +47,7 @@ public class SourceCodeController {
                     issueDtos = issuesMap.get(key);
                 }
 
-                String html = SourceCodeUtil.show(file, issueDtos);
+                String html = SourceCodeUtil.show(file, issueDtos, line);
 
                 html = "<html>" +
                        "<head>" +

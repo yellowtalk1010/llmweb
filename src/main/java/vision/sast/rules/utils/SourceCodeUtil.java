@@ -34,16 +34,21 @@ public class SourceCodeUtil {
 
     }
 
-    public static String show(String fileName, List<IssueDto> dtoList) throws Exception {
+    public static String show(String fileName, List<IssueDto> dtoList, Integer redLine) throws Exception {
 
         System.out.println("fileName = " + fileName + ", dtoList = " + dtoList.size());
         List<IssueDto> sortedList = dtoList.stream().sorted(Comparator.comparing(IssueDto::getLine)).toList();
 
         List<String> lines = openFile(fileName);
         HighLightUtil highlighterUtil = new HighLightUtil();
+        AtomicInteger counter = new AtomicInteger(0);
         List<String> newLines = lines.stream().map(line->{
 //            line = StringEscapeUtils.escapeHtml4(line);
             line = highlighterUtil.highlightLine(line);
+            counter.getAndIncrement();
+            if(redLine!=null && counter.get()==redLine){
+                line = "<div style='border: 2px solid red;'>" + line + "</div>"; //标记为红色边框
+            }
             line = "<li>" + line + "</li>";
 
             return line;
@@ -60,7 +65,7 @@ public class SourceCodeUtil {
                     s = "<a>" + s + "</a>";
                 }
                 else {
-                    s = "<a href='#'>" + s + "</a>";
+                    s = "<a href='llm_sourcecode?file="+trace.getFile()+"&line="+trace.getLine()+"'>" + s + "</a>";
                 }
 
                 traceBuilder.append(s + "<br>");
