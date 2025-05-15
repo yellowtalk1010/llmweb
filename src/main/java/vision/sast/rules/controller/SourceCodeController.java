@@ -37,7 +37,7 @@ public class SourceCodeController {
         return issuesMap.get(key).size();
     }
 
-    @GetMapping("sourceCode")
+    @GetMapping("llm_sourcecode")
     public synchronized String sourceCode(String vtid, String file) {
         if (vtid != null && file != null) {
             try {

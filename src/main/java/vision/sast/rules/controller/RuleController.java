@@ -121,7 +121,7 @@ public class RuleController {
         StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
         vtidFilesMap.get(vtid).stream().map(file->{
             int size = SourceCodeController.init(vtid, file);
-            String str = "<a href='sourceCode?vtid=" + vtid + "&file=" + file + "'>" + file + "</a> &nbsp;&nbsp;&nbsp;" + size;
+            String str = "<a href='llm_sourcecode?vtid=" + vtid + "&file=" + file + "'>" + file + "</a> &nbsp;&nbsp;&nbsp;" + size;
             return str + "<br>";
         }).forEach(stringBuilder::append);
         return stringBuilder.toString();
