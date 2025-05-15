@@ -12,6 +12,7 @@ public class LLMController {
                 + "issue 总数：" + RulesApplication.ISSUE_RESULT.getResult().size() + "<br>"
                 + "<a href='llm/files'>文件集</a>"  + "<br>"
                 + "<a href='llm_rules'>规则集</a>"  + "<br>"
+                + "<a>http://localhost:8080/pages/Rules</a>" + "<br>"
                 ;
     }
 
