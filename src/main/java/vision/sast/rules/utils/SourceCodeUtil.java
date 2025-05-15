@@ -60,9 +60,9 @@ public class SourceCodeUtil {
             List<Trace> traces = dto.getTraces();
             StringBuilder traceBuilder = new StringBuilder();
             traces.stream().forEach(trace->{
-                String s = trace.getFile() + "&nbsp#&nbsp" + trace.getLine() + "&nbsp#&nbsp" + trace.getMessage();
+                String s = "";
                 if(trace.getFile().equals(fileName)){
-                    s = "<a>" + s + "</a>";
+                    s = "当前文件" + "&nbsp#&nbsp" + trace.getLine() + "&nbsp#&nbsp" + trace.getMessage();
                 }
                 else {
                     s = "<a href='llm_sourcecode?file="+trace.getFile()+"&line="+trace.getLine()+"'>" + s + "</a>";
