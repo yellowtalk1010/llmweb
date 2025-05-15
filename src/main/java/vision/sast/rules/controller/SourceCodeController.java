@@ -38,12 +38,15 @@ public class SourceCodeController {
     }
 
     @GetMapping("llm_sourcecode")
-    public synchronized String sourceCode(String vtid, String file) {
-        if (vtid != null && file != null) {
+    public synchronized String sourceCode(String vtid, String file, Integer line) {
+        if (file != null) {
             try {
-                int size = init(vtid, file);
-                String key = getKey(vtid, file);
-                List<IssueDto> issueDtos = issuesMap.get(key);
+                List<IssueDto> issueDtos = new ArrayList<>();
+                if(vtid!=null){
+                    String key = getKey(vtid, file);
+                    issueDtos = issuesMap.get(key);
+                }
+
                 String html = SourceCodeUtil.show(file, issueDtos);
 
                 html = "<html>" +

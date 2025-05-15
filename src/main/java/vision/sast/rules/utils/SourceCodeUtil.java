@@ -56,7 +56,13 @@ public class SourceCodeUtil {
             StringBuilder traceBuilder = new StringBuilder();
             traces.stream().forEach(trace->{
                 String s = trace.getFile() + "&nbsp#&nbsp" + trace.getLine() + "&nbsp#&nbsp" + trace.getMessage();
-                s = "<a>" + s + "</a>";
+                if(trace.getFile().equals(fileName)){
+                    s = "<a>" + s + "</a>";
+                }
+                else {
+                    s = "<a href='#'>" + s + "</a>";
+                }
+
                 traceBuilder.append(s + "<br>");
             });
 
