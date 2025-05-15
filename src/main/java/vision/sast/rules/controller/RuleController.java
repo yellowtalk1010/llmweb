@@ -40,22 +40,6 @@ public class RuleController {
         }
     }
 
-    @GetMapping("rules")
-    public String rules(){
-        loadInitList();
-        StringBuilder stringBuilder = new StringBuilder();
-        vtidList.stream().map(vtid->{
-            IssueDto dto = vtidIssueMap.get(vtid);
-            if(vtidIssueCountMap.get(vtid)==null){
-                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
-                vtidIssueCountMap.put(vtid, count);
-            }
-            long size = vtidIssueCountMap.get(vtid);
-            String str = "<a href='rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
-            return str + "<br>";
-        }).forEach(stringBuilder::append);
-        return stringBuilder.toString();
-    }
 
     @GetMapping("rules_list")
     public List<Map<String, Object>> rules_list(){
@@ -78,23 +62,6 @@ public class RuleController {
         return list;
     }
 
-    @GetMapping("rule")
-    public String rule(String vtid){
-        if(vtidFilesMap.get(vtid)==null){
-            List<String> filepaths = RulesApplication.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
-                    .map(dto->dto.getFilePath()).collect(Collectors.toSet())
-                    .stream().toList().stream().sorted().toList();
-            vtidFilesMap.put(vtid, filepaths);
-        }
-        IssueDto dto = vtidIssueMap.get(vtid);
-        StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
-        vtidFilesMap.get(vtid).stream().map(file->{
-            int size = SourceCodeController.init(vtid, file);
-            String str = "<a href='sourceCode?vtid=" + vtid + "&file=" + file + "'>" + file + "</a> &nbsp;&nbsp;&nbsp;" + size;
-            return str + "<br>";
-        }).forEach(stringBuilder::append);
-        return stringBuilder.toString();
-    }
 
     @GetMapping("rule_vtid")
     public Map<String, Object> rule_vtid(String vtid){
@@ -124,5 +91,41 @@ public class RuleController {
 
         return responseMap;
     }
+
+    @GetMapping("llm_rules")
+    public String rules(){
+        loadInitList();
+        StringBuilder stringBuilder = new StringBuilder();
+        vtidList.stream().map(vtid->{
+            IssueDto dto = vtidIssueMap.get(vtid);
+            if(vtidIssueCountMap.get(vtid)==null){
+                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
+                vtidIssueCountMap.put(vtid, count);
+            }
+            long size = vtidIssueCountMap.get(vtid);
+            String str = "<a href='llm_rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
+            return str + "<br>";
+        }).forEach(stringBuilder::append);
+        return stringBuilder.toString();
+    }
+
+    @GetMapping("llm_rule")
+    public String rule(String vtid){
+        if(vtidFilesMap.get(vtid)==null){
+            List<String> filepaths = RulesApplication.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
+                    .map(dto->dto.getFilePath()).collect(Collectors.toSet())
+                    .stream().toList().stream().sorted().toList();
+            vtidFilesMap.put(vtid, filepaths);
+        }
+        IssueDto dto = vtidIssueMap.get(vtid);
+        StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
+        vtidFilesMap.get(vtid).stream().map(file->{
+            int size = SourceCodeController.init(vtid, file);
+            String str = "<a href='sourceCode?vtid=" + vtid + "&file=" + file + "'>" + file + "</a> &nbsp;&nbsp;&nbsp;" + size;
+            return str + "<br>";
+        }).forEach(stringBuilder::append);
+        return stringBuilder.toString();
+    }
+
 
 }

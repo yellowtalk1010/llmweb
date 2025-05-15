@@ -10,8 +10,8 @@ public class LLMController {
     public static String baseInfo(){
         return RulesApplication.ISSUE_FILEPATH + "<br>"
                 + "issue 总数：" + RulesApplication.ISSUE_RESULT.getResult().size() + "<br>"
-                + "<a href='files'>文件集</a>"  + "<br>"
-                + "<a href='rules'>规则集</a>"  + "<br>"
+                + "<a href='llm/files'>文件集</a>"  + "<br>"
+                + "<a href='llm_rules'>规则集</a>"  + "<br>"
                 ;
     }
 

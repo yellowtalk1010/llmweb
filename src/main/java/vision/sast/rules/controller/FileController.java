@@ -69,7 +69,7 @@ public class FileController {
         return f + ", " + ls.size() + "<br>" + stringBuilder.toString();
     }
 
-    @GetMapping("/files")
+    @GetMapping("/llm/files")
     public String files(){
         loadInitList();
         StringBuilder stringBuilder = new StringBuilder();
