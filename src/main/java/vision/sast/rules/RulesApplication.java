@@ -1,8 +1,10 @@
 package vision.sast.rules;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import vision.sast.rules.controller.IssueResultController;
 import vision.sast.rules.dto.IssueResult;
 import vision.sast.rules.utils.PropertiesKey;
 
@@ -26,6 +28,21 @@ public class RulesApplication {
         System.getProperties().put("file.encoding", "UTF-8");
         System.getProperties().put("spring.servlet.multipart.max-file-size", 1024*10 + "MB"); //上传文件最大10G
         System.getProperties().put("spring.servlet.multipart.max-request-size", 1024*10 + "MB"); //上传文件最大10G
+
+        if(args.length > 0){
+            String issuePath = args[0];
+            if(new File(issuePath).exists()){
+                try {
+                    String content = FileUtils.readFileToString(new File(issuePath), "UTF-8");
+                    IssueResultController.buildIssue(content);
+                    ISSUE_FILEPATH = issuePath;
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        }
 
         loadProperties();
         SpringApplication.run(RulesApplication.class, args);

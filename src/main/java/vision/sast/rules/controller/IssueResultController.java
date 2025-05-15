@@ -47,21 +47,25 @@ public class IssueResultController {
 //            System.out.println("收到文件内容：");
 //            System.out.println(content);
 
-            RulesApplication.ISSUE_FILEPATH = "";
-            RulesApplication.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
-            RulesApplication.loadProperties();
-
-            System.out.println(RulesApplication.ISSUE_RESULT.getResult().size());
-
-            RuleController.clear();
-            FileController.clear();
-            SourceCodeController.clear();
+            buildIssue(content);
 
             return ResponseEntity.ok("上传成功，issue数量：" + RulesApplication.ISSUE_RESULT.getResult().size());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("读取文件失败！" + e.getMessage());
         }
+    }
+
+    public static void buildIssue(String content) {
+        RulesApplication.ISSUE_FILEPATH = "";
+        RulesApplication.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
+        RulesApplication.loadProperties();
+
+        System.out.println(RulesApplication.ISSUE_RESULT.getResult().size());
+
+        RuleController.clear();
+        FileController.clear();
+        SourceCodeController.clear();
     }
 
 }
