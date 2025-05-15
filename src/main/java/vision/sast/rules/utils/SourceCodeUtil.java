@@ -6,6 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.text.StringEscapeUtils;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
+import vision.sast.rules.dto.Trace;
 
 import java.io.File;
 import java.util.Comparator;
@@ -51,6 +52,14 @@ public class SourceCodeUtil {
 
         int insertTime = 0;
         for (IssueDto dto : sortedList) {
+            List<Trace> traces = dto.getTraces();
+            StringBuilder traceBuilder = new StringBuilder();
+            traces.stream().forEach(trace->{
+                String s = trace.getFile() + "&nbsp#&nbsp" + trace.getLine() + "&nbsp#&nbsp" + trace.getMessage();
+                s = "<a>" + s + "</a>";
+                traceBuilder.append(s + "<br>");
+            });
+
             int line = dto.getLine();
             int index = line + insertTime;
             if (index > 0) {
@@ -59,7 +68,8 @@ public class SourceCodeUtil {
                         + dto.getLine() + "/" + dto.getVtId() + "/" + dto.getRule() + "/" + dto.getDefectLevel() + "/" + dto.getDefectType() + "/" + "<br>"
                         + dto.getRuleDesc() + "<br>"
                         + dto.getIssueDesc() + "<br>"
-                        + "<a class='btn' id='"+dto.getId()+"'>AI审计</a>"
+                        + traceBuilder.toString()
+                        + "<a class='btn' id='"+dto.getId()+"'>AI审计</a>" + "<br>"
                         + "</div>";
                 newLines.add(index, divStr);
                 insertTime++;
