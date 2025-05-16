@@ -12,38 +12,10 @@ import java.util.stream.Collectors;
 @RestController
 public class FileController {
 
-    //文件总数
-    public static List<String> fileList = null;
-    //文件与issue集合关系
-    public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
-
-    public static void fileClear(){
-        fileList = null;
-        fileIssuesMap = null;
-    }
-
-    public synchronized static void loadFileInitList() {
-        if(fileList ==null){
-            Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
-            fileList = set.stream().toList().stream().sorted().toList();
-        }
-
-        if(fileIssuesMap==null && fileList!=null){
-            fileIssuesMap = new ConcurrentHashMap<>();
-            fileList.stream().forEach(f->{
-                if(fileIssuesMap.get(f)==null){
-                    List<IssueDto> dtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(f)).toList();
-                    fileIssuesMap.put(f, dtos);
-                }
-            });
-        }
-
-    }
-
     @GetMapping("file")
     public synchronized String file(String f) {
-        loadFileInitList();
-        List<IssueDto> ls = fileIssuesMap.get(f);
+        Database.loadFileInitList();
+        List<IssueDto> ls = Database.fileIssuesMap.get(f);
 
         //数量
         Map<String, List<IssueDto>> vtidGroupMap = ls.stream().collect(Collectors.groupingBy(dto->dto.getVtId()));
@@ -71,10 +43,10 @@ public class FileController {
 
     @GetMapping("/llm/files")
     public String files(){
-        loadFileInitList();
+        Database.loadFileInitList();
         StringBuilder stringBuilder = new StringBuilder();
-        fileList.stream().map(file->{
-            String str = "<a href='file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + fileIssuesMap.get(file).size();
+        Database.fileList.stream().map(file->{
+            String str = "<a href='file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + Database.fileIssuesMap.get(file).size();
             return str + "<br>";
         }).forEach(stringBuilder::append);
         return stringBuilder.toString();
