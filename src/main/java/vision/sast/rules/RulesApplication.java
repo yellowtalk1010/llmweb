@@ -26,7 +26,7 @@ public class RulesApplication {
             if(new File(issuePath).exists()){
                 try {
                     String content = FileUtils.readFileToString(new File(issuePath), "UTF-8");
-                    IssueResultController.buildIssue(content);
+                    Database.buildIssue(content);
                     Database.ISSUE_FILEPATH = issuePath;
                 }
                 catch (Exception e){
