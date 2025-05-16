@@ -3,7 +3,6 @@ package vision.sast.rules.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.Database;
-import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 
 import java.util.*;
@@ -18,12 +17,12 @@ public class FileController {
     //文件与issue集合关系
     public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
 
-    public static void clear(){
+    public static void fileClear(){
         fileList = null;
         fileIssuesMap = null;
     }
 
-    public synchronized static void loadInitList() {
+    public synchronized static void loadFileInitList() {
         if(fileList ==null){
             Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
             fileList = set.stream().toList().stream().sorted().toList();
@@ -43,7 +42,7 @@ public class FileController {
 
     @GetMapping("file")
     public synchronized String file(String f) {
-        loadInitList();
+        loadFileInitList();
         List<IssueDto> ls = fileIssuesMap.get(f);
 
         //数量
@@ -72,7 +71,7 @@ public class FileController {
 
     @GetMapping("/llm/files")
     public String files(){
-        loadInitList();
+        loadFileInitList();
         StringBuilder stringBuilder = new StringBuilder();
         fileList.stream().map(file->{
             String str = "<a href='file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + fileIssuesMap.get(file).size();
