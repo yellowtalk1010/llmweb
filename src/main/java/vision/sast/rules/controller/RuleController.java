@@ -2,6 +2,7 @@ package vision.sast.rules.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vision.sast.rules.Database;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 
@@ -30,7 +31,7 @@ public class RuleController {
 
     public synchronized static void loadInitList() {
         if(vtidList ==null){
-            Set<String> set = RulesApplication.ISSUE_RESULT.getResult().stream().map(dto->{
+            Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->{
                 if(vtidIssueMap.get(dto.getVtId())==null){
                     vtidIssueMap.put(dto.getVtId(), dto);
                 }
@@ -48,7 +49,7 @@ public class RuleController {
         vtidList.stream().forEach(vtid->{
             IssueDto dto = vtidIssueMap.get(vtid);
             if(vtidIssueCountMap.get(vtid)==null){
-                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
+                long count = Database.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
                 vtidIssueCountMap.put(vtid, count);
             }
             long size = vtidIssueCountMap.get(vtid);
@@ -66,7 +67,7 @@ public class RuleController {
     @GetMapping("rule_vtid")
     public Map<String, Object> rule_vtid(String vtid){
         if(vtidFilesMap.get(vtid)==null){
-            List<String> filepaths = RulesApplication.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
+            List<String> filepaths = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
                     .map(dto->dto.getFilePath()).collect(Collectors.toSet())
                     .stream().toList().stream().sorted().toList();
             vtidFilesMap.put(vtid, filepaths);
@@ -99,7 +100,7 @@ public class RuleController {
         vtidList.stream().map(vtid->{
             IssueDto dto = vtidIssueMap.get(vtid);
             if(vtidIssueCountMap.get(vtid)==null){
-                long count = RulesApplication.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
+                long count = Database.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
                 vtidIssueCountMap.put(vtid, count);
             }
             long size = vtidIssueCountMap.get(vtid);
@@ -112,7 +113,7 @@ public class RuleController {
     @GetMapping("llm_rule")
     public String rule(String vtid){
         if(vtidFilesMap.get(vtid)==null){
-            List<String> filepaths = RulesApplication.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
+            List<String> filepaths = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
                     .map(dto->dto.getFilePath()).collect(Collectors.toSet())
                     .stream().toList().stream().sorted().toList();
             vtidFilesMap.put(vtid, filepaths);

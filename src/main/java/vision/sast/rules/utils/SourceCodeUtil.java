@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.text.StringEscapeUtils;
+import vision.sast.rules.Database;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.Trace;
@@ -23,8 +24,8 @@ public class SourceCodeUtil {
      public static List<String> openFile(String fileName) throws Exception {
 
         String codeFormat = "GBK";
-        if(RulesApplication.PROPERTIES.get(PropertiesKey.codeFormat)!=null){
-            codeFormat = (String) RulesApplication.PROPERTIES.get(PropertiesKey.codeFormat);
+        if(Database.PROPERTIES.get(PropertiesKey.codeFormat)!=null){
+            codeFormat = (String) Database.PROPERTIES.get(PropertiesKey.codeFormat);
         }
         System.out.println("open file format = " + codeFormat);
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import vision.sast.rules.Database;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueResult;
 
@@ -26,8 +27,8 @@ public class IssueResultController {
     @GetMapping("getIssueResult")
     public Map getIssueResult(){
         Map<String, Object> map = new HashMap<>();
-        map.put("issueResultFilePath", RulesApplication.ISSUE_FILEPATH);
-        map.put("issueNum", RulesApplication.ISSUE_RESULT.getResult().size());
+        map.put("issueResultFilePath", Database.ISSUE_FILEPATH);
+        map.put("issueNum", Database.ISSUE_RESULT.getResult().size());
         return map;
     }
 
@@ -49,7 +50,7 @@ public class IssueResultController {
 
             buildIssue(content);
 
-            return ResponseEntity.ok("上传成功，issue数量：" + RulesApplication.ISSUE_RESULT.getResult().size());
+            return ResponseEntity.ok("上传成功，issue数量：" + Database.ISSUE_RESULT.getResult().size());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("读取文件失败！" + e.getMessage());
@@ -57,11 +58,11 @@ public class IssueResultController {
     }
 
     public static void buildIssue(String content) {
-        RulesApplication.ISSUE_FILEPATH = "";
-        RulesApplication.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
+        Database.ISSUE_FILEPATH = "";
+        Database.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
         RulesApplication.loadProperties();
 
-        System.out.println(RulesApplication.ISSUE_RESULT.getResult().size());
+        System.out.println(Database.ISSUE_RESULT.getResult().size());
 
         RuleController.clear();
         FileController.clear();

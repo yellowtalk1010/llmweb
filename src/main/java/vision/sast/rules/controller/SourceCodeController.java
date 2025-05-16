@@ -4,6 +4,7 @@ package vision.sast.rules.controller;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vision.sast.rules.Database;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.SourceCodeUtil;
@@ -31,7 +32,7 @@ public class SourceCodeController {
     public static synchronized int init(String vtid, String file) {
         String key = getKey(vtid, file);
         if(issuesMap.get(key)==null){
-            List<IssueDto> issueDtos = RulesApplication.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(file) && dto.getVtId().equals(vtid)).toList();
+            List<IssueDto> issueDtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(file) && dto.getVtId().equals(vtid)).toList();
             issuesMap.put(key, issueDtos);
         }
         return issuesMap.get(key).size();

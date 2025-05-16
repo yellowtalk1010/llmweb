@@ -2,6 +2,7 @@ package vision.sast.rules.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vision.sast.rules.Database;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 
@@ -24,7 +25,7 @@ public class FileController {
 
     public synchronized static void loadInitList() {
         if(fileList ==null){
-            Set<String> set = RulesApplication.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
+            Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
             fileList = set.stream().toList().stream().sorted().toList();
         }
 
@@ -32,7 +33,7 @@ public class FileController {
             fileIssuesMap = new ConcurrentHashMap<>();
             fileList.stream().forEach(f->{
                 if(fileIssuesMap.get(f)==null){
-                    List<IssueDto> dtos = RulesApplication.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(f)).toList();
+                    List<IssueDto> dtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(f)).toList();
                     fileIssuesMap.put(f, dtos);
                 }
             });

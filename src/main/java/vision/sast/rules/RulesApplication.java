@@ -15,14 +15,6 @@ import java.util.Properties;
 @ComponentScan(basePackages = "vision.sast")
 public class RulesApplication {
 
-    //issue文件路径
-    @Deprecated
-    public static String ISSUE_FILEPATH = ""; //统一改为文件上传的方式
-    //issue结果保存
-    public static IssueResult ISSUE_RESULT = new IssueResult();
-    //property中文件加载
-    public static Properties PROPERTIES = new Properties();
-
     public static void main(String[] args) {
 
         System.getProperties().put("file.encoding", "UTF-8");
@@ -35,7 +27,7 @@ public class RulesApplication {
                 try {
                     String content = FileUtils.readFileToString(new File(issuePath), "UTF-8");
                     IssueResultController.buildIssue(content);
-                    ISSUE_FILEPATH = issuePath;
+                    Database.ISSUE_FILEPATH = issuePath;
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -54,7 +46,7 @@ public class RulesApplication {
      */
     public static void loadProperties() {
         try {
-            PROPERTIES.clear();
+            Database.PROPERTIES.clear();
             String configFileName = "config.properties";
             File propertiesFile = new File(configFileName);
             if(!propertiesFile.exists()){
@@ -66,8 +58,8 @@ public class RulesApplication {
                 }
             }
             InputStream input = new FileInputStream(propertiesFile);
-            PROPERTIES.load(input);
-            System.out.println(PROPERTIES);
+            Database.PROPERTIES.load(input);
+            System.out.println(Database.PROPERTIES);
         }catch (Exception exception) {
             exception.printStackTrace();
         }
