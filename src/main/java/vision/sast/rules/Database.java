@@ -20,9 +20,12 @@ public class Database {
     //property中文件加载
     public static Properties PROPERTIES = new Properties();
 
-
-    public static void buildIssue(String content) {
-        Database.ISSUE_FILEPATH = "";
+    /***
+     * 根据文本信息构建一个
+     * @param content
+     */
+    public static void buildIssue(String issuePath, String content) {
+        Database.ISSUE_FILEPATH = issuePath;
         Database.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
         RulesApplication.loadProperties();
 

@@ -48,7 +48,7 @@ public class IssueResultController {
 //            System.out.println("收到文件内容：");
 //            System.out.println(content);
 
-            Database.buildIssue(content);
+            Database.buildIssue(null, content);
 
             return ResponseEntity.ok("上传成功，issue数量：" + Database.ISSUE_RESULT.getResult().size());
         } catch (Exception e) {
