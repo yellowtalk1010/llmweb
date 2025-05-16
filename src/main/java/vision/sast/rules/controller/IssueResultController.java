@@ -64,9 +64,9 @@ public class IssueResultController {
 
         System.out.println(Database.ISSUE_RESULT.getResult().size());
 
-        RuleController.clear();
+        Database.ruleClear();
         Database.fileClear();
-        SourceCodeController.clear();
+        Database.sourceCodeClear();
     }
 
 }

@@ -51,4 +51,56 @@ public class Database {
     }
 
 
+
+    //根据规则vtid统计规则总数
+    public static List<String> vtidList;
+    //获取规则的基本信息，IssueDto中主要使用规则信息
+    public static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
+    //获取规则vtid这种规则的总数
+    public static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
+    //规则与文件的关系集合关系
+    public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
+
+    public static void ruleClear(){
+        vtidList = null;
+        vtidIssueMap.clear();
+        vtidIssueCountMap.clear();
+        vtidFilesMap.clear();
+    }
+
+    public synchronized static void loadRuleInitList() {
+        if(vtidList ==null){
+            Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->{
+                if(vtidIssueMap.get(dto.getVtId())==null){
+                    vtidIssueMap.put(dto.getVtId(), dto);
+                }
+                return dto.getVtId();
+            }).collect(Collectors.toSet());
+            vtidList = set.stream().toList().stream().sorted().toList();
+        }
+    }
+
+
+
+
+    public static Map<String, List<IssueDto>> issuesMap = new ConcurrentHashMap<>();
+
+    public static void sourceCodeClear(){
+        issuesMap.clear();
+    }
+
+    public static String getKey(String vtid, String file){
+        String key = vtid + ":" + file;
+        return key;
+    }
+
+    public static synchronized int sourceCodeInit(String vtid, String file) {
+        String key = getKey(vtid, file);
+        if(issuesMap.get(key)==null){
+            List<IssueDto> issueDtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(file) && dto.getVtId().equals(vtid)).toList();
+            issuesMap.put(key, issueDtos);
+        }
+        return issuesMap.get(key).size();
+    }
+
 }

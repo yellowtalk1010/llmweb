@@ -66,6 +66,7 @@ public class SourceCodeUtil {
                     s = "当前文件" + "&nbsp#&nbsp" + trace.getLine() + "&nbsp#&nbsp" + trace.getMessage();
                 }
                 else {
+                    s = trace.getFile() + "&nbsp#&nbsp" + trace.getLine() + "&nbsp#&nbsp" + trace.getMessage();
                     s = "<a href='llm_sourcecode?file="+trace.getFile()+"&line="+trace.getLine()+"'>" + s + "</a>";
                 }
 

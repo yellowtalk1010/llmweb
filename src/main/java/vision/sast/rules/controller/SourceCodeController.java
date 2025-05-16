@@ -5,7 +5,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.Database;
-import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.SourceCodeUtil;
 
@@ -13,30 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 public class SourceCodeController {
-
-    public static Map<String, List<IssueDto>> issuesMap = new ConcurrentHashMap<>();
-
-    public static void clear(){
-        issuesMap.clear();
-    }
-
-    private static String getKey(String vtid, String file){
-        String key = vtid + ":" + file;
-        return key;
-    }
-
-    public static synchronized int init(String vtid, String file) {
-        String key = getKey(vtid, file);
-        if(issuesMap.get(key)==null){
-            List<IssueDto> issueDtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(file) && dto.getVtId().equals(vtid)).toList();
-            issuesMap.put(key, issueDtos);
-        }
-        return issuesMap.get(key).size();
-    }
 
     @GetMapping("llm_sourcecode")
     public synchronized String sourceCode(String vtid, String file, Integer line) {
@@ -44,8 +22,8 @@ public class SourceCodeController {
             try {
                 List<IssueDto> issueDtos = new ArrayList<>();
                 if(vtid!=null){
-                    String key = getKey(vtid, file);
-                    issueDtos = issuesMap.get(key);
+                    String key = Database.getKey(vtid, file);
+                    issueDtos = Database.issuesMap.get(key);
                 }
 
                 String html = SourceCodeUtil.show(file, issueDtos, line);
@@ -80,9 +58,9 @@ public class SourceCodeController {
     public synchronized Map<String, Object> sourceCode_list(String vtid, String file) {
         if (vtid != null && file != null) {
             try {
-                int size = init(vtid, file);
-                String key = getKey(vtid, file);
-                List<IssueDto> issueDtos = issuesMap.get(key);
+                int size = Database.sourceCodeInit(vtid, file);
+                String key = Database.getKey(vtid, file);
+                List<IssueDto> issueDtos = Database.issuesMap.get(key);
                 Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);
 
                 Map<String, Object> map = new HashMap<>();
