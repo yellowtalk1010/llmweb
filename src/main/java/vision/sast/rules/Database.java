@@ -20,6 +20,10 @@ public class Database {
     //property中文件加载
     public static Properties PROPERTIES = new Properties();
 
+    //文件列表
+    public static List<String> fileList = null;
+    //文件与issue集合关系
+    public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
     /***
      * 根据文本信息构建一个
      * @param content
@@ -31,24 +35,22 @@ public class Database {
 
         System.out.println(Database.ISSUE_RESULT.getResult().size());
 
+        loadFileInitList();
+
+
         Database.ruleClear();
-        Database.fileClear();
         Database.sourceCodeClear();
     }
 
 
+    /***
+     * 加载文件信息
+     */
+    private synchronized static void loadFileInitList() {
 
-    //文件总数
-    public static List<String> fileList = null;
-    //文件与issue集合关系
-    public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
-
-    public static void fileClear(){
         fileList = null;
         fileIssuesMap = null;
-    }
 
-    public synchronized static void loadFileInitList() {
         if(fileList ==null){
             Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
             fileList = set.stream().toList().stream().sorted().toList();

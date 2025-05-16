@@ -14,7 +14,6 @@ public class FileController {
 
     @GetMapping("file")
     public synchronized String file(String f) {
-        Database.loadFileInitList();
         List<IssueDto> ls = Database.fileIssuesMap.get(f);
 
         //数量
@@ -43,7 +42,6 @@ public class FileController {
 
     @GetMapping("/llm/files")
     public String files(){
-        Database.loadFileInitList();
         StringBuilder stringBuilder = new StringBuilder();
         Database.fileList.stream().map(file->{
             String str = "<a href='file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + Database.fileIssuesMap.get(file).size();
