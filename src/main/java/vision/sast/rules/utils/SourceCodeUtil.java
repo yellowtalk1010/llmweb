@@ -10,6 +10,7 @@ import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.Trace;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,16 +24,27 @@ public class SourceCodeUtil {
      */
      public static List<String> openFile(String fileName) throws Exception {
 
-        String codeFormat = "GBK";
+        List<String> codeFormatList = new ArrayList<>();
+        codeFormatList.add("GBK");
+        codeFormatList.add("UTF-8");
+
+        for (String format : codeFormatList) {
+            try {
+                System.out.println("open file format = " + format);
+                List<String> lines = FileUtils.readLines(new File(fileName),format);
+                return lines;
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        String codeFormat = "";
         if(Database.PROPERTIES.get(PropertiesKey.codeFormat)!=null){
             codeFormat = (String) Database.PROPERTIES.get(PropertiesKey.codeFormat);
         }
         System.out.println("open file format = " + codeFormat);
-
         List<String> lines = FileUtils.readLines(new File(fileName),codeFormat);
-
         return lines;
-
     }
 
     public static String show(String fileName, List<IssueDto> dtoList, Integer redLine) throws Exception {
