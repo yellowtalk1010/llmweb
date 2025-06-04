@@ -22,6 +22,7 @@ public class SourceCodeController {
             try {
                 List<IssueDto> issueDtos = new ArrayList<>();
                 if(vtid!=null){
+                    Database.sourceCodeInit(vtid, file);
                     String key = Database.getKey(vtid, file);
                     issueDtos = Database.issuesMap.get(key);
                 }
