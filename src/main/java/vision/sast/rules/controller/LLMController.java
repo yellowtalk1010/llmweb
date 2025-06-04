@@ -6,6 +6,7 @@ import vision.sast.rules.Database;
 import vision.sast.rules.RulesApplication;
 import vision.sast.rules.dto.IssueDto;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class LLMController {
 
     @GetMapping("llm_files")
     public String llm_files(){
+        System.out.println("文件总数：" + Database.fileList.size());
         StringBuilder stringBuilder = new StringBuilder();
         Database.fileList.stream().map(file->{
             String str = "<a href='llm_file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + Database.fileIssuesMap.get(file).size();
@@ -38,6 +40,9 @@ public class LLMController {
     @GetMapping("llm_file")
     public synchronized String llm_file(String f) {
         List<IssueDto> ls = Database.fileIssuesMap.get(f);
+        File file = new File(f);
+        System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
+
 
         //数量
         Map<String, List<IssueDto>> vtidGroupMap = ls.stream().collect(Collectors.groupingBy(dto->dto.getVtId()));
