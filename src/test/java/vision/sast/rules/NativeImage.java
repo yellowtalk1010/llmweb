@@ -7,8 +7,7 @@ import lombok.Data;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /***
  * 采用 native image 命令将jar转成exe程序
@@ -28,10 +27,33 @@ public class NativeImage {
         System.out.println(reflectConfigFile.getAbsolutePath());
         assert reflectConfigFile.exists();
         String text = FileUtils.readFileToString(reflectConfigFile, "UTF-8");
-        List<Dto> list = JSON.parseArray(text, Dto.class);
-        System.out.print(list.size());
-        list.forEach(dto->{
-            System.out.println(dto.getName());
+        List<Map> list = JSON.parseArray(text, Map.class);
+        System.out.println(list.size());
+        Set<String> keyClassNames = new HashSet<>();
+        Set<String> keyNames = new HashSet<>();
+        list.forEach(map->{
+            map.keySet().stream().forEach(key->{
+                keyClassNames.add(key.getClass().getSimpleName());
+                keyNames.add(key.toString());
+            });
+            if(map.get("name")!=null
+                && (map.get("name") instanceof String)
+//                && ((String) map.get("name")).startsWith("vision")
+                    && !((String) map.get("name")).startsWith("[")
+            ){
+                map.put("allDeclaredConstructors", true);
+//                map.put("allPublicConstructors", true);
+                map.put("allDeclaredMethods", true);
+//                map.put("allPublicMethods", true);
+                map.put("allDeclaredFields", true);
+            }
+            else {
+                map.put("allDeclaredConstructors", true);
+//                map.put("allPublicConstructors", true);
+                map.put("allDeclaredMethods", true);
+//                map.put("allPublicMethods", true);
+                map.put("allDeclaredFields", true);
+            }
         });
         String json = JSONObject.toJSONString(list, JSONWriter.Feature.PrettyFormat);
         System.out.println(json);
@@ -42,10 +64,12 @@ public class NativeImage {
     @Data
     private static class Dto {
         private String name;
-        private boolean allDeclaredConstructors = true;
-        private boolean allPublicConstructors = true;
-        private boolean allDeclaredMethods = true;
-        private boolean allPublicMethods = true;
+        private Boolean allDeclaredConstructors = null;     //注册该类中所有构造方法（包括 private）
+//        private Boolean allPublicConstructors = null;
+        private Boolean allDeclaredMethods = null;          //注册该类中所有方法（包括 private）
+//        private Boolean allPublicMethods = null;
+        private Boolean allDeclaredFields = null;           //注册该类中所有字段（包括 private）
+
     }
 
 }
