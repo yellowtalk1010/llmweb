@@ -18,6 +18,7 @@ import java.util.*;
  * 4. 通过native image 生成 visonRules.exe
  *    .\engine\vision> native-image -cp .\target\visionSAST.jar -H:Class=vision.sast.VisionMain --no-fallback --enable-http --enable-https -H:ConfigurationFileDirectories=src/main/resources/native-image  -H:Name=.\target\visionRules
  * 5. 运行 visionRules.exe
+ *    .\engine\vision> .\target\visionRules.exe -projectName a -type CJ2000A -scan ..\standardCheckers\cj2000a\src\test\resources\cj2000a
  */
 public class NativeImage {
 
@@ -38,20 +39,16 @@ public class NativeImage {
             });
             if(map.get("name")!=null
                 && (map.get("name") instanceof String)
-//                && ((String) map.get("name")).startsWith("vision")
-                    && !((String) map.get("name")).startsWith("[")
+                && ((String) map.get("name")).startsWith("vision")
             ){
+                map.put("fields",null);
+                map.put("methods", null);
+                map.put("allPublicConstructors", null);
+                map.put("allPublicMethods", null);
+
+
                 map.put("allDeclaredConstructors", true);
-//                map.put("allPublicConstructors", true);
                 map.put("allDeclaredMethods", true);
-//                map.put("allPublicMethods", true);
-                map.put("allDeclaredFields", true);
-            }
-            else {
-                map.put("allDeclaredConstructors", true);
-//                map.put("allPublicConstructors", true);
-                map.put("allDeclaredMethods", true);
-//                map.put("allPublicMethods", true);
                 map.put("allDeclaredFields", true);
             }
         });
