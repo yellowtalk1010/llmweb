@@ -12,11 +12,11 @@ import java.util.*;
 /***
  * 采用 native image 命令将jar转成exe程序
  * 1. 运行你的程序以收集反射信息（收集到 native-image 文件夹中）：
- *    .\engine\vision> java -agentlib:native-image-agent=config-output-dir=./src/main/resources/native-image  -jar  .\target\visionSAST.jar  -projectName a -type CJ2000A -scan ..\standardCheckers\cj2000a\src\test\resources\cj2000a
+ *    .\engine\vision> java -agentlib:native-image-agent=config-output-dir=./compilers/native-image  -jar  .\target\visionSAST.jar  -projectName a -type CJ2000A -scan ..\standardCheckers\cj2000a\src\test\resources\cj2000a
  * 2. 读取 ./native-image/reflect-config.json
  * 3. 生产一个新的 reflect-config.json 文件
  * 4. 通过native image 生成 visonRules.exe
- *    .\engine\vision> native-image -cp .\target\visionSAST.jar -H:Class=vision.sast.VisionMain --no-fallback --enable-http --enable-https -H:ConfigurationFileDirectories=src/main/resources/native-image  -H:Name=.\target\visionRules
+ *    .\engine\vision> native-image -cp .\target\visionSAST.jar -H:Class=vision.sast.VisionMain --no-fallback --enable-http --enable-https -H:ConfigurationFileDirectories=compilers/native-image  -H:Name=.\target\visionRules
  * 5. 运行 visionRules.exe
  *    .\engine\vision> .\target\visionRules.exe -projectName a -type CJ2000A -scan ..\standardCheckers\cj2000a\src\test\resources\cj2000a
  */
