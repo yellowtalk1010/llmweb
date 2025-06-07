@@ -12,7 +12,7 @@ import java.util.*;
 /***
  * 采用 native image 命令将jar转成exe程序
  * 1. 运行你的程序以收集反射信息（收集到 native-image 文件夹中）：
- *    java -agentlib:native-image-agent=config-output-dir=./native-image -jar visionSAST.jar
+ *    .\engine\vision> java -agentlib:native-image-agent=config-output-dir=./native-image  -jar  .\target\visionSAST.jar
  * 2. 读取 ./native-image/reflect-config.json
  * 3. 生产一个新的 reflect-config.json 文件
  * 4. 通过native image 生成 visonRules.exe
