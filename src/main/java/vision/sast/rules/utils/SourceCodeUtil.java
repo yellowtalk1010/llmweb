@@ -43,6 +43,7 @@ public class SourceCodeUtil {
                         }
                     });
                     try {
+                        System.out.println("循环加载");
                         Thread.sleep(500);
                     }catch (Exception e) {
                         e.printStackTrace();
