@@ -35,6 +35,7 @@ public class SourceCodeUtil {
             @Override
             public void run() {
                 while (true) {
+                    // System.out.println("循环加载" + ISSUE_RESULT.getResult().size());
                     ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
                         try {
                             openFile(issueFile);
@@ -43,7 +44,6 @@ public class SourceCodeUtil {
                         }
                     });
                     try {
-                        System.out.println("循环加载");
                         Thread.sleep(500);
                     }catch (Exception e) {
                         e.printStackTrace();
@@ -68,9 +68,9 @@ public class SourceCodeUtil {
 
         for (String format : codeFormatList) {
             try {
-                System.out.println("open file format = " + format);
+                //System.out.println("open file format = " + format);
                 List<String> lines = FileUtils.readLines(new File(fileName),format);
-                System.out.println(fileName + "，文件加载完成");
+                System.out.println(fileName + "，文件加载完成，" + format);
                 FILE_MAP.put(fileName, lines);
                 return lines;
             }catch (Exception e) {
