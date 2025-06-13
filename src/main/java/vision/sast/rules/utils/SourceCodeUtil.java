@@ -10,6 +10,7 @@ import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.Trace;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -31,7 +32,7 @@ public class SourceCodeUtil {
          if(FILE_MAP.get(fileName) != null){
              return FILE_MAP.get(fileName);
          }
-
+        System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
         List<String> codeFormatList = new ArrayList<>();
         codeFormatList.add("GBK");
         codeFormatList.add("UTF-8");
