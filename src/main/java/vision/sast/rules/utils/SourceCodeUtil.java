@@ -16,13 +16,41 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static vision.sast.rules.Database.ISSUE_RESULT;
 
 public class SourceCodeUtil {
 
 
     private static Map<String, List<String>> FILE_MAP = new ConcurrentHashMap<>();
+
+    //循环加载文件
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    static {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
+                        try {
+                            openFile(issueFile);
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    try {
+                        Thread.sleep(500);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
     /***
      * 读取文件
@@ -41,6 +69,7 @@ public class SourceCodeUtil {
             try {
                 System.out.println("open file format = " + format);
                 List<String> lines = FileUtils.readLines(new File(fileName),format);
+                System.out.println(fileName + "，文件加载完成");
                 FILE_MAP.put(fileName, lines);
                 return lines;
             }catch (Exception e) {
