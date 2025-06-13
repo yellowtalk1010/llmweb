@@ -13,16 +13,24 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class SourceCodeUtil {
 
 
+    private static Map<String, List<String>> FILE_MAP = new ConcurrentHashMap<>();
+
     /***
      * 读取文件
      */
      public static List<String> openFile(String fileName) throws Exception {
+
+         if(FILE_MAP.get(fileName) != null){
+             return FILE_MAP.get(fileName);
+         }
 
         List<String> codeFormatList = new ArrayList<>();
         codeFormatList.add("GBK");
@@ -32,19 +40,14 @@ public class SourceCodeUtil {
             try {
                 System.out.println("open file format = " + format);
                 List<String> lines = FileUtils.readLines(new File(fileName),format);
+                FILE_MAP.put(fileName, lines);
                 return lines;
             }catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
             }
         }
-
-        String codeFormat = "";
-        if(Database.PROPERTIES.get(PropertiesKey.codeFormat)!=null){
-            codeFormat = (String) Database.PROPERTIES.get(PropertiesKey.codeFormat);
-        }
-        System.out.println("open file format = " + codeFormat);
-        List<String> lines = FileUtils.readLines(new File(fileName),codeFormat);
-        return lines;
+        return new ArrayList<>();
     }
 
     public static String show(String fileName, List<IssueDto> dtoList, Integer redLine) throws Exception {
