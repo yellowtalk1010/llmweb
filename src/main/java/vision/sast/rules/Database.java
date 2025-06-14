@@ -109,7 +109,7 @@ public class Database {
 
 
     //根据规则vtid统计规则总数
-    public static List<String> vtidList = new ArrayList<>();
+    public static java.util.List<String> vtidList = new java.util.ArrayList<>();
     //获取规则的基本信息，IssueDto中主要使用规则信息
     public static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
     //获取规则vtid这种规则的总数
@@ -122,7 +122,7 @@ public class Database {
     }
 
     public synchronized static void loadRuleInitList() {
-        vtidList.clear();
+        vtidList = new java.util.ArrayList<>();
         vtidIssueMap.clear();
         vtidIssueCountMap.clear();
         vtidFilesMap.clear();
