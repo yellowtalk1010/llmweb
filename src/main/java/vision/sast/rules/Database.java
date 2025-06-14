@@ -27,6 +27,7 @@ public class Database {
      * 线程池加载文件内容
      */
     private static void loadFileContent() {
+        FILE_CONTEXT_MAP.clear();
         System.out.println("加载文件内容");
         executorService.execute(new Runnable() {
             @Override
@@ -117,7 +118,6 @@ public class Database {
     public static void ruleClear(){
         vtidIssueCountMap.clear();
         vtidFilesMap.clear();
-        FILE_CONTEXT_MAP.clear(); //清空文件路径与文件内容关系
         fileAndVtid_issuesMap.clear();
     }
 
