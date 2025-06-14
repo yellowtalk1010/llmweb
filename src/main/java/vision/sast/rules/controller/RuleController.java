@@ -16,11 +16,7 @@ public class RuleController {
         List<Map<String, Object>> list = new ArrayList<>();
         Database.vtidList.stream().forEach(vtid->{
             IssueDto dto = Database.vtidIssueMap.get(vtid);
-            if(Database.vtidIssueCountMap.get(vtid)==null){
-                long count = Database.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
-                Database.vtidIssueCountMap.put(vtid, count);
-            }
-            long size = Database.vtidIssueCountMap.get(vtid);
+            Long size = Database.vtidIssueCountMap.get(vtid);
             Map<String, Object> map = new HashMap<>();
             map.put("vtid", vtid);
             map.put("defectLevel", dto.getDefectLevel());
@@ -66,11 +62,7 @@ public class RuleController {
         StringBuilder stringBuilder = new StringBuilder();
         Database.vtidList.stream().map(vtid->{
             IssueDto dto = Database.vtidIssueMap.get(vtid);
-            if(Database.vtidIssueCountMap.get(vtid)==null){
-                long count = Database.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
-                Database.vtidIssueCountMap.put(vtid, count);
-            }
-            long size = Database.vtidIssueCountMap.get(vtid);
+            Long size = Database.vtidIssueCountMap.get(vtid);
             String str = "<a href='llm_rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
             return str + "<br>";
         }).forEach(stringBuilder::append);

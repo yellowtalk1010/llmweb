@@ -126,6 +126,7 @@ public class Database {
     public synchronized static void loadRuleInitList() {
         vtidList.clear();
         vtidIssueMap.clear();
+        vtidIssueCountMap.clear();
 
         Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->{
             if(vtidIssueMap.get(dto.getVtId())==null){
@@ -136,6 +137,13 @@ public class Database {
         System.out.println("完成构建规则基本信息提取");
         vtidList = set.stream().toList().stream().sorted().toList();
         System.out.println("完成规则提取，规则总数:"  + vtidList.size());
+
+
+        Database.vtidList.stream().forEach(vtid->{
+            long count = Database.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
+            vtidIssueCountMap.put(vtid, count);
+        });
+        System.out.println("完成规则违反总数");
 
     }
 
