@@ -154,11 +154,7 @@ public class Database {
         System.out.println("完成规则违反总数关系");
         System.out.println("完成规则与文件之间的关系");
 
-
-
     }
-
-
 
 
 
