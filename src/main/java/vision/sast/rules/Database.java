@@ -118,7 +118,6 @@ public class Database {
     public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
 
     public static void ruleClear(){
-        vtidIssueCountMap.clear();
         vtidFilesMap.clear();
         fileAndVtid_issuesMap.clear();
     }
