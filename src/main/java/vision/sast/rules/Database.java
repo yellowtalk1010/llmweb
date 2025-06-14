@@ -118,7 +118,6 @@ public class Database {
     public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
 
     public static void ruleClear(){
-        vtidFilesMap.clear();
         fileAndVtid_issuesMap.clear();
     }
 
@@ -126,6 +125,7 @@ public class Database {
         vtidList.clear();
         vtidIssueMap.clear();
         vtidIssueCountMap.clear();
+        vtidFilesMap.clear();
 
         Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->{
             if(vtidIssueMap.get(dto.getVtId())==null){
@@ -139,10 +139,22 @@ public class Database {
 
 
         Database.vtidList.stream().forEach(vtid->{
+
+            //规则违反总数
             long count = Database.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
             vtidIssueCountMap.put(vtid, count);
+
+            //规则违反与文件关系
+            List<String> filepaths = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
+                    .map(dto->dto.getFilePath()).collect(Collectors.toSet())
+                    .stream().toList().stream().sorted().toList();
+            Database.vtidFilesMap.put(vtid, filepaths);
+
         });
-        System.out.println("完成规则违反总数");
+        System.out.println("完成规则违反总数关系");
+        System.out.println("完成规则与文件之间的关系");
+
+
 
     }
 

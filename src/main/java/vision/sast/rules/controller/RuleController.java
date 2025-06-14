@@ -30,12 +30,7 @@ public class RuleController {
 
     @GetMapping("rule_vtid")
     public Map<String, Object> rule_vtid(String vtid){
-        if(Database.vtidFilesMap.get(vtid)==null){
-            List<String> filepaths = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
-                    .map(dto->dto.getFilePath()).collect(Collectors.toSet())
-                    .stream().toList().stream().sorted().toList();
-            Database.vtidFilesMap.put(vtid, filepaths);
-        }
+
         IssueDto dto = Database.vtidIssueMap.get(vtid);
 
         Map<String, Object> responseMap = new HashMap<>();
@@ -71,12 +66,7 @@ public class RuleController {
 
     @GetMapping("llm_rule")
     public String rule(String vtid){
-        if(Database.vtidFilesMap.get(vtid)==null){
-            List<String> filepaths = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
-                    .map(dto->dto.getFilePath()).collect(Collectors.toSet())
-                    .stream().toList().stream().sorted().toList();
-            Database.vtidFilesMap.put(vtid, filepaths);
-        }
+
         IssueDto dto = Database.vtidIssueMap.get(vtid);
         StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
         Database.vtidFilesMap.get(vtid).stream().map(file->{
