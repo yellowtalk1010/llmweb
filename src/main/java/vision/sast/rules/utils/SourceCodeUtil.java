@@ -25,41 +25,13 @@ import static vision.sast.rules.Database.ISSUE_RESULT;
 
 public class SourceCodeUtil {
 
-
-    private static Map<String, List<String>> FILE_MAP = new ConcurrentHashMap<>();
-
-    //循环加载文件
-    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    static {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    // System.out.println("循环加载" + ISSUE_RESULT.getResult().size());
-                    ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
-                        try {
-                            openFile(issueFile);
-                        }catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    try {
-                        Thread.sleep(500);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
     /***
      * 读取文件
      */
      public static List<String> openFile(String fileName) throws Exception {
 
-         if(FILE_MAP.get(fileName) != null){
-             return FILE_MAP.get(fileName);
+         if(Database.FILE_CONTEXT_MAP.get(fileName) != null){
+             return Database.FILE_CONTEXT_MAP.get(fileName);
          }
         System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
         List<String> codeFormatList = new ArrayList<>();
@@ -71,11 +43,11 @@ public class SourceCodeUtil {
                 //System.out.println("open file format = " + format);
                 List<String> lines = FileUtils.readLines(new File(fileName),format);
                 System.out.println(fileName + "，文件加载完成，" + format);
-                FILE_MAP.put(fileName, lines);
+                Database.FILE_CONTEXT_MAP.put(fileName, lines);
                 return lines;
             }catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
+//                e.printStackTrace();
+//                System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
             }
         }
         return new ArrayList<>();

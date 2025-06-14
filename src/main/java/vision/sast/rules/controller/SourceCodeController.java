@@ -24,7 +24,7 @@ public class SourceCodeController {
                 if(vtid!=null){
                     Database.sourceCodeInit(vtid, file);
                     String key = Database.getKey(vtid, file);
-                    issueDtos = Database.issuesMap.get(key);
+                    issueDtos = Database.fileAndVtid_issuesMap.get(key);
                 }
 
                 String html = SourceCodeUtil.show(file, issueDtos, line);
@@ -61,7 +61,7 @@ public class SourceCodeController {
             try {
                 int size = Database.sourceCodeInit(vtid, file);
                 String key = Database.getKey(vtid, file);
-                List<IssueDto> issueDtos = Database.issuesMap.get(key);
+                List<IssueDto> issueDtos = Database.fileAndVtid_issuesMap.get(key);
                 Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);
 
                 Map<String, Object> map = new HashMap<>();

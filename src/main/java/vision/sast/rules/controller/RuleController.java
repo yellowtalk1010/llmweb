@@ -13,7 +13,6 @@ public class RuleController {
 
     @GetMapping("rules_list")
     public List<Map<String, Object>> rules_list(){
-        Database.loadRuleInitList();
         List<Map<String, Object>> list = new ArrayList<>();
         Database.vtidList.stream().forEach(vtid->{
             IssueDto dto = Database.vtidIssueMap.get(vtid);
@@ -64,7 +63,6 @@ public class RuleController {
 
     @GetMapping("llm_rules")
     public String rules(){
-        Database.loadRuleInitList();
         StringBuilder stringBuilder = new StringBuilder();
         Database.vtidList.stream().map(vtid->{
             IssueDto dto = Database.vtidIssueMap.get(vtid);
