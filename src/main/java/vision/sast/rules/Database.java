@@ -23,6 +23,7 @@ public class Database {
 
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+    public static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>(); //文件路径与文件的关系
     /***
      * 线程池加载文件内容
      */
@@ -60,6 +61,7 @@ public class Database {
             Database.ruleClear();
             //
             Database.ISSUE_FILEPATH = issuePath;
+            System.out.println("路径:" + issuePath);
             Database.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
             System.out.println("issue总数:" + Database.ISSUE_RESULT.getResult().size());
 
@@ -138,7 +140,7 @@ public class Database {
     }
 
 
-    public static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>(); //文件路径与文件的关系
+
 
 
     //规则+文件 与 issue 之间的关系
