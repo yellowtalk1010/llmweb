@@ -23,34 +23,6 @@ public class Database {
 
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>(); //文件路径与文件的关系
-    /***
-     * 线程池加载文件内容
-     */
-    private static void loadFileContent() {
-        FILE_CONTEXT_MAP.clear();
-        System.out.println("加载文件内容");
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    // System.out.println("循环加载" + ISSUE_RESULT.getResult().size());
-                    ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
-                        try {
-                            SourceCodeUtil.openFile(issueFile);
-                        }catch (Exception e) {
-//                            e.printStackTrace();
-                        }
-                    });
-                    try {
-                        Thread.sleep(500);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
 
     /***
      * 根据文本信息构建一个
@@ -67,11 +39,7 @@ public class Database {
 
             RulesApplication.loadProperties();
             loadFileInitList(); //构建文件关系
-
             loadRuleInitList(); //构建规则关系
-
-
-            loadFileContent(); //加载文件内容
         }catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -84,6 +52,8 @@ public class Database {
     public static List<String> fileList = null;
     //文件与issue集合关系
     public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
+    //文件路径与文件的关系
+    public static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>();
     /***
      * 加载文件信息
      */
@@ -103,6 +73,29 @@ public class Database {
             }
         });
         System.out.println("完成构建文件与issue之间关系");
+
+        FILE_CONTEXT_MAP.clear();
+        System.out.println("加载文件内容");
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (fileList.size() != FILE_CONTEXT_MAP.size()) {
+                    // System.out.println("循环加载" + ISSUE_RESULT.getResult().size());
+                    ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
+                        try {
+                            SourceCodeUtil.openFile(issueFile);
+                        }catch (Exception e) {
+//                            e.printStackTrace();
+                        }
+                    });
+                    try {
+                        Thread.sleep(500);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
     }
 
