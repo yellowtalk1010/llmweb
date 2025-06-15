@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class SourceCodeUtilTest {
     public static void main(String[] args) throws Exception {
-        RulesApplication.loadProperties();
+        //RulesApplication.loadProperties();
         String str = SourceCodeUtil.show("src/test/resources/ANSI_test.c", new ArrayList<IssueDto>(), null);
         System.out.println(str);
     }

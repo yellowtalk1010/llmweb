@@ -35,7 +35,7 @@ public class RulesApplication {
             }
         }
 
-        loadProperties();
+        //loadProperties();
         SpringApplication.run(RulesApplication.class, args);
 
     }
@@ -43,25 +43,25 @@ public class RulesApplication {
     /***
      * 加载config.properties文件
      */
-    public static void loadProperties() {
-        try {
-            Database.PROPERTIES.clear();
-            String configFileName = "config.properties";
-            File propertiesFile = new File(configFileName);
-            if(!propertiesFile.exists()){
-                try (FileOutputStream out = new FileOutputStream(propertiesFile)) {
-                    PropertiesKey.properties.store(out, "配置文件 - 用户信息");
-                    System.out.println("写入完成！");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            InputStream input = new FileInputStream(propertiesFile);
-            Database.PROPERTIES.load(input);
-            System.out.println(Database.PROPERTIES);
-        }catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
+//    public static void loadProperties() {
+//        try {
+//            Database.PROPERTIES.clear();
+//            String configFileName = "config.properties";
+//            File propertiesFile = new File(configFileName);
+//            if(!propertiesFile.exists()){
+//                try (FileOutputStream out = new FileOutputStream(propertiesFile)) {
+//                    PropertiesKey.properties.store(out, "配置文件 - 用户信息");
+//                    System.out.println("写入完成！");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            InputStream input = new FileInputStream(propertiesFile);
+//            Database.PROPERTIES.load(input);
+//            System.out.println(Database.PROPERTIES);
+//        }catch (Exception exception) {
+//            exception.printStackTrace();
+//        }
+//    }
 
 }
