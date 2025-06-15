@@ -97,7 +97,7 @@ public class Database {
                     }
                     try {
                         if(fileList.size()>0 && fileList.size()==FILE_CONTEXT_MAP.size()){
-                            System.out.println("全部完成文件内容缓存加载");
+                            System.out.println(fileList.size() + "全部完成文件内容缓存加载" + FILE_CONTEXT_MAP.size());
                             break;
                         }
                         Thread.sleep(2000);
