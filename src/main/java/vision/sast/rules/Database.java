@@ -97,6 +97,7 @@ public class Database {
                     }
                     try {
                         if(fileList.size()==FILE_CONTEXT_MAP.size()){
+                            System.out.println("完成文件内容缓存加载");
                             break;
                         }
                         Thread.sleep(2000);
