@@ -96,7 +96,7 @@ public class Database {
                         });
                     }
                     try {
-                        if(fileList.size()==FILE_CONTEXT_MAP.size()){
+                        if(fileList.size()>0 && fileList.size()==FILE_CONTEXT_MAP.size()){
                             System.out.println("全部完成文件内容缓存加载");
                             break;
                         }
