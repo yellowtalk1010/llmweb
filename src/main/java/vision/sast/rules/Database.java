@@ -6,6 +6,7 @@ import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.IssueResult;
 import vision.sast.rules.utils.SourceCodeUtil;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -37,7 +38,7 @@ public class Database {
             Database.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
             System.out.println("issue总数:" + Database.ISSUE_RESULT.getResult().size());
 
-            //RulesApplication.loadProperties();
+//            RulesApplication.loadProperties();
             loadFileInitList(); //构建文件关系
             loadRuleInitList(); //构建规则关系
         }catch (Exception exception) {
@@ -79,15 +80,21 @@ public class Database {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                while (fileList.size() != FILE_CONTEXT_MAP.size()) {
-                    // System.out.println("循环加载" + ISSUE_RESULT.getResult().size());
-                    ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
-                        try {
-                            SourceCodeUtil.openFile(issueFile);
-                        }catch (Exception e) {
+                while (true) {
+                    if(fileList.size()>0 && fileList.size()!=FILE_CONTEXT_MAP.size()){
+                        ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
+                            try {
+                                if(new File(issueFile).exists()){
+                                    SourceCodeUtil.openFile(issueFile);
+                                }
+                                else {
+                                    System.out.println(issueFile + "，文件不存在");
+                                }
+                            }catch (Exception e) {
 //                            e.printStackTrace();
-                        }
-                    });
+                            }
+                        });
+                    }
                     try {
                         Thread.sleep(500);
                     }catch (Exception e) {
