@@ -91,12 +91,15 @@ public class Database {
                                     System.out.println(issueFile + "，文件不存在");
                                 }
                             }catch (Exception e) {
-//                            e.printStackTrace();
+                            e.printStackTrace();
                             }
                         });
                     }
                     try {
-                        Thread.sleep(500);
+                        if(fileList.size()==FILE_CONTEXT_MAP.size()){
+                            break;
+                        }
+                        Thread.sleep(2000);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }
