@@ -81,7 +81,7 @@ public class Database {
             @Override
             public void run() {
                 while (true) {
-                    if(fileList.size()>0 && fileList.size()!=FILE_CONTEXT_MAP.size()){
+                    if(fileList.size()>0){
                         ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
                             try {
                                 if(new File(issueFile).exists()){
