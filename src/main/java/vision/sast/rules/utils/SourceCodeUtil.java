@@ -46,8 +46,8 @@ public class SourceCodeUtil {
                 Database.FILE_CONTEXT_MAP.put(fileName, lines);
                 return lines;
             }catch (Exception e) {
-//                e.printStackTrace();
-//                System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
+                e.printStackTrace();
+                System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
             }
         }
         return new ArrayList<>();
