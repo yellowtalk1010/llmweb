@@ -43,8 +43,18 @@ public class SourceCodeUtil {
                 //System.out.println("open file format = " + format);
                 List<String> lines = FileUtils.readLines(new File(fileName),format);
                 System.out.println(fileName + "，文件加载完成，" + format);
-                Database.FILE_CONTEXT_MAP.put(fileName, lines);
-                return lines;
+
+                HighLightUtil highlighterUtil = new HighLightUtil();
+                List<String> newLines = lines.stream().map(line->{
+                    //line = StringEscapeUtils.escapeHtml4(line);
+                    line = highlighterUtil.highlightLine(line);
+
+                    return line;
+                }).collect(Collectors.toList());
+
+                Database.FILE_CONTEXT_MAP.put(fileName, newLines);
+
+                return newLines;
             }catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
@@ -59,11 +69,8 @@ public class SourceCodeUtil {
         List<IssueDto> sortedList = dtoList.stream().sorted(Comparator.comparing(IssueDto::getLine)).toList();
 
         List<String> lines = openFile(fileName);
-        HighLightUtil highlighterUtil = new HighLightUtil();
         AtomicInteger counter = new AtomicInteger(0);
         List<String> newLines = lines.stream().map(line->{
-//            line = StringEscapeUtils.escapeHtml4(line);
-            line = highlighterUtil.highlightLine(line);
             counter.getAndIncrement();
             if(redLine!=null && counter.get()==redLine){
                 line = "<div style='border: 2px solid red;'>" + line + "</div>"; //标记为红色边框
@@ -123,11 +130,8 @@ public class SourceCodeUtil {
         List<IssueDto> sortedList = dtoList.stream().sorted(Comparator.comparing(IssueDto::getLine)).toList();
 
         List<String> lines = openFile(fileName);
-        HighLightUtil highlighterUtil = new HighLightUtil();
         AtomicInteger lineNumber = new AtomicInteger(1);
         List<String> newLines = lines.stream().map(line -> {
-//            line = StringEscapeUtils.escapeHtml4(line);
-            line = highlighterUtil.highlightLine(line);
             line = "<li id='line_" + lineNumber.getAndIncrement() + "'>" + line + "</li>";
             return line;
         }).collect(Collectors.toList());
@@ -140,11 +144,8 @@ public class SourceCodeUtil {
 
         System.out.println("fileName = " + fileName + "");
         List<String> lines = openFile(fileName);
-        HighLightUtil highlighterUtil = new HighLightUtil();
         AtomicInteger lineNumber = new AtomicInteger(1);
         List<String> newLines = lines.stream().map(line -> {
-//            line = StringEscapeUtils.escapeHtml4(line);
-            line = highlighterUtil.highlightLine(line);
             line = "<li id='otherfileline_" + lineNumber.getAndIncrement() + "'>" + line + "</li>";
             return line;
         }).collect(Collectors.toList());
