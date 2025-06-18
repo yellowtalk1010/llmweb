@@ -51,7 +51,7 @@ public class SourceCodeUtil {
 
                     return line;
                 }).collect(Collectors.toList());
-
+                System.out.println("高亮");
                 Database.FILE_CONTEXT_MAP.put(fileName, newLines);
 
                 return newLines;
