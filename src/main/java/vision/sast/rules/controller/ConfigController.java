@@ -76,13 +76,10 @@ public class ConfigController {
                     <html lang="zh-CN">
                     <head>
                       <meta charset="UTF-8">
-                      <title>配置文件</title>
+                      <title>度量结果</title>
                     </head>
                     <body>
-                    <h2>结果路径</h2>
-                    <a href='config_issue_path'>issue</a><br>
-                    <a href='config_measure_path'>measure</a><br>
-                    <h2>配置文件</h2>
+                    <h2>度量结果</h2>
                     """
                     +   htmlContent
                     +
