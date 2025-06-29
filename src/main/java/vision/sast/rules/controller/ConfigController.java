@@ -1,6 +1,8 @@
 package vision.sast.rules.controller;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +14,7 @@ import vision.sast.rules.Database;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -68,9 +71,27 @@ public class ConfigController {
             String content = new BufferedReader(
                     new InputStreamReader(fis, StandardCharsets.UTF_8)
             ).lines().collect(Collectors.joining("\n"));
-            String htmlContent = content
+            JSONObject jsonObject = JSONObject.parseObject(content);
+            try {
+                AtomicInteger count = new AtomicInteger(0);
+                JSONObject fileFunctionDefinition = (JSONObject)jsonObject.get("fileFunctionDefinition");
+                fileFunctionDefinition.keySet().stream().forEach(key->{
+                    JSONArray array = (JSONArray)fileFunctionDefinition.get(key);
+                    if(array!=null && array.size()>0){
+                        count.addAndGet(array.size());
+                    }
+                });
+                jsonObject.put("fileFunctionDefinition", "总数是：" + count);
+            }catch (Exception e){
+
+            }
+
+            String newContent = JSONObject.toJSONString(jsonObject, JSONWriter.Feature.PrettyFormat);
+
+            String htmlContent = newContent
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
                     .replace("\n", "<br>");
+
             return """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
