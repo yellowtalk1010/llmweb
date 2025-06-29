@@ -30,29 +30,27 @@ public class ConfigController {
                     new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
             ).lines().collect(Collectors.joining("\n"));
 
-            // 可以在这里处理 content，比如解析、打印、返回等
-//            System.out.println("收到文件内容：");
-//            System.out.println(content);
+            String htmlContent = content
+                    .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
+                    .replace("\n", "<br>");
 
-//            Database.buildIssue(null, content);
-
-            StringBuilder stringBuilder = new StringBuilder();
-//            stringBuilder.append("<!DOCTYPE html>\n" +
-//                    "                        <html lang=\"zh-CN\">\n" +
-//                    "                        <head>\n" +
-//                    "                          <meta charset=\"UTF-8\">\n" +
-//                    "                          <title>配置文件</title>\n" +
-//                    "                        </head>\n" +
-//                    "                        <body>");
-            Arrays.stream(content.split("\n")).forEach(line->{
-                line = "<div>" + line + "</div>";
-                stringBuilder.append(line);
-            });
-
-//            stringBuilder.append("\n" +
-//                    "                        </body>\n" +
-//                    "                        </html>");
-            return content;
+            return """
+                    <!DOCTYPE html>
+                    <html lang="zh-CN">
+                    <head>
+                      <meta charset="UTF-8">
+                      <title>显示 Java 字符串</title>
+                    </head>
+                    <body>
+                      <h2>Java 字符串展示：</h2>
+                    """
+                    +   htmlContent
+                    +
+                    """
+                    </body>
+                    </html>
+                                        
+                    """;
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
