@@ -42,7 +42,7 @@ public class ConfigController {
                       <title>配置文件</title>
                     </head>
                     <body>
-                      <h2>Java 字符串展示：</h2>
+                      <h2>配置文件</h2>
                     """
                     +   htmlContent
                     +
