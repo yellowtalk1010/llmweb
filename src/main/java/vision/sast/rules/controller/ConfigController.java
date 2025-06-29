@@ -23,14 +23,14 @@ public class ConfigController {
 
     @GetMapping("config_issue_path")
     public String config_issue_path() {
-        File file = new File(resultFilePath);
+        File file = new File(this.resultFilePath);
         System.out.println("打开结果路径:" + this.resultFilePath + "，" + file.exists());
 
         try {
             // 直接读取文件内容
             FileInputStream fis = new FileInputStream(file);
             String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
-            Database.buildIssue(null, content);
+            Database.buildIssue(this.resultFilePath, content);
             return this.resultFilePath;
         } catch (Exception e) {
             e.printStackTrace();
