@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vision.sast.rules.Database;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -24,7 +23,17 @@ public class ConfigController {
 
     @GetMapping("config_issue_path")
     public String config_issue_path() {
-        System.out.println("打开结果路径:" + this.resultFilePath);
+        File file = new File(resultFilePath);
+        System.out.println("打开结果路径:" + this.resultFilePath + "，" + file.exists());
+
+        try {
+            // 直接读取文件内容
+            FileInputStream fis = new FileInputStream(file);
+            String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
+            Database.buildIssue(null, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return this.resultFilePath;
     }
