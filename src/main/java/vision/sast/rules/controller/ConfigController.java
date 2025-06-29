@@ -18,6 +18,16 @@ import java.util.stream.Collectors;
 @RestController
 public class ConfigController {
 
+    @GetMapping("issue_path")
+    public String issue_path(String issuePath) {
+        return "";
+    }
+
+    @GetMapping("measure_path")
+    public String measure_path(String measurePath) {
+        return "";
+    }
+
     @PostMapping("upload_config")
     public String upload_config(@RequestParam("file") MultipartFile file) {
 
