@@ -31,7 +31,23 @@ public class ConfigController {
             FileInputStream fis = new FileInputStream(file);
             String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
             Database.buildIssue(this.resultFilePath, content);
-            return this.resultFilePath;
+            return """
+                    <!DOCTYPE html>
+                    <html lang="zh-CN">
+                    <head>
+                      <meta charset="UTF-8">
+                      <title>问题结果</title>
+                    </head>
+                    <body>
+                    """
+                     + "issue总数：" + Database.ISSUE_RESULT.getResult().size() + "<br>"
+                     + "<a href='/pages/Files'>文件集</a><br>"
+                     + "<a href='/pages/Rules'>规则集</a><br>"
+                     +
+                    """
+                    </body>
+                    </html>
+                    """;
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
