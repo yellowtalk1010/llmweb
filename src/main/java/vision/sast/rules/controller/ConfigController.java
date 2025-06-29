@@ -18,14 +18,21 @@ import java.util.stream.Collectors;
 @RestController
 public class ConfigController {
 
-    @GetMapping("issue_path")
-    public String issue_path(String issuePath) {
-        return "";
+    private String resultFilePath;
+    private String measureResultFilePath;
+
+
+    @GetMapping("config_issue_path")
+    public String config_issue_path() {
+        System.out.println("打开结果路径:" + this.resultFilePath);
+
+        return this.resultFilePath;
     }
 
-    @GetMapping("measure_path")
-    public String measure_path(String measurePath) {
-        return "";
+    @GetMapping("config_measure_path")
+    public String config_measure_path() {
+        System.out.println("打开度量路径:" + this.measureResultFilePath);
+        return this.measureResultFilePath;
     }
 
     @PostMapping("upload_config")
@@ -42,10 +49,11 @@ public class ConfigController {
             ).lines().collect(Collectors.joining("\n"));
 
             JSONObject json = JSONObject.parseObject(content);
-            String resultFilePath = (String) json.get("resultFilePath");
-            String measureResultFilePath = (String) json.get("measureResultFilePath");
+            this.resultFilePath = (String) json.get("resultFilePath");
+            this.measureResultFilePath = (String) json.get("measureResultFilePath");
             System.out.println("结果路径：" + resultFilePath);
             System.out.println("度量路径：" + measureResultFilePath);
+
 
             String htmlContent = content
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
@@ -59,7 +67,10 @@ public class ConfigController {
                       <title>配置文件</title>
                     </head>
                     <body>
-                      <h2>配置文件</h2>
+                    <h2>结果路径</h2>
+                    <a href='config_issue_path'>issue</a><br>
+                    <a href='config_measure_path'>measure</a><br>
+                    <h2>配置文件</h2>
                     """
                     +   htmlContent
                     +
