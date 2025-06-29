@@ -61,8 +61,40 @@ public class ConfigController {
 
     @GetMapping("config_measure_path")
     public String config_measure_path() {
-        System.out.println("打开度量路径:" + this.measureResultFilePath);
-        return this.measureResultFilePath;
+        File file = new File(this.measureResultFilePath);
+        System.out.println("打开度量路径:" + this.measureResultFilePath + "，" + file.exists());
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            String content = new BufferedReader(
+                    new InputStreamReader(fis, StandardCharsets.UTF_8)
+            ).lines().collect(Collectors.joining("\n"));
+            String htmlContent = content
+                    .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
+                    .replace("\n", "<br>");
+            return """
+                    <!DOCTYPE html>
+                    <html lang="zh-CN">
+                    <head>
+                      <meta charset="UTF-8">
+                      <title>配置文件</title>
+                    </head>
+                    <body>
+                    <h2>结果路径</h2>
+                    <a href='config_issue_path'>issue</a><br>
+                    <a href='config_measure_path'>measure</a><br>
+                    <h2>配置文件</h2>
+                    """
+                    +   htmlContent
+                    +
+                    """
+                    </body>
+                    </html>
+                                        
+                    """;
+        }catch (Exception e){
+            e.printStackTrace();
+            return e.getMessage();
+        }
     }
 
     @PostMapping("upload_config")
