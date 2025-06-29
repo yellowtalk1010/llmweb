@@ -39,7 +39,7 @@ public class ConfigController {
                     <html lang="zh-CN">
                     <head>
                       <meta charset="UTF-8">
-                      <title>显示 Java 字符串</title>
+                      <title>配置文件</title>
                     </head>
                     <body>
                       <h2>Java 字符串展示：</h2>
