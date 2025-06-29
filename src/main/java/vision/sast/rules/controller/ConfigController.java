@@ -31,11 +31,13 @@ public class ConfigController {
             FileInputStream fis = new FileInputStream(file);
             String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
             Database.buildIssue(null, content);
+            return this.resultFilePath;
         } catch (Exception e) {
             e.printStackTrace();
+            return e.getMessage();
         }
 
-        return this.resultFilePath;
+
     }
 
     @GetMapping("config_measure_path")
