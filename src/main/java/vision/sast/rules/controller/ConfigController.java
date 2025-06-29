@@ -1,5 +1,6 @@
 package vision.sast.rules.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,12 @@ public class ConfigController {
             String content = new BufferedReader(
                     new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
             ).lines().collect(Collectors.joining("\n"));
+
+            JSONObject json = JSONObject.parseObject(content);
+            String resultFilePath = (String) json.get("resultFilePath");
+            String measureResultFilePath = (String) json.get("measureResultFilePath");
+            System.out.println("结果路径：" + resultFilePath);
+            System.out.println("度量路径：" + measureResultFilePath);
 
             String htmlContent = content
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
