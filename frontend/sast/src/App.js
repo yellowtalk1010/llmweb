@@ -5,7 +5,7 @@ import { BrowserRouter ,Routes,  Router, Route, Link  } from 'react-router-dom';
 import Files from "./pages/Files";
 import Rules from "./pages/Rules";
 import Rule from "./pages/Rule";
-import IssueResultFile from "./pages/IssueResultFile"; //issue结果文件
+import LoadConfig from "./pages/LoadConfig"; //加载配置文件
 import SourceCode from "./pages/SourceCode"
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
     <div className="App" >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<IssueResultFile />} />
+          <Route path="/" element={<LoadConfig />} />
           
           <Route path="/pages/Rules" element={<Rules />} />
           <Route path="/pages/Rule" element={<Rule />} />

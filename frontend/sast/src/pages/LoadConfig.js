@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
 
-function IssueResultFile() {
+function LoadConfig() {
 
   return (
     <div >
@@ -12,4 +12,4 @@ function IssueResultFile() {
   );
 }
 
-export default IssueResultFile;
+export default LoadConfig;
