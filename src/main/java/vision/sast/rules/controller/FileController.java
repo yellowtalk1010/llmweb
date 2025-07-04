@@ -15,6 +15,34 @@ import java.util.stream.Collectors;
 @RestController
 public class FileController {
 
+    @GetMapping("file_path")
+    public List<Map<String, String>> file_path(String f){
+        List<IssueDto> ls = Database.fileIssuesMap.get(f);
+        File file = new File(f);
+        System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
+
+        //数量
+        Map<String, List<IssueDto>> vtidGroupMap = ls.stream().collect(Collectors.groupingBy(dto->dto.getVtId()));
+
+        Map<String, String> vtidMap = new HashMap<>();
+        List<Map<String, String>> list = new ArrayList<>();
+        ls.stream().forEach(dto->{
+            int size = 0;
+            if(vtidGroupMap.get(dto.getVtId())!=null){
+                size = vtidGroupMap.get(dto.getVtId()).size();
+            }
+            vtidMap.put("file", dto.getFilePath());
+            vtidMap.put("size", size + "");
+            vtidMap.put("vtid", dto.getVtId());
+            vtidMap.put("rule", dto.getRule());
+            vtidMap.put("defectLevel", dto.getDefectLevel());
+            vtidMap.put("ruleDesc", dto.getRuleDesc());
+            list.add(vtidMap);
+        });
+
+        return list;
+    }
+
     @GetMapping("file_list")
     public List<Map<String, String>> file_list(){
         System.out.println("文件总数：" + Database.fileList.size());
