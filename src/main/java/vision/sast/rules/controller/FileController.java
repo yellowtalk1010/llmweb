@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 public class FileController {
 
     @GetMapping("file_path")
-    public List<Map<String, String>> file_path(String f){
-        List<IssueDto> ls = Database.fileIssuesMap.get(f);
-        File file = new File(f);
+    public List<Map<String, String>> file_path(String path){
+        List<IssueDto> ls = Database.fileIssuesMap.get(path);
+        File file = new File(path);
         System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
 
         //数量
