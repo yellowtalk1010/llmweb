@@ -6,6 +6,7 @@ import vision.sast.rules.Database;
 import vision.sast.rules.dto.IssueDto;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,17 @@ public class FileController {
 
     @GetMapping("file_list")
     public List<Map<String, String>> file_list(){
-        return null;
+        System.out.println("文件总数：" + Database.fileList.size());
+
+        List<Map<String, String>> list = new ArrayList<>();
+        Database.fileList.stream().forEach(file->{
+            Map<String, String> map = new HashMap<>();
+            map.put("file", file);
+            map.put("size", Database.fileIssuesMap.get(file).size() + "");
+            list.add(map);
+        });
+
+        return list;
     }
 
     @GetMapping("llm_files")
