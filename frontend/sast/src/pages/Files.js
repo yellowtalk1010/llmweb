@@ -1,34 +1,48 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
 
+import styles from './Files.css';
+
 function Files() {
   const navigate = useNavigate();
 
-  // const [rulesData, setRulesData] = useState(null)
-  // if(rulesData==null){
-  //   fetch('/rules_list', {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   }).then(res =>{
-  //     const json = res.json();
-  //     // console.info(json)
-  //     return json
-  //   }).then(data =>{
-  //     console.log("rules_list的数据")
-  //     console.log(data)
-  //     setIssueFileData('hello')
-  //   }).catch(e =>{
-  //     console.log(e)
-  //   })
-  // }
+  const [filesData, setFilesData] = useState({list:[], status: 0})
+  if(filesData.status==0){
+    fetch('/file_list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res =>{
+      const json = res.json();
+      // console.info(json)
+      return json
+    }).then(data =>{
+      console.log("files_list的数据")
+      console.log(data)
+      setFilesData({
+        list: data,
+        status: 200
+      })
+    }).catch(e =>{
+      console.log(e)
+    })
+  }
 
   return (
-    <div>
-      <h1>文件集</h1>
+    <div id="files">
+
        
+        <ul>
+          {filesData.list.map((file, index) => (
+          <li key={index}>
+            <a href={`file?file=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
+          </li>
+        ))}
+        </ul>
+
     </div>
+
   );
 }
 

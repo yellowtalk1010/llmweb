@@ -36,7 +36,7 @@ function Rules() {
         <tbody>
           {rulesData.list.map((rule, index) => (
           <tr key={index}>
-            <td className={`highlight`}><a href={`rule?vtid=${rule.vtid}`}>{rule.vtid}</a></td>
+            <td className={`highlight`}><a style={{ textDecoration: 'none' }} href={`rule?vtid=${rule.vtid}`}>{rule.vtid}</a></td>
             <td className={`highlight`}>{rule.rule}</td>
             <td className={`highlight`}>{rule.size}</td>
             <td className={`highlight`}>{rule.defectLevel}</td>
