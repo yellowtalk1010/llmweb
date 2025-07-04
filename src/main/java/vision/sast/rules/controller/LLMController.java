@@ -15,17 +15,6 @@ import java.util.stream.Collectors;
 @RestController
 public class LLMController {
 
-
-    @GetMapping("llm")
-    public  String llm(){
-        return Database.ISSUE_FILEPATH + "<br>"
-                + "issue 总数：" + Database.ISSUE_RESULT.getResult().size() + "<br>"
-                + "<a href='llm_files'>文件集</a>"  + "<br>"
-                + "<a href='llm_rules'>规则集</a>"  + "<br>"
-                + "<a>http://localhost:8080/pages/Rules</a>" + "<br>"
-                ;
-    }
-
     @GetMapping("llm_files")
     public String llm_files(){
         System.out.println("文件总数：" + Database.fileList.size());
