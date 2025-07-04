@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
 
+import styles from './Rules.css';
+
 function Rules() {
   const navigate = useNavigate();
 
@@ -29,16 +31,25 @@ function Rules() {
 
   return (
     <div id="rules">
-      <ul>
-        {rulesData.list.map((rule, index) => (
-          <li>
-            <a href={`rule?vtid=${rule.vtid}`}>{rule.vtid}</a> &nbsp;&nbsp;&nbsp;{rule.defectLevel}-{rule.size}&nbsp;/&nbsp;{rule.ruleDesc}
-          </li>
+
+      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'auto' }}>
+        <tbody>
+          {rulesData.list.map((rule, index) => (
+          <tr key={index}>
+            <td className={`highlight`}><a href={`rule?vtid=${rule.vtid}`}>{rule.vtid}</a></td>
+            <td className={`highlight`}>{rule.rule}</td>
+            <td className={`highlight`}>{rule.size}</td>
+            <td className={`highlight`}>{rule.defectLevel}</td>
+            <td className="highlight">{rule.ruleDesc}</td>
+          </tr>
         ))}
-      </ul>
+        </tbody>
+      </table>
 
     </div>
+
   );
 }
+
 
 export default Rules;

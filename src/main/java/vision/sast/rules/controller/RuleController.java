@@ -19,6 +19,7 @@ public class RuleController {
             Long size = Database.vtidIssueCountMap.get(vtid);
             Map<String, Object> map = new HashMap<>();
             map.put("vtid", vtid);
+            map.put("rule", dto.getRule());
             map.put("defectLevel", dto.getDefectLevel());
             map.put("size", size);
             map.put("ruleDesc", dto.getRuleDesc());
