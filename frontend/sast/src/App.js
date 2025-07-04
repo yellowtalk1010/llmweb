@@ -3,6 +3,7 @@ import {Fragment, useState } from "react"
 import { BrowserRouter ,Routes,  Router, Route, Link  } from 'react-router-dom';
 
 import Files from "./pages/Files";
+import File from "./pages/File";
 import Rules from "./pages/Rules";
 import Rule from "./pages/Rule";
 import LoadConfig from "./pages/LoadConfig"; //加载配置文件
@@ -55,6 +56,7 @@ function App() {
           <Route path="/pages/Rule" element={<Rule />} />
 
           <Route path="/pages/Files" element={<Files />}/>
+          <Route path="/pages/File" element={<File />}/>
 
           <Route path="/pages/SourceCode" element={<SourceCode />} />
         </Routes>

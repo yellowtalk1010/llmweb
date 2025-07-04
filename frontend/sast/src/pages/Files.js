@@ -36,7 +36,7 @@ function Files() {
         <ul>
           {filesData.list.map((file, index) => (
           <li key={index}>
-            <a href={`file?file=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
+            <a href={`file?path=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
           </li>
         ))}
         </ul>

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class FileController {
 
     @GetMapping("file_path")
-    public List<Map<String, String>> file_path(String path){
+    public Map<String, Object> file_path(String path){
         List<IssueDto> ls = Database.fileIssuesMap.get(path);
         File file = new File(path);
         System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
@@ -24,23 +24,27 @@ public class FileController {
         //数量
         Map<String, List<IssueDto>> vtidGroupMap = ls.stream().collect(Collectors.groupingBy(dto->dto.getVtId()));
 
-        Map<String, String> vtidMap = new HashMap<>();
         List<Map<String, String>> list = new ArrayList<>();
-        ls.stream().forEach(dto->{
-            int size = 0;
-            if(vtidGroupMap.get(dto.getVtId())!=null){
-                size = vtidGroupMap.get(dto.getVtId()).size();
+        vtidGroupMap.entrySet().stream().forEach(entry->{
+            String vtid = entry.getKey();
+            List<IssueDto> dtos = entry.getValue();
+            if(dtos.size()>0){
+                Map<String, String> map = new HashMap<>();
+                map.put("size", dtos.size() + "");
+                map.put("vtid", vtid);
+                map.put("rule", dtos.get(0).getRule());
+                map.put("defectLevel", dtos.get(0).getDefectLevel());
+                map.put("ruleDesc", dtos.get(0).getRuleDesc());
+
+                list.add(map);
             }
-            vtidMap.put("file", dto.getFilePath());
-            vtidMap.put("size", size + "");
-            vtidMap.put("vtid", dto.getVtId());
-            vtidMap.put("rule", dto.getRule());
-            vtidMap.put("defectLevel", dto.getDefectLevel());
-            vtidMap.put("ruleDesc", dto.getRuleDesc());
-            list.add(vtidMap);
         });
 
-        return list;
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", list);
+        map.put("path", path);
+
+        return map;
     }
 
     @GetMapping("file_list")
