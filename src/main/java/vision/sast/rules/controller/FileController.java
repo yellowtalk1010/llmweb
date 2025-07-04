@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 @RestController
 public class FileController {
 
+    @GetMapping("file_list")
+    public List<Map<String, String>> file_list(){
+        return null;
+    }
+
     @GetMapping("llm_files")
     public String llm_files(){
         System.out.println("文件总数：" + Database.fileList.size());
