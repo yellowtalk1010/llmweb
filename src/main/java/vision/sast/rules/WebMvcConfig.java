@@ -1,9 +1,11 @@
 package vision.sast.rules;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import vision.sast.rules.interceptor.LocalhostInterceptor;
 
 
 @Configuration
@@ -40,5 +42,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 二级路径转发，例如 /user/123
         registry.addViewController("/{x:^(?!api$).*$}/{y:[\\w\\-]+}")
                 .setViewName("forward:/index.html");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LocalhostInterceptor())
+                .addPathPatterns("/**"); // 全局生效
     }
 }
