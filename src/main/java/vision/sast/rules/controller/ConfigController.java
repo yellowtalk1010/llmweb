@@ -47,8 +47,8 @@ public class ConfigController {
                      + "<a href='llm_files'>llm文件集</a><br>"
                      + "<a href='llm_rules'>llm规则集</a><br>"
                      + "<br>"
-                     + "<a href='/pages/Files'>文件集</a><br>"
-                     + "<a href='/pages/Rules'>规则集</a><br>"
+                     + "<a href='/pages/AllFiles'>文件集</a><br>"
+                     + "<a href='/pages/AllRules'>规则集</a><br>"
                      +
                     """
                     </body>

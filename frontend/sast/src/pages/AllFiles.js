@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
 
-import styles from './Files.css';
+import styles from './AllFiles.css';
 
-function Files() {
+function AllFiles() {
   const navigate = useNavigate();
 
   const [filesData, setFilesData] = useState({list:[], status: 0})
@@ -46,4 +46,4 @@ function Files() {
   );
 }
 
-export default Files;
+export default AllFiles;

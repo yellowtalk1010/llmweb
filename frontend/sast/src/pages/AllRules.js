@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
 
-import styles from './Rules.css';
+import styles from './AllRules.css';
 
-function Rules() {
+function AllRules() {
   const navigate = useNavigate();
 
   const [rulesData, setRulesData] = useState({list:[], status: 0})
@@ -52,4 +52,4 @@ function Rules() {
 }
 
 
-export default Rules;
+export default AllRules;
