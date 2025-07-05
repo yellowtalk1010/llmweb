@@ -19,5 +19,6 @@ npm run build
 
 # 版本
 ```
-rules-4.0.0.jar   2025-07-05  版本
+rules-3.0.0.jar
+rules-4.0.0.jar   eec版本
 ```
