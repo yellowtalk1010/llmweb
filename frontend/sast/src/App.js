@@ -8,6 +8,7 @@ import AllRules from "./pages/AllRules";
 import Rule from "./pages/Rule";
 import HelloWorld from "./pages/HelloWorld"; //加载配置文件
 import SourceCode from "./pages/SourceCode"
+import Start from "./pages/Start";
 
 function App() {
 
@@ -59,6 +60,8 @@ function App() {
           <Route path="/pages/File" element={<File />}/>
 
           <Route path="/pages/SourceCode" element={<SourceCode />} />
+          <Route path="/pages/Start" element={<Start />} />
+
         </Routes>
       </BrowserRouter>
     </div>
