@@ -9,7 +9,15 @@ public class StartController {
     @GetMapping("start")
     public String start(String token) {
         System.out.println("token:" + token);
-        return "启动启动启动";
+        if(token==null || token.isEmpty() || !token.equals(MarioController.RUN_TOKEN)){
+            return "启动启动启动，马力欧.奥德赛";
+        }
+        else {
+            MarioController.RUN_TOKEN = "";
+
+            return "启动成功";
+        }
+
     }
 
 }
