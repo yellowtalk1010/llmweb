@@ -6,7 +6,7 @@ import AllFiles from "./pages/AllFiles";
 import File from "./pages/File";
 import AllRules from "./pages/AllRules";
 import Rule from "./pages/Rule";
-import LoadConfig from "./pages/LoadConfig"; //加载配置文件
+import HelloWorld from "./pages/HelloWorld"; //加载配置文件
 import SourceCode from "./pages/SourceCode"
 
 function App() {
@@ -50,7 +50,7 @@ function App() {
     <div className="App" >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoadConfig />} />
+          <Route path="/" element={<HelloWorld />} />
           
           <Route path="/pages/AllRules" element={<AllRules />} />
           <Route path="/pages/Rule" element={<Rule />} />

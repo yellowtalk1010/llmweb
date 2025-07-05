@@ -1,15 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState } from "react"
 
-function LoadConfig() {
+function HelloWorld() {
 
   return (
     <div >
       <div>
-        <a href='config'>上传配置文件</a>
+        Hello world
       </div>
     </div>
   );
 }
 
-export default LoadConfig;
+export default HelloWorld;
