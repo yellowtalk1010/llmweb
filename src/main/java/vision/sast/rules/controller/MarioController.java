@@ -2,28 +2,24 @@ package vision.sast.rules.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vision.sast.rules.Database;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.Base64;
 import java.util.UUID;
 
 
 @RestController
-public class PagesController {
+public class MarioController {
 
     public static String RUN_TOKEN = "";
 
     /***
-     * 全部页面
+     * 马力欧页面
      * @return
      */
-    @GetMapping("pages")
-    public String pages() throws Exception {
+    @GetMapping("mario")
+    public String mario() throws Exception {
 
         RUN_TOKEN = UUID.randomUUID().toString();
         String config_url  = "config";
@@ -162,8 +158,8 @@ public class PagesController {
 
 
     public static String getImage(String png) throws Exception {
-        URL url = PagesController.class.getClassLoader().getResource("images/" + png);
-        InputStream inputStream = PagesController.class.getClassLoader().getResourceAsStream("images/" + png);
+        URL url = MarioController.class.getClassLoader().getResource("images/" + png);
+        InputStream inputStream = MarioController.class.getClassLoader().getResourceAsStream("images/" + png);
 
 //        File file = new File("images/" + png); //mario   mg
 //        System.out.println(file.getAbsolutePath());
