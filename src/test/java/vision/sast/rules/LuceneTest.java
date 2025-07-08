@@ -83,7 +83,7 @@ public class LuceneTest {
 
                     int startOffset = getStartOffset(fragment);
                     int endOffset = getEndOffset(fragment);
-
+                    String subStr = fileContent.substring(startOffset, endOffset);
                     float score = fragment.getScore();
                     String str = fragment.toString();
                     System.out.println(str);
