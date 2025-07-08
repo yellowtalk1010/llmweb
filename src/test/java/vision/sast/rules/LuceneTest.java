@@ -99,6 +99,7 @@ public class LuceneTest {
             }
         }
         //10. 关闭流
+        indexReader.close();
     }
 
 
