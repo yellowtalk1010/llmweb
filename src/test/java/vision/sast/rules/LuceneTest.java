@@ -95,6 +95,12 @@ public class LuceneTest {
                         if(endOffset > startOffset && endOffset < fileContent.length()){
 
                             String subStr = fileContent.substring(startOffset, endOffset);
+                            if (subStr.contains("foo")) {
+                                int index = subStr.indexOf("foo");
+                                if(startOffset + index < fileContent.length()){
+                                    fileContent.substring(startOffset+index+1, "foo".length()); //可以得到具体的位置信息
+                                }
+                            }
 
                             String str = fragment.toString();
                             System.out.println(">>>>>>\n" +str);
