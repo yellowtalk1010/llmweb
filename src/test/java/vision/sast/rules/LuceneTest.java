@@ -68,10 +68,18 @@ public class LuceneTest {
         //9. 遍历结果集
         if (scoreDocs != null) {
             for (ScoreDoc scoreDoc : scoreDocs) {
+
+                System.out.println("==================================================");
                 //获取查询到的文档唯一标识, 文档id, 这个id是lucene在创建文档的时候自动分配的
                 int  docID = scoreDoc.doc;
                 //通过文档id, 读取文档
                 Document doc = indexSearcher.doc(docID);
+
+                //通过域名, 从文档中获取域值
+                System.out.println("===md5==" + doc.get("md5"));
+                System.out.println("===fileName==" + doc.get("fileName"));
+                System.out.println("===filePath==" + doc.get("filePath"));
+
                 String fileContent = doc.get("fileContent");
 
                 TokenStream tokenStream = analyzer.tokenStream("fileContent", new StringReader(fileContent));
@@ -80,20 +88,21 @@ public class LuceneTest {
                 //String highLightContent  = highlighter.getBestFragment(tokenStream, fileContent);
                 TextFragment[] fragments = highlighter.getBestTextFragments(tokenStream, fileContent, false, 10);
                 for (TextFragment fragment : fragments) {
-
-                    int startOffset = getStartOffset(fragment);
-                    int endOffset = getEndOffset(fragment);
-                    String subStr = fileContent.substring(startOffset, endOffset);
                     float score = fragment.getScore();
-                    String str = fragment.toString();
-                    System.out.println(str);
-                }
+                    if(score >= 0.99999999){
+                        int startOffset = getStartOffset(fragment);
+                        int endOffset = getEndOffset(fragment);
+                        if(endOffset > startOffset && endOffset < fileContent.length()){
 
-                System.out.println("==================================================");
-                //通过域名, 从文档中获取域值
-                System.out.println("===md5==" + doc.get("md5"));
-                System.out.println("===fileName==" + doc.get("fileName"));
-                System.out.println("===filePath==" + doc.get("filePath"));
+                            String subStr = fileContent.substring(startOffset, endOffset);
+
+                            String str = fragment.toString();
+                            System.out.println(">>>>>>\n" +str);
+                        }
+                    }
+
+                }
+                System.out.println();
 
 
             }
