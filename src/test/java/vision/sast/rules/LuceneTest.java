@@ -1,7 +1,10 @@
 package vision.sast.rules;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -14,6 +17,8 @@ import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.nio.file.Paths;
 
 public class LuceneTest {
@@ -67,24 +72,46 @@ public class LuceneTest {
                 int  docID = scoreDoc.doc;
                 //通过文档id, 读取文档
                 Document doc = indexSearcher.doc(docID);
+                String fileContent = doc.get("fileContent");
+
+                TokenStream tokenStream = analyzer.tokenStream("fileContent", new StringReader(fileContent));
 
                 // 1. 关键词添加高亮
-//                String titleHighLight  = highlighter.getBestFragment(analyzer,"fileContent",doc.get("fileContent"));
-                String fileContent  = highlighter.getBestFragment(analyzer,"fileContent", doc.get("fileContent"));
-                System.out.println(fileContent);
-//                doc.getField("fileContent") .setValue(fileContent);
+                //String highLightContent  = highlighter.getBestFragment(tokenStream, fileContent);
+                TextFragment[] fragments = highlighter.getBestTextFragments(tokenStream, fileContent, false, 10);
+                for (TextFragment fragment : fragments) {
+
+                    int startOffset = getStartOffset(fragment);
+                    int endOffset = getEndOffset(fragment);
+
+                    float score = fragment.getScore();
+                    String str = fragment.toString();
+                    System.out.println(str);
+                }
 
                 System.out.println("==================================================");
                 //通过域名, 从文档中获取域值
                 System.out.println("===md5==" + doc.get("md5"));
                 System.out.println("===fileName==" + doc.get("fileName"));
                 System.out.println("===filePath==" + doc.get("filePath"));
-                System.out.println("===highLightFileContent==" + fileContent);
-                System.out.println("===fileContent==" + doc.get("fileContent"));
+
 
             }
         }
         //10. 关闭流
+    }
+
+
+    public static int getStartOffset(TextFragment frag) throws Exception {
+        Field field = TextFragment.class.getDeclaredField("textStartPos");
+        field.setAccessible(true); // 取消 Java 访问检查
+        return field.getInt(frag);
+    }
+
+    public static int getEndOffset(TextFragment frag) throws Exception {
+        Field field = TextFragment.class.getDeclaredField("textEndPos");
+        field.setAccessible(true);
+        return field.getInt(frag);
     }
 
 }
