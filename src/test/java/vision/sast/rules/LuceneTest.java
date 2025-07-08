@@ -10,6 +10,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -51,6 +52,14 @@ public class LuceneTest {
         //8. 获取结果集
         ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 
+        //以下代码对查询结果进行高亮显示
+        // 1.格式化对象，设置前缀和后缀
+        Formatter formatter = new SimpleHTMLFormatter("<font color='red'>","</font>");
+        // 2.关键词对象
+        Scorer scorer = new QueryScorer(query);
+        // 3. 高亮对象
+        Highlighter highlighter = new Highlighter(formatter, scorer);
+
         //9. 遍历结果集
         if (scoreDocs != null) {
             for (ScoreDoc scoreDoc : scoreDocs) {
@@ -58,12 +67,20 @@ public class LuceneTest {
                 int  docID = scoreDoc.doc;
                 //通过文档id, 读取文档
                 Document doc = indexSearcher.doc(docID);
+
+                // 1. 关键词添加高亮
+//                String titleHighLight  = highlighter.getBestFragment(analyzer,"fileContent",doc.get("fileContent"));
+                String fileContent  = highlighter.getBestFragment(analyzer,"fileContent", doc.get("fileContent"));
+                System.out.println(fileContent);
+//                doc.getField("fileContent") .setValue(fileContent);
+
                 System.out.println("==================================================");
                 //通过域名, 从文档中获取域值
                 System.out.println("===md5==" + doc.get("md5"));
                 System.out.println("===fileName==" + doc.get("fileName"));
                 System.out.println("===filePath==" + doc.get("filePath"));
-//                System.out.println("===fileContent==" + doc.get("fileContent"));
+                System.out.println("===highLightFileContent==" + fileContent);
+                System.out.println("===fileContent==" + doc.get("fileContent"));
 
             }
         }
