@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vision.sast.rules.Database;
+import vision.sast.rules.utils.LuceneUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -34,7 +36,10 @@ public class ConfigController {
         File file = new File(indexDir);
         System.out.println("索引位置:" + indexDir + "，" + file.exists());
         System.out.println("查询数据:" + search);
+
         try {
+            LuceneUtil.search(search, indexDir);
+
             return """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
