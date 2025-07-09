@@ -44,7 +44,7 @@ public class ConfigController {
                     </head>
                     <body>
                     <form action="/config_fulltext_search">
-                    <input type="text" name="search" value="">
+                    <textarea name="search" rows="5" cols="50"></textarea>
                     <br>
                     <button  type="submit">检索</button> 
                     </form>
@@ -190,7 +190,14 @@ public class ConfigController {
                     <h2>结果路径</h2>
                     <a href='config_issue_path'>issue</a><br>
                     <a href='config_measure_path'>measure</a><br>
-                    <a href='config_fulltext_index'>全文检索</a><br>
+                   
+                    <h2>全文检索</h2>
+                    <form action="/config_fulltext_search">
+                        <textarea name="search" rows="5" cols="50"></textarea>
+                        <br>
+                        <button  type="submit">查询</button> 
+                    </form>
+                    
                     <h2>配置文件</h2>
                     """
                     +   htmlContent
