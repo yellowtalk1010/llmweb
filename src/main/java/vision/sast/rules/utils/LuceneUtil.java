@@ -20,6 +20,7 @@ import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class LuceneUtil {
@@ -99,6 +100,7 @@ public class LuceneUtil {
                                     String highlightStr = fragment.toString();
                                     HighlightDto highlightDto = new HighlightDto(lineNum, highlightStr);
                                     indexDto.highlightDtos.add(highlightDto);
+                                    indexDto.highlightDtos.stream().sorted(Comparator.comparing(HighlightDto::getLineNum));
                                 }
                             }
 
@@ -114,7 +116,7 @@ public class LuceneUtil {
         //10. 关闭流
         indexReader.close();
 
-        return indexDtos;
+        return indexDtos.stream().sorted(Comparator.comparing(IndexDto::getFilePath)).toList();
     }
 
     private static int getStartOffset(TextFragment frag) throws Exception {
