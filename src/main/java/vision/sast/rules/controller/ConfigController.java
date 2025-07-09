@@ -40,26 +40,77 @@ public class ConfigController {
         try {
             List<LuceneUtil.IndexDto> indexDtoList = LuceneUtil.search(search, indexDir);
             System.out.println(indexDtoList.size());
-            String json = JSONObject.toJSONString(indexDtoList);
-            System.out.println(JSONObject.toJSONString(indexDtoList));
-            return json;
+//            String json = JSONObject.toJSONString(indexDtoList);
+//            System.out.println(json);
 
-//            return """
-//                    <!DOCTYPE html>
-//                    <html lang="zh-CN">
-//                    <head>
-//                      <meta charset="UTF-8">
-//                      <title>全文检索</title>
-//                    </head>
-//                    <body>
-//                    <form action="/config_fulltext_search">
-//                    <textarea name="search" rows="5" cols="50"></textarea>
-//                    <br>
-//                    <button  type="submit">检索</button>
-//                    </form>
-//                    </body>
-//                    </html>
-//                    """;
+            StringBuilder stringBuilder = new StringBuilder();
+            indexDtoList.stream().forEach(indexDto -> {
+                String filepath = indexDto.getFilePath().replaceAll("\\\\", "/");
+                List<LuceneUtil.HighlightDto> dtos = indexDto.getHighlightDtos();
+                dtos.stream().forEach(e->{
+                    int lineNum = e.getLineNum();
+                    String lineStr = "<a href='llm_sourcecode?file="+filepath+"&line="+e.getLineNum()+"'>" + e.getLineStr() + "</a>";
+                    String html = """
+                           <tr>
+                                <td>
+                                {{{filepath}}}
+                                </td>
+                                <td>
+                                {{{lineNum}}}
+                                </td>
+                                <td>
+                                {{{lineStr}}}
+                                </td>
+                           </tr>
+                           """;
+                    html = html.replace("{{{filepath}}}", filepath);
+                    html = html.replace("{{{lineNum}}}", String.valueOf(lineNum));
+                    html = html.replace("{{{lineStr}}}", lineStr);
+
+                    stringBuilder.append(html);
+                });
+
+            });
+
+
+            return """
+                    <!DOCTYPE html>
+                    <html lang="zh-CN">
+                    <head>
+                      <meta charset="UTF-8">
+                      <title>全文检索</title>
+                        <style>
+                          table {
+                            width: 80%;
+                            border-collapse: collapse;
+                            margin: 20px auto;
+                          }
+                          th, td {
+                            border: 1px solid #333;
+                            padding: 8px 12px;
+                            text-align: center;
+                          }
+                          th {
+                            background-color: #f2f2f2;
+                          }
+                          tr:hover {
+                            background-color: #f9f9f9;
+                          }
+                        </style>
+                    </head>
+                    <body>
+                    <table style="width: 100%; border-collapse: collapse; table-layout: auto;">
+                    <tbody>
+                    """
+                    +
+                    stringBuilder.toString()
+                    +
+                    """
+                    </tbody>
+                    </table>
+                    </body>
+                    </html>
+                    """;
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
