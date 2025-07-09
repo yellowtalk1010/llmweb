@@ -88,7 +88,7 @@ public class ConfigController {
                           th, td {
                             border: 1px solid #333;
                             padding: 8px 12px;
-                            text-align: center;
+                            text-align: left;
                           }
                           th {
                             background-color: #f2f2f2;
