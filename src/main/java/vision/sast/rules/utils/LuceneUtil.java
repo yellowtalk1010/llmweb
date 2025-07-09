@@ -89,20 +89,18 @@ public class LuceneUtil {
                         int endOffset = getEndOffset(fragment);
                         if(endOffset > startOffset && endOffset < fileContent.length()){
 
-//                            String subStr = fileContent.substring(startOffset, endOffset);
-//                            if (subStr.contains("foo")) {
-//                                int index = subStr.indexOf("foo");
-//                                if(startOffset + index < fileContent.length()){
-//                                    String subStrStr = fileContent.substring(startOffset+index, startOffset+index + "foo".length()); //可以得到具体的位置信息
-//                                    System.out.println();
-//                                }
-//                            }
+                            String subStr = fileContent.substring(startOffset, endOffset);
+                            if (subStr.contains(search)) {
+                                int index = subStr.indexOf(search);
+                                if(startOffset + index < fileContent.length()){
+                                    String subStrStr = fileContent.substring(startOffset+index, startOffset+index + search.length()); //可以得到具体的位置信息
+                                    int lineNum = fileContent.substring(0, startOffset+index + search.length()).split("\n").length;
 
-                            int lineNum = fileContent.substring(0, startOffset).split("\n").length;
-                            String highlightStr = fragment.toString();
-                            HighlightDto highlightDto = new HighlightDto(lineNum, highlightStr);
-                            indexDto.highlightDtos.add(highlightDto);
-                            //System.out.println(">>>>>>\n" +highlightStr);
+                                    String highlightStr = fragment.toString();
+                                    HighlightDto highlightDto = new HighlightDto(lineNum, highlightStr);
+                                    indexDto.highlightDtos.add(highlightDto);
+                                }
+                            }
 
                         }
                     }
