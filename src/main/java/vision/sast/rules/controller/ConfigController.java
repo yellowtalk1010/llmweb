@@ -38,24 +38,27 @@ public class ConfigController {
         System.out.println("查询数据:" + search);
 
         try {
-            LuceneUtil.search(search, indexDir);
+            List<LuceneUtil.IndexDto> indexDtoList = LuceneUtil.search(search, indexDir);
+            String json = JSONObject.toJSONString(indexDtoList);
+            System.out.println(JSONObject.toJSONString(indexDtoList));
+            return json;
 
-            return """
-                    <!DOCTYPE html>
-                    <html lang="zh-CN">
-                    <head>
-                      <meta charset="UTF-8">
-                      <title>全文检索</title>
-                    </head>
-                    <body>
-                    <form action="/config_fulltext_search">
-                    <textarea name="search" rows="5" cols="50"></textarea>
-                    <br>
-                    <button  type="submit">检索</button> 
-                    </form>
-                    </body>
-                    </html>
-                    """;
+//            return """
+//                    <!DOCTYPE html>
+//                    <html lang="zh-CN">
+//                    <head>
+//                      <meta charset="UTF-8">
+//                      <title>全文检索</title>
+//                    </head>
+//                    <body>
+//                    <form action="/config_fulltext_search">
+//                    <textarea name="search" rows="5" cols="50"></textarea>
+//                    <br>
+//                    <button  type="submit">检索</button>
+//                    </form>
+//                    </body>
+//                    </html>
+//                    """;
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
