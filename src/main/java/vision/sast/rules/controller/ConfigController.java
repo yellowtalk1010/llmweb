@@ -39,6 +39,7 @@ public class ConfigController {
 
         try {
             List<LuceneUtil.IndexDto> indexDtoList = LuceneUtil.search(search, indexDir);
+            System.out.println(indexDtoList.size());
             String json = JSONObject.toJSONString(indexDtoList);
             System.out.println(JSONObject.toJSONString(indexDtoList));
             return json;

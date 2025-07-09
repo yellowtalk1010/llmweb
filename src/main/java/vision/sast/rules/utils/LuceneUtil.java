@@ -116,7 +116,7 @@ public class LuceneUtil {
         //10. 关闭流
         indexReader.close();
 
-        return null;
+        return indexDtos;
     }
 
     private static int getStartOffset(TextFragment frag) throws Exception {
