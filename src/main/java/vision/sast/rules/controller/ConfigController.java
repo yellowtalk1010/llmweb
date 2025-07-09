@@ -28,12 +28,12 @@ public class ConfigController {
     /***
      * 全文检索
      */
-    @GetMapping("config_fulltext_index")
-    public String config_fulltext_index(){
+    @GetMapping("config_fulltext_search")
+    public String config_fulltext_search(String search){
         String indexDir = this.workspace + "/" + this.projectName + "/indexDir";
         File file = new File(indexDir);
         System.out.println("索引位置:" + indexDir + "，" + file.exists());
-
+        System.out.println("查询数据:" + search);
         try {
             return """
                     <!DOCTYPE html>
