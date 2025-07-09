@@ -20,10 +20,46 @@ import java.util.stream.Collectors;
 @RestController
 public class ConfigController {
 
+    private String workspace;
+    private String projectName;
     private String resultFilePath;
     private String measureResultFilePath;
 
+    /***
+     * 全文检索
+     */
+    @GetMapping("config_fulltext_index")
+    public String config_fulltext_index(){
+        String indexDir = this.workspace + "/" + this.projectName + "/indexDir";
+        File file = new File(indexDir);
+        System.out.println("索引位置:" + indexDir + "，" + file.exists());
 
+        try {
+            return """
+                    <!DOCTYPE html>
+                    <html lang="zh-CN">
+                    <head>
+                      <meta charset="UTF-8">
+                      <title>全文检索</title>
+                    </head>
+                    <body>
+                    <form action="/config_fulltext_search">
+                    <input type="text" name="search" value="">
+                    <br>
+                    <button  type="submit">检索</button> 
+                    </form>
+                    </body>
+                    </html>
+                    """;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    /***
+     * 结果路径
+     */
     @GetMapping("config_issue_path")
     public String config_issue_path() {
         File file = new File(this.resultFilePath);
@@ -131,9 +167,13 @@ public class ConfigController {
             JSONObject json = JSONObject.parseObject(content);
             this.resultFilePath = (String) json.get("resultFilePath");
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
-            System.out.println("结果路径：" + resultFilePath);
-            System.out.println("度量路径：" + measureResultFilePath);
+            this.workspace = (String) json.get("workspace");
+            this.projectName = (String) json.get("projectName");
 
+            System.out.println("项目名称：" + this.projectName);
+            System.out.println("空间路径：" + this.workspace);
+            System.out.println("结果路径：" + this.resultFilePath);
+            System.out.println("度量路径：" + this.measureResultFilePath);
 
             String htmlContent = content
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
@@ -150,6 +190,7 @@ public class ConfigController {
                     <h2>结果路径</h2>
                     <a href='config_issue_path'>issue</a><br>
                     <a href='config_measure_path'>measure</a><br>
+                    <a href='config_fulltext_index'>全文检索</a><br>
                     <h2>配置文件</h2>
                     """
                     +   htmlContent
