@@ -41,13 +41,16 @@ public class ConfigController {
         try {
             List<LuceneUtil.IndexDto> indexDtoList = LuceneUtil.search(search, indexDir);
             System.out.println(indexDtoList.size());
+
 //            String json = JSONObject.toJSONString(indexDtoList);
 //            System.out.println(json);
 
+            AtomicInteger atomicInteger = new AtomicInteger(0);
             StringBuilder stringBuilder = new StringBuilder();
             indexDtoList.stream().forEach(indexDto -> {
                 String filepath = indexDto.getFilePath().replaceAll("\\\\", "/");
                 List<LuceneUtil.HighlightDto> dtos = indexDto.getHighlightDtos();
+                atomicInteger.addAndGet(dtos.size());
                 dtos.stream().forEach(e->{
                     int lineNum = e.getLineNum();
                     String lineStr = "<a href='llm_sourcecode?file="+filepath+"&line="+e.getLineNum()+"'>" + e.getLineStr() + "</a>";
@@ -73,6 +76,7 @@ public class ConfigController {
 
             });
 
+            System.out.println("总行数：" + atomicInteger.get());
 
             return """
                     <!DOCTYPE html>
