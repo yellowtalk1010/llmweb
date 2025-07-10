@@ -285,7 +285,7 @@ public class ConfigController {
                     """;
             html = html.replace("{{{resultFilePath}}}", resultFilePath);
             html = html.replace("{{{measureResultFilePath}}}", measureResultFilePath);
-            html = html.replace("{{{indexDir}}}", indexDir);
+            html = html.replace("{{{indexDir}}}", indexDir + "&nbsp;&nbsp;&nbsp;" + new File(indexDir).exists());
             html = html.replace("{{{htmlFileContent}}}", htmlFileContent);
 
             return html;
