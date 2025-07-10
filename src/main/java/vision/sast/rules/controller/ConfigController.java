@@ -221,11 +221,11 @@ public class ConfigController {
 
         try {
             // 直接读取文件内容
-            String content = new BufferedReader(
+            String fileContent = new BufferedReader(
                     new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
             ).lines().collect(Collectors.joining("\n"));
 
-            JSONObject json = JSONObject.parseObject(content);
+            JSONObject json = JSONObject.parseObject(fileContent);
             this.resultFilePath = (String) json.get("resultFilePath");
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
             this.workspace = (String) json.get("workspace");
@@ -238,11 +238,11 @@ public class ConfigController {
             System.out.println("度量路径：" + this.measureResultFilePath);
             System.out.println("索引路径：" + this.indexDir);
 
-            String htmlContent = content
+            String htmlFileContent = fileContent
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
                     .replace("\n", "<br>");
 
-            return """
+            String html = """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
                     <head>
@@ -251,10 +251,12 @@ public class ConfigController {
                     </head>
                     <body>
                     <h2>结果路径</h2>
-                    <a href='config_issue_path'>issue</a><br>
-                    <a href='config_measure_path'>measure</a><br>
+                    <a href='config_issue_path'>issue</a>&nbsp;&nbsp;&nbsp;{{{resultFilePath}}}<br>
+                    <a href='config_measure_path'>measure</a>&nbsp;&nbsp;&nbsp;{{{measureResultFilePath}}}<br>
                    
                     <h2>全文检索</h2>
+                    {{{indexDir}}}
+                    <br>
                     <form action="/config_fulltext_search">
                         <textarea name="search" rows="5" cols="50"></textarea>
                         <br>
@@ -262,14 +264,17 @@ public class ConfigController {
                     </form>
                     
                     <h2>配置文件</h2>
-                    """
-                    +   htmlContent
-                    +
-                    """
+                    {{{htmlFileContent}}}
                     </body>
                     </html>
                                         
                     """;
+            html = html.replace("{{{resultFilePath}}}", resultFilePath);
+            html = html.replace("{{{measureResultFilePath}}}", measureResultFilePath);
+            html = html.replace("{{{indexDir}}}", indexDir);
+            html = html.replace("{{{htmlFileContent}}}", htmlFileContent);
+
+            return html;
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
