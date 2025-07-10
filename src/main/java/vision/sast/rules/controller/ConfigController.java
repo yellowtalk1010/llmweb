@@ -26,13 +26,14 @@ public class ConfigController {
     private String projectName;
     private String resultFilePath;
     private String measureResultFilePath;
+    private String indexDir;
 
     /***
      * 全文检索
      */
     @GetMapping("config_fulltext_search")
     public String config_fulltext_search(String search){
-        String indexDir = this.workspace + "/" + this.projectName + "/indexDir";
+
         File file = new File(indexDir);
         System.out.println("索引位置:" + indexDir + "，" + file.exists());
         System.out.println("查询数据:" + search);
@@ -229,11 +230,13 @@ public class ConfigController {
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
             this.workspace = (String) json.get("workspace");
             this.projectName = (String) json.get("projectName");
+            this.indexDir = this.workspace + "/" + this.projectName + "/indexDir";
 
             System.out.println("项目名称：" + this.projectName);
             System.out.println("空间路径：" + this.workspace);
             System.out.println("结果路径：" + this.resultFilePath);
             System.out.println("度量路径：" + this.measureResultFilePath);
+            System.out.println("索引路径：" + this.indexDir);
 
             String htmlContent = content
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
