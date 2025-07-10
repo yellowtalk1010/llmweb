@@ -37,6 +37,9 @@ public class ConfigController {
 
         File file = new File(indexDir);
         System.out.println("索引位置:" + indexDir + "，" + file.exists());
+        if(!file.exists()){
+            return "索引库不存在";
+        }
         System.out.println("查询数据:" + search);
 
         try {
