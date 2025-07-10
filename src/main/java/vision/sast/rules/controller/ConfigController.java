@@ -3,6 +3,7 @@ package vision.sast.rules.controller;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,7 +79,11 @@ public class ConfigController {
 
             System.out.println("总行数：" + atomicInteger.get());
 
-            return """
+            if(StringUtils.isEmpty(stringBuilder.toString())){
+                return "无";
+            }
+            else {
+                return """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
                     <head>
@@ -107,15 +112,17 @@ public class ConfigController {
                     <table style="width: 100%; border-collapse: collapse; table-layout: auto;">
                     <tbody>
                     """
-                    +
-                    stringBuilder.toString()
-                    +
-                    """
-                    </tbody>
-                    </table>
-                    </body>
-                    </html>
-                    """;
+                        +
+                        stringBuilder.toString()
+                        +
+                        """
+                        </tbody>
+                        </table>
+                        </body>
+                        </html>
+                        """;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
