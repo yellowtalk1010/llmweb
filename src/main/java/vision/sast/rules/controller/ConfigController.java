@@ -27,7 +27,7 @@ public class ConfigController {
     private String projectName;
     private String resultFilePath;
     private String measureResultFilePath;
-    private String indexDir;
+    private String INDEXS;
 
     /***
      * 全文检索
@@ -35,15 +35,15 @@ public class ConfigController {
     @GetMapping("config_fulltext_search")
     public String config_fulltext_search(String search){
 
-        File file = new File(indexDir);
-        System.out.println("索引位置:" + indexDir + "，" + file.exists());
+        File file = new File(INDEXS);
+        System.out.println("索引位置:" + INDEXS + "，" + file.exists());
         if(!file.exists()){
             return "索引库不存在";
         }
         System.out.println("查询数据:" + search);
 
         try {
-            List<LuceneUtil.IndexDto> indexDtoList = LuceneUtil.search(search, indexDir);
+            List<LuceneUtil.IndexDto> indexDtoList = LuceneUtil.search(search, INDEXS);
             System.out.println(indexDtoList.size());
 
 //            String json = JSONObject.toJSONString(indexDtoList);
@@ -244,13 +244,13 @@ public class ConfigController {
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
             this.workspace = (String) json.get("workspace");
             this.projectName = (String) json.get("projectName");
-            this.indexDir = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
+            this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
 
             System.out.println("项目名称：" + this.projectName);
             System.out.println("空间路径：" + this.workspace);
             System.out.println("结果路径：" + this.resultFilePath);
             System.out.println("度量路径：" + this.measureResultFilePath);
-            System.out.println("索引路径：" + this.indexDir);
+            System.out.println("索引路径：" + this.INDEXS);
 
             String htmlFileContent = fileContent
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
@@ -269,13 +269,16 @@ public class ConfigController {
                     <a href='config_measure_path'>measure</a>&nbsp;&nbsp;&nbsp;{{{measureResultFilePath}}}<br>
                    
                     <h2>全文检索</h2>
-                    {{{indexDir}}}
+                    {{{INDEXS}}}
                     <br>
                     <form action="/config_fulltext_search">
                         <textarea name="search" rows="5" cols="50"></textarea>
                         <br>
                         <button  type="submit">查询</button> 
                     </form>
+                    
+                    <h2>函数建模</h2>
+                    {{{}}}
                     
                     <h2>配置文件</h2>
                     {{{htmlFileContent}}}
@@ -287,7 +290,7 @@ public class ConfigController {
             if(this.measureResultFilePath!=null){
                 html = html.replace("{{{measureResultFilePath}}}", measureResultFilePath);
             }
-            html = html.replace("{{{indexDir}}}", indexDir + "&nbsp;&nbsp;&nbsp;" + new File(indexDir).exists());
+            html = html.replace("{{{INDEXS}}}", INDEXS + "&nbsp;&nbsp;&nbsp;" + new File(INDEXS).exists());
             html = html.replace("{{{htmlFileContent}}}", htmlFileContent);
 
             return html;
