@@ -14,6 +14,7 @@ function FunctionModule() {
 
   var aiCheckIssueID = null //保存当前打开的 ai check 交互界面
    
+  //打开： http://localhost:3001/pages/FunctionModule?vtid=CJ2000A_002&file=D:/development/github/engine/standardCheckers/cj2000a/src/test/resources/cj2000a/Rule2/Rule2.c
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
