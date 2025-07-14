@@ -9,6 +9,7 @@ import Rule from "./pages/Rule";
 import HelloWorld from "./pages/HelloWorld"; //加载配置文件
 import SourceCode from "./pages/SourceCode"
 import Start from "./pages/Start";
+import FunctionModule from "./pages/FunctionModule"; //函数模型
 
 function App() {
 
@@ -61,6 +62,7 @@ function App() {
 
           <Route path="/pages/SourceCode" element={<SourceCode />} />
           <Route path="/pages/Start" element={<Start />} />
+          <Route path="/pages/FunctionModule" element={<FunctionModule />} />
 
         </Routes>
       </BrowserRouter>
