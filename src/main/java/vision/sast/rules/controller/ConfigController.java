@@ -244,7 +244,7 @@ public class ConfigController {
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
             this.workspace = (String) json.get("workspace");
             this.projectName = (String) json.get("projectName");
-            this.indexDir = this.workspace + "/" + this.projectName + "/indexDir";
+            this.indexDir = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
 
             System.out.println("项目名称：" + this.projectName);
             System.out.println("空间路径：" + this.workspace);
