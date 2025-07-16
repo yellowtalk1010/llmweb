@@ -32,6 +32,7 @@ public class ConfigController {
     private String measureResultFilePath;
     private String systemConstraintPath;
     private String INDEXS;
+    private String FUNCTIONMODULE;
 
     /***
      * 全文检索
@@ -298,13 +299,15 @@ public class ConfigController {
             this.projectName = (String) json.get("projectName");
             this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
             this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
+            this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
 
             System.out.println("项目名称：" + this.projectName);
-            System.out.println("空间路径：" + this.workspace);
+            System.out.println("工作空间：" + this.workspace);
             System.out.println("结果路径：" + this.resultFilePath);
             System.out.println("度量路径：" + this.measureResultFilePath);
             System.out.println("系统约束：" + this.systemConstraintPath);
             System.out.println("索引路径：" + this.INDEXS);
+            System.out.println("函数建模：" + this.FUNCTIONMODULE);
 
             String htmlFileContent = fileContent
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
@@ -335,7 +338,7 @@ public class ConfigController {
                     </form>
                     
                     <h2>函数建模</h2>
-                    {{{}}}
+                    <a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>FUNCTIONMODULE</a><br>
                     
                     <h2>配置文件</h2>
                     {{{htmlFileContent}}}
@@ -349,6 +352,9 @@ public class ConfigController {
             }
             if(this.systemConstraintPath!=null){
                 html = html.replace("{{{systemConstraintPath}}}", systemConstraintPath + "&nbsp;&nbsp;&nbsp;" + new File(systemConstraintPath).exists());
+            }
+            if(this.FUNCTIONMODULE!=null){
+                html = html.replace("{{{{FUNCTIONMODULE}}}}", FUNCTIONMODULE);
             }
 
             html = html.replace("{{{INDEXS}}}", INDEXS + "&nbsp;&nbsp;&nbsp;" + new File(INDEXS).exists());
