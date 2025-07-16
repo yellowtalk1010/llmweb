@@ -1,8 +1,10 @@
 package vision.sast.rules.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -139,7 +142,46 @@ public class ConfigController {
     @GetMapping("config_systemConstraint_path")
     public String config_systemConstraint_path(){
         File file = new File(systemConstraintPath);
-        return file.getAbsolutePath();
+        if(!file.exists()){
+            return file.getAbsolutePath() + "，路径不存在";
+        }
+        else {
+            try {
+                List<String> list = FileUtils.readLines(file, "UTF-8");
+                StringBuilder stringBuilder = new StringBuilder("<li>违反系统约束</li>");
+                list.forEach(line->{
+                    Map<String, String> map = JSON.parseObject(line, Map.class);
+                    map.remove("checkType");
+                    map.remove("defectLevel");
+                    map.remove("defectType");
+                    map.remove("rule");
+                    map.remove("issueDesc");
+                    map.remove("vtId");
+                    map.remove("traces");
+                    stringBuilder.append("<li>" + JSON.toJSONString(map) + "</li>");
+                });
+
+                String html = """
+                    <!DOCTYPE html>
+                    <html lang="zh-CN">
+                    <head>
+                      <meta charset="UTF-8">
+                      <title>系统约束</title>
+                    </head>
+                    <body>
+                        <ul>
+                            {{{stringBuilder}}}
+                        </ul>
+                    </body>
+                    </html>
+                        """;
+                html = html.replace("{{{stringBuilder}}}", stringBuilder.toString());
+                return html;
+//                return file.getAbsolutePath();
+            }catch (Exception e) {
+                return e.getMessage();
+            }
+        }
     }
 
     /***
