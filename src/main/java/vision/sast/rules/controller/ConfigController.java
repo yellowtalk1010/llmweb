@@ -18,6 +18,7 @@ import vision.sast.rules.utils.LuceneUtil;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -149,8 +150,9 @@ public class ConfigController {
         else {
             try {
                 List<String> list = FileUtils.readLines(file, "UTF-8");
-                StringBuilder stringBuilder = new StringBuilder("<li>违反系统约束</li>");
-                list.forEach(line->{
+                StringBuilder stringBuilder = new StringBuilder();
+
+                Map<String, List<Map<String, String>>> groupedMaps = list.stream().map(line->{
                     Map<String, String> map = JSON.parseObject(line, Map.class);
                     map.remove("checkType");
                     map.remove("defectLevel");
@@ -159,7 +161,20 @@ public class ConfigController {
                     map.remove("issueDesc");
                     map.remove("vtId");
                     map.remove("traces");
-                    stringBuilder.append("<li>" + JSON.toJSONString(map) + "</li>");
+                    return map;
+                }).collect(Collectors.groupingBy(m->m.get("filePath")));
+
+                groupedMaps.entrySet().stream().forEach(entry->{
+                    String filePath = entry.getKey();
+                    stringBuilder.append("<li><font color='red'>"+filePath+"</font></li>");
+                    List<Map<String, String>> values = entry.getValue().stream().sorted(Comparator.comparing(m->Integer.valueOf(String.valueOf(m.get("line"))))).collect(Collectors.toList());
+                    values.stream().forEach(v->{
+                        String line = String.valueOf(v.get("line"));
+                        String ruleDesc = v.get("ruleDesc");
+                        String name = v.get("name");
+                        stringBuilder.append("<li>"+line + "行，" + name + "，" + ruleDesc +"</li>");
+                    });
+
                 });
 
                 String html = """
@@ -180,6 +195,7 @@ public class ConfigController {
                 return html;
 //                return file.getAbsolutePath();
             }catch (Exception e) {
+                e.printStackTrace();
                 return e.getMessage();
             }
         }
