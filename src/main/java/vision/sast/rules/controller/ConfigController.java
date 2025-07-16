@@ -27,6 +27,7 @@ public class ConfigController {
     private String projectName;
     private String resultFilePath;
     private String measureResultFilePath;
+    private String systemConstraintPath;
     private String INDEXS;
 
     /***
@@ -130,6 +131,15 @@ public class ConfigController {
             e.printStackTrace();
             return e.getMessage();
         }
+    }
+
+    /***
+     * 系统约束
+     */
+    @GetMapping("config_systemConstraint_path")
+    public String config_systemConstraint_path(){
+        File file = new File(systemConstraintPath);
+        return file.getAbsolutePath();
     }
 
     /***
@@ -244,12 +254,14 @@ public class ConfigController {
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
             this.workspace = (String) json.get("workspace");
             this.projectName = (String) json.get("projectName");
+            this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
             this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
 
             System.out.println("项目名称：" + this.projectName);
             System.out.println("空间路径：" + this.workspace);
             System.out.println("结果路径：" + this.resultFilePath);
             System.out.println("度量路径：" + this.measureResultFilePath);
+            System.out.println("系统约束：" + this.systemConstraintPath);
             System.out.println("索引路径：" + this.INDEXS);
 
             String htmlFileContent = fileContent
@@ -267,6 +279,9 @@ public class ConfigController {
                     <h2>结果路径</h2>
                     <a href='config_issue_path'>issue</a>&nbsp;&nbsp;&nbsp;{{{resultFilePath}}}<br>
                     <a href='config_measure_path'>measure</a>&nbsp;&nbsp;&nbsp;{{{measureResultFilePath}}}<br>
+                    
+                    <h2>系统约束</h2>
+                    <a href='config_systemConstraint_path'>systemConstraint</a>&nbsp;&nbsp;&nbsp;{{{systemConstraintPath}}}<br>
                    
                     <h2>全文检索</h2>
                     {{{INDEXS}}}
@@ -290,6 +305,10 @@ public class ConfigController {
             if(this.measureResultFilePath!=null){
                 html = html.replace("{{{measureResultFilePath}}}", measureResultFilePath);
             }
+            if(this.systemConstraintPath!=null){
+                html = html.replace("{{{systemConstraintPath}}}", systemConstraintPath + "&nbsp;&nbsp;&nbsp;" + new File(systemConstraintPath).exists());
+            }
+
             html = html.replace("{{{INDEXS}}}", INDEXS + "&nbsp;&nbsp;&nbsp;" + new File(INDEXS).exists());
             html = html.replace("{{{htmlFileContent}}}", htmlFileContent);
 
