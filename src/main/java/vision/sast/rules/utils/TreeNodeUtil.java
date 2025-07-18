@@ -62,13 +62,21 @@ public class TreeNodeUtil {
 
     // 获取相对路径的TreeNode
     public static TreeNode getRelativeTreeNode(TreeNode node) {
-        for (TreeNode child : node.children.values()) {
-            if(child.getChildren().size()>1){
-                return child;
+        if(node.getChildren()==null || node.getChildren().isEmpty()){
+            //没有子节点，则当前节点就是相对路径的根节点
+            return node;
+        }
+        else {
+            if(node.getChildren().size()==1){
+                return getRelativeTreeNode(node.getChildren().get(0));
+            }
+            else {
+                //多个子节点，则当前节点就是相对路径根节点
+                return node;
             }
         }
-        return node;
     }
+
 
     public static void main(String[] args) {
         List<String> paths = Arrays.asList(

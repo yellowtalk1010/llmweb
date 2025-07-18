@@ -61,7 +61,8 @@ public class FileController {
         });
 
         TreeNodeUtil.TreeNode root =TreeNodeUtil.buildTree(list.stream().map(m->m.get("file")).collect(Collectors.toList()));
-        TreeNodeUtil.printTree(root, "");
+        TreeNodeUtil.TreeNode relativeRoot = TreeNodeUtil.getRelativeTreeNode(root);
+        TreeNodeUtil.printTree(relativeRoot, "");
 
         return list;
     }
