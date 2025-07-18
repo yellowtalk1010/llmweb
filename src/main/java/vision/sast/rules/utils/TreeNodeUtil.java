@@ -20,7 +20,7 @@ public class TreeNodeUtil {
 
     // 构建目录树
     public static TreeNode buildTree(List<String> paths) {
-        TreeNode root = new TreeNode(""); // 根节点
+        TreeNode root = new TreeNode("",""); // 根节点
 
         for (String path : paths) {
             String[] parts = path.split("/|\\\\"); // 支持 Unix 和 Windows 路径分隔符
