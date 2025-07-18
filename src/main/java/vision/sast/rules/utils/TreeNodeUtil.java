@@ -1,9 +1,6 @@
 package vision.sast.rules.utils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 将list的目录转成tree输出
@@ -11,11 +8,13 @@ import java.util.TreeMap;
 public class TreeNodeUtil {
 
     public static class TreeNode {
-        String name;
+        String name; //文件名称，或者文件夹名称
+        String path; //完整路径
         Map<String, TreeNode> children = new TreeMap<>();
 
-        TreeNode(String name) {
+        TreeNode(String name, String path) {
             this.name = name;
+            this.path = path;
         }
     }
 
@@ -27,8 +26,17 @@ public class TreeNodeUtil {
             String[] parts = path.split("/|\\\\"); // 支持 Unix 和 Windows 路径分隔符
             TreeNode current = root;
 
-            for (String part : parts) {
-                current.children.putIfAbsent(part, new TreeNode(part));
+            for (int i = 0; i < parts.length; i++) {
+                String part = parts[i];
+
+
+                List<String> lines = new ArrayList<>();
+                for (int j = 0; j <= i; j++) {
+                    lines.add(parts[j]);
+                }
+                String partPath = String.join("/", lines);
+
+                current.children.putIfAbsent(part, new TreeNode(part, partPath));
                 current = current.children.get(part);
             }
         }
