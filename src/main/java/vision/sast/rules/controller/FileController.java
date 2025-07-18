@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.Database;
 import vision.sast.rules.dto.IssueDto;
+import vision.sast.rules.utils.TreeNodeUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,6 +59,9 @@ public class FileController {
             map.put("size", Database.fileIssuesMap.get(file).size() + "");
             list.add(map);
         });
+
+        TreeNodeUtil.TreeNode root =TreeNodeUtil.buildTree(list.stream().map(m->m.get("file")).collect(Collectors.toList()));
+        TreeNodeUtil.printTree(root, "");
 
         return list;
     }
