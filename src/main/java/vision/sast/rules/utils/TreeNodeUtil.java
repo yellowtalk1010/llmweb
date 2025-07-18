@@ -1,5 +1,7 @@
 package vision.sast.rules.utils;
 
+import lombok.Getter;
+
 import java.util.*;
 
 /**
@@ -8,9 +10,15 @@ import java.util.*;
 public class TreeNodeUtil {
 
     public static class TreeNode {
-        String name; //文件名称，或者文件夹名称
-        String path; //完整路径
-        Map<String, TreeNode> children = new TreeMap<>();
+        @Getter
+        private String name; //文件名称，或者文件夹名称
+        @Getter
+        private String path; //完整路径
+        private Map<String, TreeNode> children = new TreeMap<>();
+
+        public List<TreeNode> getChildren(){
+            return new ArrayList<>(children.values()).stream().sorted(Comparator.comparing(e->e.getName())).toList(); //按名称排序
+        }
 
         TreeNode(String name, String path) {
             this.name = name;
@@ -52,6 +60,16 @@ public class TreeNodeUtil {
         }
     }
 
+    // 获取相对路径的TreeNode
+    public static TreeNode getRelativeTreeNode(TreeNode node) {
+        for (TreeNode child : node.children.values()) {
+            if(child.getChildren().size()>1){
+                return child;
+            }
+        }
+        return node;
+    }
+
     public static void main(String[] args) {
         List<String> paths = Arrays.asList(
                 "D:/a/b/c.txt",
@@ -60,7 +78,14 @@ public class TreeNodeUtil {
                 "D:/g/h.txt"
         );
 
+        System.out.println("================绝对路径输出=============");
+
         TreeNode root = buildTree(paths);
         printTree(root, "");
+
+        System.out.println("================相对路径输出=============");
+
+        TreeNode relativeTreeNode = getRelativeTreeNode(root);
+        printTree(relativeTreeNode, "");
     }
 }
