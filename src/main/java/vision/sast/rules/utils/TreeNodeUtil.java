@@ -46,10 +46,10 @@ public class TreeNodeUtil {
 
     public static void main(String[] args) {
         List<String> paths = Arrays.asList(
-                "a/b/c.txt",
-                "a/b/d.txt",
-                "a/e/f.txt",
-                "g/h.txt"
+                "D:/a/b/c.txt",
+                "D:/a/b/d.txt",
+                "D:/a/e/f.txt",
+                "D:/g/h.txt"
         );
 
         TreeNode root = buildTree(paths);
