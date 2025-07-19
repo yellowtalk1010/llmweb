@@ -83,7 +83,7 @@ function AllFiles() {
       <div style={{ width: '30px', textAlign: 'center', background: '#f0f0f0', cursor: 'pointer' }}
            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
       >
-        <div style={{ padding: '0.5rem' }}>
+        <div style={{ padding: '0.1 rem' }}>
           {sidebarCollapsed ? '▶️' : '◀️'}
         </div>
       </div>
