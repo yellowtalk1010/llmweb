@@ -9,6 +9,7 @@ function AllFiles() {
 
   const [treeData, setTreeData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     fetch('/file_tree', {
@@ -58,10 +59,34 @@ function AllFiles() {
     <div id="files">
 
       <div style={{ display: 'flex', height: '100vh', fontFamily: 'sans-serif' }}>
-        <div style={{ width: '300px', borderRight: '1px solid #ccc', padding: '1rem', overflowY: 'auto' }}>
-          <h3>📁 文件树</h3>
-          <FileTree nodes={treeData} onSelectFile={setSelectedFile} />
+        <div
+          style={{
+            width: sidebarCollapsed ? '0' : '300px',
+            borderRight: '1px solid #ccc',
+            padding: sidebarCollapsed ? '0' : '1rem',
+            overflowY: 'auto',
+            transition: 'width 0.3s ease',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {!sidebarCollapsed && (
+            <>
+              <h3 style={{ marginTop: 0 }}>项目文件</h3>
+              <FileTree nodes={treeData} onSelectFile={setSelectedFile} />
+            </>
+          )}
+          
         </div>
+
+      {/* 折叠/展开按钮 */}
+      <div style={{ width: '30px', textAlign: 'center', background: '#f0f0f0', cursor: 'pointer' }}
+           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+      >
+        <div style={{ padding: '0.5rem' }}>
+          {sidebarCollapsed ? '▶️' : '◀️'}
+        </div>
+      </div>
+
         <div style={{ flex: 1, padding: '1rem', overflowY: 'auto' }}>
           <h3>📄 文件内容</h3>
           {selectedFile ? (
@@ -72,9 +97,12 @@ function AllFiles() {
         </div>
       </div>
       
+      
 
       <div>
+        <hr></hr>
         <ul>
+          <h2>文件平铺</h2>
           {filesData.list.map((file, index) => (
           <li key={index}>
             <a href={`file?path=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
