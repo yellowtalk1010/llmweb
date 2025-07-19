@@ -31,7 +31,7 @@ function AllFiles() {
       });
   }, []);
 
-
+  /**平铺所有文件**/
   const [filesData, setFilesData] = useState({list:[], status: 0})
   if(filesData.status==0){
     fetch('/file_list', {
