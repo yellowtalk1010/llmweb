@@ -47,6 +47,9 @@ public class TreeNodeUtil {
         private String name; //文件名称，或者文件夹名称
         @Getter
         private String path; //完整路径
+        @Getter
+        private Map<String, Object> data = new HashMap<>(); //备份数据
+
         private Map<String, TreeNode> children = new TreeMap<>();
 
         public List<TreeNode> getChildren(){
