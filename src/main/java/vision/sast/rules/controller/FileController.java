@@ -1,5 +1,6 @@
 package vision.sast.rules.controller;
 
+import com.alibaba.fastjson2.JSON;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.Database;
@@ -43,6 +44,27 @@ public class FileController {
         map.put("path", path);
 
         return map;
+    }
+
+    @GetMapping("file_tree")
+    public TreeNodeUtil.TreeNode file_tree(){
+        System.out.println("文件总数：" + Database.fileList.size());
+        TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(Database.fileList);
+        TreeNodeUtil.TreeNode relativeTreeNode = TreeNodeUtil.getRelativeTreeNode(treeNode);
+        traverseTreeNodeForData(relativeTreeNode);
+        return relativeTreeNode;
+    }
+
+    private void traverseTreeNodeForData(TreeNodeUtil.TreeNode treeNode){
+        if(treeNode!=null){
+            String path = treeNode.getPath();
+            if(Database.fileIssuesMap.get(path)!=null){
+                treeNode.getData().put("size", Database.fileIssuesMap.get(path).size());
+            }
+            treeNode.getChildren().forEach(child->{
+                traverseTreeNodeForData(child);
+            });
+        }
     }
 
     @GetMapping("file_list")
