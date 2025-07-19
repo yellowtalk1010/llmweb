@@ -3,11 +3,8 @@ import {Fragment, useState, useEffect } from "react"
 function SourceFile({node}) {
 
     const file = node.path
-    const [loading, setLoading] = useState(false);
-
-    // setLoading(true); // 开始加载
-    
-    const [sourceCodeData, setSourceCodeData] = useState([])
+    const [loading, setLoading] = useState(false);  //转圈圈加载进度条
+    const [sourceCodeData, setSourceCodeData] = useState([]) //高亮文件内容
     
 
     useEffect(() => {
