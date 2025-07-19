@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import {Fragment, useState, useEffect } from "react"
 import FileTree from "./modules/FileTree";
+import SourceFile from "./modules/SourceFile";
 
 import styles from './AllFiles.css';
 
@@ -89,10 +90,12 @@ function AllFiles() {
       </div>
 
         {/* 展示文件内容 */}    
-        <div style={{ flex: 1, padding: '1rem', overflowY: 'auto' }}>
-          <h3>📄 文件内容</h3>
+        <div style={{ flex: 1, padding: '0.1rem', overflowY: 'auto' }}>
           {selectedFile ? (
+            <>
+            <SourceFile node={selectedFile}  />
             <pre style={{ whiteSpace: 'pre-wrap' }}>{selectedFile.content}</pre>
+            </>
           ) : (
             <p>点击左侧文件查看内容</p>
           )}
