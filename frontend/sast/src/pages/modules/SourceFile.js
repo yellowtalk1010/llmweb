@@ -3,12 +3,35 @@ import {Fragment, useState, useEffect } from "react"
 function SourceFile({node}) {
 
     const file = node.path
-    const vtid = ""
+    // const vtid = ""
     const [loading, setLoading] = useState(false);  //转圈圈加载进度条
     const [sourceCodeData, setSourceCodeData] = useState({
         lines:[],
         issues:[]
     }) //高亮文件内容
+
+    const [options, setOptions] = useState({
+        list:[]
+    });
+    const [selected, setSelected] = useState("");
+
+    // 加载数据
+    useEffect(() => {
+        fetch("/file_path?path=" + file, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => {
+            const json = res.json()
+            return json
+        }).then(data => {
+            console.log("下拉数据：", data);
+            setOptions(data);
+        }).catch(err => {
+            console.error("加载失败", err);
+        });
+    }, [file]);
     
 
     useEffect(() => {
@@ -17,7 +40,7 @@ function SourceFile({node}) {
 
         setLoading(true)
 
-        fetch('/sourceCode_list?file='+file+'&vtid='+vtid, {
+        fetch('/sourceCode_list?file='+file+'&vtid='+selected, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -36,8 +59,13 @@ function SourceFile({node}) {
         }).finally(e=>{
             setLoading(false)
         })
-    }, [file]);
+    }, [file,selected]);
 
+
+    const handleChange = (e) => {
+        setSelected(e.target.value);
+        console.log("你选择了：", e.target.value);
+    };
   
 
     return (
@@ -50,6 +78,16 @@ function SourceFile({node}) {
         <div>
             <div>
                 <span>{file}</span>
+                <div>
+                    <label htmlFor="myDropdown">请选择：</label>
+                    <select id="myDropdown" value={selected} onChange={handleChange}>
+                        <option value="">-- 请选择 --</option>
+                        {options.list.map((item, idx) => (
+                        
+                         <option value={item.vtid}>{item.rule}/{item.vtid}/{item.defectLevel}/{item.ruleDesc}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
             <div>
                 <ol>
