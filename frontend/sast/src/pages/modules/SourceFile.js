@@ -12,8 +12,10 @@ function SourceFile({node}) {
         issues:[]
     }) //高亮文件内容
 
+    const [issuesData, setIssuesData] = useState(null)
 
-    const [selected, setSelected] = useState(null);
+
+    const [selectedVtid, setSelectedVtid] = useState(null);
     
 
     useEffect(() => {
@@ -22,7 +24,7 @@ function SourceFile({node}) {
 
         setLoading(true)
 
-        fetch('/sourceCode_list?file='+file+'&vtid='+selected, {
+        fetch('/sourceCode_list?file='+file+'&vtid='+selectedVtid, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -53,7 +55,7 @@ function SourceFile({node}) {
       ) : (
         <div>
             <div>
-                <Rules file={file} vtid={null} onSelectRuleVtid={setSelected}></Rules>
+                <Rules file={file} vtid={null} onSelectRuleVtid={setSelectedVtid}></Rules>
             </div>
             <div>
                 <ol>
