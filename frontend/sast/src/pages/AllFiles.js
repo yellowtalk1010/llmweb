@@ -59,6 +59,7 @@ function AllFiles() {
     <div id="files">
 
       <div style={{ display: 'flex', height: '100vh', fontFamily: 'sans-serif' }}>
+        {/* 文件树 */}
         <div
           style={{
             width: sidebarCollapsed ? '0' : '300px',
@@ -87,6 +88,7 @@ function AllFiles() {
         </div>
       </div>
 
+        {/* 展示文件内容 */}    
         <div style={{ flex: 1, padding: '1rem', overflowY: 'auto' }}>
           <h3>📄 文件内容</h3>
           {selectedFile ? (
