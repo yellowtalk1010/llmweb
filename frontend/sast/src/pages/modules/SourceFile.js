@@ -12,12 +12,6 @@ function SourceFile({node}) {
         issues:[]
     }) //高亮文件内容
 
-    const [issuesData, setIssuesData] = useState(null)
-
-
-    const [selectedVtid, setSelectedVtid] = useState(null);
-    
-
     useEffect(() => {
 
          if (!file) return;
@@ -46,6 +40,39 @@ function SourceFile({node}) {
     }, [file]);
 
 
+    const [selectedVtid, setSelectedVtid] = useState("");  //选择的vtid
+    const [issuesData, setIssuesData] = useState({
+        lines:[],
+        issues:[]
+    }) //文件 + vtid 得到的 issue 列表
+
+    // useEffect(() => {
+    //     if (!file) return;
+
+    //     console.info("选择的vtid是：" + selectedVtid)
+        
+    //     setLoading(true)
+
+    //     fetch('/sourceCode_issue_list?file='+file+'&vtid='+selectedVtid, {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       }
+    //     }).then(res =>{
+    //         const json = res.json();
+    //         return json
+    //     }).then(data =>{
+    //         console.info("请求issue")
+    //         console.log(data)
+    //         // setIssuesData(data)
+    //     }).catch(e =>{
+    //         console.log(e)
+    //     }).finally(e=>{
+    //         setLoading(false)
+    //     })
+    // }, [selectedVtid]);
+
+
 
     return (
     <>
@@ -55,7 +82,7 @@ function SourceFile({node}) {
       ) : (
         <div>
             <div>
-                <Rules file={file} vtid={null} onSelectRuleVtid={setSelectedVtid}></Rules>
+                <Rules file={file} onSelectRuleVtid={setSelectedVtid}></Rules>
             </div>
             <div>
                 <ol>
@@ -94,3 +121,4 @@ function SourceFile({node}) {
 
 
 export default SourceFile;
+
