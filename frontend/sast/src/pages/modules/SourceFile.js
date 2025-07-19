@@ -24,7 +24,7 @@ function SourceFile({node}) {
         }).catch(e =>{
           console.log(e)
         })
-    }, []);
+    }, [file]);
 
   
 
