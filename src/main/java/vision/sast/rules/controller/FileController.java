@@ -47,12 +47,12 @@ public class FileController {
     }
 
     @GetMapping("file_tree")
-    public TreeNodeUtil.TreeNode file_tree(){
+    public List<TreeNodeUtil.TreeNode> file_tree(){
         System.out.println("文件总数：" + Database.fileList.size());
         TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(Database.fileList);
         TreeNodeUtil.TreeNode relativeTreeNode = TreeNodeUtil.getRelativeTreeNode(treeNode);
         traverseTreeNodeForData(relativeTreeNode);
-        return relativeTreeNode;
+        return Arrays.asList(relativeTreeNode);
     }
 
     private void traverseTreeNodeForData(TreeNodeUtil.TreeNode treeNode){

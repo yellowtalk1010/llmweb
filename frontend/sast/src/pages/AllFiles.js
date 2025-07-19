@@ -1,10 +1,35 @@
 import { useNavigate } from 'react-router-dom';
-import {Fragment, useState } from "react"
+import {Fragment, useState, useEffect } from "react"
+import FileTree from "./modules/FileTree";
 
 import styles from './AllFiles.css';
 
 function AllFiles() {
   const navigate = useNavigate();
+
+  const [treeData, setTreeData] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  useEffect(() => {
+    fetch('/file_tree', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => {
+        const json = res.json()
+        return json
+      })
+      .then(data => {
+        console.log("file_tree的数据")
+        console.log(data)
+        setTreeData(data)
+      }).catch(e=>{
+        console.error(e)
+      });
+  }, []);
+
 
   const [filesData, setFilesData] = useState({list:[], status: 0})
   if(filesData.status==0){
@@ -32,7 +57,23 @@ function AllFiles() {
   return (
     <div id="files">
 
-       
+      <div style={{ display: 'flex', height: '100vh', fontFamily: 'sans-serif' }}>
+        <div style={{ width: '300px', borderRight: '1px solid #ccc', padding: '1rem', overflowY: 'auto' }}>
+          <h3>📁 文件树</h3>
+          <FileTree nodes={treeData} onSelectFile={setSelectedFile} />
+        </div>
+        <div style={{ flex: 1, padding: '1rem', overflowY: 'auto' }}>
+          <h3>📄 文件内容</h3>
+          {selectedFile ? (
+            <pre style={{ whiteSpace: 'pre-wrap' }}>{selectedFile.content}</pre>
+          ) : (
+            <p>点击左侧文件查看内容</p>
+          )}
+        </div>
+      </div>
+      
+
+      <div>
         <ul>
           {filesData.list.map((file, index) => (
           <li key={index}>
@@ -40,7 +81,7 @@ function AllFiles() {
           </li>
         ))}
         </ul>
-
+      </div>    
     </div>
 
   );
