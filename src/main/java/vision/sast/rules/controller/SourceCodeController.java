@@ -60,7 +60,7 @@ public class SourceCodeController {
     public synchronized Map<String, Object> sourceCode_list(String vtid, String file) {
         if (vtid != null && file != null) {
             try {
-                Thread.sleep(3000);
+//                Thread.sleep(3000);
                 int size = Database.sourceCodeInit(vtid, file);
                 String key = Database.getKey(vtid, file);
                 List<IssueDto> issueDtos = Database.fileAndVtid_issuesMap.get(key);
@@ -76,7 +76,7 @@ public class SourceCodeController {
         }
         else if ((vtid == null || StringUtils.isEmpty(vtid)) && file != null) {
             try {
-                Thread.sleep(3000);
+//                Thread.sleep(3000);
                 List<String> lines = SourceCodeUtil.show2(file);
                 Map<String, Object> map = new HashMap<>();
                 map.put("lines", lines); //文件行列表
