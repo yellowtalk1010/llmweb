@@ -18,6 +18,8 @@ function TreeNode({ node, onSelectFile }) {
     if (isFolder) {
       setExpanded(!expanded);
     } else {
+      console.info("点击文件树中的文件:")
+      console.info(node)
       onSelectFile(node);
     }
   };
