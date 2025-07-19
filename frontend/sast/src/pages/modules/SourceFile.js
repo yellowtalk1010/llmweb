@@ -13,7 +13,8 @@ function SourceFile({node}) {
     const [options, setOptions] = useState({
         list:[]
     });
-    const [selected, setSelected] = useState("");
+    const [selected, setSelected] = useState(null);
+    const [selectedRule, setSelectedRule] = useState(null);
 
     // 加载数据
     useEffect(() => {
@@ -63,8 +64,19 @@ function SourceFile({node}) {
 
 
     const handleChange = (e) => {
+        var vtid = e.target.value
+        options.list.filter((item, index) => item.vtid==vtid).forEach((item,index) =>{
+            console.info(">>>>>>>")
+            console.info(item)
+            setSelectedRule(item)
+        })
+        // .forEach((item, index) => {
+        //     // console.info(">>>>>")
+        //     // console.info(item)
+        // })
         setSelected(e.target.value);
         console.log("你选择了：", e.target.value);
+        console.log(e.target.value)
     };
   
 
@@ -77,17 +89,31 @@ function SourceFile({node}) {
       ) : (
         <div>
             <div>
-                <span>{file}</span>
                 <div>
-                    <label htmlFor="myDropdown">请选择：</label>
                     <select id="myDropdown" value={selected} onChange={handleChange}>
-                        <option value="">-- 请选择 --</option>
+                        <option key="" value="">-- 规则选择 --</option>
                         {options.list.map((item, idx) => (
-                        
-                         <option value={item.vtid}>{item.rule}/{item.vtid}/{item.defectLevel}/{item.ruleDesc}</option>
+                         <option key={item.vtid} value={item.vtid}>{item.rule}➖{item.ruleDesc}</option>
                         ))}
                     </select>
                 </div>
+                <div>
+                    <span>🔸{file}</span>
+                </div>
+                <div>
+                    
+                    {selectedRule && 
+                    (
+                        <>
+                            <div><span>🔸{selectedRule.rule}</span></div>
+                            <div><span>🔸{selectedRule.vtid}</span></div>
+                            <div><span>🔸{selectedRule.defectLevel}</span></div>
+                            <div><span>🔸{selectedRule.ruleDesc}</span></div>
+                            <div><span>🔸问题数：{selectedRule.size}</span></div>
+                        </>
+                    )}
+                </div>
+                <hr></hr>
             </div>
             <div>
                 <ol>
