@@ -31,11 +31,19 @@ function Rules({ file, myVtid, onSelectRuleVtid }) {
     const handleChange = (e) => {
         var vtid = e.target.value
         console.log("你选择了：", vtid);
-        onSelectRuleVtid(vtid)
-        setSelectedItemVtid(vtid)
-        options.list.filter((item, index) => item.vtid==vtid).forEach((item,index) =>{
-            setSelectedItem(item)
-        })
+        if(vtid==""){
+          onSelectRuleVtid(null)
+          setSelectedItemVtid(null)
+          setSelectedItem(null)
+        }
+        else{
+          onSelectRuleVtid(vtid)
+          setSelectedItemVtid(vtid)
+          options.list.filter((item, index) => item.vtid==vtid).forEach((item,index) =>{
+              setSelectedItem(item)
+          })
+        }
+        
     };
 
   return (
