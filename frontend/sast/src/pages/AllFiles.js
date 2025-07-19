@@ -59,7 +59,7 @@ function AllFiles() {
     <div id="files">
 
       <div style={{ display: 'flex', height: '100vh', fontFamily: 'sans-serif' }}>
-        {/* 文件树 */}
+        {/* 左侧文件树 */}
         <div
           style={{
             width: sidebarCollapsed ? '0' : '300px',
