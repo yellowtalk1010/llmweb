@@ -3,11 +3,44 @@ package vision.sast.rules.utils;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 将list的目录转成tree输出
  * */
 public class TreeNodeUtil {
+
+    /**
+     * window默认文件夹、文件排序
+     **/
+    public static class NaturalOrderComparator implements Comparator<String> {
+        private final Pattern pattern = Pattern.compile("(\\d+)|(\\D+)");
+
+        @Override
+        public int compare(String a, String b) {
+            Matcher ma = pattern.matcher(a.toLowerCase());
+            Matcher mb = pattern.matcher(b.toLowerCase());
+
+            while (ma.find() && mb.find()) {
+                String pa = ma.group();
+                String pb = mb.group();
+
+                int result;
+                if (Character.isDigit(pa.charAt(0)) && Character.isDigit(pb.charAt(0))) {
+                    result = Integer.compare(Integer.parseInt(pa), Integer.parseInt(pb));
+                } else {
+                    result = pa.compareTo(pb);
+                }
+
+                if (result != 0) {
+                    return result;
+                }
+            }
+
+            return Integer.compare(a.length(), b.length());
+        }
+    }
 
     public static class TreeNode {
         @Getter
@@ -17,7 +50,8 @@ public class TreeNodeUtil {
         private Map<String, TreeNode> children = new TreeMap<>();
 
         public List<TreeNode> getChildren(){
-            return new ArrayList<>(children.values()).stream().sorted(Comparator.comparing(e->e.getName())).toList(); //按名称排序
+//            return new ArrayList<>(children.values()).stream().sorted(Comparator.comparing(e->e.getName())).toList(); //按名称排序
+            return new ArrayList<>(children.values());
         }
 
         TreeNode(String name, String path) {

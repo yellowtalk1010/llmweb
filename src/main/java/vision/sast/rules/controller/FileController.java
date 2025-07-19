@@ -7,10 +7,7 @@ import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.TreeNodeUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -60,7 +57,10 @@ public class FileController {
             list.add(map);
         });
 
-        TreeNodeUtil.TreeNode root =TreeNodeUtil.buildTree(list.stream().map(m->m.get("file")).collect(Collectors.toList()));
+
+        List<String> paths = list.stream().map(m->m.get("file")).collect(Collectors.toList());
+        paths.sort(new TreeNodeUtil.NaturalOrderComparator());
+        TreeNodeUtil.TreeNode root = TreeNodeUtil.buildTree(paths);
         TreeNodeUtil.TreeNode relativeRoot = TreeNodeUtil.getRelativeTreeNode(root);
         TreeNodeUtil.printTree(relativeRoot, "");
 
