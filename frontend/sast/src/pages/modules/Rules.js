@@ -3,7 +3,7 @@ import {Fragment, useState, useEffect, useRef } from "react"
 function Rules({ file, myVtid, onSelectRuleVtid }) {
 
     const [options, setOptions] = useState({
-        list:[]
+        list:[] //记录下拉框中的数据
     });
     const [selectedItemVtid, setSelectedItemVtid] = useState(null);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -41,11 +41,11 @@ function Rules({ file, myVtid, onSelectRuleVtid }) {
   return (
     <div>
         <div>
-            <select id="myDropdown" value={selectedItemVtid} onChange={handleChange}>
+            <select id="myDropdown" value={selectedItemVtid} onChange={handleChange} style={{ width: '100%' }}>
                 <option key="" value="">-- 规则选择 --</option>
                 {options.list.map((item, idx) => (
                   <option key={item.vtid} value={item.vtid}>
-                    {item.rule}➖{item.ruleDesc}
+                    {item.size}➖{item.rule}➖{item.ruleDesc}
                   </option>
                 ))}
             </select>
