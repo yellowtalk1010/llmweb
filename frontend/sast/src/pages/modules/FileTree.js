@@ -22,6 +22,17 @@ function TreeNode({ node, onSelectFile }) {
     }
   };
 
+  const handleCopy = (e) => {
+    e.stopPropagation(); // 避免触发点击展开或选中文件
+    navigator.clipboard.writeText(node.name)
+      .then(() => {
+        alert(`已复制文件名: ${node.name}`);
+      })
+      .catch((err) => {
+        console.error('复制失败', err);
+      });
+  };
+
   return (
     <li>
       <div
@@ -33,6 +44,22 @@ function TreeNode({ node, onSelectFile }) {
         }}
       >
         {isFolder ? (expanded ? '📂' : '📁') : '📄'} {node.name}
+
+        {!isFolder && (
+          <span
+            title="复制文件名"
+            onClick={handleCopy}
+            style={{
+              marginLeft: '0.5rem',
+              cursor: 'pointer',
+              color: '#666',
+              fontSize: '0.9rem',
+            }}
+          >
+            📋
+          </span>
+        )}
+        
       </div>
       {isFolder && expanded && (
         <FileTree nodes={node.children} onSelectFile={onSelectFile} />

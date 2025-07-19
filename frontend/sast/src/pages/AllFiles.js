@@ -72,7 +72,7 @@ function AllFiles() {
         >
           {!sidebarCollapsed && (
             <>
-              <h3 style={{ marginTop: 0 }}>项目文件</h3>
+              <h3 style={{ marginTop: 0 }}>文件折叠</h3>
               <FileTree nodes={treeData} onSelectFile={setSelectedFile} />
             </>
           )}
