@@ -3,8 +3,12 @@ import {Fragment, useState, useEffect } from "react"
 function SourceFile({node}) {
 
     const file = node.path
+    const vtid = ""
     const [loading, setLoading] = useState(false);  //转圈圈加载进度条
-    const [sourceCodeData, setSourceCodeData] = useState([]) //高亮文件内容
+    const [sourceCodeData, setSourceCodeData] = useState({
+        lines:[],
+        issues:[]
+    }) //高亮文件内容
     
 
     useEffect(() => {
@@ -13,7 +17,7 @@ function SourceFile({node}) {
 
         setLoading(true)
 
-        fetch('/otherSourceCode_list?file='+file, {
+        fetch('/sourceCode_list?file='+file+'&vtid='+vtid, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -49,7 +53,7 @@ function SourceFile({node}) {
             </div>
             <div>
                 <ol>
-                {sourceCodeData.map((lineHtml, index) => (
+                {sourceCodeData.lines.map((lineHtml, index) => (
                     <span
                     key={index}
                     dangerouslySetInnerHTML={{ __html: lineHtml }}

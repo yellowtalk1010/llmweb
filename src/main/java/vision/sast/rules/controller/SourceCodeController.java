@@ -1,6 +1,7 @@
 package vision.sast.rules.controller;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,6 +68,17 @@ public class SourceCodeController {
                 Map<String, Object> map = new HashMap<>();
                 map.put("lines", pair.getLeft()); //文件行列表
                 map.put("issues", pair.getRight()); //文件对应的issue 列表
+                return map;
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if ((vtid == null || StringUtils.isEmpty(vtid)) && file != null) {
+            try {
+                List<String> lines = SourceCodeUtil.show2(file);
+                Map<String, Object> map = new HashMap<>();
+                map.put("lines", lines); //文件行列表
+                map.put("issues", new ArrayList<>()); //文件对应的issue 列表
                 return map;
             }catch (Exception e) {
                 e.printStackTrace();
