@@ -1,6 +1,7 @@
 package vision.sast.rules.controller;
 
 import com.alibaba.fastjson2.JSON;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.Database;
@@ -47,9 +48,17 @@ public class FileController {
     }
 
     @GetMapping("file_tree")
-    public List<TreeNodeUtil.TreeNode> file_tree(){
-        System.out.println("文件总数：" + Database.fileList.size());
-        TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(Database.fileList);
+    public List<TreeNodeUtil.TreeNode> file_tree(String vtid){
+        System.out.println("file_tree，入参vtid=" + vtid);
+        List<String> files = new ArrayList<>();
+        if(StringUtils.isNotEmpty(vtid)){
+            files = Database.vtidFilesMap.get(vtid);
+        }
+        else {
+            files = Database.fileList;
+        }
+        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + files.size());
+        TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(files);
         TreeNodeUtil.TreeNode relativeTreeNode = TreeNodeUtil.getRelativeTreeNode(treeNode);
         traverseTreeNodeForData(relativeTreeNode);
         return Arrays.asList(relativeTreeNode);
@@ -68,23 +77,23 @@ public class FileController {
     }
 
     @GetMapping("file_list")
-    public List<Map<String, String>> file_list(){
-        System.out.println("文件总数：" + Database.fileList.size());
-
+    public List<Map<String, String>> file_list(String vtid){
+        System.out.println("file_list，入参vtid=" + vtid);
+        List<String> files = new ArrayList<>();
+        if(StringUtils.isNotEmpty(vtid)){
+            files = Database.vtidFilesMap.get(vtid);
+        }
+        else {
+            files = Database.fileList;
+        }
+        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + files.size());
         List<Map<String, String>> list = new ArrayList<>();
-        Database.fileList.stream().forEach(file->{
+        files.stream().forEach(file->{
             Map<String, String> map = new HashMap<>();
             map.put("file", file);
             map.put("size", Database.fileIssuesMap.get(file).size() + "");
             list.add(map);
         });
-
-
-        List<String> paths = list.stream().map(m->m.get("file")).collect(Collectors.toList());
-        paths.sort(new TreeNodeUtil.NaturalOrderComparator());
-        TreeNodeUtil.TreeNode root = TreeNodeUtil.buildTree(paths);
-        TreeNodeUtil.TreeNode relativeRoot = TreeNodeUtil.getRelativeTreeNode(root);
-        TreeNodeUtil.printTree(relativeRoot, "");
 
         return list;
     }
