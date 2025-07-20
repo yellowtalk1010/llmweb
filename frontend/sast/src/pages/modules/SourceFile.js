@@ -59,12 +59,23 @@ function SourceFile({node, urlParamVtid}) {
             <div id="sourcecode_file">
                 <ol>
                 {sourceCodeData.lines.map((lineHtml, index) => {
-                    const lineNumber = index + 1;
-                    const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
-                    const divDomsReact = <IssuesTemplate issueDatas={lineIssues} onShowPopup={setShowPopup}></IssuesTemplate>
+                    var headDivDomsReact = null;
+                    var divDomsReact = null;
+                    if(index==0){
+                        //如果是文件类型问题
+                        const fileIssues = sourceCodeData.issues.filter(issue=>issue.line==0) || []
+                        headDivDomsReact = <IssuesTemplate issueDatas={fileIssues} onShowPopup={setShowPopup}></IssuesTemplate>
+                    }
+                    else {
+                        const lineNumber = index + 1;
+                        const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
+                        divDomsReact = <IssuesTemplate issueDatas={lineIssues} onShowPopup={setShowPopup}></IssuesTemplate>
+                    }
+                    
 
                     const newLiElement = (
                         <>
+                            {headDivDomsReact}
                             <span
                                 key={index}
                                 dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
