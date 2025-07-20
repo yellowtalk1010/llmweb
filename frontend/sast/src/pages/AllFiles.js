@@ -23,7 +23,7 @@ function AllFiles() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
-    fetch('/file_tree?vtid=' + urlParamVtid, {
+    fetch('/file_tree?vtid=' + urlParamVtid + "&file=" + urlParamFile, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ function AllFiles() {
   /**平铺所有文件**/
   const [filesData, setFilesData] = useState({list:[], status: 0})
   if(filesData.status==0){
-    fetch('/file_list?vtid=' + urlParamVtid, {
+    fetch('/file_list?vtid=' + urlParamVtid + "&file=" + urlParamFile, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
