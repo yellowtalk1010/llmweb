@@ -2,6 +2,7 @@ import {Fragment, useState, useEffect } from "react"
 
 import RulesTemplate from './RulesTemplate';
 import IssuesTemplate from './IssuesTemplate';
+import FilePopupExample from "./FilePopupExample";
 
 function SourceFile({node}) {
 
@@ -14,6 +15,8 @@ function SourceFile({node}) {
     }) //高亮文件内容
 
     const [selectedVtid, setSelectedVtid] = useState("");  //选择的vtid
+
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
 
@@ -58,7 +61,7 @@ function SourceFile({node}) {
                 {sourceCodeData.lines.map((lineHtml, index) => {
                     const lineNumber = index + 1;
                     const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
-                    const divDomsReact = <IssuesTemplate issueDatas={lineIssues} ></IssuesTemplate>
+                    const divDomsReact = <IssuesTemplate issueDatas={lineIssues} onShowPopup={setShowPopup}></IssuesTemplate>
 
                     const newLiElement = (
                         <>
@@ -75,6 +78,7 @@ function SourceFile({node}) {
                 })}
                 </ol>
             </div>
+            {showPopup && <FilePopupExample trace={setShowPopup} />}
         </div>
       )}
 

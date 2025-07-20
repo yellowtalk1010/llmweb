@@ -3,7 +3,7 @@ import {Fragment, useState, useEffect } from "react"
 /**
  * @param: issueDatas 是跟随 文件返回 issue列表数据
  */
-function IssuesTemplate({ issueDatas }) {
+function IssuesTemplate({ issueDatas, onShowPopup }) {
   // console.info("触发issues模块渲染")
   // console.info(issueDatas)
 
@@ -98,14 +98,14 @@ function IssuesTemplate({ issueDatas }) {
     if(currentFile==toFile){
       //closeFloatingFile()
       //同一个文件中
-      // const el = document.getElementById("line_" + trace.line)
-      // el.scrollIntoView({
-      //   behavior: 'smooth',      // 平滑滚动
-      //   block: 'center',         // 垂直方向：滚动到中间
-      //   inline: 'center'         // 水平方向：滚动到中间
-      // });
+      const el = document.getElementById("line_" + trace.line)
+      el.scrollIntoView({
+        behavior: 'smooth',      // 平滑滚动
+        block: 'center',         // 垂直方向：滚动到中间
+        inline: 'center'         // 水平方向：滚动到中间
+      });
 
-      // el.classList.add('sourcecode-li')
+      el.classList.add('sourcecode-li')
       
       console.info("统一文件中打开")
     }
@@ -113,6 +113,7 @@ function IssuesTemplate({ issueDatas }) {
       //不同文件中打开
       // openFloatingFile(event, trace)
       console.info("不同文件中打开")
+      onShowPopup(true)
     }
 
     
