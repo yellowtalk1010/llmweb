@@ -16,7 +16,7 @@ function SourceFile({node}) {
 
     const [selectedVtid, setSelectedVtid] = useState("");  //选择的vtid
 
-    const [showPopup, setShowPopup] = useState(false);
+    const [showPopup, setShowPopup] = useState(null);
 
     useEffect(() => {
 
@@ -78,7 +78,7 @@ function SourceFile({node}) {
                 })}
                 </ol>
             </div>
-            {showPopup && <FilePopupExample trace={setShowPopup} />}
+            {showPopup!=null && <FilePopupExample trace={showPopup} onTrace={setShowPopup} />}
         </div>
       )}
 

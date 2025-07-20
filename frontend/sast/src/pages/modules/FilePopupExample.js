@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-function FilePopupExample({trace}) {
+function FilePopupExample({trace, onTrace}) {
+    
     console.info("来吧展示")
     console.info(trace)
     
-
     const fileContent = `
     这是文件内容的第一行
     第二行
@@ -19,15 +19,20 @@ function FilePopupExample({trace}) {
 
     // setShowPopupp(true)
 
+    function close(){
+        console.info("close关闭")
+        onTrace(null)
+    }
+
     return (
         <div>  
         
-        {trace && (
+        {trace!=null && (
             <div style={styles.overlay}>
             <div style={styles.popup}>
                 <div style={styles.header}>
                 <span>文件内容</span>
-                <button onClick={() => trace(false)}>关闭</button>
+                <button onClick={() => close()}>关闭</button>
                 </div>
                 <div style={styles.content}>
                 <pre style={styles.pre}>{fileContent}</pre>

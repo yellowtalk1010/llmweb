@@ -113,7 +113,8 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
       //不同文件中打开
       // openFloatingFile(event, trace)
       console.info("不同文件中打开")
-      onShowPopup(true)
+
+      onShowPopup(trace)
     }
 
     
