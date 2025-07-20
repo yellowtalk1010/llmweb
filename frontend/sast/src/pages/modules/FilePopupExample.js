@@ -34,7 +34,7 @@ function FilePopupExample({trace, onTrace}) {
             //将li标签加粗
             otherFileLiDom.classList.add('sourcecode-li');
         
-            }
+        }
         
     }
 
@@ -61,17 +61,24 @@ function FilePopupExample({trace, onTrace}) {
                     lines: data
                 })
                 // console.info("渲染完成后执行")
-                
-                markRedLine(trace.line)  //给指定行好，添加红色标记
             }).catch(e =>{
                 console.log(e)
             })
-
-
             
         }
 
     },[file])
+
+
+    useEffect(() => {
+        if (otherSourceCodeData.lines.length > 0) {
+            // 延迟一帧再执行，确保 DOM 已挂载
+            requestAnimationFrame(() => {
+                markRedLine(trace.line);
+            });
+        }
+    }, [otherSourceCodeData.lines, trace.line]);
+
     
 
     return (
