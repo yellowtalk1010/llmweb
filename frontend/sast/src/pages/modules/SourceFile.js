@@ -12,6 +12,8 @@ function SourceFile({node}) {
         issues:[]
     }) //高亮文件内容
 
+    const [selectedVtid, setSelectedVtid] = useState("");  //选择的vtid
+
     useEffect(() => {
 
          if (!file) return;
@@ -37,14 +39,14 @@ function SourceFile({node}) {
         }).finally(e=>{
             setLoading(false)
         })
-    }, [file]);
+    }, [file, selectedVtid]);
 
 
-    const [selectedVtid, setSelectedVtid] = useState("");  //选择的vtid
-    const [issuesData, setIssuesData] = useState({
-        lines:[],
-        issues:[]
-    }) //文件 + vtid 得到的 issue 列表
+    
+    // const [issuesData, setIssuesData] = useState({
+    //     lines:[],
+    //     issues:[]
+    // }) //文件 + vtid 得到的 issue 列表
 
     // useEffect(() => {
     //     if (!file) return;
@@ -82,7 +84,7 @@ function SourceFile({node}) {
       ) : (
         <div>
             <div>
-                <Rules file={file} onSelectRuleVtid={setSelectedVtid}></Rules>
+                <Rules file={file} vtid={selectedVtid} onSelectRuleVtid={setSelectedVtid}></Rules>
             </div>
             <div>
                 <ol>

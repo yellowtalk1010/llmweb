@@ -53,31 +53,8 @@ public class SourceCodeController {
         else {
             return "null";
         }
-
     }
 
-    @GetMapping("sourceCode_issue_list")
-    public synchronized Map<String, Object> sourceCode_issue_list(String vtid, String file) {
-        if (vtid != null && file != null) {
-            try {
-                int size = Database.sourceCodeInit(vtid, file);
-                String key = Database.getKey(vtid, file);
-                List<IssueDto> issueDtos = Database.fileAndVtid_issuesMap.get(key);
-                Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);
-
-                Map<String, Object> map = new HashMap<>();
-                map.put("issues", pair.getRight()); //文件对应的issue 列表
-                return map;
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("issues", new ArrayList<>());
-        return map;
-
-    }
 
     @GetMapping("sourceCode_list")
     public synchronized Map<String, Object> sourceCode_list(String vtid, String file) {
@@ -116,6 +93,7 @@ public class SourceCodeController {
         return map;
 
     }
+
 
     @GetMapping("otherSourceCode_list")
     public synchronized List<String> otherSourceCode_list(String file) {

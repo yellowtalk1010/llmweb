@@ -1,6 +1,6 @@
 import {Fragment, useState, useEffect, useRef } from "react"
 
-function Rules({ file, myVtid, onSelectRuleVtid }) {
+function Rules({ file, vtid, onSelectRuleVtid }) {
 
     const [options, setOptions] = useState({
         list:[] //记录下拉框中的数据
@@ -9,7 +9,10 @@ function Rules({ file, myVtid, onSelectRuleVtid }) {
     const [selectedItem, setSelectedItem] = useState(null);
 
 
+    const mountedRef = useRef(false);
     useEffect(() => {
+      if (!mountedRef.current) {
+        mountedRef.current = true;
 
         fetch("/file_path?path=" + file, {
           method: 'GET',
@@ -22,9 +25,17 @@ function Rules({ file, myVtid, onSelectRuleVtid }) {
         }).then(data => {
             console.log("下拉数据：", data);
             setOptions(data);
+            if(vtid!=null && vtid!=""){
+              onSelectRuleVtid(vtid)
+              setSelectedItemVtid(vtid)
+              data.list.filter((item, index) => item.vtid==vtid).forEach((item,index) =>{
+                  setSelectedItem(item)
+              })
+            }
         }).catch(err => {
             console.error("加载失败", err);
         });
+      }
     }, [file]);
 
 
