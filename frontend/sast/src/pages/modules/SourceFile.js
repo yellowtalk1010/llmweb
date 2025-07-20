@@ -49,11 +49,11 @@ function SourceFile({node}) {
       {loading ? (
         <div className="spinner"></div>
       ) : (
-        <div>
+        <div id="SourceCode">
             <div>
                 <RulesTemplate file={file} vtid={selectedVtid} onSelectRuleVtid={setSelectedVtid}></RulesTemplate>
             </div>
-            <div>
+            <div id="sourcecode_file">
                 <ol>
                 {sourceCodeData.lines.map((lineHtml, index) => {
                     const lineNumber = index + 1;
