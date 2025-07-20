@@ -10,6 +10,34 @@ function FilePopupExample({trace, onTrace}) {
         lines:[]
     })
     
+
+    function markRedLine(line){
+        console.info("添加红色标记：" + line)
+        var floatingFileDom = document.getElementById("traceSourcecodeFile")
+        console.info(floatingFileDom)
+        var lineId = "otherfileline_" + line
+        console.info(lineId)
+        const otherFileLiDom = document.getElementById(lineId)
+        console.info(otherFileLiDom)
+        if(otherFileLiDom){
+            const containerHeight = floatingFileDom.clientHeight;
+            const liOffsetTop = otherFileLiDom.offsetTop;
+            const liHeight = otherFileLiDom.offsetHeight;
+            // 计算 li 要滚动到的位置，使其垂直居中
+            const scrollTop = liOffsetTop - (containerHeight / 2) + (liHeight / 2);
+            // 平滑滚动到目标位置
+            floatingFileDom.scrollTo({
+                top: scrollTop,
+                behavior: 'smooth'
+            });
+
+            //将li标签加粗
+            otherFileLiDom.classList.add('sourcecode-li');
+        
+            }
+        
+    }
+
     const mountedRef = useRef(false);
     useEffect(() => {
 
@@ -30,12 +58,17 @@ function FilePopupExample({trace, onTrace}) {
                 // console.log("rule_vtid 的数据")
                 console.log(data)
                 setOtherSourceCodeData({
-                lines: data
+                    lines: data
                 })
                 // console.info("渲染完成后执行")
+                
+                markRedLine(trace.line)  //给指定行好，添加红色标记
             }).catch(e =>{
                 console.log(e)
             })
+
+
+            
         }
 
     },[file])
@@ -51,7 +84,7 @@ function FilePopupExample({trace, onTrace}) {
                 <span>{file}</span>
                 <button onClick={() => onTrace(null)}>关闭</button>
                 </div>
-                <div style={styles.content}>
+                <div id="traceSourcecodeFile" style={styles.content}>
                     <ol>
                     {otherSourceCodeData.lines.map((lineHtml, index) => {
                         const lineNumber = index + 1;
