@@ -77,10 +77,15 @@ function Rules({ file, vtid, onSelectRuleVtid }) {
             {selectedItem && 
             (
                 <>
-                    <div><span>🔸{selectedItem.rule}</span></div>
-                    <div><span>🔸{selectedItem.vtid}</span></div>
-                    <div><span>🔸{selectedItem.defectLevel}</span></div>
-                    <div><span>🔸{selectedItem.ruleDesc}</span></div>
+                    <div>
+                      <span>🔸{selectedItem.rule}</span>
+                      <span>🔸{selectedItem.vtid}</span>
+                      <span>🔸{selectedItem.defectLevel}</span>
+                    </div>
+                    
+                    <div>
+                      <span>🔸{selectedItem.ruleDesc}</span>
+                    </div>
                     <div><span>🔸问题数：{selectedItem.size}</span></div>
                 </>
             )}
