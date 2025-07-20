@@ -51,7 +51,7 @@ public class FileController {
     public List<TreeNodeUtil.TreeNode> file_tree(String vtid){
         System.out.println("file_tree，入参vtid=" + vtid);
         List<String> files = new ArrayList<>();
-        if(StringUtils.isNotEmpty(vtid)){
+        if(vtid!=null && StringUtils.isNotEmpty(vtid)){
             files = Database.vtidFilesMap.get(vtid);
         }
         else {

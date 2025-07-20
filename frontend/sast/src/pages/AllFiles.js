@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {Fragment, useState, useEffect } from "react"
 import FileTree from "./modules/FileTree";
 import SourceFile from "./modules/SourceFile";
@@ -6,6 +8,12 @@ import SourceFile from "./modules/SourceFile";
 import styles from './AllFiles.css';
 
 function AllFiles() {
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const urlParamVtid = queryParams.get('vtid')==null?"":queryParams.get('vtid');
+  console.info("传参，urlParamVtid:" + urlParamVtid)
+
   const navigate = useNavigate();
 
   const [treeData, setTreeData] = useState([]);
@@ -13,7 +21,7 @@ function AllFiles() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
-    fetch('/file_tree', {
+    fetch('/file_tree?vtid=' + urlParamVtid, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -35,7 +43,7 @@ function AllFiles() {
   /**平铺所有文件**/
   const [filesData, setFilesData] = useState({list:[], status: 0})
   if(filesData.status==0){
-    fetch('/file_list', {
+    fetch('/file_list?vtid=' + urlParamVtid, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -73,7 +81,7 @@ function AllFiles() {
         >
           {!sidebarCollapsed && (
             <>
-              <h3 style={{ marginTop: 0 }}>文件折叠</h3>
+              <h3 style={{ marginTop: 0 }}>文件折叠 <font color='red'>{urlParamVtid}</font></h3>
               <FileTree nodes={treeData} onSelectFile={setSelectedFile} />
             </>
           )}
@@ -93,7 +101,7 @@ function AllFiles() {
         <div style={{ flex: 1, padding: '0.1rem', overflowY: 'auto' }}>
           {selectedFile ? (
             <>
-            <SourceFile node={selectedFile}  />
+            <SourceFile node={selectedFile} urlParamVtid={urlParamVtid}  />
             <pre style={{ whiteSpace: 'pre-wrap' }}>{selectedFile.content}</pre>
             </>
           ) : (

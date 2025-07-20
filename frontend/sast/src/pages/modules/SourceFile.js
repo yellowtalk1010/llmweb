@@ -4,8 +4,8 @@ import RulesTemplate from './RulesTemplate';
 import IssuesTemplate from './IssuesTemplate';
 import FilePopupExample from "./FilePopupExample";
 
-function SourceFile({node}) {
-
+function SourceFile({node, urlParamVtid}) {
+    console.info("urlParamVtid:" + urlParamVtid)
     const file = node.path
     // const vtid = ""
     const [loading, setLoading] = useState(false);  //转圈圈加载进度条
@@ -14,7 +14,7 @@ function SourceFile({node}) {
         issues:[]
     }) //高亮文件内容
 
-    const [selectedVtid, setSelectedVtid] = useState("");  //选择的vtid
+    const [selectedVtid, setSelectedVtid] = useState(urlParamVtid==null?"":urlParamVtid);  //用户在下拉框中选择的规则vtid，和 系统指定的vtid
 
     const [showPopup, setShowPopup] = useState(null);
 
@@ -54,7 +54,7 @@ function SourceFile({node}) {
       ) : (
         <div id="SourceCode">
             <div>
-                <RulesTemplate file={file} vtid={selectedVtid} onSelectRuleVtid={setSelectedVtid}></RulesTemplate>
+                <RulesTemplate file={file} selectRuleVtid={selectedVtid} onSelectRuleVtid={setSelectedVtid}></RulesTemplate>
             </div>
             <div id="sourcecode_file">
                 <ol>

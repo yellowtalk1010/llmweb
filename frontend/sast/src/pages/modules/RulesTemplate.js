@@ -1,6 +1,11 @@
 import {Fragment, useState, useEffect, useRef } from "react"
 
-function RulesTemplate({ file, vtid, onSelectRuleVtid }) {
+/**
+ * @param  file 文件路径，根据文件可以获取当前文件违反了哪些规则类型
+ * @param  selectRuleVtid 用户已经选择的规则vtid，和系统指定的vtid（这里为何要返回，是为了同步更新 select 下拉框）
+ * @param  onSelectRuleVtid 函数，用来通过源代码模块，用户修改了vtid，需要重新加载
+ */
+function RulesTemplate({ file, selectRuleVtid, onSelectRuleVtid }) {
 
     const [options, setOptions] = useState({
         list:[] //记录下拉框中的数据
@@ -25,12 +30,15 @@ function RulesTemplate({ file, vtid, onSelectRuleVtid }) {
         }).then(data => {
             console.log("下拉数据：", data);
             setOptions(data);
-            if(vtid!=null && vtid!=""){
-              data.list.filter((item, index) => item.vtid==vtid).forEach((item,index) =>{
-                  setSelectedItem(item)
+            if(selectRuleVtid!=null && selectRuleVtid!=""){
+              data.list.filter((item, index) => item.vtid==selectRuleVtid).forEach((item,index) =>{
+                  setSelectedItem(item)  //让规则下拉框选择原来的规则项目
               })
-              onSelectRuleVtid(vtid)
-              setSelectedItemVtid(vtid)
+              onSelectRuleVtid(selectRuleVtid) //通知 源代码模块，vtid做了选择
+              setSelectedItemVtid(selectRuleVtid)
+            }
+            else {
+              //
             }
             
         }).catch(err => {
@@ -65,7 +73,7 @@ function RulesTemplate({ file, vtid, onSelectRuleVtid }) {
                 <option key="" value="">-- 规则选择 --</option>
                 {options.list.map((item, idx) => (
                   <option key={item.vtid} value={item.vtid}>
-                    {item.size}➖{item.rule}➖{item.ruleDesc}
+                    {item.size}➖{item.rule}➖{item.vtid}➖{item.ruleDesc}
                   </option>
                 ))}
             </select>
