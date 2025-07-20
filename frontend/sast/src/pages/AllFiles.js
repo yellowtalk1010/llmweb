@@ -12,7 +12,9 @@ function AllFiles() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const urlParamVtid = queryParams.get('vtid')==null?"":queryParams.get('vtid');
+  const urlParamFile = queryParams.get('file')==null?"":queryParams.get('file');
   console.info("传参，urlParamVtid:" + urlParamVtid)
+  console.info("传参，urlParamFile:" + urlParamFile)
 
   const navigate = useNavigate();
 
