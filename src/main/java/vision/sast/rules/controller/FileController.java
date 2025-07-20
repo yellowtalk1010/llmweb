@@ -48,8 +48,8 @@ public class FileController {
     }
 
     @GetMapping("file_tree")
-    public List<TreeNodeUtil.TreeNode> file_tree(String vtid){
-        System.out.println("file_tree，入参vtid=" + vtid);
+    public List<TreeNodeUtil.TreeNode> file_tree(String vtid, String file){
+        System.out.println("file_tree，入参vtid=" + vtid + " ，file=" + file);
         List<String> files = new ArrayList<>();
         if(vtid!=null && StringUtils.isNotEmpty(vtid)){
             files = Database.vtidFilesMap.get(vtid);
@@ -57,8 +57,15 @@ public class FileController {
         else {
             files = Database.fileList;
         }
-        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + files.size());
-        TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(files);
+        List<String> filterFiles = new ArrayList<>();
+        if(file!=null && StringUtils.isNotEmpty(file)){
+            filterFiles = files.stream().filter(e->e.equals(file)).collect(Collectors.toList());
+        }
+        else {
+            filterFiles = files;
+        }
+        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + filterFiles.size());
+        TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(filterFiles);
         TreeNodeUtil.TreeNode relativeTreeNode = TreeNodeUtil.getRelativeTreeNode(treeNode);
         traverseTreeNodeForData(relativeTreeNode);
         return Arrays.asList(relativeTreeNode);
@@ -77,8 +84,8 @@ public class FileController {
     }
 
     @GetMapping("file_list")
-    public List<Map<String, String>> file_list(String vtid){
-        System.out.println("file_list，入参vtid=" + vtid);
+    public List<Map<String, String>> file_list(String vtid, String file){
+        System.out.println("file_list，入参vtid=" + vtid + " ，file=" + file);
         List<String> files = new ArrayList<>();
         if(StringUtils.isNotEmpty(vtid)){
             files = Database.vtidFilesMap.get(vtid);
@@ -86,12 +93,19 @@ public class FileController {
         else {
             files = Database.fileList;
         }
-        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + files.size());
+        List<String> filterFiles = new ArrayList<>();
+        if(file!=null && StringUtils.isNotEmpty(file)){
+            filterFiles = files.stream().filter(e->e.equals(file)).collect(Collectors.toList());
+        }
+        else {
+            filterFiles = files;
+        }
+        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + filterFiles.size());
         List<Map<String, String>> list = new ArrayList<>();
-        files.stream().forEach(file->{
+        filterFiles.stream().forEach(f->{
             Map<String, String> map = new HashMap<>();
-            map.put("file", file);
-            map.put("size", Database.fileIssuesMap.get(file).size() + "");
+            map.put("file", f);
+            map.put("size", Database.fileIssuesMap.get(f).size() + "");
             list.add(map);
         });
 

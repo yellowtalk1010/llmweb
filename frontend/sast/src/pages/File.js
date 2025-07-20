@@ -54,7 +54,7 @@ function File() {
         <tbody>
           {fileData.list.map((rule, index) => (
           <tr key={index}>
-            <td><a style={{ textDecoration: 'none' }} href={`sourceCode?vtid=${rule.vtid}&file=${fileData.path}`}>{rule.vtid}</a></td>
+            <td><a style={{ textDecoration: 'none' }} href={`/pages/AllFiles?vtid=${rule.vtid}&file=${fileData.path}`}>{rule.vtid}</a></td>
             <td>{rule.rule}</td>
             <td>{rule.size}</td>
             <td>{rule.defectLevel}</td>
