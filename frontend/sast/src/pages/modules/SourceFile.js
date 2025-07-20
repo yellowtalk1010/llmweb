@@ -1,6 +1,6 @@
 import {Fragment, useState, useEffect } from "react"
 
-import Rules from './Rules';
+import RulesTemplate from './RulesTemplate';
 import IssuesTemplate from './IssuesTemplate';
 
 function SourceFile({node}) {
@@ -51,7 +51,7 @@ function SourceFile({node}) {
       ) : (
         <div>
             <div>
-                <Rules file={file} vtid={selectedVtid} onSelectRuleVtid={setSelectedVtid}></Rules>
+                <RulesTemplate file={file} vtid={selectedVtid} onSelectRuleVtid={setSelectedVtid}></RulesTemplate>
             </div>
             <div>
                 <ol>

@@ -1,6 +1,6 @@
 import {Fragment, useState, useEffect, useRef } from "react"
 
-function Rules({ file, vtid, onSelectRuleVtid }) {
+function RulesTemplate({ file, vtid, onSelectRuleVtid }) {
 
     const [options, setOptions] = useState({
         list:[] //记录下拉框中的数据
@@ -97,4 +97,4 @@ function Rules({ file, vtid, onSelectRuleVtid }) {
 }
 
 
-export default Rules;
+export default RulesTemplate;

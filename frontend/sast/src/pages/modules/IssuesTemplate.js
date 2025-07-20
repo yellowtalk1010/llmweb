@@ -1,5 +1,8 @@
 import {Fragment, useState, useEffect } from "react"
 
+/**
+ * issueDatas 是跟随 文件返回 issue列表数据
+ */
 function IssuesTemplate({ issueDatas }) {
   // console.info("触发issues模块渲染")
   // console.info(issueDatas)
