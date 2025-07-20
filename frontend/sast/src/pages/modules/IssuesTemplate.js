@@ -1,7 +1,7 @@
 import {Fragment, useState, useEffect } from "react"
 
 /**
- * issueDatas 是跟随 文件返回 issue列表数据
+ * @param: issueDatas 是跟随 文件返回 issue列表数据
  */
 function IssuesTemplate({ issueDatas }) {
   // console.info("触发issues模块渲染")
@@ -20,6 +20,15 @@ function IssuesTemplate({ issueDatas }) {
         </div>
         <div>{issue.ruleDesc}</div>
         <div>{issue.issueDesc}</div>
+        <div>
+        {
+          issue.traces.map((trace, traceIndex) => (
+            <div>
+              <a className="trace_a" >{trace.file} # {trace.line} # {trace.message}</a>
+            </div>
+          ))
+        }
+        </div>
       </div>
     );
   }
