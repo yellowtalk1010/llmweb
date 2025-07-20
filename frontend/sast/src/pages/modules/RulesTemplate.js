@@ -79,6 +79,7 @@ function RulesTemplate({ file, vtid, onSelectRuleVtid }) {
             (
                 <>
                     <div>
+                      <span>🔸总数:{selectedItem.size}</span>
                       <span>🔸{selectedItem.rule}</span>
                       <span>🔸{selectedItem.vtid}</span>
                       <span>🔸{selectedItem.defectLevel}</span>
@@ -87,7 +88,7 @@ function RulesTemplate({ file, vtid, onSelectRuleVtid }) {
                     <div>
                       <span>🔸{selectedItem.ruleDesc}</span>
                     </div>
-                    <div><span>🔸问题数：{selectedItem.size}</span></div>
+                    <div></div>
                 </>
             )}
         </div>
