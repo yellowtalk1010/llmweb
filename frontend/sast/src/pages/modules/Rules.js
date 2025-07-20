@@ -26,12 +26,13 @@ function Rules({ file, vtid, onSelectRuleVtid }) {
             console.log("下拉数据：", data);
             setOptions(data);
             if(vtid!=null && vtid!=""){
-              onSelectRuleVtid(vtid)
-              setSelectedItemVtid(vtid)
               data.list.filter((item, index) => item.vtid==vtid).forEach((item,index) =>{
                   setSelectedItem(item)
               })
+              onSelectRuleVtid(vtid)
+              setSelectedItemVtid(vtid)
             }
+            
         }).catch(err => {
             console.error("加载失败", err);
         });

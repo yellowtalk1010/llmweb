@@ -1,6 +1,7 @@
 import {Fragment, useState, useEffect } from "react"
 
 import Rules from './Rules';
+import IssuesTemplate from './IssuesTemplate';
 
 function SourceFile({node}) {
 
@@ -42,22 +43,6 @@ function SourceFile({node}) {
     }, [file, selectedVtid]);
 
 
-    //渲染issue列表
-  function renderIssue1(lineIssues) {
-    console.info("hello")
-    return lineIssues.map((issue, index) => (
-      <div id={issue.id} class="issueDiv">
-        <div>{issue.name}</div>
-        <div>
-          {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
-        </div>
-        <div>{issue.ruleDesc}</div>
-        <div>{issue.issueDesc}</div>
-      </div>
-    ));
-  }
-
-
     return (
     <>
       
@@ -73,38 +58,19 @@ function SourceFile({node}) {
                 {sourceCodeData.lines.map((lineHtml, index) => {
                     const lineNumber = index + 1;
                     const lineIssues = sourceCodeData.issues.filter(issue=>issue.line==lineNumber) || []
-                    
+                    const divDomsReact = <IssuesTemplate issueDatas={lineIssues} ></IssuesTemplate>
+
                     const newLiElement = (
-                        <span
-                        key={index}
-                        dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
-                        />
+                        <>
+                            <span
+                                key={index}
+                                dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
+                                />
+                                {divDomsReact}
+                        </>
                     );
 
-                    if(lineIssues!=null && lineIssues.length > 0){
-                        const divDoms = renderIssue1(lineIssues) //渲染issue列表,将issue对象编程react元素列表（不是dom元素列表）
-                        // console.info("divDoms:")
-                        // console.info(divDoms)
-                        
-                        const span = document.createElement('span'); //
-                        span.innerHTML = lineHtml;
-                        // console.info("span:")
-                        //console.info(span.firstChild) //将html字符串转成dom元素
-    
-                        const newLiElement = (
-                        <span
-                        key={index}
-                        dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
-                        />
-                        );
-                        divDoms.unshift(newLiElement); //将新元素加入到列表中
-
-                        return divDoms
-                    }
-                    else {
-                        return newLiElement
-                    }
-
+                    return newLiElement
 
                 })}
                 </ol>
