@@ -113,18 +113,21 @@ function AllFiles() {
       </div>
       
       
-
-      <div>
-        <hr></hr>
-        <ul>
-          <h2>文件平铺</h2>
-          {filesData.list.map((file, index) => (
-          <li key={index}>
-            <a href={`file?path=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
-          </li>
-        ))}
-        </ul>
-      </div>    
+      { //如果指定文件，则不平铺
+        (urlParamFile==null || urlParamFile=="") && (
+        <div>
+          <hr></hr>
+          <ul>
+            <h2>文件平铺</h2>
+            {filesData.list.map((file, index) => (
+            <li key={index}>
+              <a href={`file?path=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
+            </li>
+          ))}
+          </ul>
+        </div>)
+      }
+          
     </div>
 
   );
