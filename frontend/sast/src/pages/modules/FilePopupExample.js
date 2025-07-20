@@ -20,19 +20,20 @@ function FilePopupExample({trace, onTrace}) {
         const otherFileLiDom = document.getElementById(lineId)
         console.info(otherFileLiDom)
         if(otherFileLiDom){
-            const containerHeight = floatingFileDom.clientHeight;
-            const liOffsetTop = otherFileLiDom.offsetTop;
-            const liHeight = otherFileLiDom.offsetHeight;
-            // 计算 li 要滚动到的位置，使其垂直居中
-            const scrollTop = liOffsetTop - (containerHeight / 2) + (liHeight / 2);
-            // 平滑滚动到目标位置
+            const containerRect = floatingFileDom.getBoundingClientRect();
+            const itemRect = otherFileLiDom.getBoundingClientRect();
+
+            const containerScrollTop = floatingFileDom.scrollTop;
+            const offset = itemRect.top - containerRect.top;
+
+            const scrollTop = containerScrollTop + offset - (containerRect.height / 2) + (itemRect.height / 2);
+
             floatingFileDom.scrollTo({
                 top: scrollTop,
-                behavior: 'smooth'
+                behavior: 'smooth',
             });
 
-            //将li标签加粗
-            otherFileLiDom.classList.add('sourcecode-li');
+            otherFileLiDom.classList.add("sourcecode-li");
         
         }
         
@@ -131,7 +132,7 @@ const styles = {
   },
   popup: {
     width: "1000px",
-    maxHeight: "80vh",
+    maxHeight: "50vh",
     backgroundColor: "white",
     borderRadius: "8px",
     overflow: "hidden",
