@@ -7,81 +7,11 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
   // console.info("触发issues模块渲染")
   // console.info(issueDatas)
 
-  //点击 trace a 标签
-  const [top, setTop] = useState(0);
-
   if(issueDatas==null || Array.from(issueDatas).length==0){
     return null;
   }
 
-  // const [otherSourceCodeData, setOtherSourceCodeData] = useState({
-  //   lines:[]
-  // })
-  // function openFloatingFile(event, trace){
-  //   const file = trace.file
-  //   //打开一个新文件，展示在div中
-  //   const filePath = document.getElementById("floating-file-name").textContent
-  //   console.info("filePath:" + filePath)
-  //   if(filePath=="" || filePath!=file){
-  //     setOtherSourceCodeData({
-  //       lines: [],
-  //       status: 200
-  //     })
-  //     document.getElementById("floating-file-name").innerText = file
-  //     //加载源文件
-  //     fetch('/otherSourceCode_list?file='+file, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     }).then(res =>{
-  //       const json = res.json();
-  //       // console.info(json)
-  //       return json
-  //     }).then(data =>{
-  //       // console.log("rule_vtid 的数据")
-  //       console.log(data)
-  //       setOtherSourceCodeData({
-  //         lines: data,
-  //         status: 200
-  //       })
-  //       // console.info("渲染完成后执行")
-  //     }).catch(e =>{
-  //       console.log(e)
-  //     })
-  //   }
 
-  //   const rect = event.target.getBoundingClientRect();
-  //   setTop(rect.bottom + window.scrollY + 5); // 按钮下方 +10px
-
-  //   var floatingFileDom = document.getElementById("floating-file")
-  //   console.info(floatingFileDom)
-  //   floatingFileDom.classList.remove("floating-file-hidden")
-  //   floatingFileDom.classList.add("floating-file-show")
-
-  //   console.info(document.getElementById("otherfileline_26"))
-  //   const otherFileLiDom = document.getElementById("otherfileline_" + trace.line)
-  //   if(otherFileLiDom){
-  //     const containerHeight = floatingFileDom.clientHeight;
-  //     const liOffsetTop = otherFileLiDom.offsetTop;
-  //     const liHeight = otherFileLiDom.offsetHeight;
-  //     // 计算 li 要滚动到的位置，使其垂直居中
-  //     const scrollTop = liOffsetTop - (containerHeight / 2) + (liHeight / 2);
-  //     // 平滑滚动到目标位置
-  //     floatingFileDom.scrollTo({
-  //       top: scrollTop,
-  //       behavior: 'smooth'
-  //     });
-
-  //     //将li标签加粗
-  //     otherFileLiDom.classList.add('sourcecode-li');
-  
-  //   }
-
-  // }
-
-
-  
   function link(event, currentFile, trace){
     console.info(trace)
     document.getElementById("sourcecode_file").querySelectorAll('div a.trace_a_click').forEach(li => {

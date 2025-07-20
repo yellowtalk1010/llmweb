@@ -5,18 +5,6 @@ function FilePopupExample({trace, onTrace}) {
     console.info("来吧展示")
     console.info(trace)
     const file = trace.file
-    
-    const fileContent = `
-    这是文件内容的第一行
-    第二行
-    第三行
-    第四行
-    第五行
-    第六行
-    第七行
-    第八行
-    这是文件内容的最后一行
-    `.repeat(10); // 模拟长内容
 
     const [otherSourceCodeData, setOtherSourceCodeData] = useState({
         lines:[]
@@ -60,11 +48,27 @@ function FilePopupExample({trace, onTrace}) {
             <div style={styles.overlay}>
             <div style={styles.popup}>
                 <div style={styles.header}>
-                <span>文件内容</span>
+                <span>{file}</span>
                 <button onClick={() => onTrace(null)}>关闭</button>
                 </div>
                 <div style={styles.content}>
-                <pre style={styles.pre}>{fileContent}</pre>
+                    <ol>
+                    {otherSourceCodeData.lines.map((lineHtml, index) => {
+                        const lineNumber = index + 1;
+                        const newLiElement = (
+                            <>
+                                <span
+                                    key={index}
+                                    dangerouslySetInnerHTML={{ __html: lineHtml }} //将字符串转成 react元素
+                                    />
+                                    
+                            </>
+                        );
+                        return newLiElement
+
+                    })}
+                    </ol>
+                
                 </div>
             </div>
             </div>
@@ -86,7 +90,7 @@ const styles = {
     zIndex: 1000,
   },
   popup: {
-    width: "600px",
+    width: "1000px",
     maxHeight: "80vh",
     backgroundColor: "white",
     borderRadius: "8px",
