@@ -118,12 +118,14 @@ public class SourceCodeUtil {
                     + issueDto.getIssueDesc() + "<br>"
                     + traceBuilder.toString()
                     + "</div>";
-            int line = issueDto.getLine();  //当line等于0时，如果是文件规则（文件规则报在0行）
+            int line = issueDto.getLine();
             if(line==0){
+                //当line等于0时，如果是文件规则（文件规则报在0行）
                 newLines.add(0, issueDivStr);
                 insertTime++;
             }
             else if (line > 0){
+                //非文件规则
                 int index = line + insertTime;
                 newLines.add(index, issueDivStr);
                 insertTime++;
