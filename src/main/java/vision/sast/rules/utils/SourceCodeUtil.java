@@ -107,7 +107,7 @@ public class SourceCodeUtil {
                         + dto.getRuleDesc() + "<br>"
                         + dto.getIssueDesc() + "<br>"
                         + traceBuilder.toString()
-                        + "<a class='btn' id='"+dto.getId()+"'>AI审计</a>" + "<br>"
+//                        + "<a class='btn' id='"+dto.getId()+"'>AI审计</a>" + "<br>"
                         + "</div>";
                 newLines.add(index, divStr);
                 insertTime++;

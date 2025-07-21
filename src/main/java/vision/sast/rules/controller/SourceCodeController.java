@@ -38,7 +38,6 @@ public class SourceCodeController {
                         "<script src='https://cdn.jsdelivr.net/npm/marked/marked.min.js'></script>" +
                        "</head>" +
                        "<body>" +
-                       "<a href='highLight?file=" + file + "'>源代码</a><br>" +
                        "<pre><code class='language-cpp'>" +
                         html +
                        "</code></pre>" +
