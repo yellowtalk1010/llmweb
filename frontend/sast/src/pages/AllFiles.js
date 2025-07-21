@@ -39,9 +39,8 @@ function AllFiles() {
   console.info("传参，urlParamFile:" + urlParamFile)
 
 
-
   /**
-   * 
+   * 文件交互
    */
   const [treeData, setTreeData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -132,7 +131,7 @@ function AllFiles() {
             </div>
           </PanelResizeHandle>
 
-          <Panel defaultSize={90} style={{ overflow: "auto" }}>
+          <Panel defaultSize={89} style={{ overflow: "auto" }}>
             {selectedFile ? (
               <>
                 <SourceFile node={selectedFile} urlParamVtid={urlParamVtid}  />
@@ -142,24 +141,47 @@ function AllFiles() {
               <p>点击左侧文件查看内容</p>
             )}
           </Panel>
+
+          <PanelResizeHandle style={{
+              width: "12px",
+              backgroundColor: isHovering ? "#e5e7eb" : "#f3f4f6",
+              position: "relative",
+              transition: "background-color 0.2s",
+            }}>
+            <div style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                cursor: "pointer",
+                padding: "4px",
+                borderRadius: "4px",
+                backgroundColor: isHovering ? "#d1d5db" : "transparent",
+              }}>
+              ⏪
+            </div>
+          </PanelResizeHandle>
+
+          <Panel defaultSize={0} style={{ overflow: "auto" }}>
+            { //如果指定文件，则不平铺
+              (urlParamFile==null || urlParamFile=="") && (
+              <div style={{minWidth: "500px"}}>
+                <ul>
+                  <h2>文件平铺</h2>
+                  {filesData.list.map((file, index) => (
+                  <li key={index}>
+                    <a href={`file?path=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
+                  </li>
+                ))}
+                </ul>
+              </div>)
+            }
+          </Panel>
         </PanelGroup>
       </div>
 
  
-      { //如果指定文件，则不平铺
-        (urlParamFile==null || urlParamFile=="") && (
-        <div>
-          <hr></hr>
-          <ul>
-            <h2>文件平铺</h2>
-            {filesData.list.map((file, index) => (
-            <li key={index}>
-              <a href={`file?path=${file.file}`}>{file.file}</a> &nbsp;&nbsp; {file.size}
-            </li>
-          ))}
-          </ul>
-        </div>)
-      }
+      
           
     </div>
 
