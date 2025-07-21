@@ -93,7 +93,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
         return renderFunctionModule(issue)
       }
       else{
-        renderIssue(issue)
+        return renderIssue(issue)
       }
     })
     : null;
