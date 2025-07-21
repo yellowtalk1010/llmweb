@@ -1,32 +1,33 @@
-import { useNavigate } from 'react-router-dom';
-import {Fragment, useState } from "react"
+import { useRef, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
-
-
 function HelloWorld() {
-
-  const [leftCollapsed, setLeftCollapsed] = useState(false);
+  const leftPanelRef = useRef(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
   const toggleLeftPanel = (e) => {
-    console.info("点击事件")
-    e.stopPropagation(); // 阻止事件冒泡到拖拽手柄
-    setLeftCollapsed(!leftCollapsed);
+    e.stopPropagation();
+    if (isCollapsed) {
+      leftPanelRef.current.expand();
+    } else {
+      leftPanelRef.current.collapse();
+    }
+    setIsCollapsed(!isCollapsed);
   };
 
   return (
     <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
-      <Panel 
-        collapsible={true}
-        collapsed={"false"}
-        defaultSize={30} 
+      <Panel
+        ref={leftPanelRef}
+        collapsible
+        defaultSize={30}
         minSize={8}
       >
         Left Content
       </Panel>
 
-      <PanelResizeHandle 
+      <PanelResizeHandle
         style={{
           width: "12px",
           backgroundColor: isHovering ? "#e5e7eb" : "#f3f4f6",
@@ -36,7 +37,6 @@ function HelloWorld() {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        {/* 折叠/展开图标 */}
         <div
           onClick={toggleLeftPanel}
           style={{
@@ -50,15 +50,11 @@ function HelloWorld() {
             backgroundColor: isHovering ? "#d1d5db" : "transparent",
           }}
         >
-          
-
-          {leftCollapsed ? "→" : "←"}
+          {isCollapsed ? "→" : "←"}
         </div>
       </PanelResizeHandle>
 
-      <Panel defaultSize={70}>
-        Right Content
-      </Panel>
+      <Panel defaultSize={70}>Right Content</Panel>
     </PanelGroup>
   );
 }
