@@ -100,7 +100,7 @@ function AllFiles() {
             minSize={8}
             style={{ overflow: "auto" }}
           >
-            <h3 style={{ marginTop: 0 }}>文件折叠 <font color='red'>{urlParamVtid}</font></h3>
+            <h3 style={{ marginTop: 0 }}> <font color='red'>{urlParamVtid}</font></h3>
             <FileTree nodes={treeData} onSelectFile={setSelectedFile} />
           </Panel>
 
@@ -165,7 +165,7 @@ function AllFiles() {
           <Panel defaultSize={0} style={{ overflow: "auto" }}>
             { //如果指定文件，则不平铺
               (urlParamFile==null || urlParamFile=="") && (
-              <div style={{minWidth: "500px"}}>
+              <div style={{minWidth: "800px"}}>
                 <ul>
                   <h2>文件平铺</h2>
                   {filesData.list.map((file, index) => (

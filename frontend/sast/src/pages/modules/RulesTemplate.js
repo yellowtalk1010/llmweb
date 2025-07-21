@@ -66,6 +66,18 @@ function RulesTemplate({ file, selectRuleVtid, onSelectRuleVtid }) {
         
     };
 
+    
+    const handleCopy = (e) => {
+      e.stopPropagation(); // 避免触发点击展开或选中文件
+      navigator.clipboard.writeText(file)
+        .then(() => {
+          alert(`已复制: ${file}`);
+        })
+        .catch((err) => {
+          console.error('复制失败', err);
+        });
+    };
+
   return (
     <div>
         <div>
@@ -79,7 +91,18 @@ function RulesTemplate({ file, selectRuleVtid, onSelectRuleVtid }) {
             </select>
         </div>
         <div>
-            <span>🔸{file}</span>
+            <span>🔸{file}</span>          
+            <span title="复制文件路径"
+              onClick={handleCopy}
+              style={{
+                marginLeft: '0.5rem',
+                cursor: 'pointer',
+                color: '#666',
+                fontSize: '0.9rem',
+              }}
+            >
+            📋
+          </span>
         </div>
         <div>
             
