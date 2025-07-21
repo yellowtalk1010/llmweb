@@ -74,11 +74,28 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
     );
   }
 
+  //渲染functonModule函数建模
+  function renderFunctionModule(issue) {
+    return (
+      <div key={issue.id} id={issue.id} className="issueDiv">
+        <div>{issue.name}</div>
+        <div>
+          函数建模
+        </div>
+      </div>
+    );
+  }
+
 
   return issueDatas != null
-    ? issueDatas.map((issue) => (
+    ? issueDatas.map((issue) => {
+      if(issue.vtId=="FunctionModule"){
+        return renderFunctionModule(issue)
+      }
+      else{
         renderIssue(issue)
-      ))
+      }
+    })
     : null;
 }
 
