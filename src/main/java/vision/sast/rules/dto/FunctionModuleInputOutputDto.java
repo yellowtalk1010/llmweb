@@ -21,6 +21,7 @@ public class FunctionModuleInputOutputDto {
     @Data
     public static class FunctionParamDto {
         private String paramName; //参数名称
+        private String paramRawSignature; //参数内容
         private boolean input;
         private boolean output;
     }
