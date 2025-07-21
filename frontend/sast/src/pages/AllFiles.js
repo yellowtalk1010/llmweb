@@ -45,49 +45,64 @@ function AllFiles() {
   const [treeData, setTreeData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  /**树形文件**/
+  const treeRef = useRef(false);
   useEffect(() => {
-    fetch('/file_tree?vtid=' + urlParamVtid + "&file=" + urlParamFile, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => {
-        const json = res.json()
-        return json
-      })
-      .then(data => {
-        console.log("file_tree的数据")
-        console.log(data)
-        setTreeData(data)
-      }).catch(e=>{
-        console.error(e)
-      });
+    if (!treeRef.current) {
+        treeRef.current = true;
+
+        fetch('/file_tree?vtid=' + urlParamVtid + "&file=" + urlParamFile, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(res => {
+            const json = res.json()
+            return json
+          })
+          .then(data => {
+            console.log("file_tree的数据")
+            console.log(data)
+            setTreeData(data)
+          }).catch(e=>{
+            console.error(e)
+          });
+        }
   }, []);
 
   /**平铺所有文件**/
-  const [filesData, setFilesData] = useState({list:[], status: 0})
-  if(filesData.status==0){
-    fetch('/file_list?vtid=' + urlParamVtid + "&file=" + urlParamFile, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+  const [filesData, setFilesData] = useState({list:[]})
+  const listRef = useRef(false);
+  useEffect(() => {
+      if (!listRef.current) {
+        listRef.current = true;
+
+        fetch('/file_list?vtid=' + urlParamVtid + "&file=" + urlParamFile, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res =>{
+          const json = res.json();
+          // console.info(json)
+          return json
+        }).then(data =>{
+          console.log("files_list的数据")
+          console.log(data)
+          setFilesData({
+            list: data,
+            status: 200
+          })
+        }).catch(e =>{
+          console.log(e)
+        })
       }
-    }).then(res =>{
-      const json = res.json();
-      // console.info(json)
-      return json
-    }).then(data =>{
-      console.log("files_list的数据")
-      console.log(data)
-      setFilesData({
-        list: data,
-        status: 200
-      })
-    }).catch(e =>{
-      console.log(e)
-    })
-  }
+
+  })
+  
+    
+  
 
   return (
     <div>
