@@ -1,6 +1,9 @@
 import { Fragment, useState, useEffect, useRef } from "react";
 import { Rnd } from "react-rnd";
 
+/**
+ * 用来弹出展示trace追踪的源代码，可拖动，可缩放，可关闭
+ */
 function FilePopupExample({ trace, onTrace }) {
   const file = trace?.file;
   const [otherSourceCodeData, setOtherSourceCodeData] = useState({ lines: [] });
@@ -29,6 +32,7 @@ function FilePopupExample({ trace, onTrace }) {
   }, [otherSourceCodeData.lines, trace.line]);
 
   function markRedLine(line) {
+    console.info("添加红色标记：" + line)
     const floatingFileDom = document.getElementById("traceSourcecodeFile");
     const otherFileLiDom = document.getElementById("otherfileline_" + line);
     if (otherFileLiDom && floatingFileDom) {
