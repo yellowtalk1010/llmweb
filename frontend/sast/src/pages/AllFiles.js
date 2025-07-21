@@ -111,7 +111,7 @@ function AllFiles() {
           <Panel
             ref={leftPanelRef}
             collapsible
-            defaultSize={10}
+            defaultSize={15}
             minSize={8}
             style={{ overflow: "auto" }}
           >
@@ -146,7 +146,7 @@ function AllFiles() {
             </div>
           </PanelResizeHandle>
 
-          <Panel defaultSize={89} style={{ overflow: "auto" }}>
+          <Panel defaultSize={95} style={{ overflow: "auto" }}>
             {selectedFile ? (
               <>
                 <SourceFile node={selectedFile} urlParamVtid={urlParamVtid}  />
