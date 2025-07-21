@@ -9,7 +9,8 @@ function HelloWorld() {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  const toggleLeftPanel = (e: React.MouseEvent) => {
+  const toggleLeftPanel = (e) => {
+    console.info("点击事件")
     e.stopPropagation(); // 阻止事件冒泡到拖拽手柄
     setLeftCollapsed(!leftCollapsed);
   };
@@ -17,10 +18,10 @@ function HelloWorld() {
   return (
     <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
       <Panel 
-        collapsible 
-        collapsed={leftCollapsed}
+        collapsible={true}
+        collapsed={"false"}
         defaultSize={30} 
-        minSize={1}
+        minSize={8}
       >
         Left Content
       </Panel>
@@ -49,17 +50,9 @@ function HelloWorld() {
             backgroundColor: isHovering ? "#d1d5db" : "transparent",
           }}
         >
-          {leftCollapsed ? (
-            // 展开图标 (→)
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M9 18l6-6-6-6" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          ) : (
-            // 折叠图标 (←)
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M15 18l-6-6 6-6" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          )}
+          
+
+          {leftCollapsed ? "→" : "←"}
         </div>
       </PanelResizeHandle>
 
