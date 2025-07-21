@@ -50,7 +50,7 @@ function HelloWorld() {
             backgroundColor: isHovering ? "#d1d5db" : "transparent",
           }}
         >
-          {isCollapsed ? "→" : "←"}
+          {isCollapsed ? "▶️" : "◀️"}
         </div>
       </PanelResizeHandle>
 
