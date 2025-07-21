@@ -164,7 +164,7 @@ function AllFiles() {
 
           <Panel defaultSize={0} style={{ overflow: "auto" }}>
             { //如果指定文件，则不平铺
-              (urlParamFile==null || urlParamFile=="") && (
+              (
               <div style={{minWidth: "800px"}}>
                 <ul>
                   <h2>文件平铺</h2>
@@ -174,7 +174,8 @@ function AllFiles() {
                   </li>
                 ))}
                 </ul>
-              </div>)
+              </div>
+              )
             }
           </Panel>
         </PanelGroup>
