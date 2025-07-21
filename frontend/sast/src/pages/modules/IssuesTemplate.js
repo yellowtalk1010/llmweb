@@ -60,7 +60,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
           {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
         </div>
         <div>{issue.ruleDesc}</div>
-        <div>{issue.issueDesc!=null?"建议："+issue.issueDesc:null}</div>
+        <div>{issue.issueDesc!=null?"描述："+issue.issueDesc:null}</div>
         <div>
         {
           issue.traces.map((trace, traceIndex) => (
@@ -70,6 +70,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
           ))
         }
         </div>
+        <a class="ai_check" id={issue.id}>AI审计</a>
       </div>
     );
   }
