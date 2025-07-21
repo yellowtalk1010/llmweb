@@ -63,13 +63,23 @@ public class SourceCodeUtil {
         return new ArrayList<>();
     }
 
+    /***
+     *
+     * @param fileName 文件名称
+     * @param dtoList 问题列表
+     * @param redLine 给指定行号加上红色的线
+     * @return
+     * @throws Exception
+     */
     public static String show(String fileName, List<IssueDto> dtoList, Integer redLine) throws Exception {
 
         System.out.println("fileName = " + fileName + ", dtoList = " + dtoList.size());
+        //fileName文件对应issue列表，根据行号进行排序
         List<IssueDto> sortedList = dtoList.stream().sorted(Comparator.comparing(IssueDto::getLine)).toList();
 
         List<String> lines = openFile(fileName);
         AtomicInteger counter = new AtomicInteger(0);
+
         List<String> newLines = lines.stream().map(line->{
             counter.getAndIncrement();
             if(redLine!=null && counter.get()==redLine){
@@ -81,9 +91,11 @@ public class SourceCodeUtil {
         }).collect(Collectors.toList());
 
 
-        int insertTime = 0;
-        for (IssueDto dto : sortedList) {
-            List<Trace> traces = dto.getTraces();
+        int insertTime = 0; //在lines行文本中插入issue次数，计数器
+        for (IssueDto issueDto : sortedList) {
+
+            //构建traces信息
+            List<Trace> traces = issueDto.getTraces();
             StringBuilder traceBuilder = new StringBuilder();
             traces.stream().forEach(trace->{
                 String s = "";
@@ -98,19 +110,26 @@ public class SourceCodeUtil {
                 traceBuilder.append(s + "<br>");
             });
 
-            int line = dto.getLine();
-            int index = line + insertTime;
-            if (index > 0) {
-                String divStr = "<div style='background-color: pink'>"
-                        + dto.getName() + "<br>"
-                        + dto.getLine() + "/" + dto.getVtId() + "/" + dto.getRule() + "/" + dto.getDefectLevel() + "/" + dto.getDefectType() + "/" + "<br>"
-                        + dto.getRuleDesc() + "<br>"
-                        + dto.getIssueDesc() + "<br>"
-                        + traceBuilder.toString()
-                        + "</div>";
-                newLines.add(index, divStr);
+            //
+            String issueDivStr = "<div style='background-color: pink'>"
+                    + issueDto.getName() + "<br>"
+                    + issueDto.getLine() + "/" + issueDto.getVtId() + "/" + issueDto.getRule() + "/" + issueDto.getDefectLevel() + "/" + issueDto.getDefectType() + "/" + "<br>"
+                    + issueDto.getRuleDesc() + "<br>"
+                    + issueDto.getIssueDesc() + "<br>"
+                    + traceBuilder.toString()
+                    + "</div>";
+            int line = issueDto.getLine();  //当line等于0时，如果是文件规则（文件规则报在0行）
+            if(line==0){
+                newLines.add(0, issueDivStr);
                 insertTime++;
             }
+            else if (line > 0){
+                int index = line + insertTime;
+                newLines.add(index, issueDivStr);
+                insertTime++;
+            }
+
+
         }
 
         StringBuilder sb = new StringBuilder("<ol>");
