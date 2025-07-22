@@ -20,20 +20,6 @@ public class RulesApplication {
         System.getProperties().put("spring.servlet.multipart.max-file-size", 1024*10 + "MB"); //上传文件最大10G
         System.getProperties().put("spring.servlet.multipart.max-request-size", 1024*10 + "MB"); //上传文件最大10G
 
-        if(args.length > 0){
-            String issuePath = args[0];
-            if(new File(issuePath).exists()){
-                try {
-                    String content = FileUtils.readFileToString(new File(issuePath), "UTF-8");
-                    Database.buildIssue(issuePath, content);
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-        }
-
         //loadProperties();
         SpringApplication.run(RulesApplication.class, args);
 
