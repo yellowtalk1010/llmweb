@@ -230,7 +230,7 @@ public class ConfigController {
                      + "<a href='/pages/AllRules'>酷洛米</a><br>"
                      + "<a href='mario'>Super Mario</a><br>"
                      + "<br>"
-                     + "<a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>FUNCTIONMODULE</a><br>"
+                     + "<a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>塞尔达传说</a><br>"
                      +
                     """
                     </body>
