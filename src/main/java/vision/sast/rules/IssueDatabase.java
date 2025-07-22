@@ -17,6 +17,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+/***
+ * issue 结果数据集
+ */
 public class IssueDatabase {
 
     //issue结果保存
