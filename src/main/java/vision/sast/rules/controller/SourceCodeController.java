@@ -1,6 +1,7 @@
 package vision.sast.rules.controller;
 
 
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,8 +60,26 @@ public class SourceCodeController {
     public synchronized Map<String, Object> sourceCode_list(String vtid, String file) {
         if (vtid != null && file != null) {
             try {
-                String key = Database.getKey(vtid, file);
-                List<IssueDto> issueDtos = Database.fileAndVtid_issuesMap.get(key);
+                List<IssueDto> issueDtos = new ArrayList<>();
+                if(vtid.equals("FunctionModule")){
+                    //函数建模数据
+                    issueDtos = FunctionModuleController.MAP.stream().filter(e->{
+                        return e.get("vtId")!=null && e.get("vtId").equals(vtid) && e.get("filePath")!=null && e.get("filePath").equals(file);
+                    }).map(e->{
+                        IssueDto issueDto = JSONObject.parseObject(JSONObject.toJSONString(e), IssueDto.class);
+                        issueDto.setLine(Integer.valueOf(String.valueOf(e.get("line"))));
+//                        issueDto.setFilePath(e.get("filePath"));
+//                        issueDto.setName(e.get("name"));
+//                        issueDto.setTraces(new ArrayList<>());
+                        issueDto.setData(e.get("functionModuleInputOutputDto"));
+                        return issueDto;
+                    }).toList();
+                }
+                else {
+                    String key = Database.getKey(vtid, file);
+                    issueDtos = Database.fileAndVtid_issuesMap.get(key);
+                }
+
                 Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);
 
                 Map<String, Object> map = new HashMap<>();

@@ -25,5 +25,7 @@ public class IssueDto {
     private String issueDesc;
     private List<Trace> traces;
 
+    //其他数据
+    private Object data;
 
 }
