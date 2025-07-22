@@ -28,6 +28,11 @@ public class FunctionModuleDatabase {
         return files;
     }
 
+    /***
+     * 查询当前文件中需要建模的issue数据
+     * @param file
+     * @return
+     */
     public static List<IssueDto> queryIssuesByFile(String file) {
         return functionModuleIssues.stream().filter(issueDto -> issueDto.getFilePath()!=null && issueDto.getFilePath().equals(file)).toList();
     }
