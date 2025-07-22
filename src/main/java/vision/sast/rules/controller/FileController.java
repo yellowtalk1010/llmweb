@@ -79,7 +79,7 @@ public class FileController {
             //
             List<String> files = new ArrayList<>();
             if(vtid!=null && StringUtils.isNotEmpty(vtid)){
-                files = IssueDatabase.vtidFilesMap.get(vtid);
+                files = IssueDatabase.queryFilesByVtid(vtid);
             }
             else {
                 files = IssueDatabase.queryAllFiles();

@@ -196,6 +196,15 @@ public class IssueDatabase {
      */
     public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
 
+    /***
+     * 查询违反vtid规则的 文件列表
+     * @param vtid
+     * @return
+     */
+    public static List<String> queryFilesByVtid(String vtid) {
+        return vtidFilesMap.get(vtid);
+    }
+
     public static void ruleClear(){
         fileAndVtid_issuesMap.clear();
     }
