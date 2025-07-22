@@ -77,7 +77,7 @@ public class IssueDatabase {
      *  key: file
      *  value: 文件中的 issue
      */
-    public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
+    private static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
 
     /***
      * 根据文件路径查询当前文件中issue列表
