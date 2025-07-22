@@ -52,40 +52,54 @@ public class Database {
     }
 
 
-    //文件列表
+    /***
+     * 文件列表
+     */
     public static List<String> fileList = null;
-    //文件与issue集合关系
+
+    /***
+     *  文件与issue集合关系
+     *  key: file
+     *  value: 文件中的 issue
+     */
     public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
-    //文件路径与文件的关系
+
+    /***
+     * 文件路径与文件的关系
+     *  key： file
+     *  value： 处理 高亮 后的行信息
+     */
     public static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>();
+
     /***
      * 加载文件信息
      */
     private synchronized static void loadFileInitList() {
 
         //TODO 从结果中提取文件
+        Database.fileList = null;
         Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
-        fileList = set.stream().toList().stream().sorted().toList();
+        Database.fileList = set.stream().toList().stream().sorted().toList();
         System.out.println("完成文件提取，总数量:" + fileList.size());
 
         //TODO 构建文件与issue关系
-        fileIssuesMap = new ConcurrentHashMap<>();
-        fileList.stream().forEach(f->{
+        Database.fileIssuesMap = new ConcurrentHashMap<>();
+        Database.fileList.stream().forEach(f->{
             if(fileIssuesMap.get(f)==null){
                 List<IssueDto> dtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(f)).toList();
-                fileIssuesMap.put(f, dtos);
+                Database.fileIssuesMap.put(f, dtos);
             }
         });
         System.out.println("完成构建文件与issue之间关系");
 
-        FILE_CONTEXT_MAP.clear();
+        Database.FILE_CONTEXT_MAP.clear();
         System.out.println("加载文件内容");
-        executorService.execute(new Runnable() {
+        Database.executorService.execute(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    if(fileList.size()>0){
-                        ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
+                    if(Database.fileList.size()>0){
+                        Database.ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
                             try {
                                 if(new File(issueFile).exists()){
                                     SourceCodeUtil.openFile(issueFile);
@@ -99,7 +113,7 @@ public class Database {
                         });
                     }
                     try {
-                        if(fileList.size()>0 && fileList.size()==FILE_CONTEXT_MAP.size()){
+                        if(Database.fileList.size()>0 && Database.fileList.size()==FILE_CONTEXT_MAP.size()){
                             System.out.println(fileList.size() + "全部完成文件内容缓存加载" + FILE_CONTEXT_MAP.size());
                             break;
                         }
@@ -114,14 +128,28 @@ public class Database {
     }
 
 
-
-    //根据规则vtid统计规则总数
+    /**
+     * 根据规则vtid统计规则总数
+     */
     public static java.util.List<String> vtidList = new java.util.ArrayList<>();
-    //获取规则的基本信息，IssueDto中主要使用规则信息
+
+    /**
+     * 获取规则的基本信息，IssueDto中主要使用规则信息
+     * key: vtid;
+     * value: checker的具体描述信息
+     */
     public static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
-    //获取规则vtid这种规则的总数
+    /***
+     * 获取规则vtid这种规则的总数，
+     * key : vtid，
+     * value : 数量
+     */
     public static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
-    //规则与文件的关系集合关系
+    /**
+     * 规则与文件的关系集合关系
+     * key: vtid
+     * value: file
+     */
     public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
 
     public static void ruleClear(){
@@ -164,8 +192,11 @@ public class Database {
     }
 
 
-
-    //规则+文件 与 issue 之间的关系
+    /***
+     * 规则 +文件 与 issue 之间的关系
+     * key： vtid : file
+     * value: 当前文件file中规则vtid的问题总数
+     */
     public static Map<String, List<IssueDto>> fileAndVtid_issuesMap = new ConcurrentHashMap<>();
 
     public static String getKey(String vtid, String file){
