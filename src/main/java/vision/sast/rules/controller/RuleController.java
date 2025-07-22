@@ -14,7 +14,7 @@ public class RuleController {
     public List<Map<String, Object>> rules_list(){
         List<Map<String, Object>> list = new ArrayList<>();
         IssueDatabase.queryAllVtidList().stream().forEach(vtid->{
-            IssueDto dto = IssueDatabase.vtidIssueMap.get(vtid);
+            IssueDto dto = IssueDatabase.queryCheckerInfo(vtid);
             Long size = IssueDatabase.vtidIssueCountMap.get(vtid);
             Map<String, Object> map = new HashMap<>();
             map.put("vtid", vtid);
@@ -31,7 +31,7 @@ public class RuleController {
     @GetMapping("rule_vtid")
     public Map<String, Object> rule_vtid(String vtid){
 
-        IssueDto dto = IssueDatabase.vtidIssueMap.get(vtid);
+        IssueDto dto = IssueDatabase.queryCheckerInfo(vtid);
 
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("defectLevel", dto.getDefectLevel());
@@ -56,7 +56,7 @@ public class RuleController {
     public String rules(){
         StringBuilder stringBuilder = new StringBuilder();
         IssueDatabase.queryAllVtidList().stream().map(vtid->{
-            IssueDto dto = IssueDatabase.vtidIssueMap.get(vtid);
+            IssueDto dto = IssueDatabase.queryCheckerInfo(vtid);
             Long size = IssueDatabase.vtidIssueCountMap.get(vtid);
             String str = "<a href='llm_rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
             return str + "<br>";
@@ -67,7 +67,7 @@ public class RuleController {
     @GetMapping("llm_rule")
     public String rule(String vtid){
 
-        IssueDto dto = IssueDatabase.vtidIssueMap.get(vtid);
+        IssueDto dto = IssueDatabase.queryCheckerInfo(vtid);
         StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
         IssueDatabase.vtidFilesMap.get(vtid).stream().map(file->{
             int size = IssueDatabase.queryIssueList(vtid, file).size();

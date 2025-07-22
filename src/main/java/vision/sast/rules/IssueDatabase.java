@@ -163,7 +163,16 @@ public class IssueDatabase {
      * key: vtid;
      * value: checker的具体描述信息
      */
-    public static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
+    private static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
+
+    /***
+     * 根据vtid查询checker信息
+     * @param vtid
+     * @return
+     */
+    public static IssueDto queryCheckerInfo(String vtid) {
+        return vtidIssueMap.get(vtid);
+    }
     /***
      * 获取规则vtid这种规则的总数，
      * key : vtid，
