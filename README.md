@@ -19,7 +19,7 @@ npm run build
 
 # 版本
 ```
-rules-3.0.0.jar
-rules-4.0.0.jar   eec版本
-rules-5.0.0.jar   eec版本（多了树形文件和折叠窗口）
+rules-3.0.0.jar   java实现版本
+rules-4.0.0.jar   部分react实现版本
+rules-5.0.0.jar   java版本 + 源代码折叠展示窗口
 ```
