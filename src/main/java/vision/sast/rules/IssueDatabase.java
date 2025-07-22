@@ -22,19 +22,62 @@ import java.util.stream.Collectors;
  */
 public class IssueDatabase {
 
-    //issue结果保存
-    private static IssueResult ISSUE_RESULT = new IssueResult();
-
-    /***
-     * 获取全部 issue信息
-     * @return
-     */
-    public static List<IssueDto> getAllIssue(){
-        return ISSUE_RESULT.getResult().stream().toList();
-    }
-
     //异步加载文件线程池
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    //issue结果保存
+    private static IssueResult ISSUE_RESULT = new IssueResult();
+    //文件列表
+    private static List<String> fileList = null;
+
+    /***
+     *  文件与issue集合关系
+     *  key: file
+     *  value: 文件中的 issue
+     */
+    private static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
+
+    /**
+     * 根据规则vtid统计规则总数
+     */
+    private static java.util.List<String> vtidList = new java.util.ArrayList<>();
+
+    /***
+     * 文件路径与文件高亮行的关系
+     *  key： file
+     *  value： 处理 高亮 后的行信息
+     */
+    private static Map<String, List<String>> FILE_HIGHLIGHT_MAP = new ConcurrentHashMap<>();
+
+    /**
+     * 获取规则的基本信息，IssueDto中主要使用规则信息
+     * key: vtid;
+     * value: checker的具体描述信息
+     */
+    private static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
+
+
+    /***
+     * 获取规则vtid这种规则的总数，
+     * key : vtid，
+     * value : 数量
+     */
+    private static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
+
+
+    /**
+     * 规则与文件的关系集合关系
+     * key: vtid
+     * value: file
+     */
+    private static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
+
+
+    /***
+     * 规则 +文件 与 issue 之间的关系
+     * key： vtid : file
+     * value: 当前文件file中规则vtid的问题总数
+     */
+    private static Map<String, List<IssueDto>> fileAndVtid_issuesMap = new ConcurrentHashMap<>();
 
 
     /***
@@ -42,7 +85,10 @@ public class IssueDatabase {
      */
     public static void initIssues(String issuePath) {
         try {
-            IssueDatabase.ruleClear();
+            //清理动态生成的数据
+            fileAndVtid_issuesMap.clear();
+            FILE_HIGHLIGHT_MAP.clear();
+
             //
             File file = new File(issuePath);
             System.out.println("打开结果路径:" + issuePath + "，" + file.exists());
@@ -59,59 +105,8 @@ public class IssueDatabase {
             exception.printStackTrace();
         }
 
-
     }
 
-
-    /***
-     * 文件列表
-     */
-    private static List<String> fileList = null;
-
-    public static List<String> queryAllFiles() {
-        return fileList.stream().toList();
-    }
-
-    /***
-     *  文件与issue集合关系
-     *  key: file
-     *  value: 文件中的 issue
-     */
-    private static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
-
-    /***
-     * 根据文件路径查询当前文件中issue列表
-     * @param file
-     * @return
-     */
-    public static List<IssueDto> queryIssuesByFile(String file) {
-        return fileIssuesMap.get(file);
-    }
-
-    /***
-     * 文件路径与文件高亮行的关系
-     *  key： file
-     *  value： 处理 高亮 后的行信息
-     */
-    private static Map<String, List<String>> FILE_HIGHLIGHT_MAP = new ConcurrentHashMap<>();
-
-    /***
-     * 查询文件高亮
-     * @param file
-     * @return
-     */
-    public static List<String> queryFileHighLightLines(String file) {
-        return FILE_HIGHLIGHT_MAP.get(file);
-    }
-
-    /**
-     * 插入高亮数据
-     * @param file
-     * @param lines
-     */
-    public static void insertFileHighLightLines(String file, List<String> lines) {
-        FILE_HIGHLIGHT_MAP.put(file, lines);
-    }
 
 
     /***
@@ -135,7 +130,6 @@ public class IssueDatabase {
         });
         System.out.println("完成构建文件与issue之间关系");
 
-        IssueDatabase.FILE_HIGHLIGHT_MAP.clear();
         System.out.println("加载文件内容");
         IssueDatabase.executorService.execute(new Runnable() {
             @Override
@@ -151,7 +145,7 @@ public class IssueDatabase {
                                     System.out.println(issueFile + "，文件不存在");
                                 }
                             }catch (Exception e) {
-                            e.printStackTrace();
+                                e.printStackTrace();
                             }
                         });
                     }
@@ -170,63 +164,6 @@ public class IssueDatabase {
 
     }
 
-
-    /**
-     * 根据规则vtid统计规则总数
-     */
-    private static java.util.List<String> vtidList = new java.util.ArrayList<>();
-    public static List<String> queryAllVtidList() { return vtidList; }
-
-    /**
-     * 获取规则的基本信息，IssueDto中主要使用规则信息
-     * key: vtid;
-     * value: checker的具体描述信息
-     */
-    private static Map<String, IssueDto> vtidIssueMap = new ConcurrentHashMap<>();
-
-    /***
-     * 根据vtid查询checker信息
-     * @param vtid
-     * @return
-     */
-    public static IssueDto queryCheckerInfo(String vtid) {
-        return vtidIssueMap.get(vtid);
-    }
-    /***
-     * 获取规则vtid这种规则的总数，
-     * key : vtid，
-     * value : 数量
-     */
-    private static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
-
-    /***
-     * 计算 vtid 的issue 数量
-     * @param vtid
-     * @return
-     */
-    public static Long queryIssueCount(String vtid) {
-        return vtidIssueCountMap.get(vtid);
-    }
-
-    /**
-     * 规则与文件的关系集合关系
-     * key: vtid
-     * value: file
-     */
-    private static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
-
-    /***
-     * 查询违反vtid规则的 文件列表
-     * @param vtid
-     * @return
-     */
-    public static List<String> queryFilesByVtid(String vtid) {
-        return vtidFilesMap.get(vtid);
-    }
-
-    public static void ruleClear(){
-        fileAndVtid_issuesMap.clear();
-    }
 
     public synchronized static void loadRuleInitList() {
         vtidList = new java.util.ArrayList<>();
@@ -263,13 +200,90 @@ public class IssueDatabase {
 
     }
 
+    /***
+     * 获取全部 issue信息
+     * @return
+     */
+    public static List<IssueDto> getAllIssue(){
+        return ISSUE_RESULT.getResult().stream().toList();
+    }
+
 
     /***
-     * 规则 +文件 与 issue 之间的关系
-     * key： vtid : file
-     * value: 当前文件file中规则vtid的问题总数
+     * 查询全部 违反的文件
+     * @return
      */
-    private static Map<String, List<IssueDto>> fileAndVtid_issuesMap = new ConcurrentHashMap<>();
+    public static List<String> queryAllFiles() {
+        return fileList.stream().toList();
+    }
+
+
+    /***
+     * 根据文件路径查询当前文件中issue列表
+     * @param file
+     * @return
+     */
+    public static List<IssueDto> queryIssuesByFile(String file) {
+        return fileIssuesMap.get(file);
+    }
+
+
+    /***
+     * 查询文件高亮
+     * @param file
+     * @return
+     */
+    public static List<String> queryFileHighLightLines(String file) {
+        return FILE_HIGHLIGHT_MAP.get(file);
+    }
+
+    /**
+     * 插入高亮数据
+     * @param file
+     * @param lines
+     */
+    public static void insertFileHighLightLines(String file, List<String> lines) {
+        FILE_HIGHLIGHT_MAP.put(file, lines);
+    }
+
+
+
+    /**
+     * 查询全部 vtid
+     * */
+    public static List<String> queryAllVtidList() { return vtidList; }
+
+
+    /***
+     * 根据vtid查询checker信息
+     * @param vtid
+     * @return
+     */
+    public static IssueDto queryCheckerInfo(String vtid) {
+        return vtidIssueMap.get(vtid);
+    }
+    /***
+     * 计算 vtid 的issue 数量
+     * @param vtid
+     * @return
+     */
+    public static Long queryIssueCount(String vtid) {
+        return vtidIssueCountMap.get(vtid);
+    }
+
+
+    /***
+     * 查询违反vtid规则的 文件列表
+     * @param vtid
+     * @return
+     */
+    public static List<String> queryFilesByVtid(String vtid) {
+        return vtidFilesMap.get(vtid);
+    }
+
+
+
+
 
     public static synchronized List<IssueDto> queryIssueList (@NonNull String vtid, @NonNull String file) {
         String key = vtid + ":" + file;
