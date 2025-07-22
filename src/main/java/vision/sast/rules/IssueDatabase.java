@@ -89,11 +89,11 @@ public class IssueDatabase {
     }
 
     /***
-     * 文件路径与文件的关系
+     * 文件路径与文件高亮行的关系
      *  key： file
      *  value： 处理 高亮 后的行信息
      */
-    private static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>();
+    private static Map<String, List<String>> FILE_HIGHLIGHT_MAP = new ConcurrentHashMap<>();
 
     /***
      * 查询文件高亮
@@ -101,7 +101,7 @@ public class IssueDatabase {
      * @return
      */
     public static List<String> queryFileHighLightLines(String file) {
-        return FILE_CONTEXT_MAP.get(file);
+        return FILE_HIGHLIGHT_MAP.get(file);
     }
 
     /**
@@ -110,7 +110,7 @@ public class IssueDatabase {
      * @param lines
      */
     public static void insertFileHighLightLines(String file, List<String> lines) {
-        FILE_CONTEXT_MAP.put(file, lines);
+        FILE_HIGHLIGHT_MAP.put(file, lines);
     }
 
 
@@ -135,7 +135,7 @@ public class IssueDatabase {
         });
         System.out.println("完成构建文件与issue之间关系");
 
-        IssueDatabase.FILE_CONTEXT_MAP.clear();
+        IssueDatabase.FILE_HIGHLIGHT_MAP.clear();
         System.out.println("加载文件内容");
         IssueDatabase.executorService.execute(new Runnable() {
             @Override
@@ -156,8 +156,8 @@ public class IssueDatabase {
                         });
                     }
                     try {
-                        if(IssueDatabase.fileList.size()>0 && IssueDatabase.fileList.size()==FILE_CONTEXT_MAP.size()){
-                            System.out.println(fileList.size() + "全部完成文件内容缓存加载" + FILE_CONTEXT_MAP.size());
+                        if(IssueDatabase.fileList.size()>0 && IssueDatabase.fileList.size()== FILE_HIGHLIGHT_MAP.size()){
+                            System.out.println(fileList.size() + "全部完成文件内容缓存加载" + FILE_HIGHLIGHT_MAP.size());
                             break;
                         }
                         Thread.sleep(2000);
