@@ -11,10 +11,14 @@ import java.util.Map;
 public class FunctionModuleInputOutputDto {
     private String compiler; //编译器
     private String version; //编译器版本
+
     private String fileName; //文件名称
     private String fileMD5;  //文件MD5
-    private String functionName; //函数名称
-    private String functionRawSignature; //函数内容
+
+    private String funcName; //函数名称
+    private Integer funcLine; //函数所在行
+    private String funcBase64; //函数内容转base64
+
     private java.util.List<FunctionParamDto> params; //函数参数列表
     private FunctionReturnValueDto returnValueDto; //返回值
 
