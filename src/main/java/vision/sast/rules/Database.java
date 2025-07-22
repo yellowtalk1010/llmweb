@@ -42,8 +42,8 @@ public class Database {
             Database.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
             System.out.println("issue总数:" + Database.ISSUE_RESULT.getResult().size());
 
-            loadFileInitList(); //构建文件关系
-            loadRuleInitList(); //构建规则关系
+            Database.loadFileInitList(); //构建文件关系
+            Database.loadRuleInitList(); //构建规则关系
         }catch (Exception exception) {
             exception.printStackTrace();
         }
