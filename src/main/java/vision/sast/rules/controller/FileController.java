@@ -50,20 +50,7 @@ public class FileController {
     @GetMapping("file_tree")
     public List<TreeNodeUtil.TreeNode> file_tree(String vtid, String file){
         System.out.println("file_tree，入参vtid=" + vtid + " ，file=" + file);
-        List<String> files = new ArrayList<>();
-        if(vtid!=null && StringUtils.isNotEmpty(vtid)){
-            files = Database.vtidFilesMap.get(vtid);
-        }
-        else {
-            files = Database.fileList;
-        }
-        List<String> filterFiles = new ArrayList<>();
-        if(file!=null && StringUtils.isNotEmpty(file)){
-            filterFiles = files.stream().filter(e->e.equals(file)).collect(Collectors.toList());
-        }
-        else {
-            filterFiles = files;
-        }
+        List<String> filterFiles = getIssueFiles(vtid, file);
         System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + filterFiles.size());
         TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(filterFiles);
         TreeNodeUtil.TreeNode relativeTreeNode = TreeNodeUtil.getRelativeTreeNode(treeNode);
@@ -83,23 +70,28 @@ public class FileController {
         }
     }
 
-    @GetMapping("file_list")
-    public List<Map<String, String>> file_list(String vtid, String file){
-        System.out.println("file_list，入参vtid=" + vtid + " ，file=" + file);
+    private List<String> getIssueFiles(String vtid, String path){
         List<String> files = new ArrayList<>();
-        if(StringUtils.isNotEmpty(vtid)){
+        if(vtid!=null && StringUtils.isNotEmpty(vtid)){
             files = Database.vtidFilesMap.get(vtid);
         }
         else {
             files = Database.fileList;
         }
         List<String> filterFiles = new ArrayList<>();
-        if(file!=null && StringUtils.isNotEmpty(file)){
-            filterFiles = files.stream().filter(e->e.equals(file)).collect(Collectors.toList());
+        if(path!=null && StringUtils.isNotEmpty(path)){
+            filterFiles = files.stream().filter(e->e.equals(path)).collect(Collectors.toList());
         }
         else {
             filterFiles = files;
         }
+        return filterFiles;
+    }
+
+    @GetMapping("file_list")
+    public List<Map<String, String>> file_list(String vtid, String file){
+        System.out.println("file_list，入参vtid=" + vtid + " ，file=" + file);
+        List<String> filterFiles = getIssueFiles(vtid, file);
         System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + filterFiles.size());
         List<Map<String, String>> list = new ArrayList<>();
         filterFiles.stream().forEach(f->{
