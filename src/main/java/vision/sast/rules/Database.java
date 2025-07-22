@@ -6,7 +6,11 @@ import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.IssueResult;
 import vision.sast.rules.utils.SourceCodeUtil;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -15,30 +19,29 @@ import java.util.stream.Collectors;
 
 public class Database {
 
-    //issue文件路径
-    public static String ISSUE_FILEPATH = "";
     //issue结果保存
     public static IssueResult ISSUE_RESULT = new IssueResult();
-    //property中文件加载
-    public static Properties PROPERTIES = new Properties();
 
+    //异步加载文件线程池
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
     /***
      * 根据文本信息构建一个
-     * @param content
      */
-    public static void buildIssue(String issuePath, @NonNull String content) {
+    public static void buildIssue(String issuePath) {
         try {
             Database.ruleClear();
             //
-            Database.ISSUE_FILEPATH = issuePath;
-            System.out.println("路径:" + issuePath);
+            File file = new File(issuePath);
+            System.out.println("打开结果路径:" + issuePath + "，" + file.exists());
+            FileInputStream fis = new FileInputStream(file);
+            //读取结果文件内容
+            String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
+            //解析issue结果
             Database.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
             System.out.println("issue总数:" + Database.ISSUE_RESULT.getResult().size());
 
-//            RulesApplication.loadProperties();
             loadFileInitList(); //构建文件关系
             loadRuleInitList(); //构建规则关系
         }catch (Exception exception) {
