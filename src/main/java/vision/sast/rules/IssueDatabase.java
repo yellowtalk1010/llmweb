@@ -93,7 +93,26 @@ public class IssueDatabase {
      *  key： file
      *  value： 处理 高亮 后的行信息
      */
-    public static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>();
+    private static Map<String, List<String>> FILE_CONTEXT_MAP = new ConcurrentHashMap<>();
+
+    /***
+     * 查询文件高亮
+     * @param file
+     * @return
+     */
+    public static List<String> queryFileHighLightLines(String file) {
+        return FILE_CONTEXT_MAP.get(file);
+    }
+
+    /**
+     * 插入高亮数据
+     * @param file
+     * @param lines
+     */
+    public static void insertFileHighLightLines(String file, List<String> lines) {
+        FILE_CONTEXT_MAP.put(file, lines);
+    }
+
 
     /***
      * 加载文件信息

@@ -22,8 +22,8 @@ public class SourceCodeUtil {
      */
      public static List<String> openFile(String fileName) throws Exception {
 
-         if(IssueDatabase.FILE_CONTEXT_MAP.get(fileName) != null){
-             return IssueDatabase.FILE_CONTEXT_MAP.get(fileName);
+         if(IssueDatabase.queryFileHighLightLines(fileName) != null){
+             return IssueDatabase.queryFileHighLightLines(fileName);
          }
         System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
         List<String> codeFormatList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class SourceCodeUtil {
                     return line;
                 }).collect(Collectors.toList());
                 System.out.println("高亮");
-                IssueDatabase.FILE_CONTEXT_MAP.put(fileName, newLines);
+                IssueDatabase.insertFileHighLightLines(fileName, newLines);
 
                 return newLines;
             }catch (Exception e) {
