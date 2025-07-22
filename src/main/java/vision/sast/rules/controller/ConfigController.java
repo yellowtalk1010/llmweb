@@ -214,7 +214,7 @@ public class ConfigController {
             FileInputStream fis = new FileInputStream(file);
             String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
             Database.buildIssue(this.resultFilePath, content);
-            return """
+            String html = """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
                     <head>
@@ -229,11 +229,17 @@ public class ConfigController {
                      + "<br>"
                      + "<a href='/pages/AllRules'>酷洛米</a><br>"
                      + "<a href='mario'>Super Mario</a><br>"
+                     + "<br>"
+                     + "<a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>FUNCTIONMODULE</a><br>"
                      +
                     """
                     </body>
                     </html>
                     """;
+            if(this.FUNCTIONMODULE!=null){
+                html = html.replace("{{{{FUNCTIONMODULE}}}}", FUNCTIONMODULE);
+            }
+            return html;
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
@@ -353,8 +359,7 @@ public class ConfigController {
                         <button  type="submit">查询</button> 
                     </form>
                     
-                    <h2>函数建模</h2>
-                    <a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>FUNCTIONMODULE</a><br>
+                    
                     
                     <h2>配置文件</h2>
                     {{{htmlFileContent}}}
@@ -369,9 +374,7 @@ public class ConfigController {
             if(this.systemConstraintPath!=null){
                 html = html.replace("{{{systemConstraintPath}}}", systemConstraintPath + "&nbsp;&nbsp;&nbsp;" + new File(systemConstraintPath).exists());
             }
-            if(this.FUNCTIONMODULE!=null){
-                html = html.replace("{{{{FUNCTIONMODULE}}}}", FUNCTIONMODULE);
-            }
+
 
             html = html.replace("{{{INDEXS}}}", INDEXS + "&nbsp;&nbsp;&nbsp;" + new File(INDEXS).exists());
             html = html.replace("{{{htmlFileContent}}}", htmlFileContent);

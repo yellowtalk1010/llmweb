@@ -71,21 +71,29 @@ public class FileController {
     }
 
     private List<String> getIssueFiles(String vtid, String path){
-        List<String> files = new ArrayList<>();
-        if(vtid!=null && StringUtils.isNotEmpty(vtid)){
-            files = Database.vtidFilesMap.get(vtid);
+        if(vtid!=null && vtid.equals("FunctionModule")){
+            //函数建模
+            return FunctionModuleController.MAP.stream().map(e->e.get("filePath")).collect(Collectors.toSet()).stream().toList();
         }
         else {
-            files = Database.fileList;
+            //
+            List<String> files = new ArrayList<>();
+            if(vtid!=null && StringUtils.isNotEmpty(vtid)){
+                files = Database.vtidFilesMap.get(vtid);
+            }
+            else {
+                files = Database.fileList;
+            }
+            List<String> filterFiles = new ArrayList<>();
+            if(path!=null && StringUtils.isNotEmpty(path)){
+                filterFiles = files.stream().filter(e->e.equals(path)).collect(Collectors.toList());
+            }
+            else {
+                filterFiles = files;
+            }
+            return filterFiles;
         }
-        List<String> filterFiles = new ArrayList<>();
-        if(path!=null && StringUtils.isNotEmpty(path)){
-            filterFiles = files.stream().filter(e->e.equals(path)).collect(Collectors.toList());
-        }
-        else {
-            filterFiles = files;
-        }
-        return filterFiles;
+
     }
 
     @GetMapping("file_list")
