@@ -3,6 +3,7 @@ package vision.sast.rules.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vision.sast.rules.FunctionModuleDatabase;
 import vision.sast.rules.IssueDatabase;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.TreeNodeUtil;
@@ -70,9 +71,9 @@ public class FileController {
     }
 
     private List<String> getIssueFiles(String vtid, String path){
-        if(vtid!=null && vtid.equals("FunctionModule")){
+        if(vtid!=null && vtid.equals(FunctionModuleDatabase.FunctionModuleVtid)){
             //函数建模
-            return FunctionModuleController.MAP.stream().map(e->e.get("filePath")).collect(Collectors.toSet()).stream().toList();
+            return FunctionModuleDatabase.queryAllFiles();
         }
         else {
             //

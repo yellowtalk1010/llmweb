@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vision.sast.rules.FunctionModuleDatabase;
 import vision.sast.rules.IssueDatabase;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.SourceCodeUtil;
@@ -59,19 +60,9 @@ public class SourceCodeController {
         if (vtid != null && file != null) {
             try {
                 List<IssueDto> issueDtos = new ArrayList<>();
-                if(vtid.equals("FunctionModule")){
+                if(vtid.equals(FunctionModuleDatabase.FunctionModuleVtid)){
                     //函数建模数据
-                    issueDtos = FunctionModuleController.MAP.stream().filter(e->{
-                        return e.get("vtId")!=null && e.get("vtId").equals(vtid) && e.get("filePath")!=null && e.get("filePath").equals(file);
-                    }).map(e->{
-                        IssueDto issueDto = JSONObject.parseObject(JSONObject.toJSONString(e), IssueDto.class);
-                        issueDto.setLine(Integer.valueOf(String.valueOf(e.get("line"))));
-//                        issueDto.setFilePath(e.get("filePath"));
-//                        issueDto.setName(e.get("name"));
-//                        issueDto.setTraces(new ArrayList<>());
-                        issueDto.setData(e.get("functionModuleInputOutputDto"));
-                        return issueDto;
-                    }).toList();
+                    issueDtos = FunctionModuleDatabase.queryIssuesByFile(file);
                 }
                 else {
                     issueDtos = IssueDatabase.queryIssueList(vtid, file);
