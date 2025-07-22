@@ -43,7 +43,7 @@ public class FunctionModuleController {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 paths.stream().forEach(e->{
-                    stringBuilder.append("<li>" + e + "</li>");
+                    stringBuilder.append("<li><a href='pages/AllFiles?vtid=FunctionModule&file="+e+"'>" + e + "</a></li>");
                 });
 
                 String html = """
