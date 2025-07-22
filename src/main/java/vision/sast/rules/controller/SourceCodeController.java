@@ -76,6 +76,7 @@ public class SourceCodeController {
                     }).toList();
                 }
                 else {
+                    Database.sourceCodeInit(vtid, file);
                     String key = Database.getKey(vtid, file);
                     issueDtos = Database.fileAndVtid_issuesMap.get(key);
                 }
