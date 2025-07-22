@@ -38,9 +38,9 @@ public class IssueDatabase {
 
 
     /***
-     * 根据文本信息构建一个
+     * 初始化 issue 结果数据
      */
-    public static void buildIssue(String issuePath) {
+    public static void initIssues(String issuePath) {
         try {
             IssueDatabase.ruleClear();
             //

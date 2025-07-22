@@ -207,7 +207,7 @@ public class ConfigController {
 
         try {
             // 直接读取文件内容
-            IssueDatabase.buildIssue(this.resultFilePath);
+            IssueDatabase.initIssues(this.resultFilePath);
             String html = """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
