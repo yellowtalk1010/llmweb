@@ -23,7 +23,15 @@ import java.util.stream.Collectors;
 public class IssueDatabase {
 
     //issue结果保存
-    public static IssueResult ISSUE_RESULT = new IssueResult();
+    private static IssueResult ISSUE_RESULT = new IssueResult();
+
+    /***
+     * 获取全部 issue信息
+     * @return
+     */
+    public static List<IssueDto> getAllIssue(){
+        return ISSUE_RESULT.getResult().stream().toList();
+    }
 
     //异步加载文件线程池
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();

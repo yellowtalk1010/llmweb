@@ -217,7 +217,7 @@ public class ConfigController {
                     </head>
                     <body>
                     """
-                     + "issue总数：" + IssueDatabase.ISSUE_RESULT.getResult().size() + "<br>"
+                     + "issue总数：" + IssueDatabase.getAllIssue().size() + "<br>"
                      + "<a href='llm_files'>llm文件集</a><br>"
                      + "<a href='llm_rules'>llm规则集</a><br>"
                      + "<br>"

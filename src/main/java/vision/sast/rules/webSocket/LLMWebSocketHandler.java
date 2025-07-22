@@ -44,7 +44,7 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
 
                 sessionMap.put(session.getId(), session);
                 //TODO 接受前端发送的代码数据，以及 rule id
-                Set<String> set = IssueDatabase.ISSUE_RESULT.getResult().stream().filter(issueDto -> issueDto.getId().equals(issueId)).map(dto->dto.getVtId()).collect(Collectors.toSet());
+                Set<String> set = IssueDatabase.getAllIssue().stream().filter(issueDto -> issueDto.getId().equals(issueId)).map(dto->dto.getVtId()).collect(Collectors.toSet());
                 if(set.size()>0 &&  LLMPrompt.map.get(set.stream().toList().get(0))!=null){
                     String prompt = LLMPrompt.map.get(set.stream().toList().get(0));
 
