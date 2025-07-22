@@ -44,6 +44,7 @@ public class FunctionModuleDatabase {
     public static void initFunctionModuleDatabase(String funcitonModulePath) {
         try {
             MAP.clear();
+            functionModuleIssues.clear();
 
             List<String> list = FileUtils.readLines(new File(funcitonModulePath), "UTF-8");
             Set<String> paths = new HashSet<>();
