@@ -66,7 +66,11 @@ public class IssueDatabase {
     /***
      * 文件列表
      */
-    public static List<String> fileList = null;
+    private static List<String> fileList = null;
+
+    public static List<String> queryAllFiles() {
+        return fileList.stream().toList();
+    }
 
     /***
      *  文件与issue集合关系

@@ -51,7 +51,7 @@ public class FileController {
     public List<TreeNodeUtil.TreeNode> file_tree(String vtid, String file){
         System.out.println("file_tree，入参vtid=" + vtid + " ，file=" + file);
         List<String> filterFiles = getIssueFiles(vtid, file);
-        System.out.println("文件总数：" + IssueDatabase.fileList.size() + "，返回：" + filterFiles.size());
+        System.out.println("文件总数：" + IssueDatabase.queryAllFiles().size() + "，返回：" + filterFiles.size());
         TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(filterFiles);
         TreeNodeUtil.TreeNode relativeTreeNode = TreeNodeUtil.getRelativeTreeNode(treeNode);
         traverseTreeNodeForData(relativeTreeNode);
@@ -82,7 +82,7 @@ public class FileController {
                 files = IssueDatabase.vtidFilesMap.get(vtid);
             }
             else {
-                files = IssueDatabase.fileList;
+                files = IssueDatabase.queryAllFiles();
             }
             List<String> filterFiles = new ArrayList<>();
             if(path!=null && StringUtils.isNotEmpty(path)){
@@ -100,7 +100,7 @@ public class FileController {
     public List<Map<String, String>> file_list(String vtid, String file){
         System.out.println("file_list，入参vtid=" + vtid + " ，file=" + file);
         List<String> filterFiles = getIssueFiles(vtid, file);
-        System.out.println("文件总数：" + IssueDatabase.fileList.size() + "，返回：" + filterFiles.size());
+        System.out.println("文件总数：" + IssueDatabase.queryAllFiles().size() + "，返回：" + filterFiles.size());
         List<Map<String, String>> list = new ArrayList<>();
         filterFiles.stream().forEach(f->{
             Map<String, String> map = new HashMap<>();
@@ -114,9 +114,9 @@ public class FileController {
 
     @GetMapping("llm_files")
     public String llm_files(){
-        System.out.println("文件总数：" + IssueDatabase.fileList.size());
+        System.out.println("文件总数：" + IssueDatabase.queryAllFiles().size());
         StringBuilder stringBuilder = new StringBuilder();
-        IssueDatabase.fileList.stream().map(file->{
+        IssueDatabase.queryAllFiles().stream().map(file->{
             String str = "<a href='llm_file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + IssueDatabase.fileIssuesMap.get(file).size();
             return str + "<br>";
         }).forEach(stringBuilder::append);
