@@ -135,7 +135,7 @@ public class IssueDatabase {
      * 根据规则vtid统计规则总数
      */
     private static java.util.List<String> vtidList = new java.util.ArrayList<>();
-    public static List<String> getVtidList() { return vtidList; }
+    public static List<String> queryAllVtidList() { return vtidList; }
 
     /**
      * 获取规则的基本信息，IssueDto中主要使用规则信息
