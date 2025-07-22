@@ -194,7 +194,7 @@ public class IssueDatabase {
      * key: vtid
      * value: file
      */
-    public static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, List<String>> vtidFilesMap = new ConcurrentHashMap<>();
 
     /***
      * 查询违反vtid规则的 文件列表
