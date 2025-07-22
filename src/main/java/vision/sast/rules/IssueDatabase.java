@@ -178,7 +178,17 @@ public class IssueDatabase {
      * key : vtid，
      * value : 数量
      */
-    public static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
+    private static Map<String, Long> vtidIssueCountMap = new ConcurrentHashMap<>();
+
+    /***
+     * 计算 vtid 的issue 数量
+     * @param vtid
+     * @return
+     */
+    public static Long queryIssueCount(String vtid) {
+        return vtidIssueCountMap.get(vtid);
+    }
+
     /**
      * 规则与文件的关系集合关系
      * key: vtid

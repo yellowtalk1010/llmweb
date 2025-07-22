@@ -15,7 +15,7 @@ public class RuleController {
         List<Map<String, Object>> list = new ArrayList<>();
         IssueDatabase.queryAllVtidList().stream().forEach(vtid->{
             IssueDto dto = IssueDatabase.queryCheckerInfo(vtid);
-            Long size = IssueDatabase.vtidIssueCountMap.get(vtid);
+            Long size = IssueDatabase.queryIssueCount(vtid);
             Map<String, Object> map = new HashMap<>();
             map.put("vtid", vtid);
             map.put("rule", dto.getRule());
@@ -57,7 +57,7 @@ public class RuleController {
         StringBuilder stringBuilder = new StringBuilder();
         IssueDatabase.queryAllVtidList().stream().map(vtid->{
             IssueDto dto = IssueDatabase.queryCheckerInfo(vtid);
-            Long size = IssueDatabase.vtidIssueCountMap.get(vtid);
+            Long size = IssueDatabase.queryIssueCount(vtid);
             String str = "<a href='llm_rule?vtid="+vtid+"'>"+vtid+"</a> &nbsp;&nbsp;&nbsp;" + dto.getDefectLevel() + "-" + size + "&nbsp;/&nbsp;" + dto.getRuleDesc();
             return str + "<br>";
         }).forEach(stringBuilder::append);
