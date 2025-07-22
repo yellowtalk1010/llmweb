@@ -17,7 +17,7 @@ public class FileController {
 
     @GetMapping("file_path")
     public Map<String, Object> file_path(String path){
-        List<IssueDto> ls = IssueDatabase.fileIssuesMap.get(path);
+        List<IssueDto> ls = IssueDatabase.queryIssuesByFile(path);
         File file = new File(path);
         System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
 
@@ -61,8 +61,8 @@ public class FileController {
     private void traverseTreeNodeForData(TreeNodeUtil.TreeNode treeNode){
         if(treeNode!=null){
             String path = treeNode.getPath();
-            if(IssueDatabase.fileIssuesMap.get(path)!=null){
-                treeNode.getData().put("size", IssueDatabase.fileIssuesMap.get(path).size());
+            if(IssueDatabase.queryIssuesByFile(path)!=null){
+                treeNode.getData().put("size", IssueDatabase.queryIssuesByFile(path).size());
             }
             treeNode.getChildren().forEach(child->{
                 traverseTreeNodeForData(child);
@@ -105,7 +105,7 @@ public class FileController {
         filterFiles.stream().forEach(f->{
             Map<String, String> map = new HashMap<>();
             map.put("file", f);
-            map.put("size", IssueDatabase.fileIssuesMap.get(f).size() + "");
+            map.put("size", IssueDatabase.queryIssuesByFile(f).size() + "");
             list.add(map);
         });
 
@@ -117,7 +117,7 @@ public class FileController {
         System.out.println("文件总数：" + IssueDatabase.queryAllFiles().size());
         StringBuilder stringBuilder = new StringBuilder();
         IssueDatabase.queryAllFiles().stream().map(file->{
-            String str = "<a href='llm_file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + IssueDatabase.fileIssuesMap.get(file).size();
+            String str = "<a href='llm_file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + IssueDatabase.queryIssuesByFile(file).size();
             return str + "<br>";
         }).forEach(stringBuilder::append);
         return stringBuilder.toString();
@@ -125,7 +125,7 @@ public class FileController {
 
     @GetMapping("llm_file")
     public synchronized String llm_file(String f) {
-        List<IssueDto> ls = IssueDatabase.fileIssuesMap.get(f);
+        List<IssueDto> ls = IssueDatabase.queryIssuesByFile(f);
         File file = new File(f);
         System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
 

@@ -80,6 +80,15 @@ public class IssueDatabase {
     public static ConcurrentHashMap<String, List<IssueDto>> fileIssuesMap = null;
 
     /***
+     * 根据文件路径查询当前文件中issue列表
+     * @param file
+     * @return
+     */
+    public static List<IssueDto> queryIssuesByFile(String file) {
+        return fileIssuesMap.get(file);
+    }
+
+    /***
      * 文件路径与文件的关系
      *  key： file
      *  value： 处理 高亮 后的行信息
