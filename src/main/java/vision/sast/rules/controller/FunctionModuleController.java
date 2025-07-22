@@ -12,13 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController("")
 public class FunctionModuleController {
 
-    private static List<Map<String, String>> MAP = new ArrayList<>();
+    public static List<Map<String, String>> MAP = new ArrayList<>();
 
-    private static String createKey(Map<String, String> map) {
-        String filePath =  map.get("filePath");
-        String line = String.valueOf(map.get("line"));
-        return filePath + ":" + line;
-    }
+//    private static String createKey(Map<String, String> map) {
+//        String filePath =  map.get("filePath");
+//        String line = String.valueOf(map.get("line"));
+//        return filePath + ":" + line;
+//    }
 
     @GetMapping("func_module_path")
     public String func_module_path(String path){
@@ -41,9 +41,9 @@ public class FunctionModuleController {
                     paths.add(filePath);
                 });
 
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid=FunctionModule'>函数建模</a></li>");
                 paths.stream().forEach(e->{
-                    stringBuilder.append("<li><a href='pages/AllFiles?vtid=FunctionModule&file="+e+"'>" + e + "</a></li>");
+                    stringBuilder.append("<li>"+e+"</li>");
                 });
 
                 String html = """
