@@ -27,13 +27,13 @@ import java.util.stream.Collectors;
 @RestController
 public class ConfigController {
 
-    private String workspace;
-    private String projectName;
-    private String resultFilePath;
-    private String measureResultFilePath;
-    private String systemConstraintPath;
-    private String INDEXS;
-    private String FUNCTIONMODULE;
+    private String workspace; //工作空间
+    private String projectName; //项目名称
+    private String resultFilePath; //issue存储路径
+    private String measureResultFilePath; //度量结果存储路径
+    private String systemConstraintPath; //系统约束路径
+    private String INDEXS; //全文检索路径
+    private String FUNCTIONMODULE; //函数建模路径
 
     /***
      * 全文检索
