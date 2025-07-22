@@ -197,20 +197,17 @@ public class Database {
      * key： vtid : file
      * value: 当前文件file中规则vtid的问题总数
      */
-    public static Map<String, List<IssueDto>> fileAndVtid_issuesMap = new ConcurrentHashMap<>();
+    private static Map<String, List<IssueDto>> fileAndVtid_issuesMap = new ConcurrentHashMap<>();
 
-    public static String getKey(String vtid, String file){
+    public static synchronized List<IssueDto> queryIssueList (@NonNull String vtid, @NonNull String file) {
         String key = vtid + ":" + file;
-        return key;
-    }
 
-    public static synchronized int sourceCodeInit(String vtid, String file) {
-        String key = getKey(vtid, file);
         if(fileAndVtid_issuesMap.get(key)==null){
             List<IssueDto> issueDtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(file) && dto.getVtId().equals(vtid)).toList();
             fileAndVtid_issuesMap.put(key, issueDtos);
         }
-        return fileAndVtid_issuesMap.get(key).size();
+
+        return fileAndVtid_issuesMap.get(key);
     }
 
 }

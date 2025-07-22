@@ -24,9 +24,10 @@ public class SourceCodeController {
             try {
                 List<IssueDto> issueDtos = new ArrayList<>();
                 if(vtid!=null){
-                    Database.sourceCodeInit(vtid, file);
-                    String key = Database.getKey(vtid, file);
-                    issueDtos = Database.fileAndVtid_issuesMap.get(key);
+                    issueDtos = Database.queryIssueList(vtid, file);
+//                    Database.sourceCodeInit(vtid, file);
+//                    String key = Database.getKey(vtid, file);
+//                    issueDtos = Database.fileAndVtid_issuesMap.get(key);
                 }
 
                 String html = SourceCodeUtil.show(file, issueDtos, line);
@@ -76,9 +77,11 @@ public class SourceCodeController {
                     }).toList();
                 }
                 else {
-                    Database.sourceCodeInit(vtid, file);
-                    String key = Database.getKey(vtid, file);
-                    issueDtos = Database.fileAndVtid_issuesMap.get(key);
+//                    Database.sourceCodeInit(vtid, file);
+//                    String key = Database.getKey(vtid, file);
+//                    issueDtos = Database.fileAndVtid_issuesMap.get(key);
+
+                    issueDtos = Database.queryIssueList(vtid, file);
                 }
 
                 Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);

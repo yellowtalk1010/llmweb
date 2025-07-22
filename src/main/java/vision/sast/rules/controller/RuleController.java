@@ -40,7 +40,7 @@ public class RuleController {
 
         List<Map<String, Object>> mapList = new ArrayList<>();
         Database.vtidFilesMap.get(vtid).stream().forEach(file->{
-            int size = Database.sourceCodeInit(vtid, file);
+            int size = Database.queryIssueList(vtid, file).size();
             Map<String, Object> map = new HashMap<>();
             map.put("vtid", vtid);
             map.put("file", file);
@@ -71,7 +71,7 @@ public class RuleController {
         IssueDto dto = Database.vtidIssueMap.get(vtid);
         StringBuilder stringBuilder = new StringBuilder(dto.getDefectLevel() + "/" + dto.getRuleDesc() + "<br>");
         Database.vtidFilesMap.get(vtid).stream().map(file->{
-            int size = Database.sourceCodeInit(vtid, file);
+            int size = Database.queryIssueList(vtid, file).size();
             String str = "<a href='llm_sourcecode?vtid=" + vtid + "&file=" + file + "'>" + file + "</a> &nbsp;&nbsp;&nbsp;" + size;
             return str + "<br>";
         }).forEach(stringBuilder::append);
