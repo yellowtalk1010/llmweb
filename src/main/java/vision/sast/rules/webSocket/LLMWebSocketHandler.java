@@ -3,8 +3,7 @@ package vision.sast.rules.webSocket;
 import com.alibaba.fastjson2.JSONObject;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import vision.sast.rules.Database;
-import vision.sast.rules.RulesApplication;
+import vision.sast.rules.IssueDatabase;
 import vision.sast.rules.webSocket.llm.LLMPrompt;
 import vision.sast.rules.webSocket.llm.LLMReponse;
 import vision.sast.rules.webSocket.llm.LLMRequest;
@@ -45,7 +44,7 @@ public class LLMWebSocketHandler extends TextWebSocketHandler {
 
                 sessionMap.put(session.getId(), session);
                 //TODO 接受前端发送的代码数据，以及 rule id
-                Set<String> set = Database.ISSUE_RESULT.getResult().stream().filter(issueDto -> issueDto.getId().equals(issueId)).map(dto->dto.getVtId()).collect(Collectors.toSet());
+                Set<String> set = IssueDatabase.ISSUE_RESULT.getResult().stream().filter(issueDto -> issueDto.getId().equals(issueId)).map(dto->dto.getVtId()).collect(Collectors.toSet());
                 if(set.size()>0 &&  LLMPrompt.map.get(set.stream().toList().get(0))!=null){
                     String prompt = LLMPrompt.map.get(set.stream().toList().get(0));
 

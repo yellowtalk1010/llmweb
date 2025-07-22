@@ -1,10 +1,9 @@
 package vision.sast.rules.controller;
 
-import com.alibaba.fastjson2.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vision.sast.rules.Database;
+import vision.sast.rules.IssueDatabase;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.TreeNodeUtil;
 
@@ -17,7 +16,7 @@ public class FileController {
 
     @GetMapping("file_path")
     public Map<String, Object> file_path(String path){
-        List<IssueDto> ls = Database.fileIssuesMap.get(path);
+        List<IssueDto> ls = IssueDatabase.fileIssuesMap.get(path);
         File file = new File(path);
         System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
 
@@ -51,7 +50,7 @@ public class FileController {
     public List<TreeNodeUtil.TreeNode> file_tree(String vtid, String file){
         System.out.println("file_tree，入参vtid=" + vtid + " ，file=" + file);
         List<String> filterFiles = getIssueFiles(vtid, file);
-        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + filterFiles.size());
+        System.out.println("文件总数：" + IssueDatabase.fileList.size() + "，返回：" + filterFiles.size());
         TreeNodeUtil.TreeNode treeNode = TreeNodeUtil.buildTree(filterFiles);
         TreeNodeUtil.TreeNode relativeTreeNode = TreeNodeUtil.getRelativeTreeNode(treeNode);
         traverseTreeNodeForData(relativeTreeNode);
@@ -61,8 +60,8 @@ public class FileController {
     private void traverseTreeNodeForData(TreeNodeUtil.TreeNode treeNode){
         if(treeNode!=null){
             String path = treeNode.getPath();
-            if(Database.fileIssuesMap.get(path)!=null){
-                treeNode.getData().put("size", Database.fileIssuesMap.get(path).size());
+            if(IssueDatabase.fileIssuesMap.get(path)!=null){
+                treeNode.getData().put("size", IssueDatabase.fileIssuesMap.get(path).size());
             }
             treeNode.getChildren().forEach(child->{
                 traverseTreeNodeForData(child);
@@ -79,10 +78,10 @@ public class FileController {
             //
             List<String> files = new ArrayList<>();
             if(vtid!=null && StringUtils.isNotEmpty(vtid)){
-                files = Database.vtidFilesMap.get(vtid);
+                files = IssueDatabase.vtidFilesMap.get(vtid);
             }
             else {
-                files = Database.fileList;
+                files = IssueDatabase.fileList;
             }
             List<String> filterFiles = new ArrayList<>();
             if(path!=null && StringUtils.isNotEmpty(path)){
@@ -100,12 +99,12 @@ public class FileController {
     public List<Map<String, String>> file_list(String vtid, String file){
         System.out.println("file_list，入参vtid=" + vtid + " ，file=" + file);
         List<String> filterFiles = getIssueFiles(vtid, file);
-        System.out.println("文件总数：" + Database.fileList.size() + "，返回：" + filterFiles.size());
+        System.out.println("文件总数：" + IssueDatabase.fileList.size() + "，返回：" + filterFiles.size());
         List<Map<String, String>> list = new ArrayList<>();
         filterFiles.stream().forEach(f->{
             Map<String, String> map = new HashMap<>();
             map.put("file", f);
-            map.put("size", Database.fileIssuesMap.get(f).size() + "");
+            map.put("size", IssueDatabase.fileIssuesMap.get(f).size() + "");
             list.add(map);
         });
 
@@ -114,10 +113,10 @@ public class FileController {
 
     @GetMapping("llm_files")
     public String llm_files(){
-        System.out.println("文件总数：" + Database.fileList.size());
+        System.out.println("文件总数：" + IssueDatabase.fileList.size());
         StringBuilder stringBuilder = new StringBuilder();
-        Database.fileList.stream().map(file->{
-            String str = "<a href='llm_file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + Database.fileIssuesMap.get(file).size();
+        IssueDatabase.fileList.stream().map(file->{
+            String str = "<a href='llm_file?f="+file+"'>"+file+"</a>&nbsp;&nbsp;&nbsp;" + IssueDatabase.fileIssuesMap.get(file).size();
             return str + "<br>";
         }).forEach(stringBuilder::append);
         return stringBuilder.toString();
@@ -125,7 +124,7 @@ public class FileController {
 
     @GetMapping("llm_file")
     public synchronized String llm_file(String f) {
-        List<IssueDto> ls = Database.fileIssuesMap.get(f);
+        List<IssueDto> ls = IssueDatabase.fileIssuesMap.get(f);
         File file = new File(f);
         System.out.print(file.getName() + "，" + file.exists() + "，问题总数" + ls.size());
 

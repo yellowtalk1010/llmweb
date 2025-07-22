@@ -3,9 +3,7 @@ package vision.sast.rules.utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.text.StringEscapeUtils;
-import vision.sast.rules.Database;
-import vision.sast.rules.RulesApplication;
+import vision.sast.rules.IssueDatabase;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.Trace;
 
@@ -14,14 +12,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import static vision.sast.rules.Database.ISSUE_RESULT;
 
 public class SourceCodeUtil {
 
@@ -30,8 +22,8 @@ public class SourceCodeUtil {
      */
      public static List<String> openFile(String fileName) throws Exception {
 
-         if(Database.FILE_CONTEXT_MAP.get(fileName) != null){
-             return Database.FILE_CONTEXT_MAP.get(fileName);
+         if(IssueDatabase.FILE_CONTEXT_MAP.get(fileName) != null){
+             return IssueDatabase.FILE_CONTEXT_MAP.get(fileName);
          }
         System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
         List<String> codeFormatList = new ArrayList<>();
@@ -52,7 +44,7 @@ public class SourceCodeUtil {
                     return line;
                 }).collect(Collectors.toList());
                 System.out.println("高亮");
-                Database.FILE_CONTEXT_MAP.put(fileName, newLines);
+                IssueDatabase.FILE_CONTEXT_MAP.put(fileName, newLines);
 
                 return newLines;
             }catch (Exception e) {

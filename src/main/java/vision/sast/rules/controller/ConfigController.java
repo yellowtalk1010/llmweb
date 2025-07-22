@@ -6,18 +6,16 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import vision.sast.rules.Database;
+import vision.sast.rules.IssueDatabase;
 import vision.sast.rules.utils.LuceneUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -209,7 +207,7 @@ public class ConfigController {
 
         try {
             // 直接读取文件内容
-            Database.buildIssue(this.resultFilePath);
+            IssueDatabase.buildIssue(this.resultFilePath);
             String html = """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
@@ -219,7 +217,7 @@ public class ConfigController {
                     </head>
                     <body>
                     """
-                     + "issue总数：" + Database.ISSUE_RESULT.getResult().size() + "<br>"
+                     + "issue总数：" + IssueDatabase.ISSUE_RESULT.getResult().size() + "<br>"
                      + "<a href='llm_files'>llm文件集</a><br>"
                      + "<a href='llm_rules'>llm规则集</a><br>"
                      + "<br>"

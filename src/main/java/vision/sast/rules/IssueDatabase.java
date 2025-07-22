@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-public class Database {
+public class IssueDatabase {
 
     //issue结果保存
     public static IssueResult ISSUE_RESULT = new IssueResult();
@@ -31,7 +31,7 @@ public class Database {
      */
     public static void buildIssue(String issuePath) {
         try {
-            Database.ruleClear();
+            IssueDatabase.ruleClear();
             //
             File file = new File(issuePath);
             System.out.println("打开结果路径:" + issuePath + "，" + file.exists());
@@ -39,11 +39,11 @@ public class Database {
             //读取结果文件内容
             String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
             //解析issue结果
-            Database.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
-            System.out.println("issue总数:" + Database.ISSUE_RESULT.getResult().size());
+            IssueDatabase.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
+            System.out.println("issue总数:" + IssueDatabase.ISSUE_RESULT.getResult().size());
 
-            Database.loadFileInitList(); //构建文件关系
-            Database.loadRuleInitList(); //构建规则关系
+            IssueDatabase.loadFileInitList(); //构建文件关系
+            IssueDatabase.loadRuleInitList(); //构建规则关系
         }catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -77,29 +77,29 @@ public class Database {
     private synchronized static void loadFileInitList() {
 
         //TODO 从结果中提取文件
-        Database.fileList = null;
-        Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
-        Database.fileList = set.stream().toList().stream().sorted().toList();
+        IssueDatabase.fileList = null;
+        Set<String> set = IssueDatabase.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
+        IssueDatabase.fileList = set.stream().toList().stream().sorted().toList();
         System.out.println("完成文件提取，总数量:" + fileList.size());
 
         //TODO 构建文件与issue关系
-        Database.fileIssuesMap = new ConcurrentHashMap<>();
-        Database.fileList.stream().forEach(f->{
+        IssueDatabase.fileIssuesMap = new ConcurrentHashMap<>();
+        IssueDatabase.fileList.stream().forEach(f->{
             if(fileIssuesMap.get(f)==null){
-                List<IssueDto> dtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(f)).toList();
-                Database.fileIssuesMap.put(f, dtos);
+                List<IssueDto> dtos = IssueDatabase.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(f)).toList();
+                IssueDatabase.fileIssuesMap.put(f, dtos);
             }
         });
         System.out.println("完成构建文件与issue之间关系");
 
-        Database.FILE_CONTEXT_MAP.clear();
+        IssueDatabase.FILE_CONTEXT_MAP.clear();
         System.out.println("加载文件内容");
-        Database.executorService.execute(new Runnable() {
+        IssueDatabase.executorService.execute(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    if(Database.fileList.size()>0){
-                        Database.ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
+                    if(IssueDatabase.fileList.size()>0){
+                        IssueDatabase.ISSUE_RESULT.getResult().stream().map(issueDto -> issueDto.getFilePath()).forEach(issueFile -> {
                             try {
                                 if(new File(issueFile).exists()){
                                     SourceCodeUtil.openFile(issueFile);
@@ -113,7 +113,7 @@ public class Database {
                         });
                     }
                     try {
-                        if(Database.fileList.size()>0 && Database.fileList.size()==FILE_CONTEXT_MAP.size()){
+                        if(IssueDatabase.fileList.size()>0 && IssueDatabase.fileList.size()==FILE_CONTEXT_MAP.size()){
                             System.out.println(fileList.size() + "全部完成文件内容缓存加载" + FILE_CONTEXT_MAP.size());
                             break;
                         }
@@ -162,7 +162,7 @@ public class Database {
         vtidIssueCountMap.clear();
         vtidFilesMap.clear();
 
-        Set<String> set = Database.ISSUE_RESULT.getResult().stream().map(dto->{
+        Set<String> set = IssueDatabase.ISSUE_RESULT.getResult().stream().map(dto->{
             if(vtidIssueMap.get(dto.getVtId())==null){
                 vtidIssueMap.put(dto.getVtId(), dto);
             }
@@ -173,17 +173,17 @@ public class Database {
         System.out.println("完成规则提取，规则总数:"  + vtidList.size());
 
 
-        Database.vtidList.stream().forEach(vtid->{
+        IssueDatabase.vtidList.stream().forEach(vtid->{
 
             //规则违反总数
-            long count = Database.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
+            long count = IssueDatabase.ISSUE_RESULT.getResult().stream().filter(r->r.getVtId().equals(vtid)).count();
             vtidIssueCountMap.put(vtid, count);
 
             //规则违反与文件关系
-            List<String> filepaths = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
+            List<String> filepaths = IssueDatabase.ISSUE_RESULT.getResult().stream().filter(dto->dto.getVtId().equals(vtid))
                     .map(dto->dto.getFilePath()).collect(Collectors.toSet())
                     .stream().toList().stream().sorted().toList();
-            Database.vtidFilesMap.put(vtid, filepaths);
+            IssueDatabase.vtidFilesMap.put(vtid, filepaths);
 
         });
         System.out.println("完成规则违反总数关系");
@@ -203,7 +203,7 @@ public class Database {
         String key = vtid + ":" + file;
 
         if(fileAndVtid_issuesMap.get(key)==null){
-            List<IssueDto> issueDtos = Database.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(file) && dto.getVtId().equals(vtid)).toList();
+            List<IssueDto> issueDtos = IssueDatabase.ISSUE_RESULT.getResult().stream().filter(dto->dto.getFilePath().equals(file) && dto.getVtId().equals(vtid)).toList();
             fileAndVtid_issuesMap.put(key, issueDtos);
         }
 
