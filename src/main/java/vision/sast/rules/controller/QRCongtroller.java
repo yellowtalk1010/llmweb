@@ -45,7 +45,7 @@ public class QRCongtroller {
     @PostMapping("llm_create_qr")
     public String llm_create_qr(Integer type, String content, String pwd) throws Exception {
         FileUtils.deleteDirectory(new File("qrs"));
-        if(pwd==null || pwd.isEmpty()){
+        if(pwd==null || pwd.isEmpty() || !pwd.equals("mario")){
             return "error";
         }
         else {
