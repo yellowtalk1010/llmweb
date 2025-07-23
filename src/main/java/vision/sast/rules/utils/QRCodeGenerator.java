@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class QRCodeGenerator {
 
-    public static int MAX = 4000; //最大切割
+    public static int MAX = 2000; //最大切割
 
     public static List<String> erweima(String text, int size) {
         int times = 0;

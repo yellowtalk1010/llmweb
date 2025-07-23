@@ -1,6 +1,7 @@
 package vision.sast.rules.controller;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.utils.QRCodeGenerator;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -40,7 +43,8 @@ public class QRCongtroller {
     }
 
     @PostMapping("llm_create_qr")
-    public String llm_create_qr(Integer type, String content, String pwd) {
+    public String llm_create_qr(Integer type, String content, String pwd) throws Exception {
+        FileUtils.deleteDirectory(new File("qrs"));
         if(pwd==null || pwd.isEmpty()){
             return "error";
         }
@@ -66,10 +70,48 @@ public class QRCongtroller {
             System.out.println("路径：");
             list.forEach(System.out::println);
 
-            return """
-                hello world.
+
+            StringBuilder stringBuilder = new StringBuilder();
+            list.stream().forEach(f->{
+                try {
+                    File file=new File(f);
+                    byte[] imageBytes = Files.readAllBytes(file.toPath());
+                    String base64 = Base64.getEncoder().encodeToString(imageBytes);
+                    String mimeType = Files.probeContentType(file.toPath());
+                    if (mimeType == null) {
+                        mimeType = "image/jpeg"; // 默认
+                    }
+
+                    String img = "<span>"+f+"</span><br>"
+                            +"<img src=\"data:" + mimeType + ";base64," + base64 + "\" /><br>";
+
+                    stringBuilder.append(img);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    stringBuilder.append(e.getMessage());
+                }
+            });
+
+
+            String html =
+            """
+                   <!DOCTYPE html>
+                   <html lang="zh-CN">
+                   <head>
+                     <meta charset="UTF-8">
+                     <title>qr</title>
+                   </head>
+                   <body>
+                        """
+                    +
+                    stringBuilder
+                    +
+                    """
+                   </body>
+                   </html>
                 """;
 
+            return html;
         }
     }
 
