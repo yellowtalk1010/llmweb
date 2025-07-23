@@ -20,7 +20,7 @@ public class QRCodeGenerator {
 
     public static int MAX = 4000; //最大切割
 
-    public static void erweima(String text, int size) {
+    public static List<String> erweima(String text, int size) {
         int times = 0;
         if(text.length() % MAX == 0){
             times = text.length() / MAX;
@@ -45,13 +45,14 @@ public class QRCodeGenerator {
             System.out.println("文件切割后拼接成功，切割数是:" + list.size());
         }
         AtomicInteger index = new AtomicInteger(1);
-        list.forEach(s->{
-            gener(s,size,index.getAndIncrement());
-        });
+
+        return list.stream().map(s->{
+            return gener(s,size,index.getAndIncrement());
+        }).toList();
 
     }
 
-    private static void gener(String text, int size, int times){
+    private static String gener(String text, int size, int times){
         String filePath = times + "-qrcode.png";
         int width = size;
         int height = size;
@@ -68,8 +69,10 @@ public class QRCodeGenerator {
 
             ImageIO.write(image, "png", new File(filePath));
             System.out.println("二维码已生成: " + filePath);
+            return new File(filePath).getAbsolutePath();
         } catch (WriterException | IOException e) {
             e.printStackTrace();
+            return "";
         }
     }
 
