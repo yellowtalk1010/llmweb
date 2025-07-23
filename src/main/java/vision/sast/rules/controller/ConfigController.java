@@ -225,6 +225,8 @@ public class ConfigController {
                      + "<a href='mario'>Mario</a><br>"
                      + "<br>"
                      + "<a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>塞尔达传说</a><br>"
+                     + "<br>"
+                     + "<a href='llm_qr'>switch2</a><br>"
                      +
                     """
                     </body>
