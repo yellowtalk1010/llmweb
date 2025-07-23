@@ -404,4 +404,30 @@ public class ConfigController {
                 """;
     }
 
+
+    @GetMapping("llm_qr")
+    public String llm_qr(){
+        String html =
+           """
+               <!DOCTYPE html>
+               <html lang="zh-CN">
+               <head>
+                 <meta charset="UTF-8">
+                 <title>qr</title>
+               </head>
+               <body>
+                    <form action="/llm_create_qr" method="post">
+                         <input type="radio" name="type" value="1" />路径  <br>
+                         <input type="radio" name="type" value="2" checked />内容 <br>
+                         <input type="password" name="pwd" /> <br>
+                         <textarea name="content" rows="5" cols="50"></textarea>
+                         <br>
+                         <button  type="submit">查询</button> 
+                    </form>
+               </body>
+               </html>
+            """;
+        return html;
+    }
+
 }
