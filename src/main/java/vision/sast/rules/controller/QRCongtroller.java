@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.utils.QRCodeGenerator;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -44,12 +45,13 @@ public class QRCongtroller {
             return "error";
         }
         else {
+            List<String> list = new ArrayList<String>();
             if(type.equals(1)){
                 System.out.println("路径:" + content);
                 if(!new File(content).exists()){
                     return "路径不存在";
                 }
-                headleFile(content);
+                list.addAll(headleFile(content));
             }
             else if(type.equals(2)){
                 if(content==null || content.isEmpty()){
@@ -57,14 +59,18 @@ public class QRCongtroller {
                 }
                 else {
                     System.out.println("内容：xxx");
-                    handleString(content);
+                    list.addAll(handleString(content));
                 }
             }
 
-        }
-        return """
+            System.out.println("路径：");
+            list.forEach(System.out::println);
+
+            return """
                 hello world.
                 """;
+
+        }
     }
 
     /***
