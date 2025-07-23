@@ -53,7 +53,7 @@ public class QRCodeGenerator {
     }
 
     private static String gener(String text, int size, int times){
-        String filePath = times + "-qrcode.png";
+
         int width = size;
         int height = size;
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -66,7 +66,11 @@ public class QRCodeGenerator {
                     image.setRGB(x, y, bitMatrix.get(x, y) ? Color.BLACK.getRGB() : Color.WHITE.getRGB());
                 }
             }
+            String filePath = "qrs/" + times + "-qrcode.png";
 
+            if(!new File(filePath).getParentFile().exists()){
+                new File(filePath).getParentFile().mkdirs();
+            }
             ImageIO.write(image, "png", new File(filePath));
             System.out.println("二维码已生成: " + filePath);
             return new File(filePath).getAbsolutePath();
