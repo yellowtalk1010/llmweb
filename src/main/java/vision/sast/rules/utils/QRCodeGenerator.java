@@ -72,7 +72,7 @@ public class QRCodeGenerator {
                 new File(filePath).getParentFile().mkdirs();
             }
             ImageIO.write(image, "png", new File(filePath));
-            System.out.println("二维码已生成: " + filePath);
+            //System.out.println("二维码已生成: " + filePath);
             return new File(filePath).getAbsolutePath();
         } catch (WriterException | IOException e) {
             e.printStackTrace();
