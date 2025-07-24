@@ -21,7 +21,8 @@
     </properties>
 
     <modules>
-        <module>web</module>
+<!--        <module>web</module>-->
+        <module>c4</module>
     </modules>
 
 </project>
