@@ -1,6 +1,7 @@
 package vision.sast.rules.controller;
 
 import com.alibaba.fastjson2.JSON;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 import vision.sast.rules.FunctionModuleDatabase;
 
@@ -10,15 +11,10 @@ import java.util.List;
 @RestController()
 public class FunctionModuleController {
 
+    @Data
     private static class FuncModuleRequestDto {
         private String issueId;
         private List<String> paramValues;
-
-        // getter 和 setter
-        public String getIssueId() { return issueId; }
-        public void setIssueId(String issueId) { this.issueId = issueId; }
-        public List<String> getParamValues() { return paramValues; }
-        public void setParamValues(List<String> paramValues) { this.paramValues = paramValues; }
     }
 
     @PostMapping("handle_func_module")
