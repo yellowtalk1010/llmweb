@@ -27,6 +27,8 @@ public class ExprASTExample {
 
         // 3. 构造语法树
         ParseTree tree = parser.compilationUnit();
+        System.out.println(tree.getText());
+
 
         // 4. 打印语法树结构（可视化）
         System.out.println("Parse Tree:\n" + tree.toStringTree(parser));
