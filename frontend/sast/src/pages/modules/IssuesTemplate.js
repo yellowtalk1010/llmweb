@@ -108,9 +108,19 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
       
       const result = await response.json();
       console.log("后端返回数据:", result);
-      alert(result.status)
-      //   // 可以在这里处理成功后的逻辑，比如提示用户
-      // alert("提交成功！");
+      
+      if(result.status=="success"){
+        //成功，则回写
+        const paramValues = result.data.data.params;
+        console.info("实际数据" + paramValues)
+        paramSelects.forEach((select, index) => {
+          const paramValue = paramValues[index]
+          select.value = paramValue.in_out || ""; // 如果值为 null，设为空字符串
+        });
+      }
+      else {
+        alert(result.status)
+      }
     } catch (error) {
       console.error("提交出错:", error);
       alert("提交失败，请重试！");
@@ -136,7 +146,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
                   <td>
                     {param.param} 
                     &nbsp;&nbsp;&nbsp;
-                    <select name={index} className="param" value={param.in_out}>
+                    <select className="param" value={param.in_out} onChange={(e) => handleFunctionModule(e, issue.id)}>
                       <option value={null}></option>
                       <option value={"in"}>输入</option>
                       <option value={"out"}>输出</option>

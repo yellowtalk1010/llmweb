@@ -33,7 +33,7 @@ public class FunctionModuleController {
         if(funcModuleRequestDto.getIssueId()!=null
                 && StringUtils.isNotBlank(funcModuleRequestDto.getIssueId())
                 && funcModuleRequestDto.getParamValues()!=null
-                && funcModuleRequestDto.getParamValues().stream().filter(e->(e!=null && (e.equals("in") || e.equals("out")))).count() == funcModuleRequestDto.getParamValues().size()){
+                && funcModuleRequestDto.getParamValues().stream().filter(e->(e!=null && ( e.equals("") || e.equals("in") || e.equals("out")))).count() == funcModuleRequestDto.getParamValues().size()){
             IssueDto issueDto = FunctionModuleDatabase.queryIssueDtoById(funcModuleRequestDto.getIssueId());
             if(issueDto!=null){
                 Object object = issueDto.getData();
@@ -49,7 +49,7 @@ public class FunctionModuleController {
                         });
 
                         map.put("status", "success");
-                        map.put("data", issueDto);
+                        map.put("data", FunctionModuleDatabase.queryIssueDtoById(funcModuleRequestDto.getIssueId()));
                         return map;
                     }
                 }
