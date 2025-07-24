@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.DatabaseFunctionModule;
 import vision.sast.rules.DatabaseIssue;
+import vision.sast.rules.DatabaseSYSTEM_CONSTRAINTS_01;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.SourceCodeUtil;
 
@@ -62,6 +63,10 @@ public class SourceCodeController {
                 if(vtid.equals(DatabaseFunctionModule.FunctionModuleVtid)){
                     //函数建模数据
                     issueDtos = DatabaseFunctionModule.queryIssuesByFile(file);
+                }
+                else if(vtid.equals(DatabaseSYSTEM_CONSTRAINTS_01.VTID)){
+                    //语法错误
+                    issueDtos = DatabaseSYSTEM_CONSTRAINTS_01.queryIssuesByFile(file);
                 }
                 else {
                     issueDtos = DatabaseIssue.queryIssueList(vtid, file);

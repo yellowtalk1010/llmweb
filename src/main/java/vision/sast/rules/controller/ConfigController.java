@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import vision.sast.rules.DatabaseFunctionModule;
 import vision.sast.rules.DatabaseIssue;
 import vision.sast.rules.DatabaseSYSTEM_CONSTRAINTS_01;
 import vision.sast.rules.utils.LuceneUtil;
@@ -152,7 +153,7 @@ public class ConfigController {
                 DatabaseSYSTEM_CONSTRAINTS_01.init_SYSTEM_CONSTRAINTS_01_Database(systemConstraintPath);
 
                 List<String> list = FileUtils.readLines(file, "UTF-8");
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid="+ DatabaseSYSTEM_CONSTRAINTS_01.VTID+"'>系统约束</a></li>");
 
                 Map<String, List<Map<String, String>>> groupedMaps = list.stream().map(line->{
                     Map<String, String> map = JSON.parseObject(line, Map.class);
@@ -230,6 +231,8 @@ public class ConfigController {
                      + "<br>"
                      + "<a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>塞尔达传说</a><br>"
                      + "<br>"
+                     + "<a href='config_systemConstraint_path'>systemConstraint</a>&nbsp;&nbsp;&nbsp;{{{systemConstraintPath}}}<br>"
+                     + "<br>"
                      + "<a href='llm_qr'>switch2</a><br>"
                      +
                     """
@@ -238,6 +241,9 @@ public class ConfigController {
                     """;
             if(this.FUNCTIONMODULE!=null){
                 html = html.replace("{{{{FUNCTIONMODULE}}}}", FUNCTIONMODULE);
+            }
+            if(this.systemConstraintPath!=null){
+                html = html.replace("{{{systemConstraintPath}}}", systemConstraintPath + "&nbsp;&nbsp;&nbsp;" + new File(systemConstraintPath).exists());
             }
             return html;
         } catch (Exception e) {
@@ -347,8 +353,7 @@ public class ConfigController {
                     <a href='config_issue_path'>issue</a>&nbsp;&nbsp;&nbsp;{{{resultFilePath}}}<br>
                     <a href='config_measure_path'>measure</a>&nbsp;&nbsp;&nbsp;{{{measureResultFilePath}}}<br>
                     
-                    <h2>系统约束</h2>
-                    <a href='config_systemConstraint_path'>systemConstraint</a>&nbsp;&nbsp;&nbsp;{{{systemConstraintPath}}}<br>
+               
                    
                     <h2>全文检索</h2>
                     {{{INDEXS}}}
@@ -371,10 +376,6 @@ public class ConfigController {
             if(this.measureResultFilePath!=null){
                 html = html.replace("{{{measureResultFilePath}}}", measureResultFilePath);
             }
-            if(this.systemConstraintPath!=null){
-                html = html.replace("{{{systemConstraintPath}}}", systemConstraintPath + "&nbsp;&nbsp;&nbsp;" + new File(systemConstraintPath).exists());
-            }
-
 
             html = html.replace("{{{INDEXS}}}", INDEXS + "&nbsp;&nbsp;&nbsp;" + new File(INDEXS).exists());
             html = html.replace("{{{htmlFileContent}}}", htmlFileContent);

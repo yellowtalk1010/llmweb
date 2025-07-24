@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.DatabaseFunctionModule;
 import vision.sast.rules.DatabaseIssue;
+import vision.sast.rules.DatabaseSYSTEM_CONSTRAINTS_01;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.TreeNodeUtil;
 
@@ -74,6 +75,10 @@ public class FileController {
         if(vtid!=null && vtid.equals(DatabaseFunctionModule.FunctionModuleVtid)){
             //函数建模
             return DatabaseFunctionModule.queryAllFiles();
+        }
+        else if(vtid!=null && vtid.equals(DatabaseSYSTEM_CONSTRAINTS_01.VTID)){
+            //语法错误
+            return DatabaseSYSTEM_CONSTRAINTS_01.queryAllFiles();
         }
         else {
             //
