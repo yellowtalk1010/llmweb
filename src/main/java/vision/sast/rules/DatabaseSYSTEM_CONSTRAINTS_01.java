@@ -14,8 +14,21 @@ public class DatabaseSYSTEM_CONSTRAINTS_01 {
     private static List<IssueDto> SYSTEM_CONSTRAINTS_01_Issues = new ArrayList<>();
     private static  List<String> files = new ArrayList<>();
 
+    public static List<String> queryAllFiles(){
+        return files;
+    }
+
     /***
-     * 语法错误
+     * 查询当前文件中需要建模的issue数据
+     * @param file
+     * @return
+     */
+    public static List<IssueDto> queryIssuesByFile(String file) {
+        return SYSTEM_CONSTRAINTS_01_Issues.stream().filter(issueDto -> issueDto.getFilePath()!=null && issueDto.getFilePath().equals(file)).toList();
+    }
+
+    /***
+     * 语法错误初始化
      * @param SYSTEM_CONSTRAINTS_01_Path
      */
     public static void init_SYSTEM_CONSTRAINTS_01_Database(String SYSTEM_CONSTRAINTS_01_Path) {

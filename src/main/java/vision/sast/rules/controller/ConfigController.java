@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vision.sast.rules.DatabaseIssue;
+import vision.sast.rules.DatabaseSYSTEM_CONSTRAINTS_01;
 import vision.sast.rules.utils.LuceneUtil;
 
 import java.io.*;
@@ -147,6 +148,9 @@ public class ConfigController {
         }
         else {
             try {
+
+                DatabaseSYSTEM_CONSTRAINTS_01.init_SYSTEM_CONSTRAINTS_01_Database(systemConstraintPath);
+
                 List<String> list = FileUtils.readLines(file, "UTF-8");
                 StringBuilder stringBuilder = new StringBuilder();
 
