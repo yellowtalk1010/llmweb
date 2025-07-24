@@ -1,11 +1,10 @@
 package vision.sast.rules.controller;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import vision.sast.rules.FunctionModuleDatabase;
+import vision.sast.rules.DatabaseFunctionModule;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.fm.FunctionModuleInputOutputDto;
 
@@ -13,7 +12,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController()
@@ -34,7 +32,7 @@ public class FunctionModuleController {
                 && StringUtils.isNotBlank(funcModuleRequestDto.getIssueId())
                 && funcModuleRequestDto.getParamValues()!=null
                 && funcModuleRequestDto.getParamValues().stream().filter(e->(e!=null && ( e.equals("") || e.equals("in") || e.equals("out")))).count() == funcModuleRequestDto.getParamValues().size()){
-            IssueDto issueDto = FunctionModuleDatabase.queryIssueDtoById(funcModuleRequestDto.getIssueId());
+            IssueDto issueDto = DatabaseFunctionModule.queryIssueDtoById(funcModuleRequestDto.getIssueId());
             if(issueDto!=null){
                 Object object = issueDto.getData();
                 if(object instanceof FunctionModuleInputOutputDto){
@@ -49,7 +47,7 @@ public class FunctionModuleController {
                         });
 
                         map.put("status", "success");
-                        map.put("data", FunctionModuleDatabase.queryIssueDtoById(funcModuleRequestDto.getIssueId()));
+                        map.put("data", DatabaseFunctionModule.queryIssueDtoById(funcModuleRequestDto.getIssueId()));
                         return map;
                     }
                 }
@@ -66,10 +64,10 @@ public class FunctionModuleController {
         }
         else {
             try {
-                FunctionModuleDatabase.initFunctionModuleDatabase(path);
+                DatabaseFunctionModule.initFunctionModuleDatabase(path);
 
-                StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid="+ FunctionModuleDatabase.FunctionModuleVtid+"'>函数建模</a></li>");
-                FunctionModuleDatabase.queryAllFiles().stream().forEach(e->{
+                StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid="+ DatabaseFunctionModule.FunctionModuleVtid+"'>函数建模</a></li>");
+                DatabaseFunctionModule.queryAllFiles().stream().forEach(e->{
                     stringBuilder.append("<li>"+e+"</li>");
                 });
 

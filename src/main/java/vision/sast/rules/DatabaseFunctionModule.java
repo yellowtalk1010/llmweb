@@ -12,7 +12,7 @@ import java.util.*;
 /***
  * 函数建模数据集
  */
-public class FunctionModuleDatabase {
+public class DatabaseFunctionModule {
 
     public static final String FunctionModuleVtid = "FunctionModule";
 

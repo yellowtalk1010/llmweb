@@ -1,12 +1,11 @@
 package vision.sast.rules.controller;
 
 
-import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vision.sast.rules.FunctionModuleDatabase;
+import vision.sast.rules.DatabaseFunctionModule;
 import vision.sast.rules.IssueDatabase;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.SourceCodeUtil;
@@ -60,9 +59,9 @@ public class SourceCodeController {
         if (vtid != null && file != null) {
             try {
                 List<IssueDto> issueDtos = new ArrayList<>();
-                if(vtid.equals(FunctionModuleDatabase.FunctionModuleVtid)){
+                if(vtid.equals(DatabaseFunctionModule.FunctionModuleVtid)){
                     //函数建模数据
-                    issueDtos = FunctionModuleDatabase.queryIssuesByFile(file);
+                    issueDtos = DatabaseFunctionModule.queryIssuesByFile(file);
                 }
                 else {
                     issueDtos = IssueDatabase.queryIssueList(vtid, file);
