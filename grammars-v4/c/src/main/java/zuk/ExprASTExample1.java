@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-//语法清洗
+//
 public class ExprASTExample1 {
 
     public static void main(String[] args) throws IOException {
