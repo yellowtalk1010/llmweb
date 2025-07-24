@@ -513,7 +513,7 @@ functionDefinition
     : declarationSpecifiers? declarator declarationList? functionDefinitonSuffix compoundStatement
     ;
 
-//这种方言，如 keil51中 void foo() interrupt 0 a {}
+//这种方言，如 keil51中 void foo() interrupt 0 a {}。 ?表示0或1次； +表示1次或多次； *表示0次或多次
 functionDefinitonSuffix
     : (Identifier | Constant)*  //标识符和常量，出现0次或多次
     ;
