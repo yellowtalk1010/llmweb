@@ -76,7 +76,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
   }
 
   //提交函数建模数据
-  function handleFunctionModule(event, issueId) {
+  const handleFunctionModule = async (e, issueId) => {
     console.info("建模id：" + issueId)
 
     const issueDiv = document.getElementById(issueId);
@@ -89,6 +89,31 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
     
     console.log("Issue ID:", issueId);
     console.log("Param values:", paramValues);
+
+    try {
+      const response = await fetch("func_module_path", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          issueId,
+          paramValues,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("请求失败");
+      }
+
+      const result = await response.json();
+      console.log("后端返回数据:", result);
+        // 可以在这里处理成功后的逻辑，比如提示用户
+      alert("提交成功！");
+    } catch (error) {
+      console.error("提交出错:", error);
+      alert("提交失败，请重试！");
+    }
   }
 
   //渲染functonModule函数建模
@@ -99,7 +124,11 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
         <div>
           <table>
             <tr>
-              <td>{issue.data.funcName} 函数</td>
+              <td>
+                {issue.data.funcName}
+                &nbsp;&nbsp;&nbsp;
+                <button onClick={(e) => handleFunctionModule(e, issue.id)}>确定</button>
+              </td>
               
               {
                 issue.data.params.map((param,index) => (
@@ -115,10 +144,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
                 ))
                 
               }
-
-              <td>
-                <button onClick={(e) => handleFunctionModule(e, issue.id)}>确定</button>
-              </td>
+ 
               
             </tr>
           </table>
