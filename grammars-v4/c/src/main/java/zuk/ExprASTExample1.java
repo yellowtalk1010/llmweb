@@ -17,6 +17,10 @@ public class ExprASTExample1 {
     public static void main(String[] args) throws IOException {
         String source = Files.readString(Paths.get("grammars-v4/c/examples/zuk_keil51.c"));
 
+        System.out.println("=== 原始源码 ===");
+        System.out.println(source);
+        System.out.println("================\n");
+
         CharStream input = CharStreams.fromString(source);
         CLexer lexer = new CLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
