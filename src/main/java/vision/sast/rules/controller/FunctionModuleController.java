@@ -10,7 +10,7 @@ import java.util.List;
 @RestController()
 public class FunctionModuleController {
 
-    public static class FuncModuleRequestDto {
+    private static class FuncModuleRequestDto {
         private String issueId;
         private List<String> paramValues;
 
@@ -22,7 +22,6 @@ public class FunctionModuleController {
     }
 
     @PostMapping("handle_func_module")
-//    public String handle_func_module(@RequestParam String issueId, @RequestParam List<String> paramValues)
     public String handle_func_module(@RequestBody FuncModuleRequestDto funcModuleRequestDto)
     {
         System.out.println("函数输入输出:" + JSON.toJSONString(funcModuleRequestDto));
