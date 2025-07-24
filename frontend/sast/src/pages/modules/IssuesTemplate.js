@@ -85,14 +85,27 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
         <div>
           <table>
             <tr>
-              <td>{issue.data.funcName}</td>
-              <td>{"("}</td>
+              <td>{issue.data.funcName} 函数</td>
+              
               {
                 issue.data.params.map((param,index) => (
-                  <td>{param.param}</td>
+                  <td>
+                    {param.param} 
+                    &nbsp;&nbsp;&nbsp;
+                    <select name={index}>
+                      <option value={null}></option>
+                      <option value={"in"}>输入</option>
+                      <option value={"out"}>输出</option>
+                    </select>
+                  </td>
                 ))
+                
               }
-              <td>{")"}</td>
+
+              <td>
+                <button>确定</button>
+              </td>
+              
             </tr>
           </table>
         </div>
