@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import vision.sast.rules.FunctionModuleDatabase;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController()
 public class FunctionModuleController {
@@ -18,10 +20,12 @@ public class FunctionModuleController {
     }
 
     @PostMapping("handle_func_module")
-    public String handle_func_module(@RequestBody FuncModuleRequestDto funcModuleRequestDto)
+    public Map<String, String> handle_func_module(@RequestBody FuncModuleRequestDto funcModuleRequestDto)
     {
         System.out.println("函数输入输出:" + JSON.toJSONString(funcModuleRequestDto));
-        return "success";
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "success");
+        return map;
     }
 
     @GetMapping("func_module_path")
