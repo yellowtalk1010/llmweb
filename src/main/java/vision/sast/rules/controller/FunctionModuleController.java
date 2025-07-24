@@ -26,9 +26,9 @@ public class FunctionModuleController {
     }
 
     @PostMapping("handle_func_module")
-    public Map<String, String> handle_func_module(@RequestBody FuncModuleRequestDto funcModuleRequestDto) {
+    public Map<String, Object> handle_func_module(@RequestBody FuncModuleRequestDto funcModuleRequestDto) {
         System.out.println("函数输入输出:" + JSON.toJSONString(funcModuleRequestDto));
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("status", "失败");
         if(funcModuleRequestDto.getIssueId()!=null
                 && StringUtils.isNotBlank(funcModuleRequestDto.getIssueId())
@@ -49,6 +49,7 @@ public class FunctionModuleController {
                         });
 
                         map.put("status", "success");
+                        map.put("data", issueDto);
                         return map;
                     }
                 }
