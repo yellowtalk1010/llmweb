@@ -8,6 +8,18 @@
     <artifactId>parent</artifactId>
     <version>1.0.0</version>
 
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <file.encoding>UTF-8</file.encoding>
+
+        <maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
+    </properties>
+
     <modules>
         <module>web</module>
     </modules>
