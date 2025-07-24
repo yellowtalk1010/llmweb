@@ -28,6 +28,16 @@ public class FunctionModuleDatabase {
         return files;
     }
 
+    public static IssueDto queryIssueDtoById(String id) {
+        List<IssueDto> issueDtos = functionModuleIssues.stream().filter(issueDto -> issueDto.getId().equals(id)).toList();
+        if(issueDtos!=null && issueDtos.size()>0){
+            return issueDtos.get(0);
+        }
+        else {
+            return null;
+        }
+    }
+
     /***
      * 查询当前文件中需要建模的issue数据
      * @param file
