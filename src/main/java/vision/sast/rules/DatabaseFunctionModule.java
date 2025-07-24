@@ -51,7 +51,7 @@ public class DatabaseFunctionModule {
      * 根据路径，初始化函数建模数据
      * @param funcitonModulePath
      */
-    public static void initFunctionModuleDatabase(String funcitonModulePath) {
+    public static List<IssueDto> initFunctionModuleDatabase(String funcitonModulePath) {
         try {
             MAP.clear();
             functionModuleIssues.clear();
@@ -72,8 +72,11 @@ public class DatabaseFunctionModule {
             });
 
             files.addAll(paths);
+
+            return functionModuleIssues;
         }catch (Exception e){
             e.printStackTrace();
+            return new ArrayList<>();
         }
 
     }

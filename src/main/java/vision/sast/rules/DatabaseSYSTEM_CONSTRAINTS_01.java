@@ -31,7 +31,7 @@ public class DatabaseSYSTEM_CONSTRAINTS_01 {
      * 语法错误初始化
      * @param SYSTEM_CONSTRAINTS_01_Path
      */
-    public static void init_SYSTEM_CONSTRAINTS_01_Database(String SYSTEM_CONSTRAINTS_01_Path) {
+    public static List<IssueDto> init_SYSTEM_CONSTRAINTS_01_Database(String SYSTEM_CONSTRAINTS_01_Path) {
         try {
             SYSTEM_CONSTRAINTS_01_Issues.clear();
 
@@ -48,8 +48,11 @@ public class DatabaseSYSTEM_CONSTRAINTS_01 {
             });
 
             files.addAll(paths);
+
+            return SYSTEM_CONSTRAINTS_01_Issues;
         }catch (Exception e){
             e.printStackTrace();
+            return new ArrayList<>();
         }
 
     }

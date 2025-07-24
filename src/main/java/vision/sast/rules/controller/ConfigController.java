@@ -31,9 +31,9 @@ public class ConfigController {
     private String projectName; //项目名称
     private String resultFilePath; //issue存储路径
     private String measureResultFilePath; //度量结果存储路径
-    private String systemConstraintPath; //系统约束路径
+    public static String systemConstraintPath; //系统约束路径
     private String INDEXS; //全文检索路径
-    private String FUNCTIONMODULE; //函数建模路径
+    public static String FUNCTIONMODULE; //函数建模路径
 
     /***
      * 全文检索

@@ -2,6 +2,7 @@ package vision.sast.rules;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
+import vision.sast.rules.controller.ConfigController;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.IssueResult;
 import vision.sast.rules.utils.SourceCodeUtil;
@@ -98,6 +99,17 @@ public class DatabaseIssue {
             //解析issue结果
             DatabaseIssue.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
             System.out.println("issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
+
+            if(new File(ConfigController.FUNCTIONMODULE).exists()){
+                //添加函数建模
+                List<IssueDto> list = DatabaseFunctionModule.initFunctionModuleDatabase(ConfigController.FUNCTIONMODULE);
+                DatabaseIssue.ISSUE_RESULT.getResult().addAll(list);
+            }
+            if(new File(ConfigController.systemConstraintPath).exists()){
+                //添加系统约束
+                List<IssueDto> list = DatabaseSYSTEM_CONSTRAINTS_01.init_SYSTEM_CONSTRAINTS_01_Database(ConfigController.systemConstraintPath);
+                DatabaseIssue.ISSUE_RESULT.getResult().addAll(list);
+            }
 
             DatabaseIssue.loadFileInitList(); //构建文件关系
             DatabaseIssue.loadRuleInitList(); //构建规则关系
