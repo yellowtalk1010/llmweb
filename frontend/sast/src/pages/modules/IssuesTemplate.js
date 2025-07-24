@@ -75,7 +75,63 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
     );
   }
 
-  //提交函数建模数据
+
+//渲染functonModule函数建模
+function renderFunctionModule(issue) {
+  return (
+    <div key={issue.id} id={issue.id} className="issueDiv">
+      <div>{issue.data.funcLine}，函数输入输出，{issue.id}</div>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                {issue.data.funcName}
+                &nbsp;&nbsp;&nbsp;
+                函数
+              </td>
+              {issue.data.params.map((param, index) => (
+                <ParamItem 
+                  key={index}
+                  param={param}
+                  issueId={issue.id}
+                />
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+
+  return issueDatas != null
+    ? issueDatas.map((issue) => {
+      if(issue.vtId=="FunctionModule"){
+        return renderFunctionModule(issue)
+      }
+      else{
+        return renderIssue(issue)
+      }
+    })
+    : null;
+}
+
+
+export default IssuesTemplate;
+
+
+
+
+
+
+
+function ParamItem({ param, issueId }) {
+  const [isHighlighted, setIsHighlighted] = useState(false);
+
+
+    //提交函数建模数据
   const handleFunctionModule = async (e, issueId) => {
     console.info("建模id：" + issueId)
 
@@ -127,55 +183,31 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
     }
   }
 
-  //渲染functonModule函数建模
-  function renderFunctionModule(issue) {
-    return (
-      <div key={issue.id} id={issue.id} className="issueDiv">
-        <div>{issue.data.funcLine}，函数输入输出，{issue.id}</div>
-        <div>
-          <table>
-            <tr>
-              <td>
-                {issue.data.funcName}
-                &nbsp;&nbsp;&nbsp;
-                函数
-              </td>
-              
-              {
-                issue.data.params.map((param,index) => (
-                  <td>
-                    {param.param} 
-                    &nbsp;&nbsp;&nbsp;
-                    <select className="param" value={param.in_out} onChange={(e) => handleFunctionModule(e, issue.id)}>
-                      <option value={null}></option>
-                      <option value={"in"}>输入</option>
-                      <option value={"out"}>输出</option>
-                    </select>
-                  </td>
-                ))
-                
-              }
- 
-              
-            </tr>
-          </table>
-        </div>
-      </div>
-    );
-  }
+  const handleLocalChange = (e) => {
+    handleFunctionModule(e, issueId);
+    setIsHighlighted(true);
+    setTimeout(() => setIsHighlighted(false), 2000);
+  };
 
-
-  return issueDatas != null
-    ? issueDatas.map((issue) => {
-      if(issue.vtId=="FunctionModule"){
-        return renderFunctionModule(issue)
-      }
-      else{
-        return renderIssue(issue)
-      }
-    })
-    : null;
+  return (
+    <td>
+      <span style={{ 
+        color: isHighlighted ? '#28a745' : 'inherit',
+        transition: 'color 2s ease-out, opacity 2s ease-out',
+        opacity: isHighlighted ? 0 : 1
+      }}>
+        {param.param}
+      </span>
+      &nbsp;&nbsp;&nbsp;
+      <select 
+        className="param" 
+        value={param.in_out} 
+        onChange={handleLocalChange}
+      >
+        <option value={null}></option>
+        <option value="in">输入</option>
+        <option value="out">输出</option>
+      </select>
+    </td>
+  );
 }
-
-
-export default IssuesTemplate;
