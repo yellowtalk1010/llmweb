@@ -510,7 +510,12 @@ externalDeclaration
     ;
 
 functionDefinition
-    : declarationSpecifiers? declarator declarationList? compoundStatement
+    : declarationSpecifiers? declarator declarationList? functionDefinitonSuffix compoundStatement
+    ;
+
+//这种方言，如 keil51中 void foo() interrupt 0 a {}
+functionDefinitonSuffix
+    : (Identifier | Constant)*  //标识符和常量，出现0次或多次
     ;
 
 declarationList
