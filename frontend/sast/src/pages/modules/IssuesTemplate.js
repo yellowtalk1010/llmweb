@@ -138,7 +138,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
               <td>
                 {issue.data.funcName}
                 &nbsp;&nbsp;&nbsp;
-                <button onClick={(e) => handleFunctionModule(e, issue.id)}>确定</button>
+                函数
               </td>
               
               {
