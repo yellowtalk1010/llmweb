@@ -105,9 +105,10 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
       if (!response.ok) {
         throw new Error("请求失败");
       }
-      console.info(response.data)
-      // const result = await response.json();
-      // console.log("后端返回数据:", result);
+      
+      const result = await response.json();
+      console.log("后端返回数据:", result);
+      alert(result.status)
       //   // 可以在这里处理成功后的逻辑，比如提示用户
       // alert("提交成功！");
     } catch (error) {
