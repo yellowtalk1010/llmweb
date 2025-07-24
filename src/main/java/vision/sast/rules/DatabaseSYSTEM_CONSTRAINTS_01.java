@@ -18,7 +18,7 @@ public class DatabaseSYSTEM_CONSTRAINTS_01 {
      * 语法错误
      * @param SYSTEM_CONSTRAINTS_01_Path
      */
-    public static void initFunctionModuleDatabase(String SYSTEM_CONSTRAINTS_01_Path) {
+    public static void init_SYSTEM_CONSTRAINTS_01_Database(String SYSTEM_CONSTRAINTS_01_Path) {
         try {
             SYSTEM_CONSTRAINTS_01_Issues.clear();
 
