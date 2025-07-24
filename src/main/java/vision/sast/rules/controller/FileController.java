@@ -72,15 +72,15 @@ public class FileController {
     }
 
     private List<String> getIssueFiles(String vtid, String path){
-        if(vtid!=null && vtid.equals(DatabaseFunctionModule.FunctionModuleVtid)){
-            //函数建模
-            return DatabaseFunctionModule.queryAllFiles();
-        }
-        else if(vtid!=null && vtid.equals(DatabaseSYSTEM_CONSTRAINTS_01.VTID)){
-            //语法错误
-            return DatabaseSYSTEM_CONSTRAINTS_01.queryAllFiles();
-        }
-        else {
+//        if(vtid!=null && vtid.equals(DatabaseFunctionModule.FunctionModuleVtid)){
+//            //函数建模
+//            return DatabaseFunctionModule.queryAllFiles();
+//        }
+//        else if(vtid!=null && vtid.equals(DatabaseSYSTEM_CONSTRAINTS_01.VTID)){
+//            //语法错误
+//            return DatabaseSYSTEM_CONSTRAINTS_01.queryAllFiles();
+//        }
+//        else {
             //
             List<String> files = new ArrayList<>();
             if(vtid!=null && StringUtils.isNotEmpty(vtid)){
@@ -97,7 +97,7 @@ public class FileController {
                 filterFiles = files;
             }
             return filterFiles;
-        }
+//        }
 
     }
 

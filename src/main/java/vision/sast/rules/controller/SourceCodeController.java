@@ -60,17 +60,17 @@ public class SourceCodeController {
         if (vtid != null && file != null) {
             try {
                 List<IssueDto> issueDtos = new ArrayList<>();
-                if(vtid.equals(DatabaseFunctionModule.FunctionModuleVtid)){
-                    //函数建模数据
-                    issueDtos = DatabaseFunctionModule.queryIssuesByFile(file);
-                }
-                else if(vtid.equals(DatabaseSYSTEM_CONSTRAINTS_01.VTID)){
-                    //语法错误
-                    issueDtos = DatabaseSYSTEM_CONSTRAINTS_01.queryIssuesByFile(file);
-                }
-                else {
+//                if(vtid.equals(DatabaseFunctionModule.FunctionModuleVtid)){
+//                    //函数建模数据
+//                    issueDtos = DatabaseFunctionModule.queryIssuesByFile(file);
+//                }
+//                else if(vtid.equals(DatabaseSYSTEM_CONSTRAINTS_01.VTID)){
+//                    //语法错误
+//                    issueDtos = DatabaseSYSTEM_CONSTRAINTS_01.queryIssuesByFile(file);
+//                }
+//                else {
                     issueDtos = DatabaseIssue.queryIssueList(vtid, file);
-                }
+//                }
 
                 Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);
 
