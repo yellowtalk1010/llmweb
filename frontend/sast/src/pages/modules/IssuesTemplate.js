@@ -192,9 +192,12 @@ function ParamItem({ param, issueId }) {
   return (
     <td>
       <span style={{ 
+        display: 'inline-block', // 确保transform能正常工作
         color: isHighlighted ? '#28a745' : 'inherit',
-        transition: 'color 2s ease-out, opacity 2s ease-out',
-        opacity: isHighlighted ? 0 : 1
+        fontSize: isHighlighted ? '1.2em' : '1em',
+        transform: isHighlighted ? 'scale(1.1)' : 'scale(1)',
+        transition: 'all 0.5s ease-out',
+        fontWeight: isHighlighted ? 'bold' : 'normal'
       }}>
         {param.param}
       </span>
