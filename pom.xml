@@ -22,7 +22,7 @@
 
     <modules>
 <!--        <module>web</module>-->
-<!--        <module>c4</module>-->
+        <module>grammars-v4</module>
     </modules>
 
 </project>
