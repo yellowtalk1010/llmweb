@@ -1,6 +1,7 @@
 package vision.sast.rules.controller;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,10 @@ public class FunctionModuleController {
             IssueDto issueDto = FunctionModuleDatabase.queryIssueDtoById(funcModuleRequestDto.getIssueId());
             if(issueDto!=null){
                 Object object = issueDto.getData();
+                if(object instanceof JSONObject){
+                    JSONObject jsonObject = (JSONObject) object;
+                    jsonObject.get("params");
+                }
                 System.out.println();
             }
         }
