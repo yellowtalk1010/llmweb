@@ -1,0 +1,68 @@
+li {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.token {
+    white-space: pre;
+}
+  
+
+span {
+    color: black;
+
+    font-family: 'Fira Code', 'JetBrains Mono', 'Source Code Pro', Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    background-color: #f5f5f5;
+
+}
+
+span.token.hl_1 {
+    color: green;
+}
+span.token.hl_2 {
+    color: green;
+}
+span.token.hl_3 {
+    color: green;
+}
+span.token.hl_4 {
+    color: green;
+}
+span.token.hl_5 {
+    color: green;
+}
+
+span.token.hl_6 {
+    color: blue;
+    font-weight: bold;
+}
+
+span.token.hl_10 {
+    color: rebeccapurple;
+}
+
+span.token.hl_13 {
+    color: deeppink;
+}
+
+span.token.hl_16 {
+    color: green;
+    font-weight: bold;
+}
+
+span.token.hl_20 {
+    color: black;
+}
+
+span.token.hl_22 {
+    color: red;
+}
+
+span.token.hl_23 {
+    color: saddlebrown;
+}
+
+span.token.hl_24 {
+    color: dimgray;
+}

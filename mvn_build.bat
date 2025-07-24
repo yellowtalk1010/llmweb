@@ -1,1 +1,0 @@
-mvn clean -Pnative native:compile -X
