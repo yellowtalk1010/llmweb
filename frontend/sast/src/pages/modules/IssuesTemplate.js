@@ -79,9 +79,22 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
   function renderFunctionModule(issue) {
     return (
       <div key={issue.id} id={issue.id} className="issueDiv">
-        <div>{issue.name}</div>
+        {/* <div>{issue.name}</div> */}
+        <div>{issue.data.funcLine}，函数输入输出</div>
+        <div>{issue.id}</div>
         <div>
-          函数建模
+          <table>
+            <tr>
+              <td>{issue.data.funcName}</td>
+              <td>{"("}</td>
+              {
+                issue.data.params.map((param,index) => (
+                  <td>{param.param}</td>
+                ))
+              }
+              <td>{")"}</td>
+            </tr>
+          </table>
         </div>
       </div>
     );
