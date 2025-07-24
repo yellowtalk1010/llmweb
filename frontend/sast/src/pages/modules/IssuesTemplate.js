@@ -91,14 +91,14 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
     console.log("Param values:", paramValues);
 
     try {
-      const response = await fetch("func_module_path", {
+      const response = await fetch("/handle_func_module", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          issueId,
-          paramValues,
+          issueId: issueId,
+          paramValues: paramValues
         }),
       });
 
