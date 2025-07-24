@@ -75,6 +75,23 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
     );
   }
 
+  //提交函数建模数据
+  function handleFunctionModule(event, issueId) {
+    console.info(event)
+    console.info(issueId)
+
+    const issueDiv = document.getElementById(issueId);
+  
+    // 2. 获取该 div 下所有 select.param 元素
+    const paramSelects = issueDiv.querySelectorAll("select.param");
+    
+    // 3. 提取它们的值
+    const paramValues = Array.from(paramSelects).map(select => select.value);
+    
+    console.log("Issue ID:", issueId);
+    console.log("Param values:", paramValues);
+  }
+
   //渲染functonModule函数建模
   function renderFunctionModule(issue) {
     return (
@@ -92,7 +109,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
                   <td>
                     {param.param} 
                     &nbsp;&nbsp;&nbsp;
-                    <select name={index}>
+                    <select name={index} className="param">
                       <option value={null}></option>
                       <option value={"in"}>输入</option>
                       <option value={"out"}>输出</option>
@@ -103,7 +120,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
               }
 
               <td>
-                <button>确定</button>
+                <button onClick={(e) => handleFunctionModule(e, issue.id)}>确定</button>
               </td>
               
             </tr>
