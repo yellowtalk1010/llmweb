@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import vision.sast.rules.IssueDatabase;
+import vision.sast.rules.DatabaseIssue;
 import vision.sast.rules.utils.LuceneUtil;
 
 import java.io.*;
@@ -207,7 +207,7 @@ public class ConfigController {
 
         try {
             // 直接读取文件内容
-            IssueDatabase.initIssues(this.resultFilePath);
+            DatabaseIssue.initIssues(this.resultFilePath);
             String html = """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
@@ -217,7 +217,7 @@ public class ConfigController {
                     </head>
                     <body>
                     """
-                     + "issue总数：" + IssueDatabase.getAllIssue().size() + "<br>"
+                     + "issue总数：" + DatabaseIssue.getAllIssue().size() + "<br>"
                      + "<a href='llm_files'>llm文件集</a><br>"
                      + "<a href='llm_rules'>llm规则集</a><br>"
                      + "<br>"

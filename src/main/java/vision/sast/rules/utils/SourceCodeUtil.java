@@ -3,7 +3,7 @@ package vision.sast.rules.utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import vision.sast.rules.IssueDatabase;
+import vision.sast.rules.DatabaseIssue;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.Trace;
 
@@ -22,8 +22,8 @@ public class SourceCodeUtil {
      */
      public static List<String> openFile(String fileName) throws Exception {
 
-         if(IssueDatabase.queryFileHighLightLines(fileName) != null){
-             return IssueDatabase.queryFileHighLightLines(fileName);
+         if(DatabaseIssue.queryFileHighLightLines(fileName) != null){
+             return DatabaseIssue.queryFileHighLightLines(fileName);
          }
         System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
         List<String> codeFormatList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class SourceCodeUtil {
                     return line;
                 }).collect(Collectors.toList());
                 System.out.println("高亮");
-                IssueDatabase.insertFileHighLightLines(fileName, newLines);
+                DatabaseIssue.insertFileHighLightLines(fileName, newLines);
 
                 return newLines;
             }catch (Exception e) {

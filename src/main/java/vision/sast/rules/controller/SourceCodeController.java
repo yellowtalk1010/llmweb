@@ -6,7 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vision.sast.rules.DatabaseFunctionModule;
-import vision.sast.rules.IssueDatabase;
+import vision.sast.rules.DatabaseIssue;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.utils.SourceCodeUtil;
 
@@ -24,7 +24,7 @@ public class SourceCodeController {
             try {
                 List<IssueDto> issueDtos = new ArrayList<>();
                 if(vtid!=null){
-                    issueDtos = IssueDatabase.queryIssueList(vtid, file);
+                    issueDtos = DatabaseIssue.queryIssueList(vtid, file);
                 }
 
                 String html = SourceCodeUtil.show(file, issueDtos, line);
@@ -64,7 +64,7 @@ public class SourceCodeController {
                     issueDtos = DatabaseFunctionModule.queryIssuesByFile(file);
                 }
                 else {
-                    issueDtos = IssueDatabase.queryIssueList(vtid, file);
+                    issueDtos = DatabaseIssue.queryIssueList(vtid, file);
                 }
 
                 Pair<List<String>, List<IssueDto>> pair = SourceCodeUtil.show1(file, issueDtos);
