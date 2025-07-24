@@ -34,8 +34,10 @@ public class FunctionModuleController {
                 if(object instanceof JSONObject){
                     JSONObject jsonObject = (JSONObject) object;
                     jsonObject.get("params");
+                    map.put("status", "success");
+                    return map;
                 }
-                System.out.println();
+
             }
         }
         return map;
