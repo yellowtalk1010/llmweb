@@ -7,11 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import vision.sast.rules.FunctionModuleDatabase;
 import vision.sast.rules.dto.IssueDto;
+import vision.sast.rules.dto.fm.FunctionModuleInputOutputDto;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController()
 public class FunctionModuleController {
@@ -27,17 +30,28 @@ public class FunctionModuleController {
         System.out.println("函数输入输出:" + JSON.toJSONString(funcModuleRequestDto));
         Map<String, String> map = new HashMap<>();
         map.put("status", "失败");
-        if(funcModuleRequestDto.getIssueId()!=null && StringUtils.isNotBlank(funcModuleRequestDto.getIssueId())){
+        if(funcModuleRequestDto.getIssueId()!=null
+                && StringUtils.isNotBlank(funcModuleRequestDto.getIssueId())
+                && funcModuleRequestDto.getParamValues()!=null
+                && funcModuleRequestDto.getParamValues().stream().filter(e->(e!=null && (e.equals("in") || e.equals("out")))).count() == funcModuleRequestDto.getParamValues().size()){
             IssueDto issueDto = FunctionModuleDatabase.queryIssueDtoById(funcModuleRequestDto.getIssueId());
             if(issueDto!=null){
                 Object object = issueDto.getData();
-                if(object instanceof JSONObject){
-                    JSONObject jsonObject = (JSONObject) object;
-                    jsonObject.get("params");
-                    map.put("status", "success");
-                    return map;
-                }
+                if(object instanceof FunctionModuleInputOutputDto){
+                    FunctionModuleInputOutputDto functionModuleInputOutputDto = (FunctionModuleInputOutputDto) object;
+                    if(functionModuleInputOutputDto.getParams()!=null
+                            && funcModuleRequestDto.getParamValues()!=null
+                            && functionModuleInputOutputDto.getParams().size()==funcModuleRequestDto.getParamValues().size()){
+                        AtomicInteger index = new AtomicInteger(0);
+                        functionModuleInputOutputDto.getParams().stream().forEach(p->{
+                            String val = funcModuleRequestDto.getParamValues().get(index.getAndIncrement());
+                            p.setIn_out(val);
+                        });
 
+                        map.put("status", "success");
+                        return map;
+                    }
+                }
             }
         }
         return map;
