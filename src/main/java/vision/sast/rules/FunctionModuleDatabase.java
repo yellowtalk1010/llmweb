@@ -3,8 +3,8 @@ package vision.sast.rules;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
-import vision.sast.rules.controller.FunctionModuleController;
 import vision.sast.rules.dto.IssueDto;
+import vision.sast.rules.dto.fm.FunctionModuleInputOutputDto;
 
 import java.io.File;
 import java.util.*;
@@ -63,7 +63,8 @@ public class FunctionModuleDatabase {
 
                 IssueDto issueDto = JSONObject.parseObject(JSONObject.toJSONString(map), IssueDto.class);
                 issueDto.setLine(Integer.valueOf(String.valueOf(map.get("line"))));
-                issueDto.setData(map.get("functionModuleInputOutputDto"));
+                FunctionModuleInputOutputDto functionModuleInputOutputDto = JSONObject.parseObject(JSONObject.toJSONString(map.get("functionModuleInputOutputDto")), FunctionModuleInputOutputDto.class);
+                issueDto.setData(functionModuleInputOutputDto);
 
                 functionModuleIssues.add(issueDto);
 
