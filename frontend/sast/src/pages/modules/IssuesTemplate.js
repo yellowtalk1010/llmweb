@@ -77,8 +77,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
 
   //提交函数建模数据
   function handleFunctionModule(event, issueId) {
-    console.info(event)
-    console.info(issueId)
+    console.info("建模id：" + issueId)
 
     const issueDiv = document.getElementById(issueId);
   
@@ -96,9 +95,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
   function renderFunctionModule(issue) {
     return (
       <div key={issue.id} id={issue.id} className="issueDiv">
-        {/* <div>{issue.name}</div> */}
-        <div>{issue.data.funcLine}，函数输入输出</div>
-        <div>{issue.id}</div>
+        <div>{issue.data.funcLine}，函数输入输出，{issue.id}</div>
         <div>
           <table>
             <tr>
