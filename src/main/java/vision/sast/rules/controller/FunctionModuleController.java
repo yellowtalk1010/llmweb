@@ -12,7 +12,7 @@ import java.util.List;
 @RestController()
 public class FunctionModuleController {
 
-    @PostMapping("func_module_path")
+    @PostMapping("handle_func_module")
     public String handle_func_module(String issueId, List<String> paramValues){
         System.out.println("函数输入输出：issueId:" + issueId + ", paramValues:" + JSON.toJSONString(paramValues));
         return "success";
