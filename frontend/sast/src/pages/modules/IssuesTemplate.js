@@ -136,7 +136,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
                   <td>
                     {param.param} 
                     &nbsp;&nbsp;&nbsp;
-                    <select name={index} className="param">
+                    <select name={index} className="param" value={param.in_out}>
                       <option value={null}></option>
                       <option value={"in"}>输入</option>
                       <option value={"out"}>输出</option>
