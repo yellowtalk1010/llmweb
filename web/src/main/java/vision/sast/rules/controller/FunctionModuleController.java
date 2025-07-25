@@ -24,7 +24,7 @@ public class FunctionModuleController {
     }
 
     @PostMapping("handle_func_module")
-    public Map<String, Object> handle_func_module(@RequestBody FuncModuleRequestDto funcModuleRequestDto) {
+    public synchronized Map<String, Object> handle_func_module(@RequestBody FuncModuleRequestDto funcModuleRequestDto) {
         System.out.println("函数输入输出:" + JSON.toJSONString(funcModuleRequestDto));
         Map<String, Object> map = new HashMap<>();
         map.put("status", "失败");
