@@ -374,16 +374,10 @@ public class ConfigController {
             System.out.println("索引路径：" + this.INDEXS);
             System.out.println("函数建模：" + this.FUNCTIONMODULE);
 
-            StringBuilder includes = new StringBuilder();
-            JSONObject jsonObject = JSONObject.parseObject(fileContent);
-            if(jsonObject.get("includeList")!=null && jsonObject.get("includeList") instanceof JSONArray){
-                JSONArray jsonArray = (JSONArray)jsonObject.get("includeList");
-                jsonArray.stream().map(e->e.toString()).forEach(e->{
-                    includes.append(e + "<br>");
-                });
-            }
 
-            String htmlFileContent = fileContent
+            String fileContentJsonStr = JSONObject.toJSONString(JSONObject.parseObject(fileContent), JSONWriter.Feature.PrettyFormat);
+
+            String htmlFileContent = fileContentJsonStr
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
                     .replace("\n", "<br>");
 
@@ -422,10 +416,8 @@ public class ConfigController {
             if(this.measureResultFilePath!=null){
                 html = html.replace("{{{measureResultFilePath}}}", measureResultFilePath);
             }
-
             html = html.replace("{{{INDEXS}}}", INDEXS + "&nbsp;&nbsp;&nbsp;" + new File(INDEXS).exists());
             html = html.replace("{{{htmlFileContent}}}", htmlFileContent);
-            html = html.replace("{{{includes}}}", includes.toString());
 
             return html;
         } catch (Exception e) {
