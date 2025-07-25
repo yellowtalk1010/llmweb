@@ -402,9 +402,6 @@ public class ConfigController {
                         <br>
                         <button  type="submit">查询</button> 
                     </form>
-
-                    <h2>头文件</h2>
-                    {{{includes}}}
                     
                     <h2>配置文件</h2>
                     {{{htmlFileContent}}}
