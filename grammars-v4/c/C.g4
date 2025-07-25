@@ -192,7 +192,7 @@ initDeclaratorList
     ;
 
 initDeclarator
-    : declarator ('=' initializer)?
+    : declarator (('='|'_at_') initializer)?   //添加一个 _at_ 的赋值操作符号
     ;
 
 storageClassSpecifier

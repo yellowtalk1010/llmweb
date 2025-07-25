@@ -1,10 +1,10 @@
 #include <REGX51.H>
 
 // 使用 xdata 定义一个外部 RAM 的全局数组
-//unsigned char xdata buffer[128] _at_ 0x2000;
+unsigned char xdata buffer[128] _at_ 0x2000;
 
 // 定义一个单个位变量，位于 bit 地址 0x20.0（P2.0）
-//bit flag _at_ 0xA0;  // 0xA0 = 0x20 << 3 + 0
+bit flag _at_ 0xA0;  // 0xA0 = 0x20 << 3 + 0
 
 // 使用数据页寄存器 bank1 中断服务程序
 void Timer0_ISR(void) interrupt 1 using 1 {
