@@ -226,7 +226,7 @@ public class ConfigController {
                      + "<a href='/pages/AllRules'>酷洛米</a><br>"
                      + "<a href='mario'>Mario</a><br>"
                      + "<br>"
-                     + "<a href='func_module_path'>塞尔达传说</a>&nbsp;&nbsp;&nbsp;{{{{FUNCTIONMODULE}}}}<br>"
+                     + "<a href='config_func_module_path'>塞尔达传说</a>&nbsp;&nbsp;&nbsp;{{{{FUNCTIONMODULE}}}}<br>"
                      + "<br>"
                      + "<a href='config_systemConstraint_path'>systemConstraint</a>&nbsp;&nbsp;&nbsp;{{{systemConstraintPath}}}<br>"
                      + "<br>"
@@ -251,8 +251,8 @@ public class ConfigController {
 
     }
 
-    @GetMapping("func_module_path")
-    public String func_module_path(){
+    @GetMapping("config_func_module_path")
+    public String config_func_module_path(){
         File file = new File(ConfigController.FUNCTIONMODULE);
         if(!file.exists()){
             return "函数模型路径不存在:" + ConfigController.FUNCTIONMODULE;
