@@ -226,7 +226,7 @@ public class ConfigController {
                      + "<a href='/pages/AllRules'>酷洛米</a><br>"
                      + "<a href='mario'>Mario</a><br>"
                      + "<br>"
-                     + "<a href='func_module_path?path={{{{FUNCTIONMODULE}}}}'>塞尔达传说</a><br>"
+                     + "<a href='func_module_path'>塞尔达传说</a>&nbsp;&nbsp;&nbsp;{{{{FUNCTIONMODULE}}}}<br>"
                      + "<br>"
                      + "<a href='config_systemConstraint_path'>systemConstraint</a>&nbsp;&nbsp;&nbsp;{{{systemConstraintPath}}}<br>"
                      + "<br>"
@@ -237,7 +237,7 @@ public class ConfigController {
                     </html>
                     """;
             if(this.FUNCTIONMODULE!=null){
-                html = html.replace("{{{{FUNCTIONMODULE}}}}", FUNCTIONMODULE);
+                html = html.replace("{{{{FUNCTIONMODULE}}}}", FUNCTIONMODULE + "&nbsp;&nbsp;&nbsp;" + new File(FUNCTIONMODULE).exists());
             }
             if(this.systemConstraintPath!=null){
                 html = html.replace("{{{systemConstraintPath}}}", systemConstraintPath + "&nbsp;&nbsp;&nbsp;" + new File(systemConstraintPath).exists());
