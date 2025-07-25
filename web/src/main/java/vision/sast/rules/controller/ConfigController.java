@@ -149,9 +149,6 @@ public class ConfigController {
         }
         else {
             try {
-
-                DatabaseSYSTEM_CONSTRAINTS_01.init_SYSTEM_CONSTRAINTS_01_Database(systemConstraintPath);
-
                 List<String> list = FileUtils.readLines(file, "UTF-8");
                 StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid="+ DatabaseSYSTEM_CONSTRAINTS_01.VTID+"'>系统约束</a></li>");
 
