@@ -56,44 +56,7 @@ public class FunctionModuleController {
         return map;
     }
 
-    @GetMapping("func_module_path")
-    public String func_module_path(){
-        File file = new File(ConfigController.FUNCTIONMODULE);
-        if(!file.exists()){
-            return "函数模型路径不存在:" + ConfigController.FUNCTIONMODULE;
-        }
-        else {
-            try {
 
-                StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid="+ DatabaseFunctionModule.FunctionModuleVtid+"'>函数建模</a></li>");
-                DatabaseFunctionModule.queryAllFiles().stream().forEach(e->{
-                    stringBuilder.append("<li>"+e+"</li>");
-                });
-
-                String html = """
-                    <!DOCTYPE html>
-                    <html lang="zh-CN">
-                    <head>
-                      <meta charset="UTF-8">
-                      <title>函数模型</title>
-                    </head>
-                    <body>
-                        <ul>
-                            {{{stringBuilder}}}
-                        </ul>
-                    </body>
-                    </html>
-                        """;
-
-                html = html.replace("{{{stringBuilder}}}", stringBuilder.toString());
-
-                return html;
-            }catch (Exception e){
-                return e.getMessage();
-            }
-        }
-
-    }
 
 
 
