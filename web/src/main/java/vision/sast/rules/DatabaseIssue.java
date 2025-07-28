@@ -2,6 +2,7 @@ package vision.sast.rules;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
+import org.springframework.util.Assert;
 import vision.sast.rules.controller.ConfigController;
 import vision.sast.rules.dto.IssueDto;
 import vision.sast.rules.dto.IssueResult;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -81,10 +83,19 @@ public class DatabaseIssue {
     private static Map<String, List<IssueDto>> fileAndVtid_issuesMap = new ConcurrentHashMap<>();
 
 
+    public static void checkLicense(){
+        LocalDate now = LocalDate.now();                   // 当前日期
+        LocalDate target = LocalDate.of(2026, 1, 1);       // 目标日期：2026-01-0
+        Assert.isTrue(!now.isAfter(target), "许可过期");
+    }
+
     /***
      * 初始化 issue 结果数据
      */
     public static void initIssues(String issuePath) {
+
+        checkLicense();
+
         try {
             //清理动态生成的数据
             fileAndVtid_issuesMap.clear();
