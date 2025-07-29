@@ -31,10 +31,9 @@ public class QRCongtroller {
                          <form action="/llm_create_qr" method="post">
                               <input type="radio" name="type" value="1" />path  <br>
                               <input type="radio" name="type" value="2" checked />content <br>
-                              <input type="password" name="pwd" /> <br>
-                              <textarea name="content" rows="5" cols="50"></textarea>
+                              <input type="password" name="pwd" /> <button  type="submit">查询</button> <br>
+                              <textarea name="content" rows="30" cols="200"></textarea>
                               <br>
-                              <button  type="submit">查询</button> 
                          </form>
                     </body>
                     </html>
