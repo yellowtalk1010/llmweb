@@ -140,69 +140,6 @@ public class ConfigController {
     }
 
     /***
-     * 系统约束
-     */
-    @GetMapping("config_systemConstraint_path")
-    public String config_systemConstraint_path(){
-        File file = new File(systemConstraintPath);
-        if(!file.exists()){
-            return file.getAbsolutePath() + "，路径不存在";
-        }
-        else {
-            try {
-                List<String> list = FileUtils.readLines(file, "UTF-8");
-                StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid="+ DatabaseSYSTEM_CONSTRAINTS_01.VTID+"'>系统约束</a></li>");
-
-                Map<String, List<Map<String, String>>> groupedMaps = list.stream().map(line->{
-                    Map<String, String> map = JSON.parseObject(line, Map.class);
-                    map.remove("checkType");
-                    map.remove("defectLevel");
-                    map.remove("defectType");
-                    map.remove("rule");
-                    map.remove("issueDesc");
-                    map.remove("vtId");
-                    map.remove("traces");
-                    return map;
-                }).collect(Collectors.groupingBy(m->m.get("filePath")));
-
-                groupedMaps.entrySet().stream().forEach(entry->{
-                    String filePath = entry.getKey();
-                    stringBuilder.append("<li><font color='red'>"+filePath+"</font></li>");
-                    List<Map<String, String>> values = entry.getValue().stream().sorted(Comparator.comparing(m->Integer.valueOf(String.valueOf(m.get("line"))))).collect(Collectors.toList());
-                    values.stream().forEach(v->{
-                        String line = String.valueOf(v.get("line"));
-                        String ruleDesc = v.get("ruleDesc");
-                        String name = v.get("name");
-                        stringBuilder.append("<li>"+line + "行，" + name + "，" + ruleDesc +"</li>");
-                    });
-
-                });
-
-                String html = """
-                    <!DOCTYPE html>
-                    <html lang="zh-CN">
-                    <head>
-                      <meta charset="UTF-8">
-                      <title>系统约束</title>
-                    </head>
-                    <body>
-                        <ul>
-                            {{{stringBuilder}}}
-                        </ul>
-                    </body>
-                    </html>
-                        """;
-                html = html.replace("{{{stringBuilder}}}", stringBuilder.toString());
-                return html;
-//                return file.getAbsolutePath();
-            }catch (Exception e) {
-                e.printStackTrace();
-                return e.getMessage();
-            }
-        }
-    }
-
-    /***
      * 结果路径
      */
     @GetMapping("config_issue_path")
@@ -229,8 +166,6 @@ public class ConfigController {
                      + "<br>"
                      + "<a href='config_func_module_path'>塞尔达传说</a>&nbsp;&nbsp;&nbsp;{{{{FUNCTIONMODULE}}}}<br>"
                      + "<br>"
-                     + "<a href='config_systemConstraint_path'>systemConstraint</a>&nbsp;&nbsp;&nbsp;{{{systemConstraintPath}}}<br>"
-                     + "<br>"
                      + "<a href='llm_qr'>switch2</a><br>"
                      +
                     """
@@ -240,9 +175,7 @@ public class ConfigController {
             if(this.FUNCTIONMODULE!=null){
                 html = html.replace("{{{{FUNCTIONMODULE}}}}", FUNCTIONMODULE + "&nbsp;&nbsp;&nbsp;" + new File(FUNCTIONMODULE).exists());
             }
-            if(this.systemConstraintPath!=null){
-                html = html.replace("{{{systemConstraintPath}}}", systemConstraintPath + "&nbsp;&nbsp;&nbsp;" + new File(systemConstraintPath).exists());
-            }
+
             return html;
         } catch (Exception e) {
             e.printStackTrace();

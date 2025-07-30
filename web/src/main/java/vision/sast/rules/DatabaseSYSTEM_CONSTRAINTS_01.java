@@ -10,7 +10,7 @@ import java.util.*;
 
 public class DatabaseSYSTEM_CONSTRAINTS_01 {
 
-    public static final String VTID = "SYSTEM_CONSTRAINTS_01";
+
     private static List<IssueDto> SYSTEM_CONSTRAINTS_01_Issues = new ArrayList<>();
     private static  List<String> files = new ArrayList<>();
 
