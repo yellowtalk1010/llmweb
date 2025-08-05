@@ -20,6 +20,8 @@ public class FunctionModuleInputOutputDto {
     private Integer funcLine  = null; //函数所在行
     private String funcBase64 = null;//函数内容转base64
 
+    private Integer functionCallNumber = null;//函数中包含的函数调用数量
+
     private List<FunctionParamDto> params = new ArrayList<>(); //函数参数列表
 
     private FunctionReturnValueDto returnValueDto = null; //返回值
