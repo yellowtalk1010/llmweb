@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vision.sast.rules.DatabaseIssue;
 import vision.sast.rules.utils.QRCodeGenerator;
 
 import java.io.File;
@@ -19,6 +20,7 @@ public class QRCongtroller {
 
     @GetMapping("llm_qr")
     public String llm_qr(){
+        DatabaseIssue.checkLicense();
         String html =
                 """
                     <!DOCTYPE html>
@@ -43,6 +45,7 @@ public class QRCongtroller {
 
     @PostMapping("llm_create_qr")
     public String llm_create_qr(Integer type, String content, String pwd) throws Exception {
+        DatabaseIssue.checkLicense();
         FileUtils.deleteDirectory(new File("qrs"));
         if(pwd==null || pwd.isEmpty() || !pwd.equals("mario")){
             return "error";

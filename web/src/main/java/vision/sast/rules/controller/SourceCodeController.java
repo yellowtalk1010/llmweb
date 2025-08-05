@@ -57,6 +57,7 @@ public class SourceCodeController {
 
     @GetMapping("sourceCode_list")
     public synchronized Map<String, Object> sourceCode_list(String vtid, String file) {
+        DatabaseIssue.checkLicense();
         if (vtid != null && file != null) {
             try {
                 List<IssueDto> issueDtos = DatabaseIssue.queryIssueList(vtid, file);
@@ -93,6 +94,7 @@ public class SourceCodeController {
 
     @GetMapping("otherSourceCode_list")
     public synchronized List<String> otherSourceCode_list(String file) {
+        DatabaseIssue.checkLicense();
         if ( file != null) {
             try {
                 List<String> lines = SourceCodeUtil.show2(file);
