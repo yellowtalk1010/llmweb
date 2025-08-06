@@ -14,6 +14,9 @@ const Run = () => (
       <form>
         <div>
           <div>
+            <button>运行</button>
+          </div>
+          <div>
             <span>命令:</span>
           </div>
           <input type='text'></input>
@@ -23,9 +26,6 @@ const Run = () => (
             <span>参数:</span>
           </div>
           <textarea></textarea>
-        </div>
-        <div>
-          <button>运行</button>
         </div>
       </form>
     </TabPanel>
