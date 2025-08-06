@@ -4,13 +4,30 @@ import 'react-tabs/style/react-tabs.css';
 const Run = () => (
   <Tabs>
     <TabList>
-      <Tab>Tab 1</Tab>
-      <Tab>Tab 2</Tab>
-      <Tab>Tab 3</Tab>
+      <Tab>run</Tab>
+      <Tab>log</Tab>
+      <Tab>error</Tab>
     </TabList>
 
     <TabPanel>
-      <h2>Tab 1 内容</h2>
+      
+      <form>
+        <div>
+          <div>
+            <span>命令:</span>
+          </div>
+          <input type='text'></input>
+        </div>
+        <div>
+          <div>
+            <span>参数:</span>
+          </div>
+          <textarea></textarea>
+        </div>
+        <div>
+          <button>运行</button>
+        </div>
+      </form>
     </TabPanel>
     <TabPanel>
       <h2>Tab 2 内容</h2>
