@@ -167,6 +167,8 @@ public class ConfigController {
                      + "<a href='config_func_module_path'>塞尔达传说</a>&nbsp;&nbsp;&nbsp;{{{{FUNCTIONMODULE}}}}<br>"
                      + "<br>"
                      + "<a href='llm_qr'>switch2</a><br>"
+                     + "<br>"
+                     + "<a href='/pages/Run'>PS5</a><br>"
                      +
                     """
                     </body>
