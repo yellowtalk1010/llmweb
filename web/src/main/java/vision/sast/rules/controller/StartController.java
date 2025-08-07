@@ -57,7 +57,8 @@ public class StartController {
                 public void run() {
                     try {
                         IS_RUNNING = true;
-                        runProcess(runCommandDto.getCommand());
+                        int exitCode = runProcess(runCommandDto.getCommand());
+                        System.out.println("exitCode:" + exitCode);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }
