@@ -1,8 +1,11 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
+
+import RunTemplate from "./modules/RunTemplate";
+
 function Run() {
-  
+
   return (
     <>
       <Tabs>
@@ -14,23 +17,7 @@ function Run() {
 
         <TabPanel>
           
-          <form>
-            <div>
-              <div>
-                <button>运行</button>
-              </div>
-              <div>
-                <span>命令:</span>
-              </div>
-              <input type='text'></input>
-            </div>
-            <div>
-              <div>
-                <span>参数:</span>
-              </div>
-              <textarea></textarea>
-            </div>
-          </form>
+          <RunTemplate></RunTemplate>
         </TabPanel>
         <TabPanel>
           <h2>Tab 2 内容</h2>
@@ -44,3 +31,5 @@ function Run() {
 }
 
 export default Run;
+
+
