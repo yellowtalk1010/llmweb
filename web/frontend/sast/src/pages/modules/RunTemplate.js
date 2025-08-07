@@ -2,11 +2,38 @@ import {Fragment, useState, useEffect } from "react"
 
 import RunLogTemplate from "./RunLogTemplate";
 
+/***
+ * 运行模版
+ */
 function RunTemplate() {
 
+    const [configOptions, setConfigOptions] = useState([]);
+    useEffect(() => {
+        // 从后端获取配置类型
+        const fetchConfigTypes = async () => {
+            try {
+                const response = await fetch('/command_list', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+                const data = await response.json();
+                setConfigOptions(data);
+            } catch (error) {
+                console.error('获取配置类型失败:', error);
+            } finally {
+                
+            }
+        };
+
+        fetchConfigTypes();
+    }, []);
+
+
+
     const [formData, setFormData] = useState({
-        command: 'java -jar D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/visionSAST.jar -config D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/workspace1/CJ2000A/project.json',
-        // command: '',
+        command: '',
         configType: '',
         fileContent: ''
     });
@@ -60,13 +87,23 @@ function RunTemplate() {
 
 
     const handleChange = (e) => {
-        console.info("change")
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
     };
+    
+    const handleSelect = (e) => {
+        const selectVal =  e.target.value
+        console.info(selectVal)
+
+        setFormData(prev => ({
+            ...prev,
+            "command": selectVal   //将选择的命令，直接写入
+        }));
+        
+    }
 
 
     return (
@@ -98,14 +135,19 @@ function RunTemplate() {
                         <div><span>配置文件:</span></div>
                         <select id="configType"
                             name="configType"
-                            value={formData.configType}
-                            onChange={handleChange}
+                            onChange={handleSelect}
                             >
-                            <option value="">-- 请选择 --</option>
-                            <option value="execute">执行</option>
-                            <option value="validate">验证</option>
-                            <option value="test">测试</option>
-                            <option value="debug">调试</option>
+                                <option value="">--</option>
+                            {
+                                Array.of(configOptions.commands).map(option=>{
+                                    console.info(option)
+                                    return (
+                                        <option value={option}>
+                                            {option}
+                                        </option>
+                                    );
+                                })
+                            }
                         </select>
                     </div>
 
