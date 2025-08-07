@@ -88,7 +88,7 @@ public class StartController {
 
 
     private static int runProcess(String command) throws Exception {
-        List<String> ls = Arrays.stream(command.split(" ")).toList();
+        List<String> ls = Arrays.stream(command.split(" ")).filter(e->StringUtils.isNotEmpty(e)).toList();
         ProcessBuilder processBuilder = new ProcessBuilder(ls);
 
         processBuilder.redirectErrorStream(false);
