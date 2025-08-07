@@ -1,8 +1,9 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-
 import RunTemplate from "./modules/RunTemplate";
+import RunLogTemplate from './modules/RunLogTemplate';
+import RunErrorTemplate from './modules/RunErrorTemplate';
 
 function Run() {
 
@@ -20,10 +21,10 @@ function Run() {
           <RunTemplate></RunTemplate>
         </TabPanel>
         <TabPanel>
-          <h2>Tab 2 内容</h2>
+          <RunLogTemplate></RunLogTemplate>
         </TabPanel>
         <TabPanel>
-          <h2>Tab 3 内容</h2>
+          <RunErrorTemplate></RunErrorTemplate>
         </TabPanel>
       </Tabs>
     </>
