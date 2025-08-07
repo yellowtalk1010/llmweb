@@ -70,7 +70,7 @@ function RunLogTemplate() {
         </TabList>
 
         <TabPanel>
-          <div style={{ padding: '20px', minWidth: '800px', width: '100%', margin: '0 auto' }}>
+          <div style={{ padding: '20px', minWidth: '800px', width: '90%', margin: '0 auto' }}>
 
             <div id="log-container" style={{
               height: '500px',
@@ -96,7 +96,7 @@ function RunLogTemplate() {
           </div>
         </TabPanel>
         <TabPanel>
-           <div style={{ padding: '20px', minWidth: '800px', width: '100%', margin: '0 auto' }}>
+           <div style={{ padding: '20px', minWidth: '800px', width: '90%', margin: '0 auto' }}>
 
             <div id="log-container" style={{
               height: '500px',

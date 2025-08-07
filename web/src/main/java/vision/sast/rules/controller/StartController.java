@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import vision.sast.rules.webSocket.LogSocketHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,14 +52,16 @@ public class StartController {
 //        }
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
 
+        LogSocketHandler.pushMessage("日志：" + UUID.randomUUID().toString(), "log");
+
         if(!IS_RUNNING){
             EXECUTOR_SERVICE.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         IS_RUNNING = true;
-                        int exitCode = runProcess(runCommandDto.getCommand());
-                        System.out.println("exitCode:" + exitCode);
+//                        int exitCode = runProcess(runCommandDto.getCommand());
+//                        System.out.println("exitCode:" + exitCode);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }

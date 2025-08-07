@@ -26,6 +26,7 @@ public class LogSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         System.out.println("日志连接建立：" + session.getId());
+        sessionMap.put(session.getId(), session);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class LogSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("连接关闭：" + session.getId());
+        System.out.println("日志连接关闭：" + session.getId());
         try {
             if(sessionMap.get(session.getId()).isOpen()){
                 sessionMap.get(session.getId()).close();
