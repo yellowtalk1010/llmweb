@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { data } from "react-router-dom";
 
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -74,11 +75,16 @@ function RunLogTemplate() {
 
             <div id="log-container" className={"log"}>
               {logs.length > 0 ? (
-                logs.map((log, index) => (
-                  <div key={index} style={{ marginBottom: '4px' }}>
-                    {log}
-                  </div>
-                ))
+                logs.map(log=>JSON.parse(log))
+                  .filter(data=>data.type=="info")
+                  .map((data, index) => {
+                    console.info(data)
+                    return (
+                    <div key={index} style={{ marginBottom: '4px'}}>
+                      {data.log}
+                    </div>
+                  );
+                  })
               ) : (
                 <div>等待日志数据...</div>
               )}
@@ -90,11 +96,16 @@ function RunLogTemplate() {
 
             <div id="log-container" className={"log"}>
               {logs.length > 0 ? (
-                logs.map((log, index) => (
-                  <div key={index} style={{ marginBottom: '4px' }}>
-                    {log}
+                logs.map(log=>JSON.parse(log))
+                .filter(data=>data.type=="error")
+                .map((data, index) => {
+                  console.info(data)
+                  return (
+                  <div key={index} style={{ marginBottom: '4px', color: 'red' }}>
+                    {data.log}
                   </div>
-                ))
+                );
+                })
               ) : (
                 <div>等待错误数据...</div>
               )}

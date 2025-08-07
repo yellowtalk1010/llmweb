@@ -52,7 +52,7 @@ public class StartController {
 //        }
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
 
-        LogSocketHandler.pushMessage("日志：" + UUID.randomUUID().toString(), "log");
+        LogSocketHandler.pushMessage("日志：" + UUID.randomUUID().toString(), "info");
 
         if(!IS_RUNNING){
             EXECUTOR_SERVICE.execute(new Runnable() {
