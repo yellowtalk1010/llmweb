@@ -139,14 +139,18 @@ function RunTemplate() {
                             >
                                 <option value="">--</option>
                             {
-                                Array.of(configOptions.commands).map(option=>{
-                                    console.info(option)
-                                    return (
-                                        <option value={option}>
-                                            {option}
-                                        </option>
-                                    );
-                                })
+                                
+                                configOptions.commands
+                                ?
+                                    configOptions.commands.map((option, index)=>{
+                                        return (
+                                            <option value={option}>
+                                                {option}
+                                            </option>
+                                        );
+                                    })
+                                :
+                                <></>
                             }
                         </select>
                     </div>
