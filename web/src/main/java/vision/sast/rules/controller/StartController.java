@@ -21,26 +21,16 @@ import java.util.concurrent.Executors;
 @RestController
 public class StartController {
 
-    private static final List<String> COMMAND_LIST = new ArrayList<>(); //记录运行成功的命令
+    private static final Set<String> COMMAND_SET = new HashSet<>(); //记录运行成功的命令
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static Boolean IS_RUNNING = false;
-
-//    @GetMapping("start")
-//    public String start(String token) {
-//        if(token==null || token.isEmpty() || !token.equals(MarioController.RUN_TOKEN)){
-//            return "启动启动启动，马力欧.奥德赛";
-//        }
-//        else {
-//            return "o_o";
-//        }
-//    }
 
     @GetMapping("command_list")
     public synchronized Map<String, Object> command_list(){
         Map<String, Object> map = new HashMap<>();
-        List<String> list = new ArrayList<>();
-        list.add("java -jar D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/visionSAST.jar -config D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/workspace1/CJ2000A/project.json");
-        map.put("commands", list);
+//        List<String> list = new ArrayList<>();
+//        list.add("java -jar D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/visionSAST.jar -config D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/workspace1/CJ2000A/project.json");
+        map.put("commands", COMMAND_SET);
         return map;
     }
 
@@ -59,6 +49,7 @@ public class StartController {
 //            Arrays.stream(runCommandDto.getCommand().split(" ")).forEach(s->stringBuilder.append(s + " "));
 //        }
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
+        COMMAND_SET.add(runCommandDto.getCommand());
 
         if(!IS_RUNNING){
             EXECUTOR_SERVICE.execute(new Runnable() {
