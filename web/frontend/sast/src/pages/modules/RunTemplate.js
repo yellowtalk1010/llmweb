@@ -155,7 +155,7 @@ function RunTemplate() {
                     
 
                     <div>
-                        <div><span>配置文件:</span></div>
+                        <div><span>历史:</span></div>
                         <select id="configType"
                             name="configType"
                             onChange={handleSelect}
