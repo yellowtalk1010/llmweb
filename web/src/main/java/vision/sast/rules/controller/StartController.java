@@ -24,6 +24,7 @@ public class StartController {
     private static final Set<String> COMMAND_SET = new HashSet<>(); //记录运行成功的命令
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static Boolean IS_RUNNING = false;
+    private static String FORMAT = "GBK";
 
     @GetMapping("command_list")
     public synchronized Map<String, Object> command_list(){
@@ -40,7 +41,16 @@ public class StartController {
         private String command;
     }
 
-
+    @GetMapping("command_format")
+    public synchronized Map<String, Object> command_format(String format){
+        System.out.println("format:" + format);
+        if(StringUtils.isNotEmpty(format)){
+            FORMAT = format;
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("format", FORMAT);
+        return map;
+    }
 
     @PostMapping("run_command")
     public synchronized Map<String, String> runCommand(@RequestBody RunCommandDto runCommandDto) {
@@ -49,7 +59,9 @@ public class StartController {
 //            Arrays.stream(runCommandDto.getCommand().split(" ")).forEach(s->stringBuilder.append(s + " "));
 //        }
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
-        COMMAND_SET.add(runCommandDto.getCommand());
+        if(StringUtils.isNotEmpty(runCommandDto.getCommand())){
+            COMMAND_SET.add(runCommandDto.getCommand());
+        }
 
         if(!IS_RUNNING){
             EXECUTOR_SERVICE.execute(new Runnable() {
@@ -89,7 +101,7 @@ public class StartController {
 
         Thread outputThread = new Thread(() -> {
             try (InputStream inputStream = process.getInputStream();
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "GBK"))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, FORMAT))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println("日志：" + line);
@@ -103,7 +115,7 @@ public class StartController {
 
         Thread errorThread = new Thread(() -> {
             try (InputStream errorStream = process.getErrorStream();
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, "UTF-8"))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, FORMAT))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     //System.out.println("错误日志：" + line);
