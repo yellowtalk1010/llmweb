@@ -52,16 +52,14 @@ public class StartController {
 //        }
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
 
-        LogSocketHandler.pushMessage("日志：" + UUID.randomUUID().toString(), "info");
-
         if(!IS_RUNNING){
             EXECUTOR_SERVICE.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         IS_RUNNING = true;
-//                        int exitCode = runProcess(runCommandDto.getCommand());
-//                        System.out.println("exitCode:" + exitCode);
+                        int exitCode = runProcess(runCommandDto.getCommand());
+                        System.out.println("exitCode:" + exitCode);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -92,11 +90,12 @@ public class StartController {
 
         Thread outputThread = new Thread(() -> {
             try (InputStream inputStream = process.getInputStream();
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "GBK"))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println("日志：" + line);
                     outputBuilder.append(line).append("\n");
+                    LogSocketHandler.pushMessage(line, "info");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -105,11 +104,12 @@ public class StartController {
 
         Thread errorThread = new Thread(() -> {
             try (InputStream errorStream = process.getErrorStream();
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, "UTF-8"))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println("错误日志：" + line);
+                    //System.out.println("错误日志：" + line);
                     errorBuilder.append(line).append("\n");
+                    LogSocketHandler.pushMessage(line, "error");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
