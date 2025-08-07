@@ -3,31 +3,108 @@ import {Fragment, useState, useEffect } from "react"
 
 function RunTemplate() {
 
+    const [formData, setFormData] = useState({
+        // command: 'java -jar D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/visionSAST.jar -config D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/workspace1/CJ2000A/project.json',
+        command: '',
+        configType: '',
+        fileContent: ''
+    });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const runCammand = async (e) => {
+        e.preventDefault();
+        console.info("running")
+    
+        if (!formData.command.trim()) {
+            //setSubmitStatus({ message: '命令不能为空', isError: true });
+            //return;
+        }
+        if (!formData.configType) {
+            //setSubmitStatus({ message: '请选择配置类型', isError: true });
+            //return;
+        }
+
+        setIsSubmitting(true);
+    
+
+        try {
+            const response = await fetch('/opt/run', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            //setSubmitStatus({ message: '命令提交成功！', isError: false });
+            console.log('Success:', result);
+        } 
+        catch (error) {
+            console.error('Error:', error);
+            //   setSubmitStatus({ 
+            //     message: `提交失败: ${error.message || '服务器错误'}`,
+            //     isError: true 
+            //   });
+        } 
+        finally {
+            setIsSubmitting(false);
+        }
+    };
+
+
+    const handleChange = (e) => {
+        console.info("change")
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+
     return (
         <>
              
-                <form>
+                <form  >
                     <div>
-                        <button>运行</button>
+                        <button 
+                            onClick={runCammand}
+                            disabled={isSubmitting} 
+                            >
+                            {isSubmitting ? '提交中...' : '运行'}
+                        </button>
                     </div>
                     <div>
                         <div>
                             <span>命令:</span>
                         </div>
-                        <input type='text'></input>
+                        <input type='text' 
+                        id="command" 
+                        name="command" 
+                        value={formData.command}
+                        onChange={handleChange}
+                        ></input>
                     </div>
                     
 
                     <div>
-                        <div>
-                        <span>配置文件:</span>
-                        </div>
-                        <select>
-                        <option value="">-- 请选择 --</option>
-                        <option value="execute">执行</option>
-                        <option value="validate">验证</option>
-                        <option value="test">测试</option>
-                        <option value="debug">调试</option>
+                        <div><span>配置文件:</span></div>
+                        <select id="configType"
+                            name="configType"
+                            value={formData.configType}
+                            onChange={handleChange}
+                            >
+                            <option value="">-- 请选择 --</option>
+                            <option value="execute">执行</option>
+                            <option value="validate">验证</option>
+                            <option value="test">测试</option>
+                            <option value="debug">调试</option>
                         </select>
                     </div>
 
@@ -35,7 +112,10 @@ function RunTemplate() {
                         <div>
                             <span>文件内容:</span>
                         </div>
-                        <textarea></textarea>
+                        <textarea name="fileContent" 
+                            value={formData.fileContent}
+                            onChange={handleChange}>
+                        </textarea>
                     </div>
                 </form>
             
