@@ -22,7 +22,7 @@ public class StartController {
 
     private static final List<String> COMMAND_LIST = new ArrayList<>(); //记录运行成功的命令
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
-    private static final Boolean IS_RUNNING = false;
+    private static Boolean IS_RUNNING = false;
 
     @GetMapping("start")
     public String start(String token) {
@@ -51,21 +51,32 @@ public class StartController {
 //        }
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
 
-        EXECUTOR_SERVICE.execute(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
+        if(!IS_RUNNING){
+            EXECUTOR_SERVICE.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        IS_RUNNING = true;
+                        runProcess(runCommandDto.getCommand());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    finally {
+                        IS_RUNNING = false;
+                    }
+                }
+            });
+        }
 
         Map<String, String> map = new HashMap<>();
+        map.put("isRunning", "1");
         return map;
     }
 
 
     private static int runProcess(String command) throws Exception {
-
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        List<String> ls = Arrays.stream(command.split(" ")).toList();
+        ProcessBuilder processBuilder = new ProcessBuilder(ls);
 
         processBuilder.redirectErrorStream(false);
 
@@ -80,6 +91,7 @@ public class StartController {
                  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    System.out.println("日志：" + line);
                     outputBuilder.append(line).append("\n");
                 }
             } catch (IOException e) {
@@ -92,6 +104,7 @@ public class StartController {
                  BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    System.out.println("错误日志：" + line);
                     errorBuilder.append(line).append("\n");
                 }
             } catch (IOException e) {
