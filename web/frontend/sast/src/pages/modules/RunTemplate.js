@@ -29,7 +29,7 @@ function RunTemplate() {
     
 
         try {
-            const response = await fetch('/opt/run', {
+            const response = await fetch('/run_command', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
