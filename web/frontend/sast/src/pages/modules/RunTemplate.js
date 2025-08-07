@@ -5,28 +5,45 @@ function RunTemplate() {
 
     return (
         <>
-            <form>
-                <div>
-                <div>
-                    <button>运行</button>
-                </div>
-                <div>
-                    <span>命令:</span>
-                </div>
-                <input type='text'></input>
-                </div>
-                <div>
-                <div>
-                    <span>参数:</span>
-                </div>
-                <textarea></textarea>
-                </div>
-            </form>
+             
+                <form>
+                    <div>
+                        <button>运行</button>
+                    </div>
+                    <div>
+                        <div>
+                            <span>命令:</span>
+                        </div>
+                        <input type='text'></input>
+                    </div>
+                    
+
+                    <div>
+                        <div>
+                        <span>配置文件:</span>
+                        </div>
+                        <select>
+                        <option value="">-- 请选择 --</option>
+                        <option value="execute">执行</option>
+                        <option value="validate">验证</option>
+                        <option value="test">测试</option>
+                        <option value="debug">调试</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div>
+                            <span>文件内容:</span>
+                        </div>
+                        <textarea></textarea>
+                    </div>
+                </form>
+            
             <style>
                 {`
                     form {
                         font-family: Arial, sans-serif;
-                        max-width: 800px;
+                        width: 90%;
                         margin: 20px auto;
                         padding: 20px;
                         border: 1px solid #ddd;
@@ -38,7 +55,7 @@ function RunTemplate() {
                         margin-bottom: 20px;
                     }
                     
-                    input[type='text'] {
+                    input[type='text'], select {
                         width: 100%;
                         padding: 10px;
                         margin-top: 5px;
@@ -50,8 +67,8 @@ function RunTemplate() {
                     
                     textarea {
                         width: 100%;
-                        height: 300px; /* Approximately 100 lines */
-                        min-height: 300px;
+                        height: 600px; /* Approximately 100 lines */
+                        min-height: 600px;
                         padding: 10px;
                         margin-top: 5px;
                         border: 1px solid #ccc;
