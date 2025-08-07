@@ -8,26 +8,27 @@ import RunErrorTemplate from './modules/RunErrorTemplate';
 function Run() {
 
   return (
-    <>
-      <Tabs>
-        <TabList>
-          <Tab>run</Tab>
-          <Tab>log</Tab>
-          <Tab>error</Tab>
-        </TabList>
+    <RunTemplate></RunTemplate>
+    // <>
+    //   <Tabs>
+    //     <TabList>
+    //       <Tab>run</Tab>
+    //       <Tab>log</Tab>
+    //       <Tab>error</Tab>
+    //     </TabList>
 
-        <TabPanel>
+    //     <TabPanel>
           
-          <RunTemplate></RunTemplate>
-        </TabPanel>
-        <TabPanel>
-          <RunLogTemplate></RunLogTemplate>
-        </TabPanel>
-        <TabPanel>
-          <RunErrorTemplate></RunErrorTemplate>
-        </TabPanel>
-      </Tabs>
-    </>
+    //       <RunTemplate></RunTemplate>
+    //     </TabPanel>
+    //     <TabPanel>
+    //       <RunLogTemplate></RunLogTemplate>
+    //     </TabPanel>
+    //     <TabPanel>
+    //       <RunErrorTemplate></RunErrorTemplate>
+    //     </TabPanel>
+    //   </Tabs>
+    // </>
   );
 }
 

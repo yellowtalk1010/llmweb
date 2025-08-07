@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 
+
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 function RunLogTemplate() {
   const [logs, setLogs] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -7,7 +11,7 @@ function RunLogTemplate() {
 
   useEffect(() => {
     // 创建 WebSocket 连接
-    const ws = new WebSocket("ws://localhost:8080/ws");
+    const ws = new WebSocket("ws://localhost:8080/log");
     setSocket(ws);
 
     ws.addEventListener('open', () => {
@@ -48,38 +52,82 @@ function RunLogTemplate() {
   }, [logs]);
 
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h2>实时日志</h2>
-      <div style={{ 
-        marginBottom: '10px',
-        color: isConnected ? 'green' : 'red',
-        fontWeight: 'bold'
-      }}>
-        连接状态: {isConnected ? '已连接' : '未连接'}
-      </div>
-      
-      <div id="log-container" style={{
-        height: '500px',
-        overflowY: 'auto',
-        backgroundColor: '#1e1e1e',
-        color: '#d4d4d4',
-        padding: '10px',
-        borderRadius: '4px',
-        fontFamily: 'monospace',
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-all'
-      }}>
-        {logs.length > 0 ? (
-          logs.map((log, index) => (
-            <div key={index} style={{ marginBottom: '4px' }}>
-              {log}
+    <>
+      <div>
+        <h2>实时日志</h2>
+            <div style={{ 
+              marginBottom: '10px',
+              color: isConnected ? 'green' : 'red',
+              fontWeight: 'bold'
+            }}>
+              连接状态: {isConnected ? '已连接' : '未连接'}
             </div>
-          ))
-        ) : (
-          <div>等待日志数据...</div>
-        )}
       </div>
-    </div>
+      <Tabs>
+        <TabList>
+            <Tab>log</Tab>
+            <Tab>error</Tab>
+        </TabList>
+
+        <TabPanel>
+          <div style={{ padding: '20px', minWidth: '800px', width: '100%', margin: '0 auto' }}>
+
+            <div id="log-container" style={{
+              height: '500px',
+              overflowY: 'auto',
+              backgroundColor: '#1e1e1e',
+              color: '#d4d4d4',
+              padding: '10px',
+              borderRadius: '4px',
+              fontFamily: 'monospace',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-all'
+            }}>
+              {logs.length > 0 ? (
+                logs.map((log, index) => (
+                  <div key={index} style={{ marginBottom: '4px' }}>
+                    {log}
+                  </div>
+                ))
+              ) : (
+                <div>等待日志数据...</div>
+              )}
+            </div>
+          </div>
+        </TabPanel>
+        <TabPanel>
+           <div style={{ padding: '20px', minWidth: '800px', width: '100%', margin: '0 auto' }}>
+
+            <div id="log-container" style={{
+              height: '500px',
+              overflowY: 'auto',
+              backgroundColor: '#1e1e1e',
+              color: '#d4d4d4',
+              padding: '10px',
+              borderRadius: '4px',
+              fontFamily: 'monospace',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-all'
+            }}>
+              {logs.length > 0 ? (
+                logs.map((log, index) => (
+                  <div key={index} style={{ marginBottom: '4px' }}>
+                    {log}
+                  </div>
+                ))
+              ) : (
+                <div>等待错误数据...</div>
+              )}
+            </div>
+          </div>   
+        </TabPanel>
+      </Tabs>
+
+    </>
+
+    
+
+    
   );
 }
 

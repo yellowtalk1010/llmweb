@@ -1,5 +1,6 @@
 import {Fragment, useState, useEffect } from "react"
 
+import RunLogTemplate from "./RunLogTemplate";
 
 function RunTemplate() {
 
@@ -108,15 +109,9 @@ function RunTemplate() {
                         </select>
                     </div>
 
-                    <div>
-                        <div>
-                            <span>文件内容:</span>
-                        </div>
-                        <textarea name="fileContent" 
-                            value={formData.fileContent}
-                            onChange={handleChange}>
-                        </textarea>
-                    </div>
+
+                    <RunLogTemplate></RunLogTemplate>
+
                 </form>
             
             <style>
