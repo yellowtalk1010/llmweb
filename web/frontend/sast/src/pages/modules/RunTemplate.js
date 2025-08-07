@@ -4,8 +4,8 @@ import {Fragment, useState, useEffect } from "react"
 function RunTemplate() {
 
     const [formData, setFormData] = useState({
-        // command: 'java -jar D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/visionSAST.jar -config D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/workspace1/CJ2000A/project.json',
-        command: '',
+        command: 'java -jar D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/visionSAST.jar -config D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/workspace1/CJ2000A/project.json',
+        // command: '',
         configType: '',
         fileContent: ''
     });
