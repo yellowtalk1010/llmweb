@@ -39,6 +39,7 @@ public class StartController {
     @Data
     public static class RunCommandDto {
         private String command;
+        private String format;
     }
 
     @GetMapping("command_format")
@@ -61,6 +62,9 @@ public class StartController {
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
         if(StringUtils.isNotEmpty(runCommandDto.getCommand())){
             COMMAND_SET.add(runCommandDto.getCommand());
+        }
+        if(StringUtils.isNotEmpty(runCommandDto.getFormat())){
+            FORMAT = runCommandDto.getFormat();
         }
 
         if(!IS_RUNNING){
