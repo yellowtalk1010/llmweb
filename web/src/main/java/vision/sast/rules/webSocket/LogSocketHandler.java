@@ -22,11 +22,13 @@ public class LogSocketHandler extends TextWebSocketHandler {
 
     //记录websocket的id与WebSockerSession关系
     public static Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
+    public static WebSocketSession webSocketSession = null;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         System.out.println("日志连接建立：" + session.getId());
         sessionMap.put(session.getId(), session);
+        webSocketSession = session;
     }
 
     @Override
@@ -72,6 +74,7 @@ public class LogSocketHandler extends TextWebSocketHandler {
         finally {
             //从记录中移除
             sessionMap.remove(session.getId());
+            webSocketSession = null;
         }
     }
 
@@ -80,15 +83,15 @@ public class LogSocketHandler extends TextWebSocketHandler {
      */
     public static void pushMessage(String log, String type){
         try {
-            if(LogSocketHandler.sessionMap.values().stream().toList().size() > 0){
-                WebSocketSession webSocketSession = LogSocketHandler.sessionMap.values().stream().toList().get(0);
+
+
                 if (webSocketSession!=null && webSocketSession.isOpen()) {
                     Map<String, String> map = new HashMap<>();
                     map.put("log", log);
                     map.put("type", type);
                     webSocketSession.sendMessage(new TextMessage(JSON.toJSONString(map)));
                 }
-            }
+
         }
         catch (Exception e){
             e.printStackTrace();
