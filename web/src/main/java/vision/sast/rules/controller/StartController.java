@@ -9,12 +9,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 public class StartController {
 
     private static final List<String> COMMAND_LIST = new ArrayList<>(); //记录运行成功的命令
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+    private static final Boolean IS_RUNNING = false;
 
     @GetMapping("start")
     public String start(String token) {
@@ -36,14 +44,72 @@ public class StartController {
 
 
     @PostMapping("run_command")
-    public Map<String, String> runCommand(@RequestBody RunCommandDto runCommandDto) {
+    public synchronized Map<String, String> runCommand(@RequestBody RunCommandDto runCommandDto) {
 //        if(StringUtils.isNotBlank(runCommandDto.getCommand())){
 //            StringBuilder stringBuilder = new StringBuilder();
 //            Arrays.stream(runCommandDto.getCommand().split(" ")).forEach(s->stringBuilder.append(s + " "));
 //        }
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
+
+        EXECUTOR_SERVICE.execute(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+
         Map<String, String> map = new HashMap<>();
         return map;
+    }
+
+
+    private static int runProcess(String command) throws Exception {
+
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+
+        processBuilder.redirectErrorStream(false);
+
+        Process process = processBuilder.start();
+
+        // 使用多线程同时读取输出流和错误流，避免阻塞
+        StringBuilder outputBuilder = new StringBuilder();
+        StringBuilder errorBuilder = new StringBuilder();
+
+        Thread outputThread = new Thread(() -> {
+            try (InputStream inputStream = process.getInputStream();
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    outputBuilder.append(line).append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread errorThread = new Thread(() -> {
+            try (InputStream errorStream = process.getErrorStream();
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    errorBuilder.append(line).append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        outputThread.start();
+        errorThread.start();
+
+        int exitCode = process.waitFor();
+
+        // 等待读取线程完成
+        outputThread.join();
+        errorThread.join();
+
+        return exitCode;
+
     }
 
 }
