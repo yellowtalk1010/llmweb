@@ -72,17 +72,7 @@ function RunLogTemplate() {
         <TabPanel>
           <div style={{ padding: '20px', minWidth: '800px', width: '90%', margin: '0 auto' }}>
 
-            <div id="log-container" style={{
-              height: '500px',
-              overflowY: 'auto',
-              backgroundColor: '#1e1e1e',
-              color: '#d4d4d4',
-              padding: '10px',
-              borderRadius: '4px',
-              fontFamily: 'monospace',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-all'
-            }}>
+            <div id="log-container" className={"log"}>
               {logs.length > 0 ? (
                 logs.map((log, index) => (
                   <div key={index} style={{ marginBottom: '4px' }}>
@@ -98,17 +88,7 @@ function RunLogTemplate() {
         <TabPanel>
            <div style={{ padding: '20px', minWidth: '800px', width: '90%', margin: '0 auto' }}>
 
-            <div id="log-container" style={{
-              height: '500px',
-              overflowY: 'auto',
-              backgroundColor: '#1e1e1e',
-              color: '#d4d4d4',
-              padding: '10px',
-              borderRadius: '4px',
-              fontFamily: 'monospace',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-all'
-            }}>
+            <div id="log-container" className={"log"}>
               {logs.length > 0 ? (
                 logs.map((log, index) => (
                   <div key={index} style={{ marginBottom: '4px' }}>
@@ -122,6 +102,24 @@ function RunLogTemplate() {
           </div>   
         </TabPanel>
       </Tabs>
+
+      <style>
+        {
+          `
+            div .log {
+              height: 500px;
+              overflow-y: auto;
+              background-color: #1e1e1e;
+              color: #d4d4d4;
+              padding: 10px;
+              border-radius: 4px;
+              font-family: monospace;
+              white-space: pre-wrap;
+              word-break: break-all;
+            }
+          `
+        }
+      </style>
 
     </>
 
