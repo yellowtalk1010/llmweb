@@ -55,8 +55,8 @@ public class StartController {
             }
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("log_format", LOG_FORMAT);
-        map.put("error_format", ERROR_FORMAT);
+        map.put("log", LOG_FORMAT);
+        map.put("error", ERROR_FORMAT);
         return map;
     }
 

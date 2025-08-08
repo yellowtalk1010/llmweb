@@ -52,22 +52,48 @@ function RunLogTemplate() {
     }
   }, [logs]);
 
+
+  //日志信息的读取格式
   const [encoding, setEncoding] = useState({
-    log: 'UTF-8',
-    error: 'UTF-8'
+    log: '',
+    error: ''
   });
 
+  useEffect(() => {
+    //从后台获取当前的编码格式
+    const fetchConfigTypes = async () => {
+        try {
+            const response = await fetch('/command_format', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+            const data = await response.json();
+            console.info(data)
+            setEncoding(data);
+        } catch (error) {
+            console.error('获取配置类型失败:', error);
+        } finally {
+            
+        }
+    };
+    fetchConfigTypes(); //调用函数
+  }, []);
+
+  //修改格式
   const handleEncodingChange = async (event, tab) => {
- 
     setEncoding(prev => ({
       ...prev,
       [tab]: event.target.value
     }));
-    
-    console.log(`Encoding changed for ${tab} tab to ${event.target.value}`);
 
-    const response = await fetch('/command_format?tab=' + tab + '&format=' + event.target.value)
-    console.info(response)
+    console.log(`Encoding changed for ${tab} tab to ${event.target.value}`);
+    const response = await fetch('/command_format?tab=' + tab + '&format=' + event.target.value) //修改日志格式
+    //console.info(response)
+    const data = await response.json();
+    console.info(data)
+    setEncoding(data);
 
   }
 
