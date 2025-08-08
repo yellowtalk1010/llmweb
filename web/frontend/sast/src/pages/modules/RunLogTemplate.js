@@ -52,6 +52,25 @@ function RunLogTemplate() {
     }
   }, [logs]);
 
+  const [encoding, setEncoding] = useState({
+    log: 'UTF-8',
+    error: 'UTF-8'
+  });
+
+  const handleEncodingChange = async (event, tab) => {
+ 
+    setEncoding(prev => ({
+      ...prev,
+      [tab]: event.target.value
+    }));
+    
+    console.log(`Encoding changed for ${tab} tab to ${event.target.value}`);
+
+    const response = await fetch('/command_format?tab=' + tab + '&format=' + event.target.value)
+    console.info(response)
+
+  }
+
   return (
     <>
       <div>
@@ -73,6 +92,27 @@ function RunLogTemplate() {
         <TabPanel>
           <div style={{ padding: '20px', minWidth: '800px', width: '90%', margin: '0 auto' }}>
 
+            <div style={{ marginBottom: '10px' }}>
+              <label>
+                <input 
+                  type="radio" 
+                  name="encoding-log" 
+                  value="GBK" 
+                  onChange={(e) => handleEncodingChange(e, 'log')}
+                  checked={encoding.log === 'GBK'}
+                /> GBK
+              </label>
+              <label style={{ marginLeft: '10px' }}>
+                <input 
+                  type="radio" 
+                  name="encoding-log" 
+                  value="UTF-8" 
+                  onChange={(e) => handleEncodingChange(e, 'log')} 
+                  checked={encoding.log === 'UTF-8'}
+                /> UTF-8
+              </label>
+            </div>
+
             <div id="log-container" className={"log"}>
               {logs.length > 0 ? (
                 logs.map(log=>JSON.parse(log))
@@ -93,6 +133,27 @@ function RunLogTemplate() {
         </TabPanel>
         <TabPanel>
            <div style={{ padding: '20px', minWidth: '800px', width: '90%', margin: '0 auto' }}>
+
+            <div style={{ marginBottom: '10px' }}>
+              <label>
+                <input 
+                  type="radio" 
+                  name="encoding-error" 
+                  value="GBK" 
+                  onChange={(e) => handleEncodingChange(e, 'error')} 
+                  checked={encoding.error === 'GBK'}
+                /> GBK
+              </label>
+              <label style={{ marginLeft: '10px' }}>
+                <input 
+                  type="radio" 
+                  name="encoding-error" 
+                  value="UTF-8" 
+                  onChange={(e) => handleEncodingChange(e, 'error')} 
+                  checked={encoding.error === 'UTF-8'}
+                /> UTF-8
+              </label>
+            </div>
 
             <div id="log-container" className={"log"}>
               {logs.length > 0 ? (

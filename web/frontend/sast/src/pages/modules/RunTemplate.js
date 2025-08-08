@@ -34,8 +34,7 @@ function RunTemplate() {
 
     const [formData, setFormData] = useState({
         command: '',
-        configType: '',
-        format: ''
+        configType: ''
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,17 +104,6 @@ function RunTemplate() {
         
     }
 
-    const handleFormat = async (e) => {
-        const selectVal =  e.target.value
-        setFormData(prev => ({
-            ...prev,
-            "format": selectVal
-        }));
-
-        const response = await fetch('/command_format?format=' + selectVal)
-        console.info(response)
-    }
-
 
     return (
         <>
@@ -140,19 +128,7 @@ function RunTemplate() {
                         onChange={handleChange}
                         ></input>
                     </div>
-
-                    <div>
-                        <div><span>格式:</span></div>
-                        <select id="format"
-                            name="format"
-                            value={formData.format}
-                            onChange={handleFormat}
-                            >
-                                <option value="GBK">GBK</option>
-                                <option value="UTF-8">UTF-8</option>
-                            </select>
-                    </div>
-                    
+                
 
                     <div>
                         <div><span>历史:</span></div>

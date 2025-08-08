@@ -24,7 +24,9 @@ public class StartController {
     private static final Set<String> COMMAND_SET = new HashSet<>(); //记录运行成功的命令
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static Boolean IS_RUNNING = false;
-    private static String FORMAT = "GBK";
+
+    private static volatile String LOG_FORMAT = "UTF-8";
+    private static volatile String ERROR_FORMAT = "UTF-8";
 
     @GetMapping("command_list")
     public synchronized Map<String, Object> command_list(){
@@ -39,32 +41,31 @@ public class StartController {
     @Data
     public static class RunCommandDto {
         private String command;
-        private String format;
     }
 
     @GetMapping("command_format")
-    public synchronized Map<String, Object> command_format(String format){
-        System.out.println("format:" + format);
-        if(StringUtils.isNotEmpty(format)){
-            FORMAT = format;
+    public synchronized Map<String, Object> command_format(String tab, String format){
+        System.out.println("tab:" + tab + ", format:" + format);
+        if(StringUtils.isNotBlank(tab) && StringUtils.isNotBlank(format)){
+            if(tab.equals("log")){
+                LOG_FORMAT = format;
+            }
+            if(tab.equals("error")){
+                ERROR_FORMAT = format;
+            }
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("format", FORMAT);
+        map.put("log_format", LOG_FORMAT);
+        map.put("error_format", ERROR_FORMAT);
         return map;
     }
 
     @PostMapping("run_command")
     public synchronized Map<String, String> runCommand(@RequestBody RunCommandDto runCommandDto) {
-//        if(StringUtils.isNotBlank(runCommandDto.getCommand())){
-//            StringBuilder stringBuilder = new StringBuilder();
-//            Arrays.stream(runCommandDto.getCommand().split(" ")).forEach(s->stringBuilder.append(s + " "));
-//        }
+
         System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
         if(StringUtils.isNotEmpty(runCommandDto.getCommand())){
             COMMAND_SET.add(runCommandDto.getCommand());
-        }
-        if(StringUtils.isNotEmpty(runCommandDto.getFormat())){
-            FORMAT = runCommandDto.getFormat();
         }
 
         if(!IS_RUNNING){
@@ -105,7 +106,7 @@ public class StartController {
 
         Thread outputThread = new Thread(() -> {
             try (InputStream inputStream = process.getInputStream();
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, FORMAT))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, LOG_FORMAT))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println("日志：" + line);
@@ -119,7 +120,7 @@ public class StartController {
 
         Thread errorThread = new Thread(() -> {
             try (InputStream errorStream = process.getErrorStream();
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, FORMAT))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, ERROR_FORMAT))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     //System.out.println("错误日志：" + line);
