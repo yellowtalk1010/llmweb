@@ -2,6 +2,7 @@ package zuk.sast.rules.webSocket;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -11,33 +12,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class LogSocketHandler extends TextWebSocketHandler {
 
     //记录websocket的id与WebSockerSession关系
-    public static Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
+    //public static Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     public static WebSocketSession webSocketSession = null;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("日志连接建立：" + session.getId());
-        sessionMap.put(session.getId(), session);
+        log.info("日志连接建立：" + session.getId());
+
+        //sessionMap.put(session.getId(), session);
         webSocketSession = session;
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String messageStr = message.getPayload();
-        System.out.println("日志收到消息：" + messageStr);
+        log.info("日志收到消息：" + messageStr);
 
         try {
             Map<String,String> map = JSONObject.parseObject(messageStr, Map.class);
-            System.out.println("收到消息map：" + JSONObject.toJSONString(map));
+            log.info("收到消息map：" + JSONObject.toJSONString(map));
             map.put("sessionId", session.getId());
 
             String issueId = map.get("issueId");
             String content = map.get("content");
 
-            sessionMap.put(session.getId(), session);
+            //sessionMap.put(session.getId(), session);
 
             Map<String,String> map1 = new HashMap<>();
             map1.put("issueId", issueId);
@@ -56,17 +59,17 @@ public class LogSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("日志连接关闭：" + session.getId());
+        log.info("日志连接关闭：" + session.getId());
         try {
-            if(sessionMap.get(session.getId()).isOpen()){
-                sessionMap.get(session.getId()).close();
-            }
+//            if(sessionMap.get(session.getId()).isOpen()){
+//                sessionMap.get(session.getId()).close();
+//            }
         }catch (Exception e) {
             e.printStackTrace();
         }
         finally {
             //从记录中移除
-            sessionMap.remove(session.getId());
+//            sessionMap.remove(session.getId());
             webSocketSession = null;
         }
     }
