@@ -2,6 +2,7 @@ package vision.sast.rules;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import vision.sast.rules.controller.ConfigController;
 import vision.sast.rules.dto.IssueDto;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 /***
  * issue 结果数据集
  */
+@Slf4j
 public class DatabaseIssue {
 
     //异步加载文件线程池
@@ -103,13 +105,15 @@ public class DatabaseIssue {
 
             //
             File file = new File(issuePath);
-            System.out.println("打开结果路径:" + issuePath + "，" + file.exists());
+            //System.out.println("打开结果路径:" + issuePath + "，" + file.exists());
+            log.info("打开结果路径:" + issuePath + "，" + file.exists());
             FileInputStream fis = new FileInputStream(file);
             //读取结果文件内容
             String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
             //解析issue结果
             DatabaseIssue.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
-            System.out.println("issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
+            //System.out.println("issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
+            log.info("issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
 
             if(new File(ConfigController.FUNCTIONMODULE).exists()){
                 //添加函数建模
