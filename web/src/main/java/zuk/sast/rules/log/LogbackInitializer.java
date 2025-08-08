@@ -29,7 +29,7 @@ public class LogbackInitializer {
         FileAppender fileAppender = new FileAppender();
         fileAppender.setContext(context);
         fileAppender.setName("GLOBAL_FILE_APPENDER");
-        fileAppender.setFile("logs/global-log.log");
+        fileAppender.setFile("web_workspace/logs/global-log.log");
         fileAppender.setEncoder(encoder);
         fileAppender.setAppend(true);
         fileAppender.setImmediateFlush(true);
