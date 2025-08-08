@@ -105,14 +105,12 @@ public class DatabaseIssue {
 
             //
             File file = new File(issuePath);
-            //System.out.println("打开结果路径:" + issuePath + "，" + file.exists());
             log.info("打开结果路径:" + issuePath + "，" + file.exists());
             FileInputStream fis = new FileInputStream(file);
             //读取结果文件内容
             String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
             //解析issue结果
             DatabaseIssue.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
-            //System.out.println("issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
             log.info("issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
 
             if(new File(ConfigController.FUNCTIONMODULE).exists()){
@@ -145,7 +143,7 @@ public class DatabaseIssue {
         DatabaseIssue.fileList = null;
         Set<String> set = DatabaseIssue.ISSUE_RESULT.getResult().stream().map(dto->dto.getFilePath()).collect(Collectors.toSet());
         DatabaseIssue.fileList = set.stream().toList().stream().sorted().toList();
-        System.out.println("完成文件提取，总数量:" + fileList.size());
+        log.info("完成文件提取，总数量:" + fileList.size());
 
         //TODO 构建文件与issue关系
         DatabaseIssue.fileIssuesMap = new ConcurrentHashMap<>();
@@ -155,9 +153,9 @@ public class DatabaseIssue {
                 DatabaseIssue.fileIssuesMap.put(f, dtos);
             }
         });
-        System.out.println("完成构建文件与issue之间关系");
+        log.info("完成构建文件与issue之间关系");
 
-        System.out.println("加载文件内容");
+        log.info("加载文件内容");
         DatabaseIssue.executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -169,7 +167,7 @@ public class DatabaseIssue {
                                     SourceCodeUtil.openFile(issueFile);
                                 }
                                 else {
-                                    System.out.println(issueFile + "，文件不存在");
+                                    log.info(issueFile + "，文件不存在");
                                 }
                             }catch (Exception e) {
                                 e.printStackTrace();
@@ -178,7 +176,7 @@ public class DatabaseIssue {
                     }
                     try {
                         if(DatabaseIssue.fileList.size()>0 && DatabaseIssue.fileList.size()== FILE_HIGHLIGHT_MAP.size()){
-                            System.out.println(fileList.size() + "全部完成文件内容缓存加载" + FILE_HIGHLIGHT_MAP.size());
+                            log.info(fileList.size() + "全部完成文件内容缓存加载" + FILE_HIGHLIGHT_MAP.size());
                             break;
                         }
                         Thread.sleep(2000);
@@ -204,9 +202,9 @@ public class DatabaseIssue {
             }
             return dto.getVtId();
         }).collect(Collectors.toSet());
-        System.out.println("完成构建规则基本信息提取");
+        log.info("完成构建规则基本信息提取");
         vtidList = set.stream().toList().stream().sorted().toList();
-        System.out.println("完成规则提取，规则总数:"  + vtidList.size());
+        log.info("完成规则提取，规则总数:"  + vtidList.size());
 
 
         DatabaseIssue.vtidList.stream().forEach(vtid->{
@@ -222,8 +220,8 @@ public class DatabaseIssue {
             DatabaseIssue.vtidFilesMap.put(vtid, filepaths);
 
         });
-        System.out.println("完成规则违反总数关系");
-        System.out.println("完成规则与文件之间的关系");
+        log.info("完成规则违反总数关系");
+        log.info("完成规则与文件之间的关系");
 
     }
 
