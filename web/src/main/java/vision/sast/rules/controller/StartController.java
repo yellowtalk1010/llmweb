@@ -109,7 +109,7 @@ public class StartController {
                  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, LOG_FORMAT))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println("日志：" + line);
+                    System.out.println(LOG_FORMAT + "日志：" + line);
                     outputBuilder.append(line).append("\n");
                     LogSocketHandler.pushMessage(line, "info");
                 }
@@ -123,7 +123,7 @@ public class StartController {
                  BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, ERROR_FORMAT))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    //System.out.println("错误日志：" + line);
+                    System.out.println(ERROR_FORMAT + "错误日志：" + line);
                     errorBuilder.append(line).append("\n");
                     LogSocketHandler.pushMessage(line, "error");
                 }
