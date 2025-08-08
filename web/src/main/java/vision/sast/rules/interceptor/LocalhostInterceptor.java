@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import vision.sast.rules.DatabaseIssue;
 
 /***
- * 限制只能localhost、127.0.0.1访问
+ * 拦截器
  */
 public class LocalhostInterceptor implements HandlerInterceptor {
 
