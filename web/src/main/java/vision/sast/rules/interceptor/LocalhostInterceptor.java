@@ -16,8 +16,6 @@ public class LocalhostInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        log.info("aaaa");
-
         DatabaseIssue.checkLicense(); //许可是否过期
 
         String ip = request.getRemoteAddr();

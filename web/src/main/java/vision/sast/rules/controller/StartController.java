@@ -3,6 +3,7 @@ package vision.sast.rules.controller;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 @RestController
 public class StartController {
 
@@ -45,7 +47,7 @@ public class StartController {
 
     @GetMapping("command_format")
     public synchronized Map<String, Object> command_format(String tab, String format){
-        System.out.println("tab:" + tab + ", format:" + format);
+        log.info("tab:" + tab + ", format:" + format);
         if(StringUtils.isNotBlank(tab) && StringUtils.isNotBlank(format)){
             if(tab.equals("log")){
                 LOG_FORMAT = format;
@@ -63,7 +65,7 @@ public class StartController {
     @PostMapping("run_command")
     public synchronized Map<String, String> runCommand(@RequestBody RunCommandDto runCommandDto) {
 
-        System.out.println(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
+        log.info(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
         if(StringUtils.isNotEmpty(runCommandDto.getCommand())){
             COMMAND_SET.add(runCommandDto.getCommand());
         }
@@ -75,7 +77,7 @@ public class StartController {
                     try {
                         IS_RUNNING = true;
                         int exitCode = runProcess(runCommandDto.getCommand());
-                        System.out.println("exitCode:" + exitCode);
+                        log.info("exitCode:" + exitCode);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -101,8 +103,8 @@ public class StartController {
         Process process = processBuilder.start();
 
         // 使用多线程同时读取输出流和错误流，避免阻塞
-        StringBuilder outputBuilder = new StringBuilder();
-        StringBuilder errorBuilder = new StringBuilder();
+        //StringBuilder outputBuilder = new StringBuilder();
+        //StringBuilder errorBuilder = new StringBuilder();
 
         Thread outputThread = new Thread(() -> {
             try (InputStream inputStream = process.getInputStream();
@@ -110,7 +112,7 @@ public class StartController {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println(LOG_FORMAT + "日志：" + line);
-                    outputBuilder.append(line).append("\n");
+                    //outputBuilder.append(line).append("\n");
                     LogSocketHandler.pushMessage(line, "info");
                 }
             } catch (IOException e) {
@@ -124,7 +126,7 @@ public class StartController {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println(ERROR_FORMAT + "错误日志：" + line);
-                    errorBuilder.append(line).append("\n");
+                    //errorBuilder.append(line).append("\n");
                     LogSocketHandler.pushMessage(line, "error");
                 }
             } catch (IOException e) {
