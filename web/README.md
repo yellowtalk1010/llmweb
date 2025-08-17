@@ -1,6 +1,7 @@
 
 # http://localhost:8080 
 # http://localhost:8080/llm
+# http://localhost:8080/config
 
 # react前段开发代码在 frontend/sast
 
