@@ -25,4 +25,5 @@ npm run build
 rules-3.0.0.jar   java实现版本
 rules-4.0.0.jar   部分react实现版本
 rules-5.0.0.jar   java版本 + 源代码折叠展示窗口
+rules-6.0.0.jar   运行进程和QR功能
 ```

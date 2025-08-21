@@ -28,7 +28,7 @@ public class StartupSuccessListener {
             public void run() {
                 try {
                     String args[] = new String[0];
-                    org.h2.tools.Console.main(args); //启动h2数据库
+                   // org.h2.tools.Console.main(args); //启动h2数据库
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
