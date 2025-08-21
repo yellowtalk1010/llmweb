@@ -27,7 +27,7 @@ public class StartupSuccessListener {
             @Override
             public void run() {
                 try {
-                    String args[] = new String[0];
+                    String args[] = new String[]{"-user", "sa", "-password", "123456", "-url", "jdbc:h2:./data/h2_database"};
                     org.h2.tools.Console.main(args); //启动h2数据库
                 }catch (Exception e) {
                     e.printStackTrace();
