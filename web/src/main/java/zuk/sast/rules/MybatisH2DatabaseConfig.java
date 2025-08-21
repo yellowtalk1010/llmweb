@@ -2,20 +2,18 @@ package zuk.sast.rules;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.h2.jdbcx.JdbcDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.h2.jdbcx.JdbcDataSource;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -59,26 +57,27 @@ public class MybatisH2DatabaseConfig {
 
             ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
 
+            List<String> tableNames = new ArrayList<>();
             while (tables.next()) {
                 String tableName = tables.getString("TABLE_NAME");
-                System.out.println(tableName);
+                tableNames.add(tableName);
             }
-            System.out.println("");
-
+            log.info("数据库表名：" + String.join(", ", tableNames));
 
         }
         catch (Exception e){
             e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
 
-//    @Bean
-//    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-//        SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-//        sessionFactory.setDataSource(dataSource);
-//        return sessionFactory.getObject();
-//    }
+    @Bean
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource);
+        return sessionFactory.getObject();
+    }
 
 //    @Bean
 //    public PlatformTransactionManager transactionManager(DataSource dataSource) {
