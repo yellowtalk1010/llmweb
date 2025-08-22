@@ -405,7 +405,7 @@ public class ConfigController {
                             <input type="file" name="file" id="file">
                             <br>
                             <br>
-                            <input type="submit" value="上传">
+                            <input type="submit" value="提交">
                           </form>
                         </body>
                         </html>
