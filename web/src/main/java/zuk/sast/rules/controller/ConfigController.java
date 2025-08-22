@@ -22,6 +22,7 @@ import zuk.sast.rules.utils.LuceneUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -160,35 +161,41 @@ public class ConfigController {
         try {
             // 直接读取文件内容
             long count = this.issueMapper.selectProjectCount(this.projectId);
-            File issueJsonLineFile = new File(this.issueJsonLineFilePath);
             if(count==0){
-                if(issueJsonLineFile.exists()){
-                    log.info("读取文件：" + issueJsonLineFile.getAbsolutePath());
-                    List<String> lines = FileUtils.readLines(issueJsonLineFile, "UTF-8");
-                    AtomicLong num = new AtomicLong(0);
-                    lines.stream().forEach(line->{
-                        num.incrementAndGet();
-                        IssueEntity issue = new IssueEntity();
-                        issue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-                        issue.setNum(num.get());
-                        issue.setProjectId(this.projectId);
-                        issue.setContent(line);
-                        this.issueMapper.insert(issue);
-                    });
+                log.info("开始导入数据");
+                List<String> list = new ArrayList<>();
+                list.add(this.issueJsonLineFilePath);
+                list.add(this.systemConstraintPath);
+                list.add(this.FUNCTIONMODULE);
+                list.stream().map(e->new File(e)).filter(e->e.exists()).forEach(file->{
+                    try {
+                        log.info("读取文件：" + file.getAbsolutePath());
+                        List<String> lines = FileUtils.readLines(file, "UTF-8");
+                        AtomicLong num = new AtomicLong(0);
+                        lines.stream().forEach(line->{
+                            num.incrementAndGet();
+                            IssueEntity issue = new IssueEntity();
+                            issue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                            issue.setNum(num.get());
+                            issue.setProjectId(this.projectId);
+                            issue.setContent(line);
+                            this.issueMapper.insert(issue);
+                        });
 
-                    long newCount = this.issueMapper.selectProjectCount(this.projectId);
-                    if(lines.size() == num.get() && lines.size() == newCount){
-                        log.info("插入成功");
+                        long newCount = this.issueMapper.selectProjectCount(this.projectId);
+                        if(lines.size() == num.get() && lines.size() == newCount){
+                            log.info("插入成功");
+                        }
+                        else {
+                            //todo 删除
+                        }
                     }
-                    else {
-                        //todo 删除
+                    catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                }
-                else {
-                    log.error(issueJsonLineFile.getAbsolutePath() + "不存在");
-                }
+                });
             }
+
 
             DatabaseIssue.initIssues(this.projectId, this.issueMapper);
             String html = """
