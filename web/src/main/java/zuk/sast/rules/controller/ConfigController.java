@@ -288,6 +288,7 @@ public class ConfigController {
         }
 
         try {
+            boolean shouldAdd = false;
             // 直接读取文件内容
             String fileContent = null;
             if(!file.isEmpty()){
@@ -295,26 +296,29 @@ public class ConfigController {
                 fileContent = new BufferedReader(
                         new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
                 ).lines().collect(Collectors.joining("\n"));
+                shouldAdd = true;
+            }
+            else {
+                //选择历史数据
+                fileContent = this.projectMapper.selectById(project_id).getContent();
+            }
 
-                JSONObject json = JSONObject.parseObject(fileContent);
-                this.resultFilePath = (String) json.get("resultFilePath");
-                this.measureResultFilePath = (String) json.get("measureResultFilePath");
-                this.workspace = (String) json.get("workspace");
-                this.projectName = (String) json.get("projectName");
-                this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
-                this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
-                this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
+            JSONObject json = JSONObject.parseObject(fileContent);
+            this.resultFilePath = (String) json.get("resultFilePath");
+            this.measureResultFilePath = (String) json.get("measureResultFilePath");
+            this.workspace = (String) json.get("workspace");
+            this.projectName = (String) json.get("projectName");
+            this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
+            this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
+            this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
 
+            if(shouldAdd){
                 //写入数据库
                 ProjectEntity projectEntity = new ProjectEntity();
                 projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
                 projectEntity.setName(this.projectName);
                 projectEntity.setContent(fileContent);
                 this.projectMapper.insert(projectEntity);
-            }
-            else {
-                //选择历史数据
-                fileContent = this.projectMapper.selectById(project_id).getContent();
             }
 
             System.out.println("项目名称：" + this.projectName);
@@ -378,7 +382,7 @@ public class ConfigController {
         StringBuilder stringBuilder = new StringBuilder();
         List<ProjectEntity> projectEntityList = this.projectMapper.selectAll();
         projectEntityList.stream().forEach(e->{
-            stringBuilder.append("<option value=\""+e.getId()+"\">"+e.getName() + "  " + e.getCreatedTime()+"</option>");
+            stringBuilder.append("<option value=\""+e.getId()+"\">"+e.getName() + "➖" + e.getCreatedTime()+"</option>");
         });
 
         String html = """
