@@ -39,7 +39,7 @@ public class SourceCodeUtil {
          try {
 
              List<String> lines = FileUtils.readLines(new File(fileName),format);
-             System.out.println(fileName + "，文件加载完成，" + format);
+             //System.out.println(fileName + "，文件加载完成，" + format);
 
              HighLightUtil highlighterUtil = new HighLightUtil();
              List<String> newLines = lines.stream().map(line->{
