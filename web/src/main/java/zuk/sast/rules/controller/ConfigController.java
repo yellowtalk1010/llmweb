@@ -293,6 +293,16 @@ public class ConfigController {
                     new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
             ).lines().collect(Collectors.joining("\n"));
 
+            JSONObject json = JSONObject.parseObject(fileContent);
+            this.resultFilePath = (String) json.get("resultFilePath");
+            this.measureResultFilePath = (String) json.get("measureResultFilePath");
+            this.workspace = (String) json.get("workspace");
+            this.projectName = (String) json.get("projectName");
+            this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
+            this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
+            this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
+
+
             //写入数据库
             ProjectEntity projectEntity = new ProjectEntity();
             projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
@@ -302,15 +312,6 @@ public class ConfigController {
             //重新重数据库中查询获取
             fileContent = this.projectMapper.selectById(projectEntity.getId()).getContent();
 
-
-            JSONObject json = JSONObject.parseObject(fileContent);
-            this.resultFilePath = (String) json.get("resultFilePath");
-            this.measureResultFilePath = (String) json.get("measureResultFilePath");
-            this.workspace = (String) json.get("workspace");
-            this.projectName = (String) json.get("projectName");
-            this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
-            this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
-            this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
 
             System.out.println("项目名称：" + this.projectName);
             System.out.println("工作空间：" + this.workspace);
