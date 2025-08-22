@@ -96,8 +96,6 @@ public class DatabaseIssue {
      */
     public static void initIssues(String issuePath) {
 
-        checkLicense();
-
         try {
             //清理动态生成的数据
             fileAndVtid_issuesMap.clear();
