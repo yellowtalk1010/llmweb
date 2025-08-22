@@ -30,6 +30,7 @@ public class ConfigController {
     private String workspace; //工作空间
     private String projectName; //项目名称
     private String resultFilePath; //issue存储路径
+    private String issueJsonLineFilePath; //issue json line存储路径
     private String measureResultFilePath; //度量结果存储路径
     public static String systemConstraintPath; //系统约束路径
     private String INDEXS; //全文检索路径
@@ -150,6 +151,7 @@ public class ConfigController {
         try {
             // 直接读取文件内容
             //this.projectMapper.selectById(this.projectId);
+
             DatabaseIssue.initIssues(this.resultFilePath);
             String html = """
                     <!DOCTYPE html>
@@ -314,6 +316,7 @@ public class ConfigController {
             this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
             this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
             this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
+            this.issueJsonLineFilePath = this.workspace + "/" + this.projectName + "/" + new File(resultFilePath).getName() + ".tmp";
 
             if(shouldAdd){
                 //写入数据库
@@ -325,8 +328,9 @@ public class ConfigController {
                 this.projectId = projectEntity.getId();
             }
 
-            System.out.println("项目ID ：" + this.projectId);
             System.out.println("项目名称：" + this.projectName);
+            System.out.println("项目ID：" + this.projectId);
+            System.out.println("issue json line：" + this.issueJsonLineFilePath);
             System.out.println("工作空间：" + this.workspace);
             System.out.println("结果路径：" + this.resultFilePath);
             System.out.println("度量路径：" + this.measureResultFilePath);
