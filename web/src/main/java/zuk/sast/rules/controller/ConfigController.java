@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import zuk.sast.rules.DatabaseFunctionModule;
 import zuk.sast.rules.DatabaseIssue;
+import zuk.sast.rules.controller.mapper.ProjectMapper;
+import zuk.sast.rules.controller.mapper.entity.ProjectEntity;
 import zuk.sast.rules.utils.LuceneUtil;
 
 import java.io.*;
@@ -29,6 +32,9 @@ public class ConfigController {
     public static String systemConstraintPath; //系统约束路径
     private String INDEXS; //全文检索路径
     public static String FUNCTIONMODULE; //函数建模路径
+
+    @Autowired
+    private ProjectMapper projectMapper;
 
     /***
      * 全文检索
@@ -303,6 +309,9 @@ public class ConfigController {
             System.out.println("索引路径：" + this.INDEXS);
             System.out.println("函数建模：" + this.FUNCTIONMODULE);
 
+            ProjectEntity projectEntity = new ProjectEntity();
+            projectEntity.setName(this.projectName);
+            this.projectMapper.insert(projectEntity);
 
             String fileContentJsonStr = JSONObject.toJSONString(JSONObject.parseObject(fileContent), JSONWriter.Feature.PrettyFormat);
 
