@@ -18,21 +18,16 @@ public class DatabaseInitializer {
 
     @PostConstruct
     public void init() {
-        createNameTable();
+        createProjectTable();
     }
 
-    private void createNameTable() {
+    private void createProjectTable() {
+        //创建项目表
         String sql = """
-            CREATE TABLE IF NOT EXISTS name (
+            CREATE TABLE IF NOT EXISTS project (
                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                first_name VARCHAR(50) NOT NULL,
-                last_name VARCHAR(50) NOT NULL,
-                full_name VARCHAR(100) AS (CONCAT(first_name, ' ', last_name)),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                status INT DEFAULT 1,
-                remark VARCHAR(200),
-                CONSTRAINT uk_name_unique UNIQUE (first_name, last_name)
+                name VARCHAR(100) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
             """;
         jdbcTemplate.execute(sql);
