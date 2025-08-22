@@ -3,8 +3,12 @@ package zuk.sast.rules;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import zuk.sast.rules.controller.ConfigController;
+import zuk.sast.rules.controller.mapper.IssueMapper;
+import zuk.sast.rules.controller.mapper.entity.IssueEntity;
 import zuk.sast.rules.dto.IssueDto;
 import zuk.sast.rules.dto.IssueResult;
 import zuk.sast.rules.utils.SourceCodeUtil;
@@ -27,6 +31,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DatabaseIssue {
 
+    //项目id
+    private static String projectId;
     //异步加载文件线程池
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
     //issue结果保存
@@ -94,22 +100,33 @@ public class DatabaseIssue {
     /***
      * 初始化 issue 结果数据
      */
-    public static void initIssues(String issuePath) {
+    public static void initIssues(String proId, IssueMapper issueMapper) {
 
+        if(projectId!=null && projectId.equals(proId)){
+            log.info("已本地初始化，issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
+            return;
+        }
         try {
+            projectId = proId;
             //清理动态生成的数据
             fileAndVtid_issuesMap.clear();
             FILE_HIGHLIGHT_MAP.clear();
 
-            //
-            File file = new File(issuePath);
-            log.info("打开结果路径:" + issuePath + "，" + file.exists());
-            FileInputStream fis = new FileInputStream(file);
-            //读取结果文件内容
-            String content = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
+            List<IssueEntity> issueEntityList = issueMapper.selectProject(projectId);
+
             //解析issue结果
-            DatabaseIssue.ISSUE_RESULT = JSONObject.parseObject(content, IssueResult.class);
-            log.info("issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
+            issueEntityList.stream().forEach(issueEntity->{
+                try{
+                    String line = issueEntity.getContent();
+                    IssueDto issueDto = JSONObject.parseObject(line, IssueDto.class);
+                    issueDto.setId(issueEntity.getId());
+
+                    DatabaseIssue.ISSUE_RESULT.getResult().add(issueDto);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            log.info("完成数据本地初始化，issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
 
             if(new File(ConfigController.FUNCTIONMODULE).exists()){
                 //添加函数建模

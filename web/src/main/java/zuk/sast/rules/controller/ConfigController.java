@@ -188,15 +188,9 @@ public class ConfigController {
                 else {
                     log.error(issueJsonLineFile.getAbsolutePath() + "不存在");
                 }
-
-            }
-            else {
-                List<IssueEntity> issues = this.issueMapper.selectProject(this.projectId);
             }
 
-
-            System.out.println(count);
-            DatabaseIssue.initIssues(this.resultFilePath);
+            DatabaseIssue.initIssues(this.projectId, this.issueMapper);
             String html = """
                     <!DOCTYPE html>
                     <html lang="zh-CN">
