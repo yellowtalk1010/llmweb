@@ -31,8 +31,8 @@ public class SourceCodeUtil {
         //System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
 
         String format = SimpleEncodingDetector.detectEncoding(fileName);
-        log.info(format + " 格式, " + fileName);
         if(format.toUpperCase().equals(SimpleEncodingDetector.OTHER)){
+            log.info(format + " 格式, " + fileName);
             return new ArrayList<>();
         }
 
@@ -48,7 +48,7 @@ public class SourceCodeUtil {
 
                  return line;
              }).collect(Collectors.toList());
-             System.out.println("高亮");
+             //System.out.println("高亮");
              DatabaseIssue.insertFileHighLightLines(fileName, newLines);
 
              return newLines;
