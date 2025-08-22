@@ -54,7 +54,7 @@ public class SourceCodeUtil {
              return newLines;
          }catch (Exception e) {
              e.printStackTrace();
-             System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
+             log.error("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
          }
 
 
