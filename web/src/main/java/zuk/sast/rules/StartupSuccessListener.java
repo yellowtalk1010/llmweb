@@ -17,8 +17,9 @@ import static zuk.sast.rules.MybatisH2DatabaseConfig.DATABASE_FILE_URL;
 @Component
 public class StartupSuccessListener {
 
-
-
+    /***
+     * springboot启动成功后，输出一下内容
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {
         log.info("StartupSuccessListener onApplicationReady");
