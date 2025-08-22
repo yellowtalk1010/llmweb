@@ -1,9 +1,11 @@
 package zuk.sast.rules.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import zuk.sast.rules.DatabaseIssue;
+import zuk.sast.rules.SimpleEncodingDetector;
 import zuk.sast.rules.dto.IssueDto;
 import zuk.sast.rules.dto.Trace;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class SourceCodeUtil {
 
     /***
@@ -25,33 +28,36 @@ public class SourceCodeUtil {
          if(DatabaseIssue.queryFileHighLightLines(fileName) != null){
              return DatabaseIssue.queryFileHighLightLines(fileName);
          }
-        System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
-        List<String> codeFormatList = new ArrayList<>();
-        codeFormatList.add("GBK");
-        codeFormatList.add("UTF-8");
+        //System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
 
-        for (String format : codeFormatList) {
-            try {
-                //System.out.println("open file format = " + format);
-                List<String> lines = FileUtils.readLines(new File(fileName),format);
-                System.out.println(fileName + "，文件加载完成，" + format);
-
-                HighLightUtil highlighterUtil = new HighLightUtil();
-                List<String> newLines = lines.stream().map(line->{
-                    //line = StringEscapeUtils.escapeHtml4(line);
-                    line = highlighterUtil.highlightLine(line);
-
-                    return line;
-                }).collect(Collectors.toList());
-                System.out.println("高亮");
-                DatabaseIssue.insertFileHighLightLines(fileName, newLines);
-
-                return newLines;
-            }catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
-            }
+        String format = SimpleEncodingDetector.detectEncoding(fileName);
+        log.info(format + " 格式, " + fileName);
+        if(format.toUpperCase().equals(SimpleEncodingDetector.OTHER)){
+            return new ArrayList<>();
         }
+
+         try {
+
+             List<String> lines = FileUtils.readLines(new File(fileName),format);
+             System.out.println(fileName + "，文件加载完成，" + format);
+
+             HighLightUtil highlighterUtil = new HighLightUtil();
+             List<String> newLines = lines.stream().map(line->{
+                 //line = StringEscapeUtils.escapeHtml4(line);
+                 line = highlighterUtil.highlightLine(line);
+
+                 return line;
+             }).collect(Collectors.toList());
+             System.out.println("高亮");
+             DatabaseIssue.insertFileHighLightLines(fileName, newLines);
+
+             return newLines;
+         }catch (Exception e) {
+             e.printStackTrace();
+             System.out.println("文件解析" + fileName + ", " + format + ", 失败：" + e.getMessage());
+         }
+
+
         return new ArrayList<>();
     }
 
