@@ -25,7 +25,7 @@ public class DatabaseInitializer {
         //创建项目表
         String sql = """
             CREATE TABLE IF NOT EXISTS project (
-                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                id VARCHAR(100) PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
                 createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )

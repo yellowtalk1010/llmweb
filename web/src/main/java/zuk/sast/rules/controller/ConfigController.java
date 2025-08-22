@@ -19,6 +19,7 @@ import zuk.sast.rules.utils.LuceneUtil;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -310,6 +311,7 @@ public class ConfigController {
             System.out.println("函数建模：" + this.FUNCTIONMODULE);
 
             ProjectEntity projectEntity = new ProjectEntity();
+            projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
             projectEntity.setName(this.projectName);
             this.projectMapper.insert(projectEntity);
 

@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface ProjectMapper {
 
-    @Insert("INSERT INTO project(name) VALUES(#{name})")
+    @Insert("INSERT INTO project(id, name) VALUES(#{id}, #{name})")
     //@Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(ProjectEntity project);
 
