@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/***
+ * mybatis 配置
+ */
 @Slf4j
 @Configuration
 @MapperScan("zuk.sast.rules.controller.mapper") // 指定 MyBatis Mapper 接口所在的包
