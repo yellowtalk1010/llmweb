@@ -139,7 +139,7 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.1</version>
+            <version>3.0.4</version>
         </dependency>
         <!--h2数据库-->
 <!--        <dependency>-->
