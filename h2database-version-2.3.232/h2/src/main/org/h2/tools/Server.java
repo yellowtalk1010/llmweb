@@ -810,7 +810,7 @@ public class Server extends Tool implements Runnable, ShutdownHandler {
         webServer.setShutdownHandler(server);
         String url = webServer.addSession(conn);
         try {
-            Server.openBrowser(url);
+            Server.openBrowser(url);  //在浏览器中打开网页
             while (!webServer.isStopped()) {
                 Thread.sleep(1000);
             }
