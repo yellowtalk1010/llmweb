@@ -9,6 +9,7 @@ import java.net.URI;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.h2.Zuk;
 import org.h2.api.ErrorCode;
 import org.h2.engine.SysProperties;
 import org.h2.message.DbException;
@@ -689,6 +690,10 @@ public class Server extends Tool implements Runnable, ShutdownHandler {
      * @throws Exception on failure
      */
     public static void openBrowser(String url) throws Exception {
+        if(true){
+            Zuk.URL = url; //取消在浏览器中自动打开网页，改为仅输出地址，让用户手动输入地址打开
+            return;
+        }
         try {
             String osName = StringUtils.toLowerEnglish(
                     Utils.getProperty("os.name", "linux"));
