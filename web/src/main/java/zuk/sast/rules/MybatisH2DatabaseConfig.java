@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 @MapperScan("zuk.sast.rules.controller.mapper") // 指定 MyBatis Mapper 接口所在的包
 public class MybatisH2DatabaseConfig {
 
+    public static final String DATABASE_FILE_URL = "jdbc:h2:./data/h2_database";  //文件数据库
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     static {
         EXECUTOR_SERVICE.execute(new Runnable() {
@@ -38,7 +39,6 @@ public class MybatisH2DatabaseConfig {
             }
         });
     }
-    public static final String DATABASE_FILE_URL = "jdbc:h2:./data/h2_database";  //文件数据库
 
     @Bean
     public DataSource dataSource() {
