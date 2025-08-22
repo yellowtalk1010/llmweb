@@ -214,11 +214,11 @@ public class ConfigController {
                      + "<a href='/pages/AllRules'>酷洛米</a><br>"
                      + "<a href='mario'>Mario</a><br>"
                      + "<br>"
-                     + "<a href='config_func_module_path'>塞尔达传说</a>&nbsp;&nbsp;&nbsp;{{{{FUNCTIONMODULE}}}}<br>"
+                     + "<a href='config_func_module_path'>塞尔达传说（funcModu）</a>&nbsp;&nbsp;&nbsp;{{{{FUNCTIONMODULE}}}}<br>"
                      + "<br>"
-                     + "<a href='llm_qr'>switch2</a><br>"
+                     + "<a href='llm_qr'>switch2（qr）</a><br>"
                      + "<br>"
-                     + "<a href='/pages/Run'>PS5</a><br>"
+                     + "<a href='/pages/Run'>PS5（run）</a><br>"
                      +
                     """
                     </body>
