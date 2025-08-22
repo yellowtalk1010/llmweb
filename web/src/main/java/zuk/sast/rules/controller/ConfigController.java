@@ -281,37 +281,41 @@ public class ConfigController {
     }
 
     @PostMapping("upload_config")
-    public String upload_config(@RequestParam("file") MultipartFile file) {
+    public String upload_config(@RequestParam("file") MultipartFile file, @RequestParam("project_id")  String project_id) {
 
-        if (file.isEmpty()) {
-            return "文件为空！";
+        if (file.isEmpty() && StringUtils.isBlank(project_id)) {
+            return "选择为空/文件为空！";
         }
 
         try {
             // 直接读取文件内容
-            String fileContent = new BufferedReader(
-                    new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
-            ).lines().collect(Collectors.joining("\n"));
+            String fileContent = null;
+            if(!file.isEmpty()){
+                //优先文件上次
+                fileContent = new BufferedReader(
+                        new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
+                ).lines().collect(Collectors.joining("\n"));
 
-            JSONObject json = JSONObject.parseObject(fileContent);
-            this.resultFilePath = (String) json.get("resultFilePath");
-            this.measureResultFilePath = (String) json.get("measureResultFilePath");
-            this.workspace = (String) json.get("workspace");
-            this.projectName = (String) json.get("projectName");
-            this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
-            this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
-            this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
+                JSONObject json = JSONObject.parseObject(fileContent);
+                this.resultFilePath = (String) json.get("resultFilePath");
+                this.measureResultFilePath = (String) json.get("measureResultFilePath");
+                this.workspace = (String) json.get("workspace");
+                this.projectName = (String) json.get("projectName");
+                this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
+                this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
+                this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
 
-
-            //写入数据库
-            ProjectEntity projectEntity = new ProjectEntity();
-            projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
-            projectEntity.setName(this.projectName);
-            projectEntity.setContent(fileContent);
-            this.projectMapper.insert(projectEntity);
-            //重新重数据库中查询获取
-            fileContent = this.projectMapper.selectById(projectEntity.getId()).getContent();
-
+                //写入数据库
+                ProjectEntity projectEntity = new ProjectEntity();
+                projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                projectEntity.setName(this.projectName);
+                projectEntity.setContent(fileContent);
+                this.projectMapper.insert(projectEntity);
+            }
+            else {
+                //选择历史数据
+                fileContent = this.projectMapper.selectById(project_id).getContent();
+            }
 
             System.out.println("项目名称：" + this.projectName);
             System.out.println("工作空间：" + this.workspace);
@@ -371,7 +375,13 @@ public class ConfigController {
 
     @GetMapping("config")
     public  String config(){
-        return """
+        StringBuilder stringBuilder = new StringBuilder();
+        List<ProjectEntity> projectEntityList = this.projectMapper.selectAll();
+        projectEntityList.stream().forEach(e->{
+            stringBuilder.append("<option value=\""+e.getId()+"\">"+e.getName() + "  " + e.getCreatedTime()+"</option>");
+        });
+
+        String html = """
                        <!DOCTYPE html>
                         <html lang="zh-CN">
                         <head>
@@ -379,16 +389,26 @@ public class ConfigController {
                           <title>配置文件</title>
                         </head>
                         <body>
-                          <h2>上传配置文件</h2>
                           <form action="/upload_config" method="post" enctype="multipart/form-data">
+                            <h2>选择项目</h2>
+                            <select id="project_id" name="project_id">
+                              <option value="">--</option>
+                              {{{projectList}}}
+                            </select>
+                            <br>
+                            <h2>上传配置</h2>
                             <label for="file">选择文件：</label>
-                            <input type="file" name="file" id="file"><br><br>
+                            <input type="file" name="file" id="file">
+                            <br>
+                            <br>
                             <input type="submit" value="上传">
                           </form>
                         </body>
                         </html>
                                         
                 """;
+        html = html.replace("{{{projectList}}}", stringBuilder.toString());
+        return html;
     }
 
 
