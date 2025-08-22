@@ -310,14 +310,17 @@ public class ConfigController {
             System.out.println("索引路径：" + this.INDEXS);
             System.out.println("函数建模：" + this.FUNCTIONMODULE);
 
+            String fileContentJsonStr = JSONObject.toJSONString(JSONObject.parseObject(fileContent), JSONWriter.Feature.PrettyFormat);
+
             ProjectEntity projectEntity = new ProjectEntity();
             projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
             projectEntity.setName(this.projectName);
+            projectEntity.setContent(fileContentJsonStr);
             this.projectMapper.insert(projectEntity);
 
-            String fileContentJsonStr = JSONObject.toJSONString(JSONObject.parseObject(fileContent), JSONWriter.Feature.PrettyFormat);
+            ProjectEntity myProject = this.projectMapper.selectById(projectEntity.getId());
 
-            String htmlFileContent = fileContentJsonStr
+            String htmlFileContent = myProject.getContent()
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
                     .replace("\n", "<br>");
 

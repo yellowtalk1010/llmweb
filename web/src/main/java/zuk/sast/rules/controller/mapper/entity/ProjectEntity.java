@@ -6,5 +6,6 @@ import lombok.Data;
 public class ProjectEntity {
     private String id;
     private String name;
+    private String content;
     private String createdTime;
 }

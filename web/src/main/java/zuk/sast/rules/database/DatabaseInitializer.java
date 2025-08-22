@@ -27,6 +27,7 @@ public class DatabaseInitializer {
             CREATE TABLE IF NOT EXISTS project (
                 id VARCHAR(100) PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
+                content BLOB NOT NULL,
                 createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
             """;
