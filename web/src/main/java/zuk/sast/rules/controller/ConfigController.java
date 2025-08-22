@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 public class ConfigController {
 
+    private String projectId; //项目id
     private String workspace; //工作空间
     private String projectName; //项目名称
     private String resultFilePath; //issue存储路径
@@ -148,6 +149,7 @@ public class ConfigController {
 
         try {
             // 直接读取文件内容
+            //this.projectMapper.selectById(this.projectId);
             DatabaseIssue.initIssues(this.resultFilePath);
             String html = """
                     <!DOCTYPE html>
@@ -300,6 +302,7 @@ public class ConfigController {
             }
             else {
                 //选择历史数据
+                this.projectId = project_id;
                 fileContent = this.projectMapper.selectById(project_id).getContent();
             }
 
@@ -319,8 +322,10 @@ public class ConfigController {
                 projectEntity.setName(this.projectName);
                 projectEntity.setContent(fileContent);
                 this.projectMapper.insert(projectEntity);
+                this.projectId = projectEntity.getId();
             }
 
+            System.out.println("项目ID ：" + this.projectId);
             System.out.println("项目名称：" + this.projectName);
             System.out.println("工作空间：" + this.workspace);
             System.out.println("结果路径：" + this.resultFilePath);
