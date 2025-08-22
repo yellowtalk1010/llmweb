@@ -36,7 +36,7 @@ public class ConfigController {
     private String projectId; //项目id
     private String workspace; //工作空间
     private String projectName; //项目名称
-    private String resultFilePath; //issue存储路径
+    private String issueJsonFilePath; //issue存储路径
     private String issueJsonLineFilePath; //issue json line存储路径
     private String measureResultFilePath; //度量结果存储路径
     public static String systemConstraintPath; //系统约束路径
@@ -354,14 +354,14 @@ public class ConfigController {
             }
 
             JSONObject json = JSONObject.parseObject(fileContent);
-            this.resultFilePath = (String) json.get("resultFilePath");
+            this.issueJsonFilePath = (String) json.get("resultFilePath");
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
             this.workspace = (String) json.get("workspace");
             this.projectName = (String) json.get("projectName");
             this.systemConstraintPath = (String) json.get("systemConstraintPath"); //系统约束
             this.INDEXS = this.workspace + "/" + this.projectName + "/zuk/INDEXS"; //项目代码全文检索路径
             this.FUNCTIONMODULE = this.workspace + "/" + this.projectName + "/zuk/FUNCTIONMODULE/functionModule.jsonl"; //项目代码全文检索路径
-            this.issueJsonLineFilePath = this.workspace + "/" + this.projectName + "/" + new File(resultFilePath).getName() + ".tmp";
+            this.issueJsonLineFilePath = this.workspace + "/" + this.projectName + "/" + new File(issueJsonFilePath).getName() + ".tmp";
 
             if(shouldAdd){
                 //写入数据库
@@ -377,7 +377,7 @@ public class ConfigController {
             System.out.println("项目ID：" + this.projectId);
             System.out.println("issue json line：" + this.issueJsonLineFilePath);
             System.out.println("工作空间：" + this.workspace);
-            System.out.println("结果路径：" + this.resultFilePath);
+            System.out.println("结果路径：" + this.issueJsonFilePath);
             System.out.println("度量路径：" + this.measureResultFilePath);
             System.out.println("系统约束：" + this.systemConstraintPath);
             System.out.println("索引路径：" + this.INDEXS);
@@ -417,7 +417,7 @@ public class ConfigController {
                     </html>
                                         
                     """;
-            html = html.replace("{{{resultFilePath}}}", resultFilePath);
+            html = html.replace("{{{resultFilePath}}}", issueJsonFilePath);
             if(this.measureResultFilePath!=null){
                 html = html.replace("{{{measureResultFilePath}}}", measureResultFilePath);
             }
