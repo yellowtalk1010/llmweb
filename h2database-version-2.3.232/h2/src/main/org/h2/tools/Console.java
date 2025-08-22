@@ -63,7 +63,7 @@ public class Console extends Tool implements ShutdownHandler {
      * @throws SQLException on failure
      */
     public static void main(String... args) throws SQLException {
-        Console console;
+        Console console; //h2 数据库启动
         try {
             console = (Console) Utils.newInstance("org.h2.tools.GUIConsole");
         } catch (Exception | NoClassDefFoundError e) {
