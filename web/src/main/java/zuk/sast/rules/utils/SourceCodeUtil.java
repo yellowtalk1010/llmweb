@@ -32,7 +32,7 @@ public class SourceCodeUtil {
 
         String format = SimpleEncodingDetector.detectEncoding(fileName);
         if(format.toUpperCase().equals(SimpleEncodingDetector.OTHER)){
-            log.info(format + " 格式, " + fileName);
+            log.error(format + " 未知格式, " + fileName);
             return new ArrayList<>();
         }
 
