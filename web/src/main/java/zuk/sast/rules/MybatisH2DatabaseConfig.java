@@ -95,7 +95,6 @@ public class MybatisH2DatabaseConfig {
         configuration.setMapUnderscoreToCamelCase(true);
         sessionFactory.setConfiguration(configuration);
 
-
         return sessionFactory.getObject();
     }
 
@@ -103,18 +102,5 @@ public class MybatisH2DatabaseConfig {
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
-
-//    @Bean
-//    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
-//        return new SqlSessionTemplate(sqlSessionFactory);
-//    }
-
-//    @Bean
-//    public MapperScannerConfigurer mapperScannerConfigurer() {
-//        MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-//        configurer.setBasePackage("zuk.sast.rules.controller.mapper");
-//        configurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-//        return configurer;
-//    }
 
 }
