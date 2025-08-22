@@ -5,10 +5,13 @@ import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import zuk.sast.rules.controller.mapper.TestMapper;
+import zuk.sast.rules.controller.mapper.entity.Test;
 import zuk.sast.rules.webSocket.LogSocketHandler;
 
 import java.io.BufferedReader;
@@ -30,8 +33,19 @@ public class StartController {
     private static volatile String LOG_FORMAT = "UTF-8";
     private static volatile String ERROR_FORMAT = "UTF-8";
 
+    @Autowired
+    private TestMapper testMapper;
+
     @GetMapping("command_list")
     public synchronized Map<String, Object> command_list(){
+
+
+        List<Test> list = testMapper.selectAll();
+        System.out.println(list.size());
+        list.stream().forEach(dto->{
+            System.out.println(JSON.toJSONString(dto));
+        });
+
         Map<String, Object> map = new HashMap<>();
 //        List<String> list = new ArrayList<>();
 //        list.add("java -jar D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/visionSAST.jar -config D:/AAAAAAAAAAAAAAAAAAAA/github/engine/vision/target/workspace1/CJ2000A/project.json");

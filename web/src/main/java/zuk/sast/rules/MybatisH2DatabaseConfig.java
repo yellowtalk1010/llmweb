@@ -1,14 +1,22 @@
 package zuk.sast.rules;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.h2.jdbcx.JdbcDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.mapper.MapperScannerConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import zuk.sast.rules.controller.mapper.TestMapper;
+import zuk.sast.rules.controller.mapper.entity.Test;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -78,6 +86,16 @@ public class MybatisH2DatabaseConfig {
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
+
+        // 配置实体类别名
+        sessionFactory.setTypeAliasesPackage("zuk.sast.rules.controller.mapper.entity");
+
+        // 可选：配置驼峰命名转换
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        sessionFactory.setConfiguration(configuration);
+
+
         return sessionFactory.getObject();
     }
 
@@ -85,5 +103,18 @@ public class MybatisH2DatabaseConfig {
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
+
+//    @Bean
+//    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+//        return new SqlSessionTemplate(sqlSessionFactory);
+//    }
+
+//    @Bean
+//    public MapperScannerConfigurer mapperScannerConfigurer() {
+//        MapperScannerConfigurer configurer = new MapperScannerConfigurer();
+//        configurer.setBasePackage("zuk.sast.rules.controller.mapper");
+//        configurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
+//        return configurer;
+//    }
 
 }

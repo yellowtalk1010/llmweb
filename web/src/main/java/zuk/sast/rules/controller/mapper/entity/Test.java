@@ -1,4 +1,4 @@
-package zuk.sast.rules.controller.mapper.dto;
+package zuk.sast.rules.controller.mapper.entity;
 
 import lombok.Data;
 
