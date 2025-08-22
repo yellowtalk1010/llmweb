@@ -293,6 +293,16 @@ public class ConfigController {
                     new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
             ).lines().collect(Collectors.joining("\n"));
 
+            //写入数据库
+            ProjectEntity projectEntity = new ProjectEntity();
+            projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
+            projectEntity.setName(this.projectName);
+            projectEntity.setContent(fileContent);
+            this.projectMapper.insert(projectEntity);
+            //重新重数据库中查询获取
+            fileContent = this.projectMapper.selectById(projectEntity.getId()).getContent();
+
+
             JSONObject json = JSONObject.parseObject(fileContent);
             this.resultFilePath = (String) json.get("resultFilePath");
             this.measureResultFilePath = (String) json.get("measureResultFilePath");
@@ -312,15 +322,7 @@ public class ConfigController {
 
             String fileContentJsonStr = JSONObject.toJSONString(JSONObject.parseObject(fileContent), JSONWriter.Feature.PrettyFormat);
 
-            ProjectEntity projectEntity = new ProjectEntity();
-            projectEntity.setId(UUID.randomUUID().toString().replaceAll("-",""));
-            projectEntity.setName(this.projectName);
-            projectEntity.setContent(fileContentJsonStr);
-            this.projectMapper.insert(projectEntity);
-
-            ProjectEntity myProject = this.projectMapper.selectById(projectEntity.getId());
-
-            String htmlFileContent = myProject.getContent()
+            String htmlFileContent = fileContentJsonStr
                     .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")  // 替换制表符为4个空格
                     .replace("\n", "<br>");
 
