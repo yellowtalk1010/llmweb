@@ -15,8 +15,8 @@ public interface IssueMapper {
     @Insert("INSERT INTO issue(id, project_id, num, content) VALUES(#{id}, #{projectId}, #{num}, #{content})")
     int insert(IssueEntity issue);
 
-    @Select("SELECT * FROM issue ORDER BY num ")
-    List<ProjectEntity> selectAll();
+    @Select("SELECT * FROM issue WHERE project_id = #{projectId} ORDER BY num ")
+    List<IssueEntity> selectProject(@Param("projectId") String projectId);
 
     @Select("SELECT count(*) as num FROM issue where project_id = #{projectId}")
     long selectProjectCount(@Param("projectId") String projectId);

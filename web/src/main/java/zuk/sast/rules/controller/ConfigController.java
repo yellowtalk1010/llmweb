@@ -3,6 +3,7 @@ package zuk.sast.rules.controller;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 public class ConfigController {
 
@@ -157,26 +159,39 @@ public class ConfigController {
 
         try {
             // 直接读取文件内容
-            //this.projectMapper.selectById(this.projectId);
             long count = this.issueMapper.selectProjectCount(this.projectId);
             File issueJsonLineFile = new File(this.issueJsonLineFilePath);
-            if(count==0 && issueJsonLineFile.exists()){
-                List<String> lines = FileUtils.readLines(issueJsonLineFile, "UTF-8");
-                AtomicLong num = new AtomicLong(0);
-                lines.stream().forEach(line->{
-                    num.incrementAndGet();
-                    IssueEntity issue = new IssueEntity();
-                    issue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-                    issue.setNum(num.get());
-                    issue.setProjectId(this.projectId);
-                    issue.setContent(line);
-                    this.issueMapper.insert(issue);
-                });
+            if(count==0){
+                if(issueJsonLineFile.exists()){
+                    log.info("读取文件：" + issueJsonLineFile.getAbsolutePath());
+                    List<String> lines = FileUtils.readLines(issueJsonLineFile, "UTF-8");
+                    AtomicLong num = new AtomicLong(0);
+                    lines.stream().forEach(line->{
+                        num.incrementAndGet();
+                        IssueEntity issue = new IssueEntity();
+                        issue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                        issue.setNum(num.get());
+                        issue.setProjectId(this.projectId);
+                        issue.setContent(line);
+                        this.issueMapper.insert(issue);
+                    });
 
-                long newCount = this.issueMapper.selectProjectCount(this.projectId);
-                if(lines.size() == num.get() && lines.size() == newCount){
-                    System.out.println("插入成功");
+                    long newCount = this.issueMapper.selectProjectCount(this.projectId);
+                    if(lines.size() == num.get() && lines.size() == newCount){
+                        log.info("插入成功");
+                    }
+                    else {
+                        //todo 删除
+                    }
+
                 }
+                else {
+                    log.error(issueJsonLineFile.getAbsolutePath() + "不存在");
+                }
+
+            }
+            else {
+                List<IssueEntity> issues = this.issueMapper.selectProject(this.projectId);
             }
 
 
