@@ -41,6 +41,7 @@ public class DatabaseInitializer {
         String sql = """
             CREATE TABLE IF NOT EXISTS issue (
                 id VARCHAR(100) PRIMARY KEY,
+                project_id  VARCHAR(100),
                 num BIGINT NOT NULL,
                 content BLOB NOT NULL
             )

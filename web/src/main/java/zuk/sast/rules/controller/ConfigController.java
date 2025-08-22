@@ -3,6 +3,7 @@ package zuk.sast.rules.controller;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import zuk.sast.rules.DatabaseFunctionModule;
 import zuk.sast.rules.DatabaseIssue;
+import zuk.sast.rules.controller.mapper.IssueMapper;
 import zuk.sast.rules.controller.mapper.ProjectMapper;
+import zuk.sast.rules.controller.mapper.entity.IssueEntity;
 import zuk.sast.rules.controller.mapper.entity.ProjectEntity;
 import zuk.sast.rules.utils.LuceneUtil;
 
@@ -21,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,6 +42,9 @@ public class ConfigController {
 
     @Autowired
     private ProjectMapper projectMapper;
+
+    @Autowired
+    private IssueMapper issueMapper;
 
     /***
      * 全文检索
@@ -151,7 +158,29 @@ public class ConfigController {
         try {
             // 直接读取文件内容
             //this.projectMapper.selectById(this.projectId);
+            long count = this.issueMapper.selectProjectCount(this.projectId);
+            File issueJsonLineFile = new File(this.issueJsonLineFilePath);
+            if(count==0 && issueJsonLineFile.exists()){
+                List<String> lines = FileUtils.readLines(issueJsonLineFile, "UTF-8");
+                AtomicLong num = new AtomicLong(0);
+                lines.stream().forEach(line->{
+                    num.incrementAndGet();
+                    IssueEntity issue = new IssueEntity();
+                    issue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                    issue.setNum(num.get());
+                    issue.setProjectId(this.projectId);
+                    issue.setContent(line);
+                    this.issueMapper.insert(issue);
+                });
 
+                long newCount = this.issueMapper.selectProjectCount(this.projectId);
+                if(lines.size() == num.get() && lines.size() == newCount){
+                    System.out.println("插入成功");
+                }
+            }
+
+
+            System.out.println(count);
             DatabaseIssue.initIssues(this.resultFilePath);
             String html = """
                     <!DOCTYPE html>
