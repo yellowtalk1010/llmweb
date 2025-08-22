@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import zuk.sast.rules.controller.mapper.TestMapper;
-import zuk.sast.rules.controller.mapper.entity.Test;
 import zuk.sast.rules.webSocket.LogSocketHandler;
 
 import java.io.BufferedReader;
@@ -33,18 +31,17 @@ public class StartController {
     private static volatile String LOG_FORMAT = "UTF-8";
     private static volatile String ERROR_FORMAT = "UTF-8";
 
-    @Autowired
-    private TestMapper testMapper;
+//    @Autowired
+//    private TestMapper testMapper;
 
     @GetMapping("command_list")
-    public synchronized Map<String, Object> command_list(){
+    public synchronized Map<String, Object> command_list() {
 
-
-        List<Test> list = testMapper.selectAll();
-        System.out.println(list.size());
-        list.stream().forEach(dto->{
-            System.out.println(JSON.toJSONString(dto));
-        });
+//        List<Test> list = testMapper.selectAll();
+//        System.out.println(list.size());
+//        list.stream().forEach(dto->{
+//            System.out.println(JSON.toJSONString(dto));
+//        });
 
         Map<String, Object> map = new HashMap<>();
 //        List<String> list = new ArrayList<>();
@@ -60,13 +57,13 @@ public class StartController {
     }
 
     @GetMapping("command_format")
-    public synchronized Map<String, Object> command_format(String tab, String format){
+    public synchronized Map<String, Object> command_format(String tab, String format) {
         log.info("tab:" + tab + ", format:" + format);
-        if(StringUtils.isNotBlank(tab) && StringUtils.isNotBlank(format)){
-            if(tab.equals("log")){
+        if (StringUtils.isNotBlank(tab) && StringUtils.isNotBlank(format)) {
+            if (tab.equals("log")) {
                 LOG_FORMAT = format;
             }
-            if(tab.equals("error")){
+            if (tab.equals("error")) {
                 ERROR_FORMAT = format;
             }
         }
@@ -80,11 +77,11 @@ public class StartController {
     public synchronized Map<String, String> runCommand(@RequestBody RunCommandDto runCommandDto) {
 
         log.info(JSON.toJSONString(runCommandDto, JSONWriter.Feature.PrettyFormat));
-        if(StringUtils.isNotEmpty(runCommandDto.getCommand())){
+        if (StringUtils.isNotEmpty(runCommandDto.getCommand())) {
             COMMAND_SET.add(runCommandDto.getCommand());
         }
 
-        if(!IS_RUNNING){
+        if (!IS_RUNNING) {
             EXECUTOR_SERVICE.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -92,10 +89,9 @@ public class StartController {
                         IS_RUNNING = true;
                         int exitCode = runProcess(runCommandDto.getCommand());
                         log.info("exitCode:" + exitCode);
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
-                    }
-                    finally {
+                    } finally {
                         IS_RUNNING = false;
                     }
                 }
@@ -109,7 +105,7 @@ public class StartController {
 
 
     private static int runProcess(String command) throws Exception {
-        List<String> ls = Arrays.stream(command.split(" ")).filter(e->StringUtils.isNotEmpty(e)).toList();
+        List<String> ls = Arrays.stream(command.split(" ")).filter(e -> StringUtils.isNotEmpty(e)).toList();
         ProcessBuilder processBuilder = new ProcessBuilder(ls);
 
         processBuilder.redirectErrorStream(false);
