@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DatabaseIssue {
 
+    public static final String FunctionModuleVtid = "FunctionModule";  //函数建模vtid
+
     //项目id
     private static String projectId;
     //异步加载文件线程池
