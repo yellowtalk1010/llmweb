@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /***
@@ -109,6 +111,45 @@ public class DatabaseIssue {
             fileAndVtid_issuesMap.clear();
             FILE_HIGHLIGHT_MAP.clear();
 
+
+            long count = issueMapper.selectProjectCount(projectId);
+            if(count==0){
+                //如果数据库中未导入数据
+                log.info("开始导入数据");
+                List<String> list = new ArrayList<>();
+                list.add(ConfigController.issueJsonLineFilePath);
+                list.add(ConfigController.systemConstraintPath);
+                list.add(ConfigController.FUNCTIONMODULE);
+                list.stream().filter(e->e!=null).map(e->new File(e)).filter(e->e.exists()).forEach(file->{
+                    try {
+                        log.info("读取文件：" + file.getAbsolutePath());
+                        List<String> lines = FileUtils.readLines(file, "UTF-8");
+                        AtomicLong num = new AtomicLong(0);
+                        lines.stream().forEach(line->{
+                            num.incrementAndGet();
+                            IssueEntity issue = new IssueEntity();
+                            issue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                            issue.setNum(num.get());
+                            issue.setProjectId(projectId);
+                            issue.setContent(line);
+                            issueMapper.insert(issue); //写入数据库中
+                        });
+
+                        long newCount = issueMapper.selectProjectCount(projectId);
+                        if(lines.size() == num.get() && lines.size() == newCount){
+                            log.info("插入成功");
+                        }
+                        else {
+                            //todo 删除
+                        }
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+
             List<IssueEntity> issueEntityList = issueMapper.selectProject(projectId);
 
             //解析issue结果
@@ -117,7 +158,7 @@ public class DatabaseIssue {
                     String line = issueEntity.getContent();
                     Map<String, String> map = JSON.parseObject(line, Map.class);
                     IssueDto issueDto = JSONObject.parseObject(JSONObject.toJSONString(map), IssueDto.class);
-                    if (issueDto.getVtId().equals("FunctionModule")) {
+                    if (issueDto.getVtId().equals(FunctionModuleVtid)) {
                         //如果是函数建模规则，单独处理
                         //issueDto.setLine(Integer.valueOf(String.valueOf(map.get("line"))));
                         FunctionModuleInputOutputDto functionModuleInputOutputDto = JSONObject.parseObject(JSONObject.toJSONString(map.get("functionModuleInputOutputDto")), FunctionModuleInputOutputDto.class);

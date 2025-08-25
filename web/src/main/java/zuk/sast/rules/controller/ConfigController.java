@@ -39,7 +39,7 @@ public class ConfigController {
     private String workspace; //工作空间
     private String projectName; //项目名称
     private String issueJsonFilePath; //issue存储路径
-    private String issueJsonLineFilePath; //issue json line存储路径
+    public static String issueJsonLineFilePath; //issue json line存储路径
     private String measureResultFilePath; //度量结果存储路径
     public static String systemConstraintPath; //系统约束路径
     private String INDEXS; //全文检索路径
