@@ -130,17 +130,6 @@ public class DatabaseIssue {
             });
             log.info("完成数据本地初始化，issue总数:" + DatabaseIssue.ISSUE_RESULT.getResult().size());
 
-            if(new File(ConfigController.FUNCTIONMODULE).exists()){
-                //添加函数建模
-                //List<IssueDto> list = DatabaseFunctionModule.initFunctionModuleDatabase(ConfigController.FUNCTIONMODULE);
-                //DatabaseIssue.ISSUE_RESULT.getResult().addAll(list);
-            }
-            if(new File(ConfigController.systemConstraintPath).exists()){
-                //添加系统约束
-                //List<IssueDto> list = DatabaseSYSTEM_CONSTRAINTS_01.init_SYSTEM_CONSTRAINTS_01_Database(ConfigController.systemConstraintPath);
-                //DatabaseIssue.ISSUE_RESULT.getResult().addAll(list);
-            }
-
             DatabaseIssue.loadFileInitList(); //构建文件关系
             DatabaseIssue.loadRuleInitList(); //构建规则关系
         }catch (Exception exception) {
