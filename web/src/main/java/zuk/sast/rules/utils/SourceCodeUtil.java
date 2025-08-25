@@ -5,12 +5,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import zuk.sast.rules.DatabaseIssue;
-import zuk.sast.rules.SimpleEncodingDetector;
 import zuk.sast.rules.dto.IssueDto;
 import zuk.sast.rules.dto.Trace;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -30,8 +28,8 @@ public class SourceCodeUtil {
          }
         //System.out.println("系统默认编码格式:" + Charset.defaultCharset().name());
 
-        String format = SimpleEncodingDetector.detectEncoding(fileName);
-        if(format.toUpperCase().equals(SimpleEncodingDetector.OTHER)){
+        String format = FileEncodingDetector.detectEncoding(fileName);
+        if(format.toUpperCase().equals(FileEncodingDetector.OTHER)){
             log.error(format + " 未知格式, " + fileName);
             return new ArrayList<>();
         }

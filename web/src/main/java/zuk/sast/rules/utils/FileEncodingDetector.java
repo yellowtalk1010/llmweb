@@ -1,9 +1,12 @@
-package zuk.sast.rules;
+package zuk.sast.rules.utils;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class SimpleEncodingDetector {
+/***
+ * 文件编码格式探索工具
+ */
+public class FileEncodingDetector {
 
     public static final String UTF_8 = "UTF-8";
     public static final String ISO_8859_1 = "ISO-8859-1";
