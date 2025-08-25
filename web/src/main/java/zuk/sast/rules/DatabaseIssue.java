@@ -1,5 +1,6 @@
 package zuk.sast.rules;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import zuk.sast.rules.controller.mapper.IssueMapper;
 import zuk.sast.rules.controller.mapper.entity.IssueEntity;
 import zuk.sast.rules.dto.IssueDto;
 import zuk.sast.rules.dto.IssueResult;
+import zuk.sast.rules.dto.fm.FunctionModuleInputOutputDto;
 import zuk.sast.rules.utils.SourceCodeUtil;
 
 import java.io.BufferedReader;
@@ -118,7 +120,13 @@ public class DatabaseIssue {
             issueEntityList.stream().forEach(issueEntity->{
                 try{
                     String line = issueEntity.getContent();
-                    IssueDto issueDto = JSONObject.parseObject(line, IssueDto.class);
+                    Map<String, String> map = JSON.parseObject(line, Map.class);
+                    IssueDto issueDto = JSONObject.parseObject(JSONObject.toJSONString(map), IssueDto.class);
+                    if (issueDto.getVtId().equals("FunctionModule")) {
+                        issueDto.setLine(Integer.valueOf(String.valueOf(map.get("line"))));
+                        FunctionModuleInputOutputDto functionModuleInputOutputDto = JSONObject.parseObject(JSONObject.toJSONString(map.get("functionModuleInputOutputDto")), FunctionModuleInputOutputDto.class);
+                        issueDto.setData(functionModuleInputOutputDto);
+                    }
                     issueDto.setId(issueEntity.getId());
 
                     DatabaseIssue.ISSUE_RESULT.getResult().add(issueDto);

@@ -108,6 +108,7 @@ function renderFunctionModule(issue) {
 
   return issueDatas != null
     ? issueDatas.map((issue) => {
+      console.info(issue)
       if(issue.vtId=="FunctionModule"){
         return renderFunctionModule(issue)
       }
