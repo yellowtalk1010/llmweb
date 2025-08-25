@@ -161,43 +161,6 @@ public class ConfigController {
     public String config_issue_path() {
 
         try {
-            // 直接读取文件内容
-            long count = this.issueMapper.selectProjectCount(this.projectId);
-            if(count==0){
-                log.info("开始导入数据");
-                List<String> list = new ArrayList<>();
-                list.add(this.issueJsonLineFilePath);
-                list.add(this.systemConstraintPath);
-                list.add(this.FUNCTIONMODULE);
-                list.stream().map(e->new File(e)).filter(e->e.exists()).forEach(file->{
-                    try {
-                        log.info("读取文件：" + file.getAbsolutePath());
-                        List<String> lines = FileUtils.readLines(file, "UTF-8");
-                        AtomicLong num = new AtomicLong(0);
-                        lines.stream().forEach(line->{
-                            num.incrementAndGet();
-                            IssueEntity issue = new IssueEntity();
-                            issue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-                            issue.setNum(num.get());
-                            issue.setProjectId(this.projectId);
-                            issue.setContent(line);
-                            this.issueMapper.insert(issue);
-                        });
-
-                        long newCount = this.issueMapper.selectProjectCount(this.projectId);
-                        if(lines.size() == num.get() && lines.size() == newCount){
-                            log.info("插入成功");
-                        }
-                        else {
-                            //todo 删除
-                        }
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-
 
             DatabaseIssue.initIssues(this.projectId, this.issueMapper);
             String html = """

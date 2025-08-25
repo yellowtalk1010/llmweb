@@ -112,7 +112,6 @@ public class DatabaseIssue {
             fileAndVtid_issuesMap.clear();
             FILE_HIGHLIGHT_MAP.clear();
 
-
             long count = issueMapper.selectProjectCount(projectId);
             if(count==0){
                 //如果数据库中未导入数据
