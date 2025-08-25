@@ -123,6 +123,7 @@ public class DatabaseIssue {
                     Map<String, String> map = JSON.parseObject(line, Map.class);
                     IssueDto issueDto = JSONObject.parseObject(JSONObject.toJSONString(map), IssueDto.class);
                     if (issueDto.getVtId().equals("FunctionModule")) {
+                        //如果是函数建模规则，单独处理
                         issueDto.setLine(Integer.valueOf(String.valueOf(map.get("line"))));
                         FunctionModuleInputOutputDto functionModuleInputOutputDto = JSONObject.parseObject(JSONObject.toJSONString(map.get("functionModuleInputOutputDto")), FunctionModuleInputOutputDto.class);
                         issueDto.setData(functionModuleInputOutputDto);
