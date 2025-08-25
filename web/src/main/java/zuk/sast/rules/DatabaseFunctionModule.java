@@ -8,6 +8,7 @@ import zuk.sast.rules.dto.fm.FunctionModuleInputOutputDto;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /***
  * 函数建模数据集
@@ -24,7 +25,10 @@ public class DatabaseFunctionModule {
      * 查询全部需要进行函数建模的文件
      * @return
      */
-    public static List<String> queryAllFiles() {
+    public static synchronized List<String> queryAllFiles() {
+        if (files == null || files.size() == 0) {
+            files = DatabaseIssue.getAllIssue().stream().filter(issueDto -> issueDto.getVtId().equals(FunctionModuleVtid)).map(issueDto -> issueDto.getFilePath()).collect(Collectors.toSet()).stream().toList();
+        }
         return files;
     }
 
@@ -60,7 +64,7 @@ public class DatabaseFunctionModule {
      * 根据路径，初始化函数建模数据
      * @param funcitonModulePath
      */
-    public static List<IssueDto> initFunctionModuleDatabase(String funcitonModulePath) {
+    private static List<IssueDto> initFunctionModuleDatabase(String funcitonModulePath) {
         try {
             MAP.clear();
             functionModuleIssues.clear();
