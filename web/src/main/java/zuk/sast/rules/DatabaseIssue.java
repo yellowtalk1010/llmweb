@@ -92,13 +92,6 @@ public class DatabaseIssue {
      */
     private static Map<String, List<IssueDto>> fileAndVtid_issuesMap = new ConcurrentHashMap<>();
 
-
-    public static void checkLicense(){
-        LocalDate now = LocalDate.now();                   // 当前日期
-        LocalDate target = LocalDate.of(2026, 1, 1);       // 目标日期：2026-01-0
-        Assert.isTrue(!now.isAfter(target), "数据导入超时");
-    }
-
     /***
      * 初始化 issue 结果数据
      */

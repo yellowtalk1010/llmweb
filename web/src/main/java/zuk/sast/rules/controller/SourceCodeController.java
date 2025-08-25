@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zuk.sast.rules.DatabaseIssue;
 import zuk.sast.rules.dto.IssueDto;
+import zuk.sast.rules.utils.CheckLicenseUtil;
 import zuk.sast.rules.utils.SourceCodeUtil;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class SourceCodeController {
 
     @GetMapping("sourceCode_list")
     public synchronized Map<String, Object> sourceCode_list(String vtid, String file) {
-        DatabaseIssue.checkLicense();
+        CheckLicenseUtil.checkLicense();
         if (vtid != null && file != null) {
             try {
                 List<IssueDto> issueDtos = DatabaseIssue.queryIssueList(vtid, file);
@@ -92,7 +93,7 @@ public class SourceCodeController {
 
     @GetMapping("otherSourceCode_list")
     public synchronized List<String> otherSourceCode_list(String file) {
-        DatabaseIssue.checkLicense();
+        CheckLicenseUtil.checkLicense();
         if ( file != null) {
             try {
                 List<String> lines = SourceCodeUtil.show2(file);

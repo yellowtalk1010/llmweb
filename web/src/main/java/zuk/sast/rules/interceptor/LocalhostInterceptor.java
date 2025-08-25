@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import zuk.sast.rules.DatabaseIssue;
+import zuk.sast.rules.utils.CheckLicenseUtil;
 
 /***
  * 拦截器
@@ -16,7 +17,7 @@ public class LocalhostInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        DatabaseIssue.checkLicense(); //许可是否过期
+        CheckLicenseUtil.checkLicense(); //许可是否过期
 
         String ip = request.getRemoteAddr();
         if (!"127.0.0.1".equals(ip) && !"0:0:0:0:0:0:0:1".equals(ip)) {
