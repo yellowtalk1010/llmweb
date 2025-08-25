@@ -247,7 +247,8 @@ public class ConfigController {
             try {
 
                 StringBuilder stringBuilder = new StringBuilder("<li><a href='pages/AllFiles?vtid="+ DatabaseFunctionModule.FunctionModuleVtid+"'>函数建模</a></li>");
-                DatabaseFunctionModule.queryAllFiles().stream().forEach(e->{
+                //查询全部需要进行函数建模的文件
+                DatabaseIssue.queryAllFiles(DatabaseFunctionModule.FunctionModuleVtid).stream().forEach(e->{
                     stringBuilder.append("<li>"+e+"</li>");
                 });
 

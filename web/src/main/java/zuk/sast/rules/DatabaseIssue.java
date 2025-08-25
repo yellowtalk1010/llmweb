@@ -248,6 +248,15 @@ public class DatabaseIssue {
         return fileList.stream().toList();
     }
 
+    /***
+     * 根据违反 vtid 查询文件
+     * @return
+     */
+    public static List<String> queryAllFiles(String vtid) {
+        List<String> files = DatabaseIssue.getAllIssue().stream().filter(issueDto -> issueDto.getVtId().equals(vtid)).map(issueDto -> issueDto.getFilePath()).collect(Collectors.toSet()).stream().toList();
+        return files;
+    }
+
 
     /***
      * 根据文件路径查询当前文件中issue列表
