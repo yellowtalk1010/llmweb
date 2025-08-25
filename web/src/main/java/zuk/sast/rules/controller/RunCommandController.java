@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,7 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 @RestController
-public class StartController {
+public class RunCommandController {
 
     private static final Set<String> COMMAND_SET = new HashSet<>(); //记录运行成功的命令
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
