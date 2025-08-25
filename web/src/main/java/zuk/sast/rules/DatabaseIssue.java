@@ -35,12 +35,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DatabaseIssue {
 
-    public static final String FunctionModuleVtid = "FunctionModule";  //函数建模vtid
+    //函数建模vtid
+    public static final String FunctionModuleVtid = "FunctionModule";
+    //异步加载文件线程池
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     //项目id
     private static String projectId;
-    //异步加载文件线程池
-    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
     //issue结果保存
     private static IssueResult ISSUE_RESULT = new IssueResult();
     //文件列表
