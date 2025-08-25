@@ -5,6 +5,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import zuk.sast.rules.DatabaseFunctionModule;
+import zuk.sast.rules.DatabaseIssue;
 import zuk.sast.rules.dto.IssueDto;
 import zuk.sast.rules.dto.fm.FunctionModuleInputOutputDto;
 
@@ -31,7 +32,7 @@ public class FunctionModuleController {
                 && StringUtils.isNotBlank(funcModuleRequestDto.getIssueId())
                 && funcModuleRequestDto.getParamValues()!=null
                 && funcModuleRequestDto.getParamValues().stream().filter(e->(e!=null && ( e.equals("") || e.equals("in") || e.equals("out")))).count() == funcModuleRequestDto.getParamValues().size()){
-            IssueDto issueDto = DatabaseFunctionModule.queryIssueDtoById(funcModuleRequestDto.getIssueId());
+            IssueDto issueDto = DatabaseIssue.queryIssueDtoById(funcModuleRequestDto.getIssueId());
             if(issueDto!=null){
                 Object object = issueDto.getData();
                 if(object instanceof FunctionModuleInputOutputDto){
@@ -46,7 +47,7 @@ public class FunctionModuleController {
                         });
 
                         map.put("status", "success");
-                        map.put("data", DatabaseFunctionModule.queryIssueDtoById(funcModuleRequestDto.getIssueId()));
+                        map.put("data", DatabaseIssue.queryIssueDtoById(funcModuleRequestDto.getIssueId()));
                         return map;
                     }
                 }

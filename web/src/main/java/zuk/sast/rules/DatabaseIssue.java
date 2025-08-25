@@ -140,6 +140,17 @@ public class DatabaseIssue {
 
     }
 
+    public static IssueDto queryIssueDtoById(String id) {
+        List<IssueDto> issueDtos = DatabaseIssue.getAllIssue().stream().filter(issueDto -> issueDto.getId().equals(id)).toList();
+        if(issueDtos!=null && issueDtos.size()>0){
+            return issueDtos.get(0);
+        }
+        else {
+            return null;
+        }
+    }
+
+
 
 
     /***
