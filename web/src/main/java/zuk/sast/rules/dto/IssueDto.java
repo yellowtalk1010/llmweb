@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class IssueDto {
-    private String id = UUID.randomUUID().toString();
+    private String id;
     private String checkType;
     private String defectLevel;
     private String defectType;
