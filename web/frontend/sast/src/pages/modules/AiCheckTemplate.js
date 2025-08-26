@@ -1,13 +1,15 @@
 import { useState } from "react";
 
-function AiCheckTemplate({ param_issue }) {
+function AiCheckTemplate({ issue }) {
     console.info("ai checker: ");
-    console.info(param_issue);
+    console.info(issue);
     
     const [isOpen, setIsOpen] = useState(false);
     const [aiConnect, setAiConnect] = useState(false); //判断ai是否连接成功
     
-    const handleAiCheckClick = () => {
+    const handleAiCheckClick = (event, issueData) => {
+        // console.info(event)
+        // console.info(issueData)
         // console.info(issue)
     };
     
@@ -79,15 +81,15 @@ function AiCheckTemplate({ param_issue }) {
                             disabled={aiConnect?"":"disabled"}
                         ></textarea>
                         <br />
-                        <button className="check-btn" onClick={handleAiCheckClick}>审计</button> 
+                        <button className="check-btn" onClick={(e)=> handleAiCheckClick(e, issue)}>审计</button> 
                         <button className="close-btn" onClick={handleCloseClick}>关闭</button>
                         <br />
                         <textarea 
                             className="textarea_hidden" 
-                            id={`textarea_hidden_${param_issue.id}`} 
+                            id={`textarea_hidden_${issue.id}`} 
                             hidden
                         ></textarea>
-                        <div className="result" id={`ai_check_${param_issue.id}`}></div>
+                        <div className="result" id={`ai_check_${issue.id}`}></div>
                     </div>
                 )}
             </div>
