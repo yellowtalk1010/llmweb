@@ -5,7 +5,7 @@ function AiCheckTemplate({ issue }) {
     console.info(issue);
     
     const [isOpen, setIsOpen] = useState(false);
-    const [aiConnect, setAiConnect] = useState(true); //判断ai是否连接成功
+    const [aiConnect, setAiConnect] = useState(false); //判断ai是否连接成功
     
     const handleAiCheckClick = () => {
         setIsOpen(true);
@@ -67,11 +67,9 @@ function AiCheckTemplate({ issue }) {
                             zIndex: 1000
                         }}
                     >
-                        {aiConnect && (
-                            <div>AI未连接</div>
-                        )}
+
                         <textarea 
-                            placeholder="请输入..." 
+                            placeholder={aiConnect?"请输入...":"AI未连接"}
                             rows="4" 
                             className="textarea_input"
                         ></textarea>
