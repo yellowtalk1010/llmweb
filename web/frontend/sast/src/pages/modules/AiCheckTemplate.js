@@ -72,6 +72,7 @@ function AiCheckTemplate({ issue }) {
                             placeholder={aiConnect?"请输入...":"AI未连接"}
                             rows="4" 
                             className="textarea_input"
+                            disabled={aiConnect?"":"disabled"}
                         ></textarea>
                         <br />
                         <button className="check-btn">审计</button> 
