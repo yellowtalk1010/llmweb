@@ -19,6 +19,9 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/***
+ * 运行命令
+ */
 @Slf4j
 @RestController
 public class RunCommandController {
@@ -30,17 +33,13 @@ public class RunCommandController {
     private static volatile String LOG_FORMAT = "UTF-8";
     private static volatile String ERROR_FORMAT = "UTF-8";
 
-//    @Autowired
-//    private TestMapper testMapper;
 
+    /***
+     * 运行命令历史
+     * @return
+     */
     @GetMapping("command_list")
     public synchronized Map<String, Object> command_list() {
-
-//        List<Test> list = testMapper.selectAll();
-//        System.out.println(list.size());
-//        list.stream().forEach(dto->{
-//            System.out.println(JSON.toJSONString(dto));
-//        });
 
         Map<String, Object> map = new HashMap<>();
 //        List<String> list = new ArrayList<>();
