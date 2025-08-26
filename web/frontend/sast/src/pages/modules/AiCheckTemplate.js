@@ -24,7 +24,7 @@ function AiCheckTemplate({ issue }) {
     };
 
 
-    const socket = new WebSocket("ws://localhost:8080/ws");
+    const socket = new WebSocket("ws://localhost:8080/ai");
     socket.addEventListener('open', () => {
         console.log('✅ WebSocket 连接已打开');
         setAiConnect(true)
@@ -91,7 +91,7 @@ function AiCheckTemplate({ issue }) {
                         <textarea 
                             className="textarea_hidden" 
                             id={`textarea_hidden_${issue.id}`} 
-                            hidden
+                            // hidden
                         ></textarea>
                         <div className="result" id={`ai_check_${issue.id}`}></div>
                     </div>
