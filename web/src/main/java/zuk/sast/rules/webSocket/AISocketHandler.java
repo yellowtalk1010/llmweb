@@ -26,6 +26,7 @@ public class AISocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessionMap.put(session.getId(), session);
+        log.info("连接总数:" + sessionMap.size());
     }
 
     @Override
@@ -52,6 +53,7 @@ public class AISocketHandler extends TextWebSocketHandler {
         }
         finally {
             sessionMap.remove(session.getId());
+            log.info("连接总数:" + sessionMap.size());
         }
     }
 
