@@ -26,6 +26,9 @@ public class AISocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessionMap.put(session.getId(), session);
+        sessionMap.entrySet().stream().filter(entry->!entry.getValue().isOpen()).forEach(entry->{
+            sessionMap.remove(entry.getKey());
+        });
         log.info("连接总数:" + sessionMap.size());
     }
 
