@@ -3,6 +3,7 @@ import {Fragment, useState, useEffect } from "react"
 import RulesTemplate from './RulesTemplate';
 import IssuesTemplate from './IssuesTemplate';
 import FilePopupExample from "./FilePopupExample";
+import AiCheckTemplate from "./AiCheckTemplate";
 
 function SourceFile({node, urlParamVtid}) {
     console.info("urlParamVtid:" + urlParamVtid)
