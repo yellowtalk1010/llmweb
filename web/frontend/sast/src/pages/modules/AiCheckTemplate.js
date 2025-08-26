@@ -37,13 +37,13 @@ function AiCheckTemplate({ issue }) {
         // console.log(websocketResult)
 
         // //将数据写入到隐藏输入框中
-        // document.getElementById("textarea_hidden-" + websocketResult).value
-        //     = document.getElementById("textarea_hidden-" + websocketResult).value + event.data
+        document.getElementById("textarea_hidden_" + issue.id).value
+            = document.getElementById("textarea_hidden_" + issue.id).value + event.data
 
-        // const input = document.getElementById("textarea_hidden-" + websocketResult).value;
+        const input = document.getElementById("textarea_hidden_" + issue.id).value;
         // const html = marked.parse(input);
         // console.info("html:" + html)
-        // document.getElementById("result-" + websocketResult).innerHTML = html;
+        // document.getElementById("ai_check_" + issue.id).innerHTML = html;
     };
 
   
