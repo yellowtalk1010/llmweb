@@ -9,29 +9,32 @@ function AiCheckTemplate({ issue }) {
     
     const handleAiCheckClick = (event, issueData) => {
         // console.info(event)
-        // console.info(issueData)
-        // console.info(issue)
+        console.info(issueData)
+        const inputData = document.getElementById("textarea_input_" + issueData.id).value
+        document.getElementById("textarea_hidden_" + issueData.id)
+        document.getElementById("ai_check_" + issueData.id)
+
+        const str = issueData.id + "##########" + inputData
+        console.info(str)
+        socket.send(str);
     };
     
     const handleCloseClick = () => {
         setIsOpen(false);
     };
 
-    var websocketResult = null;
-    // 创建 WebSocket 连接（仅一个连接复用）
-    const socket = new WebSocket("ws://localhost:8080/ws");
 
+    const socket = new WebSocket("ws://localhost:8080/ws");
     socket.addEventListener('open', () => {
         console.log('✅ WebSocket 连接已打开');
+        setAiConnect(true)
     });
-
     socket.addEventListener('error', (err) => {
         console.error('❌ WebSocket 连接出错', err);
     });
-
     socket.onmessage = function (event) {
         console.log("收到消息: " + event.data);
-        console.log(websocketResult)
+        // console.log(websocketResult)
 
         // //将数据写入到隐藏输入框中
         // document.getElementById("textarea_hidden-" + websocketResult).value
@@ -78,6 +81,7 @@ function AiCheckTemplate({ issue }) {
                             placeholder={aiConnect?"请输入...":"AI未连接"}
                             rows="4" 
                             className="textarea_input"
+                            id={`textarea_input_${issue.id}`} 
                             disabled={aiConnect?"":"disabled"}
                         ></textarea>
                         <br />
