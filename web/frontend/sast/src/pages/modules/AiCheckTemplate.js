@@ -68,7 +68,7 @@ function AiCheckTemplate({ issue }) {
                         }}
                     >
                         {aiConnect && (
-                            <div>AI连接成功</div>
+                            <div>AI未连接</div>
                         )}
                         <textarea 
                             placeholder="请输入..." 
