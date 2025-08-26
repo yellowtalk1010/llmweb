@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-function AiCheckTemplate({ issue }) {
+function AiCheckTemplate({ param_issue }) {
     console.info("ai checker: ");
-    console.info(issue);
+    console.info(param_issue);
     
     const [isOpen, setIsOpen] = useState(false);
     const [aiConnect, setAiConnect] = useState(false); //判断ai是否连接成功
     
     const handleAiCheckClick = () => {
-        setIsOpen(true);
+        // console.info(issue)
     };
     
     const handleCloseClick = () => {
@@ -48,7 +48,9 @@ function AiCheckTemplate({ issue }) {
             <div style={{ position: 'relative', display: 'inline-block' }}>
                 <a 
                     className="ai_check" 
-                    onClick={handleAiCheckClick}
+                    onClick={()=>{
+                        setIsOpen(true)
+                    }}
                     style={{ 
                         cursor: 'pointer',
                         color: '#1976d2',
@@ -82,10 +84,10 @@ function AiCheckTemplate({ issue }) {
                         <br />
                         <textarea 
                             className="textarea_hidden" 
-                            id={`textarea_hidden_${issue.id}`} 
-                            hidden="true"
+                            id={`textarea_hidden_${param_issue.id}`} 
+                            hidden
                         ></textarea>
-                        <div className="result" id={`ai_check_${issue.id}`}></div>
+                        <div className="result" id={`ai_check_${param_issue.id}`}></div>
                     </div>
                 )}
             </div>
