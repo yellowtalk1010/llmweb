@@ -100,16 +100,6 @@ function AiCheckTemplate({ issue }) {
                     border: 1px solid #e0e0e0;
                 }
                 
-                .ai_check {
-                    cursor: pointer;
-                    color: #1976d2;
-                    text-decoration: underline;
-                }
-                
-                .ai_check:hover {
-                    color: #1565c0;
-                }
-                
                 `}
             </style>
         </>
