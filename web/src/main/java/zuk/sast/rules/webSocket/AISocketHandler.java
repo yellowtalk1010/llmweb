@@ -56,12 +56,14 @@ public class AISocketHandler extends TextWebSocketHandler {
         }
         finally {
             sessionMap.remove(session.getId());
-            log.info("连接总数:" + sessionMap.size());
+            log.info("删除连接总数:" + sessionMap.size());
         }
     }
 
 
-
+    /***
+     * 测试 markdown
+     */
     private class TestThread implements Runnable {
 
         private String messageStr;
