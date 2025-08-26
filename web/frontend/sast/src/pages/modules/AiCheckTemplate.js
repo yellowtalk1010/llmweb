@@ -1,63 +1,36 @@
-import { Fragment, useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 function AiCheckTemplate({ issue }) {
     console.info("ai checker: ");
     console.info(issue);
     
     const [isOpen, setIsOpen] = useState(false);
-    const [position, setPosition] = useState({ top: 0, left: 0 });
-    const linkRef = useRef(null);
-    const floatRef = useRef(null);
     
     const handleAiCheckClick = () => {
-        if (linkRef.current) {
-            const rect = linkRef.current.getBoundingClientRect();
-            setPosition({
-                top: rect.bottom + window.scrollY,
-                left: rect.left + window.scrollX
-            });
-        }
         setIsOpen(true);
     };
     
     const handleCloseClick = () => {
         setIsOpen(false);
     };
-    
-    // 点击外部区域关闭悬浮窗
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (isOpen && 
-                floatRef.current && 
-                !floatRef.current.contains(event.target) && 
-                !event.target.closest('.ai_check')) {
-                setIsOpen(false);
-            }
-        };
-        
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isOpen]);
 
     return (
         <>
             <div style={{ position: 'relative', display: 'inline-block' }}>
                 <a 
-                    ref={linkRef}
                     className="ai_check" 
                     onClick={handleAiCheckClick}
-                    style={{ cursor: 'pointer', textDecoration: 'none'}}
+                    style={{ 
+                        cursor: 'pointer',
+                        color: '#1976d2',
+                        textDecoration: 'none'
+                    }}
                 >
                     AI审计
                 </a>
-
-                
                 
                 {isOpen && (
                     <div 
-                        ref={floatRef}
                         className="ai_float"
                         style={{
                             position: 'absolute',
