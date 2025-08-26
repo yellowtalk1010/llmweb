@@ -34,23 +34,10 @@ public class AISocketHandler extends TextWebSocketHandler {
         try {
             String messageStr = message.getPayload();
             log.info("接受到数据:" + messageStr);
-
-            EXECUTOR_SERVICE.execute(()->{
-                String md = getMD();
-                md = messageStr + "\n" + md;
-                Arrays.stream(md.split("\n")).forEach(line->{
-                    try{
-                        session.sendMessage(new TextMessage(line));
-                        Thread.sleep(1000);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            });
+            EXECUTOR_SERVICE.execute(new TestThread(messageStr, session));
         }catch (Exception e) {
             session.sendMessage(new TextMessage(e.getMessage()));
         }
-
 
     }
 
@@ -69,8 +56,39 @@ public class AISocketHandler extends TextWebSocketHandler {
     }
 
 
-    private static final String getMD() {
-        return """
+
+    private class TestThread implements Runnable {
+
+        private String messageStr;
+        private WebSocketSession session;
+
+        public TestThread(String messageStr, WebSocketSession session) {
+            this.messageStr = messageStr;
+            this.session = session;
+        }
+
+        @Override
+        public void run() {
+            String md = getMD();
+            md = this.messageStr + "\n" + md;
+            Arrays.stream(md.split("\n")).forEach(line->{
+                try{
+                    char arr[] = line.toCharArray();
+                    for (int i =0; i< arr.length; i++) {
+                        this.session.sendMessage(new TextMessage(arr[i]+"")); //一个字符一个字符的输出
+                        Thread.sleep(50);
+                    }
+                    this.session.sendMessage(new TextMessage("\n"));
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+
+        private static final String getMD() {
+            return """
                 # 一级标题
                 ## 二级标题
                 ### 三级标题
@@ -117,6 +135,7 @@ public class AISocketHandler extends TextWebSocketHandler {
                 greet("张三")
                                 
                 """;
+        }
     }
 
 }

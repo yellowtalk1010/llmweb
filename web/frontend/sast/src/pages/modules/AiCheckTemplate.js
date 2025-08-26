@@ -9,10 +9,11 @@ function AiCheckTemplate({ issue }) {
     const [aiConnect, setAiConnect] = useState(false); //判断ai是否连接成功
     
     const handleAiCheckClick = (event, issueData) => {
+        
         // console.info(event)
-        console.info(issueData)
+        // console.info(issueData)
         const inputData = document.getElementById("textarea_input_" + issueData.id).value
-        document.getElementById("textarea_hidden_" + issueData.id)
+        document.getElementById("textarea_hidden_" + issueData.id).value = ""
         document.getElementById("ai_check_" + issueData.id)
 
         const str = issueData.id //+ "##########" + inputData
@@ -27,14 +28,15 @@ function AiCheckTemplate({ issue }) {
 
     const socket = new WebSocket("ws://localhost:8080/ai");
     socket.addEventListener('open', () => {
-        console.log('✅ WebSocket 连接已打开');
+        //console.log('✅ WebSocket 连接已打开');
         setAiConnect(true)
     });
     socket.addEventListener('error', (err) => {
-        console.error('❌ WebSocket 连接出错', err);
+        setAiConnect(false)
+        //console.error('❌ WebSocket 连接出错', err);
     });
     socket.onmessage = function (event) {
-        console.log("收到消息: " + event.data);
+        //console.log("收到消息: " + event.data);
         // console.log(websocketResult)
 
         // //将数据写入到隐藏输入框中
@@ -42,9 +44,9 @@ function AiCheckTemplate({ issue }) {
             = document.getElementById("textarea_hidden_" + issue.id).value + event.data
 
         const input = document.getElementById("textarea_hidden_" + issue.id).value;
-        console.info("markdown:" + input)
+        // console.info("markdown:" + input)
         const html = marked.parse(input);
-        console.info("html:" + html)
+        // console.info("html:" + html)
         document.getElementById("ai_check_" + issue.id).innerHTML = html;
     };
 
@@ -93,7 +95,7 @@ function AiCheckTemplate({ issue }) {
                         <textarea 
                             className="textarea_hidden" 
                             id={`textarea_hidden_${issue.id}`} 
-                            // hidden
+                            hidden
                         ></textarea>
                         <div className="result" id={`ai_check_${issue.id}`}></div>
                     </div>
