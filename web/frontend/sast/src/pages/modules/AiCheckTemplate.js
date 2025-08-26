@@ -41,6 +41,8 @@ function AiCheckTemplate({ issue }) {
         // document.getElementById("result-" + websocketResult).innerHTML = html;
     };
 
+  
+
     return (
         <>
             <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -75,7 +77,7 @@ function AiCheckTemplate({ issue }) {
                             disabled={aiConnect?"":"disabled"}
                         ></textarea>
                         <br />
-                        <button className="check-btn">审计</button> 
+                        <button className="check-btn" onClick={handleAiCheckClick}>审计</button> 
                         <button className="close-btn" onClick={handleCloseClick}>关闭</button>
                         <br />
                         <textarea 
