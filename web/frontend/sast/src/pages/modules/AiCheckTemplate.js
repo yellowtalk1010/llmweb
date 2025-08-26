@@ -5,7 +5,7 @@ function AiCheckTemplate({ issue }) {
     console.info(issue);
     
     const [isOpen, setIsOpen] = useState(false);
-    const [aiConnect, setAiConnect] = useState(true);
+    const [aiConnect, setAiConnect] = useState(true); //判断ai是否连接成功
     
     const handleAiCheckClick = () => {
         setIsOpen(true);
