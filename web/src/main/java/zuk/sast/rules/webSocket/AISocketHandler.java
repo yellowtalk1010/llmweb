@@ -69,22 +69,6 @@ public class AISocketHandler extends TextWebSocketHandler {
     }
 
 
-    public static void pushMessage(String log, String type){
-        try {
-//            if (webSocketSession!=null && webSocketSession.isOpen()) {
-//                Map<String, String> map = new HashMap<>();
-//                map.put("log", log);
-//                map.put("type", type);
-//                webSocketSession.sendMessage(new TextMessage(JSON.toJSONString(map)));
-//            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
-
     private static final String getMD() {
         return """
                 # 一级标题
