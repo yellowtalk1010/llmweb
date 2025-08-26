@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+/**
+ * 二维码接口
+ */
 @RestController
 public class QRCongtroller {
 
