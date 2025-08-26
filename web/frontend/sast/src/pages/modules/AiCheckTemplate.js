@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { marked } from 'marked';
 
 function AiCheckTemplate({ issue }) {
     console.info("ai checker: ");
@@ -14,7 +15,7 @@ function AiCheckTemplate({ issue }) {
         document.getElementById("textarea_hidden_" + issueData.id)
         document.getElementById("ai_check_" + issueData.id)
 
-        const str = issueData.id + "##########" + inputData
+        const str = issueData.id //+ "##########" + inputData
         console.info(str)
         socket.send(str);
     };
@@ -41,9 +42,10 @@ function AiCheckTemplate({ issue }) {
             = document.getElementById("textarea_hidden_" + issue.id).value + event.data
 
         const input = document.getElementById("textarea_hidden_" + issue.id).value;
-        // const html = marked.parse(input);
-        // console.info("html:" + html)
-        // document.getElementById("ai_check_" + issue.id).innerHTML = html;
+        console.info("markdown:" + input)
+        const html = marked.parse(input);
+        console.info("html:" + html)
+        document.getElementById("ai_check_" + issue.id).innerHTML = html;
     };
 
   
