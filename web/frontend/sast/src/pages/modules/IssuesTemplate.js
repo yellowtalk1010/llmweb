@@ -55,6 +55,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
   function renderIssue(issue) {
     return (
       <div key={issue.id} id={issue.id} className="issueDiv">
+        <div>{issue.id}</div>
         <div>{issue.name}</div>
         <div>
           {issue.line}/{issue.vtId}/{issue.rule}/{issue.defectLevel}/{issue.defectType}
@@ -80,7 +81,8 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
 function renderFunctionModule(issue) {
   return (
     <div key={issue.id} id={issue.id} className="issueDiv">
-      <div>{issue.data.funcLine}，函数输入输出，{issue.id}</div>
+      <div>{issue.id}</div>
+      <div>{issue.data.funcLine}，函数输入输出</div>
       <div>
         <table>
           <tbody>
