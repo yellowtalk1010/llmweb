@@ -48,10 +48,12 @@ function AiCheckTemplate({ issue }) {
                     ref={linkRef}
                     className="ai_check" 
                     onClick={handleAiCheckClick}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', textDecoration: 'none'}}
                 >
                     AI审计
                 </a>
+
+                
                 
                 {isOpen && (
                     <div 
