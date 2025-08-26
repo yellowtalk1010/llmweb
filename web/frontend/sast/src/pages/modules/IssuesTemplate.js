@@ -73,7 +73,9 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
           ))
         }
         </div>
-        <a class="ai_check" id={"ai_check_" + issue.id}>AI审计</a>
+        <div>
+          <AiCheckTemplate issue={issue}></AiCheckTemplate>
+        </div>
       </div>
     );
   }
@@ -104,6 +106,9 @@ function renderFunctionModule(issue) {
             </tr>
           </tbody>
         </table>
+      </div>
+      <div>
+        <AiCheckTemplate issue={issue}></AiCheckTemplate>
       </div>
     </div>
   );
