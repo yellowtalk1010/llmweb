@@ -1,5 +1,7 @@
 import {Fragment, useState, useEffect } from "react"
 
+import AiCheckTemplate from "./AiCheckTemplate";
+
 /**
  * @param: issueDatas 是跟随 文件返回 issue列表数据
  */
