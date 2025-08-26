@@ -71,7 +71,7 @@ function IssuesTemplate({ issueDatas, onShowPopup }) {
           ))
         }
         </div>
-        <a class="ai_check" id={issue.id}>AI审计</a>
+        <a class="ai_check" id={"ai_check_" + issue.id}>AI审计</a>
       </div>
     );
   }
