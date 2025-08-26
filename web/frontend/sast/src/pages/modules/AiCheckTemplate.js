@@ -43,7 +43,7 @@ function AiCheckTemplate({ issue }) {
                         <textarea 
                             placeholder="请输入..." 
                             rows="4" 
-                            className="textarea"
+                            className="textarea_input"
                         ></textarea>
                         <br />
                         <button className="check-btn">审计</button> 
@@ -51,8 +51,8 @@ function AiCheckTemplate({ issue }) {
                         <br />
                         <textarea 
                             className="textarea_hidden" 
-                            id={`textarea_hidden-${issue.id}`} 
-                            hidden
+                            id={`textarea_hidden_${issue.id}`} 
+                            hidden="true"
                         ></textarea>
                         <div className="result" id={`ai_check_${issue.id}`}></div>
                     </div>
@@ -61,7 +61,7 @@ function AiCheckTemplate({ issue }) {
 
             <style>
                 {`
-                .textarea {
+                .textarea_input {
                     width: 900px;
                     height: 100px;
                     border: 1px solid #ddd;
@@ -110,14 +110,6 @@ function AiCheckTemplate({ issue }) {
                     color: #1565c0;
                 }
                 
-                .result {
-                    margin-top: 10px;
-                    padding: 10px;
-                    border: 1px solid #e0e0e0;
-                    border-radius: 4px;
-                    background-color: #f9f9f9;
-                    min-height: 50px;
-                }
                 `}
             </style>
         </>
