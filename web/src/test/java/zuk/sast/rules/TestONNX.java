@@ -226,9 +226,7 @@ public class TestONNX {
             long numOutputs = session.getNumOutputs();
             long starttime = session.getProfilingStartTimeInNs();
             String profiling = session.endProfiling();
-
-            OnnxMl.ModelProto
-
+            
 
             for (String text : texts) {
                 Encoded e = encode(text, vocab, maxLen, segmenter);
