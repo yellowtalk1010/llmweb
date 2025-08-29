@@ -1,6 +1,7 @@
 package zuk.sast.rules;
 
 
+import ai.onnx.proto.OnnxMl;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.huaban.analysis.jieba.JiebaSegmenter;
@@ -14,6 +15,7 @@ import org.tribuo.provenance.SimpleDataSourceProvenance;
 
 import java.io.File;
 import java.nio.LongBuffer;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -167,6 +169,34 @@ public class TestONNX {
 //        env.close();
 //    }
 
+    public static void ParseONNXFile(String onnxPath) throws Exception {
+        // 直接读取并解析 ONNX 文件
+        byte[] modelBytes = Files.readAllBytes(Paths.get(onnxPath));
+        OnnxMl.ModelProto modelProto = OnnxMl.ModelProto.parseFrom(modelBytes);
+        OnnxMl.GraphProto graph = modelProto.getGraph();
+
+        System.out.println("模型IR版本: " + modelProto.getIrVersion());
+        System.out.println("使用的算子集 (Opset): " + modelProto.getOpsetImportList());
+
+        System.out.println("\n=== 计算图中的所有节点/算子 ===");
+        for (OnnxMl.NodeProto node : graph.getNodeList()) {
+            System.out.println("Node Name: " + node.getName());
+            System.out.println("Operator Type (OpType): " + node.getOpType()); // 核心信息
+            System.out.println("Inputs: " + node.getInputList());
+            System.out.println("Outputs: " + node.getOutputList());
+            System.out.println("Domain: " + node.getDomain()); // 通常是空字符串("")表示ai.onnx域
+            System.out.println("---");
+        }
+
+        System.out.println("\n=== 图的输入和输出 ===");
+        for (OnnxMl.ValueInfoProto input : graph.getInputList()) {
+            System.out.println("Graph Input: " + input.getName());
+        }
+        for (OnnxMl.ValueInfoProto output : graph.getOutputList()) {
+            System.out.println("Graph Output: " + output.getName());
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         String path = "src\\test\\resources\\modules\\module1\\";
         JiebaSegmenter segmenter = new JiebaSegmenter();
@@ -186,6 +216,19 @@ public class TestONNX {
             OrtEnvironment env = OrtEnvironment.getEnvironment();
             OrtSession.SessionOptions opts = new OrtSession.SessionOptions();
             OrtSession session = env.createSession(path + "sentiment.onnx", opts);
+
+            Map<String, NodeInfo> inputInfo = session.getInputInfo();
+            Map<String, NodeInfo> outputInfo = session.getOutputInfo();
+            OnnxModelMetadata onnxModelMetadata = session.getMetadata();
+            Set<String> inputNames = session.getInputNames();
+            Set<String> outputNames = session.getOutputNames();
+            long numInputs = session.getNumInputs();
+            long numOutputs = session.getNumOutputs();
+            long starttime = session.getProfilingStartTimeInNs();
+            String profiling = session.endProfiling();
+
+            OnnxMl.ModelProto
+
 
             for (String text : texts) {
                 Encoded e = encode(text, vocab, maxLen, segmenter);
