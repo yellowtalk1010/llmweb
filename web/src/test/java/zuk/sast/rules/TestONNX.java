@@ -169,7 +169,7 @@ public class TestONNX {
 //        env.close();
 //    }
 
-    public static void ParseONNXFile(String onnxPath) throws Exception {
+    public static void parseONNXFile(String onnxPath) throws Exception {
         // 直接读取并解析 ONNX 文件
         byte[] modelBytes = Files.readAllBytes(Paths.get(onnxPath));
         OnnxMl.ModelProto modelProto = OnnxMl.ModelProto.parseFrom(modelBytes);
@@ -215,7 +215,8 @@ public class TestONNX {
 
             OrtEnvironment env = OrtEnvironment.getEnvironment();
             OrtSession.SessionOptions opts = new OrtSession.SessionOptions();
-            OrtSession session = env.createSession(path + "sentiment.onnx", opts);
+            String moduleOnnxPath = path + "sentiment.onnx";
+            OrtSession session = env.createSession(moduleOnnxPath, opts);
 
             Map<String, NodeInfo> inputInfo = session.getInputInfo();
             Map<String, NodeInfo> outputInfo = session.getOutputInfo();
@@ -226,7 +227,8 @@ public class TestONNX {
             long numOutputs = session.getNumOutputs();
             long starttime = session.getProfilingStartTimeInNs();
             String profiling = session.endProfiling();
-            
+
+            parseONNXFile(moduleOnnxPath);
 
             for (String text : texts) {
                 Encoded e = encode(text, vocab, maxLen, segmenter);
