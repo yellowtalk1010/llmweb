@@ -7,9 +7,14 @@ import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 import ai.onnxruntime.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oracle.labs.mlrg.olcut.util.Pair;
+import org.tribuo.*;
+import org.tribuo.provenance.ModelProvenance;
+import org.tribuo.provenance.SimpleDataSourceProvenance;
 
 import java.io.File;
 import java.nio.LongBuffer;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class TestONNX {
@@ -91,6 +96,77 @@ public class TestONNX {
         return idx;
     }
 
+//    private static void showDataMeta(String onnxModelPath){
+//        // 1. 创建ONNX环境
+//        OrtEnvironment env = OrtEnvironment.getEnvironment();
+//        // 2. 指定模型路径
+//        String modelPath = onnxModelPath;
+//
+//        // 3. 使用Tribuo加载ONNX模型
+//        // 注意：我们需要一个OutputFactory和假输入来定义输出类型。
+//        // 对于纯 inspection（检查），输出类型可能不重要，但加载需要它。
+//        OutputFactory<?> outputFactory = null; // 通常你需要一个具体的工厂，例如LabelFactory
+//        // 这里我们创建一个ONNXExternalModel，它继承自Model
+//        ONNXExternalModel<?> model = ONNXExternalModel.createONNXModel(
+//                Paths.get(modelPath),
+//                "my-model", // 模型名称
+//                outputFactory, // 可能需要根据你的任务提供一个，例如用于分类的LabelFactory
+//                new SimpleDataSourceProvenance("", outputFactory) // 数据源证明
+//        );
+//
+//        // 4. 提取模型基本信息 (通过Tribuo的Model接口)
+//        System.out.println("=== 模型基本信息 (Tribuo) ===");
+//        System.out.println("模型名称: " + model.getName());
+//        System.out.println("输入特征数: " + model.getNumberOfFeatures());
+//        System.out.println("特征名称: " + model.getFeatureIDMap().getKeySet());
+//
+//        // 5. 获取底层ONNX Session以进行深入分析 (关键步骤)
+//        OrtSession session = model.getSession();
+//        System.out.println("\n=== ONNX 模型详细信息 ===");
+//
+//        // 5.1 打印输入信息
+//        System.out.println("\n--- 模型输入 ---");
+//        Map<String, NodeInfo> inputs = session.getInputInfo();
+//        for (Map.Entry<String, NodeInfo> input : inputs.entrySet()) {
+//            String name = input.getKey();
+//            NodeInfo info = input.getValue();
+//            System.out.println("输入名称: " + name);
+//            // 尝试获取TensorInfo以查看形状和类型
+//            if (info.getInfo() instanceof TensorInfo) {
+//                TensorInfo tensorInfo = (TensorInfo) info.getInfo();
+//                System.out.println("  形状: " + java.util.Arrays.toString(tensorInfo.getShape()));
+//                System.out.println("  数据类型: " + tensorInfo.type);
+//            }
+//        }
+//
+//        // 5.2 打印输出信息
+//        System.out.println("\n--- 模型输出 ---");
+//        Map<String, NodeInfo> outputs = session.getOutputInfo();
+//        for (Map.Entry<String, NodeInfo> output : outputs.entrySet()) {
+//            String name = output.getKey();
+//            NodeInfo info = output.getValue();
+//            System.out.println("输出名称: " + name);
+//            if (info.getInfo() instanceof TensorInfo) {
+//                TensorInfo tensorInfo = (TensorInfo) info.getInfo();
+//                System.out.println("  形状: " + java.util.Arrays.toString(tensorInfo.getShape()));
+//                System.out.println("  数据类型: " + tensorInfo.type);
+//            }
+//        }
+//
+//        // 5.3 (高级) 获取计算图并遍历节点/算子
+//        // 注意：直接访问图可能需要更底层的ONNX Runtime API调用。
+//        // session.getSession() 返回的 OrtSession 允许你获取元数据，
+//        // 但要遍历所有节点，通常需要处理ONNX的GraphProto。
+//        // 一个更简单的方法是使用 session.getInputNames() 和 session.getOutputNames()，
+//        // 但完整遍历所有算子需要更多工作，可能涉及 model.getSession().getSessionOptions()...
+//
+//        System.out.println("\n操作已完成。");
+//
+//        // 6. 关闭资源
+//        session.close();
+//        env.close();
+//    }
+
     public static void main(String[] args) throws Exception {
         String path = "src\\test\\resources\\modules\\module1\\";
         JiebaSegmenter segmenter = new JiebaSegmenter();
@@ -105,9 +181,11 @@ public class TestONNX {
         };
         int maxLen = 32;
 
-        try (OrtEnvironment env = OrtEnvironment.getEnvironment();
-             OrtSession.SessionOptions opts = new OrtSession.SessionOptions();
-             OrtSession session = env.createSession(path + "sentiment.onnx", opts)) {
+        try {
+
+            OrtEnvironment env = OrtEnvironment.getEnvironment();
+            OrtSession.SessionOptions opts = new OrtSession.SessionOptions();
+            OrtSession session = env.createSession(path + "sentiment.onnx", opts);
 
             for (String text : texts) {
                 Encoded e = encode(text, vocab, maxLen, segmenter);
@@ -142,6 +220,9 @@ public class TestONNX {
                     System.out.printf("PRED: %s | probs=%s%n", labels.get(String.valueOf(pred)), sb.toString());
                 }
             }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
