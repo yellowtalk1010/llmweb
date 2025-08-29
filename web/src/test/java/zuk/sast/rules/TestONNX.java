@@ -1,6 +1,8 @@
 package zuk.sast.rules;
 
 
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 import ai.onnxruntime.*;
@@ -21,6 +23,8 @@ public class TestONNX {
         public Vocab(String path) throws Exception {
             ObjectMapper mapper = new ObjectMapper();
             Map<?,?> obj = mapper.readValue(new File(path), Map.class);
+            String formatJson = JSONObject.toJSONString(obj, JSONWriter.Feature.PrettyFormat);
+            //System.out.println(formatJson);
             token2id = (Map<String,Integer>) obj.get("token2id");
         }
 
