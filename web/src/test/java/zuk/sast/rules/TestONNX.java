@@ -12,6 +12,9 @@ import java.util.*;
 
 public class TestONNX {
 
+    /***
+     * 字典
+     */
     static class Vocab {
         Map<String, Integer> token2id;
 
