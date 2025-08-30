@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 
 function AllStock() {
-  const [stocks, setStocks] = useState([]);
+  const [stockDatas, setStockDatas] = useState({
+    stocks:[],
+    blocks:[]
+  });
+  const [search, setSearch] = useState("");      // 输入框
+  const [filter, setFilter] = useState("");      // 下拉框选择
 
   useEffect(() => {
     fetch('/stock/all?search=', {
@@ -9,9 +14,24 @@ function AllStock() {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => res.json())
-      .then(data => setStocks(data))
+      .then(data => setStockDatas(data))
       .catch(e => console.error(e));
   }, []);
+
+  // 查询事件
+  const handleSearch = () => {
+    let url = `/stock/all?search=${encodeURIComponent(search)}`;
+    if (filter) {
+      url += `&filter=${encodeURIComponent(filter)}`;
+    }
+    fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(res => res.json())
+      .then(data => setStockDatas(data))
+      .catch(e => console.error(e));
+  };
 
   // 样式对象
   const styles = {
@@ -19,6 +39,7 @@ function AllStock() {
       borderCollapse: "collapse",
       width: "100%",
       fontFamily: "Arial, sans-serif",
+      marginTop: "10px"
     },
     th: {
       border: "1px solid #ccc",
@@ -32,21 +53,57 @@ function AllStock() {
       padding: "8px",
       textAlign: "center",
     },
-    trHover: {
-      backgroundColor: "#f9f9f9",
-    },
     button: {
-      padding: "4px 8px",
+      padding: "4px 12px",
       backgroundColor: "#007bff",
       color: "#fff",
       border: "none",
       borderRadius: "4px",
       cursor: "pointer",
+      marginLeft: "8px"
+    },
+    input: {
+      padding: "6px 10px",
+      marginRight: "8px",
+      border: "1px solid #ccc",
+      borderRadius: "4px",
+    },
+    select: {
+      padding: "6px 10px",
+      marginRight: "8px",
+      border: "1px solid #ccc",
+      borderRadius: "4px",
+    },
+    form: {
+      marginBottom: "10px"
     }
   };
 
   return (
     <div style={{ padding: "20px" }}>
+      {/* 查询表单 */}
+      <div style={styles.form}>
+        <input
+          type="text"
+          placeholder="请输入股票名称或代码"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={styles.input}
+        />
+        <select
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
+          style={styles.select}
+        >
+          <option value="">全部板块</option>
+          <option value="SZ">深圳</option>
+          <option value="SH">上海</option>
+          <option value="创业板">创业板</option>
+        </select>
+        <button onClick={handleSearch} style={styles.button}>查询</button>
+      </div>
+
+      {/* 表格 */}
       <table style={styles.table}>
         <thead>
           <tr>
@@ -58,7 +115,7 @@ function AllStock() {
           </tr>
         </thead>
         <tbody>
-          {stocks.map((row, index) => (
+          {stockDatas.stocks.map((row, index) => (
             <tr
               key={index}
               style={{ cursor: "default" }}

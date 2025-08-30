@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import zuk.sast.rules.utils.ResourceFileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /***
  *
@@ -50,15 +47,18 @@ public class AllStockController {
     }
 
     @GetMapping("all")
-    public List<Map<String, String>> all(String search){
-        String html = """
-                 <!DOCTYPE html>
-                    <html lang="zh-CN">
-                    <head>
-                      <meta charset="UTF-8">
-                     </head>
-                """;
-        return STOCKS;
+    public Map<String, Object> all(String search){
+
+        List<String> blocks = STOCKS.stream()
+                .flatMap(stock->{
+                    String[] arr = stock.get("gl").split(",");
+                    return Arrays.stream(arr);
+                }).toList();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("stocks", STOCKS);
+        map.put("blocks",blocks);
+        return map;
     }
 
 }
