@@ -5,6 +5,8 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zuk.sast.rules.utils.ResourceFileUtils;
 
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
+@RequestMapping("stock")
 public class AllStockController {
 
     public static final List<Map<String, String>> STOCKS = new ArrayList<>();
@@ -46,6 +49,16 @@ public class AllStockController {
         }
     }
 
-
+    @GetMapping("all")
+    public List<Map<String, String>> all(String search){
+        String html = """
+                 <!DOCTYPE html>
+                    <html lang="zh-CN">
+                    <head>
+                      <meta charset="UTF-8">
+                     </head>
+                """;
+        return STOCKS;
+    }
 
 }
