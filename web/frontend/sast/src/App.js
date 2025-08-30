@@ -11,7 +11,7 @@ import SourceCode from "./pages/SourceCode"
 import Run from "./pages/Run";
 import FunctionModule from "./pages/FunctionModule"; //函数模型
 import Flow from "./flows/Flow";
-import Stock from "./pages/Stock";
+import Stock from "./pages/stock/Stock";
 
 function App() {
 
