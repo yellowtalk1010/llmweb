@@ -3,17 +3,17 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 function HelloWorld() {
   const leftPanelRef = useRef(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
   const toggleLeftPanel = (e) => {
     e.stopPropagation();
-    if (isCollapsed) {
+    if (collapsed) {
       leftPanelRef.current.expand();
     } else {
       leftPanelRef.current.collapse();
     }
-    setIsCollapsed(!isCollapsed);
+    setCollapsed(!collapsed);
   };
 
   return (
@@ -50,7 +50,7 @@ function HelloWorld() {
             backgroundColor: isHovering ? "#d1d5db" : "transparent",
           }}
         >
-          {isCollapsed ? "▶️" : "◀️"}
+          {collapsed ? "▶️" : "◀️"}
         </div>
       </PanelResizeHandle>
 
