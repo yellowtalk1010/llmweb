@@ -57,10 +57,10 @@ public class AllStockController {
 
             splits.stream().forEach(s->{
                 List<Map<String, String>> ls = STOCKS.stream().filter(stock->{
-                    return stock.get("api_code").contains(s)
-                            || stock.get("jys").contains(s)
-                            || stock.get("gl").contains(s)
-                            || stock.get("name").contains(s);
+                    return stock.get("api_code").toUpperCase().contains(s.toUpperCase())
+                            || stock.get("jys").toUpperCase().contains(s.toUpperCase())
+                            || stock.get("gl").toUpperCase().contains(s.toUpperCase())
+                            || stock.get("name").toUpperCase().contains(s.toUpperCase());
                 }).toList();
                 list.addAll(ls);
             });
@@ -69,11 +69,13 @@ public class AllStockController {
             list = STOCKS;
         }
 
-        List<String> blocks = list.stream()
-                .flatMap(stock->{
-                    String[] arr = stock.get("gl").split(",");
-                    return Arrays.stream(arr);
-                }).toList();
+        List<String> blocks = Arrays.asList(
+                "人工智能",
+                "deepseek",
+                "昇腾",
+                "数据中心",
+                "芯片"
+        );
 
         log.info("search:" + search +  ", stocks:" + list.size() + ", blocks:" + blocks.size());
 
