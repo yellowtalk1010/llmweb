@@ -2,6 +2,7 @@ package zuk.sast.rules.controller.stock;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.ResourceUtils;
@@ -35,7 +36,7 @@ public class AllStockController {
                 JSONObject obj = (JSONObject) item;
                 map.put("api_code", obj.getString("api_code"));
                 map.put("jys", obj.getString("jys"));
-                map.put("gl", obj.getString("gl"));
+                map.put("gl", obj.getString("gl")); //所属板块
                 map.put("name", obj.getString("name"));
                 STOCKS.add(map);
             });
@@ -47,8 +48,53 @@ public class AllStockController {
         }
     }
 
+    @GetMapping("add")
+    public synchronized Map<String, Object> add(String api_code) {
+        log.info("add:" + api_code);
+        String path = "web/data/mystock";
+        Map<String, Object> result = new HashMap<>();
+        try {
+            List<String> list = FileUtils.readLines(new File(path), "UTF-8");
+            Map<String, JSONObject> mymap = new HashMap<>();
+            list.stream().forEach(l->{
+                JSONObject jsonObject = JSONObject.parseObject(l);
+                mymap.put(jsonObject.getString("api_code"), jsonObject);
+            });
+            if(mymap.get(api_code)!=null){
+                //已经存在
+                result.put("status", "已存在");
+                return result;
+            }
+            else {
+                STOCKS.stream().filter(stock->stock.get("api_code").equals(api_code)).forEach(socket->{
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("api_code", socket.get("api_code"));
+                    jsonObject.put("jys", socket.get("jys"));
+                    jsonObject.put("name", socket.get("name"));
+                    mymap.put(api_code, jsonObject);
+                });
+                //重新转成行数据
+                List<String> newLines = mymap.entrySet().stream().map(entry->{
+                    return JSONObject.toJSONString(entry.getValue(), JSONWriter.Feature.LargeObject);
+                }).toList();
+                //重新写入文件中
+                FileUtils.writeLines(new File(path),"UTF-8", newLines);
+                result.put("status", "ok");
+                return result;
+            }
+
+
+        }catch (Exception e) {
+            //e.printStackTrace();
+            log.error(e.getMessage());
+            result.put("status", e.getMessage());
+        }
+
+        return result;
+    }
+
     @GetMapping("all")
-    public synchronized Map<String, Object> all(String search){
+    public Map<String, Object> all(String search){
 
         List<Map<String, String>> list;
         if(search!=null && search.length()>0){
