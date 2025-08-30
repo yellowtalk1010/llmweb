@@ -48,6 +48,43 @@ public class AllStockController {
         }
     }
 
+    @GetMapping("delete")
+    public synchronized Map<String, Object> delete(String api_code) {
+        log.info("add:" + api_code);
+        File resultFile = new File("data/mystock");
+        log.info("resultFile:" + resultFile.getAbsolutePath() + ", exists:" + resultFile.exists());
+        Map<String, Object> result = new HashMap<>();
+        try {
+            List<String> list = FileUtils.readLines(resultFile, "UTF-8");
+            Map<String, JSONObject> mymap = new HashMap<>();
+            list.stream().forEach(l->{
+                JSONObject jsonObject = JSONObject.parseObject(l);
+                mymap.put(jsonObject.getString("api_code"), jsonObject);
+            });
+            log.info("总数：" + mymap.size());
+
+            mymap.remove(api_code);
+
+            //重新转成行数据
+            List<String> newLines = mymap.entrySet().stream().map(entry->{
+                return JSONObject.toJSONString(entry.getValue(), JSONWriter.Feature.LargeObject);
+            }).toList();
+            //重新写入文件中
+            FileUtils.writeLines(resultFile,"UTF-8", newLines);
+            result.put("status", "ok");
+            return result;
+
+
+
+        }catch (Exception e) {
+            //e.printStackTrace();
+            log.error(e.getMessage());
+            result.put("status", e.getMessage());
+        }
+
+        return result;
+    }
+
     @GetMapping("add")
     public synchronized Map<String, Object> add(String api_code) {
         log.info("add:" + api_code);
