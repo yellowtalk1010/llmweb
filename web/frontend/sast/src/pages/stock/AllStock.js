@@ -10,7 +10,6 @@ const pages = [
 const AllStock = () => {
   const [openedPages, setOpenedPages] = useState([]); // 已打开的页面
   const [activePageId, setActivePageId] = useState(null);
-  const [collapsed, setCollapsed] = useState(false); // 左侧 Panel 是否折叠
 
   const openPage = (page) => {
     if (!openedPages.find((p) => p.id === page.id)) {
@@ -32,8 +31,8 @@ const AllStock = () => {
   return (
     <div style={{ height: "100vh" }}>
       <PanelGroup direction="horizontal">
-        {/* 左侧 Panel */}
-        <Panel defaultSize={collapsed ? 5 : 20} minSize={5} maxSize={50}>
+        {/* 左侧 Panel：网页列表 */}
+        <Panel defaultSize={20} minSize={10} maxSize={40}>
           <div
             style={{
               padding: 10,
@@ -42,25 +41,19 @@ const AllStock = () => {
               borderRight: "1px solid #ccc",
             }}
           >
-            <button onClick={() => setCollapsed(!collapsed)}>
-              {collapsed ? "展开" : "折叠"}
-            </button>
-
-            {!collapsed && (
-              <ul style={{ marginTop: 10, listStyle: "none", padding: 0 }}>
-                {pages.map((page) => (
-                  <li key={page.id} style={{ margin: "5px 0" }}>
-                    <button onClick={() => openPage(page)}>{page.title}</button>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul style={{ marginTop: 10, listStyle: "none", padding: 0 }}>
+              {pages.map((page) => (
+                <li key={page.id} style={{ margin: "5px 0" }}>
+                  <button onClick={() => openPage(page)}>{page.title}</button>
+                </li>
+              ))}
+            </ul>
           </div>
         </Panel>
 
         <PanelResizeHandle />
 
-        {/* 右侧网页内容 */}
+        {/* 右侧 Panel：网页内容 */}
         <Panel>
           <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
             {/* 标签页 */}
