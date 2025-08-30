@@ -10,7 +10,7 @@ const pages = [
 const AllStock = () => {
   const [openedPages, setOpenedPages] = useState([]); // 已打开的页面
   const [activePageId, setActivePageId] = useState(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false); // 左侧 Panel 是否折叠
 
   const openPage = (page) => {
     if (!openedPages.find((p) => p.id === page.id)) {
@@ -32,11 +32,20 @@ const AllStock = () => {
   return (
     <div style={{ height: "100vh" }}>
       <PanelGroup direction="horizontal">
-        <Panel defaultSize={20} minSize={5} maxSize={50}>
-          <div style={{ padding: 10, height: "100%", boxSizing: "border-box", borderRight: "1px solid #ccc" }}>
+        {/* 左侧 Panel */}
+        <Panel defaultSize={collapsed ? 5 : 20} minSize={5} maxSize={50}>
+          <div
+            style={{
+              padding: 10,
+              height: "100%",
+              boxSizing: "border-box",
+              borderRight: "1px solid #ccc",
+            }}
+          >
             <button onClick={() => setCollapsed(!collapsed)}>
               {collapsed ? "展开" : "折叠"}
             </button>
+
             {!collapsed && (
               <ul style={{ marginTop: 10, listStyle: "none", padding: 0 }}>
                 {pages.map((page) => (
@@ -51,8 +60,10 @@ const AllStock = () => {
 
         <PanelResizeHandle />
 
+        {/* 右侧网页内容 */}
         <Panel>
           <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+            {/* 标签页 */}
             {openedPages.length > 0 && (
               <div style={{ display: "flex", borderBottom: "1px solid #ccc" }}>
                 {openedPages.map((page) => (
@@ -84,6 +95,7 @@ const AllStock = () => {
               </div>
             )}
 
+            {/* 当前网页内容 */}
             <div style={{ flex: 1, overflow: "auto" }}>
               {activePage ? (
                 <iframe
