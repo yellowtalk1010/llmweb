@@ -11,7 +11,10 @@ import SourceCode from "./pages/SourceCode"
 import Run from "./pages/Run";
 import FunctionModule from "./pages/FunctionModule"; //函数模型
 import Flow from "./flows/Flow";
+
+
 import Stock from "./pages/stock/Stock";
+import AllStock from "./pages/stock/AllStock"
 
 function App() {
 
@@ -34,6 +37,7 @@ function App() {
           <Route path="/flows/Flow" element={<Flow />}/>
 、
           <Route path="/pages/Stock" element={<Stock />} />
+          <Route path="/pages/AllStock" element={<AllStock />} />
 
         </Routes>
       </BrowserRouter>

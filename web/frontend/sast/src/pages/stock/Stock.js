@@ -6,7 +6,7 @@ function Stock() {
   const pages = [
     { id: "1", title: "百度", url: "https://www.baidu.com" },
     { id: "2", title: "凤凰网", url: "https://www.ifeng.com" },
-    { id: "3", title: "谷歌", url: "https://www.google.com" },
+    { id: "3", title: "全部", url: "AllStock" },
   ];
 
   const leftPanelRef = useRef(null);
