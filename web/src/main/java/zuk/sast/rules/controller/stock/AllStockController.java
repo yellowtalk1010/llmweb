@@ -44,8 +44,8 @@ public class AllStockController {
             e.printStackTrace();
             log.error(e.getMessage());
         }
-
-
     }
+
+
 
 }
