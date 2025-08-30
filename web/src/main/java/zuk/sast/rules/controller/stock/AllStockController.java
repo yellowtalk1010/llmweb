@@ -50,7 +50,7 @@ public class AllStockController {
 
     @GetMapping("delete")
     public synchronized Map<String, Object> delete(String api_code) {
-        log.info("add:" + api_code);
+        log.info("delete:" + api_code);
         File resultFile = new File("data/mystock");
         log.info("resultFile:" + resultFile.getAbsolutePath() + ", exists:" + resultFile.exists());
         Map<String, Object> result = new HashMap<>();
@@ -118,6 +118,7 @@ public class AllStockController {
                 }).toList();
                 //重新写入文件中
                 FileUtils.writeLines(resultFile,"UTF-8", newLines);
+
                 result.put("status", "ok");
                 return result;
             }

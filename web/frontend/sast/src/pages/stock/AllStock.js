@@ -33,6 +33,17 @@ function AllStock() {
       .catch(e => console.error(e));
   };
 
+  const add = (event, api_code) => {
+    console.info(api_code)
+    fetch("/stock/add?api_code=" + api_code, {
+        method: 'GET',
+    })
+    .then(res => res.json())
+    .then(data => console.log('成功', data))
+    .catch(err => console.error('失败', err));
+
+  }
+
   // 样式对象
   const styles = {
     table: {
@@ -114,7 +125,7 @@ function AllStock() {
             >
               <td style={styles.td}>
                 <div>
-                    <button style={styles.button}>关注</button>
+                    <button style={styles.button} onClick={(e)=>add(e, row.api_code)}>关注</button>
                 </div>
                 <div>
                     <span>{index+1}</span>
