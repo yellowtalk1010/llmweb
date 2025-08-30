@@ -50,7 +50,7 @@ function Stock() {
       <Panel
         ref={leftPanelRef}
         collapsible
-        defaultSize={30}
+        defaultSize={10}
         minSize={8}
       >
         <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
@@ -97,7 +97,7 @@ function Stock() {
         </div>
       </PanelResizeHandle>
 
-      <Panel defaultSize={70}>
+      <Panel defaultSize={90}>
 
         <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
             {/* 标签页 */}
