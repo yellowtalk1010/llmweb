@@ -61,7 +61,7 @@ public class AllStockController {
                 JSONObject jsonObject = JSONObject.parseObject(l);
                 mymap.put(jsonObject.getString("api_code"), jsonObject);
             });
-            log.info("总数" + mymap.size());
+            log.info("总数：" + mymap.size());
             if(mymap.get(api_code)!=null){
                 //已经存在
                 result.put("status", "已存在");
