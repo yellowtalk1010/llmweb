@@ -49,14 +49,27 @@ public class AllStockController {
     @GetMapping("all")
     public Map<String, Object> all(String search){
 
-        List<String> blocks = STOCKS.stream()
+        List<Map<String, String>> list = null;
+        if(search!=null && search.length()>0){
+            list = STOCKS.stream().filter(stock->{
+                return stock.get("api_code").contains(search)
+                        || stock.get("jys").contains(search)
+                        || stock.get("gl").contains(search)
+                        || stock.get("name").contains(search);
+            }).toList();
+        }
+        else {
+            list = STOCKS;
+        }
+
+        List<String> blocks = list.stream()
                 .flatMap(stock->{
                     String[] arr = stock.get("gl").split(",");
                     return Arrays.stream(arr);
                 }).toList();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("stocks", STOCKS);
+        map.put("stocks", list);
         map.put("blocks",blocks);
         return map;
     }

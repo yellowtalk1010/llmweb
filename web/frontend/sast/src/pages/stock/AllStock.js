@@ -90,16 +90,6 @@ function AllStock() {
           onChange={e => setSearch(e.target.value)}
           style={styles.input}
         />
-        <select
-          value={filter}
-          onChange={e => setFilter(e.target.value)}
-          style={styles.select}
-        >
-          <option value="">全部板块</option>
-          <option value="SZ">深圳</option>
-          <option value="SH">上海</option>
-          <option value="创业板">创业板</option>
-        </select>
         <button onClick={handleSearch} style={styles.button}>查询</button>
       </div>
 
