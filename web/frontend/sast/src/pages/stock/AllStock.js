@@ -113,7 +113,12 @@ function AllStock() {
               onMouseLeave={e => e.currentTarget.style.backgroundColor = "#fff"}
             >
               <td style={styles.td}>
-                <button style={styles.button}>关注</button>
+                <div>
+                    <button style={styles.button}>关注</button>
+                </div>
+                <div>
+                    <span>{index+1}</span>
+                </div>
               </td>
               <td style={styles.td}>{row.jys}</td>
               <td style={styles.td}>{row.api_code}</td>

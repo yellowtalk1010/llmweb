@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,16 +48,22 @@ public class AllStockController {
     }
 
     @GetMapping("all")
-    public Map<String, Object> all(String search){
+    public synchronized Map<String, Object> all(String search){
 
-        List<Map<String, String>> list = null;
+        List<Map<String, String>> list;
         if(search!=null && search.length()>0){
-            list = STOCKS.stream().filter(stock->{
-                return stock.get("api_code").contains(search)
-                        || stock.get("jys").contains(search)
-                        || stock.get("gl").contains(search)
-                        || stock.get("name").contains(search);
-            }).toList();
+            list = new ArrayList<>();
+            List<String> splits = Arrays.stream(search.split("#")).filter(e->e!=null && e.trim().length()>0).toList();
+
+            splits.stream().forEach(s->{
+                List<Map<String, String>> ls = STOCKS.stream().filter(stock->{
+                    return stock.get("api_code").contains(s)
+                            || stock.get("jys").contains(s)
+                            || stock.get("gl").contains(s)
+                            || stock.get("name").contains(s);
+                }).toList();
+                list.addAll(ls);
+            });
         }
         else {
             list = STOCKS;
@@ -67,6 +74,8 @@ public class AllStockController {
                     String[] arr = stock.get("gl").split(",");
                     return Arrays.stream(arr);
                 }).toList();
+
+        log.info("search:" + search +  ", stocks:" + list.size() + ", blocks:" + blocks.size());
 
         Map<String, Object> map = new HashMap<>();
         map.put("stocks", list);
