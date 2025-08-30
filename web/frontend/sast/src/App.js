@@ -15,6 +15,7 @@ import Flow from "./flows/Flow";
 
 import Stock from "./pages/stock/Stock";
 import AllStock from "./pages/stock/AllStock"
+import MyStock from "./pages/stock/MyStock"
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
 、
           <Route path="/pages/Stock" element={<Stock />} />
           <Route path="/pages/AllStock" element={<AllStock />} />
+          <Route path="/pages/MyStock" element={<MyStock />} />
 
         </Routes>
       </BrowserRouter>

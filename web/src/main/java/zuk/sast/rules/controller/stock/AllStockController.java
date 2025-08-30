@@ -137,8 +137,8 @@ public class AllStockController {
      * 我的关注
      * @return
      */
-    @GetMapping("attention")
-    public Map<String, Object> attention (){
+    @GetMapping("my")
+    public Map<String, Object> my(){
         try {
             Map<String, Object> map = new HashMap<>();
             Set<String> sets = readAttention().entrySet().stream().map(e->e.getKey()).collect(Collectors.toSet());
