@@ -51,10 +51,11 @@ public class AllStockController {
     @GetMapping("add")
     public synchronized Map<String, Object> add(String api_code) {
         log.info("add:" + api_code);
-        String path = "web/data/mystock";
+        File resultFile = new File("data/mystock");
+        log.info("resultFile:" + resultFile.getAbsolutePath() + ", exists:" + resultFile.exists());
         Map<String, Object> result = new HashMap<>();
         try {
-            List<String> list = FileUtils.readLines(new File(path), "UTF-8");
+            List<String> list = FileUtils.readLines(resultFile, "UTF-8");
             Map<String, JSONObject> mymap = new HashMap<>();
             list.stream().forEach(l->{
                 JSONObject jsonObject = JSONObject.parseObject(l);
@@ -78,7 +79,7 @@ public class AllStockController {
                     return JSONObject.toJSONString(entry.getValue(), JSONWriter.Feature.LargeObject);
                 }).toList();
                 //重新写入文件中
-                FileUtils.writeLines(new File(path),"UTF-8", newLines);
+                FileUtils.writeLines(resultFile,"UTF-8", newLines);
                 result.put("status", "ok");
                 return result;
             }
