@@ -133,6 +133,10 @@ public class AllStockController {
         return result;
     }
 
+    /***
+     * 我的关注
+     * @return
+     */
     @GetMapping("attention")
     public Map<String, Object> attention (){
         try {
