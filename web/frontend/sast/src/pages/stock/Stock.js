@@ -15,8 +15,7 @@ function Stock() {
 
   const [openedPages, setOpenedPages] = useState([]);
   const [activePageId, setActivePageId] = useState(null);
-
-  const activePage = openedPages.find((p) => p.id === activePageId);
+  const [iframeSrcMap, setIframeSrcMap] = useState({});
 
   const toggleLeftPanel = (e) => {
     e.stopPropagation();
@@ -31,27 +30,32 @@ function Stock() {
   const openPage = (page) => {
     if (!openedPages.find((p) => p.id === page.id)) {
       setOpenedPages([...openedPages, page]);
+      setIframeSrcMap((prev) => ({ ...prev, [page.id]: page.url }));
     }
     setActivePageId(page.id);
   };
 
   const closePage = (id) => {
-    const newOpened = openedPages.filter((p) => p.id !== id);
-    setOpenedPages(newOpened);
+    setOpenedPages((prev) => prev.filter((p) => p.id !== id));
+    setIframeSrcMap((prev) => {
+      const newMap = { ...prev };
+      delete newMap[id];
+      return newMap;
+    });
     if (activePageId === id) {
-      setActivePageId(newOpened.length ? newOpened[newOpened.length - 1].id : null);
+      setActivePageId(openedPages.length > 1 ? openedPages[0].id : null);
     }
   };
 
   const refreshPage = (id) => {
-    setOpenedPages((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, refreshKey: Math.random() } : p))
-    );
+    setIframeSrcMap((prev) => ({
+      ...prev,
+      [id]: `${prev[id].split("?")[0]}?t=${Date.now()}`,
+    }));
   };
 
   return (
     <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
-      {/* 左侧 Panel */}
       <Panel ref={leftPanelRef} collapsible defaultSize={15} minSize={8}>
         <ul style={{ margin: 0, padding: 10, listStyle: "none" }}>
           {pages.map((page) => (
@@ -71,7 +75,6 @@ function Stock() {
         </ul>
       </Panel>
 
-      {/* 中间分隔线 + 收缩按钮 */}
       <PanelResizeHandle
         style={{
           width: "12px",
@@ -99,7 +102,6 @@ function Stock() {
         </div>
       </PanelResizeHandle>
 
-      {/* 右侧 Panel */}
       <Panel defaultSize={85}>
         <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
           {/* 标签页 */}
@@ -118,33 +120,19 @@ function Stock() {
                   }}
                 >
                   <span onClick={() => setActivePageId(page.id)}>{page.title}</span>
-
-                  {/* 刷新按钮 */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       refreshPage(page.id);
                     }}
-                    style={{
-                      marginLeft: 5,
-                      border: "none",
-                      background: "transparent",
-                      cursor: "pointer",
-                    }}
+                    style={{ marginLeft: 5, border: "none", background: "transparent", cursor: "pointer" }}
                     title="刷新页面"
                   >
                     🔄
                   </button>
-
-                  {/* 关闭按钮 */}
                   <button
                     onClick={() => closePage(page.id)}
-                    style={{
-                      marginLeft: 5,
-                      border: "none",
-                      background: "transparent",
-                      cursor: "pointer",
-                    }}
+                    style={{ marginLeft: 5, border: "none", background: "transparent", cursor: "pointer" }}
                     title="关闭页面"
                   >
                     ✕
@@ -154,18 +142,25 @@ function Stock() {
             </div>
           )}
 
-          {/* 当前网页内容 */}
-          <div style={{ flex: 1, overflow: "auto" }}>
-            {activePage ? (
+          {/* iframe 区域，全部渲染，切换显示 */}
+          <div style={{ flex: 1, position: "relative" }}>
+            {openedPages.map((page) => (
               <iframe
-                key={activePage.refreshKey || activePage.id}
-                src={activePage.url}
-                title={activePage.title}
-                style={{ width: "100%", height: "100%", border: "none" }}
+                key={page.id}
+                src={iframeSrcMap[page.id]}
+                title={page.title}
+                style={{
+                  display: page.id === activePageId ? "block" : "none",
+                  width: "100%",
+                  height: "100%",
+                  border: "none",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
               />
-            ) : (
-              <div style={{ padding: 20 }}>请选择一个网页打开</div>
-            )}
+            ))}
+            {openedPages.length === 0 && <div style={{ padding: 20 }}>请选择一个网页打开</div>}
           </div>
         </div>
       </Panel>
