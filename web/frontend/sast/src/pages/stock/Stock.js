@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 function Stock() {
-
   const pages = [
     { id: "1", title: "百度", url: "https://www.baidu.com" },
     { id: "2", title: "凤凰网", url: "https://www.ifeng.com" },
@@ -13,7 +12,6 @@ function Stock() {
   const [collapsed, setCollapsed] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  
   const [openedPages, setOpenedPages] = useState([]);
   const [activePageId, setActivePageId] = useState(null);
 
@@ -29,7 +27,7 @@ function Stock() {
     setCollapsed(!collapsed);
   };
 
-    const openPage = (page) => {
+  const openPage = (page) => {
     if (!openedPages.find((p) => p.id === page.id)) {
       setOpenedPages([...openedPages, page]);
     }
@@ -44,16 +42,17 @@ function Stock() {
     }
   };
 
+  const refreshPage = (id) => {
+    setOpenedPages((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, refreshKey: Math.random() } : p))
+    );
+  };
 
   return (
     <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
-      <Panel
-        ref={leftPanelRef}
-        collapsible
-        defaultSize={10}
-        minSize={8}
-      >
-        <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+      {/* 左侧 Panel */}
+      <Panel ref={leftPanelRef} collapsible defaultSize={15} minSize={8}>
+        <ul style={{ margin: 0, padding: 10, listStyle: "none" }}>
           {pages.map((page) => (
             <li key={page.id} style={{ margin: "8px 0" }}>
               <a
@@ -62,6 +61,7 @@ function Stock() {
                   e.preventDefault();
                   openPage(page);
                 }}
+                style={{ textDecoration: "none", color: "#007bff", cursor: "pointer" }}
               >
                 {page.title}
               </a>
@@ -70,6 +70,7 @@ function Stock() {
         </ul>
       </Panel>
 
+      {/* 中间分隔线 + 收缩按钮 */}
       <PanelResizeHandle
         style={{
           width: "12px",
@@ -97,55 +98,75 @@ function Stock() {
         </div>
       </PanelResizeHandle>
 
-      <Panel defaultSize={90}>
-
+      {/* 右侧 Panel */}
+      <Panel defaultSize={85}>
         <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-            {/* 标签页 */}
-            {openedPages.length > 0 && (
-              <div style={{ display: "flex", borderBottom: "1px solid #ccc" }}>
-                {openedPages.map((page) => (
-                  <div
-                    key={page.id}
-                    style={{
-                      padding: "5px 10px",
-                      cursor: "pointer",
-                      backgroundColor: page.id === activePageId ? "#ddd" : "#f5f5f5",
-                      borderRight: "1px solid #ccc",
-                      display: "flex",
-                      alignItems: "center",
+          {/* 标签页 */}
+          {openedPages.length > 0 && (
+            <div style={{ display: "flex", borderBottom: "1px solid #ccc" }}>
+              {openedPages.map((page) => (
+                <div
+                  key={page.id}
+                  style={{
+                    padding: "5px 10px",
+                    cursor: "pointer",
+                    backgroundColor: page.id === activePageId ? "#ddd" : "#f5f5f5",
+                    borderRight: "1px solid #ccc",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <span onClick={() => setActivePageId(page.id)}>{page.title}</span>
+
+                  {/* 刷新按钮 */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      refreshPage(page.id);
                     }}
+                    style={{
+                      marginLeft: 5,
+                      border: "none",
+                      background: "transparent",
+                      cursor: "pointer",
+                    }}
+                    title="刷新页面"
                   >
-                    <span onClick={() => setActivePageId(page.id)}>{page.title}</span>
-                    <button
-                      onClick={() => closePage(page.id)}
-                      style={{
-                        marginLeft: 5,
-                        border: "none",
-                        background: "transparent",
-                        cursor: "pointer",
-                      }}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+                    🔄
+                  </button>
 
-            {/* 当前网页内容 */}
-            <div style={{ flex: 1, overflow: "auto" }}>
-              {activePage ? (
-                <iframe
-                  src={activePage.url}
-                  title={activePage.title}
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                />
-              ) : (
-                <div style={{ padding: 20 }}>请选择一个网页打开</div>
-              )}
+                  {/* 关闭按钮 */}
+                  <button
+                    onClick={() => closePage(page.id)}
+                    style={{
+                      marginLeft: 5,
+                      border: "none",
+                      background: "transparent",
+                      cursor: "pointer",
+                    }}
+                    title="关闭页面"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
             </div>
-          </div>
+          )}
 
+          {/* 当前网页内容 */}
+          <div style={{ flex: 1, overflow: "auto" }}>
+            {activePage ? (
+              <iframe
+                key={activePage.refreshKey || activePage.id}
+                src={activePage.url}
+                title={activePage.title}
+                style={{ width: "100%", height: "100%", border: "none" }}
+              />
+            ) : (
+              <div style={{ padding: 20 }}>请选择一个网页打开</div>
+            )}
+          </div>
+        </div>
       </Panel>
     </PanelGroup>
   );
