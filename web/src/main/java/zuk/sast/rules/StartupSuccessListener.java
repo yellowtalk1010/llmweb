@@ -28,7 +28,7 @@ public class StartupSuccessListener {
                 2. 将在工具的/workspaces/项目名称/parseConfig.json上传
                 """);
         System.out.println("3. DB地址：" + Zuk.URL);
-        System.out.println("4. http://localhost:8080/pages/allStock");
+        System.out.println("4. http://localhost:8080/pages/stock"); //http://localhost:8080/pages/allStock
 
     }
 }
