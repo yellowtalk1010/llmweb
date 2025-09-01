@@ -58,6 +58,7 @@ public class LoaderStockData implements InitializingBean {
         }
         else {
             System.out.println("STOCK_PATH路径错误");
+            log.info("STOCK_PATH路径错误");
             System.exit(0);
         }
     }
