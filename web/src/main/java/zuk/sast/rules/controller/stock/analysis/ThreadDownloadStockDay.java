@@ -9,49 +9,63 @@ import zuk.sast.rules.utils.HttpClientUtil;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class ThreadDownloadStockDay implements Runnable{
+
+    private AtomicInteger num = new AtomicInteger(0);
+    public ThreadDownloadStockDay(){
+
+    }
 
     @Override
     public void run() {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         //String ym = sdf.format(new Date());
-        final String ym = "202509";
-        String startTime = "2025-09-01";
-        String endTime = "2025-09-30";
-        LoaderStockData.STOCKS.stream().forEach(stockApiVO -> {
-            String path = LoaderStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
-            try {
-                if(new File(path).exists()){
-                    List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
-                    if(lines.size()==0){
-                        FileUtils.delete(new File(path));
-                        log.info(path + " 文件空数据，已删除");
-                    }
-                }
-                else {
-                    //不存在
-                    String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
-                    String response = HttpClientUtil.sendGetRequest(url);
-                    JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
-                    List<String> lines = jsonArray.stream().map(e->{
-                        String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
-                        return line;
-                    }).toList();
-                    if(lines.size()>0){
-                        FileUtils.writeLines(new File(path), lines);
-                        log.info(path + "， 新数据写入成功");
+        while (LoaderStockData.STOCKS.size()!=num.get()){
+            final String ym = "202509";
+            String startTime = "2025-09-01";
+            String endTime = "2025-09-30";
+            LoaderStockData.STOCKS.stream().forEach(stockApiVO -> {
+                String path = LoaderStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
+                try {
+                    if(new File(path).exists()){
+                        List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
+                        if(lines.size()==0){
+                            FileUtils.delete(new File(path));
+                            log.info(path + " 文件空数据，已删除");
+                        }
+                        else {
+                            num.incrementAndGet(); //
+                        }
                     }
                     else {
-                        log.info(url + "， 下载失败，数据为空");
+                        //不存在
+                        String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
+                        String response = HttpClientUtil.sendGetRequest(url);
+                        JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
+                        List<String> lines = jsonArray.stream().map(e->{
+                            String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
+                            return line;
+                        }).toList();
+                        if(lines.size()>0){
+                            FileUtils.writeLines(new File(path), lines);
+                            log.info(path + "， 新数据写入成功");
+                            num.incrementAndGet();
+                        }
+                        else {
+                            log.info(url + "， 下载失败，数据为空");
+                        }
                     }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                    log.error(e.getMessage());
+                    log.info(path + "， 失败");
                 }
-            }catch (Exception e) {
-                e.printStackTrace();
-                log.error(e.getMessage());
-                log.info(path + "， 失败");
-            }
-        });
+            });
+        }
+
     }
 }
