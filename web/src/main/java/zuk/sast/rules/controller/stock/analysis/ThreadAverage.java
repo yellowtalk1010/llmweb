@@ -20,6 +20,18 @@ public class ThreadAverage implements Runnable{
     @Override
     public void run() {
 
+        try {
+
+            LoaderStockData.STOCKS.stream().forEach(stock->{
+                String code = stock.getApi_code();
+
+            });
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+
     }
 
 

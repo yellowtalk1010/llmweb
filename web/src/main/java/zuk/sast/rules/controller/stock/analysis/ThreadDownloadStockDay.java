@@ -28,9 +28,9 @@ public class ThreadDownloadStockDay implements Runnable{
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         //String ym = sdf.format(new Date());
         while (LoaderStockData.STOCKS.size()!=num.get()){
-            final String ym = "202509";
-            String startTime = "2025-09-01";
-            String endTime = "2025-09-01";
+            final String ym = "202507";
+            String startTime = "2025-07-01";
+            String endTime = "2025-07-31";
             LoaderStockData.STOCKS.stream().forEach(stockApiVO -> {
                 String path = LoaderStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
                 String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
