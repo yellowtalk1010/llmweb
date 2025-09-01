@@ -3,6 +3,7 @@ package zuk.sast.rules.controller.stock.analysis;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
@@ -22,6 +23,9 @@ import static zuk.sast.rules.controller.stock.analysis.LoaderStockData.STOCK_MA;
 public class ThreadMA implements Runnable{
 
     private List<String> codes = new ArrayList<>();
+
+    @Getter
+    private List<StockAverageVo> stockAverageVoList = new ArrayList<>();
 
     public ThreadMA(List<String> codes) {
         if(codes!=null && codes.size()>0){
@@ -70,7 +74,7 @@ public class ThreadMA implements Runnable{
                             .toList();
 
 
-                    List<StockAverageVo> stockAverageVoList = new ArrayList<>();
+
 
                     //System.out.println();
                     for(int i=0; i<sortedList.size(); i++){
@@ -115,14 +119,14 @@ public class ThreadMA implements Runnable{
                             stockAverageVo.setMa10(ma10.toString());
                             stockAverageVo.setMa30(ma30.toString());
 
-                            stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
+                            this.stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
 
 
                         }
 
                     }
 
-                    List<String> maLines = stockAverageVoList.stream().map(e->{
+                    List<String> maLines = this.stockAverageVoList.stream().map(e->{
                         String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
                         return line;
                     }).toList();
