@@ -3,6 +3,7 @@ package zuk.sast.rules.controller.stock.analysis;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import zuk.sast.rules.utils.HttpClientUtil;
@@ -74,5 +75,36 @@ public class ThreadDownloadStockDay implements Runnable{
             });
         }
         log.info("完成全部个股的新数据更新，" + LoaderStockData.STOCKS.size());
+    }
+
+
+    /***
+     * {
+     * "code":"000001.SZ",
+     * "time":"2025-08-01",
+     * "open":"12.24",
+     * "turnoverRatio":"0.5215960590205436",
+     * "amount":"1240239179",
+     * "high":"12.33",
+     * "low":"12.15",
+     * "changeRatio":"0.40883074407194553", //换手率
+     * "close":"12.28",                     //收盘价
+     * "volume":"101218698"
+     * }
+     */
+
+    @Data
+    public static class StockDayVo {
+        private String code;
+        private String time;
+        private String open;
+        private String turnoverRatio;
+        private String amount;
+        private String high;
+        private String low;
+        private String changeRatio;
+        private String close;
+        private String volume;
+
     }
 }
