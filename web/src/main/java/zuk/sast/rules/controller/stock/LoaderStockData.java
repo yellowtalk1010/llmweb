@@ -2,6 +2,7 @@ package zuk.sast.rules.controller.stock;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -10,9 +11,7 @@ import zuk.sast.rules.utils.ResourceFileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,7 +29,7 @@ public class LoaderStockData implements InitializingBean {
 
 
 
-    public static final List<Map<String, String>> STOCKS = new ArrayList<>();
+    public static final List<StockApiVO> STOCKS = new ArrayList<>();
 
     private void loadAllStocks(){
         try {
@@ -39,13 +38,8 @@ public class LoaderStockData implements InitializingBean {
             JSONObject jsonObject = JSONObject.parseObject(content);
             JSONArray jsonArray = jsonObject.getJSONArray("data");
             jsonArray.forEach(item -> {
-                Map<String, String> map = new HashMap<>();
-                JSONObject obj = (JSONObject) item;
-                map.put("api_code", obj.getString("api_code"));
-                map.put("jys", obj.getString("jys"));
-                map.put("gl", obj.getString("gl")); //所属板块
-                map.put("name", obj.getString("name"));
-                STOCKS.add(map);
+                StockApiVO stockApiVO = JSONObject.parseObject(JSONObject.toJSONString(item), StockApiVO.class);
+                STOCKS.add(stockApiVO);
             });
             log.info("stock总数:" + STOCKS.size());
         }
@@ -71,6 +65,16 @@ public class LoaderStockData implements InitializingBean {
         public void run() {
 
         }
+    }
+
+
+
+    @Data
+    public static class StockApiVO {
+        private String api_code;
+        private String jys;
+        private String name;
+        private String gl;
     }
 
 
