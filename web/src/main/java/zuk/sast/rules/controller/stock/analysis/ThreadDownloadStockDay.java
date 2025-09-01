@@ -38,8 +38,8 @@ public class ThreadDownloadStockDay implements Runnable{
                     if(new File(path).exists()){
                         num.incrementAndGet(); //
                         List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
-                        if(lines.size()==0){
-                            //FileUtils.delete(new File(path));
+                        if(lines.size()>=0){
+                            FileUtils.delete(new File(path));
                             log.info(path + " 文件空数据");
                         }
                     }
