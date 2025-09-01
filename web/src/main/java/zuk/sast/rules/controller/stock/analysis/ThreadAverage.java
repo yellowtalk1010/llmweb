@@ -91,7 +91,18 @@ public class ThreadAverage implements Runnable{
                             List<ThreadDownloadStockDay.StockDayVo> stockDayVoList30 = sortedList.subList(i, i+30); //过去30天均价
                             BigDecimal avg30 = daysAVG(stockDayVoList30, 30);
 
-                            System.out.println();
+                            //System.out.println();
+                            StockAverageVo stockAverageVo =new StockAverageVo();
+                            stockAverageVo.setTime(date);
+                            stockAverageVo.setOpen(stockDayVo.getOpen());
+                            stockAverageVo.setClose(stockDayVo.getClose());
+                            stockAverageVo.setHigh(stockDayVo.getHigh());
+                            stockAverageVo.setLow(stockDayVo.getLow());
+                            stockAverageVo.setAvg(avg1.toString());
+                            stockAverageVo.setAvg5(avg5.toString());
+                            stockAverageVo.setAvg10(avg10.toString());
+                            stockAverageVo.setAvg30(avg30.toString());
+
                         }
 
                     }
@@ -119,6 +130,18 @@ public class ThreadAverage implements Runnable{
     }
 
 
+    @Data
+    public static class StockAverageVo{
+        private String time;
+        private String open;
+        private String close;
+        private String high;
+        private String low;
+        private String avg;
+        private String avg5;
+        private String avg10;
+        private String avg30;
+    }
 
 }
 
