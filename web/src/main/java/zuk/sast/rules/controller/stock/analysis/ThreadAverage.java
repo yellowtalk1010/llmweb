@@ -1,6 +1,7 @@
 package zuk.sast.rules.controller.stock.analysis;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.SymbolTable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static zuk.sast.rules.controller.stock.analysis.LoaderStockData.STOCK_MA;
 
 /***
  * 均线计算
@@ -33,7 +36,7 @@ public class ThreadAverage implements Runnable{
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
-            LocalDate today = LocalDate.now();
+            final LocalDate today = LocalDate.now();
 
             this.codes.stream().forEach(code->{
                 try {
@@ -67,6 +70,9 @@ public class ThreadAverage implements Runnable{
                     List<ThreadDownloadStockDay.StockDayVo> sortedList = stockDayVoList.stream()
                             .sorted(Comparator.comparing(ThreadDownloadStockDay.StockDayVo::getTime).reversed()) //按时间倒序
                             .toList();
+
+
+                    List<StockAverageVo> stockAverageVoList = new ArrayList<>();
 
                     //System.out.println();
                     for(int i=0; i<sortedList.size(); i++){
@@ -111,11 +117,21 @@ public class ThreadAverage implements Runnable{
                             stockAverageVo.setMa10(ma10.toString());
                             stockAverageVo.setMa30(ma30.toString());
 
-                            System.out.println();
+                            stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
+
 
                         }
 
                     }
+
+                    List<String> maLines = stockAverageVoList.stream().map(e->{
+                        String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
+                        return line;
+                    }).toList();
+                    String maFile = STOCK_MA + File.separator + code + File.separator + formatter.format(today) + ".jsonl";
+                    FileUtils.writeLines(new File(maFile), maLines);
+                    System.out.println();
+
                 }
                 catch (Exception e) {
                     e.printStackTrace();

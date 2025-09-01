@@ -25,6 +25,7 @@ public class LoaderStockData implements InitializingBean {
     public static final String STOCK_TOKEN = STOCK_DATA_DIR_PATH + File.separator + "token";
     public static final String STOCK_ALL = STOCK_DATA_DIR_PATH + File.separator + "all_stock.json";
     public static final String STOCK_DAY = STOCK_DATA_DIR_PATH + File.separator + "days";
+    public static final String STOCK_MA = STOCK_DATA_DIR_PATH + File.separator + "ma";
 
 
     public static final List<StockApiVO> STOCKS = new ArrayList<>();
