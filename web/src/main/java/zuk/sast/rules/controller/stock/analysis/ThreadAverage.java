@@ -131,13 +131,13 @@ public class ThreadAverage implements Runnable{
                     }).toList();
                     String maFile = STOCK_MA + File.separator + code + File.separator + formatter.format(today) + ".jsonl";
                     FileUtils.writeLines(new File(maFile), maLines);
-                    log.info(maFile + "，写入成功，" + num.incrementAndGet() + "/" + this.codes.size());
+                    log.info(num.incrementAndGet() + "/" + this.codes.size() + "，" + maFile + "，写入成功，");
 
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    log.error(e.getMessage());
                     log.info(code + "，写入失败，" + num.incrementAndGet() + "/" + this.codes.size());
+                    log.error(e.getMessage());
                 }
             });
 
