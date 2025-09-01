@@ -2,13 +2,11 @@ package zuk.sast.rules.controller.stock.analysis;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
-import zuk.sast.rules.utils.HttpClientUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,7 +54,7 @@ public class LoaderStockData implements InitializingBean {
         File tokenFile = new File(STOCK_TOKEN);
         if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").trim().equals(TOKEN)){
             loadAllStocks();
-            EXECUTOR_SERVICE.execute(new DownloadStockDayThread());
+            EXECUTOR_SERVICE.execute(new ThreadDownloadStockDay());
         }
         else {
             System.out.println("STOCK_PATH路径错误");

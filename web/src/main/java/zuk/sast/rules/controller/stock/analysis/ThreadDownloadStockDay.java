@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.List;
 
 @Slf4j
-public class DownloadStockDayThread implements Runnable{
+public class ThreadDownloadStockDay implements Runnable{
 
     @Override
     public void run() {
