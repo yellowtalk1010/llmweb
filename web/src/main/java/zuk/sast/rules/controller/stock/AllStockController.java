@@ -1,16 +1,12 @@
 package zuk.sast.rules.controller.stock;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.util.ResourceUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zuk.sast.rules.utils.ResourceFileUtils;
 
 import java.io.File;
 import java.util.*;
@@ -24,7 +20,7 @@ import java.util.stream.Collectors;
 @RequestMapping("stock")
 public class AllStockController {
 
-    public static final List<Map<String, String>> STOCKS = new ArrayList<>();
+//    public static final List<Map<String, String>> STOCKS = new ArrayList<>();
 
 
 
@@ -33,29 +29,29 @@ public class AllStockController {
     //https://xtrade.newone.com.cn/market/json?funcno=30029&version=1&stock_code=300287&market=SZ&start=0&dayitems=5&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700218269.16897853520262
     //https://xtrade.newone.com.cn/market/json?funcno=20044&version=1&stock_code=300287&market=SZ&count=1000&type=day&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700327368.16897853520352
 
-    //https://stockapi.com.cn/v1/base/day?token=36c92182f783f08005017f78e7a264608a82952f8b91de2a&code=600004&endDate=2025-08-31&startDate=2025-08-01&calculationCycle=100  //历史日线信息
-    static {
-        try {
-            File file = ResourceFileUtils.findFile("stocks/all_stock.json");
-            String content = FileUtils.readFileToString(file, "UTF-8");
-            JSONObject jsonObject = JSONObject.parseObject(content);
-            JSONArray jsonArray = jsonObject.getJSONArray("data");
-            jsonArray.forEach(item -> {
-                Map<String, String> map = new HashMap<>();
-                JSONObject obj = (JSONObject) item;
-                map.put("api_code", obj.getString("api_code"));
-                map.put("jys", obj.getString("jys"));
-                map.put("gl", obj.getString("gl")); //所属板块
-                map.put("name", obj.getString("name"));
-                STOCKS.add(map);
-            });
-            log.info("stock总数:" + STOCKS.size());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-    }
+    //https://stockapi.com.cn/v1/base/day?token=36c92182f783f08005017f78e7a264608a82952f8b91de2a&code=600004&endDate=2025-08-31&startDate=2025-08-01&calculationCycle=100  //历史日线
+//    static {
+//        try {
+//            File file = ResourceFileUtils.findFile("stocks/all_stock.json");
+//            String content = FileUtils.readFileToString(file, "UTF-8");
+//            JSONObject jsonObject = JSONObject.parseObject(content);
+//            JSONArray jsonArray = jsonObject.getJSONArray("data");
+//            jsonArray.forEach(item -> {
+//                Map<String, String> map = new HashMap<>();
+//                JSONObject obj = (JSONObject) item;
+//                map.put("api_code", obj.getString("api_code"));
+//                map.put("jys", obj.getString("jys"));
+//                map.put("gl", obj.getString("gl")); //所属板块
+//                map.put("name", obj.getString("name"));
+//                STOCKS.add(map);
+//            });
+//            log.info("stock总数:" + STOCKS.size());
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//            log.error(e.getMessage());
+//        }
+//    }
 
     @GetMapping("delete")
     public synchronized Map<String, Object> delete(String api_code) {
@@ -117,7 +113,7 @@ public class AllStockController {
                 return result;
             }
             else {
-                STOCKS.stream().filter(stock->stock.get("api_code").equals(api_code)).forEach(socket->{
+                LoaderStockData.STOCKS.stream().filter(stock->stock.get("api_code").equals(api_code)).forEach(socket->{
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("api_code", socket.get("api_code"));
                     jsonObject.put("jys", socket.get("jys"));
@@ -150,7 +146,7 @@ public class AllStockController {
         try {
             Map<String, Object> map = new HashMap<>();
             Set<String> sets = readAttention().entrySet().stream().map(e->e.getKey()).collect(Collectors.toSet());
-            List<Map<String, String>> ls = STOCKS.stream().filter(stock->{
+            List<Map<String, String>> ls = LoaderStockData.STOCKS.stream().filter(stock->{
                 return sets.contains(stock.get("api_code"));
             }).toList();
 
@@ -173,7 +169,7 @@ public class AllStockController {
             List<String> splits = Arrays.stream(search.split("#")).filter(e->e!=null && e.trim().length()>0).toList();
 
             splits.stream().forEach(s->{
-                List<Map<String, String>> ls = STOCKS.stream().filter(stock->{
+                List<Map<String, String>> ls = LoaderStockData.STOCKS.stream().filter(stock->{
                     return stock.get("api_code").toUpperCase().contains(s.toUpperCase())
                             || stock.get("jys").toUpperCase().contains(s.toUpperCase())
                             || stock.get("gl").toUpperCase().contains(s.toUpperCase())
@@ -183,7 +179,7 @@ public class AllStockController {
             });
         }
         else {
-            list = STOCKS;
+            list = LoaderStockData.STOCKS;
         }
 
         List<String> blocks = Arrays.asList(
