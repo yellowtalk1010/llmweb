@@ -1,4 +1,4 @@
-package zuk.sast.rules.controller.stock;
+package zuk.sast.rules.controller.stock.analysis;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;

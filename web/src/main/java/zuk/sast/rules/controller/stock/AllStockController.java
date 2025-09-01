@@ -11,6 +11,8 @@ import zuk.sast.rules.controller.mapper.entity.StockEntity;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import zuk.sast.rules.controller.stock.analysis.LoaderStockData;
+
 /***
  *
  */
