@@ -20,6 +20,7 @@ public class DatabaseInitializer {
     public void init() {
         createProjectTable();
         createIssueTable();
+        createStockTable();
     }
 
     private void createProjectTable() {
@@ -44,6 +45,19 @@ public class DatabaseInitializer {
                 project_id  VARCHAR(100),
                 num BIGINT NOT NULL,
                 content BLOB NOT NULL
+            )
+            """;
+        jdbcTemplate.execute(sql);
+    }
+
+    private void createStockTable(){
+        //创建stock表
+        String sql = """
+            CREATE TABLE IF NOT EXISTS issue (
+                code VARCHAR(100) PRIMARY KEY,
+                jys  VARCHAR(100),
+                name  VARCHAR(100),
+                gl BLOB NOT NULL
             )
             """;
         jdbcTemplate.execute(sql);
