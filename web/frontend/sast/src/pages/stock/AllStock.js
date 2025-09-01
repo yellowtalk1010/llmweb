@@ -94,13 +94,14 @@ function AllStock() {
     <div style={{ padding: "20px" }}>
       {/* 查询表单 */}
       <div style={styles.form}>
-        <input
+        <textarea
           type="text"
           placeholder="请输入股票名称或代码"
           value={search}
           onChange={e => setSearch(e.target.value)}
           style={styles.input}
         />
+        
         <button onClick={handleSearch} style={styles.button}>查询</button>
       </div>
 

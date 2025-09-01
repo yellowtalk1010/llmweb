@@ -1,5 +1,6 @@
 package zuk.sast.rules.controller.stock;
 
+import com.beust.jcommander.internal.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -108,41 +109,45 @@ public class AllStockController {
         return new HashMap<>();
     }
 
+    public static final Set<String> tags = Arrays.asList(
+                    "人工智能",
+                    "deepseek",
+                    "昇腾",
+                    "数据中心",
+                    "芯片"
+            ).stream().collect(Collectors.toSet());
+
     @GetMapping("all")
     public Map<String, Object> all(String search){
 
         List<LoaderStockData.StockApiVO> list;
         if(search!=null && search.length()>0){
-            list = new ArrayList<>();
-            List<String> splits = Arrays.stream(search.split("#")).filter(e->e!=null && e.trim().length()>0).toList();
+            Set<String> splits = Arrays.stream(search.split("\n")).filter(e->e!=null && e.trim().length()>0).collect(Collectors.toSet());
 
-            splits.stream().forEach(s->{
-                List<LoaderStockData.StockApiVO> ls = LoaderStockData.STOCKS.stream().filter(stock->{
-                    return stock.getApi_code().toUpperCase().contains(s.toUpperCase())
-                            || stock.getJys().toUpperCase().contains(s.toUpperCase())
-                            || stock.getGl().toUpperCase().contains(s.toUpperCase())
-                            || stock.getName().toUpperCase().contains(s.toUpperCase());
-                }).toList();
-                list.addAll(ls);
-            });
+            list = LoaderStockData.STOCKS.stream().filter(e->{
+                return splits.stream().filter(tag->{
+                    return e.getGl().contains(tag);
+                }).count() > 0;
+            }).collect(Collectors.toList());
+
         }
         else {
-            list = LoaderStockData.STOCKS;
+            //没有输入条件，则默认输出1000条
+            list = LoaderStockData.STOCKS.stream().filter(e->{
+                return tags.stream().filter(tag->{
+                    return e.getGl().contains(tag);
+                }).count() > 0;
+            }).collect(Collectors.toList());
+            if(list!=null && list.size()>1000){
+                list = list.subList(0, 1000);
+            }
         }
 
-        List<String> blocks = Arrays.asList(
-                "人工智能",
-                "deepseek",
-                "昇腾",
-                "数据中心",
-                "芯片"
-        );
-
-        log.info("search:" + search +  ", stocks:" + list.size() + ", blocks:" + blocks.size());
+        log.info("search:" + search +  ", stocks:" + list.size() + ", blocks:" + tags.size());
 
         Map<String, Object> map = new HashMap<>();
         map.put("stocks", list);
-        map.put("blocks",blocks);
+        map.put("blocks",tags);
         return map;
     }
 
