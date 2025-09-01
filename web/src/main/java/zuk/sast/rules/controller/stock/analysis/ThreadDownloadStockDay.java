@@ -30,6 +30,7 @@ public class ThreadDownloadStockDay implements Runnable{
             String endTime = "2025-09-30";
             LoaderStockData.STOCKS.stream().forEach(stockApiVO -> {
                 String path = LoaderStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
+                String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
                 try {
                     if(new File(path).exists()){
                         List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
@@ -43,7 +44,7 @@ public class ThreadDownloadStockDay implements Runnable{
                     }
                     else {
                         //不存在
-                        String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
+
                         String response = HttpClientUtil.sendGetRequest(url);
                         JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
                         List<String> lines = jsonArray.stream().map(e->{
@@ -62,6 +63,7 @@ public class ThreadDownloadStockDay implements Runnable{
                 }catch (Exception e) {
                     e.printStackTrace();
                     log.error(e.getMessage());
+                    log.info();
                     log.info(path + "， 失败");
                 }
             });
