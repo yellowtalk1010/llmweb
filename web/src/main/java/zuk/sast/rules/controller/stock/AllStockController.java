@@ -33,6 +33,7 @@ public class AllStockController {
     //https://xtrade.newone.com.cn/market/json?funcno=30029&version=1&stock_code=300287&market=SZ&start=0&dayitems=5&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700218269.16897853520262
     //https://xtrade.newone.com.cn/market/json?funcno=20044&version=1&stock_code=300287&market=SZ&count=1000&type=day&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700327368.16897853520352
 
+    //https://stockapi.com.cn/v1/base/day?token=36c92182f783f08005017f78e7a264608a82952f8b91de2a&code=600004&endDate=2025-08-31&startDate=2025-08-01&calculationCycle=100  //历史日线信息
     static {
         try {
             File file = ResourceFileUtils.findFile("stocks/all_stock.json");
