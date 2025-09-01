@@ -68,7 +68,7 @@ public class ThreadAverage implements Runnable{
                             .sorted(Comparator.comparing(ThreadDownloadStockDay.StockDayVo::getTime).reversed()) //按时间倒序
                             .toList();
 
-                    System.out.println();
+                    //System.out.println();
                     for(int i=0; i<sortedList.size(); i++){
                         if(i+5 < stockDayVoList.size()
                                 && i+10 < stockDayVoList.size()
