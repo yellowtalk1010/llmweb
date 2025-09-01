@@ -91,6 +91,7 @@ public class LoaderStockData implements InitializingBean {
                     if(new File(path).exists()){
                         List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
                         if(lines.size()!=total){
+                            FileUtils.delete(new File(path));
                             log.info(path + "存在，但是数据总行数不对");
                         }
                     }
