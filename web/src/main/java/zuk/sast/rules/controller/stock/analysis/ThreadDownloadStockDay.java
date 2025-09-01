@@ -66,6 +66,6 @@ public class ThreadDownloadStockDay implements Runnable{
                 }
             });
         }
-
+        log.info("完成数据的更新");
     }
 }
