@@ -76,8 +76,8 @@ public class ThreadDownloadStockDay implements Runnable{
                                 }
 
                             }).toList();
-//                            FileUtils.writeLines(new File(path), lines);
-//                            log.info(path + "， 新数据写入成功" + num.get());
+                            FileUtils.writeLines(new File(path), lines);
+                            log.info(path + "， 新数据写入成功" + num.get());
                             num.incrementAndGet();
 
                             if(lines.size()==0){
