@@ -2,15 +2,12 @@ package zuk.sast.rules.controller.stock.analysis;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
-import com.alibaba.fastjson2.SymbolTable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import zuk.sast.rules.utils.DateUtil;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -19,14 +16,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static zuk.sast.rules.controller.stock.analysis.LoaderStockData.STOCK_MA;
 
 /***
- * 均线计算
+ * 过去5、10、30个交易日的均值、收盘价的均值计算
  */
 @Slf4j
-public class ThreadAverage implements Runnable{
+public class ThreadMA implements Runnable{
 
     private List<String> codes = new ArrayList<>();
 
-    public ThreadAverage(List<String> codes) {
+    public ThreadMA(List<String> codes) {
         if(codes!=null && codes.size()>0){
             this.codes.addAll(codes);
         }
