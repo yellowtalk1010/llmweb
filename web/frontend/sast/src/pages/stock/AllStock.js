@@ -96,7 +96,7 @@ function AllStock() {
       <div style={styles.form}>
         <textarea
           type="text"
-          placeholder="请输入股票名称或代码"
+          placeholder="请输入代码"
           value={search}
           onChange={e => setSearch(e.target.value)}
           style={styles.input}
@@ -133,7 +133,9 @@ function AllStock() {
                 </div>
               </td>
               <td style={styles.td}>{row.jys}</td>
-              <td style={styles.td}>{row.api_code}</td>
+              <td style={styles.td}>
+                <a href="#" onClick={()=>window.open("https://quote.eastmoney.com/"+row.jys + row.api_code+".html")}>{row.api_code}</a>
+              </td>
               <td style={styles.td}>{row.name}</td>
               <td style={styles.td}>{row.gl}</td>
             </tr>
