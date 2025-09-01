@@ -74,7 +74,8 @@ public class LoaderStockData implements InitializingBean {
         @Override
         public void run() {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
-            String ym = sdf.format(new Date());
+            //String ym = sdf.format(new Date());
+            final String ym = "202508";
             STOCKS.stream().forEach(stockApiVO -> {
                 String path = STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
                 log.info(path);
