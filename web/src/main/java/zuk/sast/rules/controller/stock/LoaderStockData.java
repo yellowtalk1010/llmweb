@@ -2,14 +2,17 @@ package zuk.sast.rules.controller.stock;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import zuk.sast.rules.utils.HttpClientUtil;
 import zuk.sast.rules.utils.ResourceFileUtils;
 
 import java.io.File;
+import java.net.http.HttpClient;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -78,7 +81,23 @@ public class LoaderStockData implements InitializingBean {
             final String ym = "202508";
             STOCKS.stream().forEach(stockApiVO -> {
                 String path = STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
-                log.info(path);
+                try {
+                    if(!new File(path).exists()){
+                        String url = "https://stockapi.com.cn/v1/base/day?token=" + TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate=2025-08-01&endDate=2025-08-31&calculationCycle=100";
+                        String response = HttpClientUtil.sendGetRequest(url);
+                        JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
+                        List<String> lines = jsonArray.stream().map(e->{
+                            String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
+                            return line;
+                        }).toList();
+                        FileUtils.writeLines(new File(path), lines);
+                        log.info(path + "， 成功");
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                    log.error(e.getMessage());
+                    log.info(path + "， 失败");
+                }
             });
         }
     }
