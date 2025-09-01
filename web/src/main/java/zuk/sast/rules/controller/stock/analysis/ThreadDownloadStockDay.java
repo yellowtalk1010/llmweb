@@ -47,9 +47,9 @@ public class ThreadDownloadStockDay implements Runnable{
 
                         String response = HttpClientUtil.sendGetRequest(url);
                         JSONObject jsonObject = JSONObject.parseObject(response);
-                        String resCode = (String)jsonObject.get("code");
+                        Integer resCode = (Integer)jsonObject.get("code");
                         String resMsg = (String)jsonObject.get("msg");
-                        if(resCode.equals("20000") && resMsg.equals("success")){
+                        if(resCode==20000 && resMsg.equals("success")){
                             JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
                             List<String> lines = jsonArray.stream().map(e->{
                                 String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
