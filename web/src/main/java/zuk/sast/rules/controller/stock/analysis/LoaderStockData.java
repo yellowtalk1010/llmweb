@@ -48,9 +48,7 @@ public class LoaderStockData implements InitializingBean {
         }
     }
 
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    public void load(){
         File tokenFile = new File(STOCK_TOKEN);
         if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").trim().equals(TOKEN)){
             loadAllStocks();
@@ -60,6 +58,12 @@ public class LoaderStockData implements InitializingBean {
             log.info("STOCK_PATH路径错误");
             System.exit(0);
         }
+    }
+
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.load();
     }
 
 
