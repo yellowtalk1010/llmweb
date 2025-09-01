@@ -1,11 +1,13 @@
 package zuk.sast.rules.controller.stock.analysis;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import zuk.sast.rules.utils.HttpClientUtil;
 
 import java.io.File;
@@ -52,7 +54,27 @@ public class ThreadDownloadStockDay implements Runnable{
                             JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
                             List<String> lines = jsonArray.stream().map(e->{
                                 String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
-                                return line;
+                                StockDayVo stockDayVo = JSONObject.parseObject(line, StockDayVo.class);
+                                if(StringUtils.isNotEmpty(stockDayVo.getOpen())
+                                        && StringUtils.isNotEmpty(stockDayVo.getTime())
+                                        && StringUtils.isNotEmpty(stockDayVo.getCode())
+                                        && StringUtils.isNotEmpty(stockDayVo.getAmount())
+                                        && StringUtils.isNotEmpty(stockDayVo.getChangeRatio())
+                                        && StringUtils.isNotEmpty(stockDayVo.getHigh())
+                                        && StringUtils.isNotEmpty(stockDayVo.getLow())
+                                        && StringUtils.isNotEmpty(stockDayVo.getTurnoverRatio())
+                                        && StringUtils.isNotEmpty(stockDayVo.getVolume())
+                                        && StringUtils.isNotEmpty(stockDayVo.getClose())
+
+                                ){
+                                    return JSONObject.toJSONString(stockDayVo, JSONWriter.Feature.LargeObject);
+                                }
+                                else {
+                                    log.error(line + "， 数据为空");
+                                    System.exit(1);
+                                    return "";
+                                }
+
                             }).toList();
                             FileUtils.writeLines(new File(path), lines);
                             log.info(path + "， 新数据写入成功" + num.get());
