@@ -22,13 +22,13 @@ import static zuk.sast.rules.controller.stock.analysis.LoaderStockData.STOCK_MA;
 @Slf4j
 public class ThreadMA implements Runnable{
 
-    private List<String> codes = new ArrayList<>();
+    public List<String> codes = new ArrayList<>();
 
     @Getter
-    private List<StockAverageVo> stockAverageVoList = new ArrayList<>();
+    public static List<StockAverageVo> stockAverageVoList = new ArrayList<>();
 
     public ThreadMA(List<String> codes) {
-        this.stockAverageVoList.clear();
+        stockAverageVoList.clear();
         if(codes!=null && codes.size()>0){
             this.codes.addAll(codes);
         }
@@ -117,14 +117,14 @@ public class ThreadMA implements Runnable{
                             stockAverageVo.setMa10(ma10.toString());
                             stockAverageVo.setMa30(ma30.toString());
 
-                            this.stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
+                            stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
 
 
                         }
 
                     }
 
-                    List<String> maLines = this.stockAverageVoList.stream().map(e->{
+                    List<String> maLines = stockAverageVoList.stream().map(e->{
                         String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
                         return line;
                     }).toList();
