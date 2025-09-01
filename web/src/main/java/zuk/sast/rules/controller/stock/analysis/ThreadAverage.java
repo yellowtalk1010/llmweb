@@ -1,6 +1,7 @@
 package zuk.sast.rules.controller.stock.analysis;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.SymbolTable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -11,10 +12,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /***
  * 均线计算
@@ -22,7 +20,6 @@ import java.util.List;
 @Slf4j
 public class ThreadAverage implements Runnable{
 
-    private Date date = new Date();
     private List<String> codes = new ArrayList<>();
 
     public ThreadAverage(List<String> codes) {
@@ -72,6 +69,32 @@ public class ThreadAverage implements Runnable{
                             .toList();
 
                     System.out.println();
+                    for(int i=0; i<sortedList.size(); i++){
+                        if(i+5 < stockDayVoList.size()
+                                && i+10 < stockDayVoList.size()
+                                && i+30 < stockDayVoList.size()
+                        ){
+
+                            ThreadDownloadStockDay.StockDayVo stockDayVo = sortedList.get(i);
+
+                            String date = stockDayVo.getTime();
+
+
+                            BigDecimal avg1 = daysAVG(Arrays.asList(stockDayVo), 1);
+
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList5 = sortedList.subList(i, i+5);
+                            BigDecimal avg5 = daysAVG(stockDayVoList5, 5);
+
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList10 = sortedList.subList(i, i+10);
+                            BigDecimal avg10 = daysAVG(stockDayVoList10, 10);
+
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList30 = sortedList.subList(i, i+30);
+                            BigDecimal avg30 = daysAVG(stockDayVoList30, 30);
+
+                            System.out.println();
+                        }
+
+                    }
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -96,16 +119,13 @@ public class ThreadAverage implements Runnable{
     }
 
     //5日均线
-    private void day5AVG(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList){
-        if(stockDayVoList.size()==5){
-            stockDayVoList.stream().map(e->new BigDecimal(e.getAmount())).reduce(BigDecimal.ZERO, BigDecimal::add);
-        }
+    private BigDecimal daysAVG(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList, int type) throws Exception {
+        BigDecimal amount = new BigDecimal(stockDayVoList.stream().mapToDouble(e -> Double.valueOf(e.getAmount())).sum());
+        BigDecimal volume = new BigDecimal(stockDayVoList.stream().mapToDouble(e -> Double.valueOf(e.getVolume())).sum());
+        BigDecimal avg = amount.divide(volume, 5, BigDecimal.ROUND_HALF_UP);
+        return avg;
     }
 
-    //10日均线
-    private void day10AVG(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList) {
-
-    }
 
 
 }
