@@ -10,7 +10,7 @@ public class ThreadAverage implements Runnable{
 
     @Override
     public void run() {
-
+        
     }
 
 }
