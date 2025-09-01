@@ -77,18 +77,18 @@ public class ThreadAverage implements Runnable{
 
                             ThreadDownloadStockDay.StockDayVo stockDayVo = sortedList.get(i);
 
-                            String date = stockDayVo.getTime();
+                            String date = stockDayVo.getTime(); //日期
 
 
-                            BigDecimal avg1 = daysAVG(Arrays.asList(stockDayVo), 1);
+                            BigDecimal avg1 = daysAVG(Arrays.asList(stockDayVo), 1);    //今日均价
 
-                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList5 = sortedList.subList(i, i+5);
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList5 = sortedList.subList(i, i+5);   //过去5天均价
                             BigDecimal avg5 = daysAVG(stockDayVoList5, 5);
 
-                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList10 = sortedList.subList(i, i+10);
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList10 = sortedList.subList(i, i+10); //过去10天均价
                             BigDecimal avg10 = daysAVG(stockDayVoList10, 10);
 
-                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList30 = sortedList.subList(i, i+30);
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList30 = sortedList.subList(i, i+30); //过去30天均价
                             BigDecimal avg30 = daysAVG(stockDayVoList30, 30);
 
                             System.out.println();
