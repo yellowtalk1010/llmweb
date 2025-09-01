@@ -46,19 +46,27 @@ public class ThreadDownloadStockDay implements Runnable{
                         //不存在
 
                         String response = HttpClientUtil.sendGetRequest(url);
-                        JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
-                        List<String> lines = jsonArray.stream().map(e->{
-                            String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
-                            return line;
-                        }).toList();
-                        if(lines.size()>0){
+                        JSONObject jsonObject = JSONObject.parseObject(response);
+                        String resCode = (String)jsonObject.get("code");
+                        String resMsg = (String)jsonObject.get("msg");
+                        if(resCode.equals("20000") && resMsg.equals("success")){
+                            JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
+                            List<String> lines = jsonArray.stream().map(e->{
+                                String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
+                                return line;
+                            }).toList();
                             FileUtils.writeLines(new File(path), lines);
-                            log.info(path + "， 新数据写入成功");
+                            log.info(path + "， 新数据写入成功" + num.get());
                             num.incrementAndGet();
+
+                            if(lines.size()==0){
+                                log.info(url + "， 下载数据为空。（可能停牌）");
+                            }
                         }
                         else {
-                            log.info(url + "， 下载失败，数据为空");
+                            log.info(url + "，返回数据异常" + response);
                         }
+
                     }
                 }catch (Exception e) {
                     e.printStackTrace();
