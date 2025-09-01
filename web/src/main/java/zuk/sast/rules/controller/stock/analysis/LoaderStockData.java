@@ -48,7 +48,7 @@ public class LoaderStockData implements InitializingBean {
         }
     }
 
-    public void load(){
+    public void load() throws Exception {
         File tokenFile = new File(STOCK_TOKEN);
         if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").trim().equals(TOKEN)){
             loadAllStocks();
