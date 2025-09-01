@@ -10,7 +10,13 @@ import org.springframework.stereotype.Component;
 import zuk.sast.rules.utils.ResourceFileUtils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,7 +31,7 @@ public class LoaderStockData implements InitializingBean {
     private static final String STOCK_DATA_DIR_PATH = "D:\\AAAAAAAAAAAAAAAAAAAA\\github\\llmweb1\\web\\stocks\\";
     private static final String STOCK_TOKEN = STOCK_DATA_DIR_PATH + File.separator + "token";
     private static final String STOCK_ALL = STOCK_DATA_DIR_PATH + File.separator + "all_stock.json";
-
+    private static final String STOCK_DAY = STOCK_DATA_DIR_PATH + File.separator + "days";
 
 
 
@@ -67,7 +73,12 @@ public class LoaderStockData implements InitializingBean {
 
         @Override
         public void run() {
-
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            String ym = sdf.format(new Date());
+            STOCKS.stream().forEach(stockApiVO -> {
+                String path = STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
+                log.info(path);
+            });
         }
     }
 
