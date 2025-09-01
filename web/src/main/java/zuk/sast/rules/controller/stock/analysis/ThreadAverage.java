@@ -84,12 +84,16 @@ public class ThreadAverage implements Runnable{
 
                             List<ThreadDownloadStockDay.StockDayVo> stockDayVoList5 = sortedList.subList(i, i+5);   //过去5天均价
                             BigDecimal avg5 = daysAVG(stockDayVoList5, 5);
+                            BigDecimal ma5 = daysMA(stockDayVoList5, 5);
 
                             List<ThreadDownloadStockDay.StockDayVo> stockDayVoList10 = sortedList.subList(i, i+10); //过去10天均价
                             BigDecimal avg10 = daysAVG(stockDayVoList10, 10);
+                            BigDecimal ma10 = daysMA(stockDayVoList10, 10);
 
                             List<ThreadDownloadStockDay.StockDayVo> stockDayVoList30 = sortedList.subList(i, i+30); //过去30天均价
                             BigDecimal avg30 = daysAVG(stockDayVoList30, 30);
+                            BigDecimal ma30 = daysMA(stockDayVoList30, 30);
+
 
                             //System.out.println();
                             StockAverageVo stockAverageVo =new StockAverageVo();
@@ -102,6 +106,12 @@ public class ThreadAverage implements Runnable{
                             stockAverageVo.setAvg5(avg5.toString());
                             stockAverageVo.setAvg10(avg10.toString());
                             stockAverageVo.setAvg30(avg30.toString());
+
+                            stockAverageVo.setMa5(ma5.toString());
+                            stockAverageVo.setMa10(ma10.toString());
+                            stockAverageVo.setMa30(ma30.toString());
+
+                            System.out.println();
 
                         }
 
@@ -129,6 +139,13 @@ public class ThreadAverage implements Runnable{
         return avg;
     }
 
+    //过去历史交易日的收盘价的平均值
+    private BigDecimal daysMA(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList, int type) throws Exception {
+        BigDecimal totalClose = new BigDecimal(stockDayVoList.stream().mapToDouble(e->Double.valueOf(e.getClose())).sum());
+        BigDecimal ma = totalClose.divide(new BigDecimal(stockDayVoList.size()), 5, BigDecimal.ROUND_HALF_UP);
+        return ma;
+    }
+
 
     @Data
     public static class StockAverageVo{
@@ -141,6 +158,10 @@ public class ThreadAverage implements Runnable{
         private String avg5;
         private String avg10;
         private String avg30;
+
+        private String ma5; //过去5个交易日收盘价的平均值
+        private String ma10;
+        private String ma30;
     }
 
 }
