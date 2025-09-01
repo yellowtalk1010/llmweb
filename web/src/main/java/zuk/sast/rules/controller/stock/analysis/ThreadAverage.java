@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static zuk.sast.rules.controller.stock.analysis.LoaderStockData.STOCK_MA;
 
@@ -37,7 +38,7 @@ public class ThreadAverage implements Runnable{
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
             final LocalDate today = LocalDate.now();
-
+            AtomicInteger num = new AtomicInteger(0);
             this.codes.stream().forEach(code->{
                 try {
                     List<ThreadDownloadStockDay.StockDayVo> stockDayVoList = new ArrayList<>();
@@ -130,12 +131,13 @@ public class ThreadAverage implements Runnable{
                     }).toList();
                     String maFile = STOCK_MA + File.separator + code + File.separator + formatter.format(today) + ".jsonl";
                     FileUtils.writeLines(new File(maFile), maLines);
-                    System.out.println();
+                    log.info(maFile + "，写入成功，" + num.incrementAndGet() + "/" + this.codes.size());
 
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                     log.error(e.getMessage());
+                    log.info(code + "，写入失败，" + num.incrementAndGet() + "/" + this.codes.size());
                 }
             });
 
