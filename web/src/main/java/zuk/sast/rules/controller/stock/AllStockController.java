@@ -115,18 +115,26 @@ public class AllStockController {
                     "昇腾",
                     "数据中心",
                     "芯片"
-            ).stream().collect(Collectors.toSet());
+            ).stream()
+            .map(e->e.toUpperCase())
+            .collect(Collectors.toSet());
 
     @GetMapping("all")
     public Map<String, Object> all(String search){
 
         List<LoaderStockData.StockApiVO> list;
         if(search!=null && search.length()>0){
-            Set<String> splits = Arrays.stream(search.split("\n")).filter(e->e!=null && e.trim().length()>0).collect(Collectors.toSet());
+            Set<String> splits = Arrays.stream(search.split("\n"))
+                    .filter(e->e!=null && e.trim().length()>0)
+                    .map(e->e.toUpperCase())
+                    .collect(Collectors.toSet());
 
             list = LoaderStockData.STOCKS.stream().filter(e->{
-                return splits.stream().filter(tag->{
-                    return e.getGl().contains(tag);
+                return splits.stream().filter(s->{
+                    return e.getGl().toUpperCase().contains(s)
+                            || e.getApi_code().toUpperCase().contains(s)
+                            || e.getName().toUpperCase().contains(s)
+                            ;
                 }).count() > 0;
             }).collect(Collectors.toList());
 
@@ -135,7 +143,7 @@ public class AllStockController {
             //没有输入条件，则默认输出1000条
             list = LoaderStockData.STOCKS.stream().filter(e->{
                 return tags.stream().filter(tag->{
-                    return e.getGl().contains(tag);
+                    return e.getGl().toUpperCase().contains(tag);
                 }).count() > 0;
             }).collect(Collectors.toList());
             if(list!=null && list.size()>1000){
