@@ -21,6 +21,7 @@ import java.util.List;
 @Slf4j
 public class ThreadAverage implements Runnable{
 
+    private Date date = new Date();
     private List<String> codes = new ArrayList<>();
 
     public ThreadAverage(List<String> codes) {
@@ -85,8 +86,20 @@ public class ThreadAverage implements Runnable{
 
     }
 
+    //计算日均线
+    private void dayAVG(ThreadDownloadStockDay.StockDayVo stockDayVo){
 
+    }
 
+    //5日均线
+    private void day5AVG(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList){
+
+    }
+
+    //10日均线
+    private void day10AVG(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList) {
+
+    }
 
 
 }
