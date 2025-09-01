@@ -109,10 +109,10 @@ public class LoaderStockData implements InitializingBean {
 //                        }).toList();
 //                        if(lines.size()==total){
 //                            FileUtils.writeLines(new File(path), lines);
-//                            log.info(path + "， 成功");
+//                            log.info(path + "， 下载成功");
 //                        }
 //                        else {
-//                            log.info(path + "， 数据请求失败");
+//                            log.info(path + "， 下载失败");
 //                        }
                     }
                 }catch (Exception e) {
