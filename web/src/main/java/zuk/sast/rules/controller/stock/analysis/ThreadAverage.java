@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import zuk.sast.rules.utils.DateUtil;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -87,13 +88,18 @@ public class ThreadAverage implements Runnable{
     }
 
     //计算日均线
-    private void dayAVG(ThreadDownloadStockDay.StockDayVo stockDayVo){
-
+    private BigDecimal dayAVG(ThreadDownloadStockDay.StockDayVo stockDayVo){
+        BigDecimal amount = new BigDecimal(stockDayVo.getAmount()); //交易额
+        BigDecimal volume = new BigDecimal(stockDayVo.getVolume()); //交易数
+        BigDecimal avg = amount.divide(volume, 5, BigDecimal.ROUND_HALF_UP);
+        return avg;
     }
 
     //5日均线
     private void day5AVG(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList){
-
+        if(stockDayVoList.size()==5){
+            stockDayVoList.stream().map(e->new BigDecimal(e.getAmount())).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
     }
 
     //10日均线
