@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static zuk.sast.rules.controller.stock.analysis.LoaderStockData.STOCK_MA;
@@ -25,10 +26,10 @@ public class ThreadMA implements Runnable{
     public List<String> codes = new ArrayList<>();
 
     @Getter
-    public static List<StockAverageVo> stockAverageVoList = new ArrayList<>();
+    public static Map<String, List<StockMaVo>> MAP = new ConcurrentHashMap<>();
 
     public ThreadMA(List<String> codes) {
-        stockAverageVoList.clear();
+        MAP.clear();
         if(codes!=null && codes.size()>0){
             this.codes.addAll(codes);
         }
@@ -76,6 +77,8 @@ public class ThreadMA implements Runnable{
                             .sorted(Comparator.comparing(ThreadDownloadStockDay.StockDayVo::getTime).reversed()) //按时间倒序
                             .toList();
 
+                    List<StockMaVo> stockMaVoList = new ArrayList<>();
+
                     //System.out.println();
                     for(int i=0; i<sortedList.size(); i++){
                         if(i+5 < stockDayVoList.size()
@@ -104,26 +107,28 @@ public class ThreadMA implements Runnable{
 
 
                             //System.out.println();
-                            StockAverageVo stockAverageVo =new StockAverageVo();
-                            stockAverageVo.setTime(date);
-                            stockAverageVo.setStockDayVo(stockDayVo);
-                            stockAverageVo.setAvg(avg1.toString());
-                            stockAverageVo.setAvg5(avg5.toString());
-                            stockAverageVo.setAvg10(avg10.toString());
-                            stockAverageVo.setAvg30(avg30.toString());
+                            StockMaVo stockMaVo =new StockMaVo();
+                            stockMaVo.setTime(date);
+                            stockMaVo.setStockDayVo(stockDayVo);
+                            stockMaVo.setAvg(avg1.toString());
+                            stockMaVo.setAvg5(avg5.toString());
+                            stockMaVo.setAvg10(avg10.toString());
+                            stockMaVo.setAvg30(avg30.toString());
 
-                            stockAverageVo.setMa5(ma5.toString());
-                            stockAverageVo.setMa10(ma10.toString());
-                            stockAverageVo.setMa30(ma30.toString());
+                            stockMaVo.setMa5(ma5.toString());
+                            stockMaVo.setMa10(ma10.toString());
+                            stockMaVo.setMa30(ma30.toString());
 
-                            stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
+                            stockMaVoList.add(stockMaVo); //记录计算好的ma数据
 
                         }
 
                     }
 
+                    MAP.put(code, stockMaVoList);
+
                     String maFile = STOCK_MA + File.separator + code + File.separator + formatter.format(today) + ".jsonl";
-                    List<String> maLines = stockAverageVoList.stream().map(e->{
+                    List<String> maLines = stockMaVoList.stream().map(e->{
                         String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
                         return line;
                     }).toList();
@@ -173,7 +178,7 @@ public class ThreadMA implements Runnable{
 
 
     @Data
-    public static class StockAverageVo{
+    public static class StockMaVo {
         private String time;
 
         private ThreadDownloadStockDay.StockDayVo stockDayVo;
