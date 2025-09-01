@@ -42,7 +42,7 @@ public class ThreadDownloadStockDay implements Runnable{
                     }).toList();
                     if(lines.size()>0){
                         FileUtils.writeLines(new File(path), lines);
-                        log.info(path + "， 下载成功");
+                        log.info(path + "， 新数据写入成功");
                     }
                     else {
                         log.info(url + "， 下载失败");
