@@ -73,7 +73,7 @@ public class LoaderStockData implements InitializingBean {
     }
 
     /***
-     * 获取历史日线数据
+     * 获取历史日线数据，按月统计
      */
     public static class StockDayThread implements Runnable {
 
