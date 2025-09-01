@@ -94,23 +94,26 @@ public class LoaderStockData implements InitializingBean {
                             FileUtils.delete(new File(path));
                             log.info(path + "存在，但是数据总行数不对");
                         }
+                        else {
+                            log.info(path + "相同");
+                        }
                     }
                     else {
                         //不存在
-                        String url = "https://stockapi.com.cn/v1/base/day?token=" + TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
-                        String response = HttpClientUtil.sendGetRequest(url);
-                        JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
-                        List<String> lines = jsonArray.stream().map(e->{
-                            String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
-                            return line;
-                        }).toList();
-                        if(lines.size()==total){
-                            FileUtils.writeLines(new File(path), lines);
-                            log.info(path + "， 成功");
-                        }
-                        else {
-                            log.info(path + "， 数据请求失败");
-                        }
+//                        String url = "https://stockapi.com.cn/v1/base/day?token=" + TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
+//                        String response = HttpClientUtil.sendGetRequest(url);
+//                        JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
+//                        List<String> lines = jsonArray.stream().map(e->{
+//                            String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
+//                            return line;
+//                        }).toList();
+//                        if(lines.size()==total){
+//                            FileUtils.writeLines(new File(path), lines);
+//                            log.info(path + "， 成功");
+//                        }
+//                        else {
+//                            log.info(path + "， 数据请求失败");
+//                        }
                     }
                 }catch (Exception e) {
                     e.printStackTrace();
