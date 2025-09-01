@@ -110,15 +110,7 @@ public class ThreadAverage implements Runnable{
 
     }
 
-    //计算日均线
-    private BigDecimal dayAVG(ThreadDownloadStockDay.StockDayVo stockDayVo){
-        BigDecimal amount = new BigDecimal(stockDayVo.getAmount()); //交易额
-        BigDecimal volume = new BigDecimal(stockDayVo.getVolume()); //交易数
-        BigDecimal avg = amount.divide(volume, 5, BigDecimal.ROUND_HALF_UP);
-        return avg;
-    }
-
-    //5日均线
+    //过去历史均价
     private BigDecimal daysAVG(List<ThreadDownloadStockDay.StockDayVo> stockDayVoList, int type) throws Exception {
         BigDecimal amount = new BigDecimal(stockDayVoList.stream().mapToDouble(e -> Double.valueOf(e.getAmount())).sum());
         BigDecimal volume = new BigDecimal(stockDayVoList.stream().mapToDouble(e -> Double.valueOf(e.getVolume())).sum());
