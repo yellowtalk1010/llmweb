@@ -45,7 +45,7 @@ public class ThreadDownloadStockDay implements Runnable{
                         log.info(path + "， 新数据写入成功");
                     }
                     else {
-                        log.info(url + "， 下载失败");
+                        log.info(url + "， 下载失败，数据为空");
                     }
                 }
             }catch (Exception e) {
