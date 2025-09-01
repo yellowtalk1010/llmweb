@@ -9,17 +9,9 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import zuk.sast.rules.utils.HttpClientUtil;
-import zuk.sast.rules.utils.ResourceFileUtils;
 
 import java.io.File;
-import java.net.http.HttpClient;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,7 +56,7 @@ public class LoaderStockData implements InitializingBean {
         File tokenFile = new File(STOCK_TOKEN);
         if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").trim().equals(TOKEN)){
             loadAllStocks();
-            EXECUTOR_SERVICE.execute(new StockDayThread());
+            EXECUTOR_SERVICE.execute(new DownloadStockDayThread());
         }
         else {
             System.out.println("STOCK_PATH路径错误");
@@ -75,7 +67,7 @@ public class LoaderStockData implements InitializingBean {
     /***
      * 获取历史日线数据，按月统计
      */
-    public static class StockDayThread implements Runnable {
+    public static class DownloadStockDayThread implements Runnable {
 
         @Override
         public void run() {
