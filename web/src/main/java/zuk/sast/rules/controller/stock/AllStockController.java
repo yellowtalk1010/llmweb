@@ -26,6 +26,13 @@ public class AllStockController {
 
     public static final List<Map<String, String>> STOCKS = new ArrayList<>();
 
+
+
+    //https://xtrade.newone.com.cn/market/json?funcno=30029&version=1&stock_code=300287&market=SZ&start=0&dayitems=1&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756699944822.16897853520034
+    //https://xtrade.newone.com.cn/market/json?funcno=20006&version=1&stock_code=300287&market=SZ&count=100&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756699944822.16897853520033
+    //https://xtrade.newone.com.cn/market/json?funcno=30029&version=1&stock_code=300287&market=SZ&start=0&dayitems=5&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700218269.16897853520262
+    //https://xtrade.newone.com.cn/market/json?funcno=20044&version=1&stock_code=300287&market=SZ&count=1000&type=day&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700327368.16897853520352
+
     static {
         try {
             File file = ResourceFileUtils.findFile("stocks/all_stock.json");
