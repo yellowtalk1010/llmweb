@@ -21,15 +21,20 @@ import java.util.concurrent.Executors;
 public class LoaderStockData implements InitializingBean {
 
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-
-    private static final File STOCK_DATA_FILE = new File("D:\\AAAAAAAAAAAAAAAAAAAA\\github\\llmweb1\\web\\stocks\\token");
     private static final String TOKEN = "fdaljwkfksajfkda16f4e6wsa1f6we546f1w31fs65efw1f3s1f3we5fw1ef3s1a3";
+
+    private static final String STOCK_DATA_DIR_PATH = "D:\\AAAAAAAAAAAAAAAAAAAA\\github\\llmweb1\\web\\stocks\\";
+    private static final String STOCK_TOKEN = STOCK_DATA_DIR_PATH + File.separator + "token";
+    private static final String STOCK_ALL = STOCK_DATA_DIR_PATH + File.separator + "all_stock.json";
+
+
+
 
     public static final List<Map<String, String>> STOCKS = new ArrayList<>();
 
     private void loadAllStocks(){
         try {
-            File file = ResourceFileUtils.findFile(STOCK_DATA_FILE.getParent() + File.separator + "all_stock.json");
+            File file = ResourceFileUtils.findFile(STOCK_ALL);
             String content = FileUtils.readFileToString(file, "UTF-8");
             JSONObject jsonObject = JSONObject.parseObject(content);
             JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -53,7 +58,8 @@ public class LoaderStockData implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if(STOCK_DATA_FILE.exists() && STOCK_DATA_FILE.isFile() && FileUtils.readFileToString(STOCK_DATA_FILE, "UTF-8").equals(TOKEN)){
+        File tokenFile = new File(STOCK_TOKEN);
+        if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").equals(TOKEN)){
             loadAllStocks();
             EXECUTOR_SERVICE.execute(new StockDayThread());
         }
@@ -63,7 +69,7 @@ public class LoaderStockData implements InitializingBean {
 
         @Override
         public void run() {
-            log.info(STOCKS.size()+"");
+
         }
     }
 
