@@ -28,6 +28,7 @@ public class ThreadMA implements Runnable{
     private List<StockAverageVo> stockAverageVoList = new ArrayList<>();
 
     public ThreadMA(List<String> codes) {
+        this.stockAverageVoList.clear();
         if(codes!=null && codes.size()>0){
             this.codes.addAll(codes);
         }
