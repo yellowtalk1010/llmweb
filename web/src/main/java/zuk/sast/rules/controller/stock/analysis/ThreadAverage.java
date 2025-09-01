@@ -63,7 +63,7 @@ public class ThreadAverage implements Runnable{
 //                        }
                     }
 
-                    //按时间排序
+                    //按时间倒序排列
                     List<ThreadDownloadStockDay.StockDayVo> sortedList = stockDayVoList.stream()
                             .sorted(Comparator.comparing(ThreadDownloadStockDay.StockDayVo::getTime).reversed()) //按时间倒序
                             .toList();
