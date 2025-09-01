@@ -53,13 +53,22 @@ public class StockTest {
             ThreadMA.StockMaVo ma2 = ls.get(2);
 
             //换手率
-            Double changeRatio0 = Double.valueOf(ma0.getStockDayVo().getChangeRatio()); //换手率
+            Double turnoverRatio0 = Double.valueOf(ma0.getStockDayVo().getTurnoverRatio());
+            Double turnoverRatio1 = Double.valueOf(ma1.getStockDayVo().getTurnoverRatio());
+            Double turnoverRatio2 = Double.valueOf(ma2.getStockDayVo().getTurnoverRatio());
+            boolean isTurnoverRatio = turnoverRatio0 > 4 && turnoverRatio0 < 6
+                    && turnoverRatio1 > 4 && turnoverRatio1 < 6
+                    && turnoverRatio2 > 4 && turnoverRatio2 < 6
+                    ;
+
+            //涨跌幅
+            Double changeRatio0 = Double.valueOf(ma0.getStockDayVo().getChangeRatio());
             Double changeRatio1 = Double.valueOf(ma1.getStockDayVo().getChangeRatio());
             Double changeRatio2 = Double.valueOf(ma2.getStockDayVo().getChangeRatio());
 
-            boolean isChangeRatio = changeRatio0 > 0.2 && changeRatio0 < 0.6
-                    && changeRatio1 > 0.2 && changeRatio1 < 0.6
-                    && changeRatio2 > 0.2 && changeRatio2 < 0.6
+            boolean isChangeRatio = changeRatio0 > 2 && changeRatio0 < 6
+                    && changeRatio1 > 2 && changeRatio1 < 6
+                    && changeRatio2 > 2 && changeRatio2 < 6
                     ;
 
             //收盘价递增
@@ -84,7 +93,7 @@ public class StockTest {
                     && close2 > close1 && close1 > close0
                     ;
 
-            if(isChangeRatio && isPrice){
+            if(isTurnoverRatio && isChangeRatio && isPrice){
                 System.out.println(code);
             }
 
