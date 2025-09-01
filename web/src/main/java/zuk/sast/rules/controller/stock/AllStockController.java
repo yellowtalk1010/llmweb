@@ -114,7 +114,9 @@ public class AllStockController {
                     "deepseek",
                     "昇腾",
                     "数据中心",
-                    "芯片"
+                    "芯片",
+                    "华为", "金融", "消费", "AI", "稀土", "工业母机"
+
             ).stream()
             .map(e->e.toUpperCase())
             .collect(Collectors.toSet());
