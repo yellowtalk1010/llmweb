@@ -4,9 +4,12 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import zuk.sast.rules.controller.mapper.StockMapper;
+import zuk.sast.rules.controller.mapper.entity.StockEntity;
 
 import java.io.File;
 import java.util.*;
@@ -53,18 +56,16 @@ public class AllStockController {
 //        }
 //    }
 
+    @Autowired
+    private StockMapper stockMapper;
+
     @GetMapping("delete")
     public synchronized Map<String, Object> delete(String api_code) {
         log.info("delete:" + api_code);
 
         Map<String, Object> result = new HashMap<>();
         try {
-
-            Map<String, JSONObject> mymap = readAttention();
-
-            mymap.remove(api_code);
-
-            writeAttention(mymap);
+            this.stockMapper.deleteByCode(api_code);
 
             result.put("status", "ok");
             return result;
@@ -78,55 +79,30 @@ public class AllStockController {
         return result;
     }
 
-    private static final File resultFile = new File("data/mystock");
-    public static Map<String, JSONObject> readAttention() throws Exception {
-        log.info("resultFile:" + resultFile.getAbsolutePath() + ", exists:" + resultFile.exists());
-        List<String> list = FileUtils.readLines(resultFile, "UTF-8");
-        Map<String, JSONObject> mymap = new HashMap<>();
-        list.stream().forEach(l->{
-            JSONObject jsonObject = JSONObject.parseObject(l);
-            mymap.put(jsonObject.getString("api_code"), jsonObject);
-        });
-        log.info("总数：" + mymap.size());
-        return mymap;
-    }
-
-    public static boolean writeAttention(Map<String, JSONObject> mymap) throws Exception {
-        //重新转成行数据
-        List<String> newLines = mymap.entrySet().stream().map(entry->{
-            return JSONObject.toJSONString(entry.getValue(), JSONWriter.Feature.LargeObject);
-        }).toList();
-        //重新写入文件中
-        FileUtils.writeLines(resultFile,"UTF-8", newLines);
-        return true;
-    }
 
     @GetMapping("add")
     public synchronized Map<String, Object> add(String api_code) {
         log.info("add:" + api_code);
         Map<String, Object> result = new HashMap<>();
         try {
-            Map<String, JSONObject> mymap = readAttention();
-            if(mymap.get(api_code)!=null){
-                //已经存在
+            List list = this.stockMapper.selectByCode(api_code);
+            if(list!=null && list.size()>0){
                 result.put("status", "已存在");
                 return result;
             }
             else {
-                LoaderStockData.STOCKS.stream().filter(stock->stock.get("api_code").equals(api_code)).forEach(socket->{
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("api_code", socket.get("api_code"));
-                    jsonObject.put("jys", socket.get("jys"));
-                    jsonObject.put("name", socket.get("name"));
-                    mymap.put(api_code, jsonObject);
+                LoaderStockData.STOCKS.stream().filter(stock->stock.getApi_code().equals(api_code)).forEach(socket->{
+                    StockEntity stockEntity = new StockEntity();
+                    stockEntity.setId(UUID.randomUUID().toString());
+                    stockEntity.setCode(socket.getApi_code());
+                    stockEntity.setJys(socket.getJys());
+                    stockEntity.setName(socket.getName());
+                    stockEntity.setType("LOVE");
+                    this.stockMapper.insert(stockEntity);
                 });
-
-                writeAttention(mymap);
-
                 result.put("status", "ok");
                 return result;
             }
-
 
         }catch (Exception e) {
             //e.printStackTrace();
@@ -144,10 +120,12 @@ public class AllStockController {
     @GetMapping("my")
     public Map<String, Object> my(){
         try {
+            List<StockEntity> stockEntities = stockMapper.selectAll();
+
             Map<String, Object> map = new HashMap<>();
-            Set<String> sets = readAttention().entrySet().stream().map(e->e.getKey()).collect(Collectors.toSet());
-            List<Map<String, String>> ls = LoaderStockData.STOCKS.stream().filter(stock->{
-                return sets.contains(stock.get("api_code"));
+            Set<String> sets = stockEntities.stream().map(e->e.getCode()).collect(Collectors.toSet());
+            List<LoaderStockData.StockApiVO> ls = LoaderStockData.STOCKS.stream().filter(stock->{
+                return sets.contains(stock.getApi_code());
             }).toList();
 
             map.put("stocks", ls);
@@ -163,17 +141,17 @@ public class AllStockController {
     @GetMapping("all")
     public Map<String, Object> all(String search){
 
-        List<Map<String, String>> list;
+        List<LoaderStockData.StockApiVO> list;
         if(search!=null && search.length()>0){
             list = new ArrayList<>();
             List<String> splits = Arrays.stream(search.split("#")).filter(e->e!=null && e.trim().length()>0).toList();
 
             splits.stream().forEach(s->{
-                List<Map<String, String>> ls = LoaderStockData.STOCKS.stream().filter(stock->{
-                    return stock.get("api_code").toUpperCase().contains(s.toUpperCase())
-                            || stock.get("jys").toUpperCase().contains(s.toUpperCase())
-                            || stock.get("gl").toUpperCase().contains(s.toUpperCase())
-                            || stock.get("name").toUpperCase().contains(s.toUpperCase());
+                List<LoaderStockData.StockApiVO> ls = LoaderStockData.STOCKS.stream().filter(stock->{
+                    return stock.getApi_code().toUpperCase().contains(s.toUpperCase())
+                            || stock.getJys().toUpperCase().contains(s.toUpperCase())
+                            || stock.getGl().toUpperCase().contains(s.toUpperCase())
+                            || stock.getName().toUpperCase().contains(s.toUpperCase());
                 }).toList();
                 list.addAll(ls);
             });

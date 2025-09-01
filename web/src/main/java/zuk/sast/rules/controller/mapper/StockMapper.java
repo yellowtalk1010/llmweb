@@ -9,13 +9,16 @@ import java.util.List;
 @Mapper
 public interface StockMapper {
 
-    @Select("SELECT * FROM stock")
+    @Select("SELECT * FROM stock ")
     List<StockEntity> selectAll();
 
-    @Insert("INSERT INTO stock(id, code, jys, name, type) VALUES(#{id}, #{code}, #{jys}, #{name}, #{type})")
+    @Insert("INSERT INTO stock(id, code, jys, name, type) VALUES (#{id}, #{code}, #{jys}, #{name}, #{type}) ")
     int insert(StockEntity stock);
 
-    @Delete("DELETE FROM stock WHERE id = #{id} ")
-    int delete(@Param("id") String id);
+    @Delete("DELETE FROM stock WHERE code = #{code} ")
+    int deleteByCode(@Param("code") String code);
+
+    @Select("SELECT * FROM stock WHERE code = ${code} ")
+    List<String> selectByCode(@Param("code") String code);
 
 }
