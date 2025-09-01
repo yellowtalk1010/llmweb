@@ -129,7 +129,7 @@ public class ThreadMA implements Runnable{
                     }).toList();
                     String maFile = STOCK_MA + File.separator + code + File.separator + formatter.format(today) + ".jsonl";
                     FileUtils.writeLines(new File(maFile), maLines);
-                    log.info(num.incrementAndGet() + "/" + this.codes.size() + "，" + maFile + "，写入成功，");
+                    log.info(num.incrementAndGet() + "/" + this.codes.size() + "，写入成功。");
 
                 }
                 catch (Exception e) {
