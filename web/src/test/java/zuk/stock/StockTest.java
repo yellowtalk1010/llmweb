@@ -28,7 +28,7 @@ public class StockTest {
         loadStockData();
         List<String> codes = LoaderStockData.STOCKS.stream().filter(e->{
             String gl = e.getGl().toUpperCase();
-            return gl.contains("人工智能")
+            Boolean st = gl.contains("人工智能")
                     || gl.contains("华为")
                     || gl.contains("芯片")
                     || gl.contains("金融")
@@ -39,6 +39,7 @@ public class StockTest {
                     || gl.contains("稀土")
                     || gl.contains("工业母机")
                     ;
+            return true;
         }).map(e->e.getApi_code()).toList();
         log.info("总数：" + codes.size());
         ThreadMA threadMA = new ThreadMA(codes);
@@ -56,9 +57,9 @@ public class StockTest {
             Double turnoverRatio0 = Double.valueOf(ma0.getStockDayVo().getTurnoverRatio());
             Double turnoverRatio1 = Double.valueOf(ma1.getStockDayVo().getTurnoverRatio());
             Double turnoverRatio2 = Double.valueOf(ma2.getStockDayVo().getTurnoverRatio());
-            boolean isTurnoverRatio = turnoverRatio0 > 4 && turnoverRatio0 < 6
-                    && turnoverRatio1 > 4 && turnoverRatio1 < 6
-                    && turnoverRatio2 > 4 && turnoverRatio2 < 6
+            boolean isTurnoverRatio = turnoverRatio0 > 4 && turnoverRatio0 < 10
+                    && turnoverRatio1 > 4 && turnoverRatio1 < 10
+                    && turnoverRatio2 > 4 && turnoverRatio2 < 10
                     ;
 
             //涨跌幅
@@ -66,9 +67,9 @@ public class StockTest {
             Double changeRatio1 = Double.valueOf(ma1.getStockDayVo().getChangeRatio());
             Double changeRatio2 = Double.valueOf(ma2.getStockDayVo().getChangeRatio());
 
-            boolean isChangeRatio = changeRatio0 > 2 && changeRatio0 < 6
-                    && changeRatio1 > 2 && changeRatio1 < 6
-                    && changeRatio2 > 2 && changeRatio2 < 6
+            boolean isChangeRatio = changeRatio0 > 2 && changeRatio0 < 30
+                    && changeRatio1 > 2 && changeRatio1 < 30
+                    && changeRatio2 > 2 && changeRatio2 < 30
                     ;
 
             //收盘价递增
@@ -88,9 +89,10 @@ public class StockTest {
             Double md5_1 = Double.valueOf(ma1.getMa5());
             Double md5_2 = Double.valueOf(ma2.getMa5());
 
-            boolean isPrice = md5_2 > md5_1 && md5_1 > md5_0
-                    && avg2 > avg1 && avg1 > avg0
-                    && close2 > close1 && close1 > close0
+            boolean isPrice = true
+                    //md5_2 > md5_1 && md5_1 > md5_0
+                    //&& avg2 > avg1 && avg1 > avg0
+                   // && close2 > close1 && close1 > close0
                     ;
 
             if(isTurnoverRatio && isChangeRatio && isPrice){
