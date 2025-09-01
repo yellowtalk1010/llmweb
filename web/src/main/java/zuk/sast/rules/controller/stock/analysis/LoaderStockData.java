@@ -57,7 +57,6 @@ public class LoaderStockData implements InitializingBean {
             EXECUTOR_SERVICE.execute(new ThreadDownloadStockDay());
         }
         else {
-            System.out.println("STOCK_PATH路径错误");
             log.info("STOCK_PATH路径错误");
             System.exit(0);
         }
