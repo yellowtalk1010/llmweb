@@ -33,13 +33,11 @@ public class ThreadDownloadStockDay implements Runnable{
                 String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
                 try {
                     if(new File(path).exists()){
+                        num.incrementAndGet(); //
                         List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
                         if(lines.size()==0){
-                            FileUtils.delete(new File(path));
-                            log.info(path + " 文件空数据，已删除");
-                        }
-                        else {
-                            num.incrementAndGet(); //
+                            //FileUtils.delete(new File(path));
+                            log.info(path + " 文件空数据");
                         }
                     }
                     else {
