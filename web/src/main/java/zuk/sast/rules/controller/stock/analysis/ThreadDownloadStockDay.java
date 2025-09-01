@@ -48,7 +48,7 @@ public class ThreadDownloadStockDay implements Runnable{
                         log.info(path + "， 下载成功");
                     }
                     else {
-                        log.info(path + "， 下载失败");
+                        log.info(url + "， 下载失败");
                     }
                 }
             }catch (Exception e) {
