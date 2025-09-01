@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import StockChart from "../modules/StockChart";
+
 function AllStock() {
   const [stockDatas, setStockDatas] = useState({
     stocks:[],
@@ -113,6 +115,7 @@ function AllStock() {
           ))}
         </tbody>
       </table>
+      <StockChart>aaa</StockChart>
     </div>
   );
 }
