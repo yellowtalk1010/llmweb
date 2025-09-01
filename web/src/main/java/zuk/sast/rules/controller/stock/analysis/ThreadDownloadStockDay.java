@@ -55,16 +55,16 @@ public class ThreadDownloadStockDay implements Runnable{
                             List<String> lines = jsonArray.stream().map(e->{
                                 String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
                                 StockDayVo stockDayVo = JSONObject.parseObject(line, StockDayVo.class);
-                                if(StringUtils.isNotEmpty(stockDayVo.getOpen())
-                                        && StringUtils.isNotEmpty(stockDayVo.getTime())
-                                        && StringUtils.isNotEmpty(stockDayVo.getCode())
-                                        && StringUtils.isNotEmpty(stockDayVo.getAmount())
-                                        && StringUtils.isNotEmpty(stockDayVo.getChangeRatio())
-                                        && StringUtils.isNotEmpty(stockDayVo.getHigh())
-                                        && StringUtils.isNotEmpty(stockDayVo.getLow())
-                                        && StringUtils.isNotEmpty(stockDayVo.getTurnoverRatio())
-                                        && StringUtils.isNotEmpty(stockDayVo.getVolume())
-                                        && StringUtils.isNotEmpty(stockDayVo.getClose())
+                                if(StringUtils.isNotEmpty(stockDayVo.getOpen()) //开盘价
+                                        && StringUtils.isNotEmpty(stockDayVo.getTime()) //交易时间
+                                        && StringUtils.isNotEmpty(stockDayVo.getCode()) //代码
+                                        && StringUtils.isNotEmpty(stockDayVo.getAmount())   //交易总金额
+                                        && StringUtils.isNotEmpty(stockDayVo.getChangeRatio())  //相比上次收盘价的涨跌比率
+                                        && StringUtils.isNotEmpty(stockDayVo.getHigh()) //最高价
+                                        && StringUtils.isNotEmpty(stockDayVo.getLow())  //最低价
+                                        && StringUtils.isNotEmpty(stockDayVo.getTurnoverRatio())    //换手率
+                                        && StringUtils.isNotEmpty(stockDayVo.getVolume())   //交易量
+                                        && StringUtils.isNotEmpty(stockDayVo.getClose())    //收盘
 
                                 ){
                                     return JSONObject.toJSONString(stockDayVo, JSONWriter.Feature.LargeObject);
