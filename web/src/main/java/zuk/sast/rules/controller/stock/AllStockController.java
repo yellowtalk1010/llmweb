@@ -1,9 +1,6 @@
 package zuk.sast.rules.controller.stock;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import zuk.sast.rules.controller.mapper.StockMapper;
 import zuk.sast.rules.controller.mapper.entity.StockEntity;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,39 +18,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("stock")
 public class AllStockController {
-
-//    public static final List<Map<String, String>> STOCKS = new ArrayList<>();
-
-
-
+    
     //https://xtrade.newone.com.cn/market/json?funcno=30029&version=1&stock_code=300287&market=SZ&start=0&dayitems=1&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756699944822.16897853520034
     //https://xtrade.newone.com.cn/market/json?funcno=20006&version=1&stock_code=300287&market=SZ&count=100&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756699944822.16897853520033
     //https://xtrade.newone.com.cn/market/json?funcno=30029&version=1&stock_code=300287&market=SZ&start=0&dayitems=5&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700218269.16897853520262
     //https://xtrade.newone.com.cn/market/json?funcno=20044&version=1&stock_code=300287&market=SZ&count=1000&type=day&cms-trace-id=fe98fa982fbf42ce88b268b841bd8a84.1756700327368.16897853520352
-
-    //https://stockapi.com.cn/v1/base/day?token=36c92182f783f08005017f78e7a264608a82952f8b91de2a&code=600004&endDate=2025-08-31&startDate=2025-08-01&calculationCycle=100  //历史日线
-//    static {
-//        try {
-//            File file = ResourceFileUtils.findFile("stocks/all_stock.json");
-//            String content = FileUtils.readFileToString(file, "UTF-8");
-//            JSONObject jsonObject = JSONObject.parseObject(content);
-//            JSONArray jsonArray = jsonObject.getJSONArray("data");
-//            jsonArray.forEach(item -> {
-//                Map<String, String> map = new HashMap<>();
-//                JSONObject obj = (JSONObject) item;
-//                map.put("api_code", obj.getString("api_code"));
-//                map.put("jys", obj.getString("jys"));
-//                map.put("gl", obj.getString("gl")); //所属板块
-//                map.put("name", obj.getString("name"));
-//                STOCKS.add(map);
-//            });
-//            log.info("stock总数:" + STOCKS.size());
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//            log.error(e.getMessage());
-//        }
-//    }
 
     @Autowired
     private StockMapper stockMapper;
