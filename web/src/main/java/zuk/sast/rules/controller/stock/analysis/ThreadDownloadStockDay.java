@@ -26,12 +26,9 @@ public class ThreadDownloadStockDay implements Runnable{
             try {
                 if(new File(path).exists()){
                     List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
-                    if(lines.size()!=total){
+                    if(lines.size()==0){
                         FileUtils.delete(new File(path));
-                        log.info(path + "存在，但是数据总行数不对");
-                    }
-                    else {
-//                            log.info(path + "相同");
+                        log.info(path + " 文件空数据，已删除");
                     }
                 }
                 else {
@@ -43,7 +40,7 @@ public class ThreadDownloadStockDay implements Runnable{
                         String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
                         return line;
                     }).toList();
-                    if(lines.size()==total){
+                    if(lines.size()>0){
                         FileUtils.writeLines(new File(path), lines);
                         log.info(path + "， 下载成功");
                     }
