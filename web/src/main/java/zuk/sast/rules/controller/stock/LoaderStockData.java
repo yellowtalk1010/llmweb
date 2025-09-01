@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 public class LoaderStockData implements InitializingBean {
 
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-    private static final String TOKEN = "fdaljwkfksajfkda16f4e6wsa1f6we546f1w31fs65efw1f3s1f3we5fw1ef3s1a3";
+    private static final String TOKEN = "36c92182f783f08005017f78e7a264608a82952f8b91de2a";
 
     private static final String STOCK_DATA_DIR_PATH = "D:\\AAAAAAAAAAAAAAAAAAAA\\github\\llmweb1\\web\\stocks\\";
     private static final String STOCK_TOKEN = STOCK_DATA_DIR_PATH + File.separator + "token";
@@ -72,5 +72,6 @@ public class LoaderStockData implements InitializingBean {
 
         }
     }
+
 
 }
