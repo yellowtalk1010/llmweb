@@ -17,10 +17,9 @@ public class ThreadDownloadStockDay implements Runnable{
     public void run() {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         //String ym = sdf.format(new Date());
-        final String ym = "202508";
-        final int total = 21;
-        String startTime = "2025-08-01";
-        String endTime = "2025-08-31";
+        final String ym = "202509";
+        String startTime = "2025-09-01";
+        String endTime = "2025-09-30";
         LoaderStockData.STOCKS.stream().forEach(stockApiVO -> {
             String path = LoaderStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
             try {
