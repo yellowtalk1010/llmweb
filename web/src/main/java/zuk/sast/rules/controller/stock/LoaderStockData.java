@@ -57,6 +57,10 @@ public class LoaderStockData implements InitializingBean {
             loadAllStocks();
             EXECUTOR_SERVICE.execute(new StockDayThread());
         }
+        else {
+            System.out.println("STOCK_PATH路径错误");
+            System.exit(0);
+        }
     }
 
     public static class StockDayThread implements Runnable {
