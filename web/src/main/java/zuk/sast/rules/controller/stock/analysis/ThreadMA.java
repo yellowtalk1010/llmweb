@@ -76,59 +76,59 @@ public class ThreadMA implements Runnable{
                             .sorted(Comparator.comparing(ThreadDownloadStockDay.StockDayVo::getTime).reversed()) //按时间倒序
                             .toList();
 
-                    String maFile = STOCK_MA + File.separator + code + File.separator + formatter.format(today) + ".jsonl";
-                    if(!new File(maFile).exists()){
+                    //System.out.println();
+                    for(int i=0; i<sortedList.size(); i++){
+                        if(i+5 < stockDayVoList.size()
+                                && i+10 < stockDayVoList.size()
+                                && i+30 < stockDayVoList.size()
+                        ){
 
-                        //System.out.println();
-                        for(int i=0; i<sortedList.size(); i++){
-                            if(i+5 < stockDayVoList.size()
-                                    && i+10 < stockDayVoList.size()
-                                    && i+30 < stockDayVoList.size()
-                            ){
+                            ThreadDownloadStockDay.StockDayVo stockDayVo = sortedList.get(i);
 
-                                ThreadDownloadStockDay.StockDayVo stockDayVo = sortedList.get(i);
-
-                                String date = stockDayVo.getTime(); //日期
+                            String date = stockDayVo.getTime(); //日期
 
 
-                                BigDecimal avg1 = daysAVG(Arrays.asList(stockDayVo), 1);    //今日均价
+                            BigDecimal avg1 = daysAVG(Arrays.asList(stockDayVo), 1);    //今日均价
 
-                                List<ThreadDownloadStockDay.StockDayVo> stockDayVoList5 = sortedList.subList(i, i+5);   //过去5天均价
-                                BigDecimal avg5 = daysAVG(stockDayVoList5, 5);
-                                BigDecimal ma5 = daysMA(stockDayVoList5, 5);
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList5 = sortedList.subList(i, i+5);   //过去5天均价
+                            BigDecimal avg5 = daysAVG(stockDayVoList5, 5);
+                            BigDecimal ma5 = daysMA(stockDayVoList5, 5);
 
-                                List<ThreadDownloadStockDay.StockDayVo> stockDayVoList10 = sortedList.subList(i, i+10); //过去10天均价
-                                BigDecimal avg10 = daysAVG(stockDayVoList10, 10);
-                                BigDecimal ma10 = daysMA(stockDayVoList10, 10);
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList10 = sortedList.subList(i, i+10); //过去10天均价
+                            BigDecimal avg10 = daysAVG(stockDayVoList10, 10);
+                            BigDecimal ma10 = daysMA(stockDayVoList10, 10);
 
-                                List<ThreadDownloadStockDay.StockDayVo> stockDayVoList30 = sortedList.subList(i, i+30); //过去30天均价
-                                BigDecimal avg30 = daysAVG(stockDayVoList30, 30);
-                                BigDecimal ma30 = daysMA(stockDayVoList30, 30);
+                            List<ThreadDownloadStockDay.StockDayVo> stockDayVoList30 = sortedList.subList(i, i+30); //过去30天均价
+                            BigDecimal avg30 = daysAVG(stockDayVoList30, 30);
+                            BigDecimal ma30 = daysMA(stockDayVoList30, 30);
 
 
-                                //System.out.println();
-                                StockAverageVo stockAverageVo =new StockAverageVo();
-                                stockAverageVo.setTime(date);
-                                stockAverageVo.setStockDayVo(stockDayVo);
-                                stockAverageVo.setAvg(avg1.toString());
-                                stockAverageVo.setAvg5(avg5.toString());
-                                stockAverageVo.setAvg10(avg10.toString());
-                                stockAverageVo.setAvg30(avg30.toString());
+                            //System.out.println();
+                            StockAverageVo stockAverageVo =new StockAverageVo();
+                            stockAverageVo.setTime(date);
+                            stockAverageVo.setStockDayVo(stockDayVo);
+                            stockAverageVo.setAvg(avg1.toString());
+                            stockAverageVo.setAvg5(avg5.toString());
+                            stockAverageVo.setAvg10(avg10.toString());
+                            stockAverageVo.setAvg30(avg30.toString());
 
-                                stockAverageVo.setMa5(ma5.toString());
-                                stockAverageVo.setMa10(ma10.toString());
-                                stockAverageVo.setMa30(ma30.toString());
+                            stockAverageVo.setMa5(ma5.toString());
+                            stockAverageVo.setMa10(ma10.toString());
+                            stockAverageVo.setMa30(ma30.toString());
 
-                                stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
-
-                            }
+                            stockAverageVoList.add(stockAverageVo); //记录计算好的ma数据
 
                         }
 
-                        List<String> maLines = stockAverageVoList.stream().map(e->{
-                            String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
-                            return line;
-                        }).toList();
+                    }
+
+                    String maFile = STOCK_MA + File.separator + code + File.separator + formatter.format(today) + ".jsonl";
+                    List<String> maLines = stockAverageVoList.stream().map(e->{
+                        String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
+                        return line;
+                    }).toList();
+
+                    if(!new File(maFile).exists()){
                         FileUtils.writeLines(new File(maFile), maLines);
                     }
 
