@@ -63,8 +63,7 @@ public class ThreadDownloadStockDay implements Runnable{
                 }catch (Exception e) {
                     e.printStackTrace();
                     log.error(e.getMessage());
-                    log.info();
-                    log.info(path + "， 失败");
+                    log.info(url + "\n" + path + "， 失败");
                 }
             });
         }
