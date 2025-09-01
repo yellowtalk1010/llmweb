@@ -2,6 +2,8 @@ package zuk.stock;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zuk.sast.rules.controller.stock.analysis.LoaderStockData;
 import zuk.sast.rules.controller.stock.analysis.ThreadMA;
 
@@ -10,6 +12,8 @@ import java.util.List;
 
 
 public class StockTest {
+
+    private static final Logger log = LoggerFactory.getLogger(StockTest.class);
 
     private void loadStockData() throws Exception {
         LoaderStockData.load();
@@ -22,8 +26,23 @@ public class StockTest {
     @Test
     public void ma() throws Exception {
         loadStockData();
-//        ThreadMA threadMA = new ThreadMA(LoaderStockData.STOCKS.stream().map(e->e.getApi_code()).toList());
-        ThreadMA threadMA = new ThreadMA(Lists.list("002633"));
+        List<String> codes = LoaderStockData.STOCKS.stream().filter(e->{
+            String gl = e.getGl().toUpperCase();
+            return gl.contains("人工智能")
+                    || gl.contains("华为")
+                    || gl.contains("芯片")
+                    || gl.contains("金融")
+                    || gl.contains("DEEPSEEK")
+                    || gl.contains("消费")
+                    || gl.contains("昇腾")
+                    || gl.contains("AI")
+                    || gl.contains("稀土")
+                    || gl.contains("工业母机")
+                    ;
+        }).map(e->e.getApi_code()).toList();
+        log.info("总数：" + codes.size());
+        ThreadMA threadMA = new ThreadMA(codes);
+//        ThreadMA threadMA = new ThreadMA(Lists.list("002633"));
         threadMA.run();
 
         ThreadMA.MAP.entrySet().stream().filter(e->e.getValue().size()>5).forEach(e->{
