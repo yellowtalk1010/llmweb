@@ -55,7 +55,7 @@ public class DatabaseInitializer {
         String sql = """
             CREATE TABLE IF NOT EXISTS stock (
                 id VARCHAR(100) PRIMARY KEY,
-                api_code VARCHAR(100),
+                code VARCHAR(100),
                 jys  VARCHAR(100),
                 name  VARCHAR(100),
                 type VARCHAR(100)

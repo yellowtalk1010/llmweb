@@ -33,7 +33,7 @@ public class LoaderStockData implements InitializingBean {
 
     private void loadAllStocks(){
         try {
-            File file = ResourceFileUtils.findFile(STOCK_ALL);
+            File file = new File(STOCK_ALL);
             String content = FileUtils.readFileToString(file, "UTF-8");
             JSONObject jsonObject = JSONObject.parseObject(content);
             JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -53,7 +53,7 @@ public class LoaderStockData implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         File tokenFile = new File(STOCK_TOKEN);
-        if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").equals(TOKEN)){
+        if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").trim().equals(TOKEN)){
             loadAllStocks();
             EXECUTOR_SERVICE.execute(new StockDayThread());
         }
