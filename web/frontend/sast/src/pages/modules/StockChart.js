@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, AreaChart, Area, ReferenceLine
+  ResponsiveContainer, AreaChart, Area, ReferenceLine, Brush,
+  BarChart, Bar, Legend
 } from 'recharts';
 
 // 模拟股票数据生成
@@ -10,6 +11,7 @@ const generateStockData = (type) => {
   const now = new Date();
   let basePrice = 150 + Math.random() * 50;
   
+  // 生成不同时间范围的数据
   if (type === 'intraday') {
     // 生成分时数据（每5分钟一个点）
     for (let i = 0; i < 78; i++) {
@@ -32,9 +34,14 @@ const generateStockData = (type) => {
         });
       }
     }
-  } else if (type === 'daily') {
+  } else {
+    let days = 30;
+    if (type === '5days') days = 5;
+    if (type === '10days') days = 10;
+    if (type === 'month') days = 30;
+    
     // 生成日K数据
-    for (let i = 30; i >= 0; i--) {
+    for (let i = days; i >= 0; i--) {
       const date = new Date(now);
       date.setDate(now.getDate() - i);
       
@@ -44,35 +51,44 @@ const generateStockData = (type) => {
       const high = Math.max(open, close) + Math.random() * 5;
       const low = Math.min(open, close) - Math.random() * 5;
       
+      // 计算均线值
       data.push({
         date: date.toLocaleDateString().substr(5),
         open: parseFloat(open.toFixed(2)),
         close: parseFloat(close.toFixed(2)),
         high: parseFloat(high.toFixed(2)),
         low: parseFloat(low.toFixed(2)),
-        volume: Math.floor(Math.random() * 10000)
+        volume: Math.floor(Math.random() * 10000),
+        ma5: 0,  // 将在后面计算
+        ma10: 0, // 将在后面计算
+        ma20: 0  // 将在后面计算
       });
     }
-  } else if (type === '5days') {
-    // 生成5日数据
-    for (let i = 120; i >= 0; i--) {
-      const time = new Date(now);
-      time.setHours(9, 30 + i * 30, 0);
+    
+    // 计算均线
+    for (let i = 0; i < data.length; i++) {
+      if (i >= 4) {
+        let sum = 0;
+        for (let j = 0; j < 5; j++) {
+          sum += data[i - j].close;
+        }
+        data[i].ma5 = parseFloat((sum / 5).toFixed(2));
+      }
       
-      if (time.getHours() >= 11 && time.getHours() < 13) {
-        // 午间休市，价格不变
-        data.push({
-          time: time.toTimeString().substr(0, 5),
-          price: basePrice,
-          volume: Math.floor(Math.random() * 1000)
-        });
-      } else {
-        basePrice += (Math.random() - 0.5);
-        data.push({
-          time: time.toTimeString().substr(0, 5),
-          price: parseFloat(basePrice.toFixed(2)),
-          volume: Math.floor(Math.random() * 1000)
-        });
+      if (i >= 9) {
+        let sum = 0;
+        for (let j = 0; j < 10; j++) {
+          sum += data[i - j].close;
+        }
+        data[i].ma10 = parseFloat((sum / 10).toFixed(2));
+      }
+      
+      if (i >= 19) {
+        let sum = 0;
+        for (let j = 0; j < 20; j++) {
+          sum += data[i - j].close;
+        }
+        data[i].ma20 = parseFloat((sum / 20).toFixed(2));
       }
     }
   }
@@ -81,19 +97,16 @@ const generateStockData = (type) => {
 };
 
 // 自定义Tooltip组件
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label, chartType }) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="label">{`时间: ${label}`}</p>
-        <p className="intro" style={{color: '#8884d8'}}>
-          价格: {payload[0].value}
-        </p>
-        {payload[1] && (
-          <p className="intro" style={{color: '#82ca9d'}}>
-            成交量: {payload[1].value.toLocaleString()}
+        <p className="label">{`${chartType === 'intraday' ? '时间' : '日期'}: ${label}`}</p>
+        {payload.map((entry, index) => (
+          <p key={index} className="intro" style={{color: entry.color}}>
+            {`${entry.name}: ${entry.value}${entry.name.includes('volume') ? '' : ''}`}
           </p>
-        )}
+        ))}
       </div>
     );
   }
@@ -101,9 +114,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 // 主组件
-const StockChart = () => {
+const EnhancedStockChart = () => {
   const [chartType, setChartType] = useState('intraday');
   const [stockData, setStockData] = useState([]);
+  const [showMA5, setShowMA5] = useState(true);
+  const [showMA10, setShowMA10] = useState(true);
+  const [showMA20, setShowMA20] = useState(true);
   const [stockInfo, setStockInfo] = useState({
     name: '腾讯控股',
     code: '00700',
@@ -134,7 +150,7 @@ const StockChart = () => {
   }, [chartType]);
 
   const renderChart = () => {
-    if (chartType === 'intraday' || chartType === '5days') {
+    if (chartType === 'intraday') {
       return (
         <AreaChart
           data={stockData}
@@ -149,13 +165,14 @@ const StockChart = () => {
           <XAxis dataKey="time" />
           <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
           <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip chartType={chartType} />} />
           <Area
             type="monotone"
             dataKey="price"
             stroke="#8884d8"
             fillOpacity={1}
             fill="url(#colorPrice)"
+            name="价格"
           />
           <ReferenceLine
             y={stockInfo.price}
@@ -164,18 +181,71 @@ const StockChart = () => {
           />
         </AreaChart>
       );
-    } else if (chartType === 'daily') {
+    } else {
       return (
-        <LineChart
-          data={stockData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <XAxis dataKey="date" />
-          <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip content={<CustomTooltip />} />
-          <Line type="monotone" dataKey="close" stroke="#8884d8" dot={false} />
-        </LineChart>
+        <div>
+          <LineChart
+            width={800}
+            height={400}
+            data={stockData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <XAxis dataKey="date" />
+            <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip content={<CustomTooltip chartType={chartType} />} />
+            <Line 
+              type="monotone" 
+              dataKey="close" 
+              stroke="#8884d8" 
+              dot={false} 
+              name="收盘价"
+            />
+            {showMA5 && (
+              <Line 
+                type="monotone" 
+                dataKey="ma5" 
+                stroke="#ff7f0e" 
+                dot={false} 
+                name="5日均线"
+              />
+            )}
+            {showMA10 && (
+              <Line 
+                type="monotone" 
+                dataKey="ma10" 
+                stroke="#2ca02c" 
+                dot={false} 
+                name="10日均线"
+              />
+            )}
+            {showMA20 && (
+              <Line 
+                type="monotone" 
+                dataKey="ma20" 
+                stroke="#d62728" 
+                dot={false} 
+                name="20日均线"
+              />
+            )}
+            <Brush dataKey="date" height={30} stroke="#8884d8" />
+            <Legend />
+          </LineChart>
+          
+          <BarChart
+            width={800}
+            height={150}
+            data={stockData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            syncId="stockChart"
+          >
+            <XAxis dataKey="date" />
+            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip />
+            <Bar dataKey="volume" fill="#413ea0" name="成交量" />
+          </BarChart>
+        </div>
       );
     }
   };
@@ -211,7 +281,46 @@ const StockChart = () => {
           >
             5日
           </button>
+          <button
+            className={chartType === '10days' ? 'active' : ''}
+            onClick={() => setChartType('10days')}
+          >
+            10日
+          </button>
+          <button
+            className={chartType === 'month' ? 'active' : ''}
+            onClick={() => setChartType('month')}
+          >
+            月线
+          </button>
         </div>
+      </div>
+      
+      <div className="ma-controls">
+        <label>
+          <input
+            type="checkbox"
+            checked={showMA5}
+            onChange={() => setShowMA5(!showMA5)}
+          />
+          5日均线
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={showMA10}
+            onChange={() => setShowMA10(!showMA10)}
+          />
+          10日均线
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={showMA20}
+            onChange={() => setShowMA20(!showMA20)}
+          />
+          20日均线
+        </label>
       </div>
       
       <div className="chart-area">
@@ -273,6 +382,7 @@ const StockChart = () => {
         .chart-controls {
           display: flex;
           gap: 10px;
+          flex-wrap: wrap;
         }
         
         .chart-controls button {
@@ -290,8 +400,24 @@ const StockChart = () => {
         }
         
         .chart-controls button.active {
-          background: #555;
+          background: #4a90e2;
           font-weight: bold;
+        }
+        
+        .ma-controls {
+          display: flex;
+          gap: 15px;
+          margin-bottom: 15px;
+          padding: 10px;
+          background: #2a2b33;
+          border-radius: 5px;
+        }
+        
+        .ma-controls label {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          cursor: pointer;
         }
         
         .chart-area {
@@ -314,9 +440,24 @@ const StockChart = () => {
         .custom-tooltip .intro {
           margin: 5px 0 0 0;
         }
+        
+        @media (max-width: 768px) {
+          .stock-header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          .chart-controls {
+            margin-top: 15px;
+          }
+          
+          .ma-controls {
+            flex-wrap: wrap;
+          }
+        }
       `}</style>
     </div>
   );
 };
 
-export default StockChart;
+export default EnhancedStockChart;
