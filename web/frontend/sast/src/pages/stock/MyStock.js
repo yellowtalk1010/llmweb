@@ -115,7 +115,7 @@ function AllStock() {
           ))}
         </tbody>
       </table>
-      <StockChart>aaa</StockChart>
+      {/* <StockChart>aaa</StockChart> */}
     </div>
   );
 }
