@@ -85,9 +85,6 @@ public class ThreadAverage implements Runnable{
 
     }
 
-    public static void main(String[] args) {
-        new ThreadAverage(null).run();
-    }
 
 
 
