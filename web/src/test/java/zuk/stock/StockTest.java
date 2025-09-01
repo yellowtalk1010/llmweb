@@ -12,8 +12,12 @@ public class StockTest {
         LoaderStockData.load();
     }
 
+    /***
+     * 计算 MA 值线
+     * @throws Exception
+     */
     @Test
-    public void test1() throws Exception {
+    public void ma() throws Exception {
         loadStockData();
         ThreadAverage threadAverage = new ThreadAverage(LoaderStockData.STOCKS.stream().map(e->e.getApi_code()).toList());
 //        ThreadAverage threadAverage = new ThreadAverage(Lists.list("002633"));
