@@ -20,7 +20,7 @@ public class DatabaseInitializer {
     public void init() {
         createProjectTable();
         createIssueTable();
-//        createStockTable();
+        createStockTable();
     }
 
     private void createProjectTable() {
