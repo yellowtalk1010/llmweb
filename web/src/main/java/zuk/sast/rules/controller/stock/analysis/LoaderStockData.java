@@ -27,10 +27,9 @@ public class LoaderStockData implements InitializingBean {
     public static final String STOCK_DAY = STOCK_DATA_DIR_PATH + File.separator + "days";
 
 
-
     public static final List<StockApiVO> STOCKS = new ArrayList<>();
 
-    private void loadAllStocks(){
+    private static void loadAllStocks(){
         try {
             File file = new File(STOCK_ALL);
             String content = FileUtils.readFileToString(file, "UTF-8");
@@ -48,7 +47,7 @@ public class LoaderStockData implements InitializingBean {
         }
     }
 
-    public void load() throws Exception {
+    public static void load() throws Exception {
         File tokenFile = new File(STOCK_TOKEN);
         if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").trim().equals(TOKEN)){
             loadAllStocks();
