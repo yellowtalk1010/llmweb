@@ -21,6 +21,7 @@ public class StockTest {
         ThreadMA threadMA = new ThreadMA(LoaderStockData.STOCKS.stream().map(e->e.getApi_code()).toList());
 //        ThreadAverage threadAverage = new ThreadAverage(Lists.list("002633"));
         threadMA.run();
+
     }
 
 }
