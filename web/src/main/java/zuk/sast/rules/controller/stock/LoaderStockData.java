@@ -72,6 +72,9 @@ public class LoaderStockData implements InitializingBean {
         }
     }
 
+    /***
+     * 获取历史日线数据
+     */
     public static class StockDayThread implements Runnable {
 
         @Override
