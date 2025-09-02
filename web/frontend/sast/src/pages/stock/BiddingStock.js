@@ -78,7 +78,7 @@ function BiddingStock() {
                             {row.name}
                             <a
                             href="#"
-                            onClick={() => window.open("https://quote.eastmoney.com/" + row.code + row.code + ".html")}
+                            onClick={() => window.open("https://quote.eastmoney.com/" + row.code + ".html")}
                             >
                             {row.code}
                             </a>
