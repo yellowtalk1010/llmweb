@@ -52,7 +52,6 @@ public class LoaderStockData implements InitializingBean {
         File tokenFile = new File(STOCK_TOKEN);
         if(tokenFile.exists() && tokenFile.isFile() && FileUtils.readFileToString(tokenFile, "UTF-8").trim().equals(TOKEN)){
             loadAllStocks();
-            EXECUTOR_SERVICE.execute(new ThreadDownloadStockDay());
         }
         else {
             log.info("STOCK_PATH路径错误");

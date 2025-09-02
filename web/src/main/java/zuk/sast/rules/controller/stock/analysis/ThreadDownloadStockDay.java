@@ -1,6 +1,5 @@
 package zuk.sast.rules.controller.stock.analysis;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
@@ -13,7 +12,6 @@ import zuk.sast.rules.utils.HttpClientUtil;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class ThreadDownloadStockDay implements Runnable{
@@ -35,60 +33,51 @@ public class ThreadDownloadStockDay implements Runnable{
                 String path = LoaderStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
                 String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
                 try {
-                    if(new File(path).exists()){
-                        num.incrementAndGet(); //
-                        List<String> lines = FileUtils.readLines(new File(path), "UTF-8");
+
+                    //不存在
+                    String response = HttpClientUtil.sendGetRequest(url);
+                    JSONObject jsonObject = JSONObject.parseObject(response);
+                    Integer resCode = (Integer)jsonObject.get("code");
+                    String resMsg = (String)jsonObject.get("msg");
+                    if(resCode==20000 && resMsg.equals("success")){
+                        JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
+                        List<String> lines = jsonArray.stream().map(e->{
+                            String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
+                            StockDayVo stockDayVo = JSONObject.parseObject(line, StockDayVo.class);
+                            if(StringUtils.isNotEmpty(stockDayVo.getOpen()) //开盘价
+                                    && StringUtils.isNotEmpty(stockDayVo.getTime()) //交易时间
+                                    && StringUtils.isNotEmpty(stockDayVo.getCode()) //代码
+                                    && StringUtils.isNotEmpty(stockDayVo.getAmount())   //交易总金额
+                                    && StringUtils.isNotEmpty(stockDayVo.getChangeRatio())  //相比上次收盘价的涨跌比率
+                                    && StringUtils.isNotEmpty(stockDayVo.getHigh()) //最高价
+                                    && StringUtils.isNotEmpty(stockDayVo.getLow())  //最低价
+                                    && StringUtils.isNotEmpty(stockDayVo.getTurnoverRatio())    //换手率
+                                    && StringUtils.isNotEmpty(stockDayVo.getVolume())   //交易量
+                                    && StringUtils.isNotEmpty(stockDayVo.getClose())    //收盘
+
+                            ){
+                                return JSONObject.toJSONString(stockDayVo, JSONWriter.Feature.LargeObject);
+                            }
+                            else {
+                                log.error(line + "， 数据为空");
+                                System.exit(1);
+                                return "";
+                            }
+
+                        }).toList();
+                        FileUtils.writeLines(new File(path), lines);
+                        log.info("成功" + num.get() + "/" + LoaderStockData.STOCKS);
+                        num.incrementAndGet();
+
                         if(lines.size()==0){
-//                            FileUtils.delete(new File(path));
-                            log.info(path + " 文件空数据");
+                            log.info(url + "， 下载数据为空。（可能停牌）");
                         }
                     }
                     else {
-                        //不存在
-
-                        String response = HttpClientUtil.sendGetRequest(url);
-                        JSONObject jsonObject = JSONObject.parseObject(response);
-                        Integer resCode = (Integer)jsonObject.get("code");
-                        String resMsg = (String)jsonObject.get("msg");
-                        if(resCode==20000 && resMsg.equals("success")){
-                            JSONArray jsonArray = (JSONArray) JSONObject.parseObject(response).get("data");
-                            List<String> lines = jsonArray.stream().map(e->{
-                                String line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject);
-                                StockDayVo stockDayVo = JSONObject.parseObject(line, StockDayVo.class);
-                                if(StringUtils.isNotEmpty(stockDayVo.getOpen()) //开盘价
-                                        && StringUtils.isNotEmpty(stockDayVo.getTime()) //交易时间
-                                        && StringUtils.isNotEmpty(stockDayVo.getCode()) //代码
-                                        && StringUtils.isNotEmpty(stockDayVo.getAmount())   //交易总金额
-                                        && StringUtils.isNotEmpty(stockDayVo.getChangeRatio())  //相比上次收盘价的涨跌比率
-                                        && StringUtils.isNotEmpty(stockDayVo.getHigh()) //最高价
-                                        && StringUtils.isNotEmpty(stockDayVo.getLow())  //最低价
-                                        && StringUtils.isNotEmpty(stockDayVo.getTurnoverRatio())    //换手率
-                                        && StringUtils.isNotEmpty(stockDayVo.getVolume())   //交易量
-                                        && StringUtils.isNotEmpty(stockDayVo.getClose())    //收盘
-
-                                ){
-                                    return JSONObject.toJSONString(stockDayVo, JSONWriter.Feature.LargeObject);
-                                }
-                                else {
-                                    log.error(line + "， 数据为空");
-                                    System.exit(1);
-                                    return "";
-                                }
-
-                            }).toList();
-                            FileUtils.writeLines(new File(path), lines);
-                            log.info(path + "， 新数据写入成功" + num.get());
-                            num.incrementAndGet();
-
-                            if(lines.size()==0){
-                                log.info(url + "， 下载数据为空。（可能停牌）");
-                            }
-                        }
-                        else {
-                            log.info(url + "，返回数据异常" + response);
-                        }
-
+                        log.info(url + "，返回数据异常" + response);
                     }
+
+
                 }catch (Exception e) {
                     e.printStackTrace();
                     log.error(e.getMessage());

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zuk.sast.rules.controller.stock.analysis.LoaderStockData;
+import zuk.sast.rules.controller.stock.analysis.ThreadDownloadStockDay;
 import zuk.sast.rules.controller.stock.analysis.ThreadMA;
 
 import java.math.BigDecimal;
@@ -17,6 +18,17 @@ public class StockTest {
 
     private void loadStockData() throws Exception {
         LoaderStockData.load();
+    }
+
+    /***
+     * 下载每个交易日的个股信息
+     * @throws Exception
+     */
+    @Test
+    public void downloadStockDay() throws Exception {
+        loadStockData();
+        ThreadDownloadStockDay downloadStockDay = new ThreadDownloadStockDay();
+        downloadStockDay.run();
     }
 
     /***
