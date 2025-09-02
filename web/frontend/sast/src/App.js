@@ -41,7 +41,7 @@ function App() {
           <Route path="/pages/Stock" element={<Stock />} />
           <Route path="/pages/AllStock" element={<AllStock />} />
           <Route path="/pages/MyStock" element={<MyStock />} />
-          <Route path="/page/BiddingStock" element={<BiddingStock/>} />
+          <Route path="/pages/BiddingStock" element={<BiddingStock/>} />
 
         </Routes>
       </BrowserRouter>

@@ -7,6 +7,7 @@ function Stock() {
     { id: "2", title: "招商", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
     { id: "3", title: "全部", url: "AllStock" },
     { id: "4", title: "我的", url: "MyStock" },
+    { id: "5", title: "竞价", url: "BiddingStock" },
   ];
 
   const leftPanelRef = useRef(null);
@@ -113,7 +114,7 @@ function Stock() {
                   style={{
                     padding: "5px 10px",
                     cursor: "pointer",
-                    backgroundColor: page.id === activePageId ? "#ddd" : "#f5f5f5",
+                    backgroundColor: page.id === activePageId ? "white" : "gray",
                     borderRight: "1px solid #ccc",
                     display: "flex",
                     alignItems: "center",
