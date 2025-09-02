@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import zuk.sast.rules.utils.HttpClientUtil;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,9 +28,17 @@ public class ThreadDownloadStockDay implements Runnable{
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         //String ym = sdf.format(new Date());
         while (LoaderStockData.STOCKS.size()!=num.get()){
-            final String ym = "202507";
-            String startTime = "2025-07-01";
-            String endTime = "2025-07-31";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            final String ym = sdf.format(new Date());
+
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");
+            String startTime = sdf1.format(new Date()) + "-01";
+
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            String endTime = sdf2.format(new Date());
+
+            System.out.println(ym+"\t"+startTime+"\t"+endTime);
+
             LoaderStockData.STOCKS.stream().forEach(stockApiVO -> {
                 String path = LoaderStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code() + File.separator + ym + ".jsonl";
                 String url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderStockData.TOKEN + "&code="+stockApiVO.getApi_code()+"&startDate="+startTime+"&endDate="+endTime+"&calculationCycle=100";
