@@ -5,8 +5,11 @@ import org.h2.Zuk;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import zuk.sast.rules.controller.stock.analysis.LoaderStockData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,5 +33,13 @@ public class StartupSuccessListener {
         System.out.println("3. DB地址：" + Zuk.URL);
         System.out.println("4. http://localhost:8080/pages/stock"); //http://localhost:8080/pages/allStock
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dt = sdf.format(new Date());
+        String url = "https://stockapi.com.cn/v1/base/jjqc?tradeDate=" + dt + "&period=0&type=1&token=" + LoaderStockData.TOKEN;
+        System.out.println("5. 竞价 " + url); //9：26
+        url = "https://stockapi.com.cn/v1/base/bkjj?endDate="+dt+"&startDate="+dt+"&type=1&token=" + LoaderStockData.TOKEN;
+        System.out.println("6. hot blocks: " + url);
+        url = "https://stockapi.com.cn/v1/base/bkCodeList?endDate="+dt+"&startDate="+dt+"&bkCode=880431&token=" + LoaderStockData.TOKEN;
+        System.out.println("7. bot blocks stock: " + url);
     }
 }
