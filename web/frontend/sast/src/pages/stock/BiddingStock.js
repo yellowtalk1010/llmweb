@@ -12,7 +12,21 @@ function BiddingStock() {
         data: []
     });
 
-    const handleSubmit = () => {
+    const merge = () => {
+        const period = document.getElementById("period").value
+        fetch("/stockBidding/merge?period="+period, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("后端返回:", data);
+            })
+            .catch(err => console.error("请求失败:", err));
+    }
+
+
+    const search = () => {
         const period = document.getElementById("period").value
         const type = document.getElementById("type").value
         console.info(period + ", " + type)
@@ -42,9 +56,11 @@ function BiddingStock() {
                     <option value={2}>成交金额排序</option>
                     <option value={3}>开盘金额顺序</option>
                     <option value={4}>抢筹涨幅排序</option>
-                    <option value={5}>合并</option>
                 </select>
-                <button onClick={handleSubmit}>查询</button>
+                <input type="text" id="tradeDate"></input>
+                <button onClick={search}>查询</button>
+                
+                <button onClick={merge}>合并</button>
             </div>
 
 
@@ -52,7 +68,6 @@ function BiddingStock() {
                 <table className="table">
                     <thead>
                     <tr>
-                        <th className="th">操作</th>
                         <th className="th">代码</th>
                         <th className="th">开盘金额</th>
                         <th className="th">抢筹涨幅</th>
@@ -69,14 +84,6 @@ function BiddingStock() {
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f5f5f5"}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = "#fff"}
                         >
-                        <td className="td">
-                            <div>
-                            <button className="button">关注</button>
-                            </div>
-                            <div>
-                            <span>{index + 1}</span>
-                            </div>
-                        </td>
                         <td className="td">
                             {row.name}
                             <a
