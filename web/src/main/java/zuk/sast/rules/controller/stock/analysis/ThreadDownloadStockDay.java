@@ -42,7 +42,6 @@ public class ThreadDownloadStockDay implements Runnable{
 //                            FileUtils.delete(new File(path));
                             log.info(path + " 文件空数据");
                         }
-                        FileUtils.delete(new File(path));
                     }
                     else {
                         //不存在
