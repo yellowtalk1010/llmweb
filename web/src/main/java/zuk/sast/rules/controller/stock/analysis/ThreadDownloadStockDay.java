@@ -30,6 +30,7 @@ public class ThreadDownloadStockDay implements Runnable{
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         //String ym = sdf.format(new Date());
         while (LoaderStockData.STOCKS.size()!=num.get()){
+            log.info("下载失败的个股信息：" + JSONObject.toJSONString(this.failStocks));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
             final String ym = sdf.format(new Date());
 
