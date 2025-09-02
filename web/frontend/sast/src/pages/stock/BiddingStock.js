@@ -42,6 +42,7 @@ function BiddingStock() {
                     <option value={2}>成交金额排序</option>
                     <option value={3}>开盘金额顺序</option>
                     <option value={4}>抢筹涨幅排序</option>
+                    <option value={5}>合并</option>
                 </select>
                 <button onClick={handleSubmit}>查询</button>
             </div>
@@ -52,10 +53,12 @@ function BiddingStock() {
                     <thead>
                     <tr>
                         <th className="th">操作</th>
-                        <th className="th">归属</th>
                         <th className="th">代码</th>
-                        <th className="th">名称</th>
-                        <th className="th">描述</th>
+                        <th className="th">开盘金额</th>
+                        <th className="th">抢筹涨幅</th>
+                        <th className="th">抢筹成交额</th>
+                        <th className="th">抢筹委托金额</th>
+                        
                     </tr>
                     </thead>
                     <tbody>
@@ -78,16 +81,16 @@ function BiddingStock() {
                             {row.name}
                             <a
                             href="#"
-                            onClick={() => window.open("https://quote.eastmoney.com/" + row.code + ".html")}
+                            onClick={() => window.open("https://quote.eastmoney.com/" + row.jys + row.code + ".html")}
                             >
                             {row.code}
                             </a>
                         </td>
-                        <td className="td">
-                            {row.name}
-                        </td>
-                        <td className="td">{row.name}</td>
-                        <td className="td">{row.name}</td>
+                        <td className="td">{row.openAmt}</td>
+                        <td className="td">{row.qczf}</td>
+                        <td className="td">{row.qccje}</td>
+                        <td className="td">{row.qcwtje}</td>
+                        
                         </tr>
                     ))}
                     </tbody>
