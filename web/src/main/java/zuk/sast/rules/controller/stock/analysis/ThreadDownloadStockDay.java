@@ -11,14 +11,16 @@ import zuk.sast.rules.utils.HttpClientUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class ThreadDownloadStockDay implements Runnable{
 
     private AtomicInteger num = new AtomicInteger(0);
+
+    private Set<String> failStocks = new HashSet<>();
+
     public ThreadDownloadStockDay(){
 
     }
@@ -80,15 +82,17 @@ public class ThreadDownloadStockDay implements Runnable{
                         num.incrementAndGet();
 
                         if(lines.size()==0){
-                            System.out.println(url + "， 下载数据为空。（可能停牌）");
+                            System.out.println(stockApiVO.getApi_code() + "， 下载数据为空。（可能停牌）");
                         }
                     }
                     else {
-                        System.out.println(url + "，返回数据异常" + response);
+                        failStocks.add(stockApiVO.getApi_code());
+                        System.out.println(stockApiVO.getApi_code() + "，返回数据异常" + response);
                     }
 
 
                 }catch (Exception e) {
+                    failStocks.add(stockApiVO.getApi_code());
                     e.printStackTrace();
                     System.out.println(url + "\n" + path + "\n失败");
                 }
