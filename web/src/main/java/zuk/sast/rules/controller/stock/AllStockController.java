@@ -165,30 +165,6 @@ public class AllStockController {
     }
 
 
-    /***
-     * 竞价强筹
-     * @param period 时期，抢筹类型，0-竞价抢筹，1-尾盘抢筹
-     * @param type 1委托金额排序  2成交金额排序  3开盘金额排序 4涨幅排序
-     * @return
-     *
-     */
-    @GetMapping("bidding")
-    public synchronized JSONObject bidding(String period, String type) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String tradeDate = sdf.format(new Date());
-        String url = "https://stockapi.com.cn/v1/base/jjqc?period=" + period + "&type=" + type + "&tradeDate=" + tradeDate;
-        try {
-            String string = HttpClientUtil.sendGetRequest(url);
-            JSONObject jsonObject = JSONObject.parseObject(string);
-            return jsonObject;
-        }catch (Exception e){
-            e.printStackTrace();
-            log.error(e.getMessage());
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 500);
-            jsonObject.put("msg", e.getMessage());
-            return jsonObject;
-        }
-    }
+
 
 }
