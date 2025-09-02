@@ -66,22 +66,21 @@ public class ThreadDownloadStockDay implements Runnable{
 
                         }).toList();
                         FileUtils.writeLines(new File(path), lines);
-                        log.info("成功，" + num.get() + "/" + LoaderStockData.STOCKS.size());
+                        System.out.println("成功，" + num.get() + "/" + LoaderStockData.STOCKS.size());
                         num.incrementAndGet();
 
                         if(lines.size()==0){
-                            log.info(url + "， 下载数据为空。（可能停牌）");
+                            System.out.println(url + "， 下载数据为空。（可能停牌）");
                         }
                     }
                     else {
-                        log.info(url + "，返回数据异常" + response);
+                        System.out.println(url + "，返回数据异常" + response);
                     }
 
 
                 }catch (Exception e) {
                     e.printStackTrace();
-                    log.error(e.getMessage());
-                    log.info(url + "\n" + path + "\n失败");
+                    System.out.println(url + "\n" + path + "\n失败");
                 }
             });
         }
