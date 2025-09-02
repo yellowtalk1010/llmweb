@@ -57,7 +57,7 @@ function Stock() {
 
   return (
     <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
-      <Panel ref={leftPanelRef} collapsible defaultSize={15} minSize={8}>
+      <Panel ref={leftPanelRef} collapsible defaultSize={10} minSize={5}>
         <ul style={{ margin: 0, padding: 10, listStyle: "none" }}>
           {pages.map((page) => (
             <li key={page.id} style={{ margin: "8px 0" }}>
@@ -103,7 +103,7 @@ function Stock() {
         </div>
       </PanelResizeHandle>
 
-      <Panel defaultSize={85}>
+      <Panel defaultSize={90}>
         <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
           {/* 标签页 */}
           {openedPages.length > 0 && (
