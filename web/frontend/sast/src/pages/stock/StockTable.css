@@ -1,0 +1,50 @@
+/* StockTable.css */
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  margin-top: 10px;
+}
+
+.th {
+  border: 1px solid #ccc;
+  padding: 8px;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.button {
+  padding: 4px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.input {
+  padding: 6px 10px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.select {
+  padding: 6px 10px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form {
+  margin-bottom: 10px;
+}
