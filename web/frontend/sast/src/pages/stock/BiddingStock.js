@@ -90,7 +90,7 @@ function BiddingStock() {
                         <th className="th">抢筹涨幅</th>
                         <th className="th">抢筹成交额</th>
                         <th className="th">抢筹委托金额</th>
-                        <th className="th">gl</th>
+                        <th className="th">描述</th>
                     </tr>
                     </thead>
                     <tbody>
