@@ -79,7 +79,7 @@ public class ThreadDownloadStockDay implements Runnable{
 
                         }).toList();
                         FileUtils.writeLines(new File(path), lines);
-                        System.out.println(stockApiVO.getApi_code() + "，行数：" + lines.size() + "，" + "成功，" + num.get() + "/" + LoaderStockData.STOCKS.size());
+                        System.out.println(stockApiVO.getApi_code() + "，行数：" + lines.size() + "，" + "成功，" + num.get() + "/" + LoaderStockData.STOCKS.size() + "， " + startTime + "至" + endTime);
                         num.incrementAndGet();
 
                         if(lines.size()==0){
