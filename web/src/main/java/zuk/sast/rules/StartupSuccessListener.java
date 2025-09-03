@@ -35,11 +35,9 @@ public class StartupSuccessListener {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dt = sdf.format(new Date());
-        String url = "https://stockapi.com.cn/v1/base/jjqc?tradeDate=" + dt + "&period=0&type=1&token=" + LoaderStockData.TOKEN;
-        System.out.println("5. 竞价 " + url); //9：26
-        url = "https://stockapi.com.cn/v1/base/bkjj?endDate="+dt+"&startDate="+dt+"&type=1&token=" + LoaderStockData.TOKEN;
-        System.out.println("6. hot blocks: " + url);
+        String url = "https://stockapi.com.cn/v1/base/bkjj?endDate="+dt+"&startDate="+dt+"&type=1&token=" + LoaderStockData.TOKEN;
+        System.out.println("5. hot blocks: " + url);
         url = "https://stockapi.com.cn/v1/base/bkCodeList?endDate="+dt+"&startDate="+dt+"&bkCode=880431&token=" + LoaderStockData.TOKEN;
-        System.out.println("7. bot blocks stock: " + url);
+        System.out.println("6. bot blocks stock: " + url);
     }
 }
