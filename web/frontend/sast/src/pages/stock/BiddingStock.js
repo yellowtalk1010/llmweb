@@ -56,14 +56,14 @@ function BiddingStock() {
             {/* 查询表单 */}
             <div className="form">
                 <select value={period} id="period" onChange={e=>setPeriod(e.target.value)}>
-                    <option value={0}>竞价抢筹</option>
+                    <option value={0}>开盘抢筹</option>
                     <option value={1}>尾盘抢筹</option>
                 </select>
                 &nbsp;
                 <select value={type} id="type" onChange={e=>setType(e.target.value)}>
                     <option value={1}>委托金额排序</option>
                     <option value={2}>成交金额排序</option>
-                    <option value={3}>开盘金额顺序</option>
+                    <option value={3}>开/尾盘金额顺序</option>
                     <option value={4}>抢筹涨幅排序</option>
                 </select>
                 &nbsp;
