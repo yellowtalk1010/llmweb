@@ -59,12 +59,14 @@ function BiddingStock() {
                     <option value={0}>竞价抢筹</option>
                     <option value={1}>尾盘抢筹</option>
                 </select>
+                &nbsp;
                 <select value={type} id="type" onChange={e=>setType(e.target.value)}>
                     <option value={1}>委托金额排序</option>
                     <option value={2}>成交金额排序</option>
                     <option value={3}>开盘金额顺序</option>
                     <option value={4}>抢筹涨幅排序</option>
                 </select>
+                &nbsp;
                 {/* 修改为日期选择器 */}
                 <input 
                     type="date" 
@@ -72,8 +74,9 @@ function BiddingStock() {
                     value={tradeDate}
                     onChange={e => setTradeDate(e.target.value)}
                 ></input>
+                &nbsp;
                 <button onClick={search}>查询</button>
-                
+                &nbsp;
                 <button onClick={merge}>合并</button>
             </div>
 
@@ -87,7 +90,7 @@ function BiddingStock() {
                         <th className="th">抢筹涨幅</th>
                         <th className="th">抢筹成交额</th>
                         <th className="th">抢筹委托金额</th>
-                        
+                        <th className="th">gl</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -100,6 +103,7 @@ function BiddingStock() {
                         >
                         <td className="td">
                             {row.name}
+                            <br/>
                             <a
                             href="#"
                             onClick={() => window.open("https://quote.eastmoney.com/" + row.jys + row.code + ".html")}
@@ -111,7 +115,7 @@ function BiddingStock() {
                         <td className="td">{row.qczf}</td>
                         <td className="td">{row.qccje}</td>
                         <td className="td">{row.qcwtje}</td>
-                        
+                        <td className="td">{row.gl}</td>
                         </tr>
                     ))}
                     </tbody>

@@ -96,7 +96,7 @@ public class StockBiddingController {
             tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         }
 
-        String key = period + "_" + type;
+        String key = period + "_" + type + "_" + tradeDate;
         if (JJQC_RESPONSE_MAP.get(key)!=null) {
             return JJQC_RESPONSE_MAP.get(key);
         }
@@ -109,6 +109,7 @@ public class StockBiddingController {
                 List<LoaderStockData.StockApiVO> stockApiVOList = LoaderStockData.STOCKS.stream().filter(stock->stock.getApi_code().equals(e.getCode())).toList();
                 if(stockApiVOList!=null && stockApiVOList.size()>0){
                     e.setJys(stockApiVOList.get(0).getJys());
+                    e.setGl(stockApiVOList.get(0).getGl());
                 }
             });
             if(response.getData()!=null && response.getData().size()>0){
@@ -138,6 +139,7 @@ public class StockBiddingController {
 
         private Integer mergeTime = 1; //合并次数
         private String jys; //SZ，SH
+        private String gl;  //行业分类
 
         //
         private String name; //个股名称
