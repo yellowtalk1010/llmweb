@@ -5,12 +5,20 @@ function BiddingStock() {
 
     const [period, setPeriod] = useState("1");
     const [type, setType] = useState("1");
+    const [tradeDate, setTradeDate] = useState(""); // 新增状态用于存储日期
 
     const [stockDatas, setStockDatas] = useState({
         code: "",
         msg: "",
         data: []
     });
+
+    // 设置默认日期为今天
+    useEffect(() => {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        setTradeDate(formattedDate);
+    }, []);
 
     const merge = () => {
         const period = document.getElementById("period").value
@@ -29,8 +37,8 @@ function BiddingStock() {
     const search = () => {
         const period = document.getElementById("period").value
         const type = document.getElementById("type").value
-        console.info(period + ", " + type)
-        fetch("/stockBidding/jjqc?period="+period+"&type="+type, {
+        console.info(period + ", " + type + ", " + tradeDate)
+        fetch("/stockBidding/jjqc?period="+period+"&type="+type+"&tradeDate="+tradeDate, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             })
@@ -57,7 +65,13 @@ function BiddingStock() {
                     <option value={3}>开盘金额顺序</option>
                     <option value={4}>抢筹涨幅排序</option>
                 </select>
-                <input type="text" id="tradeDate"></input>
+                {/* 修改为日期选择器 */}
+                <input 
+                    type="date" 
+                    id="tradeDate" 
+                    value={tradeDate}
+                    onChange={e => setTradeDate(e.target.value)}
+                ></input>
                 <button onClick={search}>查询</button>
                 
                 <button onClick={merge}>合并</button>
