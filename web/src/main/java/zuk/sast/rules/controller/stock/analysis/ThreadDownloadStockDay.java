@@ -73,7 +73,7 @@ public class ThreadDownloadStockDay implements Runnable{
                             }
                             else {
                                 log.error(line + "， 数据为空");
-                                System.exit(1);
+//                                System.exit(1);
                                 return "";
                             }
 
