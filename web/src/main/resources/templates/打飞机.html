@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>打飞机 - 被击中闪烁效果</title>
+<style>
+  html,body{height:100%;margin:0;background:#111;color:#eee;font-family:Inter,Segoe UI,Arial}
+  .wrap{display:flex;align-items:center;justify-content:center;height:100%}
+  canvas{background:linear-gradient(#012,#003);border:2px solid #0bd;box-shadow:0 6px 30px rgba(0,0,0,.7)}
+  .ui{position:absolute;left:20px;top:20px;color:#9ff;user-select:none;}
+  .hint{position:absolute;right:20px;top:20px;color:#9ff;text-align:right;max-width:280px;}
+  button{background:#0bd;border:none;color:#012;padding:6px 10px;border-radius:6px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <canvas id="game" width="480" height="720"></canvas>
+  <div class="ui">
+    <div>得分: <span id="score">0</span></div>
+    <div>生命: <span id="lives">0</span></div>
+    <div>护甲: <span id="armor">0</span></div>
+    <div>等级: <span id="level">1</span></div>
+    <div style="margin-top:8px"><button id="startBtn">开始/重开</button></div>
+  </div>
+  <div class="hint">
+    控制: ← → ↑ ↓ 或 WASD 移动，自动射击，敌机多样血条厚度及多方向子弹<br/>
+    击毁敌机护甲+对应敌机血量，护甲优先抵挡伤害，敌机生成频率减缓<br/>
+    被敌机子弹击中时，玩家短暂红色闪烁提示
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const scoreEl = document.getElementById('score');
+const livesEl = document.getElementById('lives');
+const armorEl = document.getElementById('armor');
+const levelEl = document.getElementById('level');
+const startBtn = document.getElementById('startBtn');
+
+const W = canvas.width, H = canvas.height;
+let keys = {};
+let game;
+
+class Player {
+  constructor(){
+    this.w = 44; this.h = 44;
+    this.x = W/2 - this.w/2;
+    this.y = H - this.h - 20;
+    this.speed = 6;
+    this.cooldown = 0;
+    this.color = '#0ff';
+    this.lives = 3;
+    this.armor = 0; // 护甲
+    this.hitTimer = 0; // 被击中闪烁计时器
+  }
+  move(){
+    if (keys['ArrowLeft'] || keys['a'] || keys['A']) this.x -= this.speed;
+    if (keys['ArrowRight'] || keys['d'] || keys['D']) this.x += this.speed;
+    if (keys['ArrowUp'] || keys['w'] || keys['W']) this.y -= this.speed;
+    if (keys['ArrowDown'] || keys['s'] || keys['S']) this.y += this.speed;
+    this.x = Math.max(10, Math.min(W - this.w - 10, this.x));
+    this.y = Math.max(10, Math.min(H - this.h - 10, this.y));
+    if (this.cooldown > 0) this.cooldown--;
+  }
+  shoot(){
+    if (this.cooldown === 0){
+      bullets.push(new Bullet(this.x + this.w/2, this.y));
+      this.cooldown = 12;
+    }
+  }
+  draw(){
+    ctx.save();
+    ctx.translate(this.x + this.w/2, this.y + this.h/2);
+    if(this.hitTimer > 0){
+      const alpha = this.hitTimer % 2 === 0 ? 0.6 : 1;
+      ctx.fillStyle = `rgba(255,0,0,${alpha})`;
+      this.hitTimer--;
+    } else {
+      ctx.fillStyle = this.color;
+    }
+    ctx.beginPath();
+    ctx.moveTo(-20, 18);
+    ctx.lineTo(20, 18);
+    ctx.lineTo(0, -20);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#002';
+    ctx.fillRect(-10, 6, 20, 8);
+    ctx.restore();
+  }
+}
+
+class Bullet {
+  constructor(x,y,vy=-10,vx=0,color='#ff6'){
+    this.x = x; this.y = y; this.r = 4;
+    this.vx = vx; this.vy = vy;
+    this.color = color;
+  }
+  update(){
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+}
+
+class Explosion {
+  constructor(x,y){
+    this.x = x;
+    this.y = y;
+    this.radius = 10;
+    this.maxRadius = 30;
+    this.alpha = 1;
+  }
+  update(){
+    this.radius += 2;
+    this.alpha -= 0.07;
+  }
+  draw(){
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = 'orange';
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  done(){
+    return this.alpha <= 0;
+  }
+}
+
+const enemyTypes = [
+  {
+    name:'轻型',
+    color:'#f66',
+    maxHp: 3,
+    score: 10,
+    bulletPattern: function(enemy){
+      if(enemy.cooldown === 0){
+        enemyBullets.push(new Bullet(enemy.x, enemy.y + enemy.h/2, 3, 0, '#f90'));
+        enemy.cooldown = 60;
+      }
+    }
+  },
+  {
+    name:'中型',
+    color:'#f93',
+    maxHp: 6,
+    score: 20,
+    bulletPattern: function(enemy){
+      if(enemy.cooldown === 0){
+        enemyBullets.push(new Bullet(enemy.x, enemy.y + enemy.h/2, 3, 0, '#fa0'));
+        enemyBullets.push(new Bullet(enemy.x, enemy.y + enemy.h/2, -3, 0, '#fa0'));
+        enemy.cooldown = 80;
+      }
+    }
+  },
+  {
+    name:'重型',
+    color:'#f30',
+    maxHp: 10,
+    score: 50,
+    bulletPattern: function(enemy){
+      if(enemy.cooldown === 0){
+        enemyBullets.push(new Bullet(enemy.x, enemy.y + enemy.h/2, 3, 0, '#f60'));    // 下
+        enemyBullets.push(new Bullet(enemy.x, enemy.y + enemy.h/2, -3, 0, '#f60'));   // 上
+        enemyBullets.push(new Bullet(enemy.x, enemy.y + enemy.h/2, 0, 3, '#f60'));    // 右
+        enemyBullets.push(new Bullet(enemy.x, enemy.y + enemy.h/2, 0, -3, '#f60'));   // 左
+        enemy.cooldown = 100;
+      }
+    }
+  }
+];
+
+class Enemy {
+  constructor(x,y,type){
+    this.x = x;
+    this.y = y;
+    this.w = 36;
+    this.h = 36;
+    this.vy = 1 + Math.random()*0.5;
+    this.type = type;
+    this.maxHp = type.maxHp;
+    this.hp = this.maxHp;
+    this.score = type.score;
+    this.color = type.color;
+    this.cooldown = 60 + Math.floor(Math.random()*60);
+  }
+  update(){
+    this.y += this.vy;
+    if(this.cooldown > 0) this.cooldown--;
+  }
+  shoot(){
+    this.type.bulletPattern(this);
+  }
+  draw(){
+    ctx.save();
+    ctx.translate(this.x, this.y);
+
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.moveTo(0, 20);
+    ctx.lineTo(-18, -15);
+    ctx.lineTo(18, -15);
+    ctx.closePath();
+    ctx.fill();
+
+    if(this.maxHp <= 3){
+      ctx.beginPath();
+      ctx.moveTo(-18, -15);
+      ctx.lineTo(-25, 0);
+      ctx.lineTo(-10, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(18, -15);
+      ctx.lineTo(25, 0);
+      ctx.lineTo(10, 0);
+      ctx.closePath();
+      ctx.fill();
+    } else if(this.maxHp <=6){
+      ctx.beginPath();
+      ctx.moveTo(-18, -15);
+      ctx.lineTo(-35, 10);
+      ctx.lineTo(-10, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(18, -15);
+      ctx.lineTo(35, 10);
+      ctx.lineTo(10, 0);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(-18, -15);
+      ctx.lineTo(-40, 20);
+      ctx.lineTo(-10, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(18, -15);
+      ctx.lineTo(40, 20);
+      ctx.lineTo(10, 0);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(-7, -5, 4, 0, Math.PI*2);
+    ctx.arc(7, -5, 4, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle = '#000';
+    ctx.beginPath();
+    ctx.arc(-7, -5, 2, 0, Math.PI*2);
+    ctx.arc(7, -5, 2, 0, Math.PI*2);
+    ctx.fill();
+
+    // 血条
+    const barWidth = 60;
+    const barHeight = 6;
+    const hpRatio = this.hp / this.maxHp;
+    const filledWidth = barWidth * hpRatio;
+    const startX = -barWidth/2;
+    const startY = -40;
+
+    ctx.fillStyle = '#444';
+    ctx.fillRect(startX, startY, barWidth, barHeight);
+    ctx.fillStyle = 'rgba(255, 50, 50, 0.8)';
+    ctx.fillRect(startX, startY, filledWidth, barHeight);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(startX, startY, barWidth, barHeight);
+
+    ctx.restore();
+  }
+}
+
+let player, bullets, enemies, enemyBullets, explosions;
+
+function reset(){
+  player = new Player();
+  bullets = [];
+  enemies = [];
+  enemyBullets = [];
+  explosions = [];
+  game = {
+    score: 0,
+    level: 1,
+    spawnTimer: 90,
+    frame: 0,
+    over: false,
+    scoreForNextLevel: 150,
+    playerMaxLives: 3,
+  };
+  player.lives = game.playerMaxLives;
+  player.armor = 0;
+  updateUI();
+}
+
+function updateUI(){
+  scoreEl.textContent = game.score;
+  livesEl.textContent = player.lives;
+  armorEl.textContent = player.armor;
+  levelEl.textContent = game.level;
+}
+
+function spawnEnemy(){
+  let type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+  let x = 30 + Math.random()*(W-60);
+  enemies.push(new Enemy(x, -40, type));
+}
+
+function circleRectCollide(c, r){
+  let nearestX = Math.max(r.x, Math.min(c.x, r.x + r.w));
+  let nearestY = Math.max(r.y, Math.min(c.y, r.y + r.h));
+  let dx = c.x - nearestX, dy = c.y - nearestY;
+  return dx*dx + dy*dy <= c.r*c.r;
+}
+
+function update(){
+  if (game.over) return;
+
+  player.move();
+  player.shoot();
+
+  bullets.forEach(b=>b.update());
+  enemies.forEach(e=>{
+    e.update();
+    e.shoot();
+  });
+  enemyBullets.forEach(b=>b.update());
+
+  explosions.forEach(exp=>exp.update());
+  explosions = explosions.filter(exp => !exp.done());
+
+  // 玩家子弹击中敌人
+  for(let i=bullets.length-1; i>=0; i--){
+    let b = bullets[i];
+    for(let j=enemies.length-1; j>=0; j--){
+      let e = enemies[j];
+      if(circleRectCollide({x:b.x,y:b.y,r:b.r},{x:e.x-18,y:e.y-18,w:e.w,h:e.h})){
+        e.hp--;
+        bullets.splice(i,1);
+        if(e.hp<=0){
+          game.score += e.score;
+          explosions.push(new Explosion(e.x, e.y));
+          enemies.splice(j,1);
+          player.armor += e.maxHp;  // 护甲按敌机血条大小加成
+        }
+        break;
+      }
+    }
+  }
+
+  // 玩家被敌人子弹击中
+  for(let i=enemyBullets.length-1; i>=0; i--){
+    let b = enemyBullets[i];
+    if(circleRectCollide({x:b.x,y:b.y,r:b.r},{x:player.x,y:player.y,w:player.w,h:player.h})){
+      enemyBullets.splice(i,1);
+      player.hitTimer = 12; // 触发红色闪烁受击效果
+      if(player.armor > 0){
+        player.armor--;
+      } else {
+        player.lives--;
+        if(player.lives <= 0) gameOver();
+      }
+    }
+  }
+
+  // 删除超出底部敌机
+  for(let i=enemies.length-1; i>=0; i--){
+    let e = enemies[i];
+    if(e.y > H+40){
+      enemies.splice(i,1);
+    }
+  }
+
+  // 删除越界子弹
+  bullets = bullets.filter(b => b.y > -10);
+  enemyBullets = enemyBullets.filter(b => b.y < H + 10);
+
+  // 等级提升（提升玩家最大生命并补满）
+  if(game.score >= game.scoreForNextLevel){
+    game.level++;
+    game.playerMaxLives = Math.min(5, game.playerMaxLives + 1);
+    player.lives = game.playerMaxLives;
+    game.scoreForNextLevel += 150 + game.level * 50;
+  }
+
+  game.spawnTimer--;
+  if(game.spawnTimer <= 0){
+    spawnEnemy();
+    game.spawnTimer = 90;
+  }
+
+  updateUI();
+  game.frame++;
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  // 背景星星
+  for(let i=0;i<50;i++){
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    ctx.fillRect((i*37 + game.frame*0.3) % W, (i*53) % H, 2,2);
+  }
+
+  player.draw();
+  bullets.forEach(b=>b.draw());
+  enemies.forEach(e=>e.draw());
+  enemyBullets.forEach(b=>b.draw());
+  explosions.forEach(exp=>exp.draw());
+
+  ctx.fillStyle = '#9ff'; ctx.font = '14px Arial';
+  ctx.fillText('得分: '+game.score, 14, 20);
+}
+
+function loop(){
+  update();
+  draw();
+  if(!game.over) requestAnimationFrame(loop);
+}
+
+function gameOver(){
+  game.over = true;
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.fillRect(0,H/2 - 60,W,120);
+  ctx.fillStyle = '#fff'; ctx.font = '28px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('游戏结束', W/2, H/2 - 6);
+  ctx.font = '18px Arial';
+  ctx.fillText('得分: '+game.score, W/2, H/2 + 26);
+}
+
+window.addEventListener('keydown', e=>{
+  keys[e.key]=true;
+  if([' ','Space'].includes(e.key)) e.preventDefault();
+});
+window.addEventListener('keyup', e=>{
+  keys[e.key]=false;
+});
+
+startBtn.addEventListener('click', ()=>{
+  reset();
+  if(!game.over) requestAnimationFrame(loop);
+  else {
+    game.over = false;
+    requestAnimationFrame(loop);
+  }
+});
+
+reset();
+ctx.fillStyle = '#fff'; ctx.font = '18px Arial'; ctx.textAlign = 'center';
+ctx.fillText('点击 开始/重开 开始游戏', W/2, H/2 - 10);
+ctx.fillText('上下左右移动，自动射击，敌机多样血条厚度及多方向子弹', W/2, H/2 + 18);
+</script>
+</body>
+</html>
