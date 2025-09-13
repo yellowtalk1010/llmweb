@@ -57,7 +57,7 @@ public class DatabaseIssue {
     /**
      * 根据规则vtid统计规则总数
      */
-    private static java.util.List<String> vtidList = new java.util.ArrayList<>();
+    private static List<String> vtidList = new ArrayList<>();
 
     /***
      * 文件路径与文件高亮行的关系
@@ -251,7 +251,7 @@ public class DatabaseIssue {
 
 
     public synchronized static void loadRuleInitList() {
-        vtidList = new java.util.ArrayList<>();
+        vtidList = new ArrayList<>();
         vtidIssueMap.clear();
         vtidIssueCountMap.clear();
         vtidFilesMap.clear();
