@@ -24,35 +24,6 @@
 <!--        </dependency>-->
 
         <dependency>
-            <groupId>org.eclipse.platform</groupId>
-            <artifactId>org.eclipse.core.variables</artifactId>
-            <version>3.6.500</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.annotation -->
-        <dependency>
-            <groupId>org.eclipse.jdt</groupId>
-            <artifactId>org.eclipse.jdt.annotation</artifactId>
-            <version>2.3.100</version>
-        </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.cdt.core.native -->
-<!--        <dependency>-->
-<!--            <groupId>org.eclipse.platform</groupId>-->
-<!--            <artifactId>org.eclipse.cdt.core.native</artifactId>-->
-<!--            <version>6.4.0</version>-->
-<!--        </dependency>-->
-
-        <dependency>
-            <groupId>zuk</groupId>
-            <artifactId>zuk-cdt</artifactId>
-            <version>1.0</version>
-            <systemPath>${project.basedir}/libs/org.eclipse.launchbar.core-3.1.0-SNAPSHOT.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-
-        <dependency>
             <groupId>zuk</groupId>
             <artifactId>zuk-cdt1</artifactId>
             <version>1.0</version>
