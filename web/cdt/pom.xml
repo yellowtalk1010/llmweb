@@ -17,13 +17,6 @@
 
     <dependencies>
 
-
-        <dependency>
-            <groupId>org.eclipse.platform</groupId>
-            <artifactId>org.eclipse.text</artifactId>
-            <version>3.14.200</version>
-        </dependency>
-
 <!--        <dependency>-->
 <!--            <groupId>io.joern</groupId>-->
 <!--            <artifactId>eclipse-cdt-core</artifactId>-->
