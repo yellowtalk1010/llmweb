@@ -24,7 +24,6 @@
 
     <modules>
         <module>boot</module>
-        <module>cdt</module>
     </modules>
 
 
