@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 @Configuration
 public class LogbackInitializer {
 
-    private static final String LOG_DIR = "web_workspace/logs/";
+    private static final String LOG_DIR = "logs/";
     private static final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
