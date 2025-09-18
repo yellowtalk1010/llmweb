@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static zuk.sast.rules.controller.stock.analysis.LoaderStockData.STOCK_MA;
 
 /***
- * 过去5、10、30个交易日的均值、收盘价的均值计算
+ * 过去5、10、20、30个交易日的均值、收盘价的均值计算
  */
 @Slf4j
 public class ThreadMA implements Runnable{
@@ -186,10 +186,12 @@ public class ThreadMA implements Runnable{
         private String avg;
         private String avg5;
         private String avg10;
+        private String avg20;
         private String avg30;
 
         private String ma5; //过去5个交易日收盘价的平均值
         private String ma10;
+        private String md20;
         private String ma30;
     }
 

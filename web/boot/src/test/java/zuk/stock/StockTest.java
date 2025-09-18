@@ -51,7 +51,8 @@ public class StockTest {
                     || gl.contains("稀土")
                     || gl.contains("工业母机")
                     ;
-            return true;
+//            return true;
+            return e.getApi_code().equals("600641");
         }).map(e->e.getApi_code()).toList();
         log.info("总数：" + codes.size());
         ThreadMA threadMA = new ThreadMA(codes);
