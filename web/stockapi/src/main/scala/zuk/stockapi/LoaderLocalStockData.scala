@@ -20,6 +20,7 @@ object LoaderLocalStockData {
 
   val STOCKS: util.List[StockApiVo] = new util.ArrayList[StockApiVo]
 
+  loadAllStocks()
 
   private def loadAllStocks(): Unit = {
     try {
@@ -49,10 +50,12 @@ object LoaderLocalStockData {
   }
 
   @throws[Exception]
-  def loadToken(): Unit = {
+  def loadToken(): Unit = synchronized {
     val tokenFile = new File(STOCK_TOKEN)
     if (tokenFile.exists && tokenFile.isFile && FileUtils.readFileToString(tokenFile, "UTF-8").trim == TOKEN) {
-      loadAllStocks()
+      if (STOCKS.size()==0){
+        loadAllStocks()
+      }
     }
     else {
       println(s"${STOCK_TOKEN}路径错误")
