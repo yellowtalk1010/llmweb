@@ -8,8 +8,9 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zuk.sast.rules.controller.stock.analysis.LoaderStockData;
 import zuk.sast.rules.utils.HttpClientUtil;
+import zuk.stockapi.LoaderLocalStockData;
+import zuk.stockapi.StockApiVo;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -100,13 +101,13 @@ public class StockBiddingController {
         if (JJQC_RESPONSE_MAP.get(key)!=null) {
             return JJQC_RESPONSE_MAP.get(key);
         }
-        String url = "https://stockapi.com.cn/v1/base/jjqc?period=" + period + "&type=" + type + "&tradeDate=" + tradeDate + "&token=" + LoaderStockData.TOKEN;
+        String url = "https://stockapi.com.cn/v1/base/jjqc?period=" + period + "&type=" + type + "&tradeDate=" + tradeDate + "&token=" + LoaderLocalStockData.TOKEN();
         System.out.println(url);
         try {
             String string = HttpClientUtil.sendGetRequest(url);
             JJQCResponse response = JSONObject.parseObject(string, JJQCResponse.class);
             response.getData().stream().forEach(e->{
-                List<LoaderStockData.StockApiVO> stockApiVOList = LoaderStockData.STOCKS.stream().filter(stock->stock.getApi_code().equals(e.getCode())).toList();
+                List<StockApiVo> stockApiVOList = LoaderLocalStockData.STOCKS().stream().filter(stock->stock.getApi_code().equals(e.getCode())).toList();
                 if(stockApiVOList!=null && stockApiVOList.size()>0){
                     e.setJys(stockApiVOList.get(0).getJys());
                     e.setGl(stockApiVOList.get(0).getGl());

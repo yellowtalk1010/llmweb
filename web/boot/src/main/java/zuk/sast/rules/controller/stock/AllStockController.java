@@ -14,8 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import zuk.sast.rules.controller.stock.analysis.LoaderStockData;
 import zuk.sast.rules.utils.HttpClientUtil;
+import zuk.stockapi.LoaderLocalStockData;
+import zuk.stockapi.StockApiVo;
 
 /***
  *
@@ -65,7 +66,7 @@ public class AllStockController {
                 return result;
             }
             else {
-                LoaderStockData.STOCKS.stream().filter(stock->stock.getApi_code().equals(api_code)).forEach(socket->{
+                LoaderLocalStockData.STOCKS().stream().filter(stock->stock.getApi_code().equals(api_code)).forEach(socket->{
                     StockEntity stockEntity = new StockEntity();
                     stockEntity.setId(UUID.randomUUID().toString());
                     stockEntity.setCode(socket.getApi_code());
@@ -98,7 +99,7 @@ public class AllStockController {
 
             Map<String, Object> map = new HashMap<>();
             Set<String> sets = stockEntities.stream().map(e->e.getCode()).collect(Collectors.toSet());
-            List<LoaderStockData.StockApiVO> ls = LoaderStockData.STOCKS.stream().filter(stock->{
+            List<StockApiVo> ls = LoaderLocalStockData.STOCKS().stream().filter(stock->{
                 return sets.contains(stock.getApi_code());
             }).toList();
 
@@ -127,14 +128,14 @@ public class AllStockController {
     @GetMapping("all")
     public Map<String, Object> all(String search){
 
-        List<LoaderStockData.StockApiVO> list;
+        List<StockApiVo> list;
         if(search!=null && search.length()>0){
             Set<String> splits = Arrays.stream(search.split("\n"))
                     .filter(e->e!=null && e.trim().length()>0)
                     .map(e->e.toUpperCase())
                     .collect(Collectors.toSet());
 
-            list = LoaderStockData.STOCKS.stream().filter(e->{
+            list = LoaderLocalStockData.STOCKS().stream().filter(e->{
                 return splits.stream().filter(s->{
                     return e.getGl().toUpperCase().contains(s)
                             || e.getApi_code().toUpperCase().contains(s)
@@ -146,7 +147,7 @@ public class AllStockController {
         }
         else {
             //没有输入条件，则默认输出1000条
-            list = LoaderStockData.STOCKS.stream().filter(e->{
+            list = LoaderLocalStockData.STOCKS().stream().filter(e->{
                 return tags.stream().filter(tag->{
                     return e.getGl().toUpperCase().contains(tag);
                 }).count() > 0;
