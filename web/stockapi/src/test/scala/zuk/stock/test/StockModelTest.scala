@@ -13,13 +13,8 @@ import scala.jdk.CollectionConverters.*
 
 class StockModelTest extends AnyFunSuite {
 
-  def loadData(): Unit = {
-    LoaderLocalStockData.loadToken()
-  }
-
-
   test("模型策略") {
-    this.loadData()
+    LoaderLocalStockData.loadToken()
     val codes = LoaderLocalStockData.STOCKS.asScala.filter(e=>{
       e.getApi_code.equals("600641")
         || true
