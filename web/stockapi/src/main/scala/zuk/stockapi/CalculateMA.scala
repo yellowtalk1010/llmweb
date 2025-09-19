@@ -7,20 +7,21 @@ object CalculateMA {
 
   var MAP = new ConcurrentHashMap[String, List[StockMaVo]]
 
-  def run(codes: List[String]): Unit = {
+  def run(stocks: List[StockApiVo]): Unit = {
     MAP.clear()
-    codes.foreach(code=>{
+    stocks.foreach(stock=>{
       try{
-        calCode(code)
+        calCode(stock)
       }
       catch
         case exception: Exception => exception.printStackTrace()
     })
   }
 
-  private def calCode(code: String): Unit = {
-    val codeDataFile = new File(LoaderStockData.STOCK_DAY + File.separator + code)
-    println(codeDataFile.getAbsolutePath + s", ${codeDataFile.exists()}")
+  private def calCode(stock: StockApiVo): Unit = {
+    val codeDataFile = new File(LoaderStockData.STOCK_DAY + File.separator + stock.getApi_code)
+    println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
+
   }
 
 }
