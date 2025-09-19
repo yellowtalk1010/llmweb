@@ -22,7 +22,8 @@ object CalculateMA {
     stocks.foreach(stock=>{
       try{
         val malist = calStockMA(stock)
-        MA_Model(malist)
+        new MA_Model(malist)
+
       }
       catch
         case exception: Exception => exception.printStackTrace()
