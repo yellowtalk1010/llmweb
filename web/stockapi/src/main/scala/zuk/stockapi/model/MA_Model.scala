@@ -4,7 +4,7 @@ import zuk.stockapi.{StockApiVo, StockMaVo}
 
 import java.math.BigDecimal
 /***
- * MA连续3天上升
+ * MA连续3天上升策略
  */
 class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
