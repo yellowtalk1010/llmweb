@@ -21,7 +21,7 @@ object CalculateMA {
     stocks.foreach(stock=>{
       try{
         val malist = calStockMA(stock)
-        
+        println()
       }
       catch
         case exception: Exception => exception.printStackTrace()

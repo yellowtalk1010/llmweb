@@ -90,11 +90,11 @@ public class StockMaVo {
     }
 
     public String getMa20() {
-        return md20;
+        return ma20;
     }
 
-    public void setMa20(String md20) {
-        this.md20 = md20;
+    public void setMa20(String ma20) {
+        this.ma20 = ma20;
     }
 
     public String getMa30() {
