@@ -79,7 +79,7 @@ object DownloadDayStock {
 
           println(stockApiVO.getApi_code + "，行数：" + lines.size + "，" + "成功，" + num.get + "/" + LoaderLocalStockData.STOCKS.size + "， " + startTime + "至" + endTime)
           if (lines.size == 0) {
-            println(stockApiVO.getApi_code + "， 下载数据为空。（可能停牌很久）")
+            println(s"${stockApiVO.getApi_code}，${stockApiVO.getName}，下载数据为空。（可能停牌很久）")
           }
 
         } catch {
