@@ -51,16 +51,16 @@ object CalculateMA {
       }
     })
 
-    println(s"ma模型: ${maModelList.size}")
+    println(s"ma模型策略: ${maModelList.size}")
 
     maModelList.foreach(e=>{
       println(s"${e.getApi_code}, ${e.getName}")
     })
 
-    println("ma1模型")
+    println("ma1模型策略")
 
     ma1ModelList.foreach(e => {
-      println(s"${e.getApi_code}, ${e.getName}")
+      println(s"${e.getApi_code}")
     })
 
   }
