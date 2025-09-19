@@ -1,7 +1,5 @@
 package zuk.stockapi;
 
-import zuk.sast.rules.controller.stock.analysis.ThreadDownloadStockDay;
-
 public class StockMaVo {
 
     private String time;
