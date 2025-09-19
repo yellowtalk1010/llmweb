@@ -11,7 +11,7 @@ import java.util.Date
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
-class StockTest extends AnyFunSuite {
+class StockModelTest extends AnyFunSuite {
 
   def loadData(): Unit = {
     LoaderLocalStockData.loadToken()
