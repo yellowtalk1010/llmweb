@@ -13,11 +13,8 @@ class StockTest extends AnyFunSuite {
     LoaderLocalStockData.loadToken()
   }
 
-  test(""){
-    this.loadData()
-  }
 
-  test("ma") {
+  test("模型策略") {
     this.loadData()
     val codes = LoaderLocalStockData.STOCKS.asScala.filter(e=>{
       e.getApi_code.equals("600641")
