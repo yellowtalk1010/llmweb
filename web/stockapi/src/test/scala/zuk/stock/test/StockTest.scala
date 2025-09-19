@@ -6,6 +6,8 @@ import zuk.stockapi.model.{AVG_Model, MA1_Model, MA_Model}
 import zuk.stockapi.{CalculateMA, LoaderLocalStockData, StockApiVo}
 
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
@@ -94,7 +96,7 @@ class StockTest extends AnyFunSuite {
       })
 
 
-    FileUtils.writeLines(new File("策略结果.txt"), "UTF-8", lines.asJava)
+    FileUtils.writeLines(new File(s"stockapi/model_result/策略结果-${new SimpleDateFormat("yyyyMMdd").format(new Date())}.txt"), "UTF-8", lines.asJava)
 
 
   }
