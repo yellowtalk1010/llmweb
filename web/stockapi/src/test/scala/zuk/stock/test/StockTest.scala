@@ -1,9 +1,11 @@
 package zuk.stock.test
 
+import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.stockapi.model.{AVG_Model, MA1_Model, MA_Model}
 import zuk.stockapi.{CalculateMA, LoaderLocalStockData, StockApiVo}
 
+import java.io.File
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
@@ -54,29 +56,45 @@ class StockTest extends AnyFunSuite {
 
     })
 
+    val lines = ListBuffer[String]()
+    //
     println(s"ma模型策略: ${maModelList.size}")
-
+    lines += s"ma模型策略: ${maModelList.size}"
     maModelList.foreach(e=>{
+      lines += e.getApi_code
       println(s"${e.getApi_code}")
     })
 
+    //
     println("ma1模型策略")
-
+    lines += "ma1模型策略"
     ma1ModelList.foreach(e => {
+      lines += e.getApi_code
       println(s"${e.getApi_code}")
     })
 
+    //
     println("avg模型策略")
+    lines += "avg模型策略"
     avgModelList.foreach(e=>{
+      lines += e.getApi_code
       println(s"${e.getApi_code}")
     })
 
+    //
     println("模型策略交集")
+    lines += "模型策略交集"
     (maModelList ++ ma1ModelList ++ avgModelList)
       .groupBy(_.getApi_code)
       .filter(_._2.size>1)
       .map(_._1)
-      .foreach(println)
+      .foreach(code=>{
+        lines += code
+        println(code)
+      })
+
+
+    FileUtils.writeLines(new File("策略结果.txt"), "UTF-8", lines.asJava)
 
 
   }
