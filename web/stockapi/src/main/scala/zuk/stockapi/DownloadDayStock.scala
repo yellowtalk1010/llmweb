@@ -22,8 +22,6 @@ object DownloadDayStock {
 
   def run(): Unit = {
     val num = new AtomicInteger(0)
-    //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
-    //String ym = sdf.format(new Date());
     while (LoaderLocalStockData.STOCKS.size != num.get()) {
       val sdf = new SimpleDateFormat("yyyyMM")
       val ym = sdf.format(new Date)
@@ -41,12 +39,12 @@ object DownloadDayStock {
           val jsonObject = JSONObject.parseObject(response)
           val resCode = jsonObject.get("code").asInstanceOf[Integer]
           val resMsg = jsonObject.get("msg").asInstanceOf[String]
-          if ((resCode eq 20000) && resMsg == "success") {
+          if (resCode.toString.equals("20000") && resMsg == "success") {
             val jsonArray = JSONObject.parseObject(response).get("data").asInstanceOf[JSONArray]
-            val lines = jsonArray.stream.map((e: AnyRef) => {
+            val lines = jsonArray.asScala.map((e: AnyRef) => {
               val line = JSONObject.toJSONString(e, JSONWriter.Feature.LargeObject)
               val stockDayVo = JSONObject.parseObject(line, classOf[StockDayVo])
-              if (StringUtils.isNotEmpty(stockDayVo.getOpen) //开盘价
+              val newLine = if (StringUtils.isNotEmpty(stockDayVo.getOpen) //开盘价
                 && StringUtils.isNotEmpty(stockDayVo.getTime)//交易时间
                 && StringUtils.isNotEmpty(stockDayVo.getCode)//代码
                 && StringUtils.isNotEmpty(stockDayVo.getAmount)//交易总金额
@@ -61,25 +59,27 @@ object DownloadDayStock {
               }
               else {
                 println(line + "， 数据为空")
+                ""
               }
+              newLine
             }).toList
-            FileUtils.writeLines(new File(path), lines)
+            FileUtils.writeLines(new File(path), lines.filter(l=>StringUtils.isNotEmpty(l)).asJava)
             println(stockApiVO.getApi_code + "，行数：" + lines.size + "，" + "成功，" + num.get + "/" + LoaderLocalStockData.STOCKS.size + "， " + startTime + "至" + endTime)
-            if (lines.size == 0) System.out.println(stockApiVO.getApi_code + "， 下载数据为空。（可能停牌）")
+            if (lines.size == 0) {
+              println(stockApiVO.getApi_code + "， 下载数据为空。（可能停牌）")
+            }
         }
         else
         {
           //failStocks.add(stockApiVO.getApi_code)
           println(stockApiVO.getApi_code + "，返回数据异常" + response)
         }
-      }
-      catch {
+      } catch {
         case e: Exception =>
           //failStocks.add(stockApiVO.getApi_code)
           e.printStackTrace()
           println(url + "\n" + path + "\n失败")
-      }
-        finally {
+      } finally {
           num.incrementAndGet
         }
       })
