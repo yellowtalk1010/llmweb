@@ -20,14 +20,19 @@ object CalculateMA {
     MAP.clear()
     stocks.foreach(stock=>{
       try{
-        calCode(stock)
+        val malist = calStockMA(stock)
+        
       }
       catch
         case exception: Exception => exception.printStackTrace()
     })
   }
 
-  private def calCode(stock: StockApiVo): List[StockMaVo] = {
+
+  /**
+   * 计算MA和AVG
+   */
+  private def calStockMA(stock: StockApiVo): List[StockMaVo] = {
     val code = stock.getApi_code
     val codeDataFile = new File(LoaderStockData.STOCK_DAY + File.separator + code)
     println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
