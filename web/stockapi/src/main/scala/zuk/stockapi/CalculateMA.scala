@@ -2,7 +2,7 @@ package zuk.stockapi
 
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
-import zuk.stockapi.model.{MA1_Model, MA_Model}
+import zuk.stockapi.model.{AVG_Model, MA1_Model, MA_Model}
 
 import java.io.File
 import java.math.BigDecimal
@@ -21,6 +21,7 @@ object CalculateMA {
 
     val maModelList = ListBuffer[StockApiVo]()
     val ma1ModelList = ListBuffer[StockApiVo]()
+    val avgModelList = ListBuffer[StockApiVo]()
 
     val counter = new AtomicInteger(0)
     stocks.foreach(stock=>{
@@ -28,16 +29,25 @@ object CalculateMA {
 
         val malist = calStockMA(stock)
 
+        //MA递增策略
         val maModel = new MA_Model(stock, malist)
         maModel.run()
         if(maModel.isHit()){
           maModelList += stock
         }
 
+        //MA穿透策略
         val ma1Model = new MA1_Model(stock, malist)
         ma1Model.run()
         if(ma1Model.isHit()){
           ma1ModelList += stock
+        }
+
+        //AVG递增策略
+        val avgModel = new AVG_Model(stock, malist)
+        avgModel.run()
+        if(avgModel.isHit()){
+          avgModelList += stock
         }
 
       }
@@ -62,6 +72,18 @@ object CalculateMA {
     ma1ModelList.foreach(e => {
       println(s"${e.getApi_code}")
     })
+
+    println("avg模型策略")
+    avgModelList.foreach(e=>{
+      println(s"${e.getApi_code}")
+    })
+
+    println("模型策略交集")
+    (maModelList ++ ma1ModelList ++ avgModelList)
+      .groupBy(_.getApi_code)
+      .filter(_._2.size>1)
+      .map(_._1)
+      .foreach(println)
 
   }
 
