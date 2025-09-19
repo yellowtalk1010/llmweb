@@ -2,7 +2,7 @@ package zuk.stockapi
 
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
-import zuk.stockapi.model.MA_Model
+import zuk.stockapi.model.{MA1_Model, MA_Model}
 
 import java.io.File
 import java.math.BigDecimal
@@ -19,20 +19,50 @@ object CalculateMA {
 
   def run(stocks: List[StockApiVo]): Unit = {
 
+    val maModelList = ListBuffer[StockApiVo]()
+    val ma1ModelList = ListBuffer[StockApiVo]()
+
+    val counter = new AtomicInteger(0)
     stocks.foreach(stock=>{
       try{
+
         val malist = calStockMA(stock)
 
         val maModel = new MA_Model(stock, malist)
         maModel.run()
         if(maModel.isHit()){
-          println(s"${stock.getApi_code}, ${stock.getName}")
+          maModelList += stock
+        }
+
+        val ma1Model = new MA1_Model(stock, malist)
+        ma1Model.run()
+        if(ma1Model.isHit()){
+          ma1ModelList += stock
         }
 
       }
-      catch
-        case exception: Exception => exception.printStackTrace()
+      catch {
+        case exception: Exception =>
+          exception.printStackTrace()
+      }
+      finally {
+        counter.incrementAndGet()
+        println(s"${counter.get()}/${stocks.size}")
+      }
     })
+
+    println("ma模型")
+
+    maModelList.foreach(e=>{
+      println(s"${e.getApi_code}, ${e.getName}")
+    })
+
+    println("ma1模型")
+
+    ma1ModelList.foreach(e => {
+      println(s"${e.getApi_code}, ${e.getName}")
+    })
+
   }
 
   /***
