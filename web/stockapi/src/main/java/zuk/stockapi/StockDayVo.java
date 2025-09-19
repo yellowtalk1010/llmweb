@@ -5,11 +5,11 @@ public class StockDayVo {
     private String code;
     private String time;
     private String open;
-    private String turnoverRatio;
+    private String turnoverRatio; //换手率
     private String amount;
     private String high;
     private String low;
-    private String changeRatio; //换手率
+    private String changeRatio; //涨跌
     private String close;
     private String volume;
 
