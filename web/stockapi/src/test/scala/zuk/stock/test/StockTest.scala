@@ -1,14 +1,14 @@
 package zuk.stock.test
 
 import org.scalatest.funsuite.AnyFunSuite
-import zuk.stockapi.{CalculateMA, LoaderStockData}
+import zuk.stockapi.{CalculateMA, LoaderLocalStockData}
 
 import scala.jdk.CollectionConverters.*
 
 class StockTest extends AnyFunSuite {
 
   def loadData(): Unit = {
-    LoaderStockData.loadToken()
+    LoaderLocalStockData.loadToken()
   }
 
   test(""){
@@ -17,7 +17,7 @@ class StockTest extends AnyFunSuite {
 
   test("ma") {
     this.loadData()
-    val codes = LoaderStockData.STOCKS.asScala.filter(e=>{
+    val codes = LoaderLocalStockData.STOCKS.asScala.filter(e=>{
       e.getApi_code.equals("600641")
         || true
     }).toList

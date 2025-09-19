@@ -78,7 +78,7 @@ object CalculateMA {
    */
   private def calStockMA(stock: StockApiVo): List[StockMaVo] = {
     val code = stock.getApi_code
-    val codeDataFile = new File(LoaderStockData.STOCK_DAY + File.separator + code)
+    val codeDataFile = new File(LoaderLocalStockData.STOCK_DAY + File.separator + code)
     //println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
@@ -87,7 +87,7 @@ object CalculateMA {
     for(i <- 0 until 3) {
       val premonthDate = today.minusMonths(i)
       val preMonth = formatter.format(premonthDate)
-      val path = LoaderStockData.STOCK_DAY + File.separator + code + File.separator + preMonth + ".jsonl"
+      val path = LoaderLocalStockData.STOCK_DAY + File.separator + code + File.separator + preMonth + ".jsonl"
       val file = new File(path)
       if (!file.exists) {
         println(path + "，不存在")

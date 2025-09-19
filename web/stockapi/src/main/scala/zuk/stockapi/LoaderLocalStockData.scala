@@ -8,7 +8,7 @@ import java.util
 import java.util.{ArrayList, List}
 import scala.beans.BeanProperty
 
-object LoaderStockData {
+object LoaderLocalStockData {
 
   val TOKEN = "36c92182f783f08005017f78e7a264608a82952f8b91de2a"
 
