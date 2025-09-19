@@ -9,7 +9,7 @@ public class StockDayVo {
     private String amount;
     private String high;
     private String low;
-    private String changeRatio;
+    private String changeRatio; //换手率
     private String close;
     private String volume;
 
