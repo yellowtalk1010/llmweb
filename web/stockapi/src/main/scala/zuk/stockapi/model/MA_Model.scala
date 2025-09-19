@@ -26,7 +26,7 @@ class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(sto
     ma5.compareTo(ma10) > 0
       && ma10.compareTo(ma20) > 0
       && ma20.compareTo(ma30) > 0
-      && new BigDecimal(v0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(5.0)) < 0  //换手率
+      && new BigDecimal(v0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(6.0)) < 0  //换手率
   }
 
 }
