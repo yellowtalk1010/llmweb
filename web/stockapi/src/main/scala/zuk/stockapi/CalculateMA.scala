@@ -1,5 +1,6 @@
 package zuk.stockapi
 
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 object CalculateMA {
@@ -18,7 +19,8 @@ object CalculateMA {
   }
 
   private def calCode(code: String): Unit = {
-    
+    val codeDataFile = new File(LoaderStockData.STOCK_DAY + File.separator + code)
+    println(codeDataFile.getAbsolutePath + s", ${codeDataFile.exists()}")
   }
 
 }
