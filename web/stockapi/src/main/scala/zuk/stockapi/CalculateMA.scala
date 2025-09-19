@@ -27,7 +27,7 @@ object CalculateMA {
     })
   }
 
-  private def calCode(stock: StockApiVo): Unit = {
+  private def calCode(stock: StockApiVo): List[StockMaVo] = {
     val code = stock.getApi_code
     val codeDataFile = new File(LoaderStockData.STOCK_DAY + File.separator + code)
     println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
@@ -60,6 +60,8 @@ object CalculateMA {
     }
     //按时间降序
     val sorted = stockDayVoList.sortBy(_.getTime).reverse.toList
+
+    val stockMaVoList = ListBuffer[StockMaVo]()
     for (index <- 0 until sorted.size - 31) {
 
       val subList = sorted.slice(index, index + 30)
@@ -76,9 +78,22 @@ object CalculateMA {
       val avg20 = this.cala_avg(subList.take(20))
       val avg30 = this.cala_avg(subList.take(30))
 
-      println()
+      val stockMaVo = new StockMaVo()
+      stockMaVo.setTime(time)
+      stockMaVo.setMa5(ma5.toString)
+      stockMaVo.setMa10(ma10.toString)
+      stockMaVo.setMa20(ma20.toString)
+      stockMaVo.setMa30(ma30.toString)
 
+      stockMaVo.setAvg5(avg5.toString)
+      stockMaVo.setAvg10(avg10.toString)
+      stockMaVo.setAvg20(avg20.toString)
+      stockMaVo.setAvg30(avg30.toString)
+
+      stockMaVoList += stockMaVo
     }
+
+    stockMaVoList.toList
 
   }
 

@@ -14,7 +14,7 @@ public class StockMaVo {
 
     private String ma5; //过去5个交易日收盘价的平均值
     private String ma10;
-    private String md20;
+    private String ma20;
     private String ma30;
 
     public String getTime() {
@@ -89,11 +89,11 @@ public class StockMaVo {
         this.ma10 = ma10;
     }
 
-    public String getMd20() {
+    public String getMa20() {
         return md20;
     }
 
-    public void setMd20(String md20) {
+    public void setMa20(String md20) {
         this.md20 = md20;
     }
 
