@@ -61,6 +61,7 @@ object CalculateMA {
     //按时间降序
     val sorted = stockDayVoList.sortBy(_.getTime).reverse.toList
     for (index <- 0 until sorted.size - 31) {
+
       val subList = sorted.slice(index, index + 30)
       val stockDayVo = subList.head
       val time = stockDayVo.getTime
