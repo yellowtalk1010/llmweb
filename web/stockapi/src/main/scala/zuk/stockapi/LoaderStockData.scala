@@ -24,14 +24,22 @@ object LoaderStockData {
   private def loadAllStocks(): Unit = {
     try {
       val file = new File(STOCK_ALL)
+      if(file!=null && file.exists() && file.isFile){
+        //TODO
+      }
+      else {
+        println(s"${STOCK_ALL}不存在，退出")
+        System.exit(1)
+      }
+
       val content = FileUtils.readFileToString(file, "UTF-8")
       val jsonObject = JSONObject.parseObject(content)
       val jsonArray = jsonObject.getJSONArray("data")
       jsonArray.forEach(item => {
         val stockApiVO = JSONObject.parseObject(JSONObject.toJSONString(item), classOf[StockApiVo])
         STOCKS.add(stockApiVO)
-
       })
+
       println("stock总数:" + STOCKS.size)
     } catch {
       case e: Exception =>
@@ -41,12 +49,14 @@ object LoaderStockData {
   }
 
   @throws[Exception]
-  def load(): Unit = {
+  def loadToken(): Unit = {
     val tokenFile = new File(STOCK_TOKEN)
-    if (tokenFile.exists && tokenFile.isFile && FileUtils.readFileToString(tokenFile, "UTF-8").trim == TOKEN) loadAllStocks()
+    if (tokenFile.exists && tokenFile.isFile && FileUtils.readFileToString(tokenFile, "UTF-8").trim == TOKEN) {
+      loadAllStocks()
+    }
     else {
-      println("STOCK_PATH路径错误")
-      System.exit(0)
+      println(s"${STOCK_TOKEN}路径错误")
+      System.exit(1)
     }
   }
 

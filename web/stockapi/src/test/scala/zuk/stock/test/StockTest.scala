@@ -6,7 +6,7 @@ import zuk.stockapi.LoaderStockData
 class StockTest extends AnyFunSuite {
 
   def loadData(): Unit = {
-    LoaderStockData.load()
+    LoaderStockData.loadToken()
   }
 
   test(""){

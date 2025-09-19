@@ -1,17 +1,25 @@
 package zuk.stockapi
 
-import java.util
 import java.util.concurrent.ConcurrentHashMap
-import java.util.{ArrayList, List, Map}
 
 object CalculateMA {
 
-  var codes = new util.ArrayList[String]
+  var MAP = new ConcurrentHashMap[String, List[StockMaVo]]
 
-  var MAP = new ConcurrentHashMap[String, util.List[StockMaVo]]
+  def run(codes: List[String]): Unit = {
+    MAP.clear()
+    codes.foreach(code=>{
+      try{
+        calCode(code)
+      }
+      catch
+        case exception: Exception => exception.printStackTrace()
+    })
+  }
 
-
-
+  private def calCode(code: String): Unit = {
+    
+  }
 
 }
 
