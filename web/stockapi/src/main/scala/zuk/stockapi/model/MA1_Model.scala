@@ -3,10 +3,11 @@ package zuk.stockapi.model
 import zuk.stockapi.{StockApiVo, StockMaVo}
 
 import java.math.BigDecimal
+
 /***
- * MA连续3天上升
+ * 刚好正常
  */
-class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
+class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
   var isOK: Boolean = false
 
@@ -14,8 +15,11 @@ class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(sto
 
   override def run(): Unit = {
     val list = maList.slice(0,3)
-    val filterList = list.filter(comp(_))
-    this.isOK = list.size==filterList.size
+    if(comp(list(0))){
+      val filterList = list.filter(comp(_))
+      isOK = list.size>filterList.size
+    }
+    isOK = false
   }
 
   private def comp(v0: StockMaVo): Boolean = {
