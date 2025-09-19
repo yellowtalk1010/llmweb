@@ -19,7 +19,7 @@ class StockTest extends AnyFunSuite {
     this.loadData()
     val codes = LoaderStockData.STOCKS.asScala.filter(e=>{
       e.getApi_code.equals("600641")
-//        || true
+        || true
     }).toList
     CalculateMA.run(codes)
   }
