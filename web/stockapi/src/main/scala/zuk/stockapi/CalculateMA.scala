@@ -2,6 +2,7 @@ package zuk.stockapi
 
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
+import zuk.stockapi.model.MA_Model
 
 import java.io.File
 import java.math.BigDecimal
@@ -21,7 +22,7 @@ object CalculateMA {
     stocks.foreach(stock=>{
       try{
         val malist = calStockMA(stock)
-        println()
+        MA_Model(malist)
       }
       catch
         case exception: Exception => exception.printStackTrace()
@@ -92,6 +93,9 @@ object CalculateMA {
 
       val stockMaVo = new StockMaVo()
       stockMaVo.setTime(time)
+
+      stockMaVo.setStockDayVo(stockDayVo)
+
       stockMaVo.setMa5(ma5.toString)
       stockMaVo.setMa10(ma10.toString)
       stockMaVo.setMa20(ma20.toString)
