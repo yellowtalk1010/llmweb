@@ -15,14 +15,17 @@ import scala.jdk.CollectionConverters.*
 
 object CalculateMA {
 
-  var MAP = new ConcurrentHashMap[String, List[StockMaVo]]
+
 
   def run(stocks: List[StockApiVo]): Unit = {
-    MAP.clear()
+
     stocks.foreach(stock=>{
       try{
         val malist = calStockMA(stock)
-        if(new MA_Model(stock, malist).isOK){
+
+        val maModel = new MA_Model(stock, malist)
+        maModel.run()
+        if(maModel.isHit()){
           println(s"${stock.getApi_code}, ${stock.getName}")
         }
 
