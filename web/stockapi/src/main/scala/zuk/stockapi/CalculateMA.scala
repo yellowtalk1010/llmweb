@@ -35,7 +35,7 @@ object CalculateMA {
   private def calStockMA(stock: StockApiVo): List[StockMaVo] = {
     val code = stock.getApi_code
     val codeDataFile = new File(LoaderStockData.STOCK_DAY + File.separator + code)
-    println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
+    //println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
