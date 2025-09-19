@@ -7,7 +7,7 @@ import com.alibaba.fastjson2.JSONWriter
 
 import org.apache.commons.io.FileUtils
 
-import zuk.sast.rules.utils.HttpClientUtil
+import zuk.stockapi.utils.HttpClientUtil
 
 import java.io.File
 import java.text.SimpleDateFormat
