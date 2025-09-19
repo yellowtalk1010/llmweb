@@ -19,6 +19,7 @@
 <!--        <java.version>17</java.version>-->
         <maven.compile.encoding>UTF-8</maven.compile.encoding>
         <scala.version>3.5.2</scala.version>
+        <scala.maven.plugin>4.9.2</scala.maven.plugin>
     </properties>
 
     <dependencies>
@@ -70,19 +71,22 @@
                 </configuration>
             </plugin>
 
-            <!--            <plugin>-->
-            <!--                <groupId>net.alchim31.maven</groupId>-->
-            <!--                <artifactId>scala-maven-plugin</artifactId>-->
-            <!--                <version>4.8.1</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>compile</goal>-->
-            <!--                            <goal>testCompile</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala.maven.plugin}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>
