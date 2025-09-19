@@ -29,7 +29,7 @@ class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(sto
     ma5.compareTo(ma10) > 0
       && ma10.compareTo(ma20) > 0
       && ma20.compareTo(ma30) > 0
-      && new BigDecimal(v0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(9.0)) < 0  //涨幅
+      && new BigDecimal(v0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(30.0)) < 0  //涨幅
   }
 
   /**
