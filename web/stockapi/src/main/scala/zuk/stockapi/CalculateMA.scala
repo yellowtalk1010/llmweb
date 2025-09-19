@@ -60,17 +60,26 @@ object CalculateMA {
     }
     //按时间降序
     val sorted = stockDayVoList.sortBy(_.getTime).reverse.toList
-    //println(sorted.size)
+    for (index <- 0 until sorted.size - 31) {
+      val subList = sorted.slice(index, index + 30)
+      val stockDayVo = subList.head
+      val time = stockDayVo.getTime
 
-    val ma5 = this.cala_ma(sorted.take(5))
-    val ma10 = this.cala_ma(sorted.take(10))
-    val ma20 = this.cala_ma(sorted.take(20))
-    val ma30 = this.cala_ma(sorted.take(30))
+      val ma5 = this.cala_ma(subList.take(5))
+      val ma10 = this.cala_ma(subList.take(10))
+      val ma20 = this.cala_ma(subList.take(20))
+      val ma30 = this.cala_ma(subList.take(30))
 
-    val avg5 = this.cala_avg(sorted.take(5))
-    val avg10 = this.cala_avg(sorted.take(10))
-    val avg20 = this.cala_avg(sorted.take(20))
-    val avg30 = this.cala_avg(sorted.take(30))
+      val avg5 = this.cala_avg(subList.take(5))
+      val avg10 = this.cala_avg(subList.take(10))
+      val avg20 = this.cala_avg(subList.take(20))
+      val avg30 = this.cala_avg(subList.take(30))
+
+      println()
+
+    }
+
+
 
   }
 
