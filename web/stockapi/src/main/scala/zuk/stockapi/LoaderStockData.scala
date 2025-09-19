@@ -1,5 +1,8 @@
 package zuk.stockapi
 
+import com.alibaba.fastjson2.JSONObject
+import org.apache.commons.io.FileUtils
+
 import java.io.File
 import java.util
 import java.util.{ArrayList, List}
@@ -9,13 +12,13 @@ object LoaderStockData {
 
   val TOKEN = "36c92182f783f08005017f78e7a264608a82952f8b91de2a"
 
-  val STOCK_DATA_DIR_PATH = "D:\\development\\github\\llmweb1\\web\\stocks"
+  val STOCK_DATA_DIR_PATH = "D:\\AAAAAAAAAAAAAAAAAAAA\\github\\llmweb1\\web\\stocks"
   val STOCK_TOKEN = STOCK_DATA_DIR_PATH + File.separator + "token"
   val STOCK_ALL = STOCK_DATA_DIR_PATH + File.separator + "all_stock.json"
   val STOCK_DAY = STOCK_DATA_DIR_PATH + File.separator + "days"
   val STOCK_MA = STOCK_DATA_DIR_PATH + File.separator + "ma"
 
-  val STOCKS: util.List[LoaderStockData.StockApiVO] = new util.ArrayList[LoaderStockData.StockApiVO]
+  val STOCKS: util.List[StockApiVO] = new util.ArrayList[StockApiVO]
 
 
   private def loadAllStocks(): Unit = {
@@ -25,15 +28,15 @@ object LoaderStockData {
       val jsonObject = JSONObject.parseObject(content)
       val jsonArray = jsonObject.getJSONArray("data")
       jsonArray.forEach(item => {
-        val stockApiVO = JSONObject.parseObject(JSONObject.toJSONString(item), classOf[LoaderStockData.StockApiVO])
+        val stockApiVO = JSONObject.parseObject(JSONObject.toJSONString(item), classOf[StockApiVO])
         STOCKS.add(stockApiVO)
 
       })
-      log.info("stock总数:" + STOCKS.size)
+      println("stock总数:" + STOCKS.size)
     } catch {
       case e: Exception =>
         e.printStackTrace()
-        log.error(e.getMessage)
+        println(e.getMessage)
     }
   }
 
@@ -42,7 +45,7 @@ object LoaderStockData {
     val tokenFile = new File(STOCK_TOKEN)
     if (tokenFile.exists && tokenFile.isFile && FileUtils.readFileToString(tokenFile, "UTF-8").trim == TOKEN) loadAllStocks()
     else {
-      log.info("STOCK_PATH路径错误")
+      println("STOCK_PATH路径错误")
       System.exit(0)
     }
   }
