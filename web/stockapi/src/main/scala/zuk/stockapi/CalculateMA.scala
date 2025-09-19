@@ -22,7 +22,7 @@ object CalculateMA {
     stocks.foreach(stock=>{
       try{
         val malist = calStockMA(stock)
-        new MA_Model(malist)
+        new MA_Model(stock, malist)
 
       }
       catch
