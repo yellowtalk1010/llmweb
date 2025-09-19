@@ -22,7 +22,9 @@ object CalculateMA {
     stocks.foreach(stock=>{
       try{
         val malist = calStockMA(stock)
-        new MA_Model(stock, malist)
+        if(new MA_Model(stock, malist).isOK){
+          println(s"${stock.getApi_code}, ${stock.getName}")
+        }
 
       }
       catch
