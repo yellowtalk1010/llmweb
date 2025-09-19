@@ -14,7 +14,7 @@ class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
   override def isHit(): Boolean = this.isOK
 
   override def run(): Unit = {
-    val list = maList.slice(0,3)
+    val list = maList.slice(0,5)
     if(comp(list(0))){
       val filterList = list.filter(comp(_))
       isOK = list.size>filterList.size
