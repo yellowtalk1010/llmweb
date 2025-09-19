@@ -39,5 +39,8 @@ public class StartupSuccessListener {
         System.out.println("5. hot blocks: " + url);
         url = "https://stockapi.com.cn/v1/base/bkCodeList?endDate="+dt+"&startDate="+dt+"&bkCode=880431&token=" + LoaderLocalStockData.TOKEN();
         System.out.println("6. bot blocks stock: " + url);
+        url = "https://stockapi.com.cn/v1/base/all?token=" + LoaderLocalStockData.TOKEN();
+        System.out.println("7. A股列表数据查询: " + url);
+
     }
 }
