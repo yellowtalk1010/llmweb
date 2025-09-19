@@ -48,6 +48,7 @@ object DownloadDayStock {
             }
             else {
               println(s"数据采集异常（${looptime.incrementAndGet()}次）：${url}")
+              Thread.sleep(500) //等待500毫秒继续请求
             }
           }
 
