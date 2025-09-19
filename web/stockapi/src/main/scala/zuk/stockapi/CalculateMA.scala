@@ -4,12 +4,12 @@ import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
 
 import java.io.File
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
-
 import scala.jdk.CollectionConverters.*
 
 object CalculateMA {
@@ -59,11 +59,36 @@ object CalculateMA {
       }
     }
     //按时间降序
-    val sorted = stockDayVoList.sortBy(_.getTime).reverse
+    val sorted = stockDayVoList.sortBy(_.getTime).reverse.toList
     //println(sorted.size)
 
+    val ma5 = this.cala_ma(sorted.take(5))
+    val ma10 = this.cala_ma(sorted.take(10))
+    val ma20 = this.cala_ma(sorted.take(20))
+    val ma30 = this.cala_ma(sorted.take(30))
 
+    val avg5 = this.cala_avg(sorted.take(5))
+    val avg10 = this.cala_avg(sorted.take(10))
+    val avg20 = this.cala_avg(sorted.take(20))
+    val avg30 = this.cala_avg(sorted.take(30))
 
+  }
+
+  def cala_ma(stockDayVoList: List[StockDayVo]): BigDecimal = {
+    //收盘价的平均值
+    val optSum = stockDayVoList.map(e=>{
+      new BigDecimal(e.getClose)
+    }).reduceOption((a,b)=>a.add(b))
+    val ma = optSum.get.divide(new BigDecimal(stockDayVoList.size),5, BigDecimal.ROUND_HALF_UP)
+    ma
+  }
+
+  def cala_avg(stockDayVoList: List[StockDayVo]): BigDecimal = {
+    //日均价
+    val volume = stockDayVoList.map(e=>{new BigDecimal(e.getVolume)}).reduceOption((a,b)=>a.add(b)).get
+    val amount = stockDayVoList.map(e=>{new BigDecimal(e.getAmount)}).reduceOption((a,b)=>a.add(b)).get
+    val avg = amount.divide(volume, 5, BigDecimal.ROUND_HALF_UP);
+    avg
   }
 
 }
