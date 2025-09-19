@@ -28,6 +28,13 @@ object CalculateMA {
     })
   }
 
+  /***
+   * 模型开发
+   * @param maList
+   */
+  private def filterModel(maList: List[StockMaVo]) = {
+
+  }
 
   /**
    * 计算MA和AVG
