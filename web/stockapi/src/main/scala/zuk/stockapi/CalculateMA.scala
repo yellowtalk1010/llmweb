@@ -79,8 +79,6 @@ object CalculateMA {
 
     }
 
-
-
   }
 
   def cala_ma(stockDayVoList: List[StockDayVo]): BigDecimal = {
