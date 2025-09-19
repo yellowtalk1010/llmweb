@@ -1,10 +1,12 @@
 package zuk.stockapi.model
 
-class AVG_Model extends Model {
+import zuk.stockapi.StockMaVo
 
-  override def isHit: Boolean = false
+class AVG_Model(maList: List[StockMaVo]) extends Model {
 
-  override def run: Unit = {
+  override def isHit(): Boolean = false
+
+  override def run(): Unit = {
 
   }
 }
