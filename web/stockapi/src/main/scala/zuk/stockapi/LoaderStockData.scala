@@ -18,7 +18,7 @@ object LoaderStockData {
   val STOCK_DAY = STOCK_DATA_DIR_PATH + File.separator + "days"
   val STOCK_MA = STOCK_DATA_DIR_PATH + File.separator + "ma"
 
-  val STOCKS: util.List[StockApiVO] = new util.ArrayList[StockApiVO]
+  val STOCKS: util.List[StockApiVo] = new util.ArrayList[StockApiVo]
 
 
   private def loadAllStocks(): Unit = {
@@ -28,7 +28,7 @@ object LoaderStockData {
       val jsonObject = JSONObject.parseObject(content)
       val jsonArray = jsonObject.getJSONArray("data")
       jsonArray.forEach(item => {
-        val stockApiVO = JSONObject.parseObject(JSONObject.toJSONString(item), classOf[StockApiVO])
+        val stockApiVO = JSONObject.parseObject(JSONObject.toJSONString(item), classOf[StockApiVo])
         STOCKS.add(stockApiVO)
 
       })
@@ -51,8 +51,3 @@ object LoaderStockData {
   }
 
 }
-
-class StockApiVO(@BeanProperty api_code: String,
-                 @BeanProperty jys: String,
-                 @BeanProperty name: String,
-                 @BeanProperty gl: String)
