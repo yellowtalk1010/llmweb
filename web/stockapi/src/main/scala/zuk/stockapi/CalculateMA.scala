@@ -15,75 +15,24 @@ import scala.jdk.CollectionConverters.*
 
 object CalculateMA {
 
-
-
-  def run(stocks: List[StockApiVo]): Unit = {
-
-    val maModelList = ListBuffer[StockApiVo]()
-    val ma1ModelList = ListBuffer[StockApiVo]()
-    val avgModelList = ListBuffer[StockApiVo]()
-
+  def run(stocks: List[StockApiVo]): List[(StockApiVo, List[StockMaVo])] = {
+    var list = ListBuffer[(StockApiVo, List[StockMaVo])]()
     val counter = new AtomicInteger(0)
-    stocks.foreach(stock=>{
+    stocks.map(stock=>{
       try{
-
         val malist = calStockMA(stock)
-
-        //MA递增策略
-        val maModel = new MA_Model(stock, malist)
-        maModel.run()
-        if(maModel.isHit()){
-          maModelList += stock
-        }
-
-        //MA穿透策略
-        val ma1Model = new MA1_Model(stock, malist)
-        ma1Model.run()
-        if(ma1Model.isHit()){
-          ma1ModelList += stock
-        }
-
-        //AVG递增策略
-        val avgModel = new AVG_Model(stock, malist)
-        avgModel.run()
-        if(avgModel.isHit()){
-          avgModelList += stock
-        }
-
+        (stock, malist)
       }
       catch {
         case exception: Exception =>
           exception.printStackTrace()
+          (stock, List())
       }
       finally {
         counter.incrementAndGet()
         println(s"${counter.get()}/${stocks.size}")
       }
     })
-
-    println(s"ma模型策略: ${maModelList.size}")
-
-    maModelList.foreach(e=>{
-      println(s"${e.getApi_code}")
-    })
-
-    println("ma1模型策略")
-
-    ma1ModelList.foreach(e => {
-      println(s"${e.getApi_code}")
-    })
-
-    println("avg模型策略")
-    avgModelList.foreach(e=>{
-      println(s"${e.getApi_code}")
-    })
-
-    println("模型策略交集")
-    (maModelList ++ ma1ModelList ++ avgModelList)
-      .groupBy(_.getApi_code)
-      .filter(_._2.size>1)
-      .map(_._1)
-      .foreach(println)
 
   }
 
