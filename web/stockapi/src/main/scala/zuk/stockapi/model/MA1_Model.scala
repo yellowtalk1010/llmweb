@@ -1,5 +1,6 @@
 package zuk.stockapi.model
 
+import zuk.stockapi.utils.CloseIncreaseUtil
 import zuk.stockapi.{StockApiVo, StockMaVo}
 
 import java.math.BigDecimal
@@ -18,7 +19,8 @@ class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
     val len = 3
     if(maList.size > len){
       val list = maList.slice(0, len)
-      if (comp(list(0))) {
+      val isIncre = CloseIncreaseUtil.comIncrea(list)
+      if (comp(list(0)) && isIncre) {
         val filterList = list.filter(comp(_))
         isOK = list.size != filterList.size
       }

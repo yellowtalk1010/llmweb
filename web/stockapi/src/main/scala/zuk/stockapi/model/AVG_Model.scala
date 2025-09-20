@@ -1,5 +1,6 @@
 package zuk.stockapi.model
 
+import zuk.stockapi.utils.CloseIncreaseUtil
 import zuk.stockapi.{StockApiVo, StockMaVo}
 
 import java.math.BigDecimal
@@ -16,7 +17,7 @@ class AVG_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
   override def run(): Unit = {
     if(maList.size>3){
       val list = maList.slice(0, 3)
-      val isIncre = comIncrea(list)
+      val isIncre = CloseIncreaseUtil.comIncrea(list)
       val filterList = list.filter(compMA(_))
       this.isOK = isIncre && (list.size == filterList.size)
     }
@@ -33,20 +34,6 @@ class AVG_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
       && new BigDecimal(v0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(30.0)) < 0  //涨幅
   }
 
-  /**
-   * 收盘价是否递增
-   */
-  private def comIncrea(list: List[StockMaVo]): Boolean = {
-    var st = true
-    for(i <- 0 until list.size if st){
-      val e0 = list(i)
-      val ls = list.splitAt(i)._2
-      val filter = ls.filter(e=>{
-        new BigDecimal(e0.getStockDayVo.getClose).compareTo(new BigDecimal(e.getStockDayVo.getClose)) >= 0
-      })
-      st = ls.size == filter.size
-    }
-    st
-  }
+
 
 }
