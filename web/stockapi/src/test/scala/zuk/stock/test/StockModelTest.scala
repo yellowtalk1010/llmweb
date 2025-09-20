@@ -2,7 +2,7 @@ package zuk.stock.test
 
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
-import zuk.stockapi.model.{AVG_Model, MA1_Model, MA_Model}
+import zuk.stockapi.model.{AVG_Model, MA1_Model, MA2_Model, MA_Model}
 import zuk.stockapi.{CalculateMA, LoaderLocalStockData, StockApiVo}
 
 import java.io.File
@@ -24,24 +24,32 @@ class StockModelTest extends AnyFunSuite {
 
     val maModelList = ListBuffer[StockApiVo]()
     val ma1ModelList = ListBuffer[StockApiVo]()
+    val ma2ModelList = ListBuffer[StockApiVo]()
     val avgModelList = ListBuffer[StockApiVo]()
 
     tpList.filter(_._2.size>0).foreach(tp=>{
       val stock = tp._1
       val malist = tp._2
 
-      //MA递增策略
-      val maModel = new MA_Model(stock, malist)
-      maModel.run()
-      if (maModel.isHit()) {
-        maModelList += stock
+      //转m5>m20
+      val ma2Model = new MA2_Model(stock, malist)
+      ma2Model.run()
+      if (ma2Model.isHit()) {
+        ma2ModelList += stock
       }
 
-      //MA穿透策略
+      //转m5>m10>m20>m30
       val ma1Model = new MA1_Model(stock, malist)
       ma1Model.run()
       if (ma1Model.isHit()) {
         ma1ModelList += stock
+      }
+
+      //m5>m10>m20>m30
+      val maModel = new MA_Model(stock, malist)
+      maModel.run()
+      if (maModel.isHit()) {
+        maModelList += stock
       }
 
       //AVG递增策略
@@ -54,10 +62,11 @@ class StockModelTest extends AnyFunSuite {
     })
 
     val lines = ListBuffer[String]()
+
     //
-    println(s"ma模型策略: ${maModelList.size}")
-    lines += s"ma模型策略: ${maModelList.size}"
-    maModelList.foreach(e=>{
+    println("ma2模型策略")
+    lines += "ma2模型策略"
+    ma2ModelList.foreach(e => {
       lines += e.getApi_code
       println(s"${e.getApi_code}")
     })
@@ -66,6 +75,14 @@ class StockModelTest extends AnyFunSuite {
     println("ma1模型策略")
     lines += "ma1模型策略"
     ma1ModelList.foreach(e => {
+      lines += e.getApi_code
+      println(s"${e.getApi_code}")
+    })
+
+    //
+    println(s"ma模型策略: ${maModelList.size}")
+    lines += s"ma模型策略: ${maModelList.size}"
+    maModelList.foreach(e=>{
       lines += e.getApi_code
       println(s"${e.getApi_code}")
     })
