@@ -3,6 +3,7 @@ package zuk.stockapi.model
 import zuk.stockapi.{StockApiVo, StockMaVo}
 
 import java.math.BigDecimal
+import scala.collection.mutable.ListBuffer
 
 /***
  * 均价模型策略
@@ -10,8 +11,10 @@ import java.math.BigDecimal
 class AVG_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
   var isOK: Boolean = false
-
   override def isHit(): Boolean = this.isOK
+
+  var stocks = new ListBuffer[StockApiVo]
+  override def adviceStocks(): List[StockApiVo] = this.stocks.toList
 
   override def run(): Unit = {
     if(maList.size>3){

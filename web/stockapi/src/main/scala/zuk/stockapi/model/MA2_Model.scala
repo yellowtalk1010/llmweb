@@ -3,6 +3,7 @@ package zuk.stockapi.model
 import zuk.stockapi.{StockApiVo, StockMaVo}
 
 import java.math.BigDecimal
+import scala.collection.mutable.ListBuffer
 
 /***
  * 刚刚M5>M20>M30 金叉
@@ -12,6 +13,10 @@ class MA2_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
   var isOK: Boolean = false
 
   override def isHit(): Boolean = this.isOK
+
+  var stocks = new ListBuffer[StockApiVo]
+
+  override def adviceStocks(): List[StockApiVo] = this.stocks.toList
 
   override def run(): Unit = {
     val len = 3

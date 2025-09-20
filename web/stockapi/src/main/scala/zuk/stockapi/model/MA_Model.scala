@@ -3,6 +3,7 @@ package zuk.stockapi.model
 import zuk.stockapi.{StockApiVo, StockMaVo}
 
 import java.math.BigDecimal
+import scala.collection.mutable.ListBuffer
 /***
  * MA连续3天上升策略
  */
@@ -11,6 +12,10 @@ class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(sto
   var isOK: Boolean = false
 
   override def isHit(): Boolean = this.isOK
+
+  var stocks = new ListBuffer[StockApiVo]
+
+  override def adviceStocks(): List[StockApiVo] = this.stocks.toList
 
   override def run(): Unit = {
     if(maList.size>3){
