@@ -5,7 +5,7 @@ import zuk.stockapi.{StockApiVo, StockMaVo}
 import java.math.BigDecimal
 
 /***
- * 刚好正常
+ * 刚刚M5>M10>M20>M30
  */
 class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
@@ -29,7 +29,9 @@ class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
     val ma10 = new BigDecimal(v0.getMa10)
     val ma20 = new BigDecimal(v0.getMa20)
     val ma30 = new BigDecimal(v0.getMa30)
-    ma5.compareTo(ma10) > 0 && ma10.compareTo(ma20) > 0 && ma20.compareTo(ma30) > 0
+    ma5.compareTo(ma10) > 0
+      && ma10.compareTo(ma20) > 0
+      && ma20.compareTo(ma30) > 0
   }
 
 }
