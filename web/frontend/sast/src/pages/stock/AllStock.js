@@ -85,8 +85,11 @@ function AllStock() {
               <td className="td">{row.jys}</td>
               <td className="td">
                 <a
-                  href="#"
-                  onClick={() => window.open("https://quote.eastmoney.com/" + row.jys + row.api_code + ".html")}
+                  href=""
+                  onClick={(e) => {
+                     e.preventDefault(); //// 阻止页面跳到顶部
+                    window.open("https://quote.eastmoney.com/" + row.jys + row.api_code + ".html");
+                  }}
                 >
                   {row.api_code}
                 </a>
