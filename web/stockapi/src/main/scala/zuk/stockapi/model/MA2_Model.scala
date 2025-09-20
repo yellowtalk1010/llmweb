@@ -14,10 +14,6 @@ class MA2_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
 
   override def isHit(): Boolean = this.isOK
 
-  var stocks = new ListBuffer[StockApiVo]
-
-  override def adviceStocks(): List[StockApiVo] = this.stocks.toList
-
   override def run(): Unit = {
     val len = 3
     if(maList.size > len){

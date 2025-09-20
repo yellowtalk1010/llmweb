@@ -13,10 +13,6 @@ class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(sto
 
   override def isHit(): Boolean = this.isOK
 
-  var stocks = new ListBuffer[StockApiVo]
-
-  override def adviceStocks(): List[StockApiVo] = this.stocks.toList
-
   override def run(): Unit = {
     if(maList.size>3){
       val list = maList.slice(0, 3)
