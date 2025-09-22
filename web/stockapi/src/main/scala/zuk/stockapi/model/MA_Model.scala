@@ -22,8 +22,7 @@ class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(sto
       val filterList = list.filter(compMA(_))
       this.isOK = isIncre
         && (list.size == filterList.size)
-        && (new BigDecimal(today.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) > 0    //换手率要大于4.5%
-        || new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) > 0 )  //涨幅大于3%
+        && ( new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) > 0 )  //涨幅大于2%
 
     }
   }
