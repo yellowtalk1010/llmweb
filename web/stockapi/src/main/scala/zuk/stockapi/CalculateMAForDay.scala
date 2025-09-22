@@ -129,8 +129,8 @@ object CalculateMAForDay {
 
   private def cala_avg(stockDayVoList: List[StockDayVo]): BigDecimal = {
     //日均价
-    val volume = stockDayVoList.map(e=>{new BigDecimal(e.getVolume)}).reduceOption((a,b)=>a.add(b)).get
-    val amount = stockDayVoList.map(e=>{new BigDecimal(e.getAmount)}).reduceOption((a,b)=>a.add(b)).get
+    val volume = stockDayVoList.filter(_.getVolume!=null).map(e=>{new BigDecimal(e.getVolume)}).reduceOption((a,b)=>a.add(b)).get
+    val amount = stockDayVoList.filter(_.getAmount!=null).map(e=>{new BigDecimal(e.getAmount)}).reduceOption((a,b)=>a.add(b)).get
     if(volume.compareTo(math.BigDecimal.ZERO)==0 || amount.compareTo(math.BigDecimal.ZERO) == 0){
       math.BigDecimal.ZERO
     }
