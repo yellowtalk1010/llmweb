@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils
 /***
  * 获取当日个股收盘后的信息
  */
-object DownloadDayStock {
+object DownloadDayStock extends Download {
 
   def run(stockList: List[StockApiVo]): Unit = {
     val num = new AtomicInteger(0)
