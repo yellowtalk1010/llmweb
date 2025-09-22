@@ -41,7 +41,6 @@ object DownloadDayStock extends Download {
         val stockApiVO = tp2._1
         val response = tp2._2
         val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
-        val url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
         try {
 
           val jsonArray = JSONObject.parseObject(response).get("data").asInstanceOf[JSONArray]
@@ -77,9 +76,7 @@ object DownloadDayStock extends Download {
 
         } catch {
           case e: Exception =>
-            //failStocks.add(stockApiVO.getApi_code)
             e.printStackTrace()
-            println(url + "\n" + path + "\n失败")
         } finally {
           num.incrementAndGet
         }
