@@ -33,35 +33,16 @@ object DownloadDayStock extends Download {
       val sdf2 = new SimpleDateFormat("yyyy-MM-dd")
       val endTime = sdf2.format(new Date)
       System.out.println(ym + "\t" + startTime + "\t" + endTime)
-      stockList.foreach((stockApiVO: StockApiVo) => {
+      stockList.map(stockApiVO=>{
+        val url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
+        val response = super.download(url)
+        (stockApiVO, response)
+      }).filter(tp2=>StringUtils.isNotEmpty(tp2._2)).foreach(tp2 => {
+        val stockApiVO = tp2._1
+        val response = tp2._2
         val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
         val url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
         try {
-          //不存在
-          var response:String = null
-          var isBreak = false
-          val looptime = new AtomicInteger(0) //循环次数
-          while (!isBreak){
-            try {
-              if(looptime.get()>0){
-                println(s"第${looptime.get()}次重试请求:${url}")
-              }
-              response = HttpClientUtil.sendGetRequest(url)
-              val jsonObject = JSONObject.parseObject(response)
-              val resCode = jsonObject.get("code").asInstanceOf[Integer]
-              val resMsg = jsonObject.get("msg").asInstanceOf[String]
-              if (resCode.toString.equals("20000") && resMsg == "success") {
-                isBreak = true
-              }
-              else {
-                println(s"数据采集异常（${looptime.incrementAndGet()}次）：${url}")
-                Thread.sleep(500) //等待500毫秒继续请求
-              }
-            }
-            catch
-              case exception: Exception =>
-                exception.printStackTrace()
-          }
 
           val jsonArray = JSONObject.parseObject(response).get("data").asInstanceOf[JSONArray]
           val lines = jsonArray.asScala.map(e => {
