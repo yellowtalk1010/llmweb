@@ -1,5 +1,6 @@
 package zuk.stockapi
 
+import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
 /***
@@ -8,18 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger
 object DownloadMinuteStock {
 
   def run(stockList: List[StockApiVo]) = {
-    val num = new AtomicInteger(0)
-    while (stockList.size != num.get()) {
+    stockList.foreach(stockApiVO=>{
       try {
-
+        val path = LoaderLocalStockData.STOCK_MINUTE + File.separator + stockApiVO.getApi_code + ".jsonl"
+        val url = s"https://www.stockapi.com.cn/v1/base/min?token=${LoaderLocalStockData.TOKEN}&code=${stockApiVO.getApi_code}&all=1"
       }
       catch
         case exception: Exception =>
-      finally {
-        //
-      }
-
-    }
+    })
   }
 
 }

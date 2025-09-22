@@ -17,7 +17,8 @@ object LoaderLocalStockData {
   val STOCK_TOKEN = STOCK_DATA_DIR_PATH + File.separator + "token"
   val STOCK_ALL = STOCK_DATA_DIR_PATH + File.separator + "all_stock.json"
   val STOCK_DAY = STOCK_DATA_DIR_PATH + File.separator + "days"
-  val STOCK_MA = STOCK_DATA_DIR_PATH + File.separator + "ma"
+  val STOCK_MINUTE = STOCK_DATA_DIR_PATH + File.separator + "minute"
+  //val STOCK_MA = STOCK_DATA_DIR_PATH + File.separator + "ma"
 
   val STOCKS: util.List[StockApiVo] = new util.ArrayList[StockApiVo]
 
