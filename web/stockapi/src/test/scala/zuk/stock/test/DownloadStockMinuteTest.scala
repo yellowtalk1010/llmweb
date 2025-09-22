@@ -9,9 +9,9 @@ import scala.jdk.CollectionConverters.*
 
 class DownloadStockMinuteTest extends AnyFunSuite {
 
-  test(""){
+  test("并发执行"){
     LoaderLocalStockData.loadToken()
-    val executor = Executors.newFixedThreadPool(20)
+    val executor = Executors.newFixedThreadPool(10)
     val counter = new AtomicInteger(0)
     LoaderLocalStockData.STOCKS.asScala.foreach(stock=>{
       executor.execute(()=>{
