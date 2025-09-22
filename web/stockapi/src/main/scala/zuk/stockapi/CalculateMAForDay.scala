@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
-object CalculateMA {
+object CalculateMAForDay {
 
   def run(stocks: List[StockApiVo]): List[(StockApiVo, List[StockMaVo])] = {
     var list = ListBuffer[(StockApiVo, List[StockMaVo])]()

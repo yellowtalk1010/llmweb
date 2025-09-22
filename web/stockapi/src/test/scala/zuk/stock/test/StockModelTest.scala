@@ -3,7 +3,7 @@ package zuk.stock.test
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.stockapi.model.{AVG_Model, MA1_Model, MA2_Model, MA_Model}
-import zuk.stockapi.{CalculateMA, LoaderLocalStockData, StockApiVo}
+import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData, StockApiVo}
 
 import java.io.File
 import java.text.SimpleDateFormat
@@ -20,7 +20,7 @@ class StockModelTest extends AnyFunSuite {
         || true
     }).toList
 
-    val tpList = CalculateMA.run(codes)
+    val tpList = CalculateMAForDay.run(codes)
 
     val maModelList = ListBuffer[StockApiVo]()
     val ma1ModelList = ListBuffer[StockApiVo]()
