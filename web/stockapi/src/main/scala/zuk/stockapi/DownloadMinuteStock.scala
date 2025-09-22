@@ -19,7 +19,6 @@ object DownloadMinuteStock extends Download {
 
 
   def run(stockList: List[StockApiVo]) = {
-    val counter = new AtomicInteger(0)
     stockList.foreach(stockApiVO=>{
       try {
         val stockMinuteVoList = ListBuffer[StockMinuteVo]()
@@ -62,8 +61,7 @@ object DownloadMinuteStock extends Download {
       catch
         case exception: Exception =>
       finally {
-        counter.incrementAndGet()
-        println(s"${counter.get()}/${stockList.size}")
+        //
       }
     })
   }
