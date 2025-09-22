@@ -18,12 +18,14 @@ import scala.jdk.CollectionConverters.*
 
 import org.apache.commons.lang3.StringUtils
 
+/***
+ * 获取当日个股收盘后的信息
+ */
 object DownloadDayStock {
 
-
-  def run(): Unit = {
+  def run(stockList: List[StockApiVo]): Unit = {
     val num = new AtomicInteger(0)
-    while (LoaderLocalStockData.STOCKS.size != num.get()) {
+    while (stockList.size != num.get()) {
       val sdf = new SimpleDateFormat("yyyyMM")
       val ym = sdf.format(new Date)
       val sdf1 = new SimpleDateFormat("yyyy-MM")
@@ -31,7 +33,7 @@ object DownloadDayStock {
       val sdf2 = new SimpleDateFormat("yyyy-MM-dd")
       val endTime = sdf2.format(new Date)
       System.out.println(ym + "\t" + startTime + "\t" + endTime)
-      LoaderLocalStockData.STOCKS.asScala.foreach((stockApiVO: StockApiVo) => {
+      stockList.foreach((stockApiVO: StockApiVo) => {
         val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
         val url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
         try {
