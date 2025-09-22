@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils
 
 object DownloadDayStock {
 
+
   def run(): Unit = {
     val num = new AtomicInteger(0)
     while (LoaderLocalStockData.STOCKS.size != num.get()) {
@@ -39,17 +40,25 @@ object DownloadDayStock {
           var isBreak = false
           val looptime = new AtomicInteger(0) //循环次数
           while (!isBreak){
-            response = HttpClientUtil.sendGetRequest(url)
-            val jsonObject = JSONObject.parseObject(response)
-            val resCode = jsonObject.get("code").asInstanceOf[Integer]
-            val resMsg = jsonObject.get("msg").asInstanceOf[String]
-            if (resCode.toString.equals("20000") && resMsg == "success") {
-              isBreak = true
+            try {
+              if(looptime.get()>0){
+                println(s"第${looptime.get()}次重试请求:${url}")
+              }
+              response = HttpClientUtil.sendGetRequest(url)
+              val jsonObject = JSONObject.parseObject(response)
+              val resCode = jsonObject.get("code").asInstanceOf[Integer]
+              val resMsg = jsonObject.get("msg").asInstanceOf[String]
+              if (resCode.toString.equals("20000") && resMsg == "success") {
+                isBreak = true
+              }
+              else {
+                println(s"数据采集异常（${looptime.incrementAndGet()}次）：${url}")
+                Thread.sleep(500) //等待500毫秒继续请求
+              }
             }
-            else {
-              println(s"数据采集异常（${looptime.incrementAndGet()}次）：${url}")
-              Thread.sleep(500) //等待500毫秒继续请求
-            }
+            catch
+              case exception: Exception =>
+                exception.printStackTrace()
           }
 
           val jsonArray = JSONObject.parseObject(response).get("data").asInstanceOf[JSONArray]
