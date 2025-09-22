@@ -23,8 +23,8 @@ class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
       val isIncre = CloseIncreaseUtil.comIncrea(list)
       if (comp(today)
         && isIncre
-        && new BigDecimal(today.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4/100)) > 0 //换手率要大于4.5%
-        && new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2/100)) > 0 //涨幅大于3%
+        && new BigDecimal(today.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) > 0 //换手率要大于4.5%
+        && new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) > 0 //涨幅大于3%
       ) {
         val filterList = list.filter(comp(_))
         isOK = list.size != filterList.size
