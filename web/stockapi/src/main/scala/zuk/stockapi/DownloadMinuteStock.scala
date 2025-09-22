@@ -10,6 +10,14 @@ object DownloadMinuteStock {
   def run(stockList: List[StockApiVo]) = {
     val num = new AtomicInteger(0)
     while (stockList.size != num.get()) {
+      try {
+
+      }
+      catch
+        case exception: Exception =>
+      finally {
+        //
+      }
 
     }
   }
