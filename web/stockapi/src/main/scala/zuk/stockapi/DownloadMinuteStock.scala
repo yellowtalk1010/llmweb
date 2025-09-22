@@ -17,17 +17,17 @@ import java.math.BigDecimal
  */
 object DownloadMinuteStock extends Download {
 
+
   def run(stockList: List[StockApiVo]) = {
+    val counter = new AtomicInteger(0)
     stockList.foreach(stockApiVO=>{
       try {
         val stockMinuteVoList = ListBuffer[StockMinuteVo]()
-        val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
-        val date = simpleDateFormat.format(new Date())
-        val path = LoaderLocalStockData.STOCK_MINUTE + File.separator + date + File.separator + stockApiVO.getApi_code + ".jsonl"
+        val path = createMinutePath(stockApiVO.getApi_code)
         if(!new File(path).exists()){
           //如果未下载过
-          val url = s"https://www.stockapi.com.cn/v1/base/min?token=${LoaderLocalStockData.TOKEN}&code=${stockApiVO.getApi_code}&all=1"
-          val response = super.download(url, 2) //下载分时成交量数据
+          val url = s"https://www.stockapi.com.cn/v1/base/min?token=${LoaderLocalStockData.TOKEN}&code=${stockApiVO.getApi_code}&all=0"
+          val response = super.download(url, 10) //下载分时成交量数据
           if (StringUtils.isNotEmpty(response)) {
             val jsonArray = JSONObject.parseObject(response).get("data").asInstanceOf[JSONArray]
 
@@ -52,29 +52,43 @@ object DownloadMinuteStock extends Download {
 
             FileUtils.writeLines(new File(path), lines.asJava)
           }
-          else {
-            FileUtils.writeLines(new File(path), List().asJava)
-          }
+//          else {
+//            //写入空文件
+//            FileUtils.writeLines(new File(path), List().asJava)
+//          }
         }
-        else {
-          FileUtils.readLines(new File(path), "UTF-8").asScala.foreach(line=>{
-            val stockMinuteVo = JSONObject.parseObject(line, classOf[StockMinuteVo])
-            stockMinuteVoList += stockMinuteVo
-          })
-        }
-
-        //总交易量
-        val volumn = stockMinuteVoList.map(e=>{
-          new BigDecimal(e.getShoushu).multiply(new BigDecimal(100))
-        }).reduceOption((a,b)=>a.add(b))
-
-        println()
-
 
       }
       catch
         case exception: Exception =>
+      finally {
+        counter.incrementAndGet()
+        println(s"${counter.get()}/${stockList.size}")
+      }
     })
+  }
+
+
+  def getStockMinuteVos(stockCode: String): List[StockMinuteVo] = {
+    val path = createMinutePath(stockCode)
+    val file = new File(path)
+    val stockMinuteVoList = ListBuffer[StockMinuteVo]()
+    if(file.exists()){
+      FileUtils.readLines(file, "UTF-8").asScala.foreach(line => {
+        val stockMinuteVo = JSONObject.parseObject(line, classOf[StockMinuteVo])
+        stockMinuteVoList += stockMinuteVo
+      })
+    }
+    stockMinuteVoList.toList
+  }
+
+
+  private def createMinutePath(code: String): String = {
+    val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+    var date = simpleDateFormat.format(new Date())
+    date = "zuk"
+    val path = LoaderLocalStockData.STOCK_MINUTE + File.separator + date + File.separator + code + ".jsonl"
+    path
   }
 
 }

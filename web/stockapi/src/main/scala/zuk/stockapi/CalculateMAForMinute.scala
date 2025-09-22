@@ -1,5 +1,8 @@
 package zuk.stockapi
 
+import org.apache.commons.io.FileUtils
+
+import java.io.File
 import java.math
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
@@ -11,9 +14,15 @@ object CalculateMAForMinute {
     val counter = new AtomicInteger(0)
     stocks.map(stock=>{
       try{
-        val sorted = CalculateMAForDay.getStockDayVos(stock)
-        val malist = CalculateMAForDay.calStockMA(sorted)
-        (stock, malist)
+        val minuteStock = createNewStockDayVo(stock)
+        if(minuteStock!=null){
+          val sorted = CalculateMAForDay.getStockDayVos(stock)
+          val malist = CalculateMAForDay.calStockMA(List(minuteStock) ++ sorted)
+          (stock, malist)
+        }
+        else {
+          (stock, List())
+        }
       }
       catch {
         case exception: Exception =>
@@ -26,6 +35,17 @@ object CalculateMAForMinute {
       }
     })
 
+  }
+
+  def createNewStockDayVo(stock: StockApiVo): StockDayVo = {
+    val stockMinuteVoList = DownloadMinuteStock.getStockMinuteVos(stock.getApi_code)
+    if(stockMinuteVoList!=null && stockMinuteVoList.size>0){
+      val stockMinuteVo = stockMinuteVoList.last
+      val stockDayVo = new StockDayVo
+      stockDayVo.setClose(stockMinuteVo.getPrice)
+      return stockDayVo
+    }
+    null
   }
 
 }
