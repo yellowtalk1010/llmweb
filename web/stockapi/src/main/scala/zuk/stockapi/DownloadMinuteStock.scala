@@ -63,7 +63,13 @@ object DownloadMinuteStock extends Download {
           })
         }
 
-        
+        //总交易量
+        val volumn = stockMinuteVoList.map(e=>{
+          new BigDecimal(e.getShoushu).multiply(new BigDecimal(100))
+        }).reduceOption((a,b)=>a.add(b))
+
+        println()
+
 
       }
       catch
