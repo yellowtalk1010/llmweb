@@ -1,5 +1,6 @@
 package zuk.stockapi.model
 
+import org.apache.commons.lang3.StringUtils
 import zuk.stockapi.utils.CloseIncreaseUtil
 import zuk.stockapi.{StockApiVo, StockMaVo}
 
@@ -23,13 +24,46 @@ class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
       val isIncre = CloseIncreaseUtil.comIncrea(list)
       if (comp(today)
         && isIncre
-        && new BigDecimal(today.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) > 0 //换手率要大于4.5%
-        && new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) > 0 //涨幅大于3%
+        && compTrunoverRatio(today)
+        && compChangeRatio(today)
       ) {
         val filterList = list.filter(comp(_))
         isOK = list.size != filterList.size
       }
     }
+  }
+
+  /** *
+   * 比较换手率
+   *
+   * @param today
+   * @return
+   */
+  private def compTrunoverRatio(today: StockMaVo): Boolean = {
+    if (StringUtils.isNotBlank(today.getStockDayVo.getTurnoverRatio)) {
+      val st = new BigDecimal(today.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) > 0 //换手率要大于4.5%
+      st
+    }
+    else {
+      true
+    }
+  }
+
+  /** *
+   * 比较涨跌幅度
+   *
+   * @param today
+   * @return
+   */
+  private def compChangeRatio(today: StockMaVo): Boolean = {
+    if (StringUtils.isNotBlank(today.getStockDayVo.getChangeRatio)) {
+      val st = new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) > 0 //涨幅大于3%
+      st
+    }
+    else {
+      true
+    }
+
   }
 
   private def comp(v0: StockMaVo): Boolean = {
