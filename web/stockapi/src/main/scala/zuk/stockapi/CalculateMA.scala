@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils
 import zuk.stockapi.model.{AVG_Model, MA1_Model, MA_Model}
 
 import java.io.File
+import java.math
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -133,8 +134,13 @@ object CalculateMA {
     //日均价
     val volume = stockDayVoList.map(e=>{new BigDecimal(e.getVolume)}).reduceOption((a,b)=>a.add(b)).get
     val amount = stockDayVoList.map(e=>{new BigDecimal(e.getAmount)}).reduceOption((a,b)=>a.add(b)).get
-    val avg = amount.divide(volume, 5, BigDecimal.ROUND_HALF_UP);
-    avg
+    if(volume.compareTo(math.BigDecimal.ZERO)==0 || amount.compareTo(math.BigDecimal.ZERO) == 0){
+      math.BigDecimal.ZERO
+    }
+    else {
+      val avg = amount.divide(volume, 5, BigDecimal.ROUND_HALF_UP);
+      avg
+    }
   }
 
 }
