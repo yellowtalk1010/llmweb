@@ -10,6 +10,12 @@ import scala.jdk.CollectionConverters.*
 
 class DownloadStockMinuteTest extends AnyFunSuite {
 
+  test("昨日重点关注") {
+    LoaderLocalStockData.loadToken()
+    val stocks = getAllData()
+    DownloadMinuteStock.run(stocks)
+  }
+
   test("下载1"){
     LoaderLocalStockData.loadToken()
     val stocks = LoaderLocalStockData.STOCKS.asScala.slice(0,1000).toList
@@ -39,9 +45,10 @@ class DownloadStockMinuteTest extends AnyFunSuite {
 
   test("下载5") {
     LoaderLocalStockData.loadToken()
-    val stocks = getAllData() ++ LoaderLocalStockData.STOCKS.asScala.slice(5000,LoaderLocalStockData.STOCKS.size()-1).toList
+    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(5000,LoaderLocalStockData.STOCKS.size()-1).toList
     DownloadMinuteStock.run(stocks)
   }
+
 
   def getAllData(): List[StockApiVo] = {
 
