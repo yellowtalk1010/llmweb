@@ -12,6 +12,7 @@ import java.math.BigDecimal
 class MA2_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
   var turnoverRatio = 4 //默认换手率
+  var changeRatio = 2 //默认涨幅
 
   var isOK: Boolean = false
 
@@ -57,7 +58,7 @@ class MA2_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
    */
   private def compChangeRatio(today: StockMaVo): Boolean = {
     if(StringUtils.isNotBlank(today.getStockDayVo.getChangeRatio)){
-      val st = new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) > 0 //涨幅大于3%
+      val st = new BigDecimal(today.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(changeRatio)) > 0 //涨幅大于3%
       st
     }
     else {
