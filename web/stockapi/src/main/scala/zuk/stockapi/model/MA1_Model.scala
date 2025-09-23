@@ -24,7 +24,7 @@ class MA1_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
     if(maList.size > len){
       val list = maList.slice(0, len)
       val today = list.head
-      val isIncre = CloseIncreaseUtil.comIncrea(list)
+      val isIncre = CloseIncreaseUtil.closePriceIncrea(list)
       if (comp(today)
         && isIncre
         && compTrunoverRatio(today)

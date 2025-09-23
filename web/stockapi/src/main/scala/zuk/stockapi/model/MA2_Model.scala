@@ -23,7 +23,7 @@ class MA2_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
     if(maList.size > len){
       val list = maList.slice(0, len)
       val today = list.head
-      val isIncre = CloseIncreaseUtil.comIncrea(list) //3个交易日递增
+      val isIncre = CloseIncreaseUtil.closePriceIncrea(list) //3个交易日递增
       if (comp(today) //今日MA5>MA20>MA30
         && isIncre //最近3天收盘价递增
         && compTrunoverRatio(today)

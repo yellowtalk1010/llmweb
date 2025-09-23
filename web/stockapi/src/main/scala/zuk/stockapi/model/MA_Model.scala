@@ -18,7 +18,7 @@ class MA_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(sto
     if(maList.size>3){
       val list = maList.slice(0, 3)
       val today = list.head
-      val isIncre = CloseIncreaseUtil.comIncrea(list)
+      val isIncre = CloseIncreaseUtil.closePriceIncrea(list)
       val filterList = list.filter(compMA(_))
       this.isOK = isIncre
         && (list.size == filterList.size)

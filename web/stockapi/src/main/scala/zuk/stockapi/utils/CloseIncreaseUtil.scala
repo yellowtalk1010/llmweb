@@ -8,7 +8,7 @@ object CloseIncreaseUtil {
   /**
    * 收盘价是否递增
    */
-  def comIncrea(list: List[StockMaVo]): Boolean = {
+  def closePriceIncrea(list: List[StockMaVo]): Boolean = {
     var st = true
     for (i <- 0 until list.size if st) {
       val e0 = list(i)
