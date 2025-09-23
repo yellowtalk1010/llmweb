@@ -26,7 +26,7 @@ class Download {
         }
         else {
           println(s"数据采集异常（${looptime.incrementAndGet()}次），${response}，${url}")
-          Thread.sleep(500) //等待500毫秒继续请求
+          Thread.sleep(10) //等待500毫秒继续请求
         }
       }
       catch
