@@ -6,6 +6,7 @@ import java.io.File
 import java.math
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
+import java.math.BigDecimal
 
 object CalculateMAForMinute {
 
@@ -17,6 +18,11 @@ object CalculateMAForMinute {
         val minuteStock = createNewStockDayVo(stock)
         if(minuteStock!=null){
           val sorted = CalculateMAForDay.getStockDayVos(stock)
+
+          val preDayClose = sorted.head.getClose //上一个交易日的收盘价
+          val changeRadio = (new BigDecimal(minuteStock.getClose).subtract(new BigDecimal(preDayClose))).divide(new BigDecimal(preDayClose), 5, math.BigDecimal.ROUND_UP)
+          minuteStock.setChangeRatio((changeRadio.multiply(new BigDecimal(100))).toString) //涨跌幅
+
           val malist = CalculateMAForDay.calStockMA(List(minuteStock) ++ sorted)
           (stock, malist)
         }
