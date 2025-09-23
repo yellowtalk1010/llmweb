@@ -11,6 +11,8 @@ import java.math.BigDecimal
  */
 class MA2_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
+  var turnoverRatio = 4 //默认换手率
+
   var isOK: Boolean = false
 
   override def isHit(): Boolean = this.isOK
@@ -39,7 +41,7 @@ class MA2_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
    */
   private def compTrunoverRatio(today: StockMaVo): Boolean = {
     if(StringUtils.isNotBlank(today.getStockDayVo.getTurnoverRatio)){
-      val st = new BigDecimal(today.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) > 0 //换手率要大于4.5%
+      val st = new BigDecimal(today.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(turnoverRatio)) > 0 //换手率要大于4%
       st
     }
     else {

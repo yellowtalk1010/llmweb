@@ -31,6 +31,7 @@ class StockModelForMinuteTest extends AnyFunSuite {
 
       //转m5>m20
       val ma2Model = new MA2_Model(stock, malist)
+      ma2Model.turnoverRatio = 8
       ma2Model.run()
       if (ma2Model.isHit()) {
         ma2ModelList += stock
@@ -38,6 +39,7 @@ class StockModelForMinuteTest extends AnyFunSuite {
 
       //转m5>m10>m20>m30
       val ma1Model = new MA1_Model(stock, malist)
+      ma1Model.turnoverRatio = 8
       ma1Model.run()
       if (ma1Model.isHit()) {
         ma1ModelList += stock
@@ -63,7 +65,7 @@ class StockModelForMinuteTest extends AnyFunSuite {
       println(s"${e.getApi_code}")
     })
 
-    FileUtils.writeLines(new File(s"stockapi/model_result/策略结果-${new SimpleDateFormat("yyyyMMdd").format(new Date())}.txt"), "UTF-8", lines.asJava)
+    FileUtils.writeLines(new File(s"stockapi/model_result/分钟策略结果-${new SimpleDateFormat("yyyyMMdd").format(new Date())}.txt"), "UTF-8", lines.asJava)
 
 
   }
