@@ -51,7 +51,6 @@ class StockModelForMinuteTest extends AnyFunSuite {
 
     //
     println("ma2模型策略")
-    lines += "ma2模型策略"
     ma2ModelList.foreach(e => {
       lines += e.getApi_code
       println(s"${e.getApi_code}")
@@ -59,13 +58,15 @@ class StockModelForMinuteTest extends AnyFunSuite {
 
     //
     println("ma1模型策略")
-    lines += "ma1模型策略"
     ma1ModelList.foreach(e => {
       lines += e.getApi_code
       println(s"${e.getApi_code}")
     })
 
+
     FileUtils.writeLines(new File(s"stockapi/model_result/分钟策略结果-${new SimpleDateFormat("yyyyMMdd").format(new Date())}.txt"), "UTF-8", lines.asJava)
+
+    lines.groupBy(e=>e).toList.sortBy(e=>e._2.size).reverse.map(_._1).foreach(println)
 
 
   }
