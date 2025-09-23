@@ -32,6 +32,7 @@ class StockModelForMinuteTest extends AnyFunSuite {
       //转m5>m20
       val ma2Model = new MA2_Model(stock, malist)
       ma2Model.turnoverRatio = 11
+      ma2Model.changeRatio = 5
       ma2Model.run()
       if (ma2Model.isHit()) {
         ma2ModelList += stock
@@ -40,6 +41,7 @@ class StockModelForMinuteTest extends AnyFunSuite {
       //转m5>m10>m20>m30
       val ma1Model = new MA1_Model(stock, malist)
       ma1Model.turnoverRatio = ma2Model.turnoverRatio
+      ma1Model.changeRatio = ma2Model.changeRatio
       ma1Model.run()
       if (ma1Model.isHit()) {
         ma1ModelList += stock
