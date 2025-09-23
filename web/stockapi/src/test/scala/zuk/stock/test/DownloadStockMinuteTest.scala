@@ -12,7 +12,8 @@ class DownloadStockMinuteTest extends AnyFunSuite {
 
   test("下载"){
     LoaderLocalStockData.loadToken()
-    val stocks = getAllData()
+//    val stocks = getAllData()
+    val stocks = LoaderLocalStockData.STOCKS.asScala.toList
     DownloadMinuteStock.run(stocks)
   }
 
