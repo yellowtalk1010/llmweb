@@ -16,6 +16,12 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 import scala.jdk.CollectionConverters.*
 
+
+object StockBiddingController {
+  private val JJQC_RESPONSE_MAP = new ConcurrentHashMap[String, JJQCResponse]
+}
+
+
 /** *
  * 早盘、收盘竞价接口
  */
@@ -136,9 +142,4 @@ class StockBiddingController {
     }
   }
 
-
-}
-
-object StockBiddingController {
-  private val JJQC_RESPONSE_MAP = new ConcurrentHashMap[String, JJQCResponse]
 }
