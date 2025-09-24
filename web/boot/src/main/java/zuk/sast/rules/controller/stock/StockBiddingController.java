@@ -17,6 +17,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/***
+ * 早盘、收盘竞价接口
+ */
 @Slf4j
 @RestController
 @RequestMapping("stockBidding")
