@@ -4,8 +4,9 @@ import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
 
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util
-import java.util.{ArrayList, List}
+import java.util.{ArrayList, Date, List}
 import scala.beans.BeanProperty
 
 object LoaderLocalStockData {
@@ -24,6 +25,7 @@ object LoaderLocalStockData {
 
   loadToken()
   loadAllStocks()
+  printInfo()
 
   private def loadAllStocks(): Unit = {
     try {
@@ -64,6 +66,17 @@ object LoaderLocalStockData {
       println(s"${STOCK_TOKEN}路径错误")
       System.exit(1)
     }
+  }
+
+  def printInfo(): Unit = {
+    val sdf = new SimpleDateFormat("yyyy-MM-dd")
+    val dt = sdf.format(new Date)
+    var url = "https://stockapi.com.cn/v1/base/bkjj?endDate=" + dt + "&startDate=" + dt + "&type=1&token=" + LoaderLocalStockData.TOKEN
+    System.out.println("热门板块：" + url)
+    url = "https://stockapi.com.cn/v1/base/bkCodeList?endDate=" + dt + "&startDate=" + dt + "&bkCode=880431&token=" + LoaderLocalStockData.TOKEN
+    System.out.println("热门板块个股：" + url)
+    url = "https://stockapi.com.cn/v1/base/all?token=" + LoaderLocalStockData.TOKEN
+    System.out.println("A股列表数据查询: " + url)
   }
 
 }
