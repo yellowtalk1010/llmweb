@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 @Configuration
-@MapperScan("zuk.sast.rules.controller.mapper") // 指定 MyBatis Mapper 接口所在的包
+@MapperScan({"zuk.sast.rules.controller.mapper", "zuk.sast.controller.mapper"}) // 指定 MyBatis Mapper 接口所在的包
 public class MybatisH2DatabaseConfig {
 
     public static final String DATABASE_FILE_URL = "jdbc:h2:./data/h2_database";  //文件数据库
