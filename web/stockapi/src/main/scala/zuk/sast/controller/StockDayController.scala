@@ -50,7 +50,25 @@ class StockDayController {
         .filter(e=>{
           e.getTime.equals(searchDatetime)
         })
-      dayList
+      dayList.map(e=>(stock, e))
+    }).map(e=>{
+      val stock = e._1
+      val dayInfo = e._2
+      val map = new util.HashMap[String, String]()
+      //val splits = stock.getApi_code.split(".")
+      map.put("api_code", stock.getApi_code)
+      map.put("jys", stock.getJys)
+      map.put("name", stock.getName)
+      map.put("time", dayInfo.getTime)
+      map.put("open", dayInfo.getOpen)
+      map.put("turnoverRatio", dayInfo.getTurnoverRatio)
+      map.put("amount", dayInfo.getAmount)
+      map.put("high", dayInfo.getHigh)
+      map.put("low", dayInfo.getLow)
+      map.put("changeRatio", dayInfo.getChangeRatio)
+      map.put("close", dayInfo.getClose)
+      map.put("volume", dayInfo.getCode)
+      map
     })
 
     val map = new util.HashMap[String, Object]()
