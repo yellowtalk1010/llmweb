@@ -10,44 +10,44 @@ import scala.jdk.CollectionConverters.*
 
 class DownloadStockMinuteTest extends AnyFunSuite {
 
-  test("昨日重点关注") {
-    LoaderLocalStockData.loadToken()
-    val stocks = getAllData()
-    DownloadMinuteStock.run(stocks)
-  }
+//  test("昨日重点关注") {
+//    LoaderLocalStockData.loadToken()
+//    val stocks = getAllData()
+//    DownloadMinuteStock.run(stocks)
+//  }
 
   test("下载1"){
     LoaderLocalStockData.loadToken()
-    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(0,1000).toList
+    val stocks = LoaderLocalStockData.STOCKS.asScala.toList
     DownloadMinuteStock.run(stocks)
   }
 
-  test("下载2") {
-    LoaderLocalStockData.loadToken()
-    //    val stocks = getAllData()
-    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(1000,2000).toList
-    DownloadMinuteStock.run(stocks)
-  }
-
-  test("下载3") {
-    LoaderLocalStockData.loadToken()
-    //    val stocks = getAllData()
-    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(2000,3000).toList
-    DownloadMinuteStock.run(stocks)
-  }
-
-  test("下载4") {
-    LoaderLocalStockData.loadToken()
-    //    val stocks = getAllData()
-    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(4000,5000).toList
-    DownloadMinuteStock.run(stocks)
-  }
-
-  test("下载5") {
-    LoaderLocalStockData.loadToken()
-    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(5000,LoaderLocalStockData.STOCKS.size()-1).toList
-    DownloadMinuteStock.run(stocks)
-  }
+//  test("下载2") {
+//    LoaderLocalStockData.loadToken()
+//    //    val stocks = getAllData()
+//    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(1000,2000).toList
+//    DownloadMinuteStock.run(stocks)
+//  }
+//
+//  test("下载3") {
+//    LoaderLocalStockData.loadToken()
+//    //    val stocks = getAllData()
+//    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(2000,3000).toList
+//    DownloadMinuteStock.run(stocks)
+//  }
+//
+//  test("下载4") {
+//    LoaderLocalStockData.loadToken()
+//    //    val stocks = getAllData()
+//    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(4000,5000).toList
+//    DownloadMinuteStock.run(stocks)
+//  }
+//
+//  test("下载5") {
+//    LoaderLocalStockData.loadToken()
+//    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(5000,LoaderLocalStockData.STOCKS.size()-1).toList
+//    DownloadMinuteStock.run(stocks)
+//  }
 
 
   def getAllData(): List[StockApiVo] = {
