@@ -2,7 +2,9 @@ package zuk.sast.controller
 
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
+import zuk.sast.controller.mapper.ZukStockMapper
 import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData, StockDayVo}
 
 import java.text.SimpleDateFormat
@@ -16,6 +18,9 @@ class StockDayController {
 
   private val log = LoggerFactory.getLogger(classOf[StockDayController])
 
+  @Autowired
+  private var zukStockMapper: ZukStockMapper = null
+
   /***
    * http://localhost:8080/stockDay/list?search=000001&tradeTime=2025-09-23
    * @param search
@@ -26,6 +31,12 @@ class StockDayController {
   def all(search: String, tradeTime: String): util.Map[String, Object] = {
 
     log.info(s"search: ${search}, tradeTime: ${tradeTime}")
+
+    if(this.zukStockMapper!=null){
+      println(this.zukStockMapper.getClass.getName)
+      val list = this.zukStockMapper.selectAll()
+      println()
+    }
 
     val simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
     var searchDatetime: String = simpleDateFormat.format(new Date())

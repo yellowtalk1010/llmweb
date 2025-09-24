@@ -5,7 +5,7 @@ import zuk.sast.controller.mapper.entity.{StockEntity}
 import java.util
 
 @Mapper
-trait StockMapper {
+trait ZukStockMapper {
 
   @Select(Array("SELECT * FROM stock"))
   def selectAll(): util.List[StockEntity]
