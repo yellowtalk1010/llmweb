@@ -17,7 +17,8 @@ class AllStockController {
 
   private val log = LoggerFactory.getLogger(classOf[AllStockController])
 
-  @Autowired private var stockMapper: StockMapper = _
+  @Autowired
+  private var stockMapper: StockMapper = _
 
   @GetMapping(value = Array("delete"))
   def delete(api_code: String): util.Map[String, Object] = {
