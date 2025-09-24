@@ -3,7 +3,7 @@ package zuk.sast.controller
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.mapper.ZukStockMapper
+import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.stockapi.{LoaderLocalStockData, StockApiVo}
 
@@ -17,14 +17,14 @@ class AllStockController {
 
   private val log = LoggerFactory.getLogger(classOf[AllStockController])
 
-  @Autowired private var zukStockMapper: ZukStockMapper = _
+  @Autowired private var stockMapper: StockMapper = _
 
   @GetMapping(value = Array("delete"))
   def delete(api_code: String): util.Map[String, Object] = {
     log.info("delete:" + api_code)
     val result: util.Map[String, AnyRef] = new util.HashMap[String, AnyRef]
     try {
-      this.zukStockMapper.deleteByCode(api_code)
+      this.stockMapper.deleteByCode(api_code)
       result.put("status", "ok")
       return result
     } catch {
@@ -41,7 +41,7 @@ class AllStockController {
     log.info("add:" + api_code)
     val result = new util.HashMap[String, Object]
     try {
-      val list = this.zukStockMapper.selectByCode(api_code)
+      val list = this.stockMapper.selectByCode(api_code)
       if (list != null && list.size > 0) {
         result.put("status", "已存在")
         return result
@@ -53,7 +53,7 @@ class AllStockController {
           stockEntity.code = socket.getApi_code
           stockEntity.jys = socket.getJys
           stockEntity.name = socket.getName
-          this.zukStockMapper.insert(stockEntity)
+          this.stockMapper.insert(stockEntity)
 
         })
         result.put("status", "ok")
@@ -75,7 +75,7 @@ class AllStockController {
    */
   @GetMapping(value = Array("my")) def my: util.Map[String, Object] = {
     try {
-      val stockEntities = zukStockMapper.selectAll()
+      val stockEntities = stockMapper.selectAll()
       val map = new util.HashMap[String, AnyRef]
       val sets = stockEntities.stream.map((e: StockEntity) => e.code).collect(Collectors.toSet)
       val ls = LoaderLocalStockData.STOCKS.stream.filter((stock: StockApiVo) => {
