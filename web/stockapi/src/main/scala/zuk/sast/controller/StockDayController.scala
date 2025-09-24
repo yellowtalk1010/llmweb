@@ -19,7 +19,7 @@ class StockDayController {
   private val log = LoggerFactory.getLogger(classOf[StockDayController])
 
   @Autowired
-  private var zukStockMapper: ZukStockMapper = null
+  private var zukStockMapper: ZukStockMapper = _
 
   /***
    * http://localhost:8080/stockDay/list?search=000001&tradeTime=2025-09-23
