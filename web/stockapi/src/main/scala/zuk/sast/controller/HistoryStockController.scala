@@ -11,10 +11,10 @@ import java.util.Date
 import scala.jdk.CollectionConverters.*
 
 @RestController
-@RequestMapping(value=Array("stockDay"))
-class StockDayController {
+@RequestMapping(value=Array("historyStock"))
+class HistoryStockController {
 
-  private val log = LoggerFactory.getLogger(classOf[StockDayController])
+  private val log = LoggerFactory.getLogger(classOf[HistoryStockController])
 
   /***
    * http://localhost:8080/stockDay/list?context=000001&tradeDate=2025-09-23
