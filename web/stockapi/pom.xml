@@ -41,12 +41,6 @@
             </exclusions>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>zuk.sast</groupId>-->
-<!--            <artifactId>boot</artifactId>-->
-<!--            <version>7.0.0</version>-->
-<!--        </dependency>-->
-
     </dependencies>
 
 
