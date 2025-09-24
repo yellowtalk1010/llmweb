@@ -18,16 +18,15 @@ class DownloadStockMinuteTest extends AnyFunSuite {
 
   test("下载1"){
     LoaderLocalStockData.loadToken()
-    val stocks = LoaderLocalStockData.STOCKS.asScala.toList
+    val stocks = LoaderLocalStockData.STOCKS.asScala.sortBy(_.getApi_code).toList
     DownloadMinuteStock.run(stocks)
   }
 
-//  test("下载2") {
-//    LoaderLocalStockData.loadToken()
-//    //    val stocks = getAllData()
-//    val stocks = LoaderLocalStockData.STOCKS.asScala.slice(1000,2000).toList
-//    DownloadMinuteStock.run(stocks)
-//  }
+  test("下载2") {
+    LoaderLocalStockData.loadToken()
+    val stocks = LoaderLocalStockData.STOCKS.asScala.sortBy(_.getApi_code).reverse.toList
+    DownloadMinuteStock.run(stocks)
+  }
 //
 //  test("下载3") {
 //    LoaderLocalStockData.loadToken()
