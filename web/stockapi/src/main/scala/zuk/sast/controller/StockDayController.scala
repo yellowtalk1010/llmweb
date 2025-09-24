@@ -17,24 +17,24 @@ class StockDayController {
   private val log = LoggerFactory.getLogger(classOf[StockDayController])
 
   /***
-   * http://localhost:8080/stockDay/list?search=000001&tradeTime=2025-09-23
-   * @param search
-   * @param tradeTime
+   * http://localhost:8080/stockDay/list?context=000001&tradeDate=2025-09-23
+   * @param context
+   * @param tradeDate
    * @return
    */
   @GetMapping(value=Array("list"))
-  def all(search: String, tradeTime: String): util.Map[String, Object] = {
+  def all(context: String, tradeDate: String): util.Map[String, Object] = {
 
-    log.info(s"search: ${search}, tradeTime: ${tradeTime}")
+    log.info(s"context: ${context}, tradeTime: ${tradeDate}")
 
     val simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
     var searchDatetime: String = simpleDateFormat.format(new Date())
-    if(StringUtils.isNotEmpty(tradeTime)){
-      searchDatetime = tradeTime
+    if(StringUtils.isNotEmpty(tradeDate)){
+      searchDatetime = tradeDate
     }
     val filterList = LoaderLocalStockData.STOCKS.asScala.filter(stock=>{
-      if(StringUtils.isNotEmpty(search)) {
-        val st = stock.getName.contains(search) || stock.getApi_code.contains(search)
+      if(StringUtils.isNotEmpty(context)) {
+        val st = stock.getName.contains(context) || stock.getApi_code.contains(context)
         st
       }
       else {
