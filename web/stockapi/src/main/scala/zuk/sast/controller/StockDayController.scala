@@ -42,6 +42,7 @@ class StockDayController {
       }
     }).toList
 
+    //最多返回10条数据
     val searchStockList = if(filterList.size > 10) filterList.take(10) else filterList
 
     val stockDayVoList = searchStockList.flatMap(stock=>{
