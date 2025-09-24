@@ -22,6 +22,7 @@ object LoaderLocalStockData {
 
   val STOCKS: util.List[StockApiVo] = new util.ArrayList[StockApiVo]
 
+  loadToken()
   loadAllStocks()
 
   private def loadAllStocks(): Unit = {
