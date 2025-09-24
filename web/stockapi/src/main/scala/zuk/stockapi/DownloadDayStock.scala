@@ -1,22 +1,15 @@
 package zuk.stockapi
 
 
-import com.alibaba.fastjson2.JSONArray
-import com.alibaba.fastjson2.JSONObject
-import com.alibaba.fastjson2.JSONWriter
-
+import com.alibaba.fastjson2.{JSONArray, JSONObject, JSONWriter}
 import org.apache.commons.io.FileUtils
-
-import zuk.stockapi.utils.HttpClientUtil
+import org.apache.commons.lang3.StringUtils
 
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
-
 import java.util.concurrent.atomic.AtomicInteger
 import scala.jdk.CollectionConverters.*
-
-import org.apache.commons.lang3.StringUtils
 
 /***
  * 获取当日个股收盘后的信息

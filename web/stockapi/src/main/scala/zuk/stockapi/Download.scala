@@ -1,7 +1,7 @@
 package zuk.stockapi
 
 import com.alibaba.fastjson2.JSONObject
-import zuk.stockapi.utils.HttpClientUtil
+import zuk.sast.controller.utils.HttpClientUtil
 
 import java.util.concurrent.atomic.AtomicInteger
 
