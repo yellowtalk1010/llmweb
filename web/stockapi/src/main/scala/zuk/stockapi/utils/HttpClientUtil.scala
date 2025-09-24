@@ -1,4 +1,4 @@
-package zuk.sast.controller.utils
+package zuk.stockapi.utils
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
