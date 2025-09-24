@@ -3,7 +3,7 @@ package zuk.sast.controller
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData}
+import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData, StockDayVo}
 
 import java.text.SimpleDateFormat
 import java.util
@@ -16,8 +16,14 @@ class StockDayController {
 
   private val log = LoggerFactory.getLogger(classOf[StockDayController])
 
+  /***
+   * http://localhost:8080/stockDay/list?search=000001&tradeTime=2025-09-23
+   * @param search
+   * @param tradeTime
+   * @return
+   */
   @GetMapping(value=Array("list"))
-  def all(search: String, tradeTime: String): util.Map[String, String] = {
+  def all(search: String, tradeTime: String): util.Map[String, Object] = {
 
     log.info(s"search: ${search}, tradeTime: ${tradeTime}")
 
@@ -38,7 +44,7 @@ class StockDayController {
 
     val searchStockList = if(filterList.size > 10) filterList.take(10) else filterList
 
-    val responseData = searchStockList.flatMap(stock=>{
+    val stockDayVoList = searchStockList.flatMap(stock=>{
       val dayList = CalculateMAForDay.getStockDayVos(stock)
         .filter(e=>{
           e.getTime.equals(searchDatetime)
@@ -46,9 +52,10 @@ class StockDayController {
       dayList
     })
 
-    val map = new util.HashMap[String, String]()
-    map.put("code", s"success -> ${search}")
+    val map = new util.HashMap[String, Object]()
+    map.put("code", s"success")
     map.put("time", s"${System.currentTimeMillis()}")
+    map.put("data", stockDayVoList.asJava)
     map
   }
 
