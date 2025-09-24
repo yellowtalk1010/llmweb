@@ -40,7 +40,9 @@ class StockDayController {
       else {
         true
       }
-    }).toList
+    }).groupBy(_.getApi_code)
+      .map(_._2.head)
+      .toList
 
     //最多返回10条数据
     val searchStockList = if(filterList.size > 10) filterList.take(10) else filterList
