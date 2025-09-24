@@ -9,6 +9,8 @@ import java.util
 /***
  *
  * 使用scala开发controller接口
+ *
+ * 访问： http://localhost:8080/testStock/list
  */
 @RestController
 @RequestMapping(value=Array("hlStock"))
