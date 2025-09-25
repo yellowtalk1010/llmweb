@@ -9,6 +9,8 @@ import java.util
 import java.util.{ArrayList, Date, List}
 import scala.beans.BeanProperty
 
+import scala.jdk.CollectionConverters.*
+
 object LoaderLocalStockData {
 
   val TOKEN = "36c92182f783f08005017f78e7a264608a82952f8b91de2a"
@@ -43,7 +45,10 @@ object LoaderLocalStockData {
       val jsonArray = jsonObject.getJSONArray("data")
       jsonArray.forEach(item => {
         val stockApiVO = JSONObject.parseObject(JSONObject.toJSONString(item), classOf[StockApiVo])
-        STOCKS.add(stockApiVO)
+        if(!STOCKS.asScala.map(_.getApi_code).contains(stockApiVO.getApi_code)){
+          STOCKS.add(stockApiVO)
+        }
+
       })
 
       println("stock总数:" + STOCKS.size)
