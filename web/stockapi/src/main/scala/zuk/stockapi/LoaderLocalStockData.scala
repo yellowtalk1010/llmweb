@@ -27,7 +27,7 @@ object LoaderLocalStockData {
   loadAllStocks()
   printInfo()
 
-  private def loadAllStocks(): Unit = {
+  private def loadAllStocks(): Unit = synchronized {
     try {
       val file = new File(STOCK_ALL)
       if(file!=null && file.exists() && file.isFile){
