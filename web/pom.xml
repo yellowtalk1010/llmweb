@@ -76,6 +76,13 @@
             <version>3.17.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.mhoffrog.attached</groupId>
+            <artifactId>org.eclipse.cdt.core</artifactId>
+            <version>5.11.0</version>
+            <!--CDT_8_8_0-->
+        </dependency>
+
     </dependencies>
 
 
