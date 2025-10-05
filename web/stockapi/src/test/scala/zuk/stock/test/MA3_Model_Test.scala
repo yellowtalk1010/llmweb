@@ -1,7 +1,7 @@
 package zuk.stock.test
 
 import org.scalatest.funsuite.AnyFunSuite
-import zuk.stockapi.model.MA2_Model
+import zuk.stockapi.model.{MA2_Model, MA3_Model}
 import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData}
 
 import scala.jdk.CollectionConverters.*
@@ -21,9 +21,9 @@ class MA3_Model_Test extends AnyFunSuite {
     tpList.filter(_._2.size > 0).foreach(tp => {
       val stock = tp._1
       val malist = tp._2
-      val model = new MA2_Model(stock, malist)
+      val model = new MA3_Model(stock, malist)
       if(model.isHit()){
-        println(stock.getApi_code)
+        println("推荐" + stock.getApi_code)
       }
     })
 
