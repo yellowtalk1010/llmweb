@@ -8,7 +8,7 @@ import java.math.BigDecimal
  */
 class MA3_Model (stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
-  var isOK: Boolean = false
+  private var isOK: Boolean = false
 
   override def isHit(): Boolean = isOK
 
