@@ -6,7 +6,7 @@ import java.math
 import java.math.BigDecimal
 
 /***
- * ma5 上生 ma10
+ * 第一天 ma5 上生 ma10
  */
 class MA3_Model (stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
