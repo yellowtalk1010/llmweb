@@ -18,15 +18,16 @@ class MA3_Model_Test extends AnyFunSuite {
 
     val tpList = CalculateMAForDay.run(codes)
 
-    tpList.filter(_._2.size > 0).foreach(tp => {
+    val socketList = tpList.filter(_._2.size > 0).filter(tp => {
       val stock = tp._1
       val malist = tp._2
       val model = new MA3_Model(stock, malist)
       model.run()
-      if(model.isHit()){
-        println(stock.getApi_code)
-      }
+      model.isHit()
     })
+
+    println(socketList.size)
+    socketList.map(_._1.getApi_code).foreach(println)
 
   }
 

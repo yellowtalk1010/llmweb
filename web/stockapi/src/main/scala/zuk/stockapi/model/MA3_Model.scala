@@ -1,6 +1,8 @@
 package zuk.stockapi.model
 
 import zuk.stockapi.{StockApiVo, StockMaVo}
+
+import java.math
 import java.math.BigDecimal
 
 /***
@@ -15,14 +17,18 @@ class MA3_Model (stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(s
   override def run(): Unit = {
     if(maList.size>=3){
       val list = maList.take(3)
+      val head = list.head
       if (
         (new BigDecimal(list(0).getMa5).compareTo(new BigDecimal(list(0).getMa10)) >= 0
           && new BigDecimal(list(1).getMa5).compareTo(new BigDecimal(list(1).getMa10)) <= 0
-          && new BigDecimal(list(2).getMa5).compareTo(new BigDecimal(list(2).getMa10)) <= 0)
+          && new BigDecimal(list(2).getMa5).compareTo(new BigDecimal(list(2).getMa10)) <= 0
+          && new BigDecimal(head.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >= 0
+          && new BigDecimal(head.getStockDayVo.getChangeRatio).compareTo(math.BigDecimal.ZERO) > 0
+          )
 
-          || (new BigDecimal(list(0).getMa5).compareTo(new BigDecimal(list(0).getMa10)) >= 0
-          && new BigDecimal(list(1).getMa5).compareTo(new BigDecimal(list(1).getMa10)) >= 0
-          && new BigDecimal(list(2).getMa5).compareTo(new BigDecimal(list(2).getMa10)) <= 0)
+//          || (new BigDecimal(list(0).getMa5).compareTo(new BigDecimal(list(0).getMa10)) >= 0
+//          && new BigDecimal(list(1).getMa5).compareTo(new BigDecimal(list(1).getMa10)) >= 0
+//          && new BigDecimal(list(2).getMa5).compareTo(new BigDecimal(list(2).getMa10)) <= 0)
 
       ) {
         isOK = true
