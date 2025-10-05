@@ -22,6 +22,7 @@ class MA3_Model_Test extends AnyFunSuite {
       val stock = tp._1
       val malist = tp._2
       val model = new MA3_Model(stock, malist)
+      model.run()
       if(model.isHit()){
         println("推荐" + stock.getApi_code)
       }
