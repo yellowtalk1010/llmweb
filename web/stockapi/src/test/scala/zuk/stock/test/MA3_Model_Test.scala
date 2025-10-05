@@ -12,8 +12,8 @@ class MA3_Model_Test extends AnyFunSuite {
 
     LoaderLocalStockData.loadToken()
     val codes = LoaderLocalStockData.STOCKS.asScala.filter(e => {
-      e.getApi_code.equals("600641")
-        || true
+      e.getApi_code.equals("688379")
+//        || true
     }).toList
 
     val tpList = CalculateMAForDay.run(codes)
