@@ -23,7 +23,9 @@ class MA3_Model (stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(s
           && new BigDecimal(list(1).getMa5).compareTo(new BigDecimal(list(1).getMa10)) <= 0
           && new BigDecimal(list(2).getMa5).compareTo(new BigDecimal(list(2).getMa10)) <= 0
           && new BigDecimal(head.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(3)) >= 0 //换手率
+          && new BigDecimal(head.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(9)) <= 0 //换手率
           && new BigDecimal(head.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(3)) >= 0 //涨幅度
+          && new BigDecimal(head.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(9)) <= 0 //涨幅度
       ) {
         isOK = true
       }
