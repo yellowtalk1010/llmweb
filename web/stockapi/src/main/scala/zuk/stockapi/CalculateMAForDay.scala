@@ -99,6 +99,7 @@ object CalculateMAForDay {
         println(path + "，不存在")
       }
       else {
+        println(path + "，存在")
         try {
           //读取文件中的数据
           val lines = FileUtils.readLines(file, "UTF-8")

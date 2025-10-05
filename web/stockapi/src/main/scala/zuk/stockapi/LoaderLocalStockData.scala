@@ -15,7 +15,7 @@ object LoaderLocalStockData {
 
   val TOKEN = "36c92182f783f08005017f78e7a264608a82952f8b91de2a"
 
-  val STOCK_DATA_DIR_PATH = "D:\\development\\github\\llmweb1\\web\\stocks"
+  val STOCK_DATA_DIR_PATH = "d:\\development\\github\\llmweb1\\web\\stocks"
 //  val STOCK_DATA_DIR_PATH = "D:\\AAAAAAAAAAAAAAAAAAAA\\github\\llmweb1\\web\\stocks"
   val STOCK_TOKEN = STOCK_DATA_DIR_PATH + File.separator + "token"
   val STOCK_ALL = STOCK_DATA_DIR_PATH + File.separator + "all_stock.json"
