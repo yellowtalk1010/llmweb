@@ -21,10 +21,13 @@ object DownloadDayStock extends Download {
     while (stockList.size != num.get()) {
       val sdf = new SimpleDateFormat("yyyyMM")
       val ym = sdf.format(new Date)
+//      val ym = "202509"
       val sdf1 = new SimpleDateFormat("yyyy-MM")
       val startTime = sdf1.format(new Date) + "-01"
+//      val startTime = "2025-09-01"
       val sdf2 = new SimpleDateFormat("yyyy-MM-dd")
       val endTime = sdf2.format(new Date)
+//      val endTime = "2025-09-30"
       System.out.println(ym + "\t" + startTime + "\t" + endTime)
       stockList.foreach(stockApiVO => {
 
