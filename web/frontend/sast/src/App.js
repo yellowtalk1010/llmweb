@@ -16,7 +16,6 @@ import Flow from "./flows/Flow";
 import Stock from "./pages/stock/Stock";
 import AllStock from "./pages/stock/AllStock"
 import MyStock from "./pages/stock/MyStock"
-import BiddingStock from "./pages/stock/BiddingStock";
 import HistoryStock from "./pages/stock/HistoryStock";
 
 function App() {
@@ -42,7 +41,6 @@ function App() {
           <Route path="/pages/Stock" element={<Stock />} />
           <Route path="/pages/AllStock" element={<AllStock />} />
           <Route path="/pages/MyStock" element={<MyStock />} />
-          <Route path="/pages/BiddingStock" element={<BiddingStock/>} />
           <Route path="/pages/HistoryStock" element={<HistoryStock/>} />
 
         </Routes>

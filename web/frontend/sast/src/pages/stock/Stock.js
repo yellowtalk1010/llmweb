@@ -7,8 +7,7 @@ function Stock() {
     { id: "2", title: "招商", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
     { id: "3", title: "全部", url: "AllStock" },
     { id: "4", title: "我的", url: "MyStock" },
-    { id: "5", title: "竞价", url: "BiddingStock" },
-    { id: "6", title: "历史", url: "HistoryStock" },
+    { id: "5", title: "历史", url: "HistoryStock" },
   ];
 
   const leftPanelRef = useRef(null);
