@@ -28,7 +28,7 @@ class MA5_Model_Test extends AnyFunSuite {
     })
 
     println(socketList.size)
-    socketList.map(_._1.getApi_code).foreach(println)
+    socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").foreach(println)
 
   }
 
@@ -53,8 +53,8 @@ class MA5_Model_Test extends AnyFunSuite {
         && new BigDecimal(day0.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >=0
         && new BigDecimal(day1.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >=0 //huan shou
 //
-//        && new BigDecimal(day0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(3)) >=0
-//        && new BigDecimal(day1.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(3)) >=0   //zhang fu
+        && new BigDecimal(day0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(1)) >=0
+        && new BigDecimal(day1.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(1)) >=0   //zhang fu
       ){
 
         if(yuce(maList)){
