@@ -48,17 +48,19 @@ class MA5_Model_Test extends AnyFunSuite {
 
         && new BigDecimal(day0.getMa10).compareTo(new BigDecimal(day0.getMa5)) > 0
         && new BigDecimal(day1.getMa10).compareTo(new BigDecimal(day1.getMa5)) > 0
-        && new BigDecimal(day2.getMa10).compareTo(new BigDecimal(day2.getMa5)) > 0 //
+//        && new BigDecimal(day2.getMa10).compareTo(new BigDecimal(day2.getMa5)) > 0 //
 
         && new BigDecimal(day0.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >=0
         && new BigDecimal(day1.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >=0 //huan shou
-
-        && new BigDecimal(day0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(3)) >=0
-        && new BigDecimal(day1.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(3)) >=0   //zhang fu
-
-        && yuce(maList)
+//
+//        && new BigDecimal(day0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(3)) >=0
+//        && new BigDecimal(day1.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(3)) >=0   //zhang fu
       ){
-        return true
+
+        if(yuce(maList)){
+          return true
+        }
+
       }
     }
 
@@ -74,7 +76,7 @@ class MA5_Model_Test extends AnyFunSuite {
   private def yuce(maList: List[StockMaVo]): Boolean = {
     val lastDay = maList.head
     val close = lastDay.getStockDayVo.getClose
-    val ycj = new BigDecimal(close).multiply(new BigDecimal("1.3"))
+    val ycj = (new BigDecimal(close).multiply(new BigDecimal("0.03"))).add(new BigDecimal(close))
 
     val m5list = List(ycj) ++ maList.take(4).map(e=>{
       new BigDecimal(e.getStockDayVo.getClose)
@@ -89,7 +91,7 @@ class MA5_Model_Test extends AnyFunSuite {
 
     val new10 = m10list.reduceOption[BigDecimal]((a,b)=>{
       a.add(b)
-    }).get.divide(new BigDecimal(5), 5, math.BigDecimal.ROUND_HALF_DOWN)
+    }).get.divide(new BigDecimal(10), 5, math.BigDecimal.ROUND_HALF_DOWN)
 
     val st = new5.compareTo(new10) > 0
 
