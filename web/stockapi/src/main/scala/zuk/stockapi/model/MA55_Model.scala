@@ -8,7 +8,8 @@ import java.math.BigDecimal
 /***
  * 预测
  */
-class MA5_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
+//class MA5_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
+class MA55_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(stockMaVo) {
 
   private var isOK: Boolean = false
 
