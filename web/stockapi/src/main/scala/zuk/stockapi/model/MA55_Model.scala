@@ -33,8 +33,8 @@ class MA55_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(s
         && new BigDecimal(day0.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >= 0
         && new BigDecimal(day1.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >= 0 //huan shou
         //
-        && new BigDecimal(day0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(1)) >= 0
-        && new BigDecimal(day1.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(1)) >= 0 //zhang fu
+        && new BigDecimal(day0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) >= 0
+        && new BigDecimal(day1.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) >= 0 //zhang fu
       ) {
 
         if (yuce(maList)) {
@@ -56,7 +56,7 @@ class MA55_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(s
   private def yuce(maList: List[StockMaVo]): Boolean = {
     val lastDay = maList.head
     val close = lastDay.getStockDayVo.getClose
-    val ycj = (new BigDecimal(close).multiply(new BigDecimal("0.03"))).add(new BigDecimal(close))
+    val ycj = (new BigDecimal(close).multiply(new BigDecimal("0.02"))).add(new BigDecimal(close))
 
     val m5list = List(ycj) ++ maList.take(4).map(e=>{
       new BigDecimal(e.getStockDayVo.getClose)
