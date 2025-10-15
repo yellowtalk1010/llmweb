@@ -30,8 +30,8 @@ class MA55_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(s
         && new BigDecimal(day1.getMa10).compareTo(new BigDecimal(day1.getMa5)) > 0
         //        && new BigDecimal(day2.getMa10).compareTo(new BigDecimal(day2.getMa5)) > 0 //
 
-        && new BigDecimal(day0.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >= 0
-        && new BigDecimal(day1.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >= 0 //huan shou
+        && new BigDecimal(day0.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(2)) >= 0
+        && new BigDecimal(day1.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(2)) >= 0 //huan shou
         //
         && new BigDecimal(day0.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) >= 0
         && new BigDecimal(day1.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(2)) >= 0 //zhang fu
