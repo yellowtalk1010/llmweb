@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class Download {
 
-  def download(url: String, maxTime: Int = 5): String = {
+  def download(url: String, maxTime: Int = 10): String = {
     var response: String = null
     var isBreak = false
     val looptime = new AtomicInteger(0) //循环次数
@@ -31,7 +31,8 @@ class Download {
       }
       catch
         case exception: Exception =>
-          exception.printStackTrace()
+          //exception.printStackTrace()
+          System.out.println("失败:" + exception.getMessage)
           looptime.incrementAndGet()
     }
     null
