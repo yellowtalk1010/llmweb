@@ -1,18 +1,20 @@
 package zuk.test.cbapi
 
 import com.alibaba.fastjson2.JSONObject
+import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
-import zuk.sast.cbapi.dto.ResultModel
+import zuk.sast.cbapi.dto.{FunctionModel, ResultModel}
 
+import scala.jdk.CollectionConverters.*
 import java.io.File
 
 class CompareTest extends AnyFunSuite {
 
   test("compareTet") {
-    println("a")
-    val file1 = new File("")
-    val file2 = new File("")
+
+    val file1 = new File("D:\\development\\github\\webb\\web\\json_result\\8114-cb-20251018-104434.json")
+    val file2 = new File("D:\\development\\github\\webb\\web\\json_result\\8114-zuk-20251018-104100.json")
 
     if(file1.exists() && file2.exists() && file1.isFile && file2.isFile){
 
@@ -22,11 +24,36 @@ class CompareTest extends AnyFunSuite {
       val file2Content = FileUtils.readFileToString(file2, "UTF-8")
       val resultModel2 = JSONObject.parseObject(file2Content, classOf[ResultModel])
 
+
+
+      compareFunctionMode(resultModel1.getFunctionModelList.asScala.toList, resultModel2.getFunctionModelList.asScala.toList)
+
     }
     else {
       println("文件错误")
     }
 
+  }
+
+  private def compareFunctionMode(list1: List[FunctionModel], list2: List[FunctionModel]): Unit = {
+    val desc = "compareFunctionMode"
+    list1.foreach(fm1=>{
+      val str1 = JSONObject.toJSONString(fm1, Feature.PrettyFormat)
+      val ls = list2.filter(fm2=>{
+        fm1.getFilePath.equals(fm2.getFilePath)
+        && fm1.getLine.asScala.toList.sorted.mkString(";").equals(fm2.getLine.asScala.toList.sorted.mkString(";"))
+        && fm1.getFunctionName.equals(fm2.getFunctionName)
+      })
+      if(ls.size==0){
+        println(s"${desc}：未找到匹配，${str1}")
+      }
+      else if(ls.size==1){
+        //OK
+      }
+      else {
+        println(s"${desc}：包含多个匹配，${str1}")
+      }
+    })
   }
 
 }
