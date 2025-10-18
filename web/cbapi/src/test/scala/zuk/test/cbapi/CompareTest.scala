@@ -11,7 +11,7 @@ import java.io.File
 
 class CompareTest extends AnyFunSuite {
 
-  test("compareTet") {
+  test("数据比较") {
 
     val file1 = new File("D:\\development\\github\\webb\\web\\json_result\\8114-cb-20251018-104434.json")
     val file2 = new File("D:\\development\\github\\webb\\web\\json_result\\8114-zuk-20251018-104100.json")
