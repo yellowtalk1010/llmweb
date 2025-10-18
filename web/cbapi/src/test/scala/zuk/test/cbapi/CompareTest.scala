@@ -24,9 +24,11 @@ class CompareTest extends AnyFunSuite {
       val file2Content = FileUtils.readFileToString(file2, "UTF-8")
       val resultModel2 = JSONObject.parseObject(file2Content, classOf[ResultModel])
 
+      println(s"${file1.getName} 比较 ${file2.getName}")
+      compare(resultModel1, resultModel2)
 
-
-      compareFunctionMode(resultModel1.getFunctionModelList.asScala.toList, resultModel2.getFunctionModelList.asScala.toList)
+      println(s"${file2.getName} 比较 ${file1.getName}")
+      compare(resultModel2, resultModel1)
 
     }
     else {
@@ -35,11 +37,16 @@ class CompareTest extends AnyFunSuite {
 
   }
 
+  private def compare(resultModel1: ResultModel, resultModel2: ResultModel): Unit = {
+    compareDefectResultModel(resultModel1.getDefectResultModelList.asScala.toList, resultModel2.getDefectResultModelList.asScala.toList)
+    compareFunctionMode(resultModel1.getFunctionModelList.asScala.toList, resultModel2.getFunctionModelList.asScala.toList)
+  }
+
   private def compareDefectResultModel(list1: List[DefectResultModel], list2: List[DefectResultModel]): Unit = {
     val desc = "compareDefectResultModel"
     list1.foreach(drm1=>{
       val str1 = JSONObject.toJSONString(drm1, Feature.PrettyFormat)
-      list2.filter(drm2=>{
+      val ls = list2.filter(drm2=>{
         drm1.getLine.equals(drm2.getLine)
         && drm1.getDescript.equals(drm2.getDescript)
         && drm1.getCategoryId.equals(drm2.getCategoryId)
@@ -52,7 +59,19 @@ class CompareTest extends AnyFunSuite {
         && drm1.getFilepath.equals(drm2.getFilepath)
         && drm1.getLanguage.equals(drm2.getLanguage)
         && drm1.getMd5.equals(drm2.getMd5)
+        && drm1.getChildren.size()==drm2.getChildren.size()
+        && drm1.getChildren.asScala.flatMap(e=>List(e.getFilePath,e.getLine+"",e.getDescript)).mkString(";")
+          .equals(drm2.getChildren.asScala.flatMap(e=>List(e.getFilePath, e.getLine+"", e.getDescript)).mkString(";"))
       })
+      if(ls.size==0){
+        println(s"${desc}：未找到匹配，${str1}")
+      }
+      else if(ls.size==1){
+        //OK
+      }
+      else {
+        println(s"${desc}：包含多个匹配，${str1}")
+      }
     })
   }
 

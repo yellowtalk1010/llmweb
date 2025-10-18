@@ -1,6 +1,7 @@
 package zuk.sast.cbapi.dto;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -154,7 +155,7 @@ public class DefectResultModel {
     }
 
     public List<DefectResultTrackModel> getChildren() {
-        return this.children;
+        return this.children==null?new ArrayList<>() : this.children;
     }
 
     public void setChildren(List<DefectResultTrackModel> children) {
