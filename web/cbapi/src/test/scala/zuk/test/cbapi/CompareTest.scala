@@ -13,8 +13,8 @@ class CompareTest extends AnyFunSuite {
 
   test("数据比较") {
 
-    val file1 = new File("D:\\development\\github\\webb\\web\\json_result\\8114-cb-20251018-104434.json")
-    val file2 = new File("D:\\development\\github\\webb\\web\\json_result\\8114-zuk-20251018-104100.json")
+    val file1 = new File("D:\\development\\github\\webb\\web\\json_result\\t-cwe-cb-20251018-115131.json")
+    val file2 = new File("D:\\development\\github\\webb\\web\\json_result\\t-cwe-zuk-20251018-132336.json")
 
     if(file1.exists() && file2.exists() && file1.isFile && file2.isFile){
 
@@ -24,10 +24,10 @@ class CompareTest extends AnyFunSuite {
       val file2Content = FileUtils.readFileToString(file2, "UTF-8")
       val resultModel2 = JSONObject.parseObject(file2Content, classOf[ResultModel])
 
-      println(s"${file1.getName} 比较 ${file2.getName}")
+      println(s">>>>>>>>>>>>>>>>>>>>>>${file1.getName} 比较 ${file2.getName}>>>>>>>>>>>>>>>>>>>>>>>>>")
       compare(resultModel1, resultModel2)
 
-      println(s"${file2.getName} 比较 ${file1.getName}")
+      println(s">>>>>>>>>>>>>>>>>>>>>>${file2.getName} 比较 ${file1.getName}>>>>>>>>>>>>>>>>>>>>>>>>>")
       compare(resultModel2, resultModel1)
 
     }
