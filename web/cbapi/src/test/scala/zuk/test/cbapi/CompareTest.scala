@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
-import zuk.sast.cbapi.dto.{FunctionModel, ResultModel}
+import zuk.sast.cbapi.dto.{DefectResultModel, FunctionModel, ResultModel}
 
 import scala.jdk.CollectionConverters.*
 import java.io.File
@@ -33,6 +33,27 @@ class CompareTest extends AnyFunSuite {
       println("文件错误")
     }
 
+  }
+
+  private def compareDefectResultModel(list1: List[DefectResultModel], list2: List[DefectResultModel]): Unit = {
+    val desc = "compareDefectResultModel"
+    list1.foreach(drm1=>{
+      val str1 = JSONObject.toJSONString(drm1, Feature.PrettyFormat)
+      list2.filter(drm2=>{
+        drm1.getLine.equals(drm2.getLine)
+        && drm1.getDescript.equals(drm2.getDescript)
+        && drm1.getCategoryId.equals(drm2.getCategoryId)
+        && drm1.getCategoryName.equals(drm2.getCategoryName)
+        && drm1.getRuleName.equals(drm2.getRuleName)
+        && drm1.getRuleId.equals(drm2.getRuleId)
+        && drm1.getRuleCatagory.equals(drm2.getRuleCatagory)
+        && drm1.getRuleTags.asScala.toList.sorted.mkString(";").equals(drm2.getRuleTags.asScala.toList.sorted.mkString(";"))
+        && drm1.getLevel.equals(drm2.getLevel)
+        && drm1.getFilepath.equals(drm2.getFilepath)
+        && drm1.getLanguage.equals(drm2.getLanguage)
+        && drm1.getMd5.equals(drm2.getMd5)
+      })
+    })
   }
 
   private def compareFunctionMode(list1: List[FunctionModel], list2: List[FunctionModel]): Unit = {
