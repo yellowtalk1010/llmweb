@@ -8,8 +8,12 @@ import zuk.sast.cbapi.dto.{DefectResultModel, FunctionModel, ResultModel}
 
 import scala.jdk.CollectionConverters.*
 import java.io.File
+import scala.collection.mutable.ListBuffer
 
 class CompareTest extends AnyFunSuite {
+
+  private val files = ListBuffer[String]()
+  private val categoryIds = ListBuffer[String]()
 
   test("数据比较") {
 
@@ -30,6 +34,9 @@ class CompareTest extends AnyFunSuite {
       println(s">>>>>>>>>>>>>>>>>>>>>>${file2.getName} 比较 ${file1.getName}>>>>>>>>>>>>>>>>>>>>>>>>>")
       compare(resultModel2, resultModel1)
 
+      println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+      files.toSet.foreach(println)
+      categoryIds.toSet.foreach(println)
     }
     else {
       println("文件错误")
@@ -39,7 +46,7 @@ class CompareTest extends AnyFunSuite {
 
   private def compare(resultModel1: ResultModel, resultModel2: ResultModel): Unit = {
     compareDefectResultModel(resultModel1.getDefectResultModelList.asScala.toList, resultModel2.getDefectResultModelList.asScala.toList)
-    compareFunctionMode(resultModel1.getFunctionModelList.asScala.toList, resultModel2.getFunctionModelList.asScala.toList)
+//    compareFunctionMode(resultModel1.getFunctionModelList.asScala.toList, resultModel2.getFunctionModelList.asScala.toList)
   }
 
   private def compareDefectResultModel(list1: List[DefectResultModel], list2: List[DefectResultModel]): Unit = {
@@ -65,12 +72,16 @@ class CompareTest extends AnyFunSuite {
       })
       if(ls.size==0){
         println(s"${desc}：未找到匹配，${str1}")
+        files += drm1.getFilepath
+        categoryIds += drm1.getCategoryId
       }
       else if(ls.size==1){
         //OK
       }
       else {
         println(s"${desc}：包含多个匹配，${str1}")
+        files += drm1.getFilepath
+        categoryIds += drm1.getCategoryId
       }
     })
   }
@@ -86,12 +97,14 @@ class CompareTest extends AnyFunSuite {
       })
       if(ls.size==0){
         println(s"${desc}：未找到匹配，${str1}")
+        files += fm1.getFilePath
       }
       else if(ls.size==1){
         //OK
       }
       else {
         println(s"${desc}：包含多个匹配，${str1}")
+        files += fm1.getFilePath
       }
     })
   }
