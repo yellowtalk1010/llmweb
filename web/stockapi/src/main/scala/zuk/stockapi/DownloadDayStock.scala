@@ -30,12 +30,22 @@ object DownloadDayStock extends Download {
 //      val endTime = "2025-09-30"
       System.out.println(ym + "\t" + startTime + "\t" + endTime)
       stockList
-//        .filter(stockApiVO=>{
-//          val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
-//          println(s"${stockApiVO.getApi_code}，已下载完成")
-//          val st = FileUtils.readLines(new File(path), "UTF-8").size()<5
-//          st
-//        })
+        .filter(stockApiVO=>{
+          val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
+          println(s"${stockApiVO.getApi_code}，已下载完成")
+          val file  = new File(path)
+          if(file.exists()){
+            val st = FileUtils.readLines(new File(path), "UTF-8").size() < 8
+            if(!st){
+              num.incrementAndGet
+            }
+            st
+          }
+          else {
+            true
+          }
+
+        })
         .foreach(stockApiVO => {
           try {
             val url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
@@ -66,7 +76,12 @@ object DownloadDayStock extends Download {
               }).filter(l => StringUtils.isNotEmpty(l)).toList
 
               val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
-              FileUtils.writeLines(new File(path), lines.asJava)
+              val file = new File(path)
+              if(!file.exists()){
+                file.getParentFile.mkdirs()
+                file.createNewFile()
+              }
+              FileUtils.writeLines(file, lines.asJava)
               println(stockApiVO.getApi_code + "，行数：" + lines.size + "，" + "成功，" + num.get + "/" + LoaderLocalStockData.STOCKS.size + "， " + startTime + "至" + endTime)
               if (lines.size == 0) {
                 println(s"${stockApiVO.getApi_code}，${stockApiVO.getName}，下载数据为空。（可能停牌很久）")
