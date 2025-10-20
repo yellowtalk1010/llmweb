@@ -30,22 +30,22 @@ object DownloadDayStock extends Download {
 //      val endTime = "2025-09-30"
       System.out.println(ym + "\t" + startTime + "\t" + endTime)
       stockList
-        .filter(stockApiVO=>{
-          val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
-          println(s"${stockApiVO.getApi_code}，已下载完成")
-          val file  = new File(path)
-          if(file.exists()){
-            val st = FileUtils.readLines(new File(path), "UTF-8").size() < 8
-            if(!st){
-              num.incrementAndGet
-            }
-            st
-          }
-          else {
-            true
-          }
-
-        })
+//        .filter(stockApiVO=>{
+//          val path = LoaderLocalStockData.STOCK_DAY + File.separator + stockApiVO.getApi_code + File.separator + ym + ".jsonl"
+//          println(s"${stockApiVO.getApi_code}，已下载完成")
+//          val file  = new File(path)
+//          if(file.exists()){
+//            val st = FileUtils.readLines(new File(path), "UTF-8").size() < 8
+//            if(!st){
+//              num.incrementAndGet
+//            }
+//            st
+//          }
+//          else {
+//            true
+//          }
+//
+//        })
         .foreach(stockApiVO => {
           try {
             val url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
