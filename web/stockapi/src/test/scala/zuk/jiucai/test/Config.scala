@@ -22,13 +22,13 @@ object Config {
 
 class Config {
   @BeanProperty val log_level = "INFO"
-  @BeanProperty val window = new Window()
-  @BeanProperty val text_opacity = 168
-  @BeanProperty val rest_reminder = new RestReminder
   @BeanProperty val profit_reminder_enabled = false
+  @BeanProperty val rest_reminder = new RestReminder
   @BeanProperty val show_profit_info = false
   @BeanProperty val show_stock_code = true
   @BeanProperty val stocks = new util.ArrayList[Stock]()
+  @BeanProperty val text_opacity = 168
+  @BeanProperty val window = new Window()
 }
 
 class RestReminder {
