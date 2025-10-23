@@ -11,15 +11,16 @@ import scala.jdk.CollectionConverters.*
 
 class JiucaiTest extends AnyFunSuite {
 
-  val codes = List("920300")
+  val codes = List("920300","920651","301100")
 
   test("config"){
     LoaderLocalStockData.loadToken()
     val stocks = LoaderLocalStockData.STOCKS
     stocks.asScala.map(_.getJys).toSet.foreach(println)
-    val list = stocks.asScala.filter(e=>{
+    val filterStocks = stocks.asScala.filter(e=>{
       codes.contains(e.getApi_code)
-    }).map(e=>{
+    })
+    val list = filterStocks.map(e=>{
       var code = ""
       if(e.getJys.equals("SZ")){
         code = s"0.${e.getApi_code}"

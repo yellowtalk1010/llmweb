@@ -1,6 +1,7 @@
 package zuk.jiucai.test
 
 
+import java.util
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
@@ -27,7 +28,7 @@ class Config {
   @BeanProperty val profit_reminder_enabled = false
   @BeanProperty val show_profit_info = false
   @BeanProperty val show_stock_code = true
-  @BeanProperty val stocks = List[Stock]().asJava
+  @BeanProperty val stocks = new util.ArrayList[Stock]()
 }
 
 class RestReminder {
