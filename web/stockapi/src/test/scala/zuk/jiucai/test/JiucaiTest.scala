@@ -13,7 +13,7 @@ import scala.jdk.CollectionConverters.*
 
 class JiucaiTest extends AnyFunSuite {
 
-  val codes = List("920300","920651","301100")
+  val codes = List("605133","688168","000921")
 
   test("config"){
     LoaderLocalStockData.loadToken()
