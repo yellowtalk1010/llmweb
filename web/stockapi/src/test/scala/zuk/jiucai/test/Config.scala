@@ -1,9 +1,23 @@
 package zuk.jiucai.test
 
-import zuk.jiucai.Window
 
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
+
+object Config {
+
+  def createConfigJsonFile(code_names: List[(String, String)]): Config = {
+    val config = new Config
+    code_names.map(e => {
+      val stock = new Stock
+      stock.stock_code = e._1
+      stock.stock_name = e._2
+      stock
+    }).foreach(config.stocks.add)
+    config
+  }
+
+}
 
 class Config {
   @BeanProperty val log_level = "INFO"
@@ -16,5 +30,21 @@ class Config {
   @BeanProperty val stocks = List[Stock]().asJava
 }
 
+class RestReminder {
+  @BeanProperty val enabled = false
+  @BeanProperty val hours = List(10, 11, 14, 16).asJava.toArray
+}
 
+class Stock {
+  @BeanProperty var stock_code = ""
+  @BeanProperty val buy_count = 0
+  @BeanProperty val buy_price = 0.0
+  @BeanProperty var stock_name = ""
+  @BeanProperty val stock_name_alias = ""
+}
+
+class Window {
+  @BeanProperty val x = 337
+  @BeanProperty val y = 973
+}
 
