@@ -1,43 +1,43 @@
 {
-	"log_level":"INFO",
-	"profit_reminder_enabled":false,
-	"rest_reminder":{
-		"enabled":false,
-		"hours":[
-			10,
-			11,
-			14,
-			16
-		]
-	},
-	"show_profit_info":false,
-	"show_stock_code":true,
-	"stocks":[
-		{
-			"buy_count":0,
-			"buy_price":0.0,
-			"stock_code":"0.000921",
-			"stock_name":"海信家电",
-			"stock_name_alias":""
-		},
-		{
-			"buy_count":0,
-			"buy_price":0.0,
-			"stock_code":"1.605133",
-			"stock_name":"嵘泰股份",
-			"stock_name_alias":""
-		},
-		{
-			"buy_count":0,
-			"buy_price":0.0,
-			"stock_code":"1.688168",
-			"stock_name":"安博通",
-			"stock_name_alias":""
-		}
-	],
-	"text_opacity":168,
-	"window":{
-		"x":337,
-		"y":973
-	}
+    "log_level": "INFO",
+    "profit_reminder_enabled": false,
+    "rest_reminder": {
+        "enabled": false,
+        "hours": [
+            10,
+            11,
+            14,
+            16
+        ]
+    },
+    "show_profit_info": false,
+    "show_stock_code": true,
+    "stocks": [
+        {
+            "buy_count": 0,
+            "buy_price": 0.0,
+            "stock_code": "0.000921",
+            "stock_name": "海信家电",
+            "stock_name_alias": ""
+        },
+        {
+            "buy_count": 0,
+            "buy_price": 0.0,
+            "stock_code": "1.605133",
+            "stock_name": "嵘泰股份",
+            "stock_name_alias": ""
+        },
+        {
+            "buy_count": 0,
+            "buy_price": 0.0,
+            "stock_code": "1.688168",
+            "stock_name": "安博通",
+            "stock_name_alias": ""
+        }
+    ],
+    "text_opacity": 168,
+    "window": {
+        "x": 839,
+        "y": 985
+    }
 }
