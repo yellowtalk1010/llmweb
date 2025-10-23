@@ -2,6 +2,9 @@ package zuk.jiucai.test
 
 object HLTrade {
 
+  /**
+   * 2025
+   */
   val tradeStockCodes = List(
     "300081",
     "300158",
