@@ -1,0 +1,57 @@
+{
+    "log_level": "INFO",
+    "window": {
+        "x": 29,
+        "y": 892
+    },
+    "text_opacity": 168,
+    "rest_reminder": {
+        "enabled": true,
+        "hours": [
+            10,
+            11,
+            14,
+            16
+        ]
+    },
+    "profit_reminder_enabled": false,
+    "show_profit_info": false,
+    "show_stock_code": true,
+    "stocks": [
+        {
+            "stock_code": "1.000001",
+            "buy_price": 0,
+            "buy_count": 0,
+            "stock_name": "上证指数",
+            "stock_name_alias": ""
+        },
+        {
+            "stock_code": "0.399006",
+            "buy_count": 0,
+            "buy_price": 0.0,
+            "stock_name": "创业板指",
+            "stock_name_alias": ""
+        },
+        {
+            "stock_code": "0.399001",
+            "buy_count": 0,
+            "buy_price": 0.0,
+            "stock_name": "深证成指",
+            "stock_name_alias": ""
+        },
+        {
+            "stock_code": "0.000921",
+            "buy_count": 0,
+            "buy_price": 0.0,
+            "stock_name": "海信家电",
+            "stock_name_alias": ""
+        },
+        {
+            "stock_code": "0.300158",
+            "buy_count": 0,
+            "buy_price": 0.0,
+            "stock_name": "振东制药",
+            "stock_name_alias": ""
+        }
+    ]
+}
