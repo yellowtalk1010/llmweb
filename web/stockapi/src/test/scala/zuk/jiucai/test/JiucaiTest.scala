@@ -14,9 +14,8 @@ import scala.jdk.CollectionConverters.*
 class JiucaiTest extends AnyFunSuite {
 
   val codes = List(
-    "300081",
-    "300158"
   )
+//    ++ HLTrade.tradeStockCodes.take(20)
 
   test("config"){
     LoaderLocalStockData.loadToken()
