@@ -1,9 +1,13 @@
 package zuk.stock.test
 
+import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.stockapi.model.{MA2_Model, MA3_Model}
 import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData}
 
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 import scala.jdk.CollectionConverters.*
 
 class MA3_Model_Test extends AnyFunSuite {
@@ -28,6 +32,8 @@ class MA3_Model_Test extends AnyFunSuite {
 
     println(socketList.size)
     socketList.map(_._1.getApi_code).foreach(println)
+    val sdm = new SimpleDateFormat("yyyyMMdd")
+    FileUtils.writeLines(new File(s"stockapi/model_result/MA3-${sdm.format(new Date)}.txt"), socketList.map(_._1.getApi_code).asJava)
 
   }
 
