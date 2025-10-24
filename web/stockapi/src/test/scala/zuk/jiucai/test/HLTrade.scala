@@ -6,6 +6,9 @@ object HLTrade {
    * 2025
    */
   val tradeStockCodes = List(
+    "002249",
+    "300620",
+    "601606",
     "300081",
     "300158",
     "301501",
