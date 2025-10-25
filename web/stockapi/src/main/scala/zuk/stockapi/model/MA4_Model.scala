@@ -15,18 +15,41 @@ class MA4_Model(stockMaVo: StockApiVo, maList: List[StockMaVo]) extends Model(st
   override def isHit(): Boolean = isOK
 
   override def run(): Unit = {
-    if(maList.size>=3){
-      val list = maList.take(3)
-      val head = list.head
-      if (
-        new BigDecimal(list(0).getMa5).compareTo(new BigDecimal(list(0).getMa10)) >= 0
-          && new BigDecimal(list(1).getMa5).compareTo(new BigDecimal(list(1).getMa10)) >= 0
-          && new BigDecimal(list(2).getMa5).compareTo(new BigDecimal(list(2).getMa10)) <= 0
-          && new BigDecimal(head.getStockDayVo.getTurnoverRatio).compareTo(new BigDecimal(4)) >= 0 //换手率
-          && new BigDecimal(head.getStockDayVo.getChangeRatio).compareTo(new BigDecimal(4)) >= 0 //涨幅度
-      ) {
+    val len = 4
+    if(maList.size>=len + 1){
+      val takelist = maList.take(len)
+
+      val list1 = takelist.filter(e=>{
+        val changeRatio = e.getStockDayVo.getChangeRatio
+        new math.BigDecimal(changeRatio).compareTo(new math.BigDecimal(6.0))>=0
+      })
+
+      val list2 = takelist.filter(e => {
+        val changeRatio = e.getStockDayVo.getChangeRatio
+        new math.BigDecimal(changeRatio).compareTo(new math.BigDecimal(2.0)) >= 0
+      })
+
+      //
+      var times = 0
+      for (i <- 0 until len) {
+        val today = maList(i)
+        val yesterday = maList(i + 1)
+        if(new BigDecimal(today.getStockDayVo.getClose).compareTo(new BigDecimal(yesterday.getStockDayVo.getClose))>0){
+          times = times + 1
+        }
+        else {
+//          println(".")
+        }
+      }
+
+
+      if(list1.size >= 2
+        && list2.size >= 3
+        && times >= 4
+      ){
         isOK = true
       }
+
     }
   }
 
