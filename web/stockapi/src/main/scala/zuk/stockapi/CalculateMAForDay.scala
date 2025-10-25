@@ -2,14 +2,12 @@ package zuk.stockapi
 
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
-import zuk.stockapi.model.{AVG_Model, MA1_Model, MA_Model}
 
 import java.io.File
 import java.math
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*

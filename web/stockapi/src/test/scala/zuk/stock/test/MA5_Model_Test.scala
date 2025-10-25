@@ -27,8 +27,8 @@ class MA5_Model_Test extends AnyFunSuite {
     val socketList = tpList.filter(_._2.size > 0).filter(tp => {
       val stock = tp._1
       val malist = tp._2
-      import zuk.stockapi.model.MA55_Model
-      val ma55 = new MA55_Model(stock, malist)
+      import zuk.stockapi.model.MA5_Model
+      val ma55 = new MA5_Model(stock, malist)
       ma55.run()
       ma55.isHit()
 //      val st = run(stock, malist)

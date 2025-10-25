@@ -2,7 +2,7 @@ package zuk.stock.test
 
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
-import zuk.stockapi.model.{MA2_Model, MA3_Model}
+import zuk.stockapi.model.MA3_Model
 import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData}
 
 import java.io.File
