@@ -9,13 +9,8 @@
         <version>7.0.0</version>
     </parent>
 
-    <packaging>pom</packaging>
-
-    <artifactId>nativeimage</artifactId>
-
-    <modules>
-        <module>word</module>
-        <module>graalvm_nativeimage</module>
-    </modules>
+    <groupId>zuk.sast</groupId>
+    <artifactId>word</artifactId>
+    <version>25.0.1</version>
 
 </project>
