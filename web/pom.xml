@@ -24,7 +24,8 @@
 
     <modules>
         <module>boot</module>
-<!--        <module>stockapi</module>-->
+        <module>nativeimage</module>
+        <!--        <module>stockapi</module>-->
 <!--        <module>cbapi</module>-->
     </modules>
 
