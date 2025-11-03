@@ -7,22 +7,16 @@
         <groupId>zuk.sast</groupId>
         <artifactId>web</artifactId>
         <version>7.0.0</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>graalvm_nativeimage</artifactId>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <version>25.0.1</version>
 
     <dependencies>
         <dependency>
             <groupId>zuk.sast</groupId>
             <artifactId>word</artifactId>
-            <version>7.0.0</version>
+            <version>25.0.1</version>
         </dependency>
     </dependencies>
 
