@@ -24,8 +24,8 @@
 
     <modules>
         <module>boot</module>
-        <module>stockapi</module>
-        <module>cbapi</module>
+        <module>word</module>
+        <module>graalvm_nativeimage</module>
     </modules>
 
     <dependencies>

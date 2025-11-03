@@ -5,7 +5,6 @@ import org.h2.Zuk;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import zuk.stockapi.LoaderLocalStockData;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
