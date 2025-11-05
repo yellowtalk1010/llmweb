@@ -33,7 +33,7 @@ class MA3_Model_Test extends AnyFunSuite {
     println(socketList.size)
     socketList.map(e=>e._1.getApi_code + "，" + e._1.getName).foreach(println)
     val sdm = new SimpleDateFormat("yyyyMMdd")
-    FileUtils.writeLines(new File(s"stockapi/model_result/MA3-${sdm.format(new Date)}.txt"), socketList.map(_._1.getApi_code).asJava)
+    FileUtils.writeLines(new File(s"stockapi/model_result/MA3-${sdm.format(new Date)}.txt"), socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").asJava)
 
   }
 
