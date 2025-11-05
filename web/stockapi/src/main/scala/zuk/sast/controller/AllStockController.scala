@@ -110,7 +110,10 @@ class AllStockController {
   def all(search: String): Map[String, Object] = {
     var list: List[StockApiVo] = null
     if (search != null && search.length > 0) {
-      val splits: Set[String] = Arrays.stream(search.split("\n")).filter((e: String) => e != null && e.trim.length > 0).map((e: String) => e.toUpperCase).collect(Collectors.toSet)
+      val splits: Set[String] = Arrays.stream(search.split("\n")).filter((e: String) => e != null && e.trim.length > 0).map((e: String) => {
+        val slits = e.toUpperCase.split("，")
+        slits.head
+      }).collect(Collectors.toSet)
       list = LoaderLocalStockData.STOCKS.stream.filter((e: StockApiVo) => {
         splits.stream.filter((s: String) => {
           e.getGl.toUpperCase.contains(s) || e.getApi_code.toUpperCase.contains(s) || e.getName.toUpperCase.contains(s)
