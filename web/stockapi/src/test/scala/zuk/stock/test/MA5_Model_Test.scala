@@ -38,7 +38,7 @@ class MA5_Model_Test extends AnyFunSuite {
     println(socketList.size)
     socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").foreach(println)
     val sdm = new SimpleDateFormat("yyyyMMdd")
-    FileUtils.writeLines(new File(s"stockapi/model_result/MA5-${sdm.format(new Date)}.txt"), socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").asJava)
+    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA5.txt"), socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").asJava)
 
   }
 
@@ -47,9 +47,9 @@ class MA5_Model_Test extends AnyFunSuite {
   test("主题"){
     LoaderLocalStockData.loadToken()
     val sdm = new SimpleDateFormat("yyyyMMdd")
-    val files = List(s"stockapi/model_result/MA3-${sdm.format(new Date)}.txt",
-      s"stockapi/model_result/MA4-${sdm.format(new Date)}.txt",
-      s"stockapi/model_result/MA5-${sdm.format(new Date)}.txt")
+    val files = List(s"stockapi/model_result/${sdm.format(new Date)}-MA3.txt",
+      s"stockapi/model_result/${sdm.format(new Date)}-MA4.txt",
+      s"stockapi/model_result/${sdm.format(new Date)}-MA5.txt")
     files.map(f=>new File(f)).filter(f=>f.exists()).flatMap(file=>{
       val lines = FileUtils.readLines(file, "UTF-8")
       lines.asScala.map(l=>{

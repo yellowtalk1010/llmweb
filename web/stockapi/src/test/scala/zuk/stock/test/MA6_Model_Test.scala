@@ -38,7 +38,7 @@ class MA6_Model_Test extends AnyFunSuite {
     println(socketList.size)
     socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").foreach(println)
     val sdm = new SimpleDateFormat("yyyyMMdd")
-    FileUtils.writeLines(new File(s"stockapi/model_result/MA6-${sdm.format(new Date)}.txt"), socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").asJava)
+    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA6.txt"), socketList.map(e=>s"${e._1.getApi_code}，${e._1.getName}").asJava)
 
   }
 
