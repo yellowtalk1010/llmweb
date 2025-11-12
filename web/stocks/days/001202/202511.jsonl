@@ -1,7 +1,8 @@
-{"amount":"62466754","changeRatio":"0.06","close":"16.52","code":"001202.SZ","high":"16.68","low":"16.36","open":"16.52","time":"2025-11-03","turnoverRatio":"3.239","volume":"3783840"}
-{"amount":"82583741","changeRatio":"0.97","close":"16.68","code":"001202.SZ","high":"16.82","low":"16.48","open":"16.58","time":"2025-11-04","turnoverRatio":"4.253","volume":"4968130"}
-{"amount":"47588711","changeRatio":"0.06","close":"16.69","code":"001202.SZ","high":"16.78","low":"16.50","open":"16.56","time":"2025-11-05","turnoverRatio":"2.445","volume":"2856810"}
-{"amount":"48170000","changeRatio":"0.90","close":"16.84","code":"001202.SZ","high":"16.85","low":"16.420","open":"16.72","time":"2025-11-06","turnoverRatio":"2.47","volume":"2886300"}
-{"amount":"51672992","changeRatio":"-0.6532066508313505","close":"16.73","code":"001202.SZ","high":"16.95","low":"16.66","open":"16.9","time":"2025-11-07","turnoverRatio":"2.6331","volume":"3076066"}
-{"amount":"43159204","changeRatio":"-0.956365809922296","close":"16.57","code":"001202.SZ","high":"16.79","low":"16.51","open":"16.74","time":"2025-11-10","turnoverRatio":"2.2272","volume":"2601930"}
-{"amount":"36130000","changeRatio":"-0.24","close":"16.53","code":"001202.SZ","high":"16.66","low":"16.450","open":"16.65","time":"2025-11-11","turnoverRatio":"1.87","volume":"2183700"}
+{"amount":"62466754","changeRatio":"0.06056935190792253","close":"16.52","code":"001202.SZ","high":"16.68","low":"16.36","open":"16.52","time":"2025-11-03","turnoverRatio":"3.238924756485089","volume":"3783840"}
+{"amount":"82583740","changeRatio":"0.9685230024213084","close":"16.68","code":"001202.SZ","high":"16.82","low":"16.48","open":"16.58","time":"2025-11-04","turnoverRatio":"4.252663762325116","volume":"4968130"}
+{"amount":"47588711","changeRatio":"0.05995203836931393","close":"16.69","code":"001202.SZ","high":"16.78","low":"16.5","open":"16.56","time":"2025-11-05","turnoverRatio":"2.4453974358255546","volume":"2856810"}
+{"amount":"48175349","changeRatio":"0.8987417615338441","close":"16.84","code":"001202.SZ","high":"16.85","low":"16.42","open":"16.72","time":"2025-11-06","turnoverRatio":"2.4706234265052918","volume":"2886280"}
+{"amount":"51672992","changeRatio":"-0.6532066508313505","close":"16.73","code":"001202.SZ","high":"16.95","low":"16.66","open":"16.9","time":"2025-11-07","turnoverRatio":"2.633078121691737","volume":"3076066"}
+{"amount":"43159204","changeRatio":"-0.956365809922296","close":"16.57","code":"001202.SZ","high":"16.79","low":"16.51","open":"16.74","time":"2025-11-10","turnoverRatio":"2.2272230040491268","volume":"2601930"}
+{"amount":"36138584","changeRatio":"-0.2414001207000552","close":"16.53","code":"001202.SZ","high":"16.66","low":"16.45","open":"16.65","time":"2025-11-11","turnoverRatio":"1.8692","volume":"2183710"}
+{"amount":"37268738","changeRatio":"0.24","close":"16.57","code":"001202.SZ","high":"16.66","low":"16.37","open":"16.51","time":"2025-11-12","turnoverRatio":"1.93","volume":"2258260"}
