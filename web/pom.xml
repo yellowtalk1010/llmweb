@@ -27,6 +27,7 @@
         <module>stockapi</module>
         <module>word</module>
         <module>graalvm_nativeimage</module>
+        <module>web_proxy</module>
     </modules>
 
     <dependencies>
