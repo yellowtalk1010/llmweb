@@ -14,9 +14,6 @@
     <packaging>jar</packaging>
 
     <properties>
-<!--        <maven.compiler.source>17</maven.compiler.source>-->
-<!--        <maven.compiler.target>17</maven.compiler.target>-->
-<!--        <java.version>17</java.version>-->
         <maven.compile.encoding>UTF-8</maven.compile.encoding>
         <scala.version>3.4.2</scala.version>
         <scala.maven.plugin>4.9.2</scala.maven.plugin>
