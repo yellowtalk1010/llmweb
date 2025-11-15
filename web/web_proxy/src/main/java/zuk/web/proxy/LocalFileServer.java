@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 /***
  * host + java的方式实现代理
@@ -24,9 +25,12 @@ import java.nio.file.Paths;
 public class LocalFileServer {
 
     // 本地映射根目录，例如 C:\eee\
-    private static final String LOCAL_BASE = "C:/eee/";
+    private static final String LOCAL_BASE = "web_proxy/src/main/resources/";
 
     public static void main(String[] args) throws Exception {
+        File dir = new File(LOCAL_BASE);
+        System.out.println(dir.getAbsolutePath() + "，" + dir.exists());
+        Arrays.stream(dir.listFiles()).forEach(System.out::println);
         int port = 80; // 必须和 hosts 保持一致
 
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
