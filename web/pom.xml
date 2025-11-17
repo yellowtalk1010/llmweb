@@ -28,6 +28,7 @@
         <module>word</module>
         <module>graalvm_nativeimage</module>
         <module>web_proxy</module>
+        <module>continue</module>
     </modules>
 
     <dependencies>
