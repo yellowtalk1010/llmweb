@@ -80,17 +80,20 @@ object BinServer {
     })
 
 
-//    executorService.execute(()=>{
-//
-//      Log.parse()
-//      val reqLines = Log.requestLines
-//      reqLines.foreach(req=>{
-//        Thread.sleep(2000)
-//        println()
-//        bufferedWriter.write(req.toCharArray)
-//        println()
-//      })
-//    })
+    executorService.execute(()=>{
+
+      Log.parse()
+      val reqLines = Log.requestLines.filter(l=>{
+        val obj = JSONObject.parse(l)
+        val messageType = obj.get("messageType").asInstanceOf[String]
+        !List("getIdeSettings", "getControlPlaneSessionInfo", "getIdeInfo", "getWorkspaceDirs").contains(messageType)
+      })
+      reqLines.foreach(req=>{
+        Thread.sleep(2000)
+        bufferedWriter.write(req.toCharArray)
+        println()
+      })
+    })
 
     val exitCode = process.waitFor
 
