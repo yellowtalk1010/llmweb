@@ -14,7 +14,7 @@ object BinServer {
   val getIdeSettings = """{"messageId":"XXX-XXX-XXX-XXX","messageType":"getIdeSettings","data":{"remoteConfigSyncPeriod":60,"userToken":"","pauseCodebaseIndexOnStart":false,"continueTestEnvironment":"production"}}"""
   val getControlPlaneSessionInfo = """{"messageId":"XXX-XXX-XXX-XXX","messageType":"getControlPlaneSessionInfo"}"""
   val getIdeInfo = """{"messageId":"XXX-XXX-XXX-XXX","messageType":"getIdeInfo","data":{"ideType":"jetbrains","name":"IntelliJ IDEA 2024.1","version":"2024.1","remoteName":"local","extensionVersion":"1.0.52","isPrerelease":false}}"""
-  val getWorkspaceDirs = """{"messageId":"XXX-XXX-XXX-XXX","messageType":"getWorkspaceDirs","data":["file:///D:/development/github/continue-1.5.11/continue-1.5.11/manual-testing-sandbox"]}"""
+  val getWorkspaceDirs = """{"messageId":"XXX-XXX-XXX-XXX","messageType":"getWorkspaceDirs","data":["file:///D:/csv1"]}"""
 
   val executorService: ExecutorService = Executors.newCachedThreadPool()
 
