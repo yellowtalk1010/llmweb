@@ -12,11 +12,18 @@ object Log {
   val REQUEST = "request"
   val REPONSE = "reponse"
 
+  val requestLines = ListBuffer[String]()
+  val responseLines = ListBuffer[String]()
+
   /**
    * 分析continue.log日志
    * @param args
    */
   def main(args: Array[String]): Unit = {
+    parse()
+  }
+
+  def parse(): Unit = {
     val logFile = new File("continue/src/main/resources/continue.log")
     println(s"${logFile.getAbsolutePath}, ${logFile.exists()}")
     val lines = FileUtils.readLines(logFile, "utf-8").asScala.map(l=>{
@@ -29,8 +36,8 @@ object Log {
       }
     })
     println(lines.size)
-    val requestLines = lines.filter(_._1.equals(REQUEST)).map(_._2)
-    val responseLines = lines.filter(_._1.equals(REPONSE)).map(_._2)
+    requestLines ++= lines.filter(_._1.equals(REQUEST)).map(_._2)
+    responseLines ++= lines.filter(_._1.equals(REPONSE)).map(_._2)
 
     val requestObjs = requestLines.map(e=>{
       try{
