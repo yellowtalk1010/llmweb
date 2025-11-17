@@ -16,8 +16,6 @@ object BinServer {
       println(e)
     })
     builder.directory(new File(path).getParentFile).start()
-
-
   }
 
   def main(args: Array[String]): Unit = {
