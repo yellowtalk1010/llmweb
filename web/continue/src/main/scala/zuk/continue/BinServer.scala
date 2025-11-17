@@ -39,6 +39,7 @@ object BinServer {
       while (line != null) {
         //stdout.append(line).append("\n")
         line = stdoutReader.readLine()
+        println(s"stdout:${line}")
         try{
           val obj = JSONObject.parse(line)
           if(obj!=null){
@@ -48,23 +49,27 @@ object BinServer {
             messageType match
               case "getIdeSettings" =>
                 val str = getIdeSettings.replaceAll("XXX-XXX-XXX-XXX", messageId)
-                bufferedWriter.write(str)
+                println(str)
+                bufferedWriter.write(str + "\n")
               case "getControlPlaneSessionInfo" =>
                 val str = getControlPlaneSessionInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
-                bufferedWriter.write(str)
+                println(str)
+                bufferedWriter.write(str + "\n")
               case "getIdeInfo" =>
                 val str = getIdeInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
-                bufferedWriter.write(str)
+                println(str)
+                bufferedWriter.write(str + "\n")
               case "getWorkspaceDirs" =>
                 val str = getWorkspaceDirs.replaceAll("XXX-XXX-XXX-XXX", messageId)
-                bufferedWriter.write(str)
+                println(str)
+                bufferedWriter.write(str + "\n")
               case _=>
           }
         }
         catch
           case exception: Exception => exception.printStackTrace()
 
-        println(s"stdout:${line}")
+
       }
     })
 
@@ -90,8 +95,8 @@ object BinServer {
       })
       reqLines.foreach(req=>{
         Thread.sleep(2000)
-        bufferedWriter.write(req.toCharArray)
-        println()
+        bufferedWriter.write(req  + "\n")
+        println(req  + "\n")
       })
     })
 
