@@ -28,10 +28,9 @@ object BinServer {
 
   def main(args: Array[String]): Unit = {
 
-    val continueNeedTypes = List("getIdeSettings", "getControlPlaneSessionInfo", "getIdeInfo", "getWorkspaceDirs")
-    val continueNeedTypeMap = scala.collection.mutable.HashMap[String, String]()
-
     val process = runProcess()
+
+    val bufferedWriter: BufferedWriter = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))
 
     val stdoutReader: BufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()))
     executorService.execute(()=>{
@@ -45,9 +44,21 @@ object BinServer {
           if(obj!=null){
             val messageType = obj.get("messageType").asInstanceOf[String]
             val messageId = obj.get("messageId").asInstanceOf[String]
-            if(continueNeedTypes.filter(e=>e.equals(messageType)).size>0){
-              continueNeedTypeMap.put(messageType, messageId)
-            }
+
+            messageType match
+              case "getIdeSettings" =>
+                val str = getIdeSettings.replaceAll("XXX-XXX-XXX-XXX", messageId)
+                bufferedWriter.write(str)
+              case "getControlPlaneSessionInfo" =>
+                val str = getControlPlaneSessionInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
+                bufferedWriter.write(str)
+              case "getIdeInfo" =>
+                val str = getIdeInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
+                bufferedWriter.write(str)
+              case "getWorkspaceDirs" =>
+                val str = getWorkspaceDirs.replaceAll("XXX-XXX-XXX-XXX", messageId)
+                bufferedWriter.write(str)
+              case _=>
           }
         }
         catch
@@ -68,17 +79,18 @@ object BinServer {
       }
     })
 
-    val bufferedWriter: BufferedWriter = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))
-    executorService.execute(()=>{
-      Log.parse()
-      val reqLines = Log.requestLines
-      reqLines.foreach(req=>{
-        Thread.sleep(2000)
-        println()
-        bufferedWriter.write(req.toCharArray)
-        println()
-      })
-    })
+
+//    executorService.execute(()=>{
+//
+//      Log.parse()
+//      val reqLines = Log.requestLines
+//      reqLines.foreach(req=>{
+//        Thread.sleep(2000)
+//        println()
+//        bufferedWriter.write(req.toCharArray)
+//        println()
+//      })
+//    })
 
     val exitCode = process.waitFor
 
