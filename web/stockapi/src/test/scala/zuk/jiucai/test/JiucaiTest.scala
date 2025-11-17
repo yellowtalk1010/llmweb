@@ -14,6 +14,7 @@ import scala.jdk.CollectionConverters.*
 class JiucaiTest extends AnyFunSuite {
 
   val codes = List(
+    "001332"
   )
 //    ++ HLTrade.tradeStockCodes.take(20)
 
