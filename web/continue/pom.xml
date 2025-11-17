@@ -19,6 +19,39 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>zuk</groupId>
+            <artifactId>continue-1</artifactId>
+            <version>1.0.0</version>
+            <systemPath>${project.basedir}/libs/continue-intellij-extension-1.0.52-searchableOptions.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>zuk</groupId>
+            <artifactId>continue-2</artifactId>
+            <version>1.0.0</version>
+            <systemPath>${project.basedir}/libs/continue-intellij-extension-1.0.52.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>zuk</groupId>
+            <artifactId>continue-3</artifactId>
+            <version>1.0.0</version>
+            <systemPath>${project.basedir}/libs/posthog-1.2.0.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>zuk</groupId>
+            <artifactId>continue-4</artifactId>
+            <version>1.0.0</version>
+            <systemPath>${project.basedir}/libs/sentry-8.14.0.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala3-library_3</artifactId>
