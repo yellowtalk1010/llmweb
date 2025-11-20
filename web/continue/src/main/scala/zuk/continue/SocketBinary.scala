@@ -12,7 +12,7 @@ object SocketBinary {
   var binaryProcess: Process = null
 
   var serverSocket: ServerSocket = null
-  var socket: Socket = null
+  var clientSocket: Socket = null
 
   def main(args: Array[String]): Unit = {
     startServer(3000)
@@ -33,7 +33,7 @@ object SocketBinary {
     serverSocket = new ServerSocket(port)
     println("服务端启动，监听端口: " + port)
     println("等待客户端连接")
-    socket = serverSocket.accept
+    clientSocket = serverSocket.accept
     println("客户端连接")
     startBinary()
     bridgeStreams()
@@ -46,7 +46,7 @@ object SocketBinary {
       try {
         //exe的输出转给socketClient
         val exeOutput = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
-        val socketOutput = new PrintWriter(socket.getOutputStream(), true)
+        val socketOutput = new PrintWriter(clientSocket.getOutputStream(), true)
         while (true) {
           var line = exeOutput.readLine() //读取exe
           while (line != null) {
@@ -64,13 +64,13 @@ object SocketBinary {
     executor.execute(()=>{
       try {
         //socket的输入转给exe
-        val socketInput = new BufferedReader(new InputStreamReader(socket.getInputStream))
+        val socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream))
         val processInput = new PrintWriter(binaryProcess.getOutputStream(), true)
         while (true) {
           var line = socketInput.readLine()
           while (line!=null) {
-//            println(s"socket->exe:${line}")
-            processInput.write(line + "\n")
+            println(s"socket->exe:${line}")
+//            processInput.write(line + "\n")
             line = socketInput.readLine()
           }
           Thread.sleep(200)

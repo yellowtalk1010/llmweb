@@ -2,7 +2,7 @@ package zuk.continue
 
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.lang3.StringUtils
-import zuk.continue.SocketBinary.socket
+import zuk.continue.SocketBinary.clientSocket
 
 import java.io.{BufferedReader, BufferedWriter, InputStreamReader, OutputStreamWriter}
 import java.net.Socket
@@ -34,13 +34,15 @@ object SocketClient {
         times = times + 1
         println(s"${times}，line:${line}")
         lineFilter(line)
+        socketOutput.write(map.head._2 + "\n")
+        map.clear()
       }
-      Thread.sleep(2000)
+      Thread.sleep(1000)
     }
 
-    map.map(_._2).foreach(line=>{
-      socketOutput.write(line + "\n")
-    })
+//    map.map(_._2).foreach(line=>{
+//      socketOutput.write(line + "\n")
+//    })
 
     println("over.")
   }
