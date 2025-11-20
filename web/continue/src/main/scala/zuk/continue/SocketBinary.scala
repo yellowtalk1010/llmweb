@@ -69,7 +69,7 @@ object SocketBinary {
       try {
         //socket的输入转给exe
         val socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream))
-        println("socket的输入转给exe")
+//        println("socket的输入转给exe")
         while (true) {
           if(socketInput.ready()){
             val line = socketInput.readLine()
