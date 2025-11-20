@@ -12,8 +12,8 @@ object SocketBinary {
   val executor: ExecutorService = Executors.newCachedThreadPool
 
   var binaryProcess: Process = null
-  val processOutput = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
-  val processInput = new PrintWriter(binaryProcess.getOutputStream(), true)
+  var processOutput: BufferedReader = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
+  var processInput: PrintWriter = new PrintWriter(binaryProcess.getOutputStream(), true)
 
   var serverSocket: ServerSocket = null
   var clientSocket: Socket = null
@@ -30,6 +30,8 @@ object SocketBinary {
 //    })
 //    println("启动exe")
     binaryProcess = builder.directory(new File(path).getParentFile).start()
+    processOutput = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
+    processInput = new PrintWriter(binaryProcess.getOutputStream(), true)
   }
 
 
