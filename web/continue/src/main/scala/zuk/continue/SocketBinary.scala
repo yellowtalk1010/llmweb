@@ -70,10 +70,12 @@ object SocketBinary {
         //socket的输入转给exe
         val socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream))
         while (true) {
-          val line = socketInput.readLine()
-          if (StringUtils.isNotBlank(line)) {
-            println(s"socket->exe:${line}")
-            processInput.write(line + "\n")
+          if(socketInput.ready()){
+            val line = socketInput.readLine()
+            if (StringUtils.isNotBlank(line)) {
+              println(s"socket->exe:${line}")
+              processInput.write(line + "\n")
+            }
           }
           Thread.sleep(200)
         }
