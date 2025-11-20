@@ -12,8 +12,8 @@ object SocketBinary {
   val executor: ExecutorService = Executors.newCachedThreadPool
 
   var binaryProcess: Process = null
-  var processOutput: BufferedReader = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
-  var processInput: PrintWriter = new PrintWriter(binaryProcess.getOutputStream(), true)
+  var processOutput: BufferedReader = null
+  var processInput: PrintWriter = null
 
   var serverSocket: ServerSocket = null
   var clientSocket: Socket = null
