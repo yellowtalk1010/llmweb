@@ -15,16 +15,16 @@ object SocketBinary {
   var socket: Socket = null
 
   def main(args: Array[String]): Unit = {
-
+    startServer(3000)
   }
 
   private def startBinary() = {
     val path = "C:/Users/visio/Downloads/continue-intellij-extension-1.0.52/continue-intellij-extension/core/win32-x64/continue-binary.exe"
     val builder = new ProcessBuilder(path)
-    builder.environment().asScala.map(e => s"${e._1}=${e._2}").foreach(e => {
-      println(e)
-    })
-    println("启动exe")
+//    builder.environment().asScala.map(e => s"${e._1}=${e._2}").foreach(e => {
+//      println(e)
+//    })
+//    println("启动exe")
     binaryProcess = builder.directory(new File(path).getParentFile).start()
   }
 
@@ -50,7 +50,7 @@ object SocketBinary {
         while (true) {
           var line = exeOutput.readLine() //读取exe
           while (line != null) {
-            println(s"exe->socket:${line}")
+            //println(s"exe->socket:${line}")
             socketOutput.println(line + "\n") //写入socket
             line = exeOutput.readLine()
           }
@@ -69,7 +69,7 @@ object SocketBinary {
         while (true) {
           var line = socketInput.readLine()
           while (line!=null) {
-            println(s"socket->exe:${line}")
+            //println(s"socket->exe:${line}")
             processInput.write(line + "\n")
             line = socketInput.readLine()
           }
