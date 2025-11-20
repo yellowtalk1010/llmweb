@@ -75,7 +75,8 @@ object SocketBinary {
             val line = socketInput.readLine()
             if (StringUtils.isNotBlank(line)) {
 //              println(s"socket->exe:${line}")
-              processInput.write(line + "\n")
+              processInput.write(line)
+              processInput.write("\r\n")
               processInput.flush()
             }
           }
