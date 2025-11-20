@@ -44,13 +44,14 @@ object SocketBinary {
     println("建立双向数据流")
     executor.execute(()=>{
       try {
+        //exe的输出转给socketClient
         val exeOutput = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
         val socketOutput = new PrintWriter(socket.getOutputStream(), true)
         while (true) {
           var line = exeOutput.readLine() //读取exe
           while (line != null) {
             println(s"exe->socket:${line}")
-            socketOutput.println(line) //写入socket
+            socketOutput.println(line + "\n") //写入socket
             line = exeOutput.readLine()
           }
         }
@@ -59,6 +60,26 @@ object SocketBinary {
       catch
         case exception: Exception => exception.printStackTrace()
     })
+
+    executor.execute(()=>{
+      try {
+        //socket的输入转给exe
+        val socketInput = new BufferedReader(new InputStreamReader(socket.getInputStream))
+        val processInput = new PrintWriter(binaryProcess.getOutputStream(), true)
+        while (true) {
+          var line = socketInput.readLine()
+          while (line!=null) {
+            println(s"socket->exe:${line}")
+            processInput.write(line + "\n")
+            line = socketInput.readLine()
+          }
+          Thread.sleep(200)
+        }
+      }
+      catch
+        case exception: Exception => exception.printStackTrace()
+    })
+
   }
 
 }
