@@ -38,6 +38,7 @@ object SocketClient {
         val writeLine = map.head._2  + "\n"
         println(s"写入：${writeLine}")
         socketOutput.write(writeLine)
+        socketOutput.flush()
 
         map.clear()
       }
