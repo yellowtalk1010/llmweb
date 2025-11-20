@@ -50,7 +50,7 @@ object SocketBinary {
         while (true) {
           var line = exeOutput.readLine() //读取exe
           while (line != null) {
-            //println(s"exe->socket:${line}")
+            println(s"exe->socket:${line}")
             socketOutput.println(line + "\n") //写入socket
             line = exeOutput.readLine()
           }
@@ -69,7 +69,7 @@ object SocketBinary {
         while (true) {
           var line = socketInput.readLine()
           while (line!=null) {
-            //println(s"socket->exe:${line}")
+            println(s"socket->exe:${line}")
             processInput.write(line + "\n")
             line = socketInput.readLine()
           }
