@@ -33,6 +33,7 @@ object SocketClient {
       if (StringUtils.isNotBlank(line)) {
         times = times + 1
         println(s"${times}，line:${line}")
+        lineFilter(line)
       }
       Thread.sleep(2000)
     }
