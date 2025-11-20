@@ -1,6 +1,6 @@
 package zuk.continue
 
-import java.io.File
+import java.io.{BufferedReader, File, InputStreamReader, PrintWriter}
 import java.net.{ServerSocket, Socket}
 import java.util.concurrent.{ExecutorService, Executors}
 import scala.jdk.CollectionConverters.*
@@ -42,6 +42,23 @@ object SocketBinary {
 
   def bridgeStreams() = {
     println("建立双向数据流")
+    executor.execute(()=>{
+      try {
+        val exeOutput = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
+        val socketOutput = new PrintWriter(socket.getOutputStream(), true)
+        while (true) {
+          var line = exeOutput.readLine() //读取exe
+          while (line != null) {
+            println(s"exe->socket:${line}")
+            socketOutput.println(line) //写入socket
+            line = exeOutput.readLine()
+          }
+        }
+        Thread.sleep(200)
+      }
+      catch
+        case exception: Exception => exception.printStackTrace()
+    })
   }
 
 }
