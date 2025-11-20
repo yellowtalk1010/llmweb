@@ -40,7 +40,7 @@ object SocketBinary {
     println("服务端启动，监听端口: " + port)
     println("等待客户端连接")
     clientSocket = serverSocket.accept
-    println("客户端连接")
+    println(s"客户端连接:${clientSocket.getLocalSocketAddress}")
     startBinary()
     bridgeStreams()
 
@@ -72,7 +72,7 @@ object SocketBinary {
         while (true) {
           val line = socketInput.readLine()
           if (StringUtils.isNotBlank(line)) {
-//            println(s"socket->exe:${line}")
+            println(s"socket->exe:${line}")
             processInput.write(line + "\n")
           }
           Thread.sleep(200)

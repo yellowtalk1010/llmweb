@@ -28,13 +28,17 @@ object SocketClient {
     val socketOutput = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream))
     var line = ""
     var times = 0
-    while (true && times != 4){
+    while (true && times <= 400000){
       line = socketInput.readLine()
       if (StringUtils.isNotBlank(line)) {
         times = times + 1
         println(s"${times}，line:${line}")
         lineFilter(line)
-        socketOutput.write(map.head._2 + "\n")
+
+        val writeLine = map.head._2  + "\n"
+        println(s"写入：${writeLine}")
+        socketOutput.write(writeLine)
+
         map.clear()
       }
       Thread.sleep(1000)
@@ -53,20 +57,23 @@ object SocketClient {
     if (obj != null) {
       val messageType = obj.get("messageType").asInstanceOf[String]
       val messageId = obj.get("messageId").asInstanceOf[String]
-      messageType match
-        case getIdeSettings_ =>
-          val str = getIdeSettings.replaceAll("XXX-XXX-XXX-XXX", messageId)
-          map.put(getIdeSettings_, str)
-        case getControlPlaneSessionInfo_ =>
-          val str = getControlPlaneSessionInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
-          map.put(getControlPlaneSessionInfo_, str)
-        case getIdeInfo_ =>
-          val str = getIdeInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
-          map.put(getIdeInfo_, str)
-        case getWorkspaceDirs_ =>
-          val str = getWorkspaceDirs.replaceAll("XXX-XXX-XXX-XXX", messageId)
-          map.put(getWorkspaceDirs_, str)
-        case _ =>
+      if(messageType.equals(getIdeSettings_)){
+        val str = getIdeSettings.replaceAll("XXX-XXX-XXX-XXX", messageId)
+        map.put(getIdeSettings_, str)
+      }
+      else if(messageType.equals(getControlPlaneSessionInfo_)){
+        val str = getControlPlaneSessionInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
+        map.put(getControlPlaneSessionInfo_, str)
+      }
+      else if (messageType.equals(getIdeInfo_)) {
+        val str = getIdeInfo.replaceAll("XXX-XXX-XXX-XXX", messageId)
+        map.put(getIdeInfo_, str)
+      }
+      else if (messageType.equals(getWorkspaceDirs_)) {
+        val str = getWorkspaceDirs.replaceAll("XXX-XXX-XXX-XXX", messageId)
+        map.put(getWorkspaceDirs_, str)
+      }
+
     }
   }
 
