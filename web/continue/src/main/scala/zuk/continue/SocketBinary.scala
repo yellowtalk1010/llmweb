@@ -1,5 +1,7 @@
 package zuk.continue
 
+import org.apache.commons.lang3.StringUtils
+
 import java.io.{BufferedReader, File, InputStreamReader, PrintWriter}
 import java.net.{ServerSocket, Socket}
 import java.util.concurrent.{ExecutorService, Executors}
@@ -10,6 +12,8 @@ object SocketBinary {
   val executor: ExecutorService = Executors.newCachedThreadPool
 
   var binaryProcess: Process = null
+  val processOutput = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
+  val processInput = new PrintWriter(binaryProcess.getOutputStream(), true)
 
   var serverSocket: ServerSocket = null
   var clientSocket: Socket = null
@@ -45,17 +49,15 @@ object SocketBinary {
     executor.execute(()=>{
       try {
         //exe的输出转给socketClient
-        val exeOutput = new BufferedReader(new InputStreamReader(binaryProcess.getInputStream()))
         val socketOutput = new PrintWriter(clientSocket.getOutputStream(), true)
         while (true) {
-          var line = exeOutput.readLine() //读取exe
-          while (line != null) {
+          val line = processOutput.readLine() //读取exe
+          if (StringUtils.isNotBlank(line)) {
 //            println(s"exe->socket:${line}")
             socketOutput.println(line + "\n") //写入socket
-            line = exeOutput.readLine()
           }
+          Thread.sleep(200)
         }
-        Thread.sleep(200)
       }
       catch
         case exception: Exception => exception.printStackTrace()
@@ -65,13 +67,11 @@ object SocketBinary {
       try {
         //socket的输入转给exe
         val socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream))
-        val processInput = new PrintWriter(binaryProcess.getOutputStream(), true)
         while (true) {
-          var line = socketInput.readLine()
-          while (line!=null) {
-            println(s"socket->exe:${line}")
-//            processInput.write(line + "\n")
-            line = socketInput.readLine()
+          val line = socketInput.readLine()
+          if (StringUtils.isNotBlank(line)) {
+//            println(s"socket->exe:${line}")
+            processInput.write(line + "\n")
           }
           Thread.sleep(200)
         }
