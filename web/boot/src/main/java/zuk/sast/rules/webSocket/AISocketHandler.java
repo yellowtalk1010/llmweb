@@ -22,6 +22,9 @@ public class AISocketHandler extends TextWebSocketHandler {
 
     public static Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
 
+    static {
+        zuk.Client.init();
+    }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
