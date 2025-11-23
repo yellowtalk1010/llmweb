@@ -23,7 +23,7 @@ public class AISocketHandler extends TextWebSocketHandler {
     static {
         zuk.Client.init();
 
-        EXECUTOR_SERVICE.execute(()=>{
+        EXECUTOR_SERVICE.execute(()->{
             while (true) {
                 try {
                     //清理断开的websocket连接
@@ -38,7 +38,7 @@ public class AISocketHandler extends TextWebSocketHandler {
             }
         });
 
-        EXECUTOR_SERVICE.execute(()=>{
+        EXECUTOR_SERVICE.execute(()->{
             while (true) {
                 try {
                     Thread.sleep(10);

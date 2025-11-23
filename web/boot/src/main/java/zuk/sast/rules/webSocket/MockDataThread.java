@@ -26,8 +26,8 @@ public class MockDataThread implements Runnable {
             try{
                 char arr[] = line.toCharArray();
                 for (int i =0; i< arr.length; i++) {
-                    Client.ContentData contentData = new Client.ContentData("assistant", arr[i]+"")
-                    Client.Data data = new Client.Data(false, contentData, "success")
+                    Client.ContentData contentData = new Client.ContentData("assistant", arr[i]+"");
+                    Client.Data data = new Client.Data(false, contentData, "success");
                     Client.LlmStreamChat llmStreamChat = new Client.LlmStreamChat("llm/streamChat", data, session.getId());
                     Client.queue().put(llmStreamChat);
                 }
