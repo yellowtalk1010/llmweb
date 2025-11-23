@@ -7,6 +7,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import zuk.Client;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class AISocketHandler extends TextWebSocketHandler {
 
-    public static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+    public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
     public static Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
 
@@ -41,7 +42,22 @@ public class AISocketHandler extends TextWebSocketHandler {
         try {
             String messageStr = message.getPayload();
             log.info("接受到数据:" + messageStr);
-            EXECUTOR_SERVICE.execute(new TestThread(messageStr, session));
+            //EXECUTOR_SERVICE.execute(new TestThread(messageStr, session));
+            EXECUTOR_SERVICE.execute(()->{
+                try {
+                    Client.testWrite();
+                    while (true) {
+                        Thread.sleep(50);
+                        if(!Client.queue().isEmpty()){
+                            Client.LlmStreamChat llmStreamChat = Client.queue().poll();
+                            session.sendMessage(new TextMessage(llmStreamChat.getData().getContent().getContent()));
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }catch (Exception e) {
             session.sendMessage(new TextMessage(e.getMessage()));
         }
