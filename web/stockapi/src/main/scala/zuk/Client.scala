@@ -65,6 +65,7 @@ object Client {
           write(isTelemetryEnabled.replaceAll(xxxxxxxxx, messageId))
         case "config/getSerializedProfileInfo" =>
           if(line.contains(".continue/config.yaml")){
+            println("LLM is OK.")
             isReadly = true
           }
         case "llm/streamChat" =>
