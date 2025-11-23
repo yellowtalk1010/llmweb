@@ -70,21 +70,8 @@ public class AISocketHandler extends TextWebSocketHandler {
             String messageStr = message.getPayload();
             log.info("接受到数据:" + messageStr);
             //EXECUTOR_SERVICE.execute(new MockDataThread(messageStr, session));  //mock假数据调试
-            EXECUTOR_SERVICE.execute(()->{
-                try {
-                    Client.testWrite(session.getId());
-                    while (true) {
-                        Thread.sleep(50);
-                        if(!Client.queue().isEmpty()){
-                            Client.LlmStreamChat llmStreamChat = Client.queue().poll();
-                            session.sendMessage(new TextMessage(llmStreamChat.getData().getContent().getContent()));
-                        }
-                    }
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            //new MockDataThread(messageStr, session).run();  //mock假数据调试
+            Client.testWrite(session.getId());
         }catch (Exception e) {
             session.sendMessage(new TextMessage(e.getMessage()));
         }
