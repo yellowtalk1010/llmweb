@@ -17,8 +17,8 @@ function AiCheckTemplate({ issue }) {
         document.getElementById("textarea_hidden_" + issueData.id).value = ""
         document.getElementById("ai_check_" + issueData.id)
 
-        const str = issueData.id + "##########" + inputData
-        console.info(str)
+        // const str = issueData.id + "##########" + inputData
+        // console.info(str)
         const jsonData = {
             "issueId": issueData.id,
             "content": inputData
