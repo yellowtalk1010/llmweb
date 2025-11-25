@@ -1,5 +1,6 @@
 package zuk.sast.rules.webSocket;
 
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -69,6 +70,12 @@ public class AISocketHandler extends TextWebSocketHandler {
         try {
             String messageStr = message.getPayload();
             log.info("接受到数据:" + messageStr);
+            JSONObject jsonObject = JSONObject.parseObject(messageStr);
+            String issueId = (String)jsonObject.get("issueId");
+            String content = (String)jsonObject.get("content");
+            System.out.println("issueId:" + issueId);
+            System.out.println("content:" + content);
+
             //EXECUTOR_SERVICE.execute(new MockDataThread(messageStr, session));  //mock假数据调试
             //new MockDataThread(messageStr, session).run();  //mock假数据调试
             Client.testWrite(session.getId());
