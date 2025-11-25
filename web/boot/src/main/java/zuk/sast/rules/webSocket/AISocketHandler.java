@@ -78,7 +78,13 @@ public class AISocketHandler extends TextWebSocketHandler {
 
             //EXECUTOR_SERVICE.execute(new MockDataThread(messageStr, session));  //mock假数据调试
             //new MockDataThread(messageStr, session).run();  //mock假数据调试
-            Client.testWrite(session.getId(), content);
+            StringBuilder stringBuilder = new StringBuilder();
+            Arrays.stream(content.split("\n")).forEach(line->{
+                stringBuilder.append(line);
+                stringBuilder.append("\\n"); //这里是转成字符串\n，不是真正的去换行
+            });
+
+            Client.testWrite(session.getId(), stringBuilder.toString());
         }catch (Exception e) {
             e.printStackTrace();
         }
