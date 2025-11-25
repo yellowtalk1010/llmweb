@@ -78,7 +78,7 @@ public class AISocketHandler extends TextWebSocketHandler {
 
             //EXECUTOR_SERVICE.execute(new MockDataThread(messageStr, session));  //mock假数据调试
             //new MockDataThread(messageStr, session).run();  //mock假数据调试
-            Client.testWrite(session.getId());
+            Client.testWrite(session.getId(), content);
         }catch (Exception e) {
             e.printStackTrace();
         }

@@ -75,9 +75,9 @@ object Client {
     println("完成LLM连接")
   }
 
-  def testWrite(messageId: String): Unit = {
+  def testWrite(messageId: String, codeContent: String): Unit = {
     try {
-      val llm = """{"messageId":"XXX-XXX-XXX","messageType":"llm/streamChat","data":{"completionOptions":{"reasoning":false},"title":"DeepSeek Coder","messages":[{"role":"system","content":"你是一个资深的c/c++代码审计专家，主要审计代码中编码风格，编码安全漏洞问题。"},{"role":"user","content":"\n```kt test.kt (4-7)\n    fun add(number: Double): Test {\n        result +\u003d number\n        return this\n    }\n```\n\nanalysis  code."},{"role":"assistant","content":"分析C/C++代码，让代码没有缺陷和漏洞，更好更安全。\n\n\n"},{"role":"user","content":"UINT_32 new = 0; \n\n\n\n"},{"role":"user","content":"分析这段代码，中文回复"}],"messageOptions":{"precompiled":true}}}"""
+      val llm = """{"messageId":"XXX-XXX-XXX","messageType":"llm/streamChat","data":{"completionOptions":{"reasoning":false},"title":"DeepSeek Coder","messages":[{"role":"system","content":"你是一个资深的c/c++代码审计专家，主要审计代码中编码风格，编码安全漏洞问题。"},{"role":"assistant","content":"分析C/C++代码，让代码没有缺陷和漏洞，更好更安全。\n\n\n"},{"role":"user","content":"\n``` """ + codeContent + """ \n\n```"},{"role":"user","content":"分析这段代码，中文回复"}],"messageOptions":{"precompiled":true}}}"""
       val l = llm.replaceAll(xxxxxxxxx, messageId)
       handleWriteLine(l)
     }
