@@ -9,16 +9,23 @@ function AiCheckTemplate({ issue }) {
     const [aiConnect, setAiConnect] = useState(false); //判断ai是否连接成功
     
     const handleAiCheckClick = (event, issueData) => {
-        
+        console.info("点击AI审计")
         // console.info(event)
         // console.info(issueData)
         const inputData = document.getElementById("textarea_input_" + issueData.id).value
+        //console.info(inputData)
         document.getElementById("textarea_hidden_" + issueData.id).value = ""
         document.getElementById("ai_check_" + issueData.id)
 
-        const str = issueData.id //+ "##########" + inputData
+        const str = issueData.id + "##########" + inputData
         console.info(str)
-        socket.send(str);
+        const jsonData = {
+            "issueId": issueData.id,
+            "content": inputData
+        }
+        console.info(jsonData)
+        const jsonDataString = JSON.stringify(jsonData)
+        socket.send(jsonDataString);
     };
     
     const handleCloseClick = () => {
