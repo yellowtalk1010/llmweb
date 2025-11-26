@@ -48,7 +48,7 @@ object DownloadDayStock extends Download {
 //        })
         .foreach(stockApiVO => {
           try {
-            val url = "https://stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
+            val url = "https://www.stockapi.com.cn/v1/base/day?token=" + LoaderLocalStockData.TOKEN + "&code=" + stockApiVO.getApi_code + "&startDate=" + startTime + "&endDate=" + endTime + "&calculationCycle=100"
             val response = super.download(url)
             if(StringUtils.isNotEmpty(response)){
               val jsonArray = JSONObject.parseObject(response).get("data").asInstanceOf[JSONArray]
