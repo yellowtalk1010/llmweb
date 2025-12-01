@@ -1,0 +1,59 @@
+package zuk.stock.test
+
+import org.apache.commons.io.FileUtils
+import org.scalatest.funsuite.AnyFunSuite
+import zuk.stockapi.model.MA3_Model
+import zuk.stockapi.{CalculateMAForDay, CalculateMAForDay_Tushare, LoaderLocalStockData, StockApiVo}
+
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import scala.jdk.CollectionConverters.*
+import org.apache.commons.csv.*
+
+import java.io.FileReader
+import java.io.Reader
+
+
+class Tushare_MA3_Model_Test extends AnyFunSuite {
+
+  test("tushare"){
+    //将tushare的csv数据转成对象
+    val in = new FileReader("D:\\development\\github_python\\tuShare\\src\\python\\all_stocks.csv")
+    val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
+
+    val codes = records.asScala.map(record=>{
+      val ts_code = record.get("ts_code")
+      val name = record.get("name")
+      val splits = ts_code.split("\\.")
+      val code = splits(0)
+      val jys = splits(1)
+      val gl = record.get("industry")
+      val stockApiVo = new StockApiVo()
+      stockApiVo.setApi_code(code)
+      stockApiVo.setName(name)
+      stockApiVo.setJys(jys)
+      stockApiVo.setGl(gl)
+      stockApiVo
+    }).toList
+    in.close()
+    println(s"${codes.size}")
+
+    val tpList = CalculateMAForDay_Tushare.run(codes)
+
+    val socketList = tpList.filter(_._2.size > 0).filter(tp => {
+      val stock = tp._1
+      val malist = tp._2
+      val model = new MA3_Model(stock, malist)
+      model.run()
+      model.isHit()
+    })
+
+    println(socketList.size)
+    socketList.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
+    val sdm = new SimpleDateFormat("yyyyMMdd")
+    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA3.txt"), socketList.map(e => s"${e._1.getApi_code}，${e._1.getName}").asJava)
+
+  }
+
+}
