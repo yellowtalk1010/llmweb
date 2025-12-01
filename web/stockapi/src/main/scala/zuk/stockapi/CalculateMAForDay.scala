@@ -82,8 +82,8 @@ object CalculateMAForDay {
 
   def getStockDayVos(stock: StockApiVo): List[StockDayVo] = {
     val code = stock.getApi_code
-    val codeDataFile = new File(LoaderLocalStockData.STOCK_DAY + File.separator + code)
-    //println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
+//    val codeDataFile = new File(LoaderLocalStockData.STOCK_DAY + File.separator + code)
+//    println( s"${codeDataFile.getAbsolutePath}, ${codeDataFile.exists()}, ${stock.getName}")
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
