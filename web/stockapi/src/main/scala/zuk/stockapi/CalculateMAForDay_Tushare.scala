@@ -15,6 +15,8 @@ import scala.jdk.CollectionConverters.*
 
 object CalculateMAForDay_Tushare {
 
+  var CSV_PATH = ""
+
   def run(stocks: List[StockApiVo]): List[(StockApiVo, List[StockMaVo])] = {
     var list = ListBuffer[(StockApiVo, List[StockMaVo])]()
     val counter = new AtomicInteger(0)
@@ -88,7 +90,7 @@ object CalculateMAForDay_Tushare {
     val num = new AtomicInteger(0)
     val stockDayVoList = new ListBuffer[StockDayVo]
 
-    val path = s"D:\\development\\github_python\\tuShare\\src\\python\\module\\${stock.getApi_code}_${stock.getJys}.csv"
+    val path = s"${CSV_PATH}\\module\\${stock.getApi_code}_${stock.getJys}.csv"
     val file = new File(path)
     if (!file.exists) {
       println(path + "，不存在")
