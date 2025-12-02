@@ -38,7 +38,9 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
       stockApiVo.setJys(jys)
       stockApiVo.setGl(gl)
       stockApiVo
-    }).toList
+    })
+//      .filter(e=>e.getApi_code.contains("000753"))
+      .toList
     in.close()
     println(s"${codes.size}")
 
@@ -55,7 +57,7 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
     println(socketList.size)
     socketList.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
     val sdm = new SimpleDateFormat("yyyyMMdd")
-    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA3.txt"), socketList.map(e => s"${e._1.getApi_code}，${e._1.getName}").asJava)
+//    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA3.txt"), socketList.map(e => s"${e._1.getApi_code}，${e._1.getName}").asJava)
 
   }
 
