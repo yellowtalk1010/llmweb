@@ -15,8 +15,8 @@ def send_mail():
     receiver = "513283439@qq.com"
 
     # 构造邮件内容（纯文本）
-    msg = MIMEText("你好，\n这是Python发送的邮件", "plain", "utf-8")
-    msg["Subject"] = "测试邮件"
+    msg = MIMEText("603341，龙旗科技603986，兆易创新688215，瑞晟智能688502，茂莱光学688503，聚和材料688535，华海诚科688630，芯碁微装688798，艾为电子920821，则成电子", "plain", "utf-8")
+    msg["Subject"] = "推荐"
     msg["From"] = sender
     msg["To"] = receiver
 
