@@ -36,7 +36,7 @@ object SendMail {
     }
     // 创建邮件会话
     val session = Session.getInstance(props, authenticator)
-    session.setDebug(true) // 启用调试模式
+    session.setDebug(false) // 改为true，启用调试模式
 
     try {
       // 创建邮件
