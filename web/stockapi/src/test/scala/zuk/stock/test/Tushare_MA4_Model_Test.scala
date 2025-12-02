@@ -13,7 +13,7 @@ import scala.jdk.CollectionConverters.*
 
 class Tushare_MA4_Model_Test extends AnyFunSuite {
 
-  val path = "tuShare"
+  val path = "tushare"
   CalculateMAForDay_Tushare.CSV_PATH = path
 
   test("tushare m4") {
