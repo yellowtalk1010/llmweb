@@ -21,6 +21,8 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
   val path = "tushare"
   CalculateMAForDay_Tushare.CSV_PATH = path
 
+  val mailAddress = "513283439@qq.com"
+
   test("tushare-3"){
     //将tushare的csv数据转成对象
     val in = new FileReader(s"${path}\\all_stocks.csv")
@@ -33,11 +35,13 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
       val code = splits(0)
       val jys = splits(1)
       val gl = record.get("industry")
+      val area = record.get("area")
       val stockApiVo = new StockApiVo()
       stockApiVo.setApi_code(code)
       stockApiVo.setName(name)
       stockApiVo.setJys(jys)
       stockApiVo.setGl(gl)
+      stockApiVo.setArea(area)
       stockApiVo
     })
 //      .filter(e=>e.getApi_code.contains("000753"))
@@ -47,7 +51,8 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
 
     val tpList = CalculateMAForDay_Tushare.run(codes)
 
-    val socketList = tpList.filter(_._2.size > 0).filter(tp => {
+    println("模型3号")
+    val socketListM3 = tpList.filter(_._2.size > 0).filter(tp => {
       val stock = tp._1
       val malist = tp._2
       val model = new MA3_Model(stock, malist)
@@ -56,60 +61,24 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
     })
       .filter(e=> !e._1.getName.contains("ST")) //排除ST股票
 
-    println(socketList.size)
-    socketList.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
-    val sdm = new SimpleDateFormat("yyyyMMdd")
-
-    val mailAddress = "513283439@qq.com"
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, "推荐 M3", socketList.map(e=>s"${e._1.getApi_code},${e._1.getName}").mkString("\n"))
-//    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA3.txt"), socketList.map(e => s"${e._1.getApi_code}，${e._1.getName}").asJava)
-
-  }
+    println(socketListM3.size)
+    socketListM3.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, "推荐 M3", socketListM3.map(e=>s"${e._1.getApi_code}，${e._1.getName}，${e._1.getArea}，${e._1.getGl}").mkString("\n"))
 
 
-
-  test("tushare-3.1"){
-    //将tushare的csv数据转成对象
-    val in = new FileReader(s"${path}\\all_stocks.csv")
-    val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
-
-    val codes = records.asScala.map(record=>{
-        val ts_code = record.get("ts_code")
-        val name = record.get("name")
-        val splits = ts_code.split("\\.")
-        val code = splits(0)
-        val jys = splits(1)
-        val gl = record.get("industry")
-        val stockApiVo = new StockApiVo()
-        stockApiVo.setApi_code(code)
-        stockApiVo.setName(name)
-        stockApiVo.setJys(jys)
-        stockApiVo.setGl(gl)
-        stockApiVo
-      })
-      //      .filter(e=>e.getApi_code.contains("000753"))
-      .toList
-    in.close()
-    println(s"${codes.size}")
-
-    val tpList = CalculateMAForDay_Tushare.run(codes)
-
-    val socketList = tpList.filter(_._2.size > 0).filter(tp => {
+    println("模型3.1号")
+    val socketListM3_1 = tpList.filter(_._2.size > 0).filter(tp => {
         val stock = tp._1
         val malist = tp._2
         val model = new MA3_1_Model(stock, malist)
         model.run()
         model.isHit()
       })
-      .filter(e=> !e._1.getName.contains("ST")) //排除ST股票
+      .filter(e => !e._1.getName.contains("ST")) //排除ST股票
 
-    println(socketList.size)
-    socketList.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
-    val sdm = new SimpleDateFormat("yyyyMMdd")
-
-    val mailAddress = "513283439@qq.com"
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, "推荐 M3.1", socketList.map(e=>s"${e._1.getApi_code},${e._1.getName}").mkString("\n"))
-    //    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA3.txt"), socketList.map(e => s"${e._1.getApi_code}，${e._1.getName}").asJava)
+    println(socketListM3_1.size)
+    socketListM3_1.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, "推荐 M3.1", socketListM3_1.map(e => s"${e._1.getApi_code}，${e._1.getName}，${e._1.getArea}，${e._1.getGl}").mkString("\n"))
 
   }
 
