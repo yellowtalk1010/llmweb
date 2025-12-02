@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import scala.jdk.CollectionConverters.*
 import org.apache.commons.csv.*
+import zuk.utils.SendMail
 
 import java.io.FileReader
 import java.io.Reader
@@ -57,6 +58,9 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
     println(socketList.size)
     socketList.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
     val sdm = new SimpleDateFormat("yyyyMMdd")
+
+    val mailAddress = "513283439@qq.com"
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, "推荐", socketList.map(e=>s"${e._1.getApi_code},${e._1.getName}").mkString("\n"))
 //    FileUtils.writeLines(new File(s"stockapi/model_result/${sdm.format(new Date)}-MA3.txt"), socketList.map(e => s"${e._1.getApi_code}，${e._1.getName}").asJava)
 
   }
