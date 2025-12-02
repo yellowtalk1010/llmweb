@@ -11,7 +11,7 @@ daily_basic_path = "daily_basic"
 
 module_path = "module"
 
-max = 60
+max = 120
 
 def create_module_date():
     print("创建分析数据")
