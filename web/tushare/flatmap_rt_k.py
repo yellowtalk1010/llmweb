@@ -1,35 +1,56 @@
+import os
+
 import tushare as ts
+import pandas as pd
 
-import ZukTuShare
-# 初始化pro接口
-pro = ts.pro_api(ZukTuShare.token)
-
-# 拉取数据
-def rt_k():
-    df = pro.rt_k(**{
-        "topic": "",
-        "ts_code": "0*.SZ,3*.SZ,6*.SH,9*.BJ",
-        "limit": "",
-        "offset": ""
-    }, fields=[
-        "ts_code",
-        "name",
-        "pre_close",
-        "high",
-        "open",
-        "low",
-        "close",
-        "vol",
-        "amount",
-        "num"
-    ])
-    # print(df)
-    return df
-
-# 每天最多访问该接口2次，
 if __name__ == '__main__':
-    df = rt_k()
-    df.to_csv('rt_k/rt_k.csv', index=False)
-    print("完成")
+    trade_date = "20251202"
+    path = "rt_k/rt_k.csv"
+    df = pd.read_csv(path)
+    print(len(df))
+    for index, row in df.iterrows():
+        ts_code = row['ts_code']
+        # ts_code	name	pre_close	high	open	low	close	vol	amount	num
+        print(ts_code)
+        ts_code_path = ts_code.replace(".", "_")
+        module_path = f"module/{ts_code_path}.csv"
+        if not os.path.exists(module_path):
+            print(f"{module_path}不存在")
+            continue
+        module_df = pd.read_csv(module_path)
+        if module_df.empty or len(module_df) == 0:
+            continue
 
-        
+        module_head_row = module_df.iloc[0]
+
+        turnover_rate = row['vol'] / module_head_row["float_share"]
+        change = (row['close'] - module_head_row["close"]) / module_head_row["close"]
+
+        print(module_head_row["ts_code"], module_head_row["name"])
+        # ts_code	name	trade_date	open	high	low	close	pre_close	change	vol	amount	turnover_rate	float_share	area	industry	market
+        new_record = {'ts_code': module_head_row["trade_date"],
+                      'name': module_head_row["name"],
+                      'trade_date': trade_date,
+                      'open': row["open"],
+                      'high': row["high"],
+                      'low': row["low"],
+                      'close': row["close"],
+                      'pre_close': module_head_row["close"],
+                      'change': round(change, 4),
+                      'vol': row["vol"],
+                      'amount': row["amount"],
+                      'turnover_rate': round(turnover_rate, 4),
+                      'float_share': module_head_row["float_share"],
+                      'area': module_head_row["area"],
+                      'industry': module_head_row["industry"],
+                      'market': module_head_row["market"]
+                      }
+
+        new_df = pd.DataFrame([new_record])
+
+        merge = pd.concat([new_df, module_df], ignore_index=True)
+        merge = merge.loc[:, ~merge.columns.str.contains('^Unnamed')]
+        merge.to_csv(module_path, index=False)
+        print(f"合并成功{module_path}")
+        print()
+
