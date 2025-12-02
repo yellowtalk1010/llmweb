@@ -56,6 +56,8 @@ def merge():
 
 def compare():
     print("比较")
+    error_num = 0
+    location_num = 0
     stocks = pd.read_csv("all_stocks.csv")
     for index, row in stocks.iterrows():
         ts_code = row["ts_code"].replace(".", "_")
@@ -70,6 +72,7 @@ def compare():
             daily_basic_df = pd.read_csv(daily_basic)
             if (len(daily_df) != len(daily_basic_df)):
                 print(f"数据量不一致，{ts_code}，{name}，{len(daily_df)}， {len(daily_basic_df)}")
+                error_num = error_num + 1
             else:
                 print(len(daily_df))
                 for i in range(len(daily_df)):
@@ -79,10 +82,11 @@ def compare():
                     trade_date = daily_df_row["trade_date"]
                     if daily_df_row["trade_date"] != daily_basic_df_row["trade_date"]:
                         print(f"{ts_code},{trade_date},位置错误")
+                        location_num = location_num + 1
         except:
             print(f"读取失败，{ts_code}，{name}")
 
-
+    print(f"error_num:{error_num}, location_num:{location_num}")
         
 
 # 比较daily与daily_basic数据是否一致
