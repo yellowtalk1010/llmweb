@@ -17,9 +17,12 @@ import java.io.Reader
 
 class Tushare_MA3_Model_Test extends AnyFunSuite {
 
+  val path = "D:\\development\\github_python\\tuShare\\src\\python\\"
+  CalculateMAForDay_Tushare.CSV_PATH = path
+
   test("tushare"){
     //将tushare的csv数据转成对象
-    val in = new FileReader("D:\\development\\github_python\\tuShare\\src\\python\\all_stocks.csv")
+    val in = new FileReader(s"${path}\\all_stocks.csv")
     val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
 
     val codes = records.asScala.map(record=>{
