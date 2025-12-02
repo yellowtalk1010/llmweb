@@ -54,6 +54,7 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
       model.run()
       model.isHit()
     })
+      .filter(e=> !e._1.getName.contains("ST")) //排除ST股票
 
     println(socketList.size)
     socketList.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
