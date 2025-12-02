@@ -3,3 +3,6 @@ data/*
 target/*
 
 *.log
+
+tushare/module/*
+tushare/.idea
