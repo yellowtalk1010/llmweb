@@ -22,13 +22,15 @@ if __name__ == '__main__':
             continue
 
         module_head_row = module_df.iloc[0]
+        if(module_head_row["trade_date"] == trade_date or module_head_row["trade_date"] == str(trade_date)):
+            continue
 
         turnover_rate = row['vol'] / module_head_row["float_share"]
         change = (row['close'] - module_head_row["close"]) / module_head_row["close"]
 
         print(module_head_row["ts_code"], module_head_row["name"])
         # ts_code	name	trade_date	open	high	low	close	pre_close	change	vol	amount	turnover_rate	float_share	area	industry	market
-        new_record = {'ts_code': module_head_row["trade_date"],
+        new_record = {'ts_code': module_head_row["ts_code"],
                       'name': module_head_row["name"],
                       'trade_date': trade_date,
                       'open': row["open"],

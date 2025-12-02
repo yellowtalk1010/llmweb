@@ -26,7 +26,7 @@ def rt_k():
     # print(df)
     return df
 
-# 每天最多访问该接口2次，
+# 每天最多访问该接口2次，每小时1次
 if __name__ == '__main__':
     df = rt_k()
     df.to_csv('rt_k/rt_k.csv', index=False)
