@@ -65,7 +65,7 @@ def create_module_date():
             "low": daily_df_top_30["low"],                              # 最低价
             "close": daily_df_top_30["close"],                          # 收盘价
             "pre_close": daily_df_top_30["pre_close"],                  # 上一个交易日收盘价
-            "change": daily_df_top_30["change"],                        # 涨跌额
+            "change": daily_df_top_30["pct_chg"],                       # 涨跌幅度（区别涨跌额）
             "vol": daily_df_top_30["vol"],                              # 成交量
             "amount": daily_df_top_30["amount"],                        # 成交额
             "turnover_rate": daily_basic_df_top_30["turnover_rate"],    # 换手率
