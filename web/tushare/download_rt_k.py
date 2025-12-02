@@ -23,7 +23,7 @@ def rt_k():
         "amount",
         "num"
     ])
-    print(df)
+    # print(df)
     return df
 
 # 每天最多访问该接口2次，
