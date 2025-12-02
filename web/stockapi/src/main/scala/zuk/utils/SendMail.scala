@@ -10,8 +10,10 @@ object SendMail {
   private val SMTP_PORT = 465 // SSL端口
 
   private val SMTP_PROTOCOL = "smtps" // SSL协议
+  private val authCode = "xutobxzlvwisbigc" // 授权码
 
-  def sendSimpleEmail(senderEmail: String, authCode: String, receiverEmail: String, subject: String, content: String): Boolean = {
+  def sendSimpleEmail(senderEmail: String, receiverEmail: String, subject: String, content: String): Boolean = {
+
     // 配置邮件服务器属性
     val props = new Properties()
     props.put("mail.smtp.host", SMTP_HOST)
@@ -62,15 +64,12 @@ object SendMail {
   def main(args: Array[String]): Unit = {
     // 测试发送邮件
     val senderEmail = "513283439@qq.com" // 发件人QQ邮箱
-
-    val authCode = "xutobxzlvwisbigc" // 授权码
-
     val receiverEmail = "513283439@qq.com" // 收件人邮箱
 
     val subject = "Java SMTP 测试邮件"
     val content = "这是一封通过Java发送的测试邮件！"
 
-    val success = sendSimpleEmail(senderEmail, authCode, receiverEmail, subject, content)
+    val success = sendSimpleEmail(senderEmail, receiverEmail, subject, content)
     if (success) {
       System.out.println("邮件发送成功！")
     }
