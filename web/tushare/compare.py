@@ -80,7 +80,8 @@ def compare():
                     daily_df_row = daily_df.iloc[i]
                     daily_basic_df_row = daily_basic_df.iloc[i]
                     trade_date = daily_df_row["trade_date"]
-                    if daily_df_row["trade_date"] != daily_basic_df_row["trade_date"]:
+                    if ((daily_df_row["trade_date"] != daily_basic_df_row["trade_date"])
+                            or (daily_df_row["ts_code"] != daily_basic_df_row["ts_code"] )):
                         print(f"{ts_code},{trade_date},位置错误")
                         location_num = location_num + 1
         except:
