@@ -22,7 +22,11 @@ if __name__ == '__main__':
             continue
 
         module_head_row = module_df.iloc[0]
-        if(module_head_row["trade_date"] == trade_date or module_head_row["trade_date"] == str(trade_date)):
+
+        module_head_row_trade_date = module_head_row["trade_date"]
+
+        if(module_head_row_trade_date == trade_date or str(module_head_row_trade_date) == trade_date):
+            # 记录已存在
             continue
 
         turnover_rate = row['vol'] / module_head_row["float_share"]
