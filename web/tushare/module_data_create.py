@@ -15,7 +15,7 @@ max = 120
 
 def create_module_date():
     print("创建分析数据")
-    all_stocks = pd.read_csv("all_stocks.csv")
+    all_stocks = pd.read_csv("all_stocks.csv", encoding="utf-8")
     for index, stock_row in all_stocks.iterrows():
         ts_code = stock_row["ts_code"]
         name = stock_row["name"]
@@ -35,8 +35,8 @@ def create_module_date():
             print(f"{daily_file}, {daily_basic_file} 文件不存在")
             continue
 
-        daily_df = pd.read_csv(daily_file)
-        daily_basic_df = pd.read_csv(daily_basic_file)
+        daily_df = pd.read_csv(daily_file, encoding="utf-8")
+        daily_basic_df = pd.read_csv(daily_basic_file, encoding="utf-8")
 
         if len(daily_df) < max or len(daily_basic_df) < max:
             print(f"{ts_code},{name},可能是新股，数量不足30")
@@ -78,7 +78,7 @@ def create_module_date():
         module_file = f"{module_path}/{ts_code.replace('.', '_')}.csv"
         try:
             if not os.path.exists(module_file):
-                sub_df.to_csv(module_file, index=False)
+                sub_df.to_csv(module_file, encoding='utf-8', index=False)
                 print("写入成功")
 
             else:

@@ -4,9 +4,9 @@ import tushare as ts
 import pandas as pd
 
 if __name__ == '__main__':
-    trade_date = "20251202"
+    trade_date = "20251203"
     path = "rt_k/rt_k.csv"
-    df = pd.read_csv(path)
+    df = pd.read_csv(path, encoding="utf-8")
     print(len(df))
     for index, row in df.iterrows():
         ts_code = row['ts_code']
@@ -17,7 +17,7 @@ if __name__ == '__main__':
         if not os.path.exists(module_path):
             print(f"{module_path}不存在")
             continue
-        module_df = pd.read_csv(module_path)
+        module_df = pd.read_csv(module_path, encoding="utf-8")
         if module_df.empty or len(module_df) == 0:
             continue
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
         merge = pd.concat([new_df, module_df], ignore_index=True)
         merge = merge.loc[:, ~merge.columns.str.contains('^Unnamed')]
-        merge.to_csv(module_path, index=False)
+        merge.to_csv(module_path, encoding="utf-8", index=False)
         print(f"合并成功{module_path}")
         print()
 
