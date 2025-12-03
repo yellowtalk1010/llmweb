@@ -8,14 +8,14 @@ def send_mail():
 
     port = 465  # SSL端口
     # 邮箱账号与授权码
-    sender = "513283439@qq.com"
-    auth_code = "xutobxzlvwisbigc"
+    sender = "xxx@qq.com"
+    auth_code = "xxxxx"
 
     # 收件人
-    receiver = "513283439@qq.com"
+    receiver = "xxx@qq.com"
 
     # 构造邮件内容（纯文本）
-    msg = MIMEText("603341，龙旗科技603986，兆易创新688215，瑞晟智能688502，茂莱光学688503，聚和材料688535，华海诚科688630，芯碁微装688798，艾为电子920821，则成电子", "plain", "utf-8")
+    msg = MIMEText("内容", "plain", "utf-8")
     msg["Subject"] = "推荐"
     msg["From"] = sender
     msg["To"] = receiver
