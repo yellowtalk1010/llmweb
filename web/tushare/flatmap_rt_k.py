@@ -8,10 +8,10 @@ if __name__ == '__main__':
     path = "rt_k/rt_k.csv"
     df = pd.read_csv(path, encoding="utf-8")
     print(len(df))
-    for index, row in df.iterrows():
-        ts_code = row['ts_code']
+    for index, rtk_row in df.iterrows():
+        ts_code = rtk_row['ts_code']
         # ts_code	name	pre_close	high	open	low	close	vol	amount	num
-        print(ts_code, row['name'])
+        print(ts_code, rtk_row['name'])
         ts_code_path = ts_code.replace(".", "_")
         module_path = f"module/{ts_code_path}.csv"
         if not os.path.exists(module_path):
@@ -27,23 +27,26 @@ if __name__ == '__main__':
             # 记录已存在
             continue
 
+        rtk_vol = rtk_row['vol'] / 100  #交易量
+        rtk_amount = rtk_row['amount'] / 1000 #交易额
         # 计算换手率
-        turnover_rate = row['vol'] / module_first_row["float_share"]
+        turnover_rate = rtk_vol / module_first_row["float_share"]
         # 计算涨跌
-        change = (row['close'] - module_first_row["close"]) / module_first_row["close"]
+        change = (rtk_row['close'] - module_first_row["close"]) / module_first_row["close"]
+        change = change * 100
         print(module_first_row["ts_code"], module_first_row["name"])
         # ts_code	name	trade_date	open	high	low	close	pre_close	change	vol	amount	turnover_rate	float_share	area	industry	market
         new_record = {'ts_code': module_first_row["ts_code"],
                       'name': module_first_row["name"],
                       'trade_date': trade_date,
-                      'open': row["open"],
-                      'high': row["high"],
-                      'low': row["low"],
-                      'close': row["close"],
+                      'open': rtk_row["open"],
+                      'high': rtk_row["high"],
+                      'low': rtk_row["low"],
+                      'close': rtk_row["close"],
                       'pre_close': module_first_row["close"],
                       'change': round(change, 4),
-                      'vol': row["vol"],
-                      'amount': row["amount"],
+                      'vol': rtk_vol,
+                      'amount': rtk_amount,
                       'turnover_rate': round(turnover_rate, 4),
                       'float_share': module_first_row["float_share"],
                       'area': module_first_row["area"],
