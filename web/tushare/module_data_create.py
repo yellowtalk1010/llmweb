@@ -4,7 +4,6 @@ import tushare as ts
 import pandas as pd
 import ZukTuShare
 
-pro = ts.pro_api(ZukTuShare.token)
 
 daily_path = "daily"
 daily_basic_path = "daily_basic"

@@ -15,14 +15,13 @@ import time
 import ZukTuShare
 import download_stock_basic
 
-# 初始化pro接口
-pro = ts.pro_api(ZukTuShare.token)
 
 # 位置：数据接口->股票数据->行情数据->每日指标
 def daily_basic(ts_code, trade_date, start_date, end_date):
     sleep(0.5)
     # 拉取数据
-    # 拉取数据
+    # 初始化pro接口
+    pro = ZukTuShare.getPro()
     df = pro.daily_basic(**{
         "ts_code": ts_code,
         "trade_date": trade_date,

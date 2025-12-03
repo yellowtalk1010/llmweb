@@ -13,8 +13,7 @@ def daily(ts_code, trade_date, start_date, end_date):
     time.sleep(2)
     # 导入tushare
     # 初始化pro接口
-    token = ZukTuShare.token
-    pro = ts.pro_api(token)
+    pro = ZukTuShare.getPro()
 
     # 拉取数据
     df = pro.daily(**{
