@@ -74,7 +74,11 @@ def create_module_date():
             "market": market,                                           # 市场类型：主板、创业、科创、北交
         })
 
+        if(not os.path.exists(module_path)):
+            # 创建module文件夹
+            os.makedirs(module_path)
         module_file = f"{module_path}/{ts_code.replace('.', '_')}.csv"
+
         try:
             if not os.path.exists(module_file):
                 sub_df.to_csv(module_file, encoding='utf-8', index=False)
