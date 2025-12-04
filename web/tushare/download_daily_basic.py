@@ -101,7 +101,7 @@ def download_trade_date(trade_date):
         except Exception as e:
             print(f"错误，{e.__str__()}")
 
-
+    print(f"合并总数:{merge_num}")
 # def download_ts_code(ts_code_path, start_date, end_date):
 #     code = ts_code_path.replace("_", ".")
 #     path = f"daily_basic/{ts_code_path}/" + "2025.csv"
@@ -115,7 +115,7 @@ def download_trade_date(trade_date):
 
 # 采集交易日当天全市场收盘后的信息
 if __name__ == '__main__':
-    download_trade_date("20251203")
+    download_trade_date("20251204")
     print("完成")
 
 
