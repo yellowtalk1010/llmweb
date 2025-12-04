@@ -7,6 +7,8 @@ import zuk.utils.SendMail
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
+import java.text.SimpleDateFormat
+import java.util.Date
 import scala.jdk.CollectionConverters.*
 
 object RunModule3 {
@@ -28,6 +30,8 @@ object RunModule3 {
     }
 
     PATH = path
+    val sdf = new SimpleDateFormat("yyyyMMdd")
+    val tradeDate = sdf.format(new Date())
 
     //将tushare的csv数据转成对象
     val in = new FileReader(all_stocks_file.getAbsolutePath, Charset.forName("UTF-8"))
@@ -68,7 +72,7 @@ object RunModule3 {
 
     println(socketListM3.size)
     socketListM3.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, "推荐 M3", socketListM3.map(e=>s"${e._1.getApi_code}，${e._1.getName}，${e._1.getArea}，${e._1.getGl}").mkString("\n"))
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}-推荐 M3", socketListM3.map(e=>s"${e._1.getApi_code}，${e._1.getName}，${e._1.getArea}，${e._1.getGl}").mkString("\n"))
 
 
     println("模型3.1号")
@@ -83,7 +87,7 @@ object RunModule3 {
 
     println(socketListM3_1.size)
     socketListM3_1.map(e => e._1.getApi_code + "，" + e._1.getName).foreach(println)
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, "推荐 M3.1", socketListM3_1.map(e => s"${e._1.getApi_code}，${e._1.getName}，${e._1.getArea}，${e._1.getGl}").mkString("\n"))
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}-推荐 M3.1", socketListM3_1.map(e => s"${e._1.getApi_code}，${e._1.getName}，${e._1.getArea}，${e._1.getGl}").mkString("\n"))
 
   }
 
