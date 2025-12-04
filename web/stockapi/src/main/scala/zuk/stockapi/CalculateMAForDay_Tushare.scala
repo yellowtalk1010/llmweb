@@ -3,6 +3,7 @@ package zuk.stockapi
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.io.FileUtils
+import zuk.run.RunModule3
 
 import java.io.{File, FileReader}
 import java.math
@@ -14,8 +15,6 @@ import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object CalculateMAForDay_Tushare {
-
-  var CSV_PATH = ""
 
   def run(stocks: List[StockApiVo]): List[(StockApiVo, List[StockMaVo])] = {
     var list = ListBuffer[(StockApiVo, List[StockMaVo])]()
@@ -90,7 +89,7 @@ object CalculateMAForDay_Tushare {
     val num = new AtomicInteger(0)
     val stockDayVoList = new ListBuffer[StockDayVo]
 
-    val path = s"${CSV_PATH}\\module\\${stock.getApi_code}_${stock.getJys}.csv"
+    val path = s"${RunModule3.PATH}\\module\\${stock.getApi_code}_${stock.getJys}.csv"
     val file = new File(path)
     if (!file.exists) {
       println(path + "，不存在")
