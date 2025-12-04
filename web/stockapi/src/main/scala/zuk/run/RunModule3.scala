@@ -6,6 +6,7 @@ import zuk.stockapi.model.{MA3_1_Model, MA3_Model}
 import zuk.utils.SendMail
 
 import java.io.{File, FileReader}
+import java.nio.charset.Charset
 import scala.jdk.CollectionConverters.*
 
 object RunModule3 {
@@ -29,7 +30,7 @@ object RunModule3 {
     PATH = path
 
     //将tushare的csv数据转成对象
-    val in = new FileReader(all_stocks_file.getAbsolutePath)
+    val in = new FileReader(all_stocks_file.getAbsolutePath, Charset.forName("UTF-8"))
     val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
 
     val codes = records.asScala.map(record=>{
