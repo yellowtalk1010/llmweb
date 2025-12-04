@@ -8,6 +8,7 @@ import zuk.run.RunModule3
 import java.io.{File, FileReader}
 import java.math
 import java.math.BigDecimal
+import java.nio.charset.Charset
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicInteger
@@ -98,7 +99,7 @@ object CalculateMAForDay_Tushare {
       println(path + "，存在")
       try {
         //读取文件中的数据
-        val in = new FileReader(path)
+        val in = new FileReader(path, Charset.forName("UTF-8"))
         val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
         val ls: List[StockDayVo] = records.asScala.map(record=>{
           val ts_code = record.get("ts_code")
