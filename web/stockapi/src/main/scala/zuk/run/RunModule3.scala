@@ -30,7 +30,7 @@ object RunModule3 {
     }
 
     PATH = path
-    val sdf = new SimpleDateFormat("yyyyMMdd")
+    val sdf = new SimpleDateFormat("yyyy-MM-dd")
     val tradeDate = sdf.format(new Date())
 
     //将tushare的csv数据转成对象
