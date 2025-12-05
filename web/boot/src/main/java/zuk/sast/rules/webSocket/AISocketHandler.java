@@ -6,7 +6,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import zuk.Client;
+import zuk.LLMClient;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class AISocketHandler extends TextWebSocketHandler {
     public static Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
 
     static {
-        zuk.Client.init();
+        zuk.LLMClient.init();
 
         EXECUTOR_SERVICE.execute(()->{
             while (true) {
@@ -43,8 +43,8 @@ public class AISocketHandler extends TextWebSocketHandler {
             while (true) {
                 try {
                     Thread.sleep(10);
-                    if(!Client.queue().isEmpty()){
-                        Client.LlmStreamChat llmStreamChat = Client.queue().poll();
+                    if(!LLMClient.queue().isEmpty()){
+                        LLMClient.LlmStreamChat llmStreamChat = LLMClient.queue().poll();
                         WebSocketSession session = sessionMap.get(llmStreamChat.getMessageId());
                         if(session!=null && session.isOpen()){
                             session.sendMessage(new TextMessage(llmStreamChat.getData().getContent().getContent()));
@@ -84,7 +84,7 @@ public class AISocketHandler extends TextWebSocketHandler {
                 stringBuilder.append("\\n"); //这里是转成字符串\n，不是真正的去换行
             });
 
-            Client.testWrite(session.getId(), stringBuilder.toString());
+            LLMClient.testWrite(session.getId(), stringBuilder.toString());
         }catch (Exception e) {
             e.printStackTrace();
         }

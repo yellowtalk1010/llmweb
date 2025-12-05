@@ -1,7 +1,7 @@
 package zuk.sast.rules.webSocket;
 
 import org.springframework.web.socket.WebSocketSession;
-import zuk.Client;
+import zuk.LLMClient;
 
 import java.util.Arrays;
 
@@ -26,10 +26,10 @@ public class MockDataThread implements Runnable {
             try{
                 char arr[] = line.toCharArray();
                 for (int i =0; i< arr.length; i++) {
-                    Client.ContentData contentData = new Client.ContentData("assistant", arr[i]+"");
-                    Client.Data data = new Client.Data(false, contentData, "success");
-                    Client.LlmStreamChat llmStreamChat = new Client.LlmStreamChat("llm/streamChat", data, session.getId());
-                    Client.queue().put(llmStreamChat);
+                    LLMClient.ContentData contentData = new LLMClient.ContentData("assistant", arr[i]+"");
+                    LLMClient.Data data = new LLMClient.Data(false, contentData, "success");
+                    LLMClient.LlmStreamChat llmStreamChat = new LLMClient.LlmStreamChat("llm/streamChat", data, session.getId());
+                    LLMClient.queue().put(llmStreamChat);
                 }
 
             }catch (Exception e) {
