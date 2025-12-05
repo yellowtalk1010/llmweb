@@ -8,6 +8,9 @@ import java.net.Socket
 import java.util.concurrent.{ExecutorService, Executors, LinkedBlockingQueue}
 import scala.beans.BeanProperty
 
+/***
+ * 大模型调用客户端
+ */
 object LLMClient {
 
   val xxxxxxxxx = "XXX-XXX-XXX"
