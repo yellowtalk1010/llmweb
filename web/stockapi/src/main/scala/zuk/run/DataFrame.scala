@@ -172,12 +172,15 @@ object DataFrame {
     val rtks = loadRTK(rt_k_path)
 
     val dayMap = new mutable.HashMap[String, List[ModuleDay]]
+    var count = 0
     if(rtks.isEmpty){
       println("没有计算rt_k")
       stocks.foreach(stock=>{
         try{
           val historyDays = loadModules(path, stock.ts_code)
           dayMap.put(stock.ts_code, historyDays)
+          count = count + 1
+          println(s"${count}/${stocks.size}")
         }
         catch
           case exception: Exception => exception.printStackTrace()
@@ -202,6 +205,8 @@ object DataFrame {
             rtk.change = change.toString
 
             dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
+            count = count + 1
+            println(s"${count}/${rtks.size}")
           }
         } catch
           case exception: Exception => exception.printStackTrace()
