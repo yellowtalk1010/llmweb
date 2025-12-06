@@ -2,16 +2,18 @@ package zuk.stockapi;
 
 public class StockDayVo {
 
-    private String code;
-    private String time;
-    private String open;
-    private String turnoverRatio; //换手率
-    private String amount; //交易金额
-    private String high;
-    private String low;
-    private String changeRatio; //涨跌
-    private String close;
-    private String volume; //交易量
+    private String code;            //股票代码
+    private String name;            //股票名称
+    private String time;            //交易日期
+    private String open;            //开盘价
+    private String turnoverRatio;   //换手率
+    private String amount;          //交易金额
+    private String high;            //最高价
+    private String low;             //最低价
+    private String changeRatio;     //涨跌
+    private String close;           //收盘价
+    private String volume;          //交易量
+    private String pre_close;       //昨收价
 
     public String getCode() {
         return code;
@@ -19,6 +21,14 @@ public class StockDayVo {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTime() {
@@ -91,5 +101,13 @@ public class StockDayVo {
 
     public void setVolume(String volume) {
         this.volume = volume;
+    }
+
+    public String getPre_close() {
+        return pre_close;
+    }
+
+    public void setPre_close(String pre_close) {
+        this.pre_close = pre_close;
     }
 }

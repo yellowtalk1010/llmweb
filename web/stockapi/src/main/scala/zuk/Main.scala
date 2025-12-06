@@ -1,6 +1,6 @@
 package zuk
 
-import zuk.run.RunModule3
+import zuk.run.{DataFrame, RunModule3}
 
 object Main {
 
@@ -12,7 +12,8 @@ object Main {
     else {
       val path = args(0)
       println(s"path:${path}")
-      RunModule3.handle(path)
+//      RunModule3.handle(path)
+      DataFrame.load(path)
     }
   }
 

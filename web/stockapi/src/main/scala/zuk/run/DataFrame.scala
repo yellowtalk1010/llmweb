@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
+import java.math.{BigDecimal, RoundingMode}
 
 object DataFrame {
 
@@ -61,7 +62,7 @@ object DataFrame {
     val num = new AtomicInteger(0)
     val stockDayVoList = new ListBuffer[StockDayVo]
 
-    val module_path = path + File.separator + "module " + File.separator + s"${stock.getApi_code}_${stock.getJys}.csv"
+    val module_path = path + File.separator + "module" + File.separator + s"${stock.getApi_code}_${stock.getJys}.csv"
     val module_file = new File(module_path)
     if(!module_file.exists()){
       //判断模型路径是否存在
@@ -75,6 +76,7 @@ object DataFrame {
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
       val ls: List[StockDayVo] = records.asScala.map(record => {
         val ts_code = record.get("ts_code")
+        val name = record.get("name")
         val trade_date = record.get("trade_date")
         val open = record.get("open")
         val turnover_rate = record.get("turnover_rate")
@@ -87,6 +89,7 @@ object DataFrame {
 
         val stockDayVo = new StockDayVo()
         stockDayVo.setCode(ts_code)
+        stockDayVo.setName(name)
         stockDayVo.setTime(trade_date)
         stockDayVo.setOpen(open)
         stockDayVo.setTurnoverRatio(turnover_rate)
@@ -132,28 +135,31 @@ object DataFrame {
       val in = new FileReader(files.head.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
       val ls: List[StockDayVo] = records.asScala.map(record => {
+        // ts_code	name	pre_close	high	open	low	close	vol	amount	num
         val ts_code = record.get("ts_code")
-        val trade_date = record.get("trade_date")
-        val open = record.get("open")
-        val turnover_rate = record.get("turnover_rate")
-        val amount = record.get("amount")
+        val name = record.get("name")
+        val pre_close = record.get("pre_close")
         val high = record.get("high")
+        val open = record.get("open")
         val low = record.get("low")
-        val change = record.get("change")
         val close = record.get("close")
-        val vol = record.get("vol")
+
+        var vol = record.get("vol") //这里单位是股，需要转成成手
+        vol = new BigDecimal(vol).divide(new BigDecimal(100), 4, RoundingMode.DOWN).toString
+
+        var amount = record.get("amount")
+        amount = new BigDecimal(amount).divide(new BigDecimal(1000), 4, RoundingMode.DOWN).toString
 
         val stockDayVo = new StockDayVo()
         stockDayVo.setCode(ts_code)
-        stockDayVo.setTime(trade_date)
+        stockDayVo.setName(name)
         stockDayVo.setOpen(open)
-        stockDayVo.setTurnoverRatio(turnover_rate)
         stockDayVo.setAmount(amount)
         stockDayVo.setHigh(high)
         stockDayVo.setLow(low)
-        stockDayVo.setChangeRatio(change)
         stockDayVo.setClose(close)
         stockDayVo.setVolume(vol)
+        stockDayVo.setPre_close(pre_close)
 
         stockDayVo
       }).toList
@@ -176,6 +182,16 @@ object DataFrame {
     }
 
     val stocks = loadAllStocks(path)
+    stocks.foreach(stock=>{
+      try{
+        val historyDays = loadModules(path, stock)
+        if (historyDays.size > 0) {
+          println(s"${historyDays.head.getTime}, ${historyDays.head.getCode}, ${historyDays.head.getName}")
+        }
+      }
+      catch
+        case exception: Exception=>
+    })
 
 
 
