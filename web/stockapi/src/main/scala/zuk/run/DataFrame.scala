@@ -13,13 +13,11 @@ import scala.jdk.CollectionConverters.*
 
 object DataFrame {
 
-  var all_stocks_path = ""
-
   /***
    * 加载全部股票基本数据
    */
   private def loadAllStocks(path: String) = {
-    all_stocks_path = path + File.separator + "all_stocks.csv"
+    val all_stocks_path = path + File.separator + "all_stocks.csv"
     val all_stocks_file = new File(all_stocks_path)
     println(s"${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
