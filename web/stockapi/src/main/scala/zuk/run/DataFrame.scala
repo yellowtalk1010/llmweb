@@ -112,7 +112,7 @@ object DataFrame {
       println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
       return List.empty
     }
-    val files = rt_k_file.listFiles().sortBy(_.getName).reverse
+    val files = rt_k_file.listFiles().filter(_.getName.endsWith(".csv")).sortBy(_.getName).reverse
     if(files==null || files.size==0){
       println("rt_k文件为空")
       return List.empty
