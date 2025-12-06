@@ -14,12 +14,15 @@ object PassFactory {
   def doModule(map: mutable.HashMap[String, List[ModuleDay]]) = {
 
     val modules = moduleList()
+    var count = 0
     modules.foreach(module=>{
       map.foreach(e=>{
         val stock = e._1
         val moduleDayList = e._2
         doPass(moduleDayList)
         module.run(moduleDayList)
+        count = count + 1
+        println(s"moduel:${count}/${map.size * modules.size}")
       })
     })
 
