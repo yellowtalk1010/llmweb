@@ -1,6 +1,7 @@
 package zuk
 
 import zuk.run.{DataFrame, RunModule3}
+import zuk.tu_share.pass.PassFactory
 
 object Main {
 
@@ -13,7 +14,10 @@ object Main {
       val path = args(0)
       println(s"path:${path}")
 //      RunModule3.handle(path)
-      DataFrame.load(path)
+      val map = DataFrame.load(path)
+      map.foreach(e=>{
+        PassFactory.doPass(e._2)
+      })
     }
   }
 
