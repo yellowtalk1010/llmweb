@@ -35,7 +35,7 @@ object PassFactory {
         else {
           Option.empty
         }
-      }).map(_.get)
+      }).filter(_.nonEmpty).map(_.get)
 
       sendMail(clsName, stocks)
     })
