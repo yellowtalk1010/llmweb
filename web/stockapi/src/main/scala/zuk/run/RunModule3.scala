@@ -50,7 +50,6 @@ object RunModule3 {
         stockApiVo.setName(name)
         stockApiVo.setJys(jys)
         stockApiVo.setGl(gl)
-        stockApiVo.setArea(area)
         stockApiVo
       })
       //      .filter(e=>e.getApi_code.contains("000753"))
