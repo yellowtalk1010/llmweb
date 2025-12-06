@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
+import scala.collection.*
 
 object DataFrame {
 
@@ -182,16 +183,30 @@ object DataFrame {
     }
 
     val stocks = loadAllStocks(path)
+
+
+    val map = new mutable.HashMap[StockApiVo, List[StockDayVo]]
     stocks.foreach(stock=>{
-      try{
+      try {
         val historyDays = loadModules(path, stock)
-        if (historyDays.size > 0) {
-          println(s"${historyDays.head.getTime}, ${historyDays.head.getCode}, ${historyDays.head.getName}")
-        }
-      }
-      catch
-        case exception: Exception=>
+        map.put(stock, historyDays)
+      }catch
+        case exception: Exception => exception.printStackTrace()
     })
+
+    
+
+    println()
+//    stocks.foreach(stock=>{
+//      try{
+//        val historyDays = loadModules(path, stock)
+//        if (historyDays.size > 0) {
+//          println(s"${historyDays.head.getTime}, ${historyDays.head.getCode}, ${historyDays.head.getName}")
+//        }
+//      }
+//      catch
+//        case exception: Exception=>
+//    })
 
 
 
