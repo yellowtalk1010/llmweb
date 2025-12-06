@@ -15,9 +15,7 @@ object Main {
       println(s"path:${path}")
 //      RunModule3.handle(path)
       val map = DataFrame.load(path)
-      map.foreach(e=>{
-        PassFactory.doModule(e._2)
-      })
+      PassFactory.doModule(map)
     }
   }
 

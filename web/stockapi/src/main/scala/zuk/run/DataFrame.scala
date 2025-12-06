@@ -17,6 +17,9 @@ import scala.jdk.CollectionConverters.*
 
 object DataFrame {
 
+
+  val STOCKS = new ListBuffer[TsStock]()
+
   /***
    * 加载全部股票基本数据
    */
@@ -162,10 +165,7 @@ object DataFrame {
     //加载股票信息
     val all_stocks_path = path + File.separator + "all_stocks.csv"
     val stocks = loadAllStocks(all_stocks_path)
-    val stocksMap = new mutable.HashMap[String, TsStock]
-    stocks.foreach(e=>{
-      stocksMap.put(e.ts_code, e)
-    })
+    STOCKS ++= stocks
 
     //加载实时日K
     val rt_k_path = path + File.separator + "rt_k"
@@ -208,10 +208,6 @@ object DataFrame {
       })
     }
 
-    dayMap.flatMap(_._2).foreach(e=>{
-      val v = stocksMap.get(e.ts_code)
-      e.tsStock = v.getOrElse(null)
-    })
     dayMap
 
   }

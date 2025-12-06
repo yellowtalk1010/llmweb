@@ -3,13 +3,25 @@ package zuk.tu_share.pass
 import zuk.tu_share.dto.ModuleDay
 import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_Model}
 
+import scala.collection.mutable
+
 object PassFactory {
 
-  def doModule(moduleDays: List[ModuleDay]) = {
-    doPass(moduleDays)
-    moduleList().foreach(module=>{
-      module.run(moduleDays)
-      module
+  def doModule(map: mutable.HashMap[String, List[ModuleDay]]) = {
+
+    val modules = moduleList()
+    modules.foreach(module=>{
+      map.foreach(e=>{
+        val stock = e._1
+        val moduleDayList = e._2
+        doPass(moduleDayList)
+        module.run(moduleDayList)
+      })
+    })
+
+    println("完成模型分析")
+    modules.foreach(m=>{
+      println(m.getTsStocks().mkString(";"))
     })
   }
 

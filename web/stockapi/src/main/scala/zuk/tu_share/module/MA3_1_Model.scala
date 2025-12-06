@@ -3,14 +3,12 @@ package zuk.tu_share.module
 import zuk.tu_share.dto.ModuleDay
 
 import java.math.BigDecimal
+import scala.collection.mutable.ListBuffer
 
 class MA3_1_Model extends IModel {
 
-  private var isOK: Boolean = false
+  val stocks = ListBuffer[String]()
 
-  override def isHit(): Boolean = {
-    isOK
-  }
   override def run(days: List[ModuleDay]): Unit = {
     if(days.size>=3){
       val list = days.take(3)
@@ -25,8 +23,11 @@ class MA3_1_Model extends IModel {
           && new BigDecimal(head.change).compareTo(BigDecimal(9)) <= 0 //涨幅度
       ) {
         //缩量上涨
-        isOK = true
+        stocks += head.ts_code
       }
     }
   }
+
+  override def getTsStocks(): List[String] = stocks.toList
+
 }
