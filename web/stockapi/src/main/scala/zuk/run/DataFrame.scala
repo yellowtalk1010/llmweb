@@ -71,7 +71,7 @@ object DataFrame {
 
     try {
       //读取文件中的数据
-      val in = new FileReader(path, Charset.forName("UTF-8"))
+      val in = new FileReader(module_file.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
       val ls: List[StockDayVo] = records.asScala.map(record => {
         val ts_code = record.get("ts_code")
@@ -120,10 +120,50 @@ object DataFrame {
       println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
       return List.empty
     }
+    val files = rt_k_file.listFiles().sortBy(_.getName).reverse
+    if(files==null || files.size==0){
+      println("rt_k文件为空")
+      return List.empty
+    }
 
+    val stockDayVoList = new ListBuffer[StockDayVo]
+    try {
+      //读取文件中的数据
+      val in = new FileReader(files.head.getAbsolutePath, Charset.forName("UTF-8"))
+      val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
+      val ls: List[StockDayVo] = records.asScala.map(record => {
+        val ts_code = record.get("ts_code")
+        val trade_date = record.get("trade_date")
+        val open = record.get("open")
+        val turnover_rate = record.get("turnover_rate")
+        val amount = record.get("amount")
+        val high = record.get("high")
+        val low = record.get("low")
+        val change = record.get("change")
+        val close = record.get("close")
+        val vol = record.get("vol")
 
+        val stockDayVo = new StockDayVo()
+        stockDayVo.setCode(ts_code)
+        stockDayVo.setTime(trade_date)
+        stockDayVo.setOpen(open)
+        stockDayVo.setTurnoverRatio(turnover_rate)
+        stockDayVo.setAmount(amount)
+        stockDayVo.setHigh(high)
+        stockDayVo.setLow(low)
+        stockDayVo.setChangeRatio(change)
+        stockDayVo.setClose(close)
+        stockDayVo.setVolume(vol)
 
-    List.empty
+        stockDayVo
+      }).toList
+      in.close()
+      stockDayVoList ++= ls
+    }
+    catch
+      case exception: Exception => exception.printStackTrace()
+
+    stockDayVoList.toList
   }
 
   def load(path: String): Unit = {
