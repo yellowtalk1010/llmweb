@@ -67,7 +67,7 @@ object DataFrame {
     val module_file = new File(module_path)
     if(!module_file.exists()){
       //判断模型路径是否存在
-      println(s"${module_file.getAbsolutePath}，${module_file.exists()}")
+      //println(s"${module_file.getAbsolutePath}，${module_file.exists()}")
       return List.empty
     }
 
@@ -185,12 +185,12 @@ object DataFrame {
     val stocks = loadAllStocks(path)
 
 
-    val map = new mutable.HashMap[StockApiVo, List[StockDayVo]]
+    val stockMap = new mutable.HashMap[StockApiVo, List[StockDayVo]]
     stocks.foreach(stock=>{
       try {
         val historyDays = loadModules(path, stock)
         if(historyDays!=null && historyDays.size>0){
-          map.put(stock, historyDays)
+          stockMap.put(stock, historyDays)
         }
       }catch
         case exception: Exception => exception.printStackTrace()

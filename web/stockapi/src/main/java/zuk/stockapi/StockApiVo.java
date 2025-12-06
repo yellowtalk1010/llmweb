@@ -1,14 +1,20 @@
 package zuk.stockapi;
 
-//import lombok.Data;
-//import lombok.extern.slf4j.Slf4j;
-
 public class StockApiVo {
+    private String ts_code;
     private String api_code;
     private String jys;
     private String name;
     private String gl;      //
     private String area;    //区域，福建、海南
+
+    public String getTs_code() {
+        return ts_code;
+    }
+
+    public void setTs_code(String ts_code) {
+        this.ts_code = ts_code;
+    }
 
     public String getApi_code() {
         return api_code;
