@@ -110,6 +110,22 @@ object DataFrame {
     sorted
   }
 
+  /** *
+   * 加载实时日线
+   */
+  private def loadRTK(path: String): List[StockDayVo] = {
+    val rt_k_path = s"${path}" + File.separator + "rt_k"
+    val rt_k_file = new File(rt_k_path)
+    if(!rt_k_file.exists()){
+      println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
+      return List.empty
+    }
+
+
+
+    List.empty
+  }
+
   def load(path: String): Unit = {
 
     //判断路径是否存在
