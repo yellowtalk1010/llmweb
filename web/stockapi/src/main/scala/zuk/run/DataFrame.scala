@@ -54,7 +54,7 @@ object DataFrame {
     //判断路径是否存在
     val dir = new File(path)
     if (!dir.exists() || !dir.isDirectory) {
-      println(s"${dir.getAbsolutePath}不存在")
+      println(s"${dir.getAbsolutePath}，${dir.exists()}")
       System.exit(1)
     }
 
