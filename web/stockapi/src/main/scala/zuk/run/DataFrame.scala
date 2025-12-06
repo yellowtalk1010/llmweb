@@ -162,18 +162,22 @@ object DataFrame {
     //加载股票信息
     val all_stocks_path = path + File.separator + "all_stocks.csv"
     val stocks = loadAllStocks(all_stocks_path)
+    val stocksMap = new mutable.HashMap[String, TsStock]
+    stocks.foreach(e=>{
+      stocksMap.put(e.ts_code, e)
+    })
 
     //加载实时日K
     val rt_k_path = path + File.separator + "rt_k"
     val rtks = loadRTK(rt_k_path)
 
-    val stockMap = new mutable.HashMap[String, List[ModuleDay]]
+    val dayMap = new mutable.HashMap[String, List[ModuleDay]]
     if(rtks.isEmpty){
       println("没有计算rt_k")
       stocks.foreach(stock=>{
         try{
           val historyDays = loadModules(path, stock.ts_code)
-          stockMap.put(stock.ts_code, historyDays)
+          dayMap.put(stock.ts_code, historyDays)
         }
         catch
           case exception: Exception => exception.printStackTrace()
@@ -197,14 +201,18 @@ object DataFrame {
             val change = (new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close))).divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.DOWN)
             rtk.change = change.toString
 
-            stockMap.put(rtk.ts_code, List(rtk) ++ historyDays)
+            dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
           }
         } catch
           case exception: Exception => exception.printStackTrace()
       })
     }
 
-    stockMap
+    dayMap.flatMap(_._2).foreach(e=>{
+      val v = stocksMap.get(e.ts_code)
+      e.tsStock = v.getOrElse(null)
+    })
+    dayMap
 
   }
 

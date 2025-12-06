@@ -4,14 +4,14 @@ import zuk.tu_share.dto.ModuleDay
 
 import java.math.BigDecimal
 
-class MA3_Model (days: List[ModuleDay]) extends IModel {
+class MA3_Model extends IModel {
 
   private var isOK: Boolean = false
 
   override def isHit(): Boolean = {
     isOK
   }
-  override def run(): Unit = {
+  override def run(days: List[ModuleDay]): Unit = {
     if(days.size>=3){
       val list = days.take(3)
       val head = list.head
