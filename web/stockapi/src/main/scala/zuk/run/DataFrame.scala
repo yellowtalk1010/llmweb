@@ -150,7 +150,7 @@ object DataFrame {
     stockDayVoList.toList
   }
 
-  def load(path: String): Unit = {
+  def load(path: String): mutable.HashMap[String, List[ModuleDay]] = {
 
     //判断路径是否存在
     val dir = new File(path)
@@ -204,9 +204,7 @@ object DataFrame {
       })
     }
 
-
-
-    println()
+    stockMap
 
   }
 
