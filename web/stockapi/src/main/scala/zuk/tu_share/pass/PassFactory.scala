@@ -51,7 +51,8 @@ object PassFactory {
 
     val mailAddress = "513283439@qq.com"
     val tradeDate = new SimpleDateFormat("yyyyMMdd").format(new Date)
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}-推荐 M3", list.map(e=>s"${e.ts_code}，${e.name}，${e.area}，${e.industry}").mkString("\n"))
+    val html = "https://quote.eastmoney.com/sz000547.html"
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${moduleName}", list.map(e=>s"${e.ts_code}，${e.name}，${e.area}，${e.industry}, ${html}").mkString("\n"))
   }
 
   private def moduleList(): List[IModel] = {
