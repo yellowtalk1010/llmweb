@@ -2,7 +2,7 @@ package zuk.tu_share.dto
 
 import scala.beans.BeanProperty
 
-class Stock {
+class TsStock {
 
   @BeanProperty var ts_code: String = _     //ts代码
   @BeanProperty var symbol: String = _      //股票代码
