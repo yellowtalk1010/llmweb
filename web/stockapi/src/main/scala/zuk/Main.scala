@@ -1,6 +1,6 @@
 package zuk
 
-import zuk.run.{DataFrame, RunModule3}
+import zuk.run.DataFrame
 import zuk.tu_share.pass.PassFactory
 
 object Main {
@@ -13,7 +13,6 @@ object Main {
     else {
       val path = args(0)
       println(s"path:${path}")
-//      RunModule3.handle(path)
       val map = DataFrame.load(path)
       PassFactory.doModule(map)
     }
