@@ -38,9 +38,10 @@ object DataFrame {
         val gl = record.get("industry")
         val area = record.get("area")
         val stockApiVo = new StockApiVo()
+        stockApiVo.setTs_code(ts_code)//tu_share股票代码
         stockApiVo.setApi_code(code)  //股票代码
-        stockApiVo.setName(name)      //股票名称
         stockApiVo.setJys(jys)        //SZ, SH, BJ
+        stockApiVo.setName(name)      //股票名称
         stockApiVo.setGl(gl)          //股票所属行业
         stockApiVo.setArea(area)      //股票所在区域
         stockApiVo
