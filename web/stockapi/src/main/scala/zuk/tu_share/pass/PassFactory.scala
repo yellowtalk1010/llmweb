@@ -21,6 +21,7 @@ object PassFactory {
 
     println("完成模型分析")
     modules.foreach(m=>{
+      println(m.getClass.getSimpleName)
       println(m.getTsStocks().mkString(";"))
     })
   }
