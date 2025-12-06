@@ -189,12 +189,14 @@ object DataFrame {
     stocks.foreach(stock=>{
       try {
         val historyDays = loadModules(path, stock)
-        map.put(stock, historyDays)
+        if(historyDays!=null && historyDays.size>0){
+          map.put(stock, historyDays)
+        }
       }catch
         case exception: Exception => exception.printStackTrace()
     })
 
-    
+
 
     println()
 //    stocks.foreach(stock=>{
