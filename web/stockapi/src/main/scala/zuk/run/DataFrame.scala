@@ -17,8 +17,8 @@ object DataFrame {
   private def loadAllStocks(path: String) = {
     all_stocks_path = path + File.separator + "all_stocks.csv"
     val all_stocks_file = new File(all_stocks_path)
+    println(s"${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
-      println(s"${all_stocks_file.getAbsolutePath}不存在")
       System.exit(1)
     }
     //将tushare的csv数据转成对象
@@ -58,7 +58,7 @@ object DataFrame {
       System.exit(1)
     }
 
-
+    val stocks = loadAllStocks(path)
 
 
 
