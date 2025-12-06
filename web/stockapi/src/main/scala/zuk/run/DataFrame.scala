@@ -197,11 +197,9 @@ object DataFrame {
 
     //加载实时日K
     val rt_k_path = path + File.separator + "rt_k"
-
-    val stockMap = new mutable.HashMap[String, List[StockDayVo]]
-
     val rtks = loadRTK(rt_k_path)
 
+    val stockMap = new mutable.HashMap[String, List[StockDayVo]]
     if(rtks.isEmpty){
       println("没有计算rt_k")
       stocks.foreach(stock=>{
