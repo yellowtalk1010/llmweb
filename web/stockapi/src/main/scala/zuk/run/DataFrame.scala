@@ -180,7 +180,7 @@ object DataFrame {
           val historyDays = loadModules(path, stock.ts_code)
           dayMap.put(stock.ts_code, historyDays)
           count = count + 1
-          println(s"stock:${count}/${stocks.size}")
+          println(s"st:${count}/${stocks.size}")
         }
         catch
           case exception: Exception => exception.printStackTrace()
@@ -206,7 +206,7 @@ object DataFrame {
 
             dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
             count = count + 1
-            println(s"rt_k:${count}/${rtks.size}")
+            println(s"rt:${count}/${rtks.size}")
           }
         } catch
           case exception: Exception => exception.printStackTrace()

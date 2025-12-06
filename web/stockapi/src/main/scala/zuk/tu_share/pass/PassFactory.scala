@@ -22,7 +22,7 @@ object PassFactory {
         doPass(moduleDayList)
         module.run(moduleDayList)
         count = count + 1
-        println(s"moduel:${count}/${map.size * modules.size}")
+        println(s"mod:${count}/${map.size * modules.size}")
       })
     })
 
