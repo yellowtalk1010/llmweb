@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
+import java.text.SimpleDateFormat
+import java.util.Date
 import scala.collection.*
 
 object DataFrame {
@@ -18,8 +20,7 @@ object DataFrame {
   /***
    * 加载全部股票基本数据
    */
-  private def loadAllStocks(path: String) = {
-    val all_stocks_path = path + File.separator + "all_stocks.csv"
+  private def loadAllStocks(all_stocks_path: String) = {
     val all_stocks_file = new File(all_stocks_path)
     println(s"${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
@@ -89,6 +90,7 @@ object DataFrame {
         val close = record.get("close")
         val vol = record.get("vol")
         val pre_close = record.get("pre_close")
+        val float_share = record.get("float_share")
 
         val stockDayVo = new StockDayVo()
         stockDayVo.setCode(ts_code)
@@ -103,6 +105,7 @@ object DataFrame {
         stockDayVo.setClose(close)
         stockDayVo.setVolume(vol)
         stockDayVo.setPre_close(pre_close)
+        stockDayVo.setFloat_share(float_share)
 
         stockDayVo
       }).toList
@@ -120,8 +123,7 @@ object DataFrame {
   /** *
    * 加载实时日线
    */
-  private def loadRTK(path: String): List[StockDayVo] = {
-    val rt_k_path = s"${path}" + File.separator + "rt_k"
+  private def loadRTK(rt_k_path: String): List[StockDayVo] = {
     val rt_k_file = new File(rt_k_path)
     if(!rt_k_file.exists()){
       println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
@@ -132,6 +134,9 @@ object DataFrame {
       println("rt_k文件为空")
       return List.empty
     }
+
+    val sdf = new SimpleDateFormat("yyyyMMdd")
+    val trade_date = sdf.format(new Date())
 
     val stockDayVoList = new ListBuffer[StockDayVo]
     try {
@@ -157,6 +162,7 @@ object DataFrame {
         val stockDayVo = new StockDayVo()
         stockDayVo.setCode(ts_code)
         stockDayVo.setName(name)
+        stockDayVo.setTime(trade_date) //补充交易时间为运行时间
         stockDayVo.setOpen(open)
         stockDayVo.setAmount(amount)
         stockDayVo.setHigh(high)
@@ -185,35 +191,56 @@ object DataFrame {
       System.exit(1)
     }
 
-    val stocks = loadAllStocks(path)
+    //加载股票信息
+    val all_stocks_path = path + File.separator + "all_stocks.csv"
+    val stocks = loadAllStocks(all_stocks_path)
 
+    //加载实时日K
+    val rt_k_path = path + File.separator + "rt_k"
 
-    val stockMap = new mutable.HashMap[StockApiVo, List[StockDayVo]]
-    stocks.foreach(stock=>{
-      try {
-        val historyDays = loadModules(path, stock.getTs_code)
-        if(historyDays!=null && historyDays.size>0){
-          stockMap.put(stock, historyDays)
+    val stockMap = new mutable.HashMap[String, List[StockDayVo]]
+
+    val rtks = loadRTK(rt_k_path)
+
+    if(rtks.isEmpty){
+      println("没有计算rt_k")
+      stocks.foreach(stock=>{
+        try{
+          val historyDays = loadModules(path, stock.getTs_code)
+          stockMap.put(stock.getTs_code, historyDays)
         }
-      }catch
-        case exception: Exception => exception.printStackTrace()
-    })
+        catch
+          case exception: Exception => exception.printStackTrace()
+      })
+    }
+    else {
+      //加载模型数据
+      rtks.foreach(rtk => {
+        try {
+          val historyDays = loadModules(path, rtk.getCode)
+          if (historyDays != null && historyDays.size > 0) {
+
+            val preTradeDay0 = historyDays.head //上一个交易日信息
+            rtk.setPre_close(preTradeDay0.getClose) //
+
+            // 计算换手率
+            val turnover_rate = new BigDecimal(rtk.getVolume).divide(new BigDecimal(preTradeDay0.getFloat_share), 4, RoundingMode.DOWN)
+            rtk.setTurnoverRatio(turnover_rate.toString)
+
+            //计算涨跌幅
+            val change = (new BigDecimal(rtk.getClose).subtract(new BigDecimal(rtk.getPre_close))).divide(new BigDecimal(rtk.getPre_close), 4, RoundingMode.DOWN)
+            rtk.setChangeRatio(change.toString)
+
+            stockMap.put(rtk.getCode, List(rtk) ++ historyDays)
+          }
+        } catch
+          case exception: Exception => exception.printStackTrace()
+      })
+    }
 
 
 
     println()
-//    stocks.foreach(stock=>{
-//      try{
-//        val historyDays = loadModules(path, stock)
-//        if (historyDays.size > 0) {
-//          println(s"${historyDays.head.getTime}, ${historyDays.head.getCode}, ${historyDays.head.getName}")
-//        }
-//      }
-//      catch
-//        case exception: Exception=>
-//    })
-
-
 
   }
 

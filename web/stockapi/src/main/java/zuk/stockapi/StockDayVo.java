@@ -14,6 +14,7 @@ public class StockDayVo {
     private String close;           //收盘价
     private String volume;          //交易量
     private String pre_close;       //昨收价
+    private String float_share;     //
 
     public String getCode() {
         return code;
@@ -109,5 +110,13 @@ public class StockDayVo {
 
     public void setPre_close(String pre_close) {
         this.pre_close = pre_close;
+    }
+
+    public String getFloat_share() {
+        return float_share;
+    }
+
+    public void setFloat_share(String float_share) {
+        this.float_share = float_share;
     }
 }
