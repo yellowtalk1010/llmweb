@@ -1,5 +1,6 @@
 package zuk.tu_share.pass
 
+import zuk.run.DataFrame
 import zuk.tu_share.dto.ModuleDay
 import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_Model}
 
@@ -21,8 +22,20 @@ object PassFactory {
 
     println("完成模型分析")
     modules.foreach(m=>{
-      println(m.getClass.getSimpleName)
-      println(m.getTsStocks().mkString(";"))
+      val clsName = m.getClass.getSimpleName
+      val stocks = m.getTsStocks().map(e=>{
+        val ls = DataFrame.STOCKS.filter(_.ts_code.equals(e))
+        if(ls.size>0){
+          Some(ls.head)
+        }
+        else {
+          Option.empty
+        }
+      })
+
+      println(clsName)
+      println(stocks.filter(_.nonEmpty).map(_.get).map(e=>s"${e.ts_code}, ${e.name}").mkString("\n"))
+
     })
   }
 
