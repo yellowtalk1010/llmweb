@@ -57,14 +57,14 @@ object DataFrame {
   /***
    * 加载模型数据
    */
-  private def loadModules(path: String, stock: StockApiVo): List[StockDayVo] = {
-    val code = stock.getApi_code
+  private def loadModules(path: String, ts_code: String): List[StockDayVo] = {
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
     val stockDayVoList = new ListBuffer[StockDayVo]
 
-    val module_path = path + File.separator + "module" + File.separator + s"${stock.getApi_code}_${stock.getJys}.csv"
+    val ts_code_path = ts_code.replace(".", "_")
+    val module_path = path + File.separator + "module" + File.separator + s"${ts_code_path}.csv"
     val module_file = new File(module_path)
     if(!module_file.exists()){
       //判断模型路径是否存在
@@ -88,6 +88,7 @@ object DataFrame {
         val change = record.get("change")
         val close = record.get("close")
         val vol = record.get("vol")
+        val pre_close = record.get("pre_close")
 
         val stockDayVo = new StockDayVo()
         stockDayVo.setCode(ts_code)
@@ -101,6 +102,7 @@ object DataFrame {
         stockDayVo.setChangeRatio(change)
         stockDayVo.setClose(close)
         stockDayVo.setVolume(vol)
+        stockDayVo.setPre_close(pre_close)
 
         stockDayVo
       }).toList
@@ -189,7 +191,7 @@ object DataFrame {
     val stockMap = new mutable.HashMap[StockApiVo, List[StockDayVo]]
     stocks.foreach(stock=>{
       try {
-        val historyDays = loadModules(path, stock)
+        val historyDays = loadModules(path, stock.getTs_code)
         if(historyDays!=null && historyDays.size>0){
           stockMap.put(stock, historyDays)
         }
