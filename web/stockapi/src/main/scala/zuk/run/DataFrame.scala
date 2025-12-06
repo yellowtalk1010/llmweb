@@ -49,12 +49,11 @@ object DataFrame {
   }
 
   def load(path: String): Unit = {
-    println(s"load data path:${path}")
 
     //判断路径是否存在
     val dir = new File(path)
+    println(s"${dir.getAbsolutePath}，${dir.exists()}")
     if (!dir.exists() || !dir.isDirectory) {
-      println(s"${dir.getAbsolutePath}，${dir.exists()}")
       System.exit(1)
     }
 
