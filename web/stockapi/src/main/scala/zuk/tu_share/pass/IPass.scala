@@ -4,6 +4,6 @@ import zuk.tu_share.dto.ModuleDay
 
 trait IPass {
 
-  def handle(moduleDays: List[ModuleDay]): List[ModuleDay]
+  def handle(moduleDays: List[ModuleDay]): Unit
 
 }

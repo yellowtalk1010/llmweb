@@ -8,9 +8,8 @@ import scala.collection.mutable.ListBuffer
 
 class PassMA extends IPass{
 
-  override def handle(moduleDays: List[ModuleDay]): List[ModuleDay] = {
-    val ls = calStockMA(moduleDays)
-    ls
+  override def handle(moduleDays: List[ModuleDay]): Unit = {
+    calStockMA(moduleDays)
   }
 
 
@@ -39,7 +38,7 @@ class PassMA extends IPass{
 
       stockDayVo.ma = ma
 
-      newModuleDayList += stockDayVo
+//      newModuleDayList += stockDayVo
     }
     newModuleDayList.toList
   }
