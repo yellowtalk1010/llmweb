@@ -65,8 +65,9 @@ object DataFrame {
 
     val module_path = path + File.separator + "module " + File.separator + s"${stock.getApi_code}_${stock.getJys}.csv"
     val module_file = new File(module_path)
-    println(s"${module_file.getAbsolutePath}，${module_file.exists()}")
     if(!module_file.exists()){
+      //判断模型路径是否存在
+      println(s"${module_file.getAbsolutePath}，${module_file.exists()}")
       return List.empty
     }
 
