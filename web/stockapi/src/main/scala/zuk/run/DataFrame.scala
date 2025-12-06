@@ -1,10 +1,14 @@
 package zuk.run
 
 import org.apache.commons.csv.CSVFormat
-import zuk.stockapi.StockApiVo
+import zuk.stockapi.{StockApiVo, StockDayVo}
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicInteger
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object DataFrame {
@@ -46,6 +50,65 @@ object DataFrame {
     println(s"${codes.size}")
 
     codes
+  }
+
+
+  /***
+   * 加载模型数据
+   */
+  private def loadModules(path: String, stock: StockApiVo): List[StockDayVo] = {
+    val code = stock.getApi_code
+    val formatter = DateTimeFormatter.ofPattern("yyyyMM")
+    val today = LocalDate.now
+    val num = new AtomicInteger(0)
+    val stockDayVoList = new ListBuffer[StockDayVo]
+
+    val module_path = path + File.separator + "module " + File.separator + s"${stock.getApi_code}_${stock.getJys}.csv"
+    val module_file = new File(module_path)
+    println(s"${module_file.getAbsolutePath}，${module_file.exists()}")
+    if(!module_file.exists()){
+      return List.empty
+    }
+
+    try {
+      //读取文件中的数据
+      val in = new FileReader(path, Charset.forName("UTF-8"))
+      val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
+      val ls: List[StockDayVo] = records.asScala.map(record => {
+        val ts_code = record.get("ts_code")
+        val trade_date = record.get("trade_date")
+        val open = record.get("open")
+        val turnover_rate = record.get("turnover_rate")
+        val amount = record.get("amount")
+        val high = record.get("high")
+        val low = record.get("low")
+        val change = record.get("change")
+        val close = record.get("close")
+        val vol = record.get("vol")
+
+        val stockDayVo = new StockDayVo()
+        stockDayVo.setCode(ts_code)
+        stockDayVo.setTime(trade_date)
+        stockDayVo.setOpen(open)
+        stockDayVo.setTurnoverRatio(turnover_rate)
+        stockDayVo.setAmount(amount)
+        stockDayVo.setHigh(high)
+        stockDayVo.setLow(low)
+        stockDayVo.setChangeRatio(change)
+        stockDayVo.setClose(close)
+        stockDayVo.setVolume(vol)
+
+        stockDayVo
+      }).toList
+      in.close()
+      stockDayVoList ++= ls
+    }
+    catch
+      case exception: Exception => exception.printStackTrace()
+
+    //按时间降序
+    val sorted = stockDayVoList.sortBy(_.getTime).reverse.toList
+    sorted
   }
 
   def load(path: String): Unit = {
