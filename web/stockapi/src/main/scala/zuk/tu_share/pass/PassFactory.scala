@@ -54,7 +54,10 @@ object PassFactory {
 
     val htmlContent = list.map(e=>{
       val splits = e.ts_code.split("\\.")
-      val name_href = """<a href="https://quote.eastmoney.com/""" + s"${splits(1)}${splits(0)}" + """.html">"""+e.name+"""</a>"""
+      val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
+//      println(href)
+      val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
+//      println(name_href)
       s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
     }).mkString("\n<br><br>\n")
 
