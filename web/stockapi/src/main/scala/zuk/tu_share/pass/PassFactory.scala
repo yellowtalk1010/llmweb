@@ -7,6 +7,7 @@ object PassFactory {
   def doPass(moduleDays: List[ModuleDay]) = {
     passList().foreach(pass=>{
       pass.handle(moduleDays)
+      println()
     })
   }
 
