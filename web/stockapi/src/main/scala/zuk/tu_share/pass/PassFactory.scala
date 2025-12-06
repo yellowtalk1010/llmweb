@@ -35,6 +35,7 @@ object PassFactory {
 
       println(clsName)
       println(stocks.filter(_.nonEmpty).map(_.get).map(e=>s"${e.ts_code}, ${e.name}").mkString("\n"))
+      println()
 
     })
   }
