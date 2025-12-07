@@ -1,6 +1,6 @@
 package zuk.tu_share.pass
 
-import zuk.run.DataFrame
+import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_Model}
 import zuk.utils.SendMail

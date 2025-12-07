@@ -1,4 +1,4 @@
-package zuk.run
+package zuk.tu_share
 
 import org.apache.commons.csv.CSVFormat
 import zuk.tu_share.dto.{ModuleDay, TsStock}
