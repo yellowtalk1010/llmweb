@@ -3,7 +3,7 @@ package zuk.tu_share
 import org.apache.commons.csv.CSVFormat
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 
-import java.io.{File, FileReader}
+import java.io.{File, FileOutputStream, FileReader, InputStream}
 import java.math.{BigDecimal, RoundingMode}
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -14,9 +14,15 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.*
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
+import java.util.Properties
+
 
 object DataFrame {
 
+  val properties = new Properties()
+  val turnover = "turnover"
+  val change = "change"
+  val config_properties = "tushare_config.properties"
 
   val STOCKS = new ListBuffer[TsStock]()
 
@@ -153,7 +159,26 @@ object DataFrame {
     stockDayVoList.toList
   }
 
+  private def loadProperties() = {
+    try{
+      val configFile = new File(config_properties)
+      if (!configFile.exists()) {
+        val output = new FileOutputStream(config_properties)
+        properties.put(turnover, "100")
+        properties.put(change, "100")
+        properties.store(output, "tushare config")
+        output.close()
+      }
+      properties.load(new FileReader(configFile))
+      println(properties.toString)
+    }
+    catch
+      case exception: Exception =>
+  }
+
   def load(path: String): mutable.HashMap[String, List[ModuleDay]] = {
+
+    loadProperties()
 
     //判断路径是否存在
     val dir = new File(path)
@@ -196,11 +221,15 @@ object DataFrame {
             val preTradeDay0 = historyDays.head //上一个交易日信息
 
             // 计算换手率
-            val turnover_rate = new BigDecimal(rtk.vol).divide(new BigDecimal(preTradeDay0.float_share).multiply(new BigDecimal(100)), 4, RoundingMode.DOWN)
+            val turnover_rate = new BigDecimal(rtk.vol)
+              .divide(new BigDecimal(preTradeDay0.float_share)
+                .multiply(new BigDecimal(properties.getProperty("turnover","100").toFloat)), 4, RoundingMode.DOWN)
             rtk.turnover_rate = turnover_rate.toString
 
             //计算涨跌幅
-            val change =((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
+            val change =((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close)))
+              .multiply(new BigDecimal(properties.getProperty("change", "100").toFloat)))
+              .divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
             rtk.change = change.toString
 
             println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}")
