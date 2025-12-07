@@ -41,14 +41,20 @@ object PassFactory {
         }
       }).filter(_.nonEmpty).map(_.get).filter(e=> !e.name.contains("ST"))
 
-      sendMail(clsName, stocks)
+      println(clsName)
+      println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
+
+      if(backtestLenght==0){
+        //非回测操作，则发送邮件
+        sendMail(clsName, stocks)
+      }
+      else {
+        //回测，计算回测胜率效果
+      }
     })
   }
 
   private def sendMail(moduleName: String, list: List[TsStock]) = {
-
-    println(moduleName)
-    println(list.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
 
     val mailAddress = "513283439@qq.com"
     val tradeDate = new SimpleDateFormat("yyyyMMdd").format(new Date)
