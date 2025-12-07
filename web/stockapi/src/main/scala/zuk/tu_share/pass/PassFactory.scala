@@ -21,7 +21,7 @@ object PassFactory {
 //        val moduleDayList = e._2
         val moduleDayList = e._2.slice(backtestLenght, e._2.size)  //取前几个交易日的数据，用于回测
         if(backtestLenght>0){
-          module.backTestTargetList += e._2.slice(backtestLenght-1, backtestLenght)
+          module.backTestTargetList ++= e._2.slice(backtestLenght-1, backtestLenght)
         }
         doPass(moduleDayList)
         module.run(moduleDayList)
