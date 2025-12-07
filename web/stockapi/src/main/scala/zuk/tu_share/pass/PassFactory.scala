@@ -27,10 +27,10 @@ object PassFactory {
     })
 
     println("完成模型分析")
-    modules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0).foreach(m=>{
+    modules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0).foreach(mod=>{
       //输出模型分析结论
-      val clsName = m.getClass.getSimpleName
-      val stocks = m.getTsStocks().map(e=>{
+      val clsName = mod.getClass.getSimpleName
+      val stocks = mod.getTsStocks().map(e=>{
         val ls = DataFrame.STOCKS.filter(_.ts_code.equals(e))
         if(ls.size>0){
           Some(ls.head)
@@ -38,7 +38,7 @@ object PassFactory {
         else {
           Option.empty
         }
-      }).filter(_.nonEmpty).map(_.get)
+      }).filter(_.nonEmpty).map(_.get).filter(e=> !e.name.contains("ST"))
 
       sendMail(clsName, stocks)
     })
