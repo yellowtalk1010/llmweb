@@ -19,7 +19,10 @@ object PassFactory {
       map.foreach(e=>{
         val stock = e._1
 //        val moduleDayList = e._2
-        val moduleDayList = e._2.slice(backtestLenght, e._2.size-1)  //取前几个交易日的数据，用于回测
+        val moduleDayList = e._2.slice(backtestLenght, e._2.size)  //取前几个交易日的数据，用于回测
+        if(backtestLenght>0){
+          module.backTestTargetList += e._2.slice(backtestLenght-1, backtestLenght)
+        }
         doPass(moduleDayList)
         module.run(moduleDayList)
         count = count + 1
@@ -50,6 +53,9 @@ object PassFactory {
       }
       else {
         //回测，计算回测胜率效果
+        mod.backTestTargetList.map(e=>{
+          s"${e.getClass.getSimpleName}, ${e.ts_code}, ${e.name}, ${e.turnover_rate}, ${e.change}"
+        })
       }
     })
   }

@@ -18,4 +18,9 @@ object Main {
     }
   }
 
+  def backtest(path: String, days: Int): Unit = {
+    val map = DataFrame.load(path)
+    PassFactory.doModule(map,days)
+  }
+
 }

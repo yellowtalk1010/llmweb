@@ -6,9 +6,14 @@ import zuk.Main
 
 class Tushare_MA3_Model_Test extends AnyFunSuite {
 
+  val path = "D:/development/github/llmweb1/web/tushare"
   test("tushare-3"){
-    val args = Array("D:/development/github/llmweb1/web/tushare")
+    val args = Array(path)
     Main.main(args)
+  }
+
+  test("模型回测") {
+    Main.backtest(path, 1)
   }
 
 }
