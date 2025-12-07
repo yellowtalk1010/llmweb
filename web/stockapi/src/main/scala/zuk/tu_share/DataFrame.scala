@@ -201,7 +201,8 @@ object DataFrame {
             rtk.turnover_rate = turnover_rate.toString
 
             //计算涨跌幅
-            val change = (new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close))).divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.DOWN)
+            //val change = (new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close))).divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.DOWN)
+            val change =((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
             rtk.change = change.toString
 
             dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
