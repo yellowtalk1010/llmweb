@@ -66,7 +66,7 @@ object PassFactory {
   private def sendMail(moduleName: String, list: List[TsStock]) = {
 
     val mailAddress = "513283439@qq.com"
-    val tradeDate = new SimpleDateFormat("yyyyMMdd").format(new Date)
+    val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
 
     val htmlContent = list.map(e=>{
       val splits = e.ts_code.split("\\.")
@@ -77,7 +77,7 @@ object PassFactory {
       s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
     }).mkString("\n<br><br>\n")
 
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${moduleName}", htmlContent)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate},${moduleName}", htmlContent)
   }
 
   private def moduleList(): List[IModel] = {
