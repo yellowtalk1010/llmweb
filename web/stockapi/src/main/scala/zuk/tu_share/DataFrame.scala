@@ -205,6 +205,8 @@ object DataFrame {
             val change =((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
             rtk.change = change.toString
 
+            println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}")
+
             dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
             count = count + 1
             println(s"rt:${count}/${rtks.size}")
