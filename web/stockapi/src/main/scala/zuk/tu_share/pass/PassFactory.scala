@@ -5,6 +5,7 @@ import zuk.tu_share.dto.{ModuleDay, TsStock}
 import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_2_Model, MA3_Model}
 import zuk.utils.SendMail
 
+import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
 import java.util.Date
 import scala.collection.mutable
@@ -55,7 +56,8 @@ object PassFactory {
         //回测，计算回测胜率效果
         println(s"${mod.getClass.getSimpleName}模型回测")
         mod.backTestTargetList.filter(e=>mod.getTsStocks().contains(e.ts_code)).map(e=>{
-          s"${e.trade_date}, ${e.ts_code}, ${e.name}, ${e.change}"
+          val change = (new BigDecimal(e.high).subtract(new BigDecimal(e.pre_close))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.DOWN)
+          s"${e.trade_date}, ${e.ts_code}, ${e.name}, ${e.change}, ${change}"
         }).foreach(println)
       }
     })
