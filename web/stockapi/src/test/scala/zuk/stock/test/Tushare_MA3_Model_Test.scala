@@ -13,7 +13,7 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
-    Main.backtest(path, 10)
+    Main.backtest(path, 1)
   }
 
 }
