@@ -11,14 +11,15 @@ import scala.collection.mutable
 
 object PassFactory {
 
-  def doModule(map: mutable.HashMap[String, List[ModuleDay]]) = {
+  def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
 
     val modules = moduleList()
     var count = 0
     modules.foreach(module=>{
       map.foreach(e=>{
         val stock = e._1
-        val moduleDayList = e._2
+//        val moduleDayList = e._2
+        val moduleDayList = e._2.slice(backtestLenght, e._2.size-1)  //取前几个交易日的数据，用于回测
         doPass(moduleDayList)
         module.run(moduleDayList)
         count = count + 1
