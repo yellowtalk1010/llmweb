@@ -17,7 +17,7 @@ class MA3_Model extends IModel {
         list(0).ma.ma5.compareTo(list(0).ma.ma10) >= 0          // 当前交易日，穿过5日线
           && list(1).ma.ma5.compareTo(list(1).ma.ma10) <= 0     //上一个交易日，还在5日线下
           && list(2).ma.ma5.compareTo(list(2).ma.ma10) <= 0     //前一个交易日，还在5日线下
-          && new BigDecimal(head.turnover_rate).compareTo(BigDecimal(5)) >= 0   //换手率
+          && new BigDecimal(head.turnover_rate).compareTo(BigDecimal(4)) >= 0   //换手率
           && new BigDecimal(head.turnover_rate).compareTo(BigDecimal(15)) <= 0  //换手率
           && new BigDecimal(head.change).compareTo(BigDecimal(4)) >= 0  //涨幅度
           && new BigDecimal(head.change).compareTo(BigDecimal(7)) <= 0  //涨幅度
