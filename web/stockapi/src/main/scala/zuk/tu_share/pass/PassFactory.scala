@@ -53,9 +53,10 @@ object PassFactory {
       }
       else {
         //回测，计算回测胜率效果
-        mod.backTestTargetList.map(e=>{
+        println("模型回测")
+        mod.backTestTargetList.filter(e=>mod.getTsStocks().contains(e.ts_code)).map(e=>{
           s"${e.getClass.getSimpleName}, ${e.ts_code}, ${e.name}, ${e.turnover_rate}, ${e.change}"
-        })
+        }).foreach(println)
       }
     })
   }
