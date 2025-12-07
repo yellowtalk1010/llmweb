@@ -27,7 +27,7 @@ class MA3_2_Model extends IModel {
         && new BigDecimal(list(1).change).compareTo(new BigDecimal(9)) < 0
         && new BigDecimal(list(1).turnover_rate).compareTo(new BigDecimal(5)) > 0
 
-        && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).high)) > 0 //  最新一日的最高价，不超过上一个最高价，防止抛售（如果是均价是最好的）
+//        && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).high)) > 0 //  最新一日的最高价，不超过上一个最高价，防止抛售（如果是均价是最好的）
 
       ) {
         //缩量上涨

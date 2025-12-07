@@ -55,7 +55,7 @@ object PassFactory {
         //回测，计算回测胜率效果
         println(s"${mod.getClass.getSimpleName}模型回测")
         mod.backTestTargetList.filter(e=>mod.getTsStocks().contains(e.ts_code)).map(e=>{
-          s"${e.ts_code}, ${e.name}, ${e.turnover_rate}, ${e.change}"
+          s"${e.trade_date}, ${e.ts_code}, ${e.name}, ${e.change}"
         }).foreach(println)
       }
     })
