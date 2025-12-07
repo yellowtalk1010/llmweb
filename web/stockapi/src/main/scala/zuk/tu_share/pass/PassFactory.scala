@@ -56,7 +56,7 @@ object PassFactory {
         //回测，计算回测胜率效果
         println(s"${mod.getClass.getSimpleName}模型回测")
         mod.backTestTargetList.filter(e=>mod.getTsStocks().contains(e.ts_code)).map(e=>{
-          var change = ((new BigDecimal(e.close).subtract(new BigDecimal(e.pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
+          val change = ((new BigDecimal(e.high).subtract(new BigDecimal(e.pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
           s"${e.trade_date}, ${e.ts_code}, ${e.name}, ${e.change}, ${change}"
         }).foreach(println)
       }
