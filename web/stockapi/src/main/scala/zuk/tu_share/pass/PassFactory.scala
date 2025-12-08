@@ -64,7 +64,7 @@ object PassFactory {
           val changes = ls.map(e=>{
             val change = ((new BigDecimal(e.high).subtract(new BigDecimal(pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
              s"${change}[高][${e.trade_date}]"
-          }).mkString(";")
+          }).mkString("; ")
 
           s"${ls.head.ts_code}, ${ls.head.name}, ${ls.head.change}[收], ${changes}"
         }).foreach(println)
