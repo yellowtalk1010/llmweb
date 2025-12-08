@@ -120,7 +120,7 @@ def download_trade_date(trade_date):
 if __name__ == '__main__':
 
     # download_one("002798_SZ", "20250101", "20251130")
-    download_trade_date("20251205")
+    download_trade_date("20251208")
     print("完成")
 
 
