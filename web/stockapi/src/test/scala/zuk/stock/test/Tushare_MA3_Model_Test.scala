@@ -13,7 +13,11 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
-    Main.backtest(path, 1)
+    for(i <- 1 until 20) {
+      Main.backtest(path, i)
+      println()
+    }
+
   }
 
 }

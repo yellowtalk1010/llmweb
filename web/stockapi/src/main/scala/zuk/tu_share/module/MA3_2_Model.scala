@@ -29,6 +29,7 @@ class MA3_2_Model extends IModel {
 
         && new BigDecimal(list(1).high).compareTo(new BigDecimal(list(0).high)) > 0 //  最新一日的最高价，不超过上一个最高价，防止抛售（如果是均价是最好的）
 
+        && List(list(3).low.toFloat,list(2).low.toFloat,list(1).low.toFloat).sorted.head < list(0).low.toFloat
         //进入最低价不能跌破上3日最低价
         
 

@@ -22,7 +22,11 @@ object PassFactory {
 //        val moduleDayList = e._2
         val moduleDayList = e._2.slice(backtestLenght, e._2.size)  //取前几个交易日的数据，用于回测
         if(backtestLenght>0){
-          module.backTestTargetList ++= e._2.slice(backtestLenght-1, backtestLenght)
+          var startIndex = backtestLenght-2
+          if(startIndex < 0){
+            startIndex = backtestLenght-1
+          }
+          module.backTestTargetList ++= e._2.slice(startIndex, backtestLenght) //连续两天
         }
         doPass(moduleDayList)
         module.run(moduleDayList)
@@ -55,9 +59,14 @@ object PassFactory {
       else {
         //回测，计算回测胜率效果
         println(s"${mod.getClass.getSimpleName}模型回测")
-        mod.backTestTargetList.filter(e=>mod.getTsStocks().contains(e.ts_code)).map(e=>{
-          val change = ((new BigDecimal(e.high).subtract(new BigDecimal(e.pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
-          s"${e.trade_date}, ${e.ts_code}, ${e.name}, ${e.change}, ${change}"
+        mod.backTestTargetList.filter(e=>mod.getTsStocks().contains(e.ts_code)).groupBy(_.ts_code).map(_._2.sortBy(_.trade_date)).map(ls=>{
+          val pre_close = ls.head.pre_close
+          val changes = ls.map(e=>{
+            val change = ((new BigDecimal(e.high).subtract(new BigDecimal(pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
+             s"${change}[高][${e.trade_date}]"
+          }).mkString(";")
+
+          s"${ls.head.ts_code}, ${ls.head.name}, ${ls.head.change}[收], ${changes}"
         }).foreach(println)
       }
     })
