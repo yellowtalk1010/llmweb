@@ -18,7 +18,7 @@ object PassFactory {
 
     val finishModules = ListBuffer[IModel]()
     var count = 0
-    map.filter(_._2.size>100).foreach(e=>{
+    map.foreach(e=>{
       val modules = moduleList()
       modules.foreach(module=>{
         val stock = e._1
@@ -92,10 +92,10 @@ object PassFactory {
 
   private def moduleList(): List[IModel] = {
     List(
-//      new MA3_Model,
-//      new MA3_1_Model,
+      //      new MA3_Model,
+      //      new MA3_1_Model,
       new MA3_2_Model,
-//      new MA3_3_Model
+      //          new MA3_3_Model
     )
   }
 
