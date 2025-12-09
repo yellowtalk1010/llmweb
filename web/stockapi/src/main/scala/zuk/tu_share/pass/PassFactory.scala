@@ -27,7 +27,7 @@ object PassFactory {
             startIndex = backtestLenght-1
           }
           module.sells ++= e._2.slice(startIndex, backtestLenght) //连续两天
-          module.buy = e._2(backtestLenght)
+//          module.buy = e._2(backtestLenght)
         }
         doPass(moduleDayList)
         module.run(moduleDayList)
@@ -67,7 +67,7 @@ object PassFactory {
              s"${change}[高][${e.trade_date}]"
           }).mkString("; ")
 
-          s"${ls.head.ts_code}, ${ls.head.name}, [买][${mod.buy.trade_date}]${mod.buy.close}, ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
+          s"${ls.head.ts_code}, ${ls.head.name}, ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
         }).foreach(println)
       }
     })
