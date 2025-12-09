@@ -17,22 +17,23 @@ object PassFactory {
     val modules = moduleList()
     var count = 0
     modules.foreach(module=>{
-      map.foreach(e=>{
+      map.filter(! _._2.isEmpty).foreach(e=>{
         val stock = e._1
 //        val moduleDayList = e._2
         val moduleDayList = e._2.slice(backtestLenght, e._2.size)  //取前几个交易日的数据，用于回测
+        println(s"${moduleDayList.head.ts_code},${moduleDayList.head.name}")
         if(backtestLenght>0){
           var startIndex = backtestLenght-2
           if(startIndex < 0){
             startIndex = backtestLenght-1
           }
           module.sells ++= e._2.slice(startIndex, backtestLenght) //连续两天
-//          module.buy = e._2(backtestLenght)
+          module.buys ++= List(e._2(backtestLenght))
         }
         doPass(moduleDayList)
         module.run(moduleDayList)
         count = count + 1
-        println(s"mod:${count}/${map.size * modules.size}")
+        println(s"mod:${moduleDayList.head.ts_code},${moduleDayList.head.name},${count}/${map.size * modules.size}")
       })
     })
 
@@ -67,7 +68,8 @@ object PassFactory {
              s"${change}[高][${e.trade_date}]"
           }).mkString("; ")
 
-          s"${ls.head.ts_code}, ${ls.head.name}, ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
+          val buy = mod.buys.filter(_.ts_code.equals(ls.head.ts_code)).head
+          s"${ls.head.ts_code}, ${ls.head.name}, [买], ${buy.trade_date}, [卖], ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
         }).foreach(println)
       }
     })
