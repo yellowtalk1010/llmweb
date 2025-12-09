@@ -1,6 +1,7 @@
 package zuk.tu_share.pass
 
 import zuk.tu_share.DataFrame
+import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_2_Model, MA3_3_Model, MA3_Model}
 import zuk.utils.SendMail
@@ -65,16 +66,7 @@ object PassFactory {
       }
       else {
         //回测
-        println(s"${moduleName}模型回测")
-        moduleList.filter(e=>e.buy!=null && e.sells.size>0).foreach(mod=>{
-          val preClose = mod.sells.head.pre_close //取除权后收盘价
-          val mkStr = mod.sells.sortBy(_.trade_date).map(e=>{
-            val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
-            s"${e.trade_date} 高 ${change}"
-          }).mkString(", ")
-          val str = s"${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}[买], [卖]${mod.sells.head.trade_date} 收 ${mod.sells.head.change}, ${mkStr}"
-          println(str)
-        })
+        BackTest.backTestList ++= moduleList
       }
     })
     println()
