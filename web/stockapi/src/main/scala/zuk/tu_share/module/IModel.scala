@@ -6,7 +6,8 @@ import scala.collection.mutable.ListBuffer
 
 trait IModel {
 
-  var backTestTargetList = ListBuffer[ModuleDay]()
+  var sells = ListBuffer[ModuleDay]()
+  var buy: ModuleDay = _
 
   def run(days: List[ModuleDay]): Unit //运行模型
 

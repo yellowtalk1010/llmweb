@@ -26,7 +26,8 @@ object PassFactory {
           if(startIndex < 0){
             startIndex = backtestLenght-1
           }
-          module.backTestTargetList ++= e._2.slice(startIndex, backtestLenght) //连续两天
+          module.sells ++= e._2.slice(startIndex, backtestLenght) //连续两天
+          module.buy = e._2(backtestLenght)
         }
         doPass(moduleDayList)
         module.run(moduleDayList)
@@ -59,7 +60,7 @@ object PassFactory {
       else {
         //回测，计算回测胜率效果
         println(s"${mod.getClass.getSimpleName}模型回测")
-        mod.backTestTargetList.filter(e=>mod.getTsStocks().contains(e.ts_code)).groupBy(_.ts_code).map(_._2.sortBy(_.trade_date)).map(ls=>{
+        mod.sells.filter(e=>mod.getTsStocks().contains(e.ts_code)).groupBy(_.ts_code).map(_._2.sortBy(_.trade_date)).map(ls=>{
           val pre_close = ls.head.pre_close
           val changes = ls.map(e=>{
             val change = ((new BigDecimal(e.high).subtract(new BigDecimal(pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
