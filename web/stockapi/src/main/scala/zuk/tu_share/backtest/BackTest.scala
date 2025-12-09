@@ -12,6 +12,10 @@ object BackTest {
   def analysis(clsName: String): Unit = {
 
     val filterList = backTestList.filter(_.getClass.getSimpleName.equals(clsName)).filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
+    if(filterList.size==0){
+      println("无数据")
+      return
+    }
 
     val victoryList = filterList.filter(mod=>{
 
