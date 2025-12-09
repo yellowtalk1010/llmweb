@@ -243,7 +243,7 @@ object DataFrame {
       })
     }
 
-    dayMap
+    dayMap.filter(_._2.size>100)
 
   }
 
