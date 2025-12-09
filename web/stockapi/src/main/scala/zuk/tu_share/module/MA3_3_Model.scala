@@ -5,6 +5,9 @@ import zuk.tu_share.dto.ModuleDay
 import java.math.BigDecimal
 import scala.collection.mutable.ListBuffer
 
+/***
+ * 反包继续上涨
+ */
 class MA3_3_Model extends IModel {
 
   val stocks = ListBuffer[String]()

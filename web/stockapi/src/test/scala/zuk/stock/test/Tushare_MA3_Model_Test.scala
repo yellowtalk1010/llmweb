@@ -2,6 +2,8 @@ package zuk.stock.test
 
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.Main
+import zuk.tu_share.backtest.BackTest
+import zuk.tu_share.module.{MA3_2_Model, MA3_3_Model}
 
 
 class Tushare_MA3_Model_Test extends AnyFunSuite {
@@ -15,6 +17,7 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
   test("模型回测") {
     for(i <- 1 until 40) {
       Main.backtest(path, i)
+      BackTest.analysis(classOf[MA3_2_Model].getSimpleName)
       println()
     }
 

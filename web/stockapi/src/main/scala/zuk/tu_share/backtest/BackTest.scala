@@ -9,9 +9,9 @@ object BackTest {
 
   val backTestList = ListBuffer[IModel]()
 
-  def analysis(cls: Class[IModel]): Unit = {
+  def analysis(clsName: String): Unit = {
 
-    val filterList = backTestList.filter(_.getClass.getSimpleName.equals(cls.getSimpleName)).filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
+    val filterList = backTestList.filter(_.getClass.getSimpleName.equals(clsName)).filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
 
     val victoryList = filterList.filter(mod=>{
 
@@ -28,7 +28,7 @@ object BackTest {
 
     })
 
-    println(s"${cls.getSimpleName}胜率：${new BigDecimal(victoryList.size).divide(new BigDecimal(filterList.size), 4, RoundingMode.UP)}")
+    println(s"${clsName}胜率：${new BigDecimal(victoryList.size).divide(new BigDecimal(filterList.size), 4, RoundingMode.UP)}")
 
   }
 
