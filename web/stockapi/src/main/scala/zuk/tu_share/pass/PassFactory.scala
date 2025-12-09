@@ -69,7 +69,7 @@ object PassFactory {
         BackTest.backTestList ++= moduleList
       }
     })
-    println()
+
 
 //    finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0).foreach(mod=>{
 //      //输出模型分析结论
