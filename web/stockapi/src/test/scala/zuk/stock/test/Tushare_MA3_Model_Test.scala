@@ -15,13 +15,8 @@ class Tushare_MA3_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
-    for(i <- 1 to 10) {
-      Main.backtest(path, i)
-      println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
-    }
+    Main.backtest(path, 40)
     BackTest.analysis(classOf[MA3_2_Model].getSimpleName)
-
-
   }
 
 }

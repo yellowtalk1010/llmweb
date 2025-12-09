@@ -20,7 +20,12 @@ object Main {
 
   def backtest(path: String, days: Int): Unit = {
     val map = DataFrame.load(path)
-    PassFactory.doModule(map,days)
+
+    for(i <- 1 to days) {
+      PassFactory.doModule(map,i)
+      println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
+    }
+
   }
 
 }
