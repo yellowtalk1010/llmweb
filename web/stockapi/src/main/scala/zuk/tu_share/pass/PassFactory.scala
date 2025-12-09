@@ -29,7 +29,7 @@ object PassFactory {
           if (startIndex < 0) {
             startIndex = backtestLenght - 1
           }
-          module.sells ++= e._2.slice(startIndex, backtestLenght) //连续两天
+          module.sells ++= e._2.slice(startIndex, backtestLenght).reverse //连续两天
           module.buy = e._2(backtestLenght)
         }
         doPass(moduleDayList)
