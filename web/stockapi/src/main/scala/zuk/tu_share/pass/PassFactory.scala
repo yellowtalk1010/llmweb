@@ -71,42 +71,6 @@ object PassFactory {
     })
 
 
-//    finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0).foreach(mod=>{
-//      //输出模型分析结论
-//      val clsName = mod.getClass.getSimpleName
-//      val stocks = mod.getTsStocks().map(e=>{
-//        val ls = DataFrame.STOCKS.filter(_.ts_code.equals(e))
-//        if(ls.size>0){
-//          Some(ls.head)
-//        }
-//        else {
-//          Option.empty
-//        }
-//      }).filter(_.nonEmpty).map(_.get)
-//        //.filter(e=> !e.name.contains("ST")) //移除ST股票
-//
-//      println(clsName)
-//      println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
-//
-//      if(backtestLenght==0){
-//        //非回测操作，则发送邮件
-//        sendMail(clsName, stocks)
-//      }
-//      else {
-//        //回测，计算回测胜率效果
-//        println(s"${mod.getClass.getSimpleName}模型回测")
-//        mod.sells.filter(e=>mod.getTsStocks().contains(e.ts_code)).groupBy(_.ts_code).map(_._2.sortBy(_.trade_date)).map(ls=>{
-//          val pre_close = ls.head.pre_close
-//          val changes = ls.map(e=>{
-//            val change = ((new BigDecimal(e.high).subtract(new BigDecimal(pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
-//             s"${change}[高][${e.trade_date}]"
-//          }).mkString("; ")
-//
-//          val buy = mod.buys.filter(_.ts_code.equals(ls.head.ts_code)).head
-//          s"${mod.getClass.getSimpleName}, ${ls.head.ts_code}, ${ls.head.name}, [买], ${buy.trade_date}, [卖], ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
-//        }).foreach(println)
-//      }
-//    })
   }
 
   private def sendMail(moduleName: String, list: List[TsStock]) = {
