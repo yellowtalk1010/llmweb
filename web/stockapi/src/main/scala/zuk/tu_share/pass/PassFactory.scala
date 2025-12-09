@@ -68,7 +68,7 @@ object PassFactory {
           }).mkString("; ")
 
           val buy = mod.buys.filter(_.ts_code.equals(ls.head.ts_code)).head
-          s"${ls.head.ts_code}, ${ls.head.name}, [买], ${buy.trade_date}, [卖], ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
+          s"${mod.getClass.getSimpleName}, ${ls.head.ts_code}, ${ls.head.name}, [买], ${buy.trade_date}, [卖], ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
         }).foreach(println)
       }
     })
