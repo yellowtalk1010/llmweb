@@ -17,7 +17,7 @@ object PassFactory {
     val modules = moduleList()
     var count = 0
     modules.foreach(module=>{
-      map.filter(! _._2.isEmpty).foreach(e=>{
+      map.filter(_._2.size>100).foreach(e=>{
         val stock = e._1
 //        val moduleDayList = e._2
         val moduleDayList = e._2.slice(backtestLenght, e._2.size)  //取前几个交易日的数据，用于回测
