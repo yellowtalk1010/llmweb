@@ -21,7 +21,6 @@ object PassFactory {
         val stock = e._1
 //        val moduleDayList = e._2
         val moduleDayList = e._2.slice(backtestLenght, e._2.size)  //取前几个交易日的数据，用于回测
-        println(s"${moduleDayList.head.ts_code},${moduleDayList.head.name}")
         if(backtestLenght>0){
           var startIndex = backtestLenght-2
           if(startIndex < 0){
