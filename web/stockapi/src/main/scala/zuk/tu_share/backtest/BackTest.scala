@@ -18,10 +18,10 @@ object BackTest {
       val preClose = mod.sells.head.pre_close
       val highStr = mod.sells.map(e=>{
         val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
-        s"${e.trade_date}, ${change}"
+        s"${e.trade_date}【${change}】"
       }).mkString(", ")
 
-      println(s"${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}, 买, ${highStr}")
+      println(s"${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买】, ${highStr}")
       mod.sells.filter(e=>{
         e.high.toFloat > mod.buy.close.toFloat
       }).size > 0
