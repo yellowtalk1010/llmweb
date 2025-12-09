@@ -9,69 +9,112 @@ import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
 import java.util.Date
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 object PassFactory {
 
   def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
 
-    val modules = moduleList()
+    val finishModules = ListBuffer[IModel]()
     var count = 0
-    modules.foreach(module=>{
-      map.filter(_._2.size>100).foreach(e=>{
+    map.filter(_._2.size>100).foreach(e=>{
+      val modules = moduleList()
+      modules.foreach(module=>{
         val stock = e._1
-//        val moduleDayList = e._2
-        val moduleDayList = e._2.slice(backtestLenght, e._2.size)  //取前几个交易日的数据，用于回测
-        if(backtestLenght>0){
-          var startIndex = backtestLenght-3
-          if(startIndex < 0){
-            startIndex = backtestLenght-1
+        //        val moduleDayList = e._2
+        val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
+        if (backtestLenght > 0) {
+          var startIndex = backtestLenght - 3
+          if (startIndex < 0) {
+            startIndex = backtestLenght - 1
           }
           module.sells ++= e._2.slice(startIndex, backtestLenght) //连续两天
-          module.buys ++= List(e._2(backtestLenght))
+          module.buy = e._2(backtestLenght)
         }
         doPass(moduleDayList)
         module.run(moduleDayList)
         count = count + 1
         println(s"mod:${count}/${map.size * modules.size}")
       })
+      finishModules ++= modules
     })
 
     println("完成模型分析")
-    modules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0).foreach(mod=>{
-      //输出模型分析结论
-      val clsName = mod.getClass.getSimpleName
-      val stocks = mod.getTsStocks().map(e=>{
-        val ls = DataFrame.STOCKS.filter(_.ts_code.equals(e))
+    val filterModules = finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
+    filterModules.groupBy(_.getClass.getSimpleName).foreach(tp2=>{
+      val moduleName = tp2._1
+      val moduleList = tp2._2
+
+      val stocks = moduleList.flatMap(_.getTsStocks()).map(s=>{
+        val ls = DataFrame.STOCKS.filter(_.ts_code.equals(s))
         if(ls.size>0){
           Some(ls.head)
         }
         else {
           Option.empty
         }
-      }).filter(_.nonEmpty).map(_.get).filter(e=> !e.name.contains("ST"))
+      }).filter(_.nonEmpty).map(_.get)
+        //.filter(! _.name.contains("ST")) //移除ST股票
 
-      println(clsName)
+      println(moduleName)
       println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
 
       if(backtestLenght==0){
-        //非回测操作，则发送邮件
-        sendMail(clsName, stocks)
+        //非回测，则发送邮件
+        sendMail(moduleName, stocks.toList)
       }
       else {
-        //回测，计算回测胜率效果
-        println(s"${mod.getClass.getSimpleName}模型回测")
-        mod.sells.filter(e=>mod.getTsStocks().contains(e.ts_code)).groupBy(_.ts_code).map(_._2.sortBy(_.trade_date)).map(ls=>{
-          val pre_close = ls.head.pre_close
-          val changes = ls.map(e=>{
-            val change = ((new BigDecimal(e.high).subtract(new BigDecimal(pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
-             s"${change}[高][${e.trade_date}]"
-          }).mkString("; ")
-
-          val buy = mod.buys.filter(_.ts_code.equals(ls.head.ts_code)).head
-          s"${mod.getClass.getSimpleName}, ${ls.head.ts_code}, ${ls.head.name}, [买], ${buy.trade_date}, [卖], ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
-        }).foreach(println)
+        //回测
+        println(s"${moduleName}模型回测")
+        moduleList.filter(e=>e.buy!=null && e.sells.size>0).foreach(mod=>{
+          val preClose = mod.sells.head.pre_close //取除权后收盘价
+          val mkStr = mod.sells.sortBy(_.trade_date).map(e=>{
+            val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
+            s"${e.trade_date} 高 ${change}"
+          }).mkString(", ")
+          val str = s"${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}[买], [卖]${mod.sells.head.trade_date} 收 ${mod.sells.head.change}, ${mkStr}"
+          println(str)
+        })
       }
     })
+    println()
+
+//    finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0).foreach(mod=>{
+//      //输出模型分析结论
+//      val clsName = mod.getClass.getSimpleName
+//      val stocks = mod.getTsStocks().map(e=>{
+//        val ls = DataFrame.STOCKS.filter(_.ts_code.equals(e))
+//        if(ls.size>0){
+//          Some(ls.head)
+//        }
+//        else {
+//          Option.empty
+//        }
+//      }).filter(_.nonEmpty).map(_.get)
+//        //.filter(e=> !e.name.contains("ST")) //移除ST股票
+//
+//      println(clsName)
+//      println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
+//
+//      if(backtestLenght==0){
+//        //非回测操作，则发送邮件
+//        sendMail(clsName, stocks)
+//      }
+//      else {
+//        //回测，计算回测胜率效果
+//        println(s"${mod.getClass.getSimpleName}模型回测")
+//        mod.sells.filter(e=>mod.getTsStocks().contains(e.ts_code)).groupBy(_.ts_code).map(_._2.sortBy(_.trade_date)).map(ls=>{
+//          val pre_close = ls.head.pre_close
+//          val changes = ls.map(e=>{
+//            val change = ((new BigDecimal(e.high).subtract(new BigDecimal(pre_close))).multiply(new BigDecimal(100))).divide(new BigDecimal(e.pre_close), 4, RoundingMode.UP)
+//             s"${change}[高][${e.trade_date}]"
+//          }).mkString("; ")
+//
+//          val buy = mod.buys.filter(_.ts_code.equals(ls.head.ts_code)).head
+//          s"${mod.getClass.getSimpleName}, ${ls.head.ts_code}, ${ls.head.name}, [买], ${buy.trade_date}, [卖], ${ls.head.change}[收][${ls.head.trade_date}], ${changes}"
+//        }).foreach(println)
+//      }
+//    })
   }
 
   private def sendMail(moduleName: String, list: List[TsStock]) = {
@@ -95,8 +138,8 @@ object PassFactory {
     List(
 //      new MA3_Model,
 //      new MA3_1_Model,
-//      new MA3_2_Model,
-      new MA3_3_Model
+      new MA3_2_Model,
+//      new MA3_3_Model
     )
   }
 

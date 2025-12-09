@@ -7,7 +7,7 @@ import scala.collection.mutable.ListBuffer
 trait IModel {
 
   var sells = ListBuffer[ModuleDay]()
-  var buys = ListBuffer[ModuleDay]()
+  var buy: ModuleDay = _
 
   def run(days: List[ModuleDay]): Unit //运行模型
 
