@@ -21,10 +21,14 @@ object BackTest {
         s"${e.trade_date}【${change}】【卖出】"
       }).mkString(", ")
 
-      println(s"${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买入】, ${highStr}")
-      mod.sells.filter(e=>{
+      val st = mod.sells.filter(e => {
         e.high.toFloat > mod.buy.close.toFloat
       }).size > 0
+
+      val ok = if (st) "" else "X"
+      println(s"${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}")
+
+      st
 
     })
 
