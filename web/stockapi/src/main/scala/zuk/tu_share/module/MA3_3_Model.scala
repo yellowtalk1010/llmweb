@@ -47,6 +47,6 @@ class MA3_3_Model extends IModel {
 
   override def getTsStocks(): List[String] = stocks.toList
 
-  override def desc(): String = "反包两日阴线后继续上升。过滤60个交易日，胜率【0.8174】"
+  override def desc(): String = "胜率【0.8174】，反包两日阴线后继续上升，过去60个交易日。"
 
 }
