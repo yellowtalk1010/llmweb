@@ -74,7 +74,7 @@ object PassFactory {
 
       if(backtestLenght==0){
         //非回测，则发送邮件
-        sendMail(moduleName, stocks.toList)
+        sendMail(s"${moduleName}，${moduleList.head.desc()}", stocks.toList)
       }
       else {
         //回测
