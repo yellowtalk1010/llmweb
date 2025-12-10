@@ -14,6 +14,15 @@ import scala.collection.mutable.ListBuffer
 
 object PassFactory {
 
+  private def moduleList(): List[IModel] = {
+    List(
+        new MA3_Model,
+        new MA3_1_Model,
+      new MA3_2_Model,
+      new MA3_3_Model
+    )
+  }
+
   def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
 
     val finishModules = ListBuffer[IModel]()
@@ -91,15 +100,6 @@ object PassFactory {
     }).mkString("\n<br><br>\n")
 
     SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate},${moduleName}", htmlContent)
-  }
-
-  private def moduleList(): List[IModel] = {
-    List(
-//            new MA3_Model,
-//            new MA3_1_Model,
-      new MA3_2_Model,
-      new MA3_3_Model
-    )
   }
 
   private def doPass(moduleDays: List[ModuleDay]) = {
