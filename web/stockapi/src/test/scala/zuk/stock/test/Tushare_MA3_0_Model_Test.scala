@@ -6,7 +6,7 @@ import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.module.{MA3_2_Model, MA3_3_Model}
 
 
-class Tushare_MA3_Model_Test extends AnyFunSuite {
+class Tushare_MA3_0_Model_Test extends AnyFunSuite {
 
   val path = "D:/development/github/llmweb1/web/tushare"
   test("tushare-3"){

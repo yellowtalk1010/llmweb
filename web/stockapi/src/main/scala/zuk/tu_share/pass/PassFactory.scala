@@ -3,7 +3,7 @@ package zuk.tu_share.pass
 import zuk.tu_share.DataFrame
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.dto.{ModuleDay, TsStock}
-import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_2_Model, MA3_3_Model, MA3_Model}
+import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_2_Model, MA3_3_Model, MA3_0_Model}
 import zuk.utils.SendMail
 
 import java.math.{BigDecimal, RoundingMode}
@@ -16,7 +16,7 @@ object PassFactory {
 
   private def moduleList(): List[IModel] = {
     List(
-        new MA3_Model,
+        new MA3_0_Model,
         new MA3_1_Model,
       new MA3_2_Model,
       new MA3_3_Model

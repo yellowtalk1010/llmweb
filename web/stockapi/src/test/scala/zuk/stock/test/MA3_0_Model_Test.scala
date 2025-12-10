@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import scala.jdk.CollectionConverters.*
 
-class MA3_Model_Test extends AnyFunSuite {
+class MA3_0_Model_Test extends AnyFunSuite {
 
   test("模型策略") {
 

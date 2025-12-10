@@ -5,7 +5,7 @@ import zuk.tu_share.dto.{ModuleDay, TsStock}
 import java.math.BigDecimal
 import scala.collection.mutable.ListBuffer
 
-class MA3_Model extends IModel {
+class MA3_0_Model extends IModel {
 
   val stocks = new ListBuffer[String]()
 
