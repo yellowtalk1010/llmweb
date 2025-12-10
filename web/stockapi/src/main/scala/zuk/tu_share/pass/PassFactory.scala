@@ -27,6 +27,9 @@ object PassFactory {
         if (backtestLenght > 0) {
           var startIndex = backtestLenght - 3
           if (startIndex < 0) {
+            startIndex = backtestLenght - 2
+          }
+          if (startIndex < 0) {
             startIndex = backtestLenght - 1
           }
           module.sells ++= e._2.slice(startIndex, backtestLenght).reverse //连续两天
