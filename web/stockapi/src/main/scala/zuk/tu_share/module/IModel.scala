@@ -13,4 +13,6 @@ trait IModel {
 
   def getTsStocks(): List[String]
 
+  def desc():String
+
 }

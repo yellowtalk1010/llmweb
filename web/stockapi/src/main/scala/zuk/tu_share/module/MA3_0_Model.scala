@@ -28,4 +28,6 @@ class MA3_0_Model extends IModel {
   }
 
   override def getTsStocks(): List[String] = stocks.toList
+
+  override def desc(): String = "上穿MA5。过滤60个交易日，胜率【0.8237】"
 }
