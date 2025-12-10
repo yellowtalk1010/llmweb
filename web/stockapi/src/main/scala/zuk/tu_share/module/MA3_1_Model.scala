@@ -21,9 +21,14 @@ class MA3_1_Model extends IModel {
           && new BigDecimal(head.turnover_rate).compareTo(BigDecimal(5)) <= 0 //换手率
           && new BigDecimal(head.change).compareTo(BigDecimal(4)) >= 0 //涨幅度
           && new BigDecimal(head.change).compareTo(BigDecimal(9)) <= 0 //涨幅度
+          && new BigDecimal(head.vol).compareTo(new BigDecimal(list(1).vol).add(new BigDecimal(list(2).vol))) < 0 //
       ) {
         //缩量上涨
-        stocks += head.ts_code
+        if(!head.name.contains("ST")){
+          //ST不推荐
+          stocks += head.ts_code
+        }
+
       }
     }
   }
