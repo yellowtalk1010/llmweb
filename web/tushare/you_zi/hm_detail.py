@@ -5,7 +5,7 @@ import ZukTuShare
 import pandas as pd
 
 # 初始化pro接口
-pro = ZukTuShare.getPro()
+pro = ZukTuShare.getPro_10000()
 
 # 游资交易每日明细
 def download_hm_detail(trade_date):
