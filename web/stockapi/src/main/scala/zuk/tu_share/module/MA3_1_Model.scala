@@ -38,6 +38,6 @@ class MA3_1_Model extends IModel {
 
   override def getTsStocks(): List[String] = stocks.toList
 
-  override def desc(): String = "胜率【0.9200】，缩量上涨。过去60个交易日，"
+  override def desc(): String = "【0.9200】，缩量上涨。过去60个交易日，"
 
 }
