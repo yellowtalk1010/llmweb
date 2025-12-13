@@ -123,6 +123,8 @@ class AllStockController {
           hmDetail.net_amount = record.get("net_amount")
           hmDetail.hm_name = record.get("hm_name")
           hmDetail.hm_orgs = record.get("hm_orgs")
+          //
+          hmDetail.splitTsCode(hmDetail.ts_code)
           hmDetail
         })
         .toList

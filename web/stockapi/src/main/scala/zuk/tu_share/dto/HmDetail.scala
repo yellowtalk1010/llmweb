@@ -5,7 +5,7 @@ import scala.beans.BeanProperty
 /**
  * 游资交易每日明细
  */
-class HmDetail {
+class HmDetail extends TsCodeSplit{
   @BeanProperty var trade_date: String = _  //交易日期
   @BeanProperty var ts_code: String = _     //ts 代码
   @BeanProperty var ts_name: String = _     //股票名称
@@ -14,5 +14,7 @@ class HmDetail {
   @BeanProperty var net_amount: String = _  //净买入（买卖和（万））
   @BeanProperty var hm_name: String = _     //游资名称
   @BeanProperty var hm_orgs: String = _     //关联机构
+
+  //额外计算
   @BeanProperty var count: Int = _          //数量
 }

@@ -94,7 +94,7 @@ function HistoryStock() {
                             <br/>
                             <a
                             href="#"
-                            onClick={() => window.open("https://quote.eastmoney.com/" + row.ts_code + ".html")}
+                            onClick={() => window.open("https://quote.eastmoney.com/" + row.s_1 + row.s_0 + ".html")}
                             >
                             {row.ts_code}
                             </a>

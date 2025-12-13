@@ -52,6 +52,7 @@ class TopInstController {
           topInst.reason = record.get("reason")
 
           //额外计算
+          topInst.splitTsCode(topInst.ts_code)
           val ls = AllStockController.hmDetailMap.flatMap(_._2.asScala).filter(_.ts_code.equals(topInst.ts_code))
           if (ls.size > 0) {
             topInst.ts_name = ls.head.ts_name

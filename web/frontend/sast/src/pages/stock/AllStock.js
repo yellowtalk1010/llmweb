@@ -112,7 +112,7 @@ function AllStock() {
                   href=""
                   onClick={(e) => {
                      e.preventDefault(); //// 阻止页面跳到顶部
-                    window.open("https://quote.eastmoney.com/" + row.ts_code + ".html");
+                    window.open("https://quote.eastmoney.com/" + row.s_1 + row.s_0 + ".html");
                   }}
                 >
                   {row.ts_code}

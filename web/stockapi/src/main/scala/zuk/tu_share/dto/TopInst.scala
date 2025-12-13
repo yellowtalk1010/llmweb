@@ -5,7 +5,7 @@ import scala.beans.BeanProperty
 /***
  * 龙虎榜机构交易单
  */
-class TopInst {
+class TopInst extends TsCodeSplit{
 
   @BeanProperty var trade_date: String = _  //交易日期
   @BeanProperty var ts_code: String = _     //TS代码
