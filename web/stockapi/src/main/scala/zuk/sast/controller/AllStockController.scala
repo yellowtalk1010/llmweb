@@ -64,7 +64,7 @@ class AllStockController {
           stockEntity.jys = socket.getJys
           stockEntity.name = socket.getName
           this.stockMapper.insert(stockEntity)
-
+          System.out.println("插入数据库成功")
         })
         result.put("status", "ok")
         return result
