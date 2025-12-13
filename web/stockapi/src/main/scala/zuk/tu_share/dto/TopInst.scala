@@ -19,5 +19,7 @@ class TopInst {
   @BeanProperty var side_desc: String = _   //
   @BeanProperty var reason: String = _      //上榜理由
 
+  @BeanProperty var count: Int = _          //数量
+
 
 }
