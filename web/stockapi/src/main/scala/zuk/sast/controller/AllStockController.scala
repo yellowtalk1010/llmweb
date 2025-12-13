@@ -1,5 +1,6 @@
 package zuk.sast.controller
 
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
@@ -104,13 +105,23 @@ class AllStockController {
     println(s"tradedate:${tradedate}, search:${search}")
     HmDetailUtil.loadData()
     val list = new util.ArrayList[HmDetail]()
-    if(HmDetailUtil.hmDetailMap.get(tradedate).nonEmpty){
-      list.addAll(HmDetailUtil.hmDetailMap.get(tradedate).get.filter(e=>{
-          scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.hm_orgs).filter(_.contains(search)).size>0
-      }).asJava)
+    if(StringUtils.isNotBlank(tradedate)){
+      if(HmDetailUtil.hmDetailMap.get(tradedate).nonEmpty){
+        list.addAll(HmDetailUtil.hmDetailMap.get(tradedate).get.asJava)
+      }
+    }
+    else {
+      list.addAll(HmDetailUtil.hmDetailMap.flatMap(_._2).toList.asJava)
     }
     val map: Map[String, AnyRef] = new HashMap[String, AnyRef]
-    map.put("stocks", list)
+    map.put("stocks", list.asScala.filter(e=>{
+      if(StringUtils.isBlank(search)){
+        true
+      }
+      else {
+        scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.hm_orgs).filter(_.contains(search)).size>0
+      }
+    }).asJava)
     map
   }
 
