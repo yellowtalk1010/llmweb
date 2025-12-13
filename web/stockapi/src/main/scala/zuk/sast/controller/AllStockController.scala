@@ -124,7 +124,7 @@ class AllStockController {
       in.close()
       val countMap = codes.groupBy(_.ts_code).map(e=>(e._1, e._2.size))
       codes.foreach(c=>{
-        c.count = countMap.get(c.ts_code).get
+        c.count = countMap.get(c.ts_code).get //计算买入的游资数量
       })
       hmDetailMap.put(tradedate, codes.sortBy(_.count).reverse.asJava)
     }
