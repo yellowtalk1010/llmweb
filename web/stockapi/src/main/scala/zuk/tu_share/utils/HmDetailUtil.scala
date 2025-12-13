@@ -40,9 +40,9 @@ object HmDetailUtil {
           hmDetail.trade_date = record.get("trade_date")
           hmDetail.ts_code = record.get("ts_code")
           hmDetail.ts_name = record.get("ts_name")
-          hmDetail.buy_amount = record.get("buy_amount")
-          hmDetail.sell_amount = record.get("sell_amount")
-          hmDetail.net_amount = record.get("net_amount")
+          hmDetail.buy_amount = record.get("buy_amount").toFloat.toString
+          hmDetail.sell_amount = record.get("sell_amount").toFloat.toString
+          hmDetail.net_amount = record.get("net_amount").toFloat.toString
           hmDetail.hm_name = record.get("hm_name")
           hmDetail.hm_orgs = record.get("hm_orgs")
           //
