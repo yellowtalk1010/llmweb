@@ -54,7 +54,7 @@ object PassFactory {
 
     println("完成模型分析")
     val filterModules = finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
-    filterModules.groupBy(_.getClass.getSimpleName).foreach(tp2=>{
+    filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).foreach(tp2=>{
       val moduleName = tp2._1
       val moduleList = tp2._2
 
@@ -74,7 +74,7 @@ object PassFactory {
 
       if(backtestLenght==0){
         //非回测，则发送邮件
-        sendMail(s"${moduleList.head.desc()}, ${moduleName}", stocks.toList)
+        sendMail(moduleList.head, stocks.toList)
       }
       else {
         //回测
@@ -85,7 +85,7 @@ object PassFactory {
 
   }
 
-  private def sendMail(moduleName: String, list: List[TsStock]) = {
+  private def sendMail(module: IModel, list: List[TsStock]) = {
 
     val mailAddress = "513283439@qq.com"
     val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
@@ -99,7 +99,7 @@ object PassFactory {
       s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
     }).mkString("\n<br><br>\n")
 
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate},${moduleName}", htmlContent)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate},${module.winRate}", module.desc() + "\n<br>" + htmlContent)
   }
 
   private def doPass(moduleDays: List[ModuleDay]) = {
