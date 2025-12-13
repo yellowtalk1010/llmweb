@@ -134,7 +134,14 @@ class AllStockController {
     lastMerge.net_amount = "E8（一亿）：" + totalList.map(_.net_amount.toFloat).sum.toString
 
     val map: Map[String, AnyRef] = new HashMap[String, AnyRef]
-    map.put("stocks", (totalList += lastMerge).asJava)
+    map.put("stocks", (totalList.sortWith((a,b)=>{
+      if(a.trade_date.equals(b.trade_date)){
+        a.count > b.count
+      }
+      else {
+        a.trade_date.toInt > b.trade_date.toInt
+      }
+    } ) += lastMerge).asJava)
     map
   }
 
