@@ -47,7 +47,8 @@ object HM_MOD {
       (stock, sum)
     }).toList.sortBy(_._2).reverse
     netAmounts.foreach(tp=>{
-      doPrintln(s"${toStr(tp._1)}, ${tp._2}")
+      val hms = hmJoins.filter(_._1.ts_code.equals(tp._1.ts_code)).head._2
+      doPrintln(s"${toStr(tp._1)}, 【${tp._2}】, ${hms.size}, ${hms.mkString("; ")}")
     })
 
     println("发送邮件")
@@ -59,7 +60,7 @@ object HM_MOD {
   }
 
   private def doPrintln(line: String): Unit = {
-    lines += line
+    lines += line.replace(" ", "&nbsp")
     println(line)
   }
 
