@@ -47,12 +47,6 @@ function HistoryStock() {
             {/* 查询表单 */}
             <div className="form">
                 <input
-                    type="text"
-                    id="search"
-                />
-                &nbsp;
-                {/* 修改为日期选择器 */}
-                <input
                     type="date"
                     value={`${tradedate.slice(0, 4)}-${tradedate.slice(4, 6)}-${tradedate.slice(6, 8)}`}
                     onChange={(e) => {
@@ -61,11 +55,13 @@ function HistoryStock() {
                     }}
                     className="input"
                 />
-                &nbsp;
+                <input
+                    type="text"
+                    id="search"
+                    className="input"
+                />
                 <button onClick={handleSearch}>查询</button>
             </div>
-
-
             <div style={{ padding: "20px" }}>
                 <table className="table">
                     <thead>
