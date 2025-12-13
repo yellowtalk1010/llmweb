@@ -2,6 +2,9 @@ package zuk.tu_share.dto
 
 import scala.beans.BeanProperty
 
+/**
+ * 游资交易每日明细
+ */
 class HmDetail {
   @BeanProperty var trade_date: String = _  //交易日期
   @BeanProperty var ts_code: String = _     //ts 代码
