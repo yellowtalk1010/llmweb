@@ -5,7 +5,7 @@ function Stock() {
   const pages = [
     { id: "1", title: "stockapi", url: "https://stockapi.com.cn/" },
     { id: "2", title: "招商", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
-    { id: "3", title: "全部", url: "AllStock" },
+    { id: "3", title: "龙虎榜", url: "AllStock" },
     { id: "4", title: "我的", url: "MyStock" },
     { id: "5", title: "历史", url: "HistoryStock" },
   ];

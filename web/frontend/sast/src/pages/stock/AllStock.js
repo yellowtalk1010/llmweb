@@ -41,11 +41,31 @@ function AllStock() {
       .catch(err => console.error('失败', err));
   };
 
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+  };
+  //交易日期
+  const [tradedate, setTradedate] = useState(getTodayDate());
+
+
   return (
     <div className="container">
-      {/* 查询表单 */}
       <div className="form">
-        <textarea
+        <input
+          type="date"
+          value={`${tradedate.slice(0, 4)}-${tradedate.slice(4, 6)}-${tradedate.slice(6, 8)}`}
+          onChange={(e) => {
+            const value = e.target.value.replace(/-/g, '');
+            setTradedate(value);
+          }}
+          className="input"
+        />
+        <input
           type="text"
           placeholder="请输入代码"
           value={search}
