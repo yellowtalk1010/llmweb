@@ -9,8 +9,16 @@ import scala.jdk.CollectionConverters.*
 
 object HmDetailUtil {
 
+
+  val SIZE = 30
+
   val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
 
+  /***
+   * 游资交易每日明细
+   *
+   * 最近30天
+   */
   def loadData(): Unit = {
     if(hmDetailMap.size>0){
       return
@@ -18,8 +26,8 @@ object HmDetailUtil {
     val hmDetailPath = "tushare/hm/hm_detail/"
     val hmDetailFile = new File(hmDetailPath)
     var files = hmDetailFile.listFiles().sortBy(_.getName).reverse
-    if (files.size>30){
-      files = files.take(30)
+    if (files.size>SIZE){
+      files = files.take(SIZE)
     }
     files.map(_.getAbsolutePath).foreach(println)
     files.foreach(hmFile=>{
