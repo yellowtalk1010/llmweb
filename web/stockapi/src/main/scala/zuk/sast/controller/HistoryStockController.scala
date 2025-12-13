@@ -20,7 +20,7 @@ class HistoryStockController {
 
   private val log = LoggerFactory.getLogger(classOf[HistoryStockController])
 
-  private var topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
+  private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 
   /**
    * 龙虎榜机构交易单
