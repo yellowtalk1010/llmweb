@@ -57,25 +57,31 @@ object LLMClient {
    * 初始化
    */
   def init(): Unit = {
-    val socketClient = new Socket("127.0.0.1", 1010)
-    socketInput = new BufferedReader(new InputStreamReader(socketClient.getInputStream))
-    socketOutput = new PrintWriter(socketClient.getOutputStream(), true)
+    try {
+      val socketClient = new Socket("127.0.0.1", 1010)
+      socketInput = new BufferedReader(new InputStreamReader(socketClient.getInputStream))
+      socketOutput = new PrintWriter(socketClient.getOutputStream(), true)
 
-    executor.execute(() => {
-      while (true) {
-        try {
-          Thread.sleep(20)
-          val line = socketInput.readLine()
-          if (StringUtils.isNotBlank(line)) {
-            println(s"read:${line}")
-            handleReadLine(line)
+      executor.execute(() => {
+        while (true) {
+          try {
+            Thread.sleep(20)
+            val line = socketInput.readLine()
+            if (StringUtils.isNotBlank(line)) {
+              println(s"read:${line}")
+              handleReadLine(line)
+            }
           }
+          catch
+            case exception: Exception => exception.printStackTrace()
         }
-        catch
-          case exception: Exception => exception.printStackTrace()
-      }
-    })
-    println("完成LLM连接")
+      })
+      println("连接LLM完成")
+    }
+    catch
+      case exception: Exception =>
+        println("未连接LLM")
+
   }
 
   def testWrite(messageId: String, codeContent: String): Unit = {
