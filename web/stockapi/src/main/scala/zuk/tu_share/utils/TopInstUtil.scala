@@ -15,6 +15,9 @@ object TopInstUtil {
 
   val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 
+  /***
+   * 龙虎榜机构交易单
+   */
   def loadData(): Unit = {
     HmDetailUtil.loadData()
     if(topInstMap.size>0){
