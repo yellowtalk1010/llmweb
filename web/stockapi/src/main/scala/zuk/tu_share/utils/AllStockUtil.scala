@@ -39,6 +39,9 @@ object AllStockUtil {
         tsStock.area = record.get("area")
         tsStock.industry = record.get("industry")
         tsStock.market = record.get("market")
+
+        //额外处理
+        tsStock.splitTsCode(tsStock.ts_code)
         tsStock
       })
       .toList
