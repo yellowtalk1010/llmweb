@@ -69,7 +69,6 @@ function HistoryStock() {
                         <th className="th">交易日</th>
                         <th className="th">代码</th>
                         <th className="th">名称</th>
-                        <th className="th">营业部名称</th>
                         <th className="th">买入额（万）</th>
                         <th className="th">买入占总成交比例</th>
                         <th className="th">卖出额（万）</th>
@@ -77,6 +76,7 @@ function HistoryStock() {
                         <th className="th">净成交额（万）</th>
                         <th className="th">买卖类型</th>
                         <th className="th">上榜理由</th>
+                        <th className="th">营业部名称</th>
                     </tr>
                     </thead>
 
@@ -99,8 +99,7 @@ function HistoryStock() {
                             {row.ts_code}
                             </a>
                         </td>
-                        <td className="td">{row.ts_name}<br/>{row.hm_name}</td>
-                        <td className="td">{row.exalter}</td>
+                        <td className="td">{row.ts_name}【{row.count}】<br/>{row.hm_name}</td>
                         <td className="td">{row.buy}</td>
                         <td className="td">{row.buy_rate}</td>
                         <td className="td">{row.sell}</td>
@@ -108,6 +107,7 @@ function HistoryStock() {
                         <td className="td">{row.net_buy}</td>
                         <td className="td">{row.side_desc}</td>
                         <td className="td">{row.reason}</td>
+                        <td className="td">{row.exalter}</td>
                         </tr>
                     ))}
                     </tbody>
