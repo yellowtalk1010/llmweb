@@ -99,7 +99,7 @@ object PassFactory {
       s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
     }).mkString("\n<br><br>\n")
 
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}【${module.winRate}】", module.desc() + "\n<br>" + htmlContent)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}【${module.winRate}】${module.desc() }", htmlContent)
   }
 
   private def doPass(moduleDays: List[ModuleDay]) = {
