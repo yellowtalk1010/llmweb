@@ -106,12 +106,12 @@ class AllStockController {
     HmDetailUtil.loadData()
     val list = new util.ArrayList[HmDetail]()
     if(StringUtils.isNotBlank(tradedate)){
-      if(HmDetailUtil.hmDetailMap.get(tradedate).nonEmpty){
-        list.addAll(HmDetailUtil.hmDetailMap.get(tradedate).get.asJava)
+      if(HmDetailUtil.loadData().get(tradedate).nonEmpty){
+        list.addAll(HmDetailUtil.loadData().get(tradedate).get.asJava)
       }
     }
     else {
-      list.addAll(HmDetailUtil.hmDetailMap.flatMap(_._2).toList.asJava)
+      list.addAll(HmDetailUtil.loadData().flatMap(_._2).toList.asJava)
     }
 
     val totalList = list.asScala.filter(e=>{

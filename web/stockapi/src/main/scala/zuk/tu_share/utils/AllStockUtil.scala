@@ -11,14 +11,14 @@ import scala.jdk.CollectionConverters.*
 
 object AllStockUtil {
 
-  val STOCKS = new ListBuffer[TsStock]()
+  private val STOCKS = new ListBuffer[TsStock]()
 
   /** *
    * 加载市场全部股票数据
    */
-  def loadData(): Unit = {
+  def loadData(): List[TsStock] = synchronized {
     if(STOCKS.size>0){
-      return
+      return STOCKS.toList
     }
     val all_stocks_path = "tushare/all_stocks.csv"
     val all_stocks_file = new File(all_stocks_path)
@@ -46,6 +46,8 @@ object AllStockUtil {
     println(s"${codes.size}")
 
     STOCKS ++= codes
+
+    STOCKS.toList
 
   }
 

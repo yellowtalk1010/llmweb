@@ -13,18 +13,16 @@ object TopInstUtil {
 
   val SIZE = 30
 
-  val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
+  private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 
   /***
    * 龙虎榜机构交易单
    *
    * 最近30天
    */
-  def loadData(): Unit = {
-    AllStockUtil.loadData()
-    HmDetailUtil.loadData()
+  def loadData(): scala.collection.mutable.HashMap[String, List[TopInst]] = synchronized {
     if(topInstMap.size>0){
-      return
+      return topInstMap
     }
     val topInstPath = s"tushare/hm/top_inst/"
     val topInstFile = new File(topInstPath)
@@ -52,11 +50,11 @@ object TopInstUtil {
 
           //额外计算
           topInst.splitTsCode(topInst.ts_code)
-          val ls = HmDetailUtil.hmDetailMap.flatMap(_._2).filter(_.ts_code.equals(topInst.ts_code))
+          val ls = HmDetailUtil.loadData().flatMap(_._2).filter(_.ts_code.equals(topInst.ts_code))
           if (ls.size > 0) {
             topInst.ts_name = ls.head.ts_name
           }
-          val ls1 = HmDetailUtil.hmDetailMap.flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
+          val ls1 = HmDetailUtil.loadData().flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
           if (ls1.size > 0) {
             topInst.hm_name = ls1.head.hm_name
           }
@@ -85,6 +83,7 @@ object TopInstUtil {
       topInstMap.put(tradedate, codes.sortBy(_.count).reverse.asJava)
     })
 
+    topInstMap
   }
 
 

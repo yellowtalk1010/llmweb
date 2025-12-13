@@ -12,18 +12,16 @@ object HmDetailUtil {
 
   val SIZE = 30
 
-  val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
+  private val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
 
   /***
    * 游资交易每日明细
    *
    * 最近30天
    */
-  def loadData(): Unit = {
-    AllStockUtil.loadData()
-    TopInstUtil.loadData()
+  def loadData(): scala.collection.mutable.HashMap[String, List[HmDetail]] = synchronized {
     if(hmDetailMap.size>0){
-      return
+      return hmDetailMap
     }
     val hmDetailPath = "tushare/hm/hm_detail/"
     val hmDetailFile = new File(hmDetailPath)
@@ -62,6 +60,8 @@ object HmDetailUtil {
       hmDetailMap.put(tradedate, codes.sortBy(_.count).reverse)
 
     })
+
+    hmDetailMap
 
   }
 

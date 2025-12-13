@@ -24,8 +24,8 @@ class TopInstController {
     log.info(s"search: ${search}, tradedate: ${tradedate}")
 
     val list = new util.ArrayList[TopInst]()
-    if(TopInstUtil.topInstMap.get(tradedate).nonEmpty){
-      list.addAll(TopInstUtil.topInstMap.get(tradedate).get.asScala.filter(e=>{
+    if(TopInstUtil.loadData().get(tradedate).nonEmpty){
+      list.addAll(TopInstUtil.loadData().get(tradedate).get.asScala.filter(e=>{
         scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
       }).asJava)
     }
