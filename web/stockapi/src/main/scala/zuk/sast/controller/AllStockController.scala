@@ -101,12 +101,12 @@ class AllStockController {
   }
 
   /***
-   * 查询交易日龙虎榜信息
+   * 游资交易每日明细
    */
   @GetMapping(value = Array("all"))
   def all(tradedate: String, search: String): Map[String, Object] = {
     val hmFile = new File(s"tushare/hm/hm_detail/hm_detail-${tradedate}.csv") //龙虎榜路径
-    println(s"查询龙虎榜信息:hmPath=${hmFile.exists()}, tradedate=${tradedate}, search=${search}")
+    println(s"游资交易每日明细:hmPath=${hmFile.exists()}, tradedate=${tradedate}, search=${search}")
     if(hmFile.exists() && hmDetailMap.get(tradedate).isEmpty){
       //路径存在
       val in = new FileReader(hmFile.getAbsolutePath, Charset.forName("UTF-8"))
