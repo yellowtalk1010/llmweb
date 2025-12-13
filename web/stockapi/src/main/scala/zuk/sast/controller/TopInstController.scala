@@ -15,10 +15,10 @@ import java.util.{Date, List}
 import scala.jdk.CollectionConverters.*
 
 @RestController
-@RequestMapping(value=Array("historyStock"))
-class HistoryStockController {
+@RequestMapping(value=Array("top_inst"))
+class TopInstController {
 
-  private val log = LoggerFactory.getLogger(classOf[HistoryStockController])
+  private val log = LoggerFactory.getLogger(classOf[TopInstController])
 
   private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 

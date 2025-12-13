@@ -29,7 +29,7 @@ function HistoryStock() {
         const search = document.getElementById("search").value
         console.info(search + ", " + tradedate)
 
-        fetch("/historyStock/list?search="+search+"&tradedate="+tradedate, {
+        fetch("/top_inst/list?search="+search+"&tradedate="+tradedate, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             })
