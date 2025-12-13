@@ -21,7 +21,7 @@ function AllStock() {
 
   // 查询事件
   const handleSearch = () => {
-    let url = `/stock/all?search=${encodeURIComponent(search)}`;
+    let url = `/stock/all?tradedate=${tradedate}&search=${encodeURIComponent(search)}`;
     if (filter) {
       url += `&filter=${encodeURIComponent(filter)}`;
     }
@@ -80,10 +80,14 @@ function AllStock() {
         <thead>
           <tr>
             <th className="th">操作</th>
-            <th className="th">归属</th>
+            <th className="th">交易日期</th>
             <th className="th">代码</th>
             <th className="th">名称</th>
-            <th className="th">描述</th>
+            <th className="th">游资名称</th>
+            <th className="th">买入数量（万）</th>
+            <th className="th">卖出数量（万）</th>
+            <th className="th">净买入（买卖和（万））</th>
+            <th className="th">关联机构</th>
           </tr>
         </thead>
         <tbody>
@@ -96,26 +100,30 @@ function AllStock() {
             >
               <td className="td">
                 <div>
-                  <button className="button" onClick={(e) => add(e, row.api_code)}>关注</button>
+                  <button className="button" onClick={(e) => add(e, row.ts_code)}>关注</button>
                 </div>
                 <div>
                   <span>{index + 1}</span>
                 </div>
               </td>
-              <td className="td">{row.jys}</td>
+              <td className="td">{row.trade_date}</td>
               <td className="td">
                 <a
                   href=""
                   onClick={(e) => {
                      e.preventDefault(); //// 阻止页面跳到顶部
-                    window.open("https://quote.eastmoney.com/" + row.jys + row.api_code + ".html");
+                    window.open("https://quote.eastmoney.com/" + row.ts_code + ".html");
                   }}
                 >
-                  {row.api_code}
+                  {row.ts_code}
                 </a>
               </td>
-              <td className="td">{row.name}</td>
-              <td className="td">{row.gl}</td>
+              <td className="td">{row.ts_name}</td>
+              <td className="td">{row.hm_name}</td>
+              <td className="td">{row.buy_amount}</td>
+              <td className="td">{row.sell_amount}</td>
+              <td className="td">{row.net_amount}</td>
+              <td className="td">{row.hm_orgs}</td>
             </tr>
           ))}
         </tbody>

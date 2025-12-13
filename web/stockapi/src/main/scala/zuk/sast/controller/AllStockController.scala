@@ -1,21 +1,28 @@
 package zuk.sast.controller
 
+import org.apache.commons.csv.CSVFormat
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.stockapi.{LoaderLocalStockData, StockApiVo}
+import zuk.tu_share.dto.HmDetail
 
 import java.util
 import java.util.stream.Collectors
 import java.util.{Arrays, HashMap, List, Map, Set, UUID}
+import java.io.{File, FileReader}
+import java.nio.charset.Charset
+import scala.jdk.CollectionConverters.*
 
 @RestController
 @RequestMapping(value = Array("stock"))
 class AllStockController {
 
   private val log = LoggerFactory.getLogger(classOf[AllStockController])
+
+  private val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
 
   @Autowired
   private var stockMapper: StockMapper = _
@@ -93,52 +100,38 @@ class AllStockController {
     new util.HashMap[String, Object]
   }
 
-  val tags: util.Set[String] = util.Arrays.asList(
-    "人工智能",
-    "deepseek",
-    "昇腾",
-    "数据中心",
-    "芯片",
-    "华为",
-    "金融",
-    "消费",
-    "AI",
-    "稀土",
-    "工业母机").stream.map((e: String) => e.toUpperCase).collect(Collectors.toSet)
-
   @GetMapping(value = Array("all"))
-  def all(search: String): Map[String, Object] = {
-    var list: List[StockApiVo] = null
-    if (search != null && search.length > 0) {
-      val splits: Set[String] = Arrays.stream(search.split("\n")).filter((e: String) => e != null && e.trim.length > 0).map((e: String) => {
-        val slits = e.toUpperCase.split("，")
-        slits.head
-      }).collect(Collectors.toSet)
-      list = LoaderLocalStockData.STOCKS.stream.filter((e: StockApiVo) => {
-        splits.stream.filter((s: String) => {
-          e.getGl.toUpperCase.contains(s) || e.getApi_code.toUpperCase.contains(s) || e.getName.toUpperCase.contains(s)
-
-        }).count > 0
-
-      }).collect(Collectors.toList)
+  def all(tradedate: String, search: String): Map[String, Object] = {
+    val hmFile = new File(s"tushare/hm/hm_detail/hm_detail-${tradedate}.csv") //龙虎榜路径
+    println(s"查询龙虎榜信息:hmPath=${hmFile.exists()}, tradedate=${tradedate}, search=${search}")
+    if(hmFile.exists() && hmDetailMap.get(tradedate).isEmpty){
+      //路径存在
+      val in = new FileReader(hmFile.getAbsolutePath, Charset.forName("UTF-8"))
+      val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
+      val codes = records.asScala.map(record => {
+          val hmDetail = new HmDetail()
+          hmDetail.trade_date = record.get("trade_date")
+          hmDetail.ts_code = record.get("ts_code")
+          hmDetail.ts_name = record.get("ts_name")
+          hmDetail.buy_amount = record.get("buy_amount")
+          hmDetail.sell_amount = record.get("sell_amount")
+          hmDetail.net_amount = record.get("net_amount")
+          hmDetail.hm_name = record.get("hm_name")
+          hmDetail.hm_orgs = record.get("hm_orgs")
+          hmDetail
+        })
+        .toList
+      in.close()
+      hmDetailMap.put(tradedate, codes.asJava)
     }
-    else {
-      //没有输入条件，则默认输出1000条
-      list = LoaderLocalStockData.STOCKS.stream.filter((e: StockApiVo) => {
-        tags.stream.filter((tag: String) => {
-          e.getGl.toUpperCase.contains(tag)
-
-        }).count > 0
-
-      }).collect(Collectors.toList)
-      if (list != null && list.size > 1000) {
-        list = list.subList(0, 1000)
-      }
+    val list = new util.ArrayList[HmDetail]()
+    if(hmDetailMap.get(tradedate).nonEmpty){
+      list.addAll(hmDetailMap.get(tradedate).get.asScala.filter(e=>{
+          scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.hm_orgs).filter(_.contains(search)).size>0
+      }).asJava)
     }
-    log.info("search:" + search + ", stocks:" + list.size + ", blocks:" + tags.size)
     val map: Map[String, AnyRef] = new HashMap[String, AnyRef]
     map.put("stocks", list)
-    map.put("blocks", tags)
     map
   }
 
