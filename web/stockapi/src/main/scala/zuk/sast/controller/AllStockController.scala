@@ -113,15 +113,28 @@ class AllStockController {
     else {
       list.addAll(HmDetailUtil.hmDetailMap.flatMap(_._2).toList.asJava)
     }
-    val map: Map[String, AnyRef] = new HashMap[String, AnyRef]
-    map.put("stocks", list.asScala.filter(e=>{
+
+    val totalList = list.asScala.filter(e=>{
       if(StringUtils.isBlank(search)){
         true
       }
       else {
-        scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.hm_orgs).filter(_.contains(search)).size>0
+
+        val searchList = search.split("&").map(_.trim)
+        val ls = searchList.filter(line=>{
+            scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.hm_orgs).filter(_.contains(line)).size > 0
+        })
+        ls.size == searchList.size
       }
-    }).asJava)
+    })
+
+    val lastMerge = new HmDetail()
+    lastMerge.sell_amount = "卖出：" + totalList.map(_.sell_amount.toFloat).sum.toString
+    lastMerge.buy_amount = "买入：" + totalList.map(_.buy_amount.toFloat).sum.toString
+    lastMerge.net_amount = "E8（一亿）：" + totalList.map(_.net_amount.toFloat).sum.toString
+
+    val map: Map[String, AnyRef] = new HashMap[String, AnyRef]
+    map.put("stocks", (totalList += lastMerge).asJava)
     map
   }
 
