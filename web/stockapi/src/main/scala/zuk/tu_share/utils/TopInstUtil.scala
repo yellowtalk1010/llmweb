@@ -16,6 +16,7 @@ object TopInstUtil {
   val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 
   def loadData(): Unit = {
+    HmDetailUtil.loadData()
     if(topInstMap.size>0){
       return
     }
@@ -83,7 +84,7 @@ object TopInstUtil {
 
 
   private def getTradedate(filename: String): String = {
-    filename.replace("hm_detail-", "").replace(".csv","")
+    filename.replace("_top_inst", "").replace(".csv","")
   }
 
 }
