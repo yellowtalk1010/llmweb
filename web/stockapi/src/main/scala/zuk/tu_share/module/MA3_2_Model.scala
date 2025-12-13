@@ -2,6 +2,7 @@ package zuk.tu_share.module
 
 import zuk.tu_share.dto.ModuleDay
 
+import java.math
 import java.math.BigDecimal
 import scala.collection.mutable.ListBuffer
 
@@ -21,6 +22,8 @@ class MA3_2_Model extends IModel {
           && new BigDecimal(list(2).change).compareTo(new BigDecimal(0)) < 0  //下跌
           && new BigDecimal(list(1).change).compareTo(new BigDecimal(0)) > 0  //上涨
           && new BigDecimal(list(0).change).compareTo(new BigDecimal(0)) < 0  //下跌
+
+//          && List(list(1).ma.ma10.floatValue(), list(1).ma.ma20.floatValue(), list(1).ma.ma30.floatValue()).min < list(1).ma.ma5.floatValue()  //站上5日线条件
 
         && new BigDecimal(list(2).close).compareTo(new BigDecimal(list(3).close)) < 0 //连续2天下跌是递减趋势
         && new BigDecimal(list(1).low).compareTo(new BigDecimal(list(2).close)) < 0   //
