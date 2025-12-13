@@ -17,8 +17,11 @@ object TopInstUtil {
 
   /***
    * 龙虎榜机构交易单
+   *
+   * 最近30天
    */
   def loadData(): Unit = {
+    AllStockUtil.loadData()
     HmDetailUtil.loadData()
     if(topInstMap.size>0){
       return

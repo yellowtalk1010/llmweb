@@ -20,6 +20,8 @@ object HmDetailUtil {
    * 最近30天
    */
   def loadData(): Unit = {
+    AllStockUtil.loadData()
+    TopInstUtil.loadData()
     if(hmDetailMap.size>0){
       return
     }

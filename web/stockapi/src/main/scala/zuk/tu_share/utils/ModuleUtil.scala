@@ -5,13 +5,18 @@ import scala.jdk.CollectionConverters.*
 object ModuleUtil {
 
   def handule(): Unit = {
+    AllStockUtil.loadData()
     HmDetailUtil.loadData()
     TopInstUtil.loadData()
-    HmDetailUtil.hmDetailMap.map(_._1).toList.sorted.foreach(tradedate=>{
+    val codeSet = HmDetailUtil.hmDetailMap.flatMap(_._2.map(e=>s"${e.ts_code},${e.ts_name}")).toSet
+    println("总票数:" + codeSet.size)
+    codeSet.foreach(println)
 
-    })
-    val hmDetailList = HmDetailUtil.hmDetailMap.flatMap(_._2).toList.sortBy(_.trade_date)
-    hmDetailList
+  }
+
+
+  def main(args: Array[String]): Unit = {
+    handule()
   }
 
 }
