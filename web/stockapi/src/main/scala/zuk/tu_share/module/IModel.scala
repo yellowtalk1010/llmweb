@@ -15,4 +15,6 @@ trait IModel {
 
   def desc():String
 
+  def winRate: Float
+
 }

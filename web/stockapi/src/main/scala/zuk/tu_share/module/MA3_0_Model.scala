@@ -29,5 +29,7 @@ class MA3_0_Model extends IModel {
 
   override def getTsStocks(): List[String] = stocks.toList
 
-  override def desc(): String = "胜率【0.8237】，上穿MA5，过去60个交易日，"
+  override def desc(): String = "上穿MA5"
+
+  override def winRate: Float = 0.8237
 }
