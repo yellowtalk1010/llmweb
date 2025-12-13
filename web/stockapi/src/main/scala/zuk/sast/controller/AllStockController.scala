@@ -120,7 +120,7 @@ class AllStockController {
       }
       else {
 
-        val searchList = search.split("&").map(_.trim)
+        val searchList = search.split("&").filter(e=>StringUtils.isNotBlank(e)).map(_.trim)
         val ls = searchList.filter(line=>{
             scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.hm_orgs).filter(_.contains(line)).size > 0
         })
