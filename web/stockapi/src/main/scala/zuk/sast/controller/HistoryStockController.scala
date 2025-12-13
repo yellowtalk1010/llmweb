@@ -31,7 +31,7 @@ class HistoryStockController {
 
     log.info(s"search: ${search}, tradedate: ${tradedate}")
 
-    val topInstFile = new File(s"tushare/hm/top_inst/top_inst_${tradedate}.csv")
+    val topInstFile = new File(s"tushare/hm/top_inst/${tradedate}_top_inst.csv")
     println(s"龙虎榜机构交易单:topInstFile=${topInstFile.exists()}, tradedate=${tradedate}, search=${search}")
 
     if (topInstFile.exists()) {
@@ -49,13 +49,20 @@ class HistoryStockController {
           topInst.sell_rate = record.get("sell_rate")
           topInst.net_buy = record.get("net_buy")
           topInst.side = record.get("side")
-          topInst.side_desc = record.get("side_desc")
           topInst.reason = record.get("reason")
           topInst
         })
         .toList
       in.close()
-      val countMap = codes.groupBy(_.ts_code).map(e => (e._1, e._2.size))
+      val countMap = codes.map(e=>{
+        if(e.side.equals("0")){
+          e.side_desc = "买入"
+        }
+        else if(e.side.equals("1")) {
+          e.side_desc = "卖出"
+        }
+        e
+      }).groupBy(_.ts_code).map(e => (e._1, e._2.size))
       codes.foreach(c => {
         c.count = countMap.get(c.ts_code).get //计算买入的游资数量
       })

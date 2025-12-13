@@ -6,8 +6,7 @@ import "./StockTable.css"
  */
 function HistoryStock() {
  
-    const [context, setContext] = useState("")  //查询的数据
-    const [tradeDate, setTradeDate] = useState(""); // 新增状态用于存储日期
+    const [search, setSearch] = useState("")  //查询的数据
 
     const [stockDatas, setStockDatas] = useState({
         code: "",
@@ -15,19 +14,22 @@ function HistoryStock() {
         data: []
     });
 
-    // 设置默认日期为今天
-    useEffect(() => {
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
-        setTradeDate(formattedDate);
-    }, []);
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+  };
+  //交易日期
+  const [tradedate, setTradedate] = useState(getTodayDate());
 
 
-    const search = () => {
-        const context = document.getElementById("context").value
-        console.info(context + ", " + tradeDate)
+    const handleSearch = () => {
+        const search = document.getElementById("search").value
+        console.info(search + ", " + tradedate)
 
-        fetch("/historyStock/list?context="+context+"&tradeDate="+tradeDate, {
+        fetch("/historyStock/list?search="+search+"&tradedate="+tradedate, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             })
@@ -46,18 +48,21 @@ function HistoryStock() {
             <div className="form">
                 <input
                     type="text"
-                    id="context"
-                ></input>
+                    id="search"
+                />
                 &nbsp;
                 {/* 修改为日期选择器 */}
-                <input 
-                    type="date" 
-                    id="tradeDate" 
-                    value={tradeDate}
-                    onChange={e => setTradeDate(e.target.value)}
-                ></input>
+                <input
+                    type="date"
+                    value={`${tradedate.slice(0, 4)}-${tradedate.slice(4, 6)}-${tradedate.slice(6, 8)}`}
+                    onChange={(e) => {
+                        const value = e.target.value.replace(/-/g, '');
+                        setTradedate(value);
+                    }}
+                    className="input"
+                />
                 &nbsp;
-                <button onClick={search}>查询</button>
+                <button onClick={handleSearch}>查询</button>
             </div>
 
 
@@ -65,14 +70,17 @@ function HistoryStock() {
                 <table className="table">
                     <thead>
                     <tr>
-                        <th className="th">名称/代码</th>
-                        <th className="th">时间</th>
-                        <th className="th">开盘价</th>
-                        <th className="th">最低价</th>
-                        <th className="th">最高价</th>
-                        <th className="th">收盘价</th>
-                        <th className="th">换手率</th>
-                        <th className="th">涨跌</th>
+                        <th className="th">交易日</th>
+                        <th className="th">代码</th>
+                        <th className="th">名称</th>
+                        <th className="th">营业部名称</th>
+                        <th className="th">买入额（万）</th>
+                        <th className="th">买入占总成交比例</th>
+                        <th className="th">卖出额（万）</th>
+                        <th className="th">卖出占总成交比例</th>
+                        <th className="th">净成交额（万）</th>
+                        <th className="th">买卖类型</th>
+                        <th className="th">上榜理由</th>
                     </tr>
                     </thead>
 
@@ -84,23 +92,26 @@ function HistoryStock() {
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f5f5f5"}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = "#fff"}
                         >
+                        <td className="td">{row.trade_date}</td>    
                         <td className="td">
                             {row.name}
                             <br/>
                             <a
                             href="#"
-                            onClick={() => window.open("https://quote.eastmoney.com/" + row.jys + row.api_code + ".html")}
+                            onClick={() => window.open("https://quote.eastmoney.com/" + row.ts_code + ".html")}
                             >
-                            {row.api_code}
+                            {row.ts_code}
                             </a>
                         </td>
-                        <td className="td">{row.time}</td>
-                        <td className="td">{row.open}</td>
-                        <td className="td">{row.low}</td>
-                        <td className="td">{row.high}</td>
-                        <td className="td">{row.close}</td>
-                        <td className="td">{row.turnoverRatio}</td>
-                        <td className="td">{row.changeRatio}</td>
+                        <td className="td">{row.ts_code}名称【{row.count}】</td>
+                        <td className="td">{row.exalter}</td>
+                        <td className="td">{row.buy}</td>
+                        <td className="td">{row.buy_rate}</td>
+                        <td className="td">{row.sell}</td>
+                        <td className="td">{row.sell_rate}</td>
+                        <td className="td">{row.net_buy}</td>
+                        <td className="td">{row.side_desc}</td>
+                        <td className="td">{row.reason}</td>
                         </tr>
                     ))}
                     </tbody>
