@@ -21,7 +21,7 @@ object HM_MOD {
     val codeSet = HmDetailUtil.loadData().flatMap(_._2.map(e=>s"${e.ts_code}")).toSet
     val hm_stocks = AllStockUtil.loadData().filter(e=>codeSet.contains(e.ts_code))
     doPrintln("总票数:" + hm_stocks.size)
-    hm_stocks.map(toStr).foreach(doPrintln)
+//    hm_stocks.map(toStr).foreach(doPrintln)
     doPrintln(s"\n${LINE}行业排序${LINE}")
     val industrySortStocks = hm_stocks.groupBy(_.industry).toList.sortBy(_._2.size).reverse
     industrySortStocks.map(tp=>s"${tp._1},${tp._2.size}").foreach(doPrintln)
