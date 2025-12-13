@@ -99,7 +99,7 @@ function HistoryStock() {
                             {row.ts_code}
                             </a>
                         </td>
-                        <td className="td">{row.ts_code}名称【{row.count}】</td>
+                        <td className="td">{row.ts_name}<br/>{row.hm_name}</td>
                         <td className="td">{row.exalter}</td>
                         <td className="td">{row.buy}</td>
                         <td className="td">{row.buy_rate}</td>

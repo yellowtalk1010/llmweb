@@ -50,6 +50,20 @@ class TopInstController {
           topInst.net_buy = record.get("net_buy")
           topInst.side = record.get("side")
           topInst.reason = record.get("reason")
+
+          //额外计算
+          val ls = AllStockController.hmDetailMap.flatMap(_._2.asScala).filter(_.ts_code.equals(topInst.ts_code))
+          if (ls.size > 0) {
+            topInst.ts_name = ls.head.ts_name
+          }
+          val ls1 = AllStockController.hmDetailMap.flatMap(_._2.asScala).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
+          if (ls1.size > 0) {
+            topInst.hm_name = ls1.head.hm_name
+          }
+          else {
+            topInst.hm_name = "unknow"
+          }
+
           topInst
         })
         .toList
@@ -72,7 +86,7 @@ class TopInstController {
     val list = new util.ArrayList[TopInst]()
     if(topInstMap.get(tradedate).nonEmpty){
       list.addAll(topInstMap.get(tradedate).get.asScala.filter(e=>{
-        scala.collection.mutable.ListBuffer(e.ts_code).filter(s=>s.contains(search)).size>0
+        scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
       }).asJava)
     }
 

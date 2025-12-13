@@ -16,13 +16,15 @@ import java.io.{File, FileReader}
 import java.nio.charset.Charset
 import scala.jdk.CollectionConverters.*
 
+object AllStockController{
+  val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
+}
+
 @RestController
 @RequestMapping(value = Array("stock"))
 class AllStockController {
 
   private val log = LoggerFactory.getLogger(classOf[AllStockController])
-
-  private val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
 
   @Autowired
   private var stockMapper: StockMapper = _
@@ -107,7 +109,7 @@ class AllStockController {
   def all(tradedate: String, search: String): Map[String, Object] = {
     val hmFile = new File(s"tushare/hm/hm_detail/hm_detail-${tradedate}.csv") //龙虎榜路径
     println(s"游资交易每日明细:hmPath=${hmFile.exists()}, tradedate=${tradedate}, search=${search}")
-    if(hmFile.exists() && hmDetailMap.get(tradedate).isEmpty){
+    if(hmFile.exists() && AllStockController.hmDetailMap.get(tradedate).isEmpty){
       //路径存在
       val in = new FileReader(hmFile.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
@@ -129,11 +131,11 @@ class AllStockController {
       codes.foreach(c=>{
         c.count = countMap.get(c.ts_code).get //计算买入的游资数量
       })
-      hmDetailMap.put(tradedate, codes.sortBy(_.count).reverse.asJava)
+      AllStockController.hmDetailMap.put(tradedate, codes.sortBy(_.count).reverse.asJava)
     }
     val list = new util.ArrayList[HmDetail]()
-    if(hmDetailMap.get(tradedate).nonEmpty){
-      list.addAll(hmDetailMap.get(tradedate).get.asScala.filter(e=>{
+    if(AllStockController.hmDetailMap.get(tradedate).nonEmpty){
+      list.addAll(AllStockController.hmDetailMap.get(tradedate).get.asScala.filter(e=>{
           scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.hm_orgs).filter(_.contains(search)).size>0
       }).asJava)
     }

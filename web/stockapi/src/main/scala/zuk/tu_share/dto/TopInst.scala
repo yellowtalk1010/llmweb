@@ -19,6 +19,9 @@ class TopInst {
   @BeanProperty var side_desc: String = _   //
   @BeanProperty var reason: String = _      //上榜理由
 
+  //需要额外计算
+  @BeanProperty var ts_name: String = _     //TS名称
+  @BeanProperty var hm_name: String = _     //游资名称
   @BeanProperty var count: Int = _          //数量
 
 
