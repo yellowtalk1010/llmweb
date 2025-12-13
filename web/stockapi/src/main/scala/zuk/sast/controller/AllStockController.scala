@@ -100,6 +100,9 @@ class AllStockController {
     new util.HashMap[String, Object]
   }
 
+  /***
+   * 查询交易日龙虎榜信息
+   */
   @GetMapping(value = Array("all"))
   def all(tradedate: String, search: String): Map[String, Object] = {
     val hmFile = new File(s"tushare/hm/hm_detail/hm_detail-${tradedate}.csv") //龙虎榜路径
