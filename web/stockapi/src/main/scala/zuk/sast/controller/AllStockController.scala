@@ -122,7 +122,11 @@ class AllStockController {
         })
         .toList
       in.close()
-      hmDetailMap.put(tradedate, codes.asJava)
+      val countMap = codes.groupBy(_.ts_code).map(e=>(e._1, e._2.size))
+      codes.foreach(c=>{
+        c.count = countMap.get(c.ts_code).get
+      })
+      hmDetailMap.put(tradedate, codes.sortBy(_.count).reverse.asJava)
     }
     val list = new util.ArrayList[HmDetail]()
     if(hmDetailMap.get(tradedate).nonEmpty){

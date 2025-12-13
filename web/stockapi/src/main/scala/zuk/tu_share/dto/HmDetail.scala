@@ -11,4 +11,5 @@ class HmDetail {
   @BeanProperty var net_amount: String = _  //净买入（买卖和（万））
   @BeanProperty var hm_name: String = _     //游资名称
   @BeanProperty var hm_orgs: String = _     //关联机构
+  @BeanProperty var count: Int = _          //数量
 }

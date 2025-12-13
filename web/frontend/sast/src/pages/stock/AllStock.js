@@ -118,7 +118,7 @@ function AllStock() {
                   {row.ts_code}
                 </a>
               </td>
-              <td className="td">{row.ts_name}</td>
+              <td className="td">{row.ts_name}【{row.count}】</td>
               <td className="td">{row.hm_name}</td>
               <td className="td">{row.buy_amount}</td>
               <td className="td">{row.sell_amount}</td>
