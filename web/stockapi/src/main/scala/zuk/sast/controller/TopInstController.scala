@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.stockapi.{CalculateMAForDay, LoaderLocalStockData}
 import zuk.tu_share.dto.{HmDetail, TopInst}
+import zuk.tu_share.utils.HmDetailUtil
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
@@ -53,11 +54,11 @@ class TopInstController {
 
           //额外计算
           topInst.splitTsCode(topInst.ts_code)
-          val ls = AllStockController.hmDetailMap.flatMap(_._2.asScala).filter(_.ts_code.equals(topInst.ts_code))
+          val ls = HmDetailUtil.hmDetailMap.flatMap(_._2).filter(_.ts_code.equals(topInst.ts_code))
           if (ls.size > 0) {
             topInst.ts_name = ls.head.ts_name
           }
-          val ls1 = AllStockController.hmDetailMap.flatMap(_._2.asScala).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
+          val ls1 = HmDetailUtil.hmDetailMap.flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
           if (ls1.size > 0) {
             topInst.hm_name = ls1.head.hm_name
           }
