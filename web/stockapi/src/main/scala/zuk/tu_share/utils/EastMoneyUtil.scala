@@ -19,4 +19,9 @@ object EastMoneyUtil {
     }
   }
 
+  def createLocalURL(tsName: String): String = {
+    //http://localhost:8080/pages/allStock
+    s"http://localhost:8080/pages/allStock?search=${tsName}"
+  }
+
 }

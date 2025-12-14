@@ -64,7 +64,7 @@ object HM_MOD {
   }
 
   private def toStr(stock: TsStock): String = {
-    s"${stock.ts_code},${stock.name},${stock.area},${stock.industry},${EastMoneyUtil.createURL(stock)}"
+    s"${stock.ts_code},${stock.name},${stock.area},${stock.industry},${EastMoneyUtil.createLocalURL(stock.ts_code)}"
   }
 
   private def doPrintln(line: String): Unit = {

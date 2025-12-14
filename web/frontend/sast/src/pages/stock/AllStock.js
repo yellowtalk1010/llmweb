@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from 'react-router-dom';
 import "./StockTable.css";
 
 function AllStock() {
+
+  
+  const [searchParams] = useSearchParams();
+  const stockCode = searchParams.get('search');
+  console.info(stockCode)
+  
   const [stockDatas, setStockDatas] = useState({
     stocks: [],
     blocks: []
   });
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(stockCode);
   const [filter, setFilter] = useState("");
 
+
   useEffect(() => {
-    fetch('/stock/all?search=', {
+    fetch('/stock/all?search='+stockCode, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })
