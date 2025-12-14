@@ -20,13 +20,13 @@ object EastMoneyUtil {
     }
   }
 
-  def createLocalURL(tsName: String, tradedate: String=""): String = {
+  def createLocalURL(search: String, tradedate: String=""): String = {
     //http://localhost:8080/pages/allStock
     if(StringUtils.isBlank(tradedate)){
-      s"http://localhost:8080/pages/allStock?search=${tsName}"
+      s"http://localhost:8080/pages/allStock?search=${search}"
     }
     else {
-      s"http://localhost:8080/pages/allStock?search=${tsName}&tradedate=${tradedate}"
+      s"http://localhost:8080/pages/allStock?search=${search}&tradedate=${tradedate}"
     }
 
   }
