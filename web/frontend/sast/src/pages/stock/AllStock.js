@@ -7,6 +7,7 @@ function AllStock() {
   
   const [searchParams] = useSearchParams();
   const stockCode = searchParams.get('search');
+  const stockTradedate = searchParams.get('tradedate');
   console.info(stockCode)
   
   const [stockDatas, setStockDatas] = useState({
@@ -18,7 +19,7 @@ function AllStock() {
 
 
   useEffect(() => {
-    fetch('/stock/all?search='+stockCode, {
+    fetch('/stock/all?search='+stockCode+'&tradedate='+stockTradedate, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })
