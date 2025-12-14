@@ -32,7 +32,7 @@ object HM_MOD {
     hm_stocks.filter(s=>{
       industrySortStocks.take(10).map(_._1).contains(s.industry)   //行业排名取前5名，前几名，差距不大。
       && areaSortStocks.take(10).map(_._1).contains(s.area)        //地区排名取第1名，因为第一名的权重很大，所以，只取第一名。
-    }).map(toStr).foreach(doPrintln)
+    }).map(s=>toStr(s)).foreach(doPrintln)
     doPrintln(s"\n${LINE}参与游资机构数量排名${LINE}")
     val hmJoins = HmDetailUtil.loadData().toList.flatMap(_._2).groupBy(_.ts_code).map(e=>(e._1, e._2.map(_.hm_name).toSet)).toList.sortBy(_._2.size).reverse.map(tp=>{
       try{
@@ -59,11 +59,21 @@ object HM_MOD {
       doPrintln(s"${toStr(tp._1)} , 【${tp._2}】, ${hms.size} , ${hms.mkString("; ")}")
     })
 
+    doPrintln(s"\n${LINE}最近一个交易日个股${LINE}")
+    List(HmDetailUtil.loadData().toList.sortBy(_._1).reverse.head).foreach(tp=>{
+      val tradedate = tp._1
+      tp._2.map(_.ts_code).toSet.map(e => {
+          val stock = AllStockUtil.loadData().filter(_.ts_code.equals(e)).head
+          stock
+        }).map(s=>toStr(s, tradedate))
+        .foreach(doPrintln)
+    })
+
     println("发送邮件")
     SendMail.sendSimpleEmail("513283439@qq.com", "513283439@qq.com", s"${new SimpleDateFormat("yyyyMMdd").format(new Date())}龙虎榜复盘", s"${lines.mkString("<br>")}")
   }
 
-  private def toStr(stock: TsStock): String = {
+  private def toStr(stock: TsStock, tradedate: String=null): String = {
     s"${stock.ts_code},${stock.name},${stock.area},${stock.industry},${EastMoneyUtil.createLocalURL(stock.ts_code)}"
   }
 
