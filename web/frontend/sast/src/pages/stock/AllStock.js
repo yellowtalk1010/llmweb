@@ -56,7 +56,6 @@ function AllStock() {
   //交易日期
   const [tradedate, setTradedate] = useState(getTodayDate());
 
-
   return (
     <div className="container">
       <div className="form">

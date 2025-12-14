@@ -62,11 +62,14 @@ object HM_MOD {
     doPrintln(s"\n${LINE}最近一个交易日个股${LINE}")
     List(HmDetailUtil.loadData().toList.sortBy(_._1).reverse.head).foreach(tp=>{
       val tradedate = tp._1
-      tp._2.map(_.ts_code).toSet.map(e => {
-          val stock = AllStockUtil.loadData().filter(_.ts_code.equals(e)).head
-          stock
-        }).map(s=>toStr(s, tradedate))
-        .foreach(doPrintln)
+      tp._2.groupBy(_.ts_code).map(grp=>{
+        val code = grp._1
+        val sum = grp._2.map(_.net_amount.toDouble).sum
+        (code, sum)
+      }).toList.sortBy(_._2).reverse.foreach((c,d)=>{
+        val stock = AllStockUtil.loadData().filter(_.ts_code.equals(c)).head
+        doPrintln(s"${d}, " + toStr(stock, tradedate))
+      })
     })
 
     println("发送邮件")
