@@ -15,8 +15,6 @@ function AllStock() {
     blocks: []
   });
   const [search, setSearch] = useState(stockCode);
-  const [filter, setFilter] = useState("");
-
 
   useEffect(() => {
     fetch('/stock/all?search='+stockCode+'&tradedate='+stockTradedate, {
@@ -30,10 +28,7 @@ function AllStock() {
 
   // 查询事件
   const handleSearch = () => {
-    let url = `/stock/all?tradedate=${tradedate}&search=${encodeURIComponent(search)}`;
-    if (filter) {
-      url += `&filter=${encodeURIComponent(filter)}`;
-    }
+    let url = `/stock/all?tradedate=${tradedate}&search=${search==null?"":search}`;
     fetch(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
