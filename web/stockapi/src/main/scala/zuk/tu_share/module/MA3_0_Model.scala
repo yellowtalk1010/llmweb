@@ -21,6 +21,7 @@ class MA3_0_Model extends IModel {
           && new BigDecimal(head.turnover_rate).compareTo(BigDecimal(15)) <= 0  //换手率
           && new BigDecimal(head.change).compareTo(BigDecimal(4)) >= 0  //涨幅度
           && new BigDecimal(head.change).compareTo(BigDecimal(7)) <= 0  //涨幅度
+          && List(list(1).change.toFloat, list(2).change.toFloat).min < 0
       ) {
         stocks += head.ts_code
       }
