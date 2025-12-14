@@ -11,7 +11,7 @@ import scala.jdk.CollectionConverters.*
 
 object TopInstUtil {
 
-  val SIZE = 10
+  val SIZE = 10 //只考虑过去10个交易日的龙虎榜
 
   private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 

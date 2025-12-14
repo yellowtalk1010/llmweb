@@ -10,7 +10,7 @@ import scala.jdk.CollectionConverters.*
 object HmDetailUtil {
 
 
-  val SIZE = 10
+  val SIZE = 10 //只考虑过去10个交易日的龙虎榜
 
   private val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
 
