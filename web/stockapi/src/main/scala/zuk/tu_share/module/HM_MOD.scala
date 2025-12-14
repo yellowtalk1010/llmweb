@@ -73,8 +73,8 @@ object HM_MOD {
     SendMail.sendSimpleEmail("513283439@qq.com", "513283439@qq.com", s"${new SimpleDateFormat("yyyyMMdd").format(new Date())}龙虎榜复盘", s"${lines.mkString("<br>")}")
   }
 
-  private def toStr(stock: TsStock, tradedate: String=null): String = {
-    s"${stock.ts_code},${stock.name},${stock.area},${stock.industry},${EastMoneyUtil.createLocalURL(stock.ts_code)}"
+  private def toStr(stock: TsStock, tradedate: String=""): String = {
+    s"${stock.ts_code},${stock.name},${stock.area},${stock.industry},${EastMoneyUtil.createLocalURL(stock.ts_code, tradedate)}"
   }
 
   private def doPrintln(line: String): Unit = {
