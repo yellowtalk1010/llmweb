@@ -1,5 +1,6 @@
 package zuk.tu_share.utils
 
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.TsCodeSplit
 
 object EastMoneyUtil {
@@ -21,7 +22,13 @@ object EastMoneyUtil {
 
   def createLocalURL(tsName: String, tradedate: String=""): String = {
     //http://localhost:8080/pages/allStock
-    s"http://localhost:8080/pages/allStock?search=${tsName}&tradedate=${tradedate}"
+    if(StringUtils.isBlank(tradedate)){
+      s"http://localhost:8080/pages/allStock?search=${tsName}"
+    }
+    else {
+      s"http://localhost:8080/pages/allStock?search=${tsName}&tradedate=${tradedate}"
+    }
+
   }
 
 }
