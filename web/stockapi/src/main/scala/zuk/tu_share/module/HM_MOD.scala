@@ -35,17 +35,25 @@ object HM_MOD {
     }).map(toStr).foreach(doPrintln)
     doPrintln(s"\n${LINE}参与游资机构数量排名${LINE}")
     val hmJoins = HmDetailUtil.loadData().toList.flatMap(_._2).groupBy(_.ts_code).map(e=>(e._1, e._2.map(_.hm_name).toSet)).toList.sortBy(_._2.size).reverse.map(tp=>{
-      val hmNames = tp._2
-      val stock = AllStockUtil.loadData().filter(s=>s.ts_code.equals(tp._1)).head
-      doPrintln(s"${toStr(stock)}, ${hmNames.size}个, ${hmNames.mkString("; ")}")
-      (stock, hmNames)
-    })
+      try{
+        val hmNames = tp._2
+        val stock = AllStockUtil.loadData().filter(s => s.ts_code.equals(tp._1)).head
+        doPrintln(s"${toStr(stock)}, ${hmNames.size}个, ${hmNames.mkString("; ")}")
+        Some((stock, hmNames))
+      }
+      catch
+        case e: Exception => Option.empty
+    }).filter(_.nonEmpty).map(_.get)
     doPrintln(s"\n${LINE}过去30个交易日净买卖排序${LINE}")
     val netAmounts = HmDetailUtil.loadData().flatMap(_._2).groupBy(_.ts_code).map(tp=>{
-      val stock = AllStockUtil.loadData().filter(_.ts_code.equals(tp._1)).head
-      val sum = tp._2.map(_.net_amount.toDouble).sum
-      (stock, sum)
-    }).toList.sortBy(_._2).reverse
+      try{
+        val stock = AllStockUtil.loadData().filter(_.ts_code.equals(tp._1)).head
+        val sum = tp._2.map(_.net_amount.toDouble).sum
+        Some((stock, sum))
+      }
+      catch
+        case e: Exception => Option.empty
+    }).filter(_.nonEmpty).map(_.get).toList.sortBy(_._2).reverse
     netAmounts.foreach(tp=>{
       val hms = hmJoins.filter(_._1.ts_code.equals(tp._1.ts_code)).head._2
       doPrintln(s"${toStr(tp._1)} , 【${tp._2}】, ${hms.size} , ${hms.mkString("; ")}")
