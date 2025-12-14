@@ -11,7 +11,7 @@ import scala.jdk.CollectionConverters.*
 
 object TopInstUtil {
 
-  val SIZE = 30
+  val SIZE = 10
 
   private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 

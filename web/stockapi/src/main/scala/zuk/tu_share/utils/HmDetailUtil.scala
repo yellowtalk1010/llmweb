@@ -10,7 +10,7 @@ import scala.jdk.CollectionConverters.*
 object HmDetailUtil {
 
 
-  val SIZE = 30
+  val SIZE = 10
 
   private val hmDetailMap = scala.collection.mutable.HashMap[String, List[HmDetail]]()
 
