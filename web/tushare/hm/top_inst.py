@@ -4,7 +4,7 @@ import pandas as pd
 import ZukTuShare
 
 # 初始化pro接口
-pro = ZukTuShare.getPro_10000()
+pro = ZukTuShare.getPro_5000()
 
 # 拉取数据
 def top_inst(trade_date):
@@ -30,7 +30,7 @@ def top_inst(trade_date):
 
 
 if __name__ == '__main__':
-    trade_date = "20251216"
+    trade_date = "20251217"
     df = top_inst(trade_date)
     df.to_csv(f"top_inst/{trade_date}_top_inst.csv", encoding="utf-8", index=False)
     print("完成")

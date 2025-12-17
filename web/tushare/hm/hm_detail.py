@@ -5,7 +5,7 @@ import ZukTuShare
 import pandas as pd
 
 # 初始化pro接口
-pro = ZukTuShare.getPro_10000()
+pro = ZukTuShare.getPro_5000()
 
 # 游资交易每日明细
 def download_hm_detail(trade_date):
@@ -34,7 +34,7 @@ def download_hm_detail(trade_date):
 
 if __name__ == '__main__':
     print("游资交易每日明细")
-    trade_date = "20251216"
+    trade_date = "20251217"
     df = download_hm_detail(trade_date)
     df.to_csv(f"hm_detail/hm_detail-{trade_date}.csv", encoding="utf-8", index=False)
     print("完成")
