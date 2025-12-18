@@ -115,7 +115,7 @@ def download_trade_date(trade_date):
 
 # 采集交易日当天全市场收盘后的信息
 if __name__ == '__main__':
-    download_trade_date("20251217")
+    download_trade_date("20251218")
     print("完成")
 
 
