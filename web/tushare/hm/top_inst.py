@@ -26,6 +26,7 @@ def top_inst(trade_date):
         "reason"
     ])
     # print(df)
+    print(len(df))
     return df
 
 

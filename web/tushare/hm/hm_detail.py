@@ -30,6 +30,7 @@ def download_hm_detail(trade_date):
         "tag"
     ])
     # print(df)
+    print(len(df))
     return df
 
 if __name__ == '__main__':
