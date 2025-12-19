@@ -59,6 +59,8 @@ object PassFactory {
       val moduleName = tp2._1
       val moduleList = tp2._2
 
+      BackTest.backTestList ++= moduleList  //收集回测数据
+
       val stocks = moduleList.flatMap(_.getTsStocks()).map(s=>{
         val ls = DataFrame.STOCKS.filter(_.ts_code.equals(s))
         if(ls.size>0){
@@ -72,8 +74,6 @@ object PassFactory {
 
       println(moduleName)
       println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
-
-      BackTest.backTestList ++= moduleList
 
       var htmlContent = stocks.toList.map(e => {
         val splits = e.ts_code.split("\\.")
