@@ -54,7 +54,8 @@ object PassFactory {
 
     println("完成模型分析")
     val filterModules = finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
-    filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).foreach(tp2=>{
+
+    val emailContent = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).map(tp2=>{
       val moduleName = tp2._1
       val moduleList = tp2._2
 
@@ -72,32 +73,45 @@ object PassFactory {
       println(moduleName)
       println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
 
-      if(backtestLenght==0){
-        //非回测，则发送邮件
-        sendMail(moduleList.head, stocks.toList)
-      }
-      else {
-        //回测
-        BackTest.backTestList ++= moduleList
-      }
-    })
+      BackTest.backTestList ++= moduleList
 
+      var htmlContent = stocks.toList.map(e => {
+        val splits = e.ts_code.split("\\.")
+        val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
+        val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
+        s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
+      }).mkString("\n<br><br>\n")
+
+      htmlContent =  s"【${moduleList.head.winRate}】${moduleList.head.desc()}${moduleList.head.getClass.getSimpleName}<br><br>" + htmlContent
+
+      htmlContent
+    }).mkString("<br><br>\n\n")
+
+    if(backtestLenght==0){
+      sendMail(emailContent)
+    }
 
   }
 
-  private def sendMail(module: IModel, list: List[TsStock]) = {
+//  private def sendMail(module: IModel, list: List[TsStock]) = {
+//
+//    val mailAddress = "513283439@qq.com"
+//    val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
+//
+//    val htmlContent = list.map(e=>{
+//      val splits = e.ts_code.split("\\.")
+//      val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
+//      val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
+//      s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
+//    }).mkString("\n<br><br>\n")
+//
+//    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}【${module.winRate}】${module.desc()}${module.getClass.getSimpleName}", htmlContent)
+//  }
 
+  private def sendMail(htmlContent: String) = {
     val mailAddress = "513283439@qq.com"
-    val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
-
-    val htmlContent = list.map(e=>{
-      val splits = e.ts_code.split("\\.")
-      val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
-      val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
-      s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
-    }).mkString("\n<br><br>\n")
-
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}【${module.winRate}】${module.desc()}${module.getClass.getSimpleName}", htmlContent)
+    val tradeDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}", htmlContent)
   }
 
   private def doPass(moduleDays: List[ModuleDay]) = {
