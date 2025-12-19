@@ -82,7 +82,7 @@ object PassFactory {
         s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
       }).mkString("\n<br><br>\n")
 
-      htmlContent =  s"【${moduleList.head.winRate}】${moduleList.head.desc()}${moduleList.head.getClass.getSimpleName}<br><br>" + htmlContent
+      htmlContent =  s"【${moduleList.head.winRate}】${moduleList.head.desc()}, ${moduleList.head.getClass.getSimpleName}<br><br>" + htmlContent
 
       htmlContent
     }).mkString("<br><br>\n\n")
