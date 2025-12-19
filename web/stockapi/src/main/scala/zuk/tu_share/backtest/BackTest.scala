@@ -30,7 +30,7 @@ object BackTest {
           }).mkString(", ")
 
           val ok = if (st) "" else "X"
-          println(s"${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}")
+          println(s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}")
 
           st
 
