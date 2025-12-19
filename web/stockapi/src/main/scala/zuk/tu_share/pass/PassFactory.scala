@@ -55,7 +55,7 @@ object PassFactory {
     println("完成模型分析")
     val filterModules = finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
 
-    val emailContent = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).map(tp2=>{
+    val emailContent = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
       val moduleName = tp2._1
       val moduleList = tp2._2
 
