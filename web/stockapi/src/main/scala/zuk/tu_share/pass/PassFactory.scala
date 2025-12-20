@@ -102,10 +102,10 @@ object PassFactory {
       val start = 20251219
       val st = start < cur && cur < end
       if(st){
-        println("OK")
+        //println("OK")
       }
       else {
-        println("OK!")
+        //println("OK!")
       }
       st
     }
