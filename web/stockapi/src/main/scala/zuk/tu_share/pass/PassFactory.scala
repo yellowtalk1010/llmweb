@@ -72,8 +72,10 @@ object PassFactory {
       }).filter(_.nonEmpty).map(_.get)
         //.filter(! _.name.contains("ST")) //移除ST股票
 
-      println(moduleName)
-      println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
+      if(license()){
+        println(moduleName)
+        println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
+      }
 
       var htmlContent = stocks.toList.map(e => {
         val splits = e.ts_code.split("\\.")
@@ -87,26 +89,23 @@ object PassFactory {
       htmlContent
     }).mkString("<br><br>\n\n")
 
-    if(backtestLenght==0){
+    if(backtestLenght==0 && license()){
       sendMail(emailContent)
     }
 
   }
 
-//  private def sendMail(module: IModel, list: List[TsStock]) = {
-//
-//    val mailAddress = "513283439@qq.com"
-//    val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
-//
-//    val htmlContent = list.map(e=>{
-//      val splits = e.ts_code.split("\\.")
-//      val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
-//      val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
-//      s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
-//    }).mkString("\n<br><br>\n")
-//
-//    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}【${module.winRate}】${module.desc()}${module.getClass.getSimpleName}", htmlContent)
-//  }
+  private def license(): Boolean = {
+
+    try{
+      val end = 20260501
+      val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
+      end > cur
+    }
+    catch
+      case exception: Exception => false
+  }
+
 
   private def sendMail(htmlContent: String) = {
     val mailAddress = "513283439@qq.com"
