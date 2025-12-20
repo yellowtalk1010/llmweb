@@ -119,6 +119,13 @@
                 <artifactId>native-maven-plugin</artifactId>
                 <version>0.11.3</version>
                 <extensions>true</extensions>
+                <configuration>
+                    <buildArgs>
+                        <buildArg>-Dfile.encoding=UTF-8</buildArg>
+                        <buildArg>-H:DefaultCharset=UTF-8</buildArg>
+                    </buildArgs>
+                    <imageName>stockapi</imageName>
+                </configuration>
                 <executions>
                     <execution>
                         <id>build-native</id>
