@@ -9,7 +9,7 @@ import zuk.tu_share.module.{HM_MOD, MA3_2_Model, MA3_3_Model}
 
 class Tushare_MA3_0_Model_Test extends AnyFunSuite {
 
-  val path = "D:/development/github/llmweb1/web/tushare"
+  val path = "tushare"
   test("tushare-3"){
     val args = Array(path)
     Main.main(args)
