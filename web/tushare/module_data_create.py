@@ -41,34 +41,34 @@ def create_module_date():
             print(f"{ts_code},{name},可能是新股，数量不足30")
             continue
 
-        daily_df_top_30 = daily_df[:max]
-        daily_basic_df_top_30 = daily_basic_df[:max]
+        daily_df_top_max = daily_df[:max]
+        daily_basic_df_top_max = daily_basic_df[:max]
 
         # 判断数据是否一致
         compare_ok = True
-        for i in range(len(daily_basic_df_top_30)):
+        for i in range(len(daily_basic_df_top_max)):
             if(compare_ok):
-                if ((daily_df_top_30.iloc[i]["trade_date"] != daily_basic_df_top_30.iloc[i]["trade_date"])
-                    or (daily_df_top_30.iloc[i]["ts_code"] != daily_basic_df_top_30.iloc[i]["ts_code"])):
+                if ((daily_df_top_max.iloc[i]["trade_date"] != daily_basic_df_top_max.iloc[i]["trade_date"])
+                    or (daily_df_top_max.iloc[i]["ts_code"] != daily_basic_df_top_max.iloc[i]["ts_code"])):
                     compare_ok = False
         if(compare_ok is False):
             print("数据不一致")
             continue
 
         sub_df = pd.DataFrame({
-            "ts_code": daily_df_top_30["ts_code"],                      # 股票代码
+            "ts_code": daily_df_top_max["ts_code"],                      # 股票代码
             "name": name,                                               # 股票名称
-            "trade_date": daily_df_top_30["trade_date"],                # 交易日
-            "open": daily_df_top_30["open"],                            # 开盘价
-            "high": daily_df_top_30["high"],                            # 最高价
-            "low": daily_df_top_30["low"],                              # 最低价
-            "close": daily_df_top_30["close"],                          # 收盘价
-            "pre_close": daily_df_top_30["pre_close"],                  # 上一个交易日收盘价
-            "change": daily_df_top_30["pct_chg"],                       # 涨跌幅度（区别涨跌额）
-            "vol": daily_df_top_30["vol"],                              # 成交量
-            "amount": daily_df_top_30["amount"],                        # 成交额
-            "turnover_rate": daily_basic_df_top_30["turnover_rate"],    # 换手率
-            "float_share": daily_basic_df_top_30["float_share"],        # 流通数
+            "trade_date": daily_df_top_max["trade_date"],                # 交易日
+            "open": daily_df_top_max["open"],                            # 开盘价
+            "high": daily_df_top_max["high"],                            # 最高价
+            "low": daily_df_top_max["low"],                              # 最低价
+            "close": daily_df_top_max["close"],                          # 收盘价
+            "pre_close": daily_df_top_max["pre_close"],                  # 上一个交易日收盘价
+            "change": daily_df_top_max["pct_chg"],                       # 涨跌幅度（区别涨跌额）
+            "vol": daily_df_top_max["vol"],                              # 成交量
+            "amount": daily_df_top_max["amount"],                        # 成交额
+            "turnover_rate": daily_basic_df_top_max["turnover_rate"],    # 换手率
+            "float_share": daily_basic_df_top_max["float_share"],        # 流通数
             "area": area,                                               # 所在地区
             "industry": industry,                                       # 行业
             "market": market,                                           # 市场类型：主板、创业、科创、北交
