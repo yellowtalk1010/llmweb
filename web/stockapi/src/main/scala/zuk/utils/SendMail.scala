@@ -51,7 +51,12 @@ object SendMail {
 //      message.setText(content)
       message.setContent(content, "text/html; charset=utf-8")
       // 发送邮件
-      Transport.send(message)
+//      Transport.send(message)
+
+      import com.sun.mail.smtp.SMTPTransport
+      val transport = new SMTPTransport(session, null)
+      transport.connect(SMTP_HOST, senderEmail, authCode)
+      transport.sendMessage(message, message.getAllRecipients)
       println("邮件发送成功！")
       true
     } catch {
