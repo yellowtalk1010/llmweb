@@ -96,11 +96,18 @@ object PassFactory {
   }
 
   private def license(): Boolean = {
-
     try{
       val end = 20260501
       val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
-      end > cur
+      val start = 20251219
+      val st = end > cur && cur > start
+      if(st){
+        println("OK")
+      }
+      else {
+        println("OK!")
+      }
+      st
     }
     catch
       case exception: Exception => false
