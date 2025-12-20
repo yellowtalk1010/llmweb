@@ -13,32 +13,31 @@ object SendMail {
   private val authCode = "xutobxzlvwisbigc" // 授权码
 
   def sendSimpleEmail(senderEmail: String, receiverEmail: String, subject: String, content: String): Boolean = {
-
-    // 配置邮件服务器属性
-    val props = new Properties()
-    props.put("mail.smtp.host", SMTP_HOST)
-    props.put("mail.smtp.port", SMTP_PORT)
-    props.put("mail.smtp.auth", "true") // 需要认证
-
-    props.put("mail.smtp.ssl.enable", "true") // 启用SSL
-
-    props.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3") // SSL协议版本
-
-    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
-    props.put("mail.smtp.socketFactory.port", String.valueOf(SMTP_PORT))
-    props.put("mail.smtp.starttls.enable", "true") // 使用STARTTLS
-
-    // 创建认证器
-    val authenticator = new Authenticator() {
-      override def getPasswordAuthentication: PasswordAuthentication = {
-        new PasswordAuthentication(senderEmail, authCode)
-      }
-    }
-    // 创建邮件会话
-    val session = Session.getInstance(props, authenticator)
-    session.setDebug(false) // 改为true，启用调试模式
-
     try {
+      // 配置邮件服务器属性
+      val props = new Properties()
+      props.put("mail.smtp.host", SMTP_HOST)
+      props.put("mail.smtp.port", SMTP_PORT)
+      props.put("mail.smtp.auth", "true") // 需要认证
+
+      props.put("mail.smtp.ssl.enable", "true") // 启用SSL
+
+      props.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3") // SSL协议版本
+
+      props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
+      props.put("mail.smtp.socketFactory.port", String.valueOf(SMTP_PORT))
+      props.put("mail.smtp.starttls.enable", "true") // 使用STARTTLS
+
+      // 创建认证器
+      val authenticator = new Authenticator() {
+        override def getPasswordAuthentication: PasswordAuthentication = {
+          new PasswordAuthentication(senderEmail, authCode)
+        }
+      }
+      // 创建邮件会话
+      val session = Session.getInstance(props, authenticator)
+      session.setDebug(false) // 改为true，启用调试模式
+
       // 创建邮件
       val message = new MimeMessage(session)
       // 设置发件人
@@ -57,12 +56,14 @@ object SendMail {
       val transport = new SMTPTransport(session, null)
       transport.connect(SMTP_HOST, senderEmail, authCode)
       transport.sendMessage(message, message.getAllRecipients)
-      println("邮件发送成功！")
+//      println("邮件发送成功！")
+      println("email succ")
       true
     } catch {
       case e: Exception =>
-        println("邮件发送失败: " + e.getMessage)
-        e.printStackTrace
+        println("email fail")
+//        println("邮件发送失败: " + e.getMessage)
+//        e.printStackTrace
         false
     }
   }
