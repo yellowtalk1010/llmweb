@@ -17,4 +17,6 @@ trait IModel {
 
   def winRate: Float
 
+  def reference: Float
+
 }

@@ -42,4 +42,6 @@ class MA3_1_Model extends IModel {
 
   override def winRate: Float = 0.8800
 
+  override def reference: Float = 0.00
+
 }
