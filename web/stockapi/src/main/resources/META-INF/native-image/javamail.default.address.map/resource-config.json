@@ -1,0 +1,27 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "META-INF/javamail\\.providers"
+      },
+      {
+        "pattern": "META-INF/javamail\\.default\\.address\\.map"
+      },
+      {
+        "pattern": "META-INF/mailcap"
+      },
+      {
+        "pattern": "META-INF/mailcap\\.default"
+      },
+      {
+        "pattern": "META-INF/services/javax\\.mail\\.Provider"
+      },
+      {
+        "pattern": "META-INF/services/javax\\.activation\\.DataContentHandler"
+      },
+      {
+        "pattern": ".*\\.properties$"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "META-INF/javamail\\.providers"
+      },
+      {
+        "pattern": "META-INF/mailcap"
+      },
+      {
+        "pattern": "META-INF/services/javax\\.mail\\..*"
+      },
+      {
+        "pattern": ".*\\.properties$"
+      }
+    ]
+  },
+  "bundles": [
+    {
+      "name": "com.sun.mail.util.logging.MailHandler"
+    }
+  ],
+  "proxy": [
+    {
+      "interfaces": ["javax.mail.event.TransportListener"]
+    },
+    {
+      "interfaces": ["javax.mail.event.MessageCountListener"]
+    }
+  ]
+}
