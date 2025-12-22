@@ -35,7 +35,7 @@ def download_hm_detail(trade_date):
 
 if __name__ == '__main__':
     print("游资交易每日明细")
-    trade_date = "20251219"
+    trade_date = "20251222"
     df = download_hm_detail(trade_date)
     df.to_csv(f"hm_detail/hm_detail-{trade_date}.csv", encoding="utf-8", index=False)
     print("完成")
