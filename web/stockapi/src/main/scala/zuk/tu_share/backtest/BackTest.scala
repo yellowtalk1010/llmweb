@@ -1,8 +1,11 @@
 package zuk.tu_share.backtest
 
 import zuk.tu_share.module.IModel
+import zuk.utils.SendMail
 
 import java.math.{BigDecimal, RoundingMode}
+import java.text.SimpleDateFormat
+import java.util.Date
 import scala.collection.mutable.ListBuffer
 
 object BackTest {
@@ -10,6 +13,8 @@ object BackTest {
   val backTestList = ListBuffer[IModel]()
 
   def analysis(): Unit = {
+
+    val lines = new ListBuffer[String]()
 
     backTestList.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
       .groupBy(_.getClass.getSimpleName)
@@ -30,16 +35,30 @@ object BackTest {
           }).mkString(", ")
 
           val ok = if (st) "" else "X"
-          println(s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}")
+
+          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
+          lines += line
+          println(line)
 
           st
 
         })
 
-        println(s"${clsName}胜率：${new BigDecimal(victoryList.size).divide(new BigDecimal(ls.size), 4, RoundingMode.UP)}")
+        val line = s"${clsName}胜率：${new BigDecimal(victoryList.size).divide(new BigDecimal(ls.size), 4, RoundingMode.UP)}"
+        lines += line
+        println(line)
     })
 
 
+    sendMail(lines.mkString("<br>/n"))
+
+
+  }
+
+  private def sendMail(htmlContent: String) = {
+    val mailAddress = "513283439@qq.com"
+    val tradeDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}", htmlContent)
   }
 
 }
