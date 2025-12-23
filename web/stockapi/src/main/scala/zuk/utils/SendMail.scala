@@ -57,11 +57,11 @@ object SendMail {
       transport.connect(SMTP_HOST, senderEmail, authCode)
       transport.sendMessage(message, message.getAllRecipients)
 //      println("邮件发送成功！")
-      println("email succ")
+      println("succ")
       true
     } catch {
       case e: Exception =>
-        println("email fail")
+        println("fail")
 //        println("邮件发送失败: " + e.getMessage)
 //        e.printStackTrace
         false
