@@ -50,7 +50,7 @@ object BackTest {
     })
 
 
-    sendMail(lines.mkString("<br>/n"))
+    sendMail(lines.mkString("<br>\n"))
 
 
   }
