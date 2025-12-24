@@ -57,8 +57,8 @@ object BackTest {
 
   private def sendMail(htmlContent: String) = {
     val mailAddress = "513283439@qq.com"
-    val tradeDate = new SimpleDateFormat("yyyy-MM-dd【backtest】").format(new Date)
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}", htmlContent)
+    val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}【backtest】", htmlContent)
   }
 
 }
