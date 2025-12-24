@@ -31,7 +31,7 @@ def top_inst(trade_date):
 
 
 if __name__ == '__main__':
-    trade_date = "20251223"
+    trade_date = "20251224"
     df = top_inst(trade_date)
     df.to_csv(f"top_inst/{trade_date}_top_inst.csv", encoding="utf-8", index=False)
     print("完成")
