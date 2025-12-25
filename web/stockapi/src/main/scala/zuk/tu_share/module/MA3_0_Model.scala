@@ -10,7 +10,7 @@ class MA3_0_Model extends IModel {
   val stocks = new ListBuffer[String]()
 
   override def run(days: List[ModuleDay]): Unit = {
-    if(days.size>=3){
+    if(days.size>=3 && limitUp(days)){
       val list = days.take(3)
       val head = list.head
       if (
