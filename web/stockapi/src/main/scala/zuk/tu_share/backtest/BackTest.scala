@@ -16,7 +16,7 @@ object BackTest {
 
     val lines = new ListBuffer[String]()
 
-    backTestList.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
+    backTestList.filter(e=>e.getStockDtos()!=null && e.getStockDtos().size>0)
       .groupBy(_.getClass.getSimpleName)
       .filter(_._2.size>0)
       .foreach(e=>{

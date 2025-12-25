@@ -11,7 +11,7 @@ trait IModel {
 
   def run(days: List[ModuleDay]): Unit //运行模型
 
-  def getTsStocks(): List[String]
+  def getStockDtos(): List[StockDto]
 
   def desc():String
 
@@ -21,9 +21,10 @@ trait IModel {
 
   def limitUp(days: List[ModuleDay]): Boolean = {
     try {
+      val max = 60
       //历史上30天出现过涨停
-      if (days.size > 30) {
-        days.take(30).filter(_.change.toFloat >= 9.0).size > 0
+      if (days.size > max) {
+        days.take(max).filter(_.change.toFloat >= 9.0).size > 0
       }
       else {
         days.filter(_.change.toFloat >= 9.0).size > 0

@@ -1,5 +1,6 @@
 package zuk.tu_share.module
 
+import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
 
 import java.math.BigDecimal
@@ -7,10 +8,10 @@ import scala.collection.mutable.ListBuffer
 
 class MA3_1_Model extends IModel {
 
-  val stocks = ListBuffer[String]()
+  val stockDtos = new ListBuffer[StockDto]()
 
   override def run(days: List[ModuleDay]): Unit = {
-    if(days.size>=4 && limitUp(days)){
+    if(days.size>=4){
       val list = days.take(4)
       val head = list.head
       if (
@@ -29,14 +30,18 @@ class MA3_1_Model extends IModel {
         //缩量上涨
         if(!head.name.contains("ST")){
           //ST不推荐
-          stocks += head.ts_code
+
+          val stockDto = new StockDto
+          stockDto.tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
+          stockDto.limitUp = super.limitUp(days)
+          stockDtos += stockDto
         }
 
       }
     }
   }
 
-  override def getTsStocks(): List[String] = stocks.toList
+  override def getStockDtos(): List[StockDto] = stockDtos.toList
 
   override def desc(): String = "缩量上涨"
 

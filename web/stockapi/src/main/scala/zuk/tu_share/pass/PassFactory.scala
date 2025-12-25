@@ -53,7 +53,7 @@ object PassFactory {
     })
 
     println("完成模型分析")
-    val filterModules = finishModules.filter(e=>e.getTsStocks()!=null && e.getTsStocks().size>0)
+    val filterModules = finishModules.filter(e=>e.getStockDtos()!=null && e.getStockDtos().size>0)
 
     val emailContent = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
       val moduleName = tp2._1
@@ -61,27 +61,19 @@ object PassFactory {
 
       BackTest.backTestList ++= moduleList  //收集回测数据
 
-      val stocks = moduleList.flatMap(_.getTsStocks()).map(s=>{
-        val ls = DataFrame.STOCKS.filter(_.ts_code.equals(s))
-        if(ls.size>0){
-          Some(ls.head)
-        }
-        else {
-          Option.empty
-        }
-      }).filter(_.nonEmpty).map(_.get)
-        //.filter(! _.name.contains("ST")) //移除ST股票
+      val stockDtos = moduleList.flatMap(_.getStockDtos()).filter(_.tsStock!=null)
 
       if(license()){
         println(moduleName)
-        println(stocks.map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
+        println(stockDtos.map(_.tsStock).map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
       }
 
-      var htmlContent = stocks.toList.map(e => {
+      var htmlContent = stockDtos.toList.map(dto => {
+        val e = dto.tsStock
         val splits = e.ts_code.split("\\.")
         val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
         val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
-        s"${e.ts_code}，${name_href}，${e.area}，${e.industry}"
+        s"${e.ts_code}，${name_href}，${e.area}，${e.industry}, ${dto.limitUp}"
       }).mkString("\n<br><br>\n")
 
       htmlContent =  s"【${moduleList.head.winRate}】${moduleList.head.desc()}, ${moduleList.head.getClass.getSimpleName}<br><br>" + htmlContent
