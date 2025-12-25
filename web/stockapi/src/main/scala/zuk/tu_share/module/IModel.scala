@@ -21,7 +21,7 @@ trait IModel {
 
   def limitUp(days: List[ModuleDay]): Boolean = {
     try {
-      val max = 60
+      val max = 30
       //历史上30天出现过涨停
       if (days.size > max) {
         days.take(max).filter(_.change.toFloat >= 9.0).size > 0
