@@ -25,6 +25,7 @@ object DataFrame {
   val config_properties = "tushare_config.properties"
 
   val STOCKS = new ListBuffer[TsStock]()
+  val STOCKS_MAP= new mutable.HashMap[String, TsStock]()
 
   /***
    * 加载全部股票基本数据
@@ -190,6 +191,11 @@ object DataFrame {
     //加载股票信息
     val all_stocks_path = path + File.separator + "all_stocks.csv"
     val stocks = loadAllStocks(all_stocks_path)
+
+    stocks.foreach(e => {
+      //转成MAP格式
+      STOCKS_MAP.put(e.ts_code, e)
+    })
     STOCKS ++= stocks
 
     //加载实时日K
