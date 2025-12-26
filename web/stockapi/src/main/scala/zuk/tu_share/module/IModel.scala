@@ -3,6 +3,7 @@ package zuk.tu_share.module
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 
 import scala.collection.mutable.ListBuffer
+import java.math.{BigDecimal, RoundingMode}
 
 trait IModel {
 
@@ -32,6 +33,18 @@ trait IModel {
     }
     catch
       case exception: Exception=> true
+  }
+
+  def changeUpRate(days: List[ModuleDay]): Boolean = {
+    try{
+      if(days.size==0){
+        return false
+      }
+      val size = days.filter(_.turnover_rate.toFloat >= 3.0).size
+      new BigDecimal(size).divide(new BigDecimal(days.size), 5, RoundingMode.UP).compareTo(new BigDecimal(0.3)) > 0
+    }
+    catch
+      case exception: Exception => false
   }
 
 }
