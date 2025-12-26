@@ -1,6 +1,5 @@
 package zuk.tu_share.backtest
 
-import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.module.IModel
 import zuk.utils.SendMail
 
@@ -17,7 +16,7 @@ object BackTest {
 
     val lines = new ListBuffer[String]()
 
-    backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null && StringUtils.isNotBlank(e.getStockDto().tsStock.ts_code))
+    backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
       .filter(_._2.size>0)
       .foreach(e=>{
