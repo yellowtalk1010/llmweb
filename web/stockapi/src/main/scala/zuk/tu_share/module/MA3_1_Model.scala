@@ -4,14 +4,14 @@ import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
 
 import java.math.BigDecimal
-import scala.collection.mutable.ListBuffer
 
 class MA3_1_Model extends IModel {
 
   var stockDto: StockDto = _
 
   override def run(days: List[ModuleDay]): Unit = {
-    if(days.size>=4){
+    val changeUpRate = super.changeUpRate(days) //过去30个交易日中换手率大于3.5的占比，必须大于3成
+    if(days.size>=4 && changeUpRate >= 0.3){
       val list = days.take(4)
       val head = list.head
       if (
@@ -32,7 +32,7 @@ class MA3_1_Model extends IModel {
           //ST不推荐
           val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
           if (tsStock != null) {
-            stockDto = new StockDto(tsStock, super.limitUp(days), super.changeUpRate(days))
+            stockDto = new StockDto(tsStock, super.limitUp(days), changeUpRate)
           }
         }
 
