@@ -25,11 +25,11 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
   }
 
   test("计算") {
-    var bj = 100000.0d
+    var bj = 200000.0d
     for(i <- 1 to 12) {
       println(s"${i}月，${bj}")
       for(j <- 1 to 20) {
-        bj = bj + (bj * 0.0145)
+        bj = bj + (bj * 0.01)
         println(s"   第${j}天，${bj}")
       }
 
