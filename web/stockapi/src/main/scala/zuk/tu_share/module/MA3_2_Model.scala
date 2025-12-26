@@ -44,7 +44,7 @@ class MA3_2_Model extends IModel {
         //缩量上涨
 
         val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
-        if(tsStock==null){
+        if(tsStock != null){
           stockDto = new StockDto(tsStock, super.limitUp(days), super.changeUpRate(days))
         }
 
