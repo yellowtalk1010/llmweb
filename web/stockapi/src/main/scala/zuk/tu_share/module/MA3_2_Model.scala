@@ -46,6 +46,7 @@ class MA3_2_Model extends IModel {
         val stockDto = new StockDto
         stockDto.tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
         stockDto.limitUp = super.limitUp(days)
+        stockDto.turnoverRate = super.changeUpRate(days)
         stockDtos += stockDto
       }
     }

@@ -35,16 +35,24 @@ trait IModel {
       case exception: Exception=> true
   }
 
-  def changeUpRate(days: List[ModuleDay]): Boolean = {
+  def changeUpRate(days: List[ModuleDay]): Float = {
     try{
       if(days.size==0){
-        return false
+        return 0.0
       }
-      val size = days.filter(_.turnover_rate.toFloat >= 3.0).size
-      new BigDecimal(size).divide(new BigDecimal(days.size), 5, RoundingMode.UP).compareTo(new BigDecimal(0.3)) > 0
+      val max = 30
+      var size = 0
+        if (days.size > max) {
+          size = days.take(max).filter(_.turnover_rate.toFloat >= 3.0).size
+      }
+      else {
+        size = days.filter(_.change.toFloat >= 3.0).size
+      }
+//      val size = days.filter(_.turnover_rate.toFloat >= 3.0).size
+      new BigDecimal(size).divide(new BigDecimal(days.size), 5, RoundingMode.UP).floatValue()
     }
     catch
-      case exception: Exception => false
+      case exception: Exception => 0.0
   }
 
 }

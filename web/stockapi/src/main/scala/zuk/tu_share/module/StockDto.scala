@@ -8,4 +8,5 @@ class StockDto {
 
   @BeanProperty var limitUp: Boolean = false
   @BeanProperty var tsStock: TsStock = _
+  @BeanProperty var turnoverRate: Float = 0.0
 }
