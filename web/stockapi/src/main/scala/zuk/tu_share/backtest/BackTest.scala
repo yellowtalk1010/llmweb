@@ -1,5 +1,6 @@
 package zuk.tu_share.backtest
 
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.module.IModel
 import zuk.utils.SendMail
 
@@ -16,13 +17,13 @@ object BackTest {
 
     val lines = new ListBuffer[String]()
 
-    backTestList.filter(e=>e.getStockDtos()!=null && e.getStockDtos().size>0)
+    backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null && StringUtils.isNotBlank(e.getStockDto().tsStock.ts_code))
       .groupBy(_.getClass.getSimpleName)
       .filter(_._2.size>0)
       .foreach(e=>{
         val clsName = e._1
         val ls = e._2
-        val victoryList = ls.filter(mod => {
+        val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().turnoverRate)).reverse.filter(mod => {
 
           var st = false
           val preClose = mod.sells.head.pre_close
@@ -36,7 +37,7 @@ object BackTest {
 
           val ok = if (st) "" else "X"
 
-          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
+          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【${mod.getStockDto().turnoverRate}】【买入】, ${highStr}, ${ok}"
           lines += line
           println(line)
 

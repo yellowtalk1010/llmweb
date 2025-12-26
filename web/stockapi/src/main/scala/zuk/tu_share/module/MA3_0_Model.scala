@@ -1,14 +1,13 @@
 package zuk.tu_share.module
 
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.{ModuleDay, TsStock}
+import zuk.tu_share.dto.ModuleDay
 
 import java.math.BigDecimal
-import scala.collection.mutable.ListBuffer
 
 class MA3_0_Model extends IModel {
 
-  val stockDtos = new ListBuffer[StockDto]()
+  var stockDto: StockDto = _
 
   override def run(days: List[ModuleDay]): Unit = {
     if(days.size>=3){
@@ -25,16 +24,15 @@ class MA3_0_Model extends IModel {
           && List(list(1).change.toFloat, list(2).change.toFloat).min < 0
       ) {
 
-        val stockDto = new StockDto
+        stockDto = new StockDto
         stockDto.tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
         stockDto.limitUp = super.limitUp(days)
         stockDto.turnoverRate = super.changeUpRate(days)
-        stockDtos += stockDto
       }
     }
   }
 
-  override def getStockDtos(): List[StockDto] = stockDtos.toList
+  override def getStockDto(): StockDto = stockDto
 
   override def desc(): String = "上穿MA5"
 

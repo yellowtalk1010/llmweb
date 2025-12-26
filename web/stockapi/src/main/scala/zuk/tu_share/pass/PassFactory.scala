@@ -1,9 +1,10 @@
 package zuk.tu_share.pass
 
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.dto.{ModuleDay, TsStock}
-import zuk.tu_share.module.{IModel, MA3_1_Model, MA3_2_Model, MA3_3_Model, MA3_0_Model}
+import zuk.tu_share.module.{IModel, MA3_0_Model, MA3_1_Model, MA3_2_Model, MA3_3_Model}
 import zuk.utils.SendMail
 
 import java.math.{BigDecimal, RoundingMode}
@@ -53,7 +54,7 @@ object PassFactory {
     })
 
     println("完成模型分析")
-    val filterModules = finishModules.filter(e=>e.getStockDtos()!=null && e.getStockDtos().size>0)
+    val filterModules = finishModules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null && StringUtils.isNotBlank(e.getStockDto().tsStock.ts_code))
 
     val emailContent = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
       val moduleName = tp2._1
@@ -61,14 +62,14 @@ object PassFactory {
 
       BackTest.backTestList ++= moduleList  //收集回测数据
 
-      val stockDtos = moduleList.flatMap(_.getStockDtos()).filter(_.tsStock!=null)
+      val stockDtos = moduleList.map(_.getStockDto())
 
       if(license()){
         println(moduleName)
         println(stockDtos.map(_.tsStock).map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
       }
 
-      var htmlContent = stockDtos.toList.map(dto => {
+      var htmlContent = stockDtos.toList.sortBy(_.turnoverRate).reverse.map(dto => {
         val e = dto.tsStock
         val splits = e.ts_code.split("\\.")
         val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
@@ -89,9 +90,9 @@ object PassFactory {
 
   private def license(): Boolean = {
     try{
-      val end = 20260215
+      val start = 20251226
       val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
-      val start = 20251224
+      val end = 20260215
       val st = start <= cur && cur <= end
       if(st){
         //println("OK")

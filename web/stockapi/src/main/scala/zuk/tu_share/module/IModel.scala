@@ -12,7 +12,7 @@ trait IModel {
 
   def run(days: List[ModuleDay]): Unit //运行模型
 
-  def getStockDtos(): List[StockDto]
+  def getStockDto(): StockDto
 
   def desc():String
 
