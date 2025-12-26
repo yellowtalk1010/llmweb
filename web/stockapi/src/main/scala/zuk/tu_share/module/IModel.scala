@@ -44,11 +44,11 @@ trait IModel {
       val max = 30
       var size = 0
         if (days.size > max) {
-          size = days.take(max).filter(_.turnover_rate.toFloat >= 5.0).size
+          size = days.take(max).filter(_.turnover_rate.toFloat >= 3.5).size
           new BigDecimal(size).divide(new BigDecimal(max), 5, RoundingMode.UP).floatValue()
       }
       else {
-        size = days.filter(_.change.toFloat >= 5.0).size
+        size = days.filter(_.change.toFloat >= 3.5).size
         new BigDecimal(size).divide(new BigDecimal(days.size), 5, RoundingMode.UP).floatValue()
       }
     }
