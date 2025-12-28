@@ -26,15 +26,15 @@ trait IModel {
       //历史上30天出现过涨停次数
       if (days.size > max) {
         val size = days.take(max).filter(_.change.toFloat >= 9.0).size
-        s"${size}/30涨次"
+        s"${size}/30涨"
       }
       else {
         val size = days.filter(_.change.toFloat >= 9.0).size
-        s"${size}/${days.size}涨次"
+        s"${size}/${days.size}涨"
       }
     }
     catch
-      case exception: Exception => "0/0涨次"
+      case exception: Exception => "0/0涨"
   }
 
   def limitDown(days: List[ModuleDay]): String = {
