@@ -1,6 +1,7 @@
 package zuk.tu_share
 
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 
 import java.io.{File, FileOutputStream, FileReader, InputStream}
@@ -96,6 +97,7 @@ object DataFrame {
         moduleDay.amount = record.get("amount")
         moduleDay.turnover_rate = record.get("turnover_rate")
         moduleDay.float_share = record.get("float_share")
+        moduleDay.total_mv = record.get("total_mv")
 
         moduleDay
       }).toList
