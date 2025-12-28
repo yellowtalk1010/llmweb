@@ -22,7 +22,7 @@ object BackTest {
       .foreach(e=>{
         val clsName = e._1
         val ls = e._2
-        val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().turnoverRate)).reverse.filter(mod => {
+        val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse.filter(mod => {
 
           var st = false
           val preClose = mod.sells.head.pre_close
@@ -36,7 +36,7 @@ object BackTest {
 
           val ok = if (st) "" else "X"
 
-          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().turnoverRate}，${mod.getStockDto().totalMV}亿】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
+          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
           lines += line
           println(line)
 
