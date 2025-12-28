@@ -78,7 +78,7 @@ object PassFactory {
         val splits = e.ts_code.split("\\.")
         val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
         val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
-        s"${e.ts_code}，${name_href}，${e.area}，${e.industry}, ${dto.limitUp}, ${dto.turnoverRate}"
+        s"${e.ts_code}, ${name_href}, ${e.area}，${e.industry}, ${dto.limitUp}, ${dto.limitDown}, ${dto.turnoverRate}"
       }).mkString("\n<br><br>\n")
 
       htmlContent =  s"【${moduleList.head.winRate}】${moduleList.head.desc()}, ${moduleList.head.getClass.getSimpleName}<br><br>" + htmlContent
