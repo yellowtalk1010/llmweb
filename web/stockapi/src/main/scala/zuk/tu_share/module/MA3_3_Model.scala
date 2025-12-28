@@ -46,11 +46,11 @@ class MA3_3_Model extends IModel {
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           if(StringUtils.isNotBlank(head.total_mv)){
             stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
-            stockDto.preChangeRate = head.change.toFloat
+            stockDto.preChangeRate = new BigDecimal(head.change).setScale(2, RoundingMode.HALF_UP).floatValue()
           }
           else {
             stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
-            stockDto.preChangeRate = days(1).change.toFloat
+            stockDto.preChangeRate = new BigDecimal(days(1).change).setScale(2, RoundingMode.HALF_UP).floatValue()
           }
         }
 

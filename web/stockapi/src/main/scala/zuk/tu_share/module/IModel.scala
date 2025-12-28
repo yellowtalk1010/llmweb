@@ -43,11 +43,11 @@ trait IModel {
       //历史上30天出现过涨停次数
       if (days.size > max) {
         val size = days.take(max).filter(_.change.toFloat <= -9.0).size
-        s"${size}/30跌次"
+        s"${size}/30跌"
       }
       else {
         val size = days.filter(_.change.toFloat <= -9.0).size
-        s"${size}/${days.size}跌次"
+        s"${size}/${days.size}跌"
       }
     }
     catch
@@ -64,11 +64,11 @@ trait IModel {
       var size = 0
         if (days.size > max) {
           size = days.take(max).filter(_.turnover_rate.toFloat >= 5.0).size
-          new BigDecimal(size).divide(new BigDecimal(max), 5, RoundingMode.UP).floatValue()
+          new BigDecimal(size).divide(new BigDecimal(max), 1, RoundingMode.UP).floatValue()
       }
       else {
         size = days.filter(_.change.toFloat >= 5.0).size
-        new BigDecimal(size).divide(new BigDecimal(days.size), 5, RoundingMode.UP).floatValue()
+        new BigDecimal(size).divide(new BigDecimal(days.size), 1, RoundingMode.UP).floatValue()
       }
     }
     catch
