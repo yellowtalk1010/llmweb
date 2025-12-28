@@ -120,7 +120,7 @@ def download_trade_date(trade_date):
 if __name__ == '__main__':
 
     # download_one("002798_SZ", "20250101", "20251130")
-    download_trade_date("20251226")
+    download_trade_date(ZukTuShare.analysis_trade_date)
     print("完成")
 
 
