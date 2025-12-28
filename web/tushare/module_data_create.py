@@ -72,6 +72,7 @@ def create_module_date():
             "area": area,                                               # 所在地区
             "industry": industry,                                       # 行业
             "market": market,                                           # 市场类型：主板、创业、科创、北交
+            "total_mv": daily_basic_df_top_max["total_mv"]              # 总市值
         })
 
         if(not os.path.exists(module_path)):
