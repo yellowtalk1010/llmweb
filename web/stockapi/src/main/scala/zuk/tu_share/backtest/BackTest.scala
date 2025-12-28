@@ -36,7 +36,7 @@ object BackTest {
 
           val ok = if (st) "" else "X"
 
-          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name}, ${mod.buy.trade_date}【${mod.getStockDto().turnoverRate}】【买入】, ${highStr}, ${ok}"
+          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().turnoverRate}，${mod.getStockDto().totalMV}亿】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
           lines += line
           println(line)
 

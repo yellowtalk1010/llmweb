@@ -31,24 +31,28 @@ object PassFactory {
     map.foreach(e=>{
       val modules = moduleList()
       modules.foreach(module=>{
-        val stock = e._1
-        //        val moduleDayList = e._2
-        val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
-        if (backtestLenght > 0) {
-          var startIndex = backtestLenght - 3
-          if (startIndex < 0) {
-            startIndex = backtestLenght - 2
+        try {
+          val stock = e._1
+          //        val moduleDayList = e._2
+          val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
+          if (backtestLenght > 0) {
+            var startIndex = backtestLenght - 3
+            if (startIndex < 0) {
+              startIndex = backtestLenght - 2
+            }
+            if (startIndex < 0) {
+              startIndex = backtestLenght - 1
+            }
+            module.sells ++= e._2.slice(startIndex, backtestLenght).reverse //连续两天
+            module.buy = e._2(backtestLenght)
           }
-          if (startIndex < 0) {
-            startIndex = backtestLenght - 1
-          }
-          module.sells ++= e._2.slice(startIndex, backtestLenght).reverse //连续两天
-          module.buy = e._2(backtestLenght)
+          doPass(moduleDayList)
+          module.run(moduleDayList)
+          count = count + 1
+          println(s"mod:${count}/${map.size * modules.size}")
         }
-        doPass(moduleDayList)
-        module.run(moduleDayList)
-        count = count + 1
-        println(s"mod:${count}/${map.size * modules.size}")
+        catch
+          case exception: Exception => exception.printStackTrace()
       })
       finishModules ++= modules
     })

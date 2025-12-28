@@ -1,9 +1,10 @@
 package zuk.tu_share.module
 
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
 
-import java.math.BigDecimal
+import java.math.{BigDecimal, RoundingMode}
 import scala.collection.mutable.ListBuffer
 
 /***
@@ -43,6 +44,12 @@ class MA3_3_Model extends IModel {
         val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
         if(tsStock != null){
           stockDto = new StockDto(tsStock, super.limitUp(days), super.changeUpRate(days))
+          if (StringUtils.isNotBlank(head.total_mv)) {
+            stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+          }
+          else {
+            stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+          }
         }
 
       }

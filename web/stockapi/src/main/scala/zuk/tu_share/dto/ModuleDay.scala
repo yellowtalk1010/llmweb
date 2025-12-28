@@ -17,6 +17,7 @@ class ModuleDay {
   @BeanProperty var amount: String = _
   @BeanProperty var turnover_rate: String = _
   @BeanProperty var float_share: String = _
+  @BeanProperty var total_mv: String = _
 
   @BeanProperty var ma: MA = _
 
