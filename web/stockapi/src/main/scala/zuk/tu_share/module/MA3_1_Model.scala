@@ -53,7 +53,7 @@ class MA3_1_Model extends IModel {
 
   override def desc(): String = "缩量上涨"
 
-  override def winRate: Float = 0.8966
+  override def winRate: Float = 0.9286
 
   override def reference: Float = 0.00
 

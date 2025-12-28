@@ -62,7 +62,7 @@ class MA3_3_Model extends IModel {
 
   override def desc(): String = "反包两日阴线后继续上升"
 
-  override def winRate: Float = 0.8546
+  override def winRate: Float = 0.8673
 
   override def reference: Float = 0.00
 
