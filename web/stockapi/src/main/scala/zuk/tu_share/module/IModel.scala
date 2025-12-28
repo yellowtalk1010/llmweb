@@ -20,19 +20,38 @@ trait IModel {
 
   def reference: Float
 
-  def limitUp(days: List[ModuleDay]): Boolean = {
+  def limitUp(days: List[ModuleDay]): String = {
     try {
       val max = 30
-      //历史上30天出现过涨停
+      //历史上30天出现过涨停次数
       if (days.size > max) {
-        days.take(max).filter(_.change.toFloat >= 9.0).size > 0
+        val size = days.take(max).filter(_.change.toFloat >= 9.0).size
+        s"${size}/30涨次"
       }
       else {
-        days.filter(_.change.toFloat >= 9.0).size > 0
+        val size = days.filter(_.change.toFloat >= 9.0).size
+        s"${size}/${days.size}涨次"
       }
     }
     catch
-      case exception: Exception=> true
+      case exception: Exception => "0/0涨次"
+  }
+
+  def limitDown(days: List[ModuleDay]): String = {
+    try {
+      val max = 30
+      //历史上30天出现过涨停次数
+      if (days.size > max) {
+        val size = days.take(max).filter(_.change.toFloat <= -9.0).size
+        s"${size}/30跌次"
+      }
+      else {
+        val size = days.filter(_.change.toFloat <= -9.0).size
+        s"${size}/${days.size}跌次"
+      }
+    }
+    catch
+      case exception: Exception => "0/0跌次"
   }
 
   def changeUpRate(days: List[ModuleDay]): Float = {
@@ -44,11 +63,11 @@ trait IModel {
       val max = 30
       var size = 0
         if (days.size > max) {
-          size = days.take(max).filter(_.turnover_rate.toFloat >= 3.5).size
+          size = days.take(max).filter(_.turnover_rate.toFloat >= 5.0).size
           new BigDecimal(size).divide(new BigDecimal(max), 5, RoundingMode.UP).floatValue()
       }
       else {
-        size = days.filter(_.change.toFloat >= 3.5).size
+        size = days.filter(_.change.toFloat >= 5.0).size
         new BigDecimal(size).divide(new BigDecimal(days.size), 5, RoundingMode.UP).floatValue()
       }
     }
