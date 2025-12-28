@@ -9,4 +9,5 @@ class StockDto(@BeanProperty var tsStock: TsStock,  //个股详情
                @BeanProperty var turnoverRate: Float = 0.0  //过去30个交易日中，换手率大于3.5的比例
               ) {
   @BeanProperty var totalMV: Float = 0.0 //总市值
+  @BeanProperty var preChangeRate: Float = 0.0 //买入当天尾盘涨跌幅
 }

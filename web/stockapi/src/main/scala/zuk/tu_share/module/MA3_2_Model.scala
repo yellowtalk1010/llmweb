@@ -47,11 +47,13 @@ class MA3_2_Model extends IModel {
         val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
         if(tsStock != null){
           stockDto = new StockDto(tsStock, super.limitUp(days), super.changeUpRate(days))
-          if (StringUtils.isNotBlank(head.total_mv)) {
+          if(StringUtils.isNotBlank(head.total_mv)){
             stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = head.change.toFloat
           }
           else {
             stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = days(1).change.toFloat
           }
         }
 
