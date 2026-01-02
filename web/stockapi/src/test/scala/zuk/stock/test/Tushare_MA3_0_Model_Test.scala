@@ -1,10 +1,13 @@
 package zuk.stock.test
 
+import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.Main
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.module.HM_MOD.handule
 import zuk.tu_share.module.{HM_MOD, MA3_2_Model, MA3_3_Model}
+
+import java.io.File
 
 
 class Tushare_MA3_0_Model_Test extends AnyFunSuite {
@@ -16,7 +19,7 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
-    Main.backtest(path, 60)
+    Main.backtest(path, 180)
     BackTest.analysis()
   }
 
@@ -35,4 +38,17 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
 
     }
   }
+
+  test("copy"){
+    val path = "D:\\development\\github\\llmweb\\web\\tushare\\daily\\"
+    val dir = new File(path)
+    val dirFiles = dir.listFiles()
+    dirFiles.filter(_.isDirectory).foreach(df=>{
+
+      val file2024 = new File(df.getAbsolutePath + File.separator + "2024.csv")
+      println(file2024.getAbsolutePath)
+      FileUtils.copyFile(new File("D:\\development\\github\\llmweb\\web\\stockapi\\src\\test\\scala\\zuk\\stock\\test\\2024.csv"), file2024)
+    })
+  }
+
 }
