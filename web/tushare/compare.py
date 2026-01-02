@@ -74,7 +74,7 @@ def compare():
                 print(f"数据量不一致，{ts_code}，{name}，{len(daily_df)}， {len(daily_basic_df)}")
                 error_num = error_num + 1
             else:
-                print(len(daily_df))
+                print(f"记录数量：{len(daily_df)}")
                 for i in range(len(daily_df)):
                     ts_code = daily_df.iloc[i]["ts_code"]
                     daily_df_row = daily_df.iloc[i]
