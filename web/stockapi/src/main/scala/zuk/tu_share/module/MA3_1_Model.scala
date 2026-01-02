@@ -12,7 +12,9 @@ class MA3_1_Model extends IModel {
 
   override def run(days: List[ModuleDay]): Unit = {
     val changeUpRate = super.changeUpRate(days) //过去30个交易日中换手率大于3.5的占比，必须大于3成
-    if(days.size>=4 && changeUpRate >= 0.3){
+    if(days.size>=4
+//      && changeUpRate >= 0.3
+    ){
       val list = days.take(4)
       val head = list.head
       if (
