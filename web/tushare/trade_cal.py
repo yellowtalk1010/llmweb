@@ -31,18 +31,18 @@ def download_trade_cal():
     df.to_csv("trade_cal.csv", index=False)
 
 
-def read_trade_cal():
-    trade_cals = pd.read_csv("trade_cal.csv")
-    for index, row in trade_cals.sort_index(ascending=False).iterrows():
-        is_open = row["is_open"]
-        if(is_open==1):
-            cal_date = row["cal_date"]
-            print(cal_date)
-            download_daily.download_trade_date(str(cal_date))
-            # download_daily_basic.download_trade_date(str(cal_date))
-            time.sleep(2)
+# def read_trade_cal():
+#     trade_cals = pd.read_csv("trade_cal.csv")
+#     for index, row in trade_cals.sort_index(ascending=False).iterrows():
+#         is_open = row["is_open"]
+#         if(is_open==1):
+#             cal_date = row["cal_date"]
+#             print(cal_date)
+#             # download_daily.download_trade_date(str(cal_date))
+#             download_daily_basic.download_trade_date(str(cal_date))
+#             time.sleep(2)
 
 
 
 if __name__ == '__main__':
-    read_trade_cal()
+    download_trade_cal()
