@@ -10,7 +10,12 @@ daily_basic_path = "daily_basic"
 
 module_path = "module"
 
-max = 120 # 提取最大数量 120 条记录
+max = 300 # 提取最大数量 120 条记录
+
+# 判断是否「严格递减」
+def is_decreasing(lst):
+    return all(lst[i] > lst[i+1] for i in range(len(lst) - 1))
+
 
 def create_module_date():
     print("创建分析数据")
@@ -51,8 +56,12 @@ def create_module_date():
         daily_basic_df = pd.concat([daily_basic_df_2025, daily_basic_df_2024], ignore_index=True)
 
         if(len(daily_df) != len(daily_basic_df)):
-            print(f"{len(daily_df)}, {len(daily_basic_df)}")
+            print(f"{len(daily_df)}, {len(daily_basic_df)}数据不相等，严重异常")
             continue
+
+        tradedate_list = list(daily_df["trade_date"])
+        if not is_decreasing(tradedate_list):
+            print("交易日期异常，严重错误")
 
         if len(daily_df) < max or len(daily_basic_df) < max:
             print(f"{ts_code},{name},可能是新股，数量不足{max}")
