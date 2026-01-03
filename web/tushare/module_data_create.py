@@ -31,16 +31,6 @@ def create_module_date():
         ts_code_path = ts_code.replace(".", "_")
 
         # 构建数据文件的路径
-
-        daily_file_2024 = daily_path + "/" + ts_code_path + "/" + "2024.csv"
-        daily_basic_file_2024 = daily_basic_path + "/" + ts_code_path + "/" + "2024.csv"
-        if not os.path.exists(daily_file_2024) or not os.path.exists(daily_basic_file_2024):
-            # 判断数据文件路径是否存在
-            print(f"{daily_file_2024}, {daily_basic_file_2024} 文件不存在")
-            continue
-        daily_df_2024 = pd.read_csv(daily_file_2024, encoding="utf-8")
-        daily_basic_df_2024 = pd.read_csv(daily_basic_file_2024, encoding="utf-8")
-
         #
         daily_file_2025 = daily_path + "/" + ts_code_path + "/" + "2025.csv"
         daily_basic_file_2025 = daily_basic_path + "/" + ts_code_path + "/" + "2025.csv"
@@ -51,7 +41,17 @@ def create_module_date():
         daily_df_2025 = pd.read_csv(daily_file_2025, encoding="utf-8")
         daily_basic_df_2025 = pd.read_csv(daily_basic_file_2025, encoding="utf-8")
 
+        ##
+        daily_file_2024 = daily_path + "/" + ts_code_path + "/" + "2024.csv"
+        daily_basic_file_2024 = daily_basic_path + "/" + ts_code_path + "/" + "2024.csv"
+        if not os.path.exists(daily_file_2024) or not os.path.exists(daily_basic_file_2024):
+            # 判断数据文件路径是否存在
+            print(f"{daily_file_2024}, {daily_basic_file_2024} 文件不存在")
+            continue
+        daily_df_2024 = pd.read_csv(daily_file_2024, encoding="utf-8")
+        daily_basic_df_2024 = pd.read_csv(daily_basic_file_2024, encoding="utf-8")
 
+        # 上下拼接
         daily_df = pd.concat([daily_df_2025, daily_df_2024], ignore_index=True)
         daily_basic_df = pd.concat([daily_basic_df_2025, daily_basic_df_2024], ignore_index=True)
 
