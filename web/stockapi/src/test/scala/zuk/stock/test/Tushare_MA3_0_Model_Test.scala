@@ -19,7 +19,7 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
-    Main.backtest(path, 180)
+    Main.backtest(path, 60)
     BackTest.analysis()
   }
 
@@ -39,16 +39,16 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
     }
   }
 
-  test("copy"){
-    val path = "D:\\development\\github\\llmweb\\web\\tushare\\daily\\"
-    val dir = new File(path)
-    val dirFiles = dir.listFiles()
-    dirFiles.filter(_.isDirectory).foreach(df=>{
-
-      val file2024 = new File(df.getAbsolutePath + File.separator + "2024.csv")
-      println(file2024.getAbsolutePath)
-      FileUtils.copyFile(new File("D:\\development\\github\\llmweb\\web\\stockapi\\src\\test\\scala\\zuk\\stock\\test\\2024.csv"), file2024)
-    })
-  }
+//  test("copy"){
+//    val path = "D:\\development\\github\\llmweb\\web\\tushare\\daily_basic\\"
+//    val dir = new File(path)
+//    val dirFiles = dir.listFiles()
+//    dirFiles.filter(_.isDirectory).foreach(df=>{
+//
+//      val file2026 = new File(df.getAbsolutePath + File.separator + "2026.csv")
+//      println(file2026.getAbsolutePath)
+//      FileUtils.copyFile(new File("D:\\development\\github\\llmweb\\web\\stockapi\\src\\test\\scala\\zuk\\stock\\test\\2026.csv"), file2026)
+//    })
+//  }
 
 }
