@@ -10,7 +10,7 @@ daily_basic_path = "daily_basic"
 
 module_path = "module"
 
-max = 120
+max = 120 # 提取最大数量 120 条记录
 
 def create_module_date():
     print("创建分析数据")
@@ -26,19 +26,36 @@ def create_module_date():
         ts_code_path = ts_code.replace(".", "_")
 
         # 构建数据文件的路径
-        daily_file = daily_path + "/" + ts_code_path + "/" + "2025.csv"
-        daily_basic_file = daily_basic_path + "/" + ts_code_path + "/" + "2025.csv"
 
-        if not os.path.exists(daily_file) or not os.path.exists(daily_basic_file):
+        daily_file_2024 = daily_path + "/" + ts_code_path + "/" + "2024.csv"
+        daily_basic_file_2024 = daily_basic_path + "/" + ts_code_path + "/" + "2024.csv"
+        if not os.path.exists(daily_file_2024) or not os.path.exists(daily_basic_file_2024):
             # 判断数据文件路径是否存在
-            print(f"{daily_file}, {daily_basic_file} 文件不存在")
+            print(f"{daily_file_2024}, {daily_basic_file_2024} 文件不存在")
+            continue
+        daily_df_2024 = pd.read_csv(daily_file_2024, encoding="utf-8")
+        daily_basic_df_2024 = pd.read_csv(daily_basic_file_2024, encoding="utf-8")
+
+        #
+        daily_file_2025 = daily_path + "/" + ts_code_path + "/" + "2025.csv"
+        daily_basic_file_2025 = daily_basic_path + "/" + ts_code_path + "/" + "2025.csv"
+        if not os.path.exists(daily_file_2025) or not os.path.exists(daily_basic_file_2025):
+            # 判断数据文件路径是否存在
+            print(f"{daily_file_2025}, {daily_basic_file_2025} 文件不存在")
+            continue
+        daily_df_2025 = pd.read_csv(daily_file_2025, encoding="utf-8")
+        daily_basic_df_2025 = pd.read_csv(daily_basic_file_2025, encoding="utf-8")
+
+
+        daily_df = pd.concat([daily_df_2025, daily_df_2024], ignore_index=True)
+        daily_basic_df = pd.concat([daily_basic_df_2025, daily_basic_df_2024], ignore_index=True)
+
+        if(len(daily_df) != len(daily_basic_df)):
+            print(f"{len(daily_df)}, {len(daily_basic_df)}")
             continue
 
-        daily_df = pd.read_csv(daily_file, encoding="utf-8")
-        daily_basic_df = pd.read_csv(daily_basic_file, encoding="utf-8")
-
         if len(daily_df) < max or len(daily_basic_df) < max:
-            print(f"{ts_code},{name},可能是新股，数量不足30")
+            print(f"{ts_code},{name},可能是新股，数量不足{max}")
             continue
 
         daily_df_top_max = daily_df[:max]
