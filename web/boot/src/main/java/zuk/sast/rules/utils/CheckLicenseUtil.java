@@ -12,4 +12,5 @@ public class CheckLicenseUtil {
         Assert.isTrue(!now.isAfter(target), "数据导入超时");
     }
 
+
 }
