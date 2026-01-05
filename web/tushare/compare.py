@@ -62,8 +62,8 @@ def compare():
     for index, row in stocks.iterrows():
         ts_code = row["ts_code"].replace(".", "_")
         name = row["name"]
-        daily = "daily/" + ts_code + "/2025.csv"
-        daily_basic = "daily_basic/" + ts_code + "/2025.csv"
+        daily = "daily/" + ts_code + "/2026.csv"
+        daily_basic = "daily_basic/" + ts_code + "/2026.csv"
         if os.path.exists(daily) is False or os.path.exists(daily_basic) is False:
             print(f"路径缺失，{ts_code}，{name}")
         print(ts_code, name)

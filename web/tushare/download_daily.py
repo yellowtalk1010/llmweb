@@ -66,12 +66,12 @@ def daily(ts_code, trade_date, start_date, end_date):
 #     except Exception as e:
 #         print(e)
 
-def download_one(ts_code_path, start_date, end_date):
-    ts_code = ts_code_path.replace("_", ".")
-    df = daily(ts_code, "",start_date, end_date)
-    path = f"{daily_path}/{ts_code_path}/2025.csv"
-    df.to_csv(path, index=False)
-    print(f"完成。{path}，{len(df)}")
+# def download_one(ts_code_path, start_date, end_date):
+#     ts_code = ts_code_path.replace("_", ".")
+#     df = daily(ts_code, "",start_date, end_date)
+#     path = f"{daily_path}/{ts_code_path}/2026.csv"
+#     df.to_csv(path, index=False)
+#     print(f"完成。{path}，{len(df)}")
 
 def download_trade_date(trade_date):
     if len(trade_date) != 8:
