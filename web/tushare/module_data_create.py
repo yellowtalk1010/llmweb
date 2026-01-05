@@ -10,7 +10,7 @@ daily_basic_path = "daily_basic"
 
 module_path = "module"
 
-max = 300 # 提取最大数量 120 条记录
+max = 120 # 提取最大数量 120 条记录
 
 # 判断是否「严格递减」
 def is_decreasing(lst):
