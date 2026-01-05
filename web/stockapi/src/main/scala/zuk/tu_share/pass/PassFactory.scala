@@ -76,7 +76,12 @@ object PassFactory {
       var htmlContent = stockDtos.toList.sortBy(_.turnoverRate).reverse.map(dto => {
         val e = dto.tsStock
         val splits = e.ts_code.split("\\.")
-        val href = s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
+        val href = if(splits(1).toUpperCase.contains("BJ")){
+          s"https://quote.eastmoney.com/${splits(1)}/${splits(0)}.html"
+        }
+        else {
+          s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
+        }
         val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
         s"${e.ts_code}, ${name_href}, ${e.area}，${e.industry}, ${dto.limitUp}, ${dto.limitDown}, ${dto.turnoverRate}活跃"
       }).mkString("\n<br><br>\n")
@@ -94,9 +99,9 @@ object PassFactory {
 
   private def license(): Boolean = {
     try{
-      val start = 20251229
+      val start = 20260105
       val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
-      val end = 20260215
+      val end = 20260216
       val st = start <= cur && cur <= end
       if(st){
         //println("OK")
