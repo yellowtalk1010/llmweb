@@ -1,2 +1,3 @@
 ts_code,trade_date,close,turnover_rate,turnover_rate_f,volume_ratio,pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,total_share,float_share,free_share,total_mv,circ_mv,limit_status
+002031.SZ,20260106,7.96,7.5288,8.153,0.91,,,8.2383,17.8197,25.3497,0.0,,219939.567,193875.3591,179031.6991,1750718.9533,1543247.8584,0
 002031.SZ,20260105,7.89,5.1381,5.5641,0.49,,,8.1659,17.663,25.1268,0.0,,219939.567,193875.3591,179031.6991,1735323.1836,1529676.5833,0

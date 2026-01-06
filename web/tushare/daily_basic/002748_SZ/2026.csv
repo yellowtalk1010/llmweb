@@ -1,2 +1,3 @@
 ts_code,trade_date,close,turnover_rate,turnover_rate_f,volume_ratio,pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,total_share,float_share,free_share,total_mv,circ_mv,limit_status
+002748.SZ,20260106,12.84,6.8083,14.7093,0.72,117.7492,71.4855,2.244,1.5526,1.5148,0.3894,0.3894,24000.0,24000.0,11108.5,308160.0,308160.0,0
 002748.SZ,20260105,12.91,5.2473,11.3369,0.48,118.3911,71.8752,2.2562,1.561,1.5231,0.3873,0.3873,24000.0,24000.0,11108.5,309840.0,309840.0,0

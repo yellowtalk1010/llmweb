@@ -1,2 +1,3 @@
 ts_code,trade_date,close,turnover_rate,turnover_rate_f,volume_ratio,pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,total_share,float_share,free_share,total_mv,circ_mv,limit_status
+002789.SZ,20260106,10.47,4.6954,9.8596,0.77,,,,0.2674,0.3761,0.0,,15962.3514,15646.6099,7451.2595,167125.8192,163820.0057,0
 002789.SZ,20260105,10.55,7.8169,16.4143,1.55,,,,0.2695,0.3789,0.0,,15962.3514,15646.6099,7451.2595,168402.8073,165071.7344,0

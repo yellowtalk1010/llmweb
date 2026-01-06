@@ -1,2 +1,3 @@
 ts_code,trade_date,close,turnover_rate,turnover_rate_f,volume_ratio,pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,total_share,float_share,free_share,total_mv,circ_mv,limit_status
+920526.BJ,20260106,24.81,4.2455,8.7401,2.92,87.9607,128.8031,9.1349,17.8374,17.9431,,,8270.0,5236.7486,2543.7467,205178.7,129923.7328,0
 920526.BJ,20260105,23.7,1.6331,3.362,1.04,84.0253,123.0405,8.7262,17.0393,17.1403,,,8270.0,5236.7486,2543.7467,195999.0,124110.9418,0
