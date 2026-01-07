@@ -34,9 +34,11 @@ class MA3_3_Model extends IModel {
 
         && new BigDecimal(list(1).high).compareTo(new BigDecimal(list(0).high)) < 0
           && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).close)) < 0
-          && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).low)) > 0 //下引线
-          && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).open)) > 0 //下引线
           && new BigDecimal(list(0).vol).compareTo(new BigDecimal(list(2).vol).add(new BigDecimal(list(3).vol))) > 0
+
+          && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).low)) > 0 //下引线涵盖在柱子里
+          && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).open)) > 0 //下引线涵盖在柱子里
+
 
       //        && List(list(3).low.toFloat,list(2).low.toFloat,list(1).low.toFloat).sorted.head < list(0).low.toFloat
         //进入最低价不能跌破上3日最低价
