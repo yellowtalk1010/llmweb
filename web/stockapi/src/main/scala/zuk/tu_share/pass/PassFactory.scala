@@ -99,7 +99,7 @@ object PassFactory {
 
   private def license(): Boolean = {
     try{
-      val start = 20260105
+      val start = 20260107
       val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
       val end = 20260216
       val st = start <= cur && cur <= end
