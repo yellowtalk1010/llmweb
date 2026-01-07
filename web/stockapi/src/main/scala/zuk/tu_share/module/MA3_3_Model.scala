@@ -34,6 +34,8 @@ class MA3_3_Model extends IModel {
 
         && new BigDecimal(list(1).high).compareTo(new BigDecimal(list(0).high)) < 0
           && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).close)) < 0
+          && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).low)) > 0 //下引线
+          && new BigDecimal(list(1).close).compareTo(new BigDecimal(list(0).open)) > 0 //下引线
           && new BigDecimal(list(0).vol).compareTo(new BigDecimal(list(2).vol).add(new BigDecimal(list(3).vol))) > 0
 
       //        && List(list(3).low.toFloat,list(2).low.toFloat,list(1).low.toFloat).sorted.head < list(0).low.toFloat
@@ -60,9 +62,9 @@ class MA3_3_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def desc(): String = "反包两日阴线后继续上升"
+  override def desc(): String = "反包两日阴线后继续上升（下引线最好涵盖在上一个交易日的柱子里面）"
 
-  override def winRate: Float = 0.8379
+  override def winRate: Float = 0.8937
 
   override def reference: Float = 0.00
 
