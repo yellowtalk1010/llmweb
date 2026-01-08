@@ -64,7 +64,7 @@ class MA3_3_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def desc(): String = "反包两日阴线后继续上升（下引线最好涵盖在上一个交易日的柱子里面）"
+  override def desc(): String = "反包两日阴线后继续上升（下引线最好涵盖在上一个交易日的柱子里面）。赶紧入手。"
 
   override def winRate: Float = 0.8937
 
