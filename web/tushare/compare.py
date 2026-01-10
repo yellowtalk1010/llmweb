@@ -54,7 +54,7 @@ def merge():
                 print()
 
 
-def compare():
+def compare(year):
     print("比较")
     error_num = 0
     location_num = 0
@@ -62,8 +62,8 @@ def compare():
     for index, row in stocks.iterrows():
         ts_code = row["ts_code"].replace(".", "_")
         name = row["name"]
-        daily = "daily/" + ts_code + "/2026.csv"
-        daily_basic = "daily_basic/" + ts_code + "/2026.csv"
+        daily = f"daily/${ts_code}/{year}.csv"
+        daily_basic = f"daily_basic/${ts_code}/{year}.csv"
         if os.path.exists(daily) is False or os.path.exists(daily_basic) is False:
             print(f"路径缺失，{ts_code}，{name}")
         print(ts_code, name)
@@ -90,11 +90,30 @@ def compare():
     print(f"error_num:{error_num}, location_num:{location_num}")
         
 
+# 去重
+def deduplication(path, year):
+    stock_dirs = os.listdir(path)
+    for stock_dir in stock_dirs:
+        path_file = f"{path}/{stock_dir}/{2023}.csv"
+        if os.path.exists(path_file):
+            print(f"{path_file}, {os.path.exists(path_file)}")
+            df = pd.read_csv(path_file)
+            df_unique = df.drop_duplicates(subset=['trade_date'], keep='first')
+            df_sorted = df_unique.sort_values('trade_date', ascending=False)
+            df_sorted.to_csv(path_file, index=False)
+            if  len(df) > len(df_sorted):
+                print(f"{len(df)}, {len(df_sorted)}, 不一致...................")
+        else:
+            print(f"{path_file}, 路径不存在")
+
 # 比较daily与daily_basic数据是否一致
 if __name__ == '__main__':
     # rename()
     # merge()
-    compare()
+    year = "2023"
+    deduplication("daily", year) #去重
+    deduplication("daily_basic", year) #去重
+    compare(year)
     print("完成")
 
 
