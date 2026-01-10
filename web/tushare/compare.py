@@ -94,7 +94,7 @@ def compare(year):
 def deduplication(path, year):
     stock_dirs = os.listdir(path)
     for stock_dir in stock_dirs:
-        if os.path.isdir(stock_dir):
+        if os.path.isdir(f"{path}/{stock_dir}"):
             path_file = f"{path}/{stock_dir}/{year}.csv"
             if os.path.exists(path_file):
                 print(f"{path_file}, {os.path.exists(path_file)}")
