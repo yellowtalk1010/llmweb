@@ -5,6 +5,7 @@ import zuk.tu_share.DataFrame
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 import zuk.tu_share.module.{IModel, MA3_0_Model, MA3_1_Model, MA3_2_Model, MA3_3_Model}
+import zuk.tu_share.utils.License
 import zuk.utils.SendMail
 
 import java.math.{BigDecimal, RoundingMode}
@@ -68,7 +69,7 @@ object PassFactory {
 
       val stockDtos = moduleList.map(_.getStockDto())
 
-      if(license()){
+      if(License.check()){
         println(moduleName)
         println(stockDtos.map(_.tsStock).map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
       }
@@ -91,30 +92,11 @@ object PassFactory {
       htmlContent
     }).mkString("<br><br>\n\n")
 
-    if(backtestLenght==0 && license()){
+    if(backtestLenght==0 && License.check()){
       sendMail(emailContent)
     }
 
   }
-
-  private def license(): Boolean = {
-    try{
-      val start = 20260107
-      val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
-      val end = 20260216
-      val st = start <= cur && cur <= end
-      if(st){
-        //println("OK")
-      }
-      else {
-        //println("OK!")
-      }
-      st
-    }
-    catch
-      case exception: Exception => false
-  }
-
 
   private def sendMail(htmlContent: String) = {
     val mailAddress = "513283439@qq.com"
