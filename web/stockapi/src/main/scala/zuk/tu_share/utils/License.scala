@@ -24,7 +24,7 @@ object License {
   }
 
   def check(pwd: String): Boolean = {
-    pwd.toLowerCase.equals("ilovehuangliao".toLowerCase) && check()
+    pwd.toLowerCase.equals("huangliaofather".toLowerCase) && check()
   }
 
 }
