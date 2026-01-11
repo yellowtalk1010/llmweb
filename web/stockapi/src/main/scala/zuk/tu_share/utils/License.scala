@@ -23,4 +23,8 @@ object License {
       case exception: Exception => false
   }
 
+  def check(pwd: String): Boolean = {
+    pwd.toLowerCase.equals("ilovehuangliao".toLowerCase) && check()
+  }
+
 }
