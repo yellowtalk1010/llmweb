@@ -1,7 +1,8 @@
 package zuk.tu_share.pass
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.ModuleDay
-import java.math.BigDecimal
+
+import java.math.{BigDecimal, RoundingMode}
 import zuk.tu_share.dto.PriceLimit
 
 /***
@@ -30,6 +31,7 @@ class PassPriceLimit extends IPass {
    * 科创板	±20%	新股上市前5个交易日无涨跌幅，之后为±20%
    * 北交所	±30%	新股上市首日无涨跌幅，之后为±30%
    *
+   * 涨跌停，保留2位小数，第三位四舍五入
    */
   private def calPriceLimit(tucode: String, preClose: String): Tuple2[BigDecimal, BigDecimal] = {
     val splits = tucode.split("\\\\.")
@@ -39,8 +41,8 @@ class PassPriceLimit extends IPass {
         val upRate = new BigDecimal(1).add(new BigDecimal(0.3))
         val downRate = new BigDecimal(1).subtract(new BigDecimal(0.3))
 
-        val priceLimitUp = new BigDecimal(preClose).multiply(upRate)
-        val priceLimitDown = new BigDecimal(preClose).multiply(downRate)
+        val priceLimitUp = new BigDecimal(preClose).multiply(upRate).setScale(2, RoundingMode.HALF_UP)
+        val priceLimitDown = new BigDecimal(preClose).multiply(downRate).setScale(2, RoundingMode.HALF_UP)
 
         return (priceLimitUp, priceLimitDown)
 
@@ -51,8 +53,8 @@ class PassPriceLimit extends IPass {
         val upRate = new BigDecimal(1).add(new BigDecimal(0.2))
         val downRate = new BigDecimal(1).subtract(new BigDecimal(0.2))
 
-        val priceLimitUp = new BigDecimal(preClose).multiply(upRate)
-        val priceLimitDown = new BigDecimal(preClose).multiply(downRate)
+        val priceLimitUp = new BigDecimal(preClose).multiply(upRate).setScale(2, RoundingMode.HALF_UP)
+        val priceLimitDown = new BigDecimal(preClose).multiply(downRate).setScale(2, RoundingMode.HALF_UP)
 
         return (priceLimitUp, priceLimitDown)
       }
@@ -62,8 +64,8 @@ class PassPriceLimit extends IPass {
         val upRate = new BigDecimal(1).add(new BigDecimal(0.2))
         val downRate = new BigDecimal(1).subtract(new BigDecimal(0.2))
 
-        val priceLimitUp = new BigDecimal(preClose).multiply(upRate)
-        val priceLimitDown = new BigDecimal(preClose).multiply(downRate)
+        val priceLimitUp = new BigDecimal(preClose).multiply(upRate).setScale(2, RoundingMode.HALF_UP)
+        val priceLimitDown = new BigDecimal(preClose).multiply(downRate).setScale(2, RoundingMode.HALF_UP)
 
         return (priceLimitUp, priceLimitDown)
       }
@@ -73,8 +75,8 @@ class PassPriceLimit extends IPass {
         val upRate = new BigDecimal(1).add(new BigDecimal(0.1))
         val downRate = new BigDecimal(1).subtract(new BigDecimal(0.1))
 
-        val priceLimitUp = new BigDecimal(preClose).multiply(upRate)
-        val priceLimitDown = new BigDecimal(preClose).multiply(downRate)
+        val priceLimitUp = new BigDecimal(preClose).multiply(upRate).setScale(2, RoundingMode.HALF_UP)
+        val priceLimitDown = new BigDecimal(preClose).multiply(downRate).setScale(2, RoundingMode.HALF_UP)
 
 
         return (priceLimitUp, priceLimitDown)
