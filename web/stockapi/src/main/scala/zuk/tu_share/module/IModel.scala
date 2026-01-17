@@ -26,7 +26,7 @@ trait IModel {
     }
     else {
       //收盘价小于涨停价
-      new BigDecimal(moduleDay.getClose).compareTo(moduleDay.priceLimit.priceLimitUp) < 0
+      new BigDecimal(moduleDay.close).compareTo(moduleDay.priceLimit.priceLimitUp) < 0
     }
   }
 
