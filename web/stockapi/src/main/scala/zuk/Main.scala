@@ -30,7 +30,7 @@ object Main {
       }
     }
     if(!LicenseUtil.checkPwd()){
-      println("pwd error.")
+      println("pwd err")
       System.exit(0)
     }
     println(s"path:${CammandParam.param.toString}")
