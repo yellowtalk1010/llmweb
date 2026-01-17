@@ -16,4 +16,6 @@ class MA {
   @BeanProperty var ma20: BigDecimal = _
   @BeanProperty var ma30: BigDecimal = _
 
+  @BeanProperty var priceLimitUp: BigDecimal = _    //涨停价
+  @BeanProperty var priceLimitDown: BigDecimal = _  //跌停价
 }
