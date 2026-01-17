@@ -36,7 +36,7 @@ class PassPriceLimit extends IPass {
   private def calPriceLimit(tucode: String, preClose: String): Tuple2[BigDecimal, BigDecimal] = {
     val splits = tucode.split("\\\\.")
     if(splits.size==2){
-      if(splits(0).toUpperCase.equals("BJ")){
+      if(splits.map(_.toUpperCase).filter(_.startsWith("BJ")).size>0){
         //北交所  ±30%
         val upRate = new BigDecimal(1).add(new BigDecimal(0.3))
         val downRate = new BigDecimal(1).subtract(new BigDecimal(0.3))
@@ -47,7 +47,7 @@ class PassPriceLimit extends IPass {
         return (priceLimitUp, priceLimitDown)
 
       }
-      else if(splits(1).startsWith("30")){
+      else if(splits.map(_.toUpperCase).filter(_.startsWith("30")).size>0){
         //创业版 ±20%
 
         val upRate = new BigDecimal(1).add(new BigDecimal(0.2))
@@ -58,7 +58,7 @@ class PassPriceLimit extends IPass {
 
         return (priceLimitUp, priceLimitDown)
       }
-      else if(splits(1).startsWith("68")){
+      else if(splits.map(_.toUpperCase).filter(_.startsWith("68")).size>0){
         //科创版 ±20%
 
         val upRate = new BigDecimal(1).add(new BigDecimal(0.2))
