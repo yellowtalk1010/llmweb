@@ -20,6 +20,16 @@ trait IModel {
 
   def reference: Float
 
+  def filterPriceLimitUp(moduleDay: ModuleDay): Boolean = {
+    if(moduleDay.priceLimit == null){
+      true
+    }
+    else {
+      //收盘价小于涨停价
+      new BigDecimal(moduleDay.getClose).compareTo(moduleDay.priceLimit.priceLimitUp) < 0
+    }
+  }
+
   def limitUp(days: List[ModuleDay]): String = {
     try {
       val max = 30
