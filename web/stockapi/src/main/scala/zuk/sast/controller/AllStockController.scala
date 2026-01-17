@@ -102,7 +102,7 @@ class AllStockController {
    */
   @GetMapping(value = Array("all"))
   def all(tradedate: String, search: String): Map[String, Object] = {
-    println(s"tradedate:${tradedate}, search:${search}")
+    log.info(s"tradedate:${tradedate}, search:${search}")
     HmDetailUtil.loadData()
     val list = new util.ArrayList[HmDetail]()
     if(StringUtils.isNotBlank(tradedate)){
