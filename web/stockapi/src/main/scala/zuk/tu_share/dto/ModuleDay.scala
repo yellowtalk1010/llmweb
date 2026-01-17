@@ -20,5 +20,6 @@ class ModuleDay {
   @BeanProperty var total_mv: String = _
 
   @BeanProperty var ma: MA = _
+  @BeanProperty var priceLimit: PriceLimit = _
 
 }
