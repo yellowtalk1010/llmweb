@@ -11,16 +11,16 @@ import zuk.tu_share.dto.PriceLimit
 class PassPriceLimit extends IPass {
 
   override def handle(moduleDays: List[ModuleDay]): Unit = {
-    moduleDays.filter(e=>StringUtils.isNotBlank(e.getPre_close)).foreach(e=>{
+    moduleDays.filter(e=>StringUtils.isNotBlank(e.pre_close)).foreach(e=>{
       val pl = e.priceLimit
-      val preClose = e.getPre_close //上一个交易日的收盘价
-      val tscode = e.getTs_code
+      val preClose = e.pre_close //上一个交易日的收盘价
+      val tscode = e.ts_code
 
       val tp2 = calPriceLimit(tscode, preClose)
       if(tp2!=null){
         val priceLimit = new PriceLimit()
-        priceLimit.setPriceLimitUp(tp2._1)
-        priceLimit.setPriceLimitDown(tp2._2)
+        priceLimit.priceLimitUp = tp2._1
+        priceLimit.priceLimitDown = tp2._2
       }
     })
   }
