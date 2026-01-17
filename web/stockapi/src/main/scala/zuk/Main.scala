@@ -1,7 +1,8 @@
 package zuk
 
-import zuk.tu_share.DataFrame
+import zuk.tu_share.{CammandParam, DataFrame}
 import zuk.tu_share.pass.PassFactory
+import zuk.tu_share.utils.LicenseUtil
 
 import java.io.PrintStream
 import java.nio.charset.{Charset, StandardCharsets}
@@ -14,16 +15,26 @@ object Main {
     // 设置默认编码
     fixWindowsConsole()
 
-    var path = "."
     if(args==null || args.size==0) {
       println("path is empty.")
     }
     else {
-      path = args(0)
+      for (i <- 0 until args.size) {
+        val v = args(i).toLowerCase
+        v match
+          case "-path" =>
+            CammandParam.param.path = args(i+1)
+          case "-pwd" =>
+            CammandParam.param.pwd = args(i+1)
+          case _=>
+      }
     }
-
-    println(s"path:${path}")
-    val map = DataFrame.load(path)
+    if(!LicenseUtil.checkPwd()){
+      println("password error.")
+      System.exit(0)
+    }
+    println(s"path:${CammandParam.param.toString}")
+    val map = DataFrame.load(CammandParam.param.path)
     PassFactory.doModule(map)
 
   }

@@ -1,11 +1,13 @@
 package zuk.tu_share.utils
 
+import zuk.tu_share.CammandParam
+
 import java.text.SimpleDateFormat
 import java.util.Date
 
 object LicenseUtil {
 
-  def check(): Boolean = {
+  def checkDate(): Boolean = {
     try {
       val start = 20260116
       val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
@@ -23,8 +25,12 @@ object LicenseUtil {
       case exception: Exception => false
   }
 
-  def check(pwd: String): Boolean = {
-    pwd.toLowerCase.equals("huangliaofather".toLowerCase) && check()
+  def checkPwd(): Boolean = {
+    CammandParam.param.pwd.toLowerCase.equals("huangliaofather".toLowerCase)
+  }
+
+  def check(): Boolean = {
+    checkPwd() && checkDate()
   }
 
 }
