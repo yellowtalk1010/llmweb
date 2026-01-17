@@ -5,7 +5,7 @@ import zuk.tu_share.DataFrame
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 import zuk.tu_share.module.{IModel, MA3_0_Model, MA3_1_Model, MA3_2_Model, MA3_3_Model}
-import zuk.tu_share.utils.License
+import zuk.tu_share.utils.LicenseUtil
 import zuk.utils.SendMail
 
 import java.math.{BigDecimal, RoundingMode}
@@ -69,7 +69,7 @@ object PassFactory {
 
       val stockDtos = moduleList.map(_.getStockDto())
 
-      if(License.check()){
+      if(LicenseUtil.check()){
         println(moduleName)
         println(stockDtos.map(_.tsStock).map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
       }
@@ -92,7 +92,7 @@ object PassFactory {
       htmlContent
     }).mkString("<br><br>\n\n")
 
-    if(backtestLenght==0 && License.check()){
+    if(backtestLenght==0 && LicenseUtil.check()){
       sendMail(emailContent)
     }
 

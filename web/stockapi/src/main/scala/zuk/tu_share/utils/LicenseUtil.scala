@@ -3,11 +3,11 @@ package zuk.tu_share.utils
 import java.text.SimpleDateFormat
 import java.util.Date
 
-object License {
+object LicenseUtil {
 
   def check(): Boolean = {
     try {
-      val start = 20260115
+      val start = 20260116
       val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
       val end = 20260216
       val st = start <= cur && cur <= end
