@@ -25,6 +25,13 @@ object PassFactory {
     )
   }
 
+  private def passList(): List[IPass] = {
+    List(
+      new PassMA,
+      new PassPriceLimit
+    )
+  }
+
   def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
 
     val finishModules = ListBuffer[IModel]()
@@ -109,9 +116,5 @@ object PassFactory {
       pass.handle(moduleDays)
     })
   }
-
-  private def passList(): List[IPass] = {
-    List(new PassMA)
-  }
-
+  
 }
