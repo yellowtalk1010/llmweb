@@ -20,7 +20,8 @@ class MA3_2_Model extends IModel {
       val list = days.take(5)
       val head = list.head
       if (
-        new BigDecimal(list(3).change).compareTo(new BigDecimal(0)) < 0       //下跌
+        filterPriceLimitUp(list.head)
+          && new BigDecimal(list(3).change).compareTo(new BigDecimal(0)) < 0       //下跌
           && new BigDecimal(list(2).change).compareTo(new BigDecimal(0)) < 0  //下跌
           && new BigDecimal(list(1).change).compareTo(new BigDecimal(0)) > 0  //上涨
           && new BigDecimal(list(0).change).compareTo(new BigDecimal(0)) < 0  //下跌

@@ -18,7 +18,8 @@ class MA3_1_Model extends IModel {
       val list = days.take(4)
       val head = list.head
       if (
-        list(0).ma.ma5.compareTo(list(0).ma.ma10) >= 0
+        filterPriceLimitUp(list.head)
+          && list(0).ma.ma5.compareTo(list(0).ma.ma10) >= 0
           && list(1).ma.ma5.compareTo(list(1).ma.ma10) <= 0
           && list(2).ma.ma5.compareTo(list(2).ma.ma10) <= 0
           && new BigDecimal(head.turnover_rate).compareTo(BigDecimal(0)) >= 0 //换手率

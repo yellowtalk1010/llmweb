@@ -21,6 +21,7 @@ class PassPriceLimit extends IPass {
         val priceLimit = new PriceLimit()
         priceLimit.priceLimitUp = tp2._1
         priceLimit.priceLimitDown = tp2._2
+        e.priceLimit = priceLimit
       }
     })
   }

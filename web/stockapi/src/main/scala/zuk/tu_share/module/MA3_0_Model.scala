@@ -14,8 +14,8 @@ class MA3_0_Model extends IModel {
     if(days.size>=3){
       val list = days.take(3)
       val head = list.head
-      if (
-        list(0).ma.ma5.compareTo(list(0).ma.ma10) >= 0          // 当前交易日，穿过5日线
+      if (filterPriceLimitUp(list.head)
+          && list(0).ma.ma5.compareTo(list(0).ma.ma10) >= 0          // 当前交易日，穿过5日线
           && list(1).ma.ma5.compareTo(list(1).ma.ma10) <= 0     //上一个交易日，还在5日线下
           && list(2).ma.ma5.compareTo(list(2).ma.ma10) <= 0     //前一个交易日，还在5日线下
           && new BigDecimal(head.turnover_rate).compareTo(BigDecimal(4)) >= 0   //换手率
