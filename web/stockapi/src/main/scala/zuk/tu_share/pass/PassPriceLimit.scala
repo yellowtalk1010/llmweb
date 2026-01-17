@@ -12,7 +12,7 @@ class PassPriceLimit extends IPass {
 
   override def handle(moduleDays: List[ModuleDay]): Unit = {
     moduleDays.filter(e=>StringUtils.isNotBlank(e.pre_close)).foreach(e=>{
-      val pl = e.priceLimit
+      val tradeDate = e.trade_date
       val preClose = e.pre_close //上一个交易日的收盘价
       val tscode = e.ts_code
 
@@ -34,7 +34,7 @@ class PassPriceLimit extends IPass {
    * 涨跌停，保留2位小数，第三位四舍五入
    */
   private def calPriceLimit(tucode: String, preClose: String): Tuple2[BigDecimal, BigDecimal] = {
-    val splits = tucode.split("\\\\.")
+    val splits = tucode.split("\\.")
     if(splits.size==2){
       if(splits.map(_.toUpperCase).filter(_.startsWith("BJ")).size>0){
         //北交所  ±30%
