@@ -3,6 +3,7 @@ package zuk.stock.test
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.Main
+import zuk.tu_share.CammandParam
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.module.HM_MOD.handule
 import zuk.tu_share.module.{HM_MOD, MA3_2_Model, MA3_3_Model}
@@ -19,6 +20,7 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
+    CammandParam.param.pwd = "huangliaofather"
     Main.backtest(path, 80)
     BackTest.analysis()
   }
