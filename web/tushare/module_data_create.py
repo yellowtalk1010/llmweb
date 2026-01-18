@@ -118,21 +118,27 @@ def create_module_date():
             print(e)
 
 
-# def limit():
-#     limit_path = "limit_list_d/data"
-#     if os.path.exists(limit_path):
-#       files = os.listdir(limit_path)
-#       files.sort(reverse=True)  # 使用 reverse=True 进行降序排序
-#       print(len(files))
-#       for file_name in files[:max]: # 取前120条
-#           file_path = os.path.join(limit_path, file_name)
-#           print(f"{file_path}, {os.path.exists(file_path)}")
-#           df = pd.read_csv(file_path, encoding="utf-8", header=None)
-#
-#
+def limit():
+    limit_path = "limit_list_d/data"
+    if os.path.exists(limit_path):
+        files = os.listdir(limit_path)
+        files.sort(reverse=True)  # 使用 reverse=True 进行降序排序
+        print(len(files))
+        df_list = []
+        for file_name in files[:max]: # 取前120条
+            file_path = os.path.join(limit_path, file_name)
+            print(f"{file_path}, {os.path.exists(file_path)}")
+            df = pd.read_csv(file_path, encoding="utf-8", header=None)
+            df_list.append(df)
+
+        if df_list:
+            combined_df = pd.concat(df_list, ignore_index=True)
+            print(f"合并完成，总行数: {len(combined_df)}")
+
 
 
 
 if __name__ == '__main__':
     # 创建分析数据
-    create_module_date()
+    # create_module_date()
+    limit()
