@@ -167,5 +167,5 @@ def limit():
 
 if __name__ == '__main__':
     # 创建分析数据
-    # create_module_date()
+    create_module_date()
     limit()
