@@ -142,14 +142,28 @@ def limit():
 
         if df_list:
             combined_df = pd.concat(df_list, ignore_index=True)
-            print(f"合并完成，总行数: {len(combined_df)}")
+            # print(f"合并完成，总行数: {len(combined_df)}")
             sorted_df = combined_df.sort_values(
                 by=['ts_code', 'trade_date'],
                 ascending=[True, False]
             ).reset_index(drop=True)
             print(f"排序完成，总行数: {len(sorted_df)}")
-
-
+            for index, row in sorted_df.iterrows():
+                ts_code = row['ts_code']
+                name = row['name']
+                trade_date = row['trade_date']
+                limit = row['limit']
+                # print(f"{ts_code}, {name}, {trade_date}, {limit}")
+                ts_code_path = ts_code.replace(".", "_")
+                module_file = f"{module_path}/{ts_code_path}.csv"
+                if os.path.exists(module_file):
+                    module_file_df = pd.read_csv(module_file, encoding="utf-8")
+                    # 查找 trade_date 等于当前日期的行
+                    mask = module_file_df['trade_date'] == trade_date
+                    if mask.sum() > 0 and limit == "Z":
+                        module_file_df.loc[mask, 'limit'] = limit
+                        module_file_df.to_csv(module_file, encoding='utf-8', index=False)
+                        print(f"{ts_code}, {name}, {trade_date}, {limit}")
 
 if __name__ == '__main__':
     # 创建分析数据
