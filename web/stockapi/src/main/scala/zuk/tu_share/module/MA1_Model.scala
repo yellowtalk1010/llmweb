@@ -31,6 +31,7 @@ class MA1_Model extends IModel {
           && list(1).high.toFloat > list(2).high.toFloat && list(1).vol.toFloat < list(2).vol.toFloat && list(1).change.toFloat > 0 //炸板次日价涨量缩
           && list(0).high.toFloat > list(1).high.toFloat  //
           && list(0).low.toFloat > list(1).low.toFloat    //
+          && list(0).vol.toFloat < list(1).vol.toFloat
         ) {
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
@@ -58,7 +59,7 @@ class MA1_Model extends IModel {
   }
 
   override def winRate: Float = {
-    0.8838
+    0.9296
   }
 
   override def reference: Float = 0.0
