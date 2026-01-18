@@ -117,7 +117,7 @@ def create_module_date():
         except Exception as e:
             print(e)
 
-
+# 写入炸板数据
 def limit():
     limit_path = "limit_list_d/data"
     if os.path.exists(limit_path):
