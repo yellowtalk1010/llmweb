@@ -46,7 +46,7 @@ class MA1_Model extends IModel {
       }
     }
     catch
-      case exception: Exception => exception.printStackTrace()
+      case exception: Exception => //exception.printStackTrace()
 
   }
 
