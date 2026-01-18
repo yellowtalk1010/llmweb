@@ -1,8 +1,9 @@
 package zuk.tu_share.module
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
 
-import java.math.BigDecimal
+import java.math.{BigDecimal, RoundingMode}
 /***
  * 中长持有
  *
@@ -22,6 +23,7 @@ class MA1_Model extends IModel {
     try {
       if (days.size > max && days.take(max).filter(_.limit.equals("Z")).size > 0) {
         val list = days.take(max)
+        val head = days.head
         if (
           filterPriceLimitUp(list.head)
           && list(2).limit.equals("Z") //炸板
@@ -32,11 +34,19 @@ class MA1_Model extends IModel {
         ) {
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+          if (StringUtils.isNotBlank(head.total_mv)) {
+            stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = new BigDecimal(head.change).setScale(2, RoundingMode.HALF_UP).floatValue()
+          }
+          else {
+            stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = new BigDecimal(days(1).change).setScale(2, RoundingMode.HALF_UP).floatValue()
+          }
         }
       }
     }
     catch
-      case exception: Exception =>
+      case exception: Exception => exception.printStackTrace()
 
   }
 
