@@ -15,23 +15,22 @@ import java.math.BigDecimal
  */
 class MA1_Model extends IModel {
 
-  val max = 10
+  val max = 3
   var stockDto: StockDto = _
 
   override def run(days: List[ModuleDay]): Unit = {
     try {
       if (days.size > max && days.take(max).filter(_.limit.equals("Z")).size > 0) {
         val maxDays = days.take(max)
-        val index = maxDays.indexWhere(_.limit.equals("Z"))
-        if (index >= 2) {
-          val maxDay = maxDays(index)
-          val maxDay_1 = maxDays(index - 1)
-          if (maxDay_1.high.toFloat > maxDay.high.toFloat //价涨
-            && maxDay_1.vol.toFloat < maxDay.vol.toFloat  //量缩
-          ) {
-            val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
-            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
-          }
+        if (
+          filterPriceLimitUp(list.head)
+          && maxDays(2).limit.equals("Z") //炸板
+          && maxDays(1).high.toFloat > maxDays(2).high.toFloat && maxDays(1).vol.toFloat < maxDays(2).vol.toFloat //炸板次日价涨量缩
+          && maxDays(0).high.toFloat > maxDays(1).high.toFloat  //
+          && maxDays(0).low.toFloat > maxDays(1).low.toFloat    //
+        ) {
+          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
+          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
       }
     }
