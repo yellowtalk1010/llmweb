@@ -28,7 +28,7 @@ class MA1_Model extends IModel {
           filterPriceLimitUp(list.head)
           && list(2).limit.equals("Z") //炸板
           && list(2).high.equals(list(2).priceLimit.priceLimitUp.toString) //炸板后，尾盘修复
-          && list(1).high.toFloat > list(2).high.toFloat && list(1).vol.toFloat < list(2).vol.toFloat //炸板次日价涨量缩
+          && list(1).high.toFloat > list(2).high.toFloat && list(1).vol.toFloat < list(2).vol.toFloat && list(1).change.toFloat > 0 //炸板次日价涨量缩
           && list(0).high.toFloat > list(1).high.toFloat  //
           && list(0).low.toFloat > list(1).low.toFloat    //
         ) {
@@ -54,7 +54,7 @@ class MA1_Model extends IModel {
   override def getStockDto(): StockDto = this.stockDto
 
   override def desc(): String = {
-    "中长持有，炸板角度"
+    "主力行为：1.炸板，2.次日缩量上涨；3.缩量上涨（尾盘买入）；4. 涨跌都必须卖出。因为如果下跌，会一直下跌。 "
   }
 
   override def winRate: Float = {
