@@ -25,6 +25,7 @@ class MA1_Model extends IModel {
         if (
           filterPriceLimitUp(list.head)
           && list(2).limit.equals("Z") //炸板
+          && list(2).high.equals(list(2).priceLimit.priceLimitUp.toString) //炸板后，尾盘修复
           && list(1).high.toFloat > list(2).high.toFloat && list(1).vol.toFloat < list(2).vol.toFloat //炸板次日价涨量缩
           && list(0).high.toFloat > list(1).high.toFloat  //
           && list(0).low.toFloat > list(1).low.toFloat    //
