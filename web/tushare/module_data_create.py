@@ -118,9 +118,18 @@ def create_module_date():
             print(e)
 
 
-def limit():
-    path = f"{module_path}"
-    print()
+# def limit():
+#     limit_path = "limit_list_d/data"
+#     if os.path.exists(limit_path):
+#       files = os.listdir(limit_path)
+#       files.sort(reverse=True)  # 使用 reverse=True 进行降序排序
+#       print(len(files))
+#       for file_name in files[:max]: # 取前120条
+#           file_path = os.path.join(limit_path, file_name)
+#           print(f"{file_path}, {os.path.exists(file_path)}")
+#           df = pd.read_csv(file_path, encoding="utf-8", header=None)
+#
+#
 
 
 
