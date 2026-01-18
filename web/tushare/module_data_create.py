@@ -98,7 +98,8 @@ def create_module_date():
             "area": area,                                               # 所在地区
             "industry": industry,                                       # 行业
             "market": market,                                           # 市场类型：主板、创业、科创、北交
-            "total_mv": daily_basic_df_top_max["total_mv"]              # 总市值
+            "total_mv": daily_basic_df_top_max["total_mv"],              # 总市值
+            "limit": "N"                                                 # U涨停，D跌停，Z炸版，N未处理
         })
 
         if(not os.path.exists(module_path)):
@@ -115,6 +116,12 @@ def create_module_date():
                 print("已经存在")
         except Exception as e:
             print(e)
+
+
+def limit():
+    path = f"{module_path}"
+    print()
+
 
 
 if __name__ == '__main__':
