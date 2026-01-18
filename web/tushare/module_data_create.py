@@ -128,13 +128,26 @@ def limit():
         for file_name in files[:max]: # 取前120条
             file_path = os.path.join(limit_path, file_name)
             print(f"{file_path}, {os.path.exists(file_path)}")
-            df = pd.read_csv(file_path, encoding="utf-8", header=None)
+            df = pd.read_csv(file_path, encoding="utf-8")
+            df_selected = df[['ts_code',
+                              'trade_date',
+                              'name',
+                              'open_times',     # 炸板次数
+                              'up_stat',        # 涨停统计
+                              'limit_times',    # 连板数
+                              'limit'           # D跌停U涨停Z炸板
+                              ]].copy()
+
             df_list.append(df)
 
         if df_list:
             combined_df = pd.concat(df_list, ignore_index=True)
             print(f"合并完成，总行数: {len(combined_df)}")
-
+            sorted_df = combined_df.sort_values(
+                by=['ts_code', 'trade_date'],
+                ascending=[True, False]
+            ).reset_index(drop=True)
+            print()
 
 
 
