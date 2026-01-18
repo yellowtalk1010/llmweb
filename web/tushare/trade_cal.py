@@ -4,6 +4,7 @@ import tushare as ts
 import ZukTuShare
 import download_daily
 import download_daily_basic
+import limit_list_d
 import time
 
 
@@ -39,7 +40,8 @@ def read_trade_cal():
             cal_date = row["cal_date"]
             print(cal_date)
             # download_daily.download_trade_date(str(cal_date))
-            download_daily_basic.download_trade_date(str(cal_date))
+            # download_daily_basic.download_trade_date(str(cal_date))
+            # limit_list_d.save_limit_list_d(cal_date)
             time.sleep(2)
 
 
