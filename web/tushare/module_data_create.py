@@ -127,7 +127,7 @@ def limit():
         df_list = []
         for file_name in files[:max]: # 取前120条
             file_path = os.path.join(limit_path, file_name)
-            print(f"{file_path}, {os.path.exists(file_path)}")
+            # print(f"{file_path}, {os.path.exists(file_path)}")
             df = pd.read_csv(file_path, encoding="utf-8")
             df_selected = df[['ts_code',
                               'trade_date',
