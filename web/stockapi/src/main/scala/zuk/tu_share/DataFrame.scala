@@ -98,6 +98,7 @@ object DataFrame {
         moduleDay.turnover_rate = record.get("turnover_rate")
         moduleDay.float_share = record.get("float_share")
         moduleDay.total_mv = record.get("total_mv")
+        moduleDay.limit = record.get("limit")
 
         moduleDay
       }).toList

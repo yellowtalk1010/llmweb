@@ -18,6 +18,7 @@ class ModuleDay {
   @BeanProperty var turnover_rate: String = _
   @BeanProperty var float_share: String = _
   @BeanProperty var total_mv: String = _
+  @BeanProperty var limit: String = "N"
 
   @BeanProperty var ma: MA = _
   @BeanProperty var priceLimit: PriceLimit = _
