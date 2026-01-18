@@ -21,13 +21,13 @@ class MA1_Model extends IModel {
   override def run(days: List[ModuleDay]): Unit = {
     try {
       if (days.size > max && days.take(max).filter(_.limit.equals("Z")).size > 0) {
-        val maxDays = days.take(max)
+        val list = days.take(max)
         if (
           filterPriceLimitUp(list.head)
-          && maxDays(2).limit.equals("Z") //炸板
-          && maxDays(1).high.toFloat > maxDays(2).high.toFloat && maxDays(1).vol.toFloat < maxDays(2).vol.toFloat //炸板次日价涨量缩
-          && maxDays(0).high.toFloat > maxDays(1).high.toFloat  //
-          && maxDays(0).low.toFloat > maxDays(1).low.toFloat    //
+          && list(2).limit.equals("Z") //炸板
+          && list(1).high.toFloat > list(2).high.toFloat && list(1).vol.toFloat < list(2).vol.toFloat //炸板次日价涨量缩
+          && list(0).high.toFloat > list(1).high.toFloat  //
+          && list(0).low.toFloat > list(1).low.toFloat    //
         ) {
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
