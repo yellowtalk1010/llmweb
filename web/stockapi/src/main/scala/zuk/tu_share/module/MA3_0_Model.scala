@@ -45,7 +45,7 @@ class MA3_0_Model extends IModel {
 
   override def desc(): String = "上穿MA5"
 
-  override def winRate: Float = 0.8390
+  override def winRate: Float = 0.8469
 
   override def reference: Float = 0.00
 }
