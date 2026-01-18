@@ -17,10 +17,12 @@ class MA1_Model extends IModel {
   var stockDto: StockDto = _
 
   override def run(days: List[ModuleDay]): Unit = {
-    if(days.size>max && days.take(max).filter(_.limit.equals("N")).size > 0){
+    if(days.size>max && days.take(max).filter(_.limit.equals("Z")).size > 0){
       val maxDays = days.take(max)
-      val index = maxDays.indexWhere(_.limit.equals("N"))
-      println()
+      val index = maxDays.indexWhere(_.limit.equals("Z"))
+      if(index >= 2){
+
+      }
     }
   }
 
