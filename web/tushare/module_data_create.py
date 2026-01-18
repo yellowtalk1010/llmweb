@@ -147,7 +147,7 @@ def limit():
                 by=['ts_code', 'trade_date'],
                 ascending=[True, False]
             ).reset_index(drop=True)
-            print()
+            print(f"排序完成，总行数: {len(sorted_df)}")
 
 
 
