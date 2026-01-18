@@ -168,4 +168,5 @@ def limit():
 if __name__ == '__main__':
     # 创建分析数据
     create_module_date()
+    # 写入炸板数据
     limit()
