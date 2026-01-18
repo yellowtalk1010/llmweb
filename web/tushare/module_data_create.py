@@ -138,7 +138,7 @@ def limit():
                               'limit'           # D跌停U涨停Z炸板
                               ]].copy()
 
-            df_list.append(df)
+            df_list.append(df_selected)
 
         if df_list:
             combined_df = pd.concat(df_list, ignore_index=True)
