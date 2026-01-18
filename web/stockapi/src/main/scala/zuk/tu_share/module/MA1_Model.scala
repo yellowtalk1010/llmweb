@@ -13,26 +13,17 @@ import java.math.BigDecimal
  */
 class MA1_Model extends IModel {
 
+  val max = 10
   var stockDto: StockDto = _
 
   override def run(days: List[ModuleDay]): Unit = {
-    if(days.size>=5){
-      if(filterPriceLimitUp(days.head)
-        && limitUpbreakout(days(4))
-
-      ){}
+    if(days.size>max && days.take(max).filter(_.limit.equals("N")).size > 0){
+      val maxDays = days.take(max)
+      val index = maxDays.indexWhere(_.limit.equals("N"))
+      println()
     }
   }
 
-  /***
-   * 涨停炸板
-   *
-   * 单独获取炸板数据？？？？
-   * */
-  private def limitUpbreakout(day: ModuleDay): Boolean = {
-    new BigDecimal(day.high).compareTo(day.priceLimit.priceLimitUp) == 0  //最高价涨停
-    && new BigDecimal(day.close).compareTo(new BigDecimal(day.high)) //收盘炸板
-  }
 
   override def getStockDto(): StockDto = this.stockDto
 
