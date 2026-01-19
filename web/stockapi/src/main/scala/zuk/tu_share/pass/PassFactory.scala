@@ -14,6 +14,8 @@ import java.util.Date
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
+import zuk.tu_share.CammandParam
+
 object PassFactory {
 
   private def moduleList(): List[IModel] = {
@@ -58,7 +60,7 @@ object PassFactory {
           doPass(moduleDayList)
           module.run(moduleDayList)
           count = count + 1
-          println(s"mod:${count}/${map.size * modules.size}")
+          println(s"mod:${CammandParam.param.back}:${count}/${map.size * modules.size}")
         }
         catch
           case exception: Exception => exception.printStackTrace()
