@@ -15,25 +15,20 @@ object Main {
 
     // 设置默认编码
     fixWindowsConsole()
-
-    if(args==null || args.size==0) {
-      println("path is empty.")
+    for (i <- 0 until args.size) {
+      val v = args(i).toLowerCase
+      v match
+        case "-path" =>
+          CammandParam.param.path = args(i+1)
+        case "-pwd" =>
+          CammandParam.param.pwd = args(i+1)
+        case "-back" =>
+          CammandParam.param.back = true
+        case "-back_step" =>
+          CammandParam.param.back_step = args(i+1).toInt
+        case _=>
     }
-    else {
-      for (i <- 0 until args.size) {
-        val v = args(i).toLowerCase
-        v match
-          case "-path" =>
-            CammandParam.param.path = args(i+1)
-          case "-pwd" =>
-            CammandParam.param.pwd = args(i+1)
-          case "-back" =>
-            CammandParam.param.back = true
-          case "-back_step" =>
-            CammandParam.param.back_step = args(i+1).toInt
-          case _=>
-      }
-    }
+     
     if(!LicenseUtil.checkPwd()){
       println("pwd err")
       System.exit(0)
