@@ -17,7 +17,7 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
 
   val path = "tushare"
   test("tushare-3"){
-    val args = Array(path)
+    val args = Array("-path", path, "-pwd", "huangliaofather")
     Main.main(args)
   }
 
