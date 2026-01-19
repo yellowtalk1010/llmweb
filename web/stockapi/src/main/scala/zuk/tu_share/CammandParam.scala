@@ -6,7 +6,7 @@ object CammandParam {
 
 class CammandParam {
   var path: String = "."
-  var pwd: String = null
+  var pwd: String = ""
   var back: Boolean = false
   var back_step: Int = 80
 
