@@ -66,7 +66,16 @@ class MA3_2_Model extends IModel {
 
   override def desc(): String = "反包两日阴线后继续下跌"
 
-  override def winRate: Float = 0.8883
+  override def winRate: Float = {
+
+    val v = DataFrame.properties.get(classOf[MA3_2_Model].getSimpleName.toUpperCase)
+    if (v != null) {
+      v.toString.toFloat
+    }
+    else {
+      0.8883
+    }
+  }
 
   override def reference: Float = 0.00
 

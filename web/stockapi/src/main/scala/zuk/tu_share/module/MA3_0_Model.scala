@@ -45,7 +45,15 @@ class MA3_0_Model extends IModel {
 
   override def desc(): String = "上穿MA5"
 
-  override def winRate: Float = 0.8469
+  override def winRate: Float = {
+    val v = DataFrame.properties.get(classOf[MA3_0_Model].getSimpleName.toUpperCase)
+    if (v != null) {
+      v.toString.toFloat
+    }
+    else {
+      0.8469
+    }
+  }
 
   override def reference: Float = 0.00
 }

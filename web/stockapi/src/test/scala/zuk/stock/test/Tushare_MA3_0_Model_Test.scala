@@ -10,6 +10,8 @@ import zuk.tu_share.module.{HM_MOD, MA3_2_Model, MA3_3_Model}
 
 import java.io.File
 
+import scala.jdk.CollectionConverters.*
+
 
 class Tushare_MA3_0_Model_Test extends AnyFunSuite {
 
@@ -20,9 +22,11 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
-    CammandParam.param.pwd = "huangliaofather"
-    Main.backtest(path, 80)
-    BackTest.analysis()
+//    CammandParam.param.pwd = "huangliaofather"
+//    Main.backtest(path, 80)
+//    BackTest.analysis()
+    val args = Array("-path", path, "-pwd", "huangliaofather", "-back", "-back_step", "80")
+    Main.main(args)
   }
 
   test("龙虎榜复盘") {
