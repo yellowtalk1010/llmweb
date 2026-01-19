@@ -23,7 +23,7 @@ object DataFrame {
   val properties = new Properties()
   val turnover = "turnover"
   val change = "change"
-  val config_properties = "tushare_config.properties"
+  val config_properties = "stock_config.properties"
 
   val STOCKS = new ListBuffer[TsStock]()
   val STOCKS_MAP= new mutable.HashMap[String, TsStock]()
@@ -240,7 +240,7 @@ object DataFrame {
               .multiply(new BigDecimal(properties.getProperty("change", "100").toFloat)))
               .divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
             rtk.change = change.toString
-            
+
             val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
             rtk.vol = vol.toString
 
