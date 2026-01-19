@@ -62,7 +62,6 @@ object Main {
       Locale.setDefault(Locale.CHINA)
     } catch {
       case e: Exception =>
-        e.printStackTrace()
     }
   }
 
