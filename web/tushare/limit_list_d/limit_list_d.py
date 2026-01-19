@@ -45,7 +45,7 @@ def download_limit_list_d(trade_date):
 
 def save_limit_list_d(trade_date):
     df = download_limit_list_d(trade_date)
-    df.to_csv(f"limit_list_d/data/{trade_date}_limit_list_d.csv")
+    df.to_csv(f"data/{trade_date}_limit_list_d.csv")
 
 # 获取炸板数据
 if __name__ == '__main__':
