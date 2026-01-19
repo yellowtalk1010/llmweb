@@ -49,5 +49,5 @@ def save_limit_list_d(trade_date):
 
 # 获取炸板数据
 if __name__ == '__main__':
-    trade_date = "20260116"
+    trade_date = ZukTuShare.analysis_trade_date
     save_limit_list_d(trade_date)
