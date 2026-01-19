@@ -1,5 +1,6 @@
 package zuk
 
+import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.{CammandParam, DataFrame}
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.LicenseUtil
@@ -26,6 +27,10 @@ object Main {
             CammandParam.param.path = args(i+1)
           case "-pwd" =>
             CammandParam.param.pwd = args(i+1)
+          case "-back" =>
+            CammandParam.param.back = true
+          case "-back_step" =>
+            CammandParam.param.back_step = args(i+1).toInt
           case _=>
       }
     }
@@ -34,8 +39,16 @@ object Main {
       System.exit(0)
     }
     println(s"path:${CammandParam.param.toString}")
-    val map = DataFrame.load(CammandParam.param.path)
-    PassFactory.doModule(map)
+    if (!CammandParam.param.back){
+      val map = DataFrame.load(CammandParam.param.path)
+      PassFactory.doModule(map)
+    }
+    else {
+      //回测
+      backtest(CammandParam.param.path, CammandParam.param.back_step)
+      BackTest.analysis()
+    }
+
 
   }
 
