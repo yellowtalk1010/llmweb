@@ -240,8 +240,11 @@ object DataFrame {
               .multiply(new BigDecimal(properties.getProperty("change", "100").toFloat)))
               .divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
             rtk.change = change.toString
+            
+            val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
+            rtk.vol = vol.toString
 
-            println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}")
+            println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
 
             dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
             count = count + 1
