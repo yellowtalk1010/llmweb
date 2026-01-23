@@ -22,9 +22,6 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
   }
 
   test("模型回测") {
-//    CammandParam.param.pwd = "huangliaofather"
-//    Main.backtest(path, 80)
-//    BackTest.analysis()
     val args = Array("-path", path, "-pwd", "huangliaofather", "-back", "-back_step", "80")
     Main.main(args)
   }
