@@ -64,14 +64,19 @@ object BackTest {
    * 保存到文件中
    */
   private def storeProperties() = {
+    var output: FileOutputStream = null
     try {
       import zuk.tu_share.DataFrame
-      val output = new FileOutputStream(DataFrame.config_properties)
+      output = new FileOutputStream(DataFrame.config_properties)
       DataFrame.properties.store(output, "stock config")
-      output.close()
     }
     catch
       case exception: Exception =>
+    finally {
+      if(output!=null){
+        output.close()
+      }
+    }
   }
 
   private def sendMail(htmlContent: String) = {
