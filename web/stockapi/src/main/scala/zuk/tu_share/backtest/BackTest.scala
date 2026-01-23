@@ -49,7 +49,7 @@ object BackTest {
         //计算胜率
         val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.size), 4, RoundingMode.UP)
         //胜率保存到properties中
-        zuk.tu_share.DataFrame.properties.put(clsName, victoryRate.toString)
+        zuk.tu_share.DataFrame.properties.put(clsName.toUpperCase, victoryRate.toString)
         val line = s"${clsName}胜率：${victoryRate}"
         lines += line
         println(line)
@@ -67,8 +67,10 @@ object BackTest {
     var output: FileOutputStream = null
     try {
       import zuk.tu_share.DataFrame
+      val sdf = new SimpleDateFormat("yyyy-MM-dd")
+      val dateStr = sdf.format(new Date())
       output = new FileOutputStream(DataFrame.config_properties)
-      DataFrame.properties.store(output, "stock config")
+      DataFrame.properties.store(output, s"${dateStr} stock config")
     }
     catch
       case exception: Exception =>
