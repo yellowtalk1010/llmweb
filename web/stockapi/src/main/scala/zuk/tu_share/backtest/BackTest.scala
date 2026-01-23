@@ -1,8 +1,10 @@
 package zuk.tu_share.backtest
 
+import zuk.tu_share.DataFrame.config_properties
 import zuk.tu_share.module.IModel
 import zuk.utils.SendMail
 
+import java.io.FileOutputStream
 import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -44,15 +46,32 @@ object BackTest {
 
         })
 
-        val line = s"${clsName}胜率：${new BigDecimal(victoryList.size).divide(new BigDecimal(ls.size), 4, RoundingMode.UP)}"
+        //计算胜率
+        val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.size), 4, RoundingMode.UP)
+        //胜率保存到properties中
+        zuk.tu_share.DataFrame.properties.put(clsName, victoryRate.toString)
+        val line = s"${clsName}胜率：${victoryRate}"
         lines += line
         println(line)
     })
 
-
+    storeProperties()
     sendMail(lines.mkString("<br>\n"))
 
+  }
 
+  /***
+   * 保存到文件中
+   */
+  private def storeProperties() = {
+    try {
+      import zuk.tu_share.DataFrame
+      val output = new FileOutputStream(DataFrame.config_properties)
+      DataFrame.properties.store(output, "stock config")
+      output.close()
+    }
+    catch
+      case exception: Exception =>
   }
 
   private def sendMail(htmlContent: String) = {

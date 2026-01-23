@@ -170,7 +170,7 @@ object DataFrame {
         val output = new FileOutputStream(config_properties)
         properties.put(turnover, "100")
         properties.put(change, "100")
-        properties.store(output, "tushare config")
+        properties.store(output, "stock config")
         output.close()
       }
       properties.load(new FileReader(configFile))
