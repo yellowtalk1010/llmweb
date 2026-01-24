@@ -9,7 +9,7 @@ import pandas as pd
 ALL_STOCK_BASICS_FILE = "all_stocks.csv"  #全部股票数据存放路径
 
 # 位置：数据接口->股票数据->基础数据->股票列表
-def stock_basic():
+def down_load_stock_basic():
 
     # 初始化pro接口
     pro = ts.pro_api(ZukTuShare.getPro_10000())
@@ -43,6 +43,6 @@ def stock_basic():
 
 if __name__ == '__main__':
     print("拉取全部股票数据")
-    df = stock_basic()
+    df = down_load_stock_basic()
     print("将股票存入" + ALL_STOCK_BASICS_FILE + "文件中")
     df.to_csv(ALL_STOCK_BASICS_FILE, index=False)
