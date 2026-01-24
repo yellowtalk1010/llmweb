@@ -3,7 +3,7 @@ import os
 import tushare as ts
 import pandas as pd
 import time
-
+from pathlib import Path
 
 import ZukTuShare
 
@@ -94,6 +94,7 @@ def download_trade_date(trade_date):
             ts_code = flat_row["ts_code"]
             ts_code_path = ts_code.replace(".", "_")
             year_file = f"{daily_path}/{ts_code_path}/{year}.csv"
+            Path(year_file).parent.mkdir(parents=True, exist_ok=True)
 
             if os.path.exists(year_file) is False:
                 print(f"{year_file}，文件不存在")
