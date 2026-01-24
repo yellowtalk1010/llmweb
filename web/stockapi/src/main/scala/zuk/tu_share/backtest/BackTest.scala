@@ -50,7 +50,7 @@ object BackTest {
         val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.size), 4, RoundingMode.UP)
         //胜率保存到properties中
         zuk.tu_share.DataFrame.properties.put(clsName.toUpperCase, victoryRate.toString)
-        val line = s"${clsName}胜率：${victoryRate}"
+        val line = s"${clsName}胜率：${victoryRate}, ${ls.head.desc()}"
         lines += line
         println(line)
     })
