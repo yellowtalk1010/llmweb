@@ -17,7 +17,7 @@ import download_stock_basic
 
 
 # 位置：数据接口->股票数据->行情数据->每日指标
-def daily_basic(ts_code, trade_date, start_date, end_date):
+def down_load_daily_basic(ts_code, trade_date, start_date, end_date):
     sleep(0.5)
     # 拉取数据
     # 初始化pro接口
@@ -64,7 +64,7 @@ def download_trade_date(trade_date):
 
     trade_date_path = daily_basic_path + "/" + trade_date + ".csv"
     if os.path.exists(trade_date_path) is False:
-        df = daily_basic("", trade_date, "", "")
+        df = down_load_daily_basic("", trade_date, "", "")
         df.to_csv(trade_date_path)
         print(f"写入成功，{trade_date_path}")
     else:
