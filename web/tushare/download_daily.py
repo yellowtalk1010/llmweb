@@ -98,6 +98,8 @@ def download_trade_date(trade_date):
 
             if os.path.exists(year_file) is False:
                 print(f"{year_file}，文件不存在")
+                df = down_load_daily(ts_code, "", "20260101", trade_date)
+                df.to_csv(year_file)
                 continue
 
             # print(f"读取{year_file}")
