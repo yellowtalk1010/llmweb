@@ -83,7 +83,7 @@ def download_trade_date(trade_date):
 
             if os.path.exists(year_file) is False:
                 print(f"{year_file}，文件不存在")
-                df = down_load_daily_basic(ts_code, "", "20260101", trade_date)
+                df = down_load_daily_basic(ts_code, "", ZukTuShare.analysis_trade_date_start, trade_date)
                 df.to_csv(year_file)
                 continue
 
