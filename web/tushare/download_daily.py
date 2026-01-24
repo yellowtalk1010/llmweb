@@ -9,7 +9,7 @@ import ZukTuShare
 
 daily_path = "daily"
 
-def daily(ts_code, trade_date, start_date, end_date):
+def down_load_daily(ts_code, trade_date, start_date, end_date):
     time.sleep(2)
     # 导入tushare
     # 初始化pro接口
@@ -80,7 +80,7 @@ def download_trade_date(trade_date):
     year = trade_date[0:4]
     path = f"{daily_path}/{trade_date}.csv"
     if os.path.exists(path) is False:
-        trade_date_df = daily("", trade_date, "", "")
+        trade_date_df = down_load_daily("", trade_date, "", "")
         trade_date_df.to_csv(path, index=False)
         print(f"{path}，写入成功")
     else:
