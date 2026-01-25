@@ -35,6 +35,12 @@ object PassFactory {
     )
   }
 
+  /***
+   * 模型分析
+   * @param map key是股票代码， list是分析数据
+   * @param backtestLenght 回测数据长度
+   * @return
+   */
   def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
 
     val finishModules = ListBuffer[IModel]()
