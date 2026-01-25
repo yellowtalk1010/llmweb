@@ -32,19 +32,17 @@ class MA3_1_Model extends IModel {
           && new BigDecimal(head.high).compareTo(new BigDecimal(list(1).high)) > 0
       ) {
         //缩量上涨
-        if(!head.name.contains("ST")){
-          //ST不推荐
-          val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
-          if (tsStock != null) {
-            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), changeUpRate)
-            if (StringUtils.isNotBlank(head.total_mv)) {
-              stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
-              stockDto.preChangeRate = new BigDecimal(head.change).setScale(2, RoundingMode.HALF_UP).floatValue()
-            }
-            else {
-              stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
-              stockDto.preChangeRate = new BigDecimal(days(1).change).setScale(2, RoundingMode.HALF_UP).floatValue()
-            }
+        //ST不推荐
+        val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
+        if (tsStock != null) {
+          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), changeUpRate)
+          if (StringUtils.isNotBlank(head.total_mv)) {
+            stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = new BigDecimal(head.change).setScale(2, RoundingMode.HALF_UP).floatValue()
+          }
+          else {
+            stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = new BigDecimal(days(1).change).setScale(2, RoundingMode.HALF_UP).floatValue()
           }
         }
 
