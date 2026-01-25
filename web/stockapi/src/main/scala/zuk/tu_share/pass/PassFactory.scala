@@ -80,7 +80,9 @@ object PassFactory {
 
     //todo 多模型推荐
     var moreModuleStr = filterModules.map(_.getStockDto().tsStock).groupBy(_.ts_code).filter(_._2.size>1).map(_._2.head).map(e=>{
-      e.ts_code + ", " + e.name
+      val href = e.getEastmoneyURL()
+      val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
+      e.ts_code + ", " + name_href
     }).mkString("<br><br>\n\n")
     moreModuleStr = "多模型推荐<br><br>\n\n" + moreModuleStr
 
