@@ -2,6 +2,13 @@ package zuk.tu_share.dto
 
 import scala.beans.BeanProperty
 
+object ModuleDay {
+  val N = "N" //默认
+  val U = "U" //涨停
+  val D = "D" //跌停
+  val Z = "Z" //炸板
+}
+
 class ModuleDay {
 
   @BeanProperty var ts_code: String = _
@@ -18,7 +25,7 @@ class ModuleDay {
   @BeanProperty var turnover_rate: String = _
   @BeanProperty var float_share: String = _
   @BeanProperty var total_mv: String = _
-  @BeanProperty var limit: String = "N"
+  @BeanProperty var limit: String = ModuleDay.N   //D跌停，U涨停，Z炸板
 
   @BeanProperty var ma: MA = _
   @BeanProperty var priceLimit: PriceLimit = _

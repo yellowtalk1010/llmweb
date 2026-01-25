@@ -21,7 +21,7 @@ class MA1_Model extends IModel {
 
   override def run(days: List[ModuleDay]): Unit = {
     try {
-      if (days.size > max && days.take(max).filter(_.limit.equals("Z")).size > 0) {
+      if (days.size > max && days.take(max).filter(_.limit.equals(ModuleDay.Z)).size > 0) {
         val list = days.take(max)
         val head = days.head
         if (
