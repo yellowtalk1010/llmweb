@@ -11,10 +11,11 @@ class MA3_0_Model extends IModel {
   var stockDto: StockDto = _
 
   override def run(days: List[ModuleDay]): Unit = {
-    if(days.size>=3){
-      val list = days.take(3)
+    if(days.size>30){
+      val list = days.take(30)
       val head = list.head
       if (filterPriceLimitUp(list.head)
+          && list.filter(e=>e.limit.equals("Z") || e.limit.equals("U")).size > 0
           && list(0).ma.ma5.compareTo(list(0).ma.ma10) >= 0          // 当前交易日，穿过5日线
           && list(1).ma.ma5.compareTo(list(1).ma.ma10) <= 0     //上一个交易日，还在5日线下
           && list(2).ma.ma5.compareTo(list(2).ma.ma10) <= 0     //前一个交易日，还在5日线下
