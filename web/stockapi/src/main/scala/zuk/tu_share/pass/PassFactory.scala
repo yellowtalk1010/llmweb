@@ -79,12 +79,13 @@ object PassFactory {
     val filterModules = finishModules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
 
     //todo 多模型推荐
-    val moreModuleStr = filterModules.map(_.getStockDto().tsStock).groupBy(_.ts_code).filter(_._2.size>1).map(_._2.head).map(e=>{
+    var moreModuleStr = filterModules.map(_.getStockDto().tsStock).groupBy(_.ts_code).filter(_._2.size>1).map(_._2.head).map(e=>{
       e.ts_code + ", " + e.name
     }).mkString("<br><br>\n\n")
+    moreModuleStr = "多模型推荐<br><br>\n\n" + moreModuleStr
 
     //todo 各模型推荐
-    val singleModuleStr = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
+    var singleModuleStr = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
       val moduleName = tp2._1
       val moduleList = tp2._2
 
@@ -109,6 +110,7 @@ object PassFactory {
 
       htmlContent
     }).mkString("<br><br>\n\n")
+    singleModuleStr = "单模型推荐<br><br>\n\n" +  singleModuleStr
 
     if(backtestLenght==0 && LicenseUtil.check()){
       sendMail(moreModuleStr + singleModuleStr)
