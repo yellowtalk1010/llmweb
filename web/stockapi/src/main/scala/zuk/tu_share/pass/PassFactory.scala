@@ -87,19 +87,14 @@ object PassFactory {
       val stockDtos = moduleList.map(_.getStockDto())
 
       if(LicenseUtil.check()){
+        //如果许可通过，则打印出结果
         println(moduleName)
         println(stockDtos.map(_.tsStock).map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
       }
 
       var htmlContent = stockDtos.toList.sortBy(_.turnoverRate).reverse.map(dto => {
         val e = dto.tsStock
-        val splits = e.ts_code.split("\\.")
-        val href = if(splits(1).toUpperCase.contains("BJ")){
-          s"https://quote.eastmoney.com/${splits(1)}/${splits(0)}.html"
-        }
-        else {
-          s"https://quote.eastmoney.com/${splits(1)}${splits(0)}.html"
-        }
+        val href = e.getEastmoneyURL()
         val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
         s"${e.ts_code}, ${name_href}, ${e.area}，${e.industry}, ${dto.limitUp}, ${dto.limitDown}, ${dto.turnoverRate}活跃"
       }).mkString("\n<br><br>\n")
