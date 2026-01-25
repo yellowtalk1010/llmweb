@@ -113,7 +113,7 @@ object PassFactory {
     singleModuleStr = "单模型推荐<br><br>\n\n" +  singleModuleStr
 
     if(backtestLenght==0 && LicenseUtil.check()){
-      sendMail(moreModuleStr + singleModuleStr)
+      sendMail(moreModuleStr + "<br><br>\n\n" + singleModuleStr)
     }
 
   }
