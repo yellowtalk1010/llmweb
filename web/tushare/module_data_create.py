@@ -160,7 +160,7 @@ def limit():
                     module_file_df = pd.read_csv(module_file, encoding="utf-8")
                     # 查找 trade_date 等于当前日期的行
                     mask = module_file_df['trade_date'] == trade_date
-                    if mask.sum() > 0 and limit == "Z":
+                    if mask.sum() > 0:
                         module_file_df.loc[mask, 'limit'] = limit
                         module_file_df.to_csv(module_file, encoding='utf-8', index=False)
                         print(f"{ts_code}, {name}, {trade_date}, {limit}")
