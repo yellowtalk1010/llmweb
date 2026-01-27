@@ -61,7 +61,7 @@ trait IModel {
       }
     }
     catch
-      case exception: Exception => "0/0跌次"
+      case exception: Exception => "0/0跌"
   }
 
   def changeUpRate(days: List[ModuleDay]): Float = {
