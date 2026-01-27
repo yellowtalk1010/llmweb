@@ -17,12 +17,12 @@ object Main {
     fixWindowsConsole()
     //参数解析
     CammandParam.parse(args)
+    println(s"path:${CammandParam.param.toString}")
     //许可密码校验
     if(!LicenseUtil.checkPwd()){
       println("pwd err")
       System.exit(0)
     }
-    println(s"path:${CammandParam.param.toString}")
     if (CammandParam.param.back){
       //回测
       backtest(CammandParam.param.path, CammandParam.param.back_step)
