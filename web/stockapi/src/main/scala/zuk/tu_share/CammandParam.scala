@@ -9,8 +9,9 @@ class CammandParam {
   var pwd: String = ""
   var back: Boolean = false
   var back_step: Int = 80
+  var json: Boolean = false
 
   override def toString: String = {
-    s"CammandParam=path:${path}, pwd:******, back: ${back}, back_step:${back_step}"
+    s"CammandParam=path:${path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}"
   }
 }

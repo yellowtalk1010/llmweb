@@ -26,6 +26,8 @@ object Main {
           CammandParam.param.back = true
         case "-back_step" =>
           CammandParam.param.back_step = args(i+1).toInt
+        case "-json" =>
+          CammandParam.param.json = true
         case _=>
     }
      

@@ -3,8 +3,8 @@ package zuk.tu_share.pass
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
 import zuk.tu_share.backtest.BackTest
-import zuk.tu_share.dto.{ModuleDay, TsStock}
-import zuk.tu_share.module.{IModel, MA3_0_Model, MA3_1_Model, MA3_2_Model, MA3_3_Model, MA1_Model}
+import zuk.tu_share.dto.{ModuleDay, RecommendResult, TsStock}
+import zuk.tu_share.module.{IModel, MA1_Model, MA3_0_Model, MA3_1_Model, MA3_2_Model, MA3_3_Model}
 import zuk.tu_share.utils.LicenseUtil
 import zuk.utils.SendMail
 
@@ -13,8 +13,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-
 import zuk.tu_share.CammandParam
+
+import scala.jdk.CollectionConverters.*
 
 object PassFactory {
 
@@ -99,6 +100,11 @@ object PassFactory {
         //如果许可通过，则打印出结果
         println(moduleName)
         println(stockDtos.map(_.tsStock).map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
+
+        if(!CammandParam.param.back && CammandParam.param.json){
+          RecommendResult.results.addAll(stockDtos.asJava) //收集全部数据
+        }
+
       }
 
       var htmlContent = stockDtos.toList.sortBy(_.turnoverRate).reverse.map(dto => {
