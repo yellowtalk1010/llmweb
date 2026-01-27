@@ -17,7 +17,7 @@ object Main {
     fixWindowsConsole()
     //参数解析
     CammandParam.parse(args)
-     
+    //许可密码校验
     if(!LicenseUtil.checkPwd()){
       println("pwd err")
       System.exit(0)
