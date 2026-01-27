@@ -23,17 +23,17 @@ object Main {
       System.exit(0)
     }
     println(s"path:${CammandParam.param.toString}")
-    if (!CammandParam.param.back){
-      val map = DataFrame.load(CammandParam.param.path)
-      PassFactory.doModule(map)
-    }
-    else {
+    if (CammandParam.param.back){
       //回测
       backtest(CammandParam.param.path, CammandParam.param.back_step)
       BackTest.analysis()
     }
-
-
+    else {
+      //分析
+      val map = DataFrame.load(CammandParam.param.path)
+      PassFactory.doModule(map)
+    }
+    
   }
 
   def backtest(path: String, days: Int): Unit = {
