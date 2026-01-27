@@ -37,5 +37,7 @@ if __name__ == '__main__':
     print("游资交易每日明细")
     trade_date = ZukTuShare.analysis_trade_date
     df = download_hm_detail(trade_date)
-    df.to_csv(f"hm_detail/hm_detail-{trade_date}.csv", encoding="utf-8", index=False)
+    path = f"hm_detail/hm_detail-{trade_date}.csv"
+    print(path)
+    df.to_csv(f"{path}", encoding="utf-8", index=False)
     print("完成")
