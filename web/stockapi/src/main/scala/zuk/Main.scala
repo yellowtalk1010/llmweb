@@ -33,7 +33,7 @@ object Main {
       val map = DataFrame.load(CammandParam.param.path)
       PassFactory.doModule(map)
     }
-    
+
   }
 
   def backtest(path: String, days: Int): Unit = {
