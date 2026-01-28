@@ -40,22 +40,9 @@ class Email extends ISend {
       val moduleName = tp2._1
       val moduleList = tp2._2
 
-      BackTest.backTestList ++= moduleList  //收集回测数据
-
       val stockDtos = moduleList.map(_.getStockDto())
 
-      if(LicenseUtil.check()){
-        //如果许可通过，则打印出结果
-        println(moduleName)
-        println(stockDtos.map(_.tsStock).map(e => s"${e.ts_code}, ${e.name}").mkString("\n"))
-
-        if(!CammandParam.param.back && CammandParam.param.json){
-          RecommendResult.results.addAll(stockDtos.asJava) //收集全部数据
-        }
-
-      }
-
-      var htmlContent = stockDtos.toList.sortBy(_.turnoverRate).reverse.map(dto => {
+      var htmlContent = stockDtos.sortBy(_.turnoverRate).reverse.map(dto => {
         val e = dto.tsStock
         val href = e.getEastmoneyURL()
         val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
