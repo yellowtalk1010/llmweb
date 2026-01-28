@@ -42,9 +42,9 @@ class JsonFile extends ISend {
         map.put("area", area)
         map.put("industry", industry)
 
-        val modWinRate = list.head.winRate //模型胜率
-        val modDesc = list.head.desc()    //模型描述
-        val modClsName = list.head.getClass.getSimpleName.toUpperCase //模型代码
+        val modWinRate = m.winRate //模型胜率
+        val modDesc = m.desc()    //模型描述
+        val modClsName = m.getClass.getSimpleName.toUpperCase //模型代码
 
         map.put("modWinRate", s"${modWinRate}")
         map.put("modDesc", modDesc)
@@ -55,7 +55,7 @@ class JsonFile extends ISend {
 
       val json = JSONObject.toJSONString(arr, Feature.PrettyFormat)
       val sdf = new SimpleDateFormat("yyyyMMdd_HHmmss")
-      val filepath = s"json/${sdf.format(new Date)}"
+      val filepath = s"json/${sdf.format(new Date)}.json"
       FileUtils.write(new File(filepath), json, "UTF-8")
     }
     catch
