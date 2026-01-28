@@ -73,14 +73,13 @@ object PassFactory {
         catch
           case exception: Exception => exception.printStackTrace()
       })
-      finishModules ++= modules
+      finishModules ++= modules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
     })
 
     println("完成模型分析")
-    val filterModules = finishModules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
 
     //todo 多模型推荐
-    var moreModuleStr = filterModules.map(_.getStockDto().tsStock).groupBy(_.ts_code).filter(_._2.size>1).map(_._2.head).map(e=>{
+    var moreModuleStr = finishModules.map(_.getStockDto().tsStock).groupBy(_.ts_code).filter(_._2.size>1).map(_._2.head).map(e=>{
       val href = e.getEastmoneyURL()
       val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
       e.ts_code + ", " + name_href
@@ -88,7 +87,7 @@ object PassFactory {
     moreModuleStr = "多模型推荐<br><br>\n\n" + moreModuleStr
 
     //todo 各模型推荐
-    var singleModuleStr = filterModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
+    var singleModuleStr = finishModules.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
       val moduleName = tp2._1
       val moduleList = tp2._2
 
