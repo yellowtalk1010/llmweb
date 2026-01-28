@@ -1,9 +1,9 @@
 package zuk.tu_share.send
 
-import zuk.tu_share.module.StockDto
+import zuk.tu_share.module.IModel
 
 trait ISend {
 
-  def doSend(list: List[StockDto]): Unit
+  def doSend(list: List[IModel]): Unit
 
 }
