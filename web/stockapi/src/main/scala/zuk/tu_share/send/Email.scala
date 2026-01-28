@@ -1,8 +1,6 @@
 package zuk.tu_share.send
 
 import zuk.tu_share.CammandParam
-import zuk.tu_share.backtest.BackTest
-import zuk.tu_share.dto.RecommendResult
 import zuk.tu_share.module.IModel
 import zuk.tu_share.utils.LicenseUtil
 import zuk.utils.SendMail
