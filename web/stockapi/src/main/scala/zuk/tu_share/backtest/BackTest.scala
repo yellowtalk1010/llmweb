@@ -1,5 +1,6 @@
 package zuk.tu_share.backtest
 
+import zuk.tu_share.DataFrame
 import zuk.tu_share.DataFrame.config_properties
 import zuk.tu_share.module.IModel
 import zuk.utils.SendMail
@@ -27,7 +28,16 @@ object BackTest {
         val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse
           .filter(mod=>{
             if(mod.sells.size==0){
-              val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, 【未交易】"
+              val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
+              val name = if(!tsStock.isEmpty){
+                val url = tsStock.get.getEastmoneyURL()
+                val href = s"<a href='${url}'>${mod.buy.name}</a>"
+                href
+              }
+              else {
+                mod.buy.name
+              }
+              val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, 【未交易】"
               lines += line
             }
             mod.sells.size>0
@@ -46,7 +56,17 @@ object BackTest {
 
             val ok = if (st) "" else "X"
 
-            val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
+            val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
+            val name = if (!tsStock.isEmpty) {
+              val url = tsStock.get.getEastmoneyURL()
+              val href = s"<a href='${url}'>${mod.buy.name}</a>"
+              href
+            }
+            else {
+              mod.buy.name
+            }
+
+            val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
             lines += line
             println(line)
 
