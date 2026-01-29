@@ -6,7 +6,7 @@ import zuk.tu_share.module.IModel
 /***
  * 收集回测数据
  */
-class BackTest extends ISend {
+class ToBackTest extends ISend {
 
   override def doSend(list: List[IModel]): Unit = {
 

@@ -16,7 +16,8 @@ object ISendFactory {
     List(
       new Console,
       new Email,
-      new JsonFile
+      new JsonFile,
+      new ToBackTest,
     )
   }
 

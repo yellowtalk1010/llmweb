@@ -25,7 +25,12 @@ object Main {
     }
     if (CammandParam.param.back){
       //回测
-      backtest(CammandParam.param.path, CammandParam.param.back_step)
+      val map = DataFrame.load(CammandParam.param.path)
+      for (i <- 1 to CammandParam.param.back_step) {
+        PassFactory.doModule(map, i)
+        println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
+      }
+
       BackTest.analysis()
     }
     else {
@@ -36,15 +41,6 @@ object Main {
 
   }
 
-  def backtest(path: String, days: Int): Unit = {
-    val map = DataFrame.load(path)
-
-    for(i <- 1 to days) {
-      PassFactory.doModule(map,i)
-      println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
-    }
-
-  }
 
   private def fixWindowsConsole(): Unit = {
     try {
