@@ -24,30 +24,38 @@ object BackTest {
       .foreach(e=>{
         val clsName = e._1
         val ls = e._2
-        val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse.filter(mod => {
-
-          var st = false
-          val preClose = mod.sells.head.pre_close
-          val highStr = mod.sells.map(e => {
-            val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
-            if(change.compareTo(new BigDecimal(0.45)) >=0){
-              st = true //算入手续费
+        val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse
+          .filter(mod=>{
+            if(mod.sells.size==0){
+              val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, 【未交易】"
+              lines += line
             }
-            s"${e.trade_date}【${change}】【卖出】"
-          }).mkString(", ")
+            mod.sells.size>0
+          })
+          .filter(mod => {
 
-          val ok = if (st) "" else "X"
+            var st = false
+            val preClose = mod.sells.head.pre_close
+            val highStr = mod.sells.map(e => {
+              val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
+              if(change.compareTo(new BigDecimal(0.45)) >=0){
+                st = true //算入手续费
+              }
+              s"${e.trade_date}【${change}】【卖出】"
+            }).mkString(", ")
 
-          val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
-          lines += line
-          println(line)
+            val ok = if (st) "" else "X"
 
-          st
+            val line = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
+            lines += line
+            println(line)
 
-        })
+            st
+
+          })
 
         //计算胜率
-        val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.size), 4, RoundingMode.UP)
+        val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.filter(_.sells.size>0).size), 4, RoundingMode.UP)
         //胜率保存到properties中
         zuk.tu_share.DataFrame.properties.put(clsName.toUpperCase, victoryRate.toString)
         val line = s"${clsName}胜率：${victoryRate}, ${ls.head.desc()}"

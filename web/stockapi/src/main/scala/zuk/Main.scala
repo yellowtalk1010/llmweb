@@ -26,7 +26,7 @@ object Main {
     if (CammandParam.param.back){
       //回测
       val map = DataFrame.load(CammandParam.param.path)
-      for (i <- 1 to CammandParam.param.back_step) {
+      for (i <- 0 to CammandParam.param.back_step) {
         PassFactory.doModule(map, i)
         println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
       }
