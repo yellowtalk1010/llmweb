@@ -1,7 +1,7 @@
 import tushare as ts
 
 analysis_trade_date_start = "20260101"
-analysis_trade_date = "20260129"
+analysis_trade_date = "20260130"
 
 def getPro():
     return getPro_5000()
