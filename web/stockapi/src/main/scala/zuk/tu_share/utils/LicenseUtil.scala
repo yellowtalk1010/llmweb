@@ -9,7 +9,7 @@ object LicenseUtil {
 
   def checkDate(): Boolean = {
     try {
-      val start = 20260125
+      val start = 20260131
       val cur = new SimpleDateFormat("yyyyMMdd").format(new Date()).toInt
       val end = 20260216
       val st = start <= cur && cur <= end
