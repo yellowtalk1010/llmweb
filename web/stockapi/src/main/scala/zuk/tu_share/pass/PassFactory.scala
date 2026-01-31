@@ -75,7 +75,7 @@ object PassFactory {
           doPass(moduleDayList)
           module.run(moduleDayList)
           count = count + 1
-          println(s"mod:${CammandParam.param.back.toString.substring(0,1)}:${count}/${map.size * modules.size}")
+          println(s"mod:${CammandParam.param.back.toString.substring(0,1)}:${backtestLenght}:${count}/${map.size * modules.size}")
         }
         catch
           case exception: Exception => exception.printStackTrace()
