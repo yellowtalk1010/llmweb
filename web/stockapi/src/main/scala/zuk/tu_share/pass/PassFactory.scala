@@ -14,6 +14,7 @@ object PassFactory {
   private def moduleList(): List[IModel] = {
     List(
         new MA1_Model,
+        new MA1_1_Model,
         new MA3_0_Model,
         new MA3_1_Model,
         new MA3_2_Model,
