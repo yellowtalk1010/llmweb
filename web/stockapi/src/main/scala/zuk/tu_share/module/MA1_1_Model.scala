@@ -35,6 +35,8 @@ class MA1_1_Model extends IModel {
         if ((ListOrderCheck.isIncreasing(zList.map(_.close.toFloat))
           || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))
           || zList(0).high.toFloat > zList(1).close.toFloat) //炸板收盘价递增
+          && zList(0).vol.toFloat < zList(1).vol.toFloat
+          && list(0).vol.toFloat < zList(0).vol.toFloat
           && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
           && list.head.close.toFloat > list.head.pre_close.toFloat //收盘价大于昨收价格
         ) {
