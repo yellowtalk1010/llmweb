@@ -13,14 +13,15 @@ import java.math.{BigDecimal, RoundingMode}
 class MA1_1_Model extends IModel {
 
   var stockDto: StockDto = null
+  var max = 6
 
   override def run(days: List[ModuleDay]): Unit = {
-    if(days.size > 10){
+    if(days.size > max){
       val head = days.head
-      val list = days.take(10)
+      val list = days.take(max)
       val zList = list.filter(_.limit.equals(ModuleDay.Z)) //炸板次数
       if(zList.size>=2 //多个次炸板
-        && (ListOrderCheck.isIncreasing(zList.map(_.close.toFloat)) || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))) //炸板收盘价递增
+        && (ListOrderCheck.isIncreasing(zList.map(_.close.toFloat)) || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat)) || zList(0).high.toFloat > zList(1).close.toFloat) //炸板收盘价递增
         && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
         && list.head.close.toFloat > list.head.pre_close.toFloat //收盘价大于昨收价格
       ){
