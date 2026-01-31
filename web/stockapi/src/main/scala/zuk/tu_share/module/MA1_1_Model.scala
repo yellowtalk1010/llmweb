@@ -14,7 +14,7 @@ class MA1_1_Model extends IModel {
 
   var reason: String = ""
   var stockDto: StockDto = null
-  var max = 10
+  var max = 6
 
   override def buyReason(): String = reason
 
@@ -28,12 +28,18 @@ class MA1_1_Model extends IModel {
       if(zhaBanIndexList.size>=2  //多个次炸板
         && Math.abs(zhaBanIndexList(0)._2 - zhaBanIndexList(1)._2) > 1 //但不能是连续炸板
       ){
-        val middleList = list.slice(zhaBanIndexList(0)._2 + 1, zhaBanIndexList(1)._2)
+        val middleList = list.slice(zhaBanIndexList(0)._2 + 1, zhaBanIndexList(1)._2) //最近两次炸板中间的数据
 
 
         val zList = zhaBanIndexList.map(_._1) //炸板列表
- 
+
         if (middleList.filter(e=>List(ModuleDay.D, ModuleDay.U).contains(e.limit)).size==0 //炸板中间不能出现涨停、跌停
+          && middleList.map(_.high.toFloat).max < zList.map(_.high.toFloat).max
+          && middleList.map(_.low.toFloat).min > zList.map(_.low.toFloat).min
+          && middleList.map(_.vol.toFloat).max < zList.map(_.vol.toFloat).min
+          && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
+          && list(0).vol.toFloat < zList.map(_.vol.toFloat).min
+
 //          (ListOrderCheck.isIncreasing(zList.map(_.close.toFloat))
 //          || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))
 //                  zList(0).high.toFloat > zList(1).close.toFloat)
