@@ -30,7 +30,6 @@ class MA1_1_Model extends IModel {
       ){
         val middleList = list.slice(zhaBanIndexList(0)._2 + 1, zhaBanIndexList(1)._2) //最近两次炸板中间的数据
 
-
         val zList = zhaBanIndexList.map(_._1) //炸板列表
 
         if (middleList.filter(e=>List(ModuleDay.D, ModuleDay.U).contains(e.limit)).size==0 //炸板中间不能出现涨停、跌停
