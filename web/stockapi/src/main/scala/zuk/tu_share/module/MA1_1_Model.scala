@@ -3,6 +3,7 @@ package zuk.tu_share.module
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.utils.ListOrderCheck
 
 import java.math.{BigDecimal, RoundingMode}
 
@@ -19,6 +20,7 @@ class MA1_1_Model extends IModel {
       val list = days.take(10)
       val zList = list.filter(_.limit.equals(ModuleDay.Z)) //炸板次数
       if(zList.size>=2 //多个次炸板
+        && (ListOrderCheck.isIncreasing(zList.map(_.close.toFloat)) || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))) //炸板收盘价递增
         && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
         && list.head.close.toFloat > list.head.pre_close.toFloat //收盘价大于昨收价格
       ){
