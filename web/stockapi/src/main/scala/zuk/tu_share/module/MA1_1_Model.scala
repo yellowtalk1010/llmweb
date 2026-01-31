@@ -12,8 +12,11 @@ import java.math.{BigDecimal, RoundingMode}
  */
 class MA1_1_Model extends IModel {
 
+  var reason: String = ""
   var stockDto: StockDto = null
-  var max = 6
+  var max = 10
+
+  override def buyReason(): String = reason
 
   override def run(days: List[ModuleDay]): Unit = {
     if(days.size > max){
@@ -27,6 +30,7 @@ class MA1_1_Model extends IModel {
         && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
         && list.head.close.toFloat > list.head.pre_close.toFloat //收盘价大于昨收价格
       ){
+        reason = zList.map(_.trade_date).mkString("至")
         val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
         stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         if (StringUtils.isNotBlank(head.total_mv)) {
