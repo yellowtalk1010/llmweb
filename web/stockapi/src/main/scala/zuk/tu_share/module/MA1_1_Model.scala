@@ -26,7 +26,7 @@ class MA1_1_Model extends IModel {
       val zhaBanIndexList = list.zipWithIndex.filter(_._1.limit.equals("Z"))
 
       if(zhaBanIndexList.size>=2  //多个次炸板
-        && Math.abs(zhaBanIndexList(0)._2 - zhaBanIndexList(1)._2) > 1 //但不能是连续炸板
+//        && Math.abs(zhaBanIndexList(0)._2 - zhaBanIndexList(1)._2) > 1 //但不能是连续炸板
         && list.slice(zhaBanIndexList(0)._2, zhaBanIndexList(1)._2).filter(e=>e.limit.equals(ModuleDay.U) || e.limit.equals(ModuleDay.D)).size==0 //中间不能存在涨停、跌停
       ){
 
@@ -37,9 +37,9 @@ class MA1_1_Model extends IModel {
 //          || zList(0).high.toFloat > zList(1).close.toFloat
           ) //炸板收盘价递增
 //          && zList(0).vol.toFloat < zList(1).vol.toFloat
-          && list(0).vol.toFloat < zList(0).vol.toFloat
-          && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
-          && list.head.close.toFloat > list.head.pre_close.toFloat //收盘价大于昨收价格
+//          && list(0).vol.toFloat < zList(0).vol.toFloat
+//          && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
+//          && list.head.close.toFloat > list.head.pre_close.toFloat //收盘价大于昨收价格
         ) {
           reason = zList.reverse.map(_.trade_date).mkString("至")
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
