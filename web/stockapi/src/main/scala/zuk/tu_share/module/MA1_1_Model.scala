@@ -38,26 +38,8 @@ class MA1_1_Model extends IModel {
           && middleList.map(_.low.toFloat).min > zList.map(_.low.toFloat).min
           && middleList.map(_.vol.toFloat).max < zList.map(_.vol.toFloat).min
           && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
-          && list(0).vol.toFloat < zList.map(_.vol.toFloat).min
-
-//          (ListOrderCheck.isIncreasing(zList.map(_.close.toFloat))
-//          || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))
-//                  zList(0).high.toFloat > zList(1).close.toFloat)
-          && true)
-          if ((
-            //          ListOrderCheck.isIncreasing(zList.map(_.close.toFloat))
-            //          || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))
-            //          ||
-//            zList(0).high.toFloat > zList(1).close.toFloat
-//              && zList(0).close.toFloat > zList(1).open.toFloat
-              true
-            ) //炸板收盘价递增
-            //          && zList(0).vol.toFloat < zList(1).vol.toFloat
-            //          && list(0).vol.toFloat < zList(0).vol.toFloat
-            //          && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
-//            && list(1).limit.equals(ModuleDay.Z) //上一个交易日炸板
-          //          && list.head.close.toFloat > list.head.pre_close.toFloat //收盘价大于昨收价格
-          ) {
+          && list(0).vol.toFloat < zList.map(_.vol.toFloat).min //缩量
+        ) {
             reason = zList.reverse.map(_.trade_date).mkString("至")
             val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
             stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
