@@ -37,8 +37,8 @@ class MA1_1_Model extends IModel {
           && middleList.map(_.low.toFloat).min > zList.map(_.low.toFloat).min
           && middleList.map(_.vol.toFloat).max < zList.map(_.vol.toFloat).min
           && (list(1).limit.equals(ModuleDay.Z) || list(1).limit.equals(ModuleDay.U))//上一个交易日炸板
-          && list(0).vol.toFloat < list(1).vol.toFloat
-          && list(0).change.toFloat > 0
+//          && list(0).vol.toFloat < list(1).vol.toFloat
+//          && list(0).change.toFloat > 0
         ) {
             reason = zList.reverse.map(_.trade_date).mkString("至")
             val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
@@ -61,7 +61,7 @@ class MA1_1_Model extends IModel {
   override def getStockDto(): StockDto = this.stockDto
 
   override def desc(): String = {
-    "合力炸板，主力强势介入，缩量上涨（直接买入）"
+    "合力炸板，主力强势介入，缩量上涨更好"
   }
 
   override def winRate: Float = 0.0
