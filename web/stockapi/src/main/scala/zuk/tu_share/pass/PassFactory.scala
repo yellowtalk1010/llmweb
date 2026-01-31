@@ -75,7 +75,10 @@ object PassFactory {
           doPass(moduleDayList)
           module.run(moduleDayList)
           count = count + 1
-          println(s"mod:${CammandParam.param.back.toString.substring(0,1)}:${backtestLenght}:${count}/${map.size * modules.size}")
+          println(s"mod" +
+            s":${CammandParam.param.back.toString.substring(0,1)}" +  //是否回测，t是，f否
+            s":${backtestLenght+1}/${CammandParam.param.back_step}" + //回测进度
+            s":${count}/${map.size * modules.size}")  //进度
         }
         catch
           case exception: Exception => exception.printStackTrace()
