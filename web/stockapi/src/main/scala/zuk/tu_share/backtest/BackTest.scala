@@ -1,5 +1,6 @@
 package zuk.tu_share.backtest
 
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
 import zuk.tu_share.DataFrame.config_properties
 import zuk.tu_share.module.IModel
@@ -37,7 +38,10 @@ object BackTest {
               else {
                 mod.buy.name
               }
-              val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, 【未交易】"
+
+              val buyReason = s"<span title='${mod.buyReason()}'>买入</span>"
+
+              val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, 【未交易】"
               lines += line
             }
             mod.sells.size>0
@@ -66,7 +70,9 @@ object BackTest {
               mod.buy.name
             }
 
-            val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【买入】, ${highStr}, ${ok}"
+            val buyReason = s"<span title='${mod.buyReason()}'>买入</span>"
+
+            val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, ${highStr}, ${ok}"
             lines += line
             println(line)
 
