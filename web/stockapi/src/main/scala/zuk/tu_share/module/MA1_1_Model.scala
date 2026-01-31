@@ -54,17 +54,24 @@ class MA1_1_Model extends IModel {
           }
       }
 
-
     }
   }
 
   override def getStockDto(): StockDto = this.stockDto
 
   override def desc(): String = {
-    "合力炸板，主力强势介入，缩量上涨更好"
+    "合力炸板，主力强势介入，缩量上涨"
   }
 
-  override def winRate: Float = 0.0
+  override def winRate: Float = {
+    val v = DataFrame.properties.get(classOf[MA1_Model].getSimpleName.toUpperCase)
+    if(v!=null){
+      v.toString.toFloat
+    }
+    else {
+      0.9311
+    }
+  }
 
   override def reference: Float = 0.0
 }
