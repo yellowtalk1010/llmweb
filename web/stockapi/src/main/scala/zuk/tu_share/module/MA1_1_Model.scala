@@ -26,17 +26,18 @@ class MA1_1_Model extends IModel {
       val zhaBanIndexList = list.zipWithIndex.filter(_._1.limit.equals("Z"))
 
       if(zhaBanIndexList.size>=2  //多个次炸板
-                && Math.abs(zhaBanIndexList(0)._2 - zhaBanIndexList(1)._2) > 1 //但不能是连续炸板
-        && list.slice(zhaBanIndexList(0)._2, zhaBanIndexList(1)._2).filter(e=>e.limit.equals(ModuleDay.U) || e.limit.equals(ModuleDay.D)).size==0 //中间不能存在涨停、跌停
+        && Math.abs(zhaBanIndexList(0)._2 - zhaBanIndexList(1)._2) > 1 //但不能是连续炸板
       ){
+        val middleList = list.slice(zhaBanIndexList(0)._2 + 1, zhaBanIndexList(1)._2)
+
 
         val zList = zhaBanIndexList.map(_._1) //炸板列表
-
-        if (
+ 
+        if (middleList.filter(e=>List(ModuleDay.D, ModuleDay.U).contains(e.limit)).size==0 //炸板中间不能出现涨停、跌停
 //          (ListOrderCheck.isIncreasing(zList.map(_.close.toFloat))
 //          || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))
 //                  zList(0).high.toFloat > zList(1).close.toFloat)
-          true)
+          && true)
           if ((
             //          ListOrderCheck.isIncreasing(zList.map(_.close.toFloat))
             //          || ListOrderCheck.isIncreasing(zList.map(_.high.toFloat))
