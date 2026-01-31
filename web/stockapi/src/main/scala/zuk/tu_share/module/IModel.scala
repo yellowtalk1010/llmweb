@@ -16,6 +16,8 @@ trait IModel {
 
   def desc():String
 
+  def buyReason(): String = ""//买入理由
+
   def winRate: Float
 
   def reference: Float
