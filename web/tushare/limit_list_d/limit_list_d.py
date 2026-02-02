@@ -7,7 +7,7 @@ import time
 import ZukTuShare
 
 # 初始化pro接口
-pro = ZukTuShare.getPro_10000()
+pro = ZukTuShare.getPro()
 
 def download_limit_list_d(trade_date):
     # 拉取数据

@@ -1,2 +1,3 @@
-Unnamed: 0,ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount
-0,920119.BJ,20260130,135.0,142.65,108.31,109.5,41.88,67.62,161.4613,103173.47,1239815.521
+ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount
+920119.BJ,20260202,115.0,118.8,109.88,110.36,109.5,0.86,0.7854,43805.49,496023.183
+920119.BJ,20260130,135.0,142.65,108.31,109.5,41.88,67.62,161.4613,103173.47,1239815.521

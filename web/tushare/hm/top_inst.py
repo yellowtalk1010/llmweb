@@ -4,7 +4,7 @@ import pandas as pd
 import ZukTuShare
 
 # 初始化pro接口
-pro = ZukTuShare.getPro_10000()
+pro = ZukTuShare.getPro()
 
 # 拉取数据
 def top_inst(trade_date):
