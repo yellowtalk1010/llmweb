@@ -56,7 +56,8 @@ class Email extends ISend {
     if(!CammandParam.param.back //分析
       && LicenseUtil.check()    //检查许可
     ){
-      sendMail(moreModuleStr + "<br><br>\n\n" + singleModuleStr)
+//      sendMail(moreModuleStr + "<br><br>\n\n" + singleModuleStr)
+      sendMail(singleModuleStr)
     }
 
   }
