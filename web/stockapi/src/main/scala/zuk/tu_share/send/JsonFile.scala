@@ -3,7 +3,7 @@ package zuk.tu_share.send
 import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
-import zuk.tu_share.CammandParam
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.module.IModel
 import zuk.tu_share.utils.LicenseUtil
 
@@ -21,7 +21,7 @@ class JsonFile extends ISend {
   override def doSend(list: List[IModel]): Unit = {
     try {
 
-      if(CammandParam.param.json && LicenseUtil.check()){
+      if(ParseCammandParam.param.json && LicenseUtil.check()){
         //校验命令、 许可校验
 
         val arr = list.map(m => {

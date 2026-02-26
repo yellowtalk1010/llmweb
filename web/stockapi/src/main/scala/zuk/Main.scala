@@ -1,7 +1,7 @@
 package zuk
 
 import zuk.tu_share.backtest.BackTest
-import zuk.tu_share.{CammandParam, DataFrame}
+import zuk.tu_share.{ParseCammandParam, DataFrame}
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.LicenseUtil
 
@@ -16,17 +16,17 @@ object Main {
     // 设置默认编码
     fixWindowsConsole()
     //参数解析
-    CammandParam.parse(args)
-    println(s"path:${CammandParam.param.toString}")
+    ParseCammandParam.parse(args)
+    println(s"path:${ParseCammandParam.param.toString}")
     //许可密码校验
     if(!LicenseUtil.checkPwd()){
       println("pwd err")
       System.exit(0)
     }
-    if (CammandParam.param.back){
+    if (ParseCammandParam.param.back){
       //回测
-      val map = DataFrame.load(CammandParam.param.path)
-      for (i <- 0 to CammandParam.param.back_step) {
+      val map = DataFrame.load(ParseCammandParam.param.path)
+      for (i <- 0 to ParseCammandParam.param.back_step) {
         PassFactory.doModule(map, i)
         println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
       }
@@ -35,7 +35,7 @@ object Main {
     }
     else {
       //分析
-      val map = DataFrame.load(CammandParam.param.path)
+      val map = DataFrame.load(ParseCammandParam.param.path)
       PassFactory.doModule(map)
     }
 

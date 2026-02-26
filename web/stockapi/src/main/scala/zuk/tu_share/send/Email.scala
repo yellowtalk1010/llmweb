@@ -1,6 +1,6 @@
 package zuk.tu_share.send
 
-import zuk.tu_share.CammandParam
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.module.IModel
 import zuk.tu_share.utils.LicenseUtil
 import zuk.utils.SendMail
@@ -53,7 +53,7 @@ class Email extends ISend {
     }).mkString("<br><br>\n\n")
     singleModuleStr = "单模型推荐<br><br>\n\n" + singleModuleStr
 
-    if(!CammandParam.param.back //分析
+    if(!ParseCammandParam.param.back //分析
       && LicenseUtil.check()    //检查许可
     ){
 //      sendMail(moreModuleStr + "<br><br>\n\n" + singleModuleStr)

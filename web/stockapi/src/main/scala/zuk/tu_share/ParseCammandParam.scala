@@ -1,28 +1,28 @@
 package zuk.tu_share
 
-object CammandParam {
-  val param = new CammandParam()
+object ParseCammandParam {
+  val param = new ParseCammandParam()
 
   def parse(args: Array[String]): Unit = {
     for (i <- 0 until args.size) {
       val v = args(i).toLowerCase
       v match
         case "-path" =>
-          CammandParam.param.path = args(i + 1)
+          ParseCammandParam.param.path = args(i + 1)
         case "-pwd" =>
-          CammandParam.param.pwd = args(i + 1)
+          ParseCammandParam.param.pwd = args(i + 1)
         case "-back" =>
-          CammandParam.param.back = true
+          ParseCammandParam.param.back = true
         case "-back_step" =>
-          CammandParam.param.back_step = args(i + 1).toInt
+          ParseCammandParam.param.back_step = args(i + 1).toInt
         case "-json" =>
-          CammandParam.param.json = true
+          ParseCammandParam.param.json = true
         case _ =>
     }
   }
 }
 
-class CammandParam {
+class ParseCammandParam {
   var path: String = "."
   var pwd: String = ""
   var back: Boolean = false

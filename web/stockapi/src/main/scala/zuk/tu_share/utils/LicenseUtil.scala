@@ -1,6 +1,6 @@
 package zuk.tu_share.utils
 
-import zuk.tu_share.CammandParam
+import zuk.tu_share.ParseCammandParam
 
 import java.io.File
 import java.text.SimpleDateFormat
@@ -28,7 +28,7 @@ object LicenseUtil {
 
   def checkPwd(): Boolean = {
     val userNameFile = new File("C:\\Users\\5132")
-    CammandParam.param.pwd.toLowerCase.equals("huangliaofather".toLowerCase)
+    ParseCammandParam.param.pwd.toLowerCase.equals("huangliaofather".toLowerCase)
     || userNameFile.getName.toLowerCase.equals("5132")
   }
 

@@ -1,6 +1,6 @@
 package zuk.tu_share.pass
 
-import zuk.tu_share.CammandParam
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.ModuleDay
 import zuk.tu_share.module.*
 import zuk.tu_share.send.ISendFactory
@@ -52,7 +52,7 @@ object PassFactory {
           val stock = e._1
           //
           val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
-          if (CammandParam.param.back) {
+          if (ParseCammandParam.param.back) {
             //如果回测
             var startIndex = backtestLenght - 3
             if (startIndex < 0) {
@@ -76,8 +76,8 @@ object PassFactory {
           module.run(moduleDayList)
           count = count + 1
           println(s"mod" +
-            s":${CammandParam.param.back.toString.substring(0,1)}" +  //是否回测，t是，f否
-            s":${backtestLenght+1}/${CammandParam.param.back_step}" + //回测进度
+            s":${ParseCammandParam.param.back.toString.substring(0,1)}" +  //是否回测，t是，f否
+            s":${backtestLenght+1}/${ParseCammandParam.param.back_step}" + //回测进度
             s":${count}/${map.size * modules.size}")  //进度
         }
         catch
