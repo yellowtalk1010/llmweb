@@ -26,8 +26,7 @@ object BackTest {
       .foreach(e=>{
         val clsName = e._1
         val ls = e._2
-        val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse
-          .filter(mod=>{
+        val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse.filter(mod=>{
             if(mod.sells.size==0){
               val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
               val name = if(!tsStock.isEmpty){
@@ -45,8 +44,7 @@ object BackTest {
               lines += line
             }
             mod.sells.size>0
-          })
-          .filter(mod => {
+          }).filter(mod => {
 
             var st = false
             val preClose = mod.sells.head.pre_close
