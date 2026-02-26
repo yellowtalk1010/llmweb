@@ -15,6 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry.addHandler(new LLMWebSocketHandler(), "/ws")
                 .addHandler(new LogSocketHandler(), "/log")
                 .addHandler(new AISocketHandler(), "/ai")
+                .addHandler(new TuShareModStockHandler(), "/tushare_stock") //tushare股票推荐
                 .setAllowedOrigins("*"); // 允许跨域
     }
 }
