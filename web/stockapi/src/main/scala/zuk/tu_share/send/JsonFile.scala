@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import zuk.tu_share.ParseCammandParam
+import zuk.tu_share.dto.ResultJsonDto
 import zuk.tu_share.module.IModel
 import zuk.tu_share.utils.LicenseUtil
 
@@ -26,8 +27,9 @@ class JsonFile extends ISend {
         //校验命令、 许可校验
 
         val arr = list.map(m => {
+          val resultJsonDto = new ResultJsonDto
 
-          val map = new util.HashMap[String, String]()
+//          val map = new util.HashMap[String, String]()
 
           val dto = m.getStockDto()
 
@@ -35,29 +37,47 @@ class JsonFile extends ISend {
           val limitDown = dto.limitDown
           val turnoverRate = dto.turnoverRate //活跃
 
-          map.put("limitUp", limitUp)
-          map.put("limitDown", limitUp)
-          map.put("turnoverRate", s"${turnoverRate}活跃")
+//          map.put("limitUp", limitUp)
+          resultJsonDto.limitUp = limitUp
+
+//          map.put("limitDown", limitDown)
+          resultJsonDto.limitDown = limitDown
+
+//          map.put("turnoverRate", s"${turnoverRate}活跃")
+          resultJsonDto.turnoverRate = s"${turnoverRate}活跃"
 
           val ts_code = dto.tsStock.ts_code //代码
           val name = dto.tsStock.name //名称
           val area = dto.tsStock.area //区域
           val industry = dto.tsStock.industry //行业
 
-          map.put("ts_code", ts_code)
-          map.put("name", name)
-          map.put("area", area)
-          map.put("industry", industry)
+//          map.put("ts_code", ts_code)
+          resultJsonDto.ts_code = ts_code
+
+//          map.put("name", name)
+          resultJsonDto.name = name
+
+//          map.put("area", area)
+          resultJsonDto.area = area
+
+//          map.put("industry", industry)
+          resultJsonDto.industry = industry
 
           val modWinRate = m.winRate //模型胜率
           val modDesc = m.desc() //模型描述
           val modClsName = m.getClass.getSimpleName.toUpperCase //模型代码
 
-          map.put("modWinRate", s"${modWinRate}")
-          map.put("modDesc", modDesc)
-          map.put("modClsName", modClsName)
+//          map.put("modWinRate", s"${modWinRate}")
+          resultJsonDto.modWinRate = s"${modWinRate}"
 
-          map
+//          map.put("modDesc", modDesc)
+          resultJsonDto.modDesc = modDesc
+
+//          map.put("modClsName", modClsName)
+          resultJsonDto.modClsName = modClsName
+
+//          map
+          resultJsonDto
         }).asJava
 
         val json = JSONObject.toJSONString(arr, Feature.PrettyFormat)
