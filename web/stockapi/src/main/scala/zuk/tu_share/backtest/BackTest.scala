@@ -14,6 +14,9 @@ import scala.collection.mutable.ListBuffer
 
 object BackTest {
 
+  /***
+   * 保存回测的数据
+   */
   val backTestList = ListBuffer[IModel]()
 
   def analysis(): Unit = {
