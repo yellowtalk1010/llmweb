@@ -1,16 +1,9 @@
 package zuk.stock.test
 
-import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.Main
-import zuk.tu_share.CammandParam
-import zuk.tu_share.backtest.BackTest
+import zuk.tu_share.module.HM_MOD
 import zuk.tu_share.module.HM_MOD.handule
-import zuk.tu_share.module.{HM_MOD, MA3_2_Model, MA3_3_Model}
-
-import java.io.File
-
-import scala.jdk.CollectionConverters.*
 
 
 class Tushare_MA3_0_Model_Test extends AnyFunSuite {
