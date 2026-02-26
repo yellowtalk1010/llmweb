@@ -21,7 +21,8 @@ class JsonFile extends ISend {
   override def doSend(list: List[IModel]): Unit = {
     try {
 
-      if(ParseCammandParam.param.json && LicenseUtil.check()){
+      if(ParseCammandParam.param.json
+        && LicenseUtil.check()){
         //校验命令、 许可校验
 
         val arr = list.map(m => {
@@ -60,8 +61,8 @@ class JsonFile extends ISend {
         }).asJava
 
         val json = JSONObject.toJSONString(arr, Feature.PrettyFormat)
-        val sdf = new SimpleDateFormat("yyyyMMdd_HHmmss")
-        val filepath = s"json/${sdf.format(new Date)}.json"
+        val sdf = new SimpleDateFormat("yyyyMMdd_HH_mm_ss")
+        val filepath = s"result_json/${sdf.format(new Date)}.json"
         FileUtils.write(new File(filepath), json, "UTF-8")
 
       }
