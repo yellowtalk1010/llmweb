@@ -13,8 +13,12 @@ import java.text.SimpleDateFormat
 import java.util
 import java.util.Date
 import scala.beans.BeanProperty
+import scala.jdk.CollectionConverters.*
 
 case class StockResultJson(){
+
+  @BeanProperty var file: File = null
+
   @BeanProperty var area: String = ""
   @BeanProperty var modDesc: String = ""
   @BeanProperty var ts_code: String = ""
@@ -57,10 +61,29 @@ class PushStockController {
       val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
       var dateStr = simpleDateFormat.format(new Date())
       val filterJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
-      log.info(s"json文件：\n${filterJsonFiles.map(_.getName).mkString("\n")}")
+      log.info(s"\njson文件：\n${filterJsonFiles.map(_.getName).mkString("\n")}")
+
+      val stockResultJsonList = filterJsonFiles.map(file=>{
+        val array = JSONArray.parseArray(FileUtils.readFileToString(file, Charset.forName("UTF-8")), classOf[StockResultJson])
+        array.asScala.map(e=>{
+          e.file=file
+          e
+        })
+      })
+
+      val modWinRateClsNames = stockResultJsonList.flatMap(e=>e).groupBy(_.modClsName).map(e=>(e._1, e._2.toList.head)).toList.sortBy(_._2.modWinRate).reverse.map(e=>(e._1, e._2.modWinRate))
+      log.info(s"\n胜率：\n${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("\n")}")
+
       val headJson = filterJsonFiles.head
       val headJsonArray = JSONArray.parseArray(FileUtils.readFileToString(headJson, Charset.forName("UTF-8")), classOf[StockResultJson])
+      val headSortedArray = headJsonArray.asScala.sortBy(e=>(e.modWinRate, e.turnoverRate))(
+        Ordering.Tuple2(
+          Ordering.String.reverse, //降序
+          Ordering.String.reverse  //降序
+        ))
+
       val historyJsons = filterJsonFiles.slice(1, filterJsonFiles.length)
+
 
       println()
     }
