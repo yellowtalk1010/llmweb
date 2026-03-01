@@ -29,7 +29,7 @@ function PushTushareStock() {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 30000);
+    const interval = setInterval(fetchData, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -39,7 +39,6 @@ function PushTushareStock() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Push Tushare Stock</h1>
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
@@ -47,7 +46,14 @@ function PushTushareStock() {
       {data.map((moduleItem, index) => (
         <div key={index} className="border rounded-2xl p-4 shadow-sm">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold mb-3">{moduleItem.module}</h2>
+            <h2>
+              <span style={{ color: "red" }}>
+                  {moduleItem.time}
+                </span>
+            </h2>
+            <h4 className="text-lg font-semibold mb-3">
+              {moduleItem.module}
+            </h4>
             {moduleItem.histories && moduleItem.histories.length > 0 && (
               <button
                 onClick={() => toggleModule(index)}
