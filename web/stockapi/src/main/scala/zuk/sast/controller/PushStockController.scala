@@ -19,7 +19,9 @@ import scala.jdk.CollectionConverters.*
 case class StockResultJson(){
 
   @BeanProperty var file: File = null
+  @BeanProperty var fileName: String = ""
   @BeanProperty var eastmoneyURL: String = "" //东方财富地址
+
 
   @BeanProperty var area: String = ""
   @BeanProperty var modDesc: String = ""
@@ -76,6 +78,7 @@ class PushStockController {
           tsStock.ts_code = e.ts_code
           e.eastmoneyURL = tsStock.getEastmoneyURL()
           e.file=file
+          e.fileName=file.getName
           e
         }).sortBy(_.modWinRate).reverse
       })
