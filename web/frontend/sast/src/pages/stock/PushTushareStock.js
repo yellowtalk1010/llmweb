@@ -44,7 +44,16 @@ function PushTushareStock() {
       {error && <p className="text-red-500">Error: {error}</p>}
 
       {data.map((moduleItem, index) => (
-        <div key={index} className="border rounded-2xl p-4 shadow-sm">
+        <div
+  key={index}
+  className={`
+    rounded-2xl p-5 shadow-md transition-all duration-300
+    ${index % 2 === 0 
+      ? "bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100" 
+      : "bg-gradient-to-r from-gray-50 to-slate-100 border border-gray-200"}
+    hover:shadow-xl hover:scale-[1.01]
+  `}
+>
           <div className="flex justify-between items-center">
             <h2>
               <span style={{ color: "red" }}>
@@ -90,22 +99,31 @@ function StockTable({ list }) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm border-collapse">
         <thead>
-          <tr className="border-b bg-gray-50">
-            <th className="p-2 text-left">名称</th>
-            <th className="p-2 text-left">代码</th>
-            <th className="p-2 text-left">行业</th>
-            <th className="p-2 text-left">地区</th>
-            <th className="p-2 text-left">胜率</th>
-            <th className="p-2 text-left">换手率</th>
-            <th className="p-2 text-left">涨停</th>
-            <th className="p-2 text-left">跌停</th>
-            <th className="p-2 text-left">链接</th>
-          </tr>
+        <tr className="border-b bg-gray-50">
+          <th className="p-2 text-left">名称</th>
+          <th className="p-2 text-left">代码</th>
+          <th className="p-2 text-left">行业</th>
+          <th className="p-2 text-left">地区</th>
+          <th className="p-2 text-left">胜率</th>
+          <th className="p-2 text-left">换手率</th>
+          <th className="p-2 text-left">涨停</th>
+          <th className="p-2 text-left">跌停</th>
+          <th className="p-2 text-left">来源</th>
+        </tr>
         </thead>
         <tbody>
-          {list.map((item, idx) => (
+        {list.map((item, idx) => (
             <tr key={idx} className="border-b hover:bg-gray-50">
-              <td className="p-2 font-medium">{item.name}</td>
+              <td className="p-2 font-medium">
+                <a
+                  href={item.eastmoneyURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                {item.name} 
+                </a>
+              </td>
               <td className="p-2">{item.ts_code}</td>
               <td className="p-2">{item.industry}</td>
               <td className="p-2">{item.area}</td>
@@ -113,16 +131,8 @@ function StockTable({ list }) {
               <td className="p-2">{item.turnoverRate}</td>
               <td className="p-2 text-red-500">{item.limitUp}</td>
               <td className="p-2 text-blue-500">{item.limitDown}</td>
-              <td className="p-2">
-                <a
-                  href={item.eastmoneyURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline"
-                >
-                  查看
-                </a>
-              </td>
+              
+              <td className="p-2">{item.fileName}</td>
             </tr>
           ))}
         </tbody>
