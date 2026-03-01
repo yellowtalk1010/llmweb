@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
+import zuk.tu_share.dto.TsStock
 
 import java.io.File
 import java.nio.charset.Charset
@@ -18,6 +19,7 @@ import scala.jdk.CollectionConverters.*
 case class StockResultJson(){
 
   @BeanProperty var file: File = null
+  @BeanProperty var eastmoneyURL: String = "" //东方财富地址
 
   @BeanProperty var area: String = ""
   @BeanProperty var modDesc: String = ""
@@ -70,6 +72,9 @@ class PushStockController {
       val stockResultJsonList = filterJsonFiles.map(file=>{
         val array = JSONArray.parseArray(FileUtils.readFileToString(file, Charset.forName("UTF-8")), classOf[StockResultJson])
         array.asScala.map(e=>{
+          val tsStock = new TsStock()
+          tsStock.ts_code = e.ts_code
+          e.eastmoneyURL = tsStock.getEastmoneyURL()
           e.file=file
           e
         }).sortBy(_.modWinRate).reverse
