@@ -68,21 +68,33 @@ class PushStockController {
         array.asScala.map(e=>{
           e.file=file
           e
-        })
+        }).sortBy(_.modWinRate).reverse
       })
 
       val modWinRateClsNames = stockResultJsonList.flatMap(e=>e).groupBy(_.modClsName).map(e=>(e._1, e._2.toList.head)).toList.sortBy(_._2.modWinRate).reverse.map(e=>(e._1, e._2.modWinRate))
       log.info(s"\n胜率：\n${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("\n")}")
 
-      val headJson = filterJsonFiles.head
-      val headJsonArray = JSONArray.parseArray(FileUtils.readFileToString(headJson, Charset.forName("UTF-8")), classOf[StockResultJson])
-      val headSortedArray = headJsonArray.asScala.sortBy(e=>(e.modWinRate, e.turnoverRate))(
-        Ordering.Tuple2(
-          Ordering.String.reverse, //降序
-          Ordering.String.reverse  //降序
-        ))
+      val heads = stockResultJsonList.head
+      val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
-      val historyJsons = filterJsonFiles.slice(1, filterJsonFiles.length)
+      val headStocks = modWinRateClsNames.map(clsName=>{
+        val headList = heads.filter(_.modClsName.equals(clsName)).sortBy(_.turnoverRate).reverse
+        val historyList = histories.filter(_.modClsName.equals(clsName)).sortBy(_.file.getName).reverse
+        (clsName, headList, historyList)
+      })
+
+
+
+
+//      val headJson = filterJsonFiles.head
+//      val headJsonArray = JSONArray.parseArray(FileUtils.readFileToString(headJson, Charset.forName("UTF-8")), classOf[StockResultJson])
+//      val headSortedArray = headJsonArray.asScala.sortBy(e=>(e.modWinRate, e.turnoverRate))(
+//        Ordering.Tuple2(
+//          Ordering.String.reverse, //降序
+//          Ordering.String.reverse  //降序
+//        ))
+//
+//      val historyJsons = filterJsonFiles.slice(1, filterJsonFiles.length)
 
 
       println()
