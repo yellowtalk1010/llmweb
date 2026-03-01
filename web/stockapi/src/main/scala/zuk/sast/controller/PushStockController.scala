@@ -77,7 +77,7 @@ class PushStockController {
       val heads = stockResultJsonList.head
       val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
-      val headStocks = modWinRateClsNames.map(clsName=>{
+      val pushStocks = modWinRateClsNames.map(clsName=>{
         val headList = heads.filter(_.modClsName.equals(clsName)).sortBy(_.turnoverRate).reverse
         val historyList = histories.filter(_.modClsName.equals(clsName)).sortBy(_.file.getName).reverse
         (clsName, headList, historyList)
