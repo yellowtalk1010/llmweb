@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 
+import java.io.File
 import java.util
 import scala.beans.BeanProperty
 
@@ -29,8 +30,16 @@ class PushStockController {
   def all(search: String, tradedate: String): util.Map[String, Object] = {
 
     val pro = System.getProperties
+    this.stockResultJsonPath = "D:\\development\\github\\stockapi\\result_json"
     log.info(s"股票json结果路径：${this.stockResultJsonPath}")
-
+    val file = new File(this.stockResultJsonPath)
+    if(file.exists() && file.isDirectory){
+      val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
+      log.info(s"股票json结果总数：${jsonfiles.length}")
+    }
+    else {
+      log.info(s"${this.stockResultJsonPath}路径不存在")
+    }
     val list = new util.ArrayList[Object]()
     val map = new util.HashMap[String, Object]()
     map.put("code", s"success")
