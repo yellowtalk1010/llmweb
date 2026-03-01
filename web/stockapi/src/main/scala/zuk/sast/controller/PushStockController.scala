@@ -86,7 +86,10 @@ class PushStockController {
           else {
             e._2.sortBy(_.file.getName).head //取最早推荐
           }
-        }).toList.sortBy(_.file.getName).reverse
+        }).toList
+          .filter(e=> !headList.map(_.ts_code).contains(e.ts_code)) //不能再headList中
+          .sortBy(_.file.getName)
+          .reverse
         (clsName, headList, historyList)
       })
 
