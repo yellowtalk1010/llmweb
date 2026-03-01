@@ -52,6 +52,10 @@ class PushStockController {
   @GetMapping(value = Array("list"))
   def all(tradedate: String): util.Map[String, Object] = {
 
+    val response = new util.HashMap[String, Object]()
+    response.put("code", s"success")
+    response.put("time", s"${System.currentTimeMillis()}")
+
     val pro = System.getProperties
     this.stockResultJsonPath = "D:\\development\\github\\stockapi\\result_json"
     log.info(s"股票json结果路径：${this.stockResultJsonPath}")
@@ -78,7 +82,9 @@ class PushStockController {
       val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
       val pushStocks = modWinRateClsNames.map(_._1).map(clsName=>{
+        //最新数据
         val headList = heads.filter(_.modClsName.equals(clsName)).sortBy(_.turnoverRate).reverse
+        //历史数据
         val historyList = histories.filter(_.modClsName.equals(clsName)).groupBy(_.ts_code).map(e=>{
           if(e._2.size==1){
             e._2.head
@@ -93,30 +99,23 @@ class PushStockController {
         (clsName, headList, historyList)
       })
 
+      val maplist = pushStocks.map(e=>{
+        val head = (e._2 ++ e._3).head
+        val map = new util.HashMap[String, Object]()
+        map.put("time", s"${head.file.getName}")
+        map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
+        map.put("heads", e._2.toList.asJava)
+        map.put("histories", e._3.asJava)
+        map
+      }).asJava
 
-
-
-//      val headJson = filterJsonFiles.head
-//      val headJsonArray = JSONArray.parseArray(FileUtils.readFileToString(headJson, Charset.forName("UTF-8")), classOf[StockResultJson])
-//      val headSortedArray = headJsonArray.asScala.sortBy(e=>(e.modWinRate, e.turnoverRate))(
-//        Ordering.Tuple2(
-//          Ordering.String.reverse, //降序
-//          Ordering.String.reverse  //降序
-//        ))
-//
-//      val historyJsons = filterJsonFiles.slice(1, filterJsonFiles.length)
-
-
-      println()
+      response.put("data", maplist)
     }
     else {
       log.info(s"${this.stockResultJsonPath}路径不存在")
     }
-    val list = new util.ArrayList[Object]()
-    val map = new util.HashMap[String, Object]()
-    map.put("code", s"success")
-    map.put("time", s"${System.currentTimeMillis()}")
-    map.put("data", list)
-    map
+
+    response
+
   }
 }
