@@ -30,7 +30,7 @@ class PushStockController {
   private var stockResultJsonPath: String = null
 
   @GetMapping(value = Array("list"))
-  def all(search: String, tradedate: String): util.Map[String, Object] = {
+  def all(tradedate: String): util.Map[String, Object] = {
 
     val pro = System.getProperties
     this.stockResultJsonPath = "D:\\development\\github\\stockapi\\result_json"
