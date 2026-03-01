@@ -25,12 +25,9 @@ public class StartupSuccessListener {
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {
         log.info("StartupSuccessListener onApplicationReady");
-        System.out.print("""
-                1. 在浏览器器中输入：http://localhost:8080/config
-                2. 将在工具的/workspaces/项目名称/parseConfig.json上传
-                """);
-        System.out.println("3. DB地址：" + Zuk.URL);
-        System.out.println("4. http://localhost:8080/pages/stock"); //http://localhost:8080/pages/allStock
+        System.out.println("1. DB地址：" + Zuk.URL);
+        System.out.println("2. 程序分析：http://localhost:8080/config （将在工具的/workspaces/项目名称/parseConfig.json上传）");
+        System.out.println("3. 股票：http://localhost:8080/pages/stock"); //http://localhost:8080/pages/allStock
 
     }
 }

@@ -16,6 +16,9 @@ class PushStockController {
   @GetMapping(value = Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
 
+    val pro = System.getProperties
+    println(pro)
+
     val list = new util.ArrayList[Object]()
     val map = new util.HashMap[String, Object]()
     map.put("code", s"success")
