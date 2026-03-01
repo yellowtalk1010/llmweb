@@ -1,23 +1,37 @@
 package zuk.sast.controller
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.{Autowired, Value}
+import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
+
 import java.util
+import scala.beans.BeanProperty
 
 /***
  * 股票推荐列表
  */
 @RestController
 @RequestMapping(value = Array("push_stocks"))
+@Component
 class PushStockController {
 
   private val log = LoggerFactory.getLogger(classOf[PushStockController])
+
+  /***
+   * 获取application.properties中的数据
+   */
+  @Value("${aaa.bbb}")
+  @BeanProperty
+  private var aaa_bbb: String = null
+
 
   @GetMapping(value = Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
 
     val pro = System.getProperties
     println(pro)
+    println(aaa_bbb)
 
     val list = new util.ArrayList[Object]()
     val map = new util.HashMap[String, Object]()
