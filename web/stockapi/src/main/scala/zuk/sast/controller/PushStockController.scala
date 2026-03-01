@@ -1,12 +1,15 @@
 package zuk.sast.controller
 
+import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util
+import java.util.Date
 import scala.beans.BeanProperty
 
 /***
@@ -36,6 +39,11 @@ class PushStockController {
     if(file.exists() && file.isDirectory){
       val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
       log.info(s"股票json结果总数：${jsonfiles.length}")
+      val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+      var dateStr = simpleDateFormat.format(new Date())
+      jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse.foreach(file=>{
+        println(file)
+      })
     }
     else {
       log.info(s"${this.stockResultJsonPath}路径不存在")
