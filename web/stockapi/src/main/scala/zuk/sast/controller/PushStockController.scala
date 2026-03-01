@@ -41,9 +41,13 @@ class PushStockController {
       log.info(s"股票json结果总数：${jsonfiles.length}")
       val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
       var dateStr = simpleDateFormat.format(new Date())
-      jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse.foreach(file=>{
+      val filterJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
+      filterJsonFiles.foreach(file=>{
         println(file)
       })
+      val headJson = filterJsonFiles.head
+      val historyJsons = filterJsonFiles.slice(1, filterJsonFiles.length)
+      println()
     }
     else {
       log.info(s"${this.stockResultJsonPath}路径不存在")
