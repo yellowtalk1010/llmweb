@@ -19,19 +19,17 @@ class PushStockController {
   private val log = LoggerFactory.getLogger(classOf[PushStockController])
 
   /***
-   * 获取application.properties中的数据
+   * 获取application.properties中的数据，股票json结果路径
    */
-  @Value("${aaa.bbb}")
+  @Value("${stock.result.json.path}")
   @BeanProperty
-  private var aaa_bbb: String = null
-
+  private var stockResultJsonPath: String = null
 
   @GetMapping(value = Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
 
     val pro = System.getProperties
-    println(pro)
-    println(aaa_bbb)
+    log.info(s"股票json结果路径：${this.stockResultJsonPath}")
 
     val list = new util.ArrayList[Object]()
     val map = new util.HashMap[String, Object]()
