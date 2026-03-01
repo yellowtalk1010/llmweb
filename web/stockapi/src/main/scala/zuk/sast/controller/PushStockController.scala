@@ -61,7 +61,6 @@ class PushStockController {
     response.put("time", s"${System.currentTimeMillis()}")
 
     val pro = System.getProperties
-    this.stockResultJsonPath = "D:\\development\\github\\stockapi\\result_json"
     log.info(s"股票json结果路径：${this.stockResultJsonPath}")
     val file = new File(this.stockResultJsonPath)
     if(file.exists() && file.isDirectory){
