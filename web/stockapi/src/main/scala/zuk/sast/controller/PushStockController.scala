@@ -14,6 +14,20 @@ import java.util
 import java.util.Date
 import scala.beans.BeanProperty
 
+case class StockResultJson(){
+  @BeanProperty var area: String = ""
+  @BeanProperty var modDesc: String = ""
+  @BeanProperty var ts_code: String = ""
+  @BeanProperty var turnoverRate: String = ""
+  @BeanProperty var name: String = ""
+
+  @BeanProperty var limitUp: String = ""
+  @BeanProperty var industry: String = ""
+  @BeanProperty var limitDown: String = ""
+  @BeanProperty var modWinRate: String = ""
+  @BeanProperty var modClsName: String = ""
+}
+
 /***
  * 股票推荐列表
  */
@@ -45,7 +59,7 @@ class PushStockController {
       val filterJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
       log.info(s"json文件：\n${filterJsonFiles.map(_.getName).mkString("\n")}")
       val headJson = filterJsonFiles.head
-      val headJsonArrayObj = JSONArray.parseArray(FileUtils.readFileToString(headJson, Charset.forName("UTF-8")))
+      val headJsonArray = JSONArray.parseArray(FileUtils.readFileToString(headJson, Charset.forName("UTF-8")), classOf[StockResultJson])
       val historyJsons = filterJsonFiles.slice(1, filterJsonFiles.length)
 
       println()
