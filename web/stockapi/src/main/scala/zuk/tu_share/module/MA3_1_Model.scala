@@ -52,7 +52,7 @@ class MA3_1_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def desc(): String = "缩量上涨"
+  override def desc(): String = "缩量上涨，建议下午买入"
 
   override def winRate: Float = {
     val v = DataFrame.properties.get(classOf[MA3_1_Model].getSimpleName.toUpperCase)
