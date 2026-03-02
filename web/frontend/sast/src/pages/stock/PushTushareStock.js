@@ -45,21 +45,17 @@ function PushTushareStock() {
 
       {data.map((moduleItem, index) => (
         <div
-  key={index}
-  className={`
-    rounded-2xl p-5 shadow-md transition-all duration-300
-    ${index % 2 === 0 
-      ? "bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100" 
-      : "bg-gradient-to-r from-gray-50 to-slate-100 border border-gray-200"}
-    hover:shadow-xl hover:scale-[1.01]
-  `}
+            key={index}
+            style={{
+              border: "none",
+              borderRadius: "16px",
+              padding: "20px",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              transition: "all 0.3s",
+              backgroundColor: index % 2 === 0 ? "#dbeafe" : "#cdd1d3"  // 蓝色 / 灰色
+            }}
 >
 
-        <hr style={{
-          border: "none",
-          borderTop: "2px solid #6207f4",
-          width: "100%"
-        }}></hr>
 
           <div className="flex justify-between items-center">
             
