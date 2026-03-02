@@ -54,7 +54,15 @@ function PushTushareStock() {
     hover:shadow-xl hover:scale-[1.01]
   `}
 >
+
+        <hr style={{
+          border: "none",
+          borderTop: "2px solid #6207f4",
+          width: "100%"
+        }}></hr>
+
           <div className="flex justify-between items-center">
+            
             <h2>
               <span style={{ color: "red" }}>
                   {moduleItem.time}
@@ -90,6 +98,7 @@ function PushTushareStock() {
           )}
         </div>
       ))}
+
     </div>
   );
 }
