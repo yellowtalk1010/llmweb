@@ -61,7 +61,7 @@ class PushStockController {
     response.put("time", s"${System.currentTimeMillis()}")
 
     val pro = System.getProperties
-    log.info(s"股票json结果路径：${this.stockResultJsonPath}")
+    log.info(s"stock result json path: ${this.stockResultJsonPath}")
     val file = new File(this.stockResultJsonPath)
     if(file.exists() && file.isDirectory){
       val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
