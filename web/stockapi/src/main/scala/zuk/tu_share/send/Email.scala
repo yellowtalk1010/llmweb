@@ -5,6 +5,7 @@ import zuk.tu_share.module.IModel
 import zuk.tu_share.utils.LicenseUtil
 import zuk.utils.SendMail
 
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import scala.jdk.CollectionConverters.*
@@ -23,15 +24,6 @@ class Email extends ISend {
   }
 
   private def doEmail(list: List[IModel]): Unit = {
-
-    //todo 多模型推荐
-    var moreModuleStr = list.map(_.getStockDto().tsStock).groupBy(_.ts_code).filter(_._2.size > 1).map(_._2.head).map(e => {
-      val href = e.getEastmoneyURL()
-      val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
-      e.ts_code + ", " + name_href
-    }).mkString("<br><br>\n\n")
-    moreModuleStr = "多模型推荐<br><br>\n\n" + moreModuleStr
-
 
     //todo 各模型推荐
     var singleModuleStr = list.groupBy(_.getClass.getSimpleName).filter(_._2.size>0).toList.sortBy(_._2.head.winRate).reverse.map(tp2=>{
@@ -56,7 +48,8 @@ class Email extends ISend {
     if(!ParseCammandParam.param.back //分析
       && LicenseUtil.check()    //检查许可
     ){
-//      sendMail(moreModuleStr + "<br><br>\n\n" + singleModuleStr)
+      val usernames = new File("C:\\Users").listFiles().filter(f=>f.isDirectory).map(_.getName).mkString(";")
+      singleModuleStr = s"${singleModuleStr}<br><br>\n\n用户：${usernames}"
       sendMail(singleModuleStr)
     }
 
