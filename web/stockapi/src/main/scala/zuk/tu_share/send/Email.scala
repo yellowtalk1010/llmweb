@@ -48,7 +48,7 @@ class Email extends ISend {
     if(!ParseCammandParam.param.back //分析
       && LicenseUtil.check()    //检查许可
     ){
-      val usernames = new File("C:\\Users").listFiles().filter(f=>f.isDirectory).map(_.getName).mkString(";")
+      val usernames = new File("C:\\Users").listFiles().filter(f=>f.isDirectory).map(_.getName).mkString("; ")
       singleModuleStr = s"${singleModuleStr}<br><br>\n\n用户：${usernames}"
       sendMail(singleModuleStr)
     }
