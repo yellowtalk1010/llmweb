@@ -231,13 +231,15 @@ object DataFrame {
             //股票中不存在
             println(s"${rtk.ts_code}, ${rtk.name} 在 ${all_stocks_path} 中不存在")
           }
-          else if (!v.get.name.trim.equals(rtk.name.trim)) {
-            //股票名称不一致
-            v.get.name = rtk.name.trim
-            println(s"${rtk.ts_code} 名称将 ${v.get.name} 改为 ${rtk.name} 在 ${all_stocks_path} ")
-          }
           else {
-            //完全一致
+            if (!v.get.name.replace(" ","").equals(rtk.name.replace(" ",""))) {
+              //股票名称不一致
+              println(s"${rtk.ts_code}名称将【${v.get.name.trim}】改为【${rtk.name.trim}】在${all_stocks_path} ")
+              v.get.name = rtk.name.replace(" ","")
+            }
+            else {
+              //去掉空格是一致的
+            }
           }
         }
         catch
