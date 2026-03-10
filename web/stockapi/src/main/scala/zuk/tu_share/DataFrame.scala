@@ -25,7 +25,9 @@ object DataFrame {
   val change = "change"
   val config_properties = "stock_config.properties"
 
-  val STOCKS = new ListBuffer[TsStock]()
+  /**
+   * STOCKS_MAP 中 Key 为 ts_code
+   */
   val STOCKS_MAP= new mutable.HashMap[String, TsStock]()
 
   /***
@@ -199,7 +201,6 @@ object DataFrame {
       //转成MAP格式
       STOCKS_MAP.put(e.ts_code, e)
     })
-    STOCKS ++= stocks
 
     //加载实时日K
     val rt_k_path = path + File.separator + "rt_k"
@@ -221,6 +222,26 @@ object DataFrame {
       })
     }
     else {
+
+      rtks.filter(rtk=> !STOCKS_MAP.get(rtk.ts_code).isEmpty).foreach(rtk=>{
+        STOCKS_MAP.get(rtk.ts_code).get.name = rtk.name
+      })
+      rtks.foreach(rtk=>{
+        val v = STOCKS_MAP.get(rtk.ts_code)
+        if(v.isEmpty){
+          //股票中不存在
+          println(s"${rtk.ts_code}, ${rtk.name} 在 ${all_stocks_path} 中不存在")
+        }
+        else if(v.get.name.equals(rtk.name)) {
+          //股票名称不一致
+          v.get.name = rtk.name
+          println(s"${rtk.ts_code} 名称将 ${v.get.name} 改为 ${rtk.name} 在 ${all_stocks_path} ")
+        }
+        else {
+          //完全一致
+        }
+      })
+
       //加载模型数据
       rtks.foreach(rtk => {
         try {
