@@ -225,19 +225,23 @@ object DataFrame {
 
       //比较股票的名称
       rtks.foreach(rtk=>{
-        val v = STOCKS_MAP.get(rtk.ts_code)
-        if(v.isEmpty){
-          //股票中不存在
-          println(s"${rtk.ts_code}, ${rtk.name} 在 ${all_stocks_path} 中不存在")
+        try {
+          val v = STOCKS_MAP.get(rtk.ts_code)
+          if (v.isEmpty) {
+            //股票中不存在
+            println(s"${rtk.ts_code}, ${rtk.name} 在 ${all_stocks_path} 中不存在")
+          }
+          else if (!v.get.name.trim.equals(rtk.name.trim)) {
+            //股票名称不一致
+            v.get.name = rtk.name.trim
+            println(s"${rtk.ts_code} 名称将 ${v.get.name} 改为 ${rtk.name} 在 ${all_stocks_path} ")
+          }
+          else {
+            //完全一致
+          }
         }
-        else if(v.get.name.equals(rtk.name)) {
-          //股票名称不一致
-          v.get.name = rtk.name
-          println(s"${rtk.ts_code} 名称将 ${v.get.name} 改为 ${rtk.name} 在 ${all_stocks_path} ")
-        }
-        else {
-          //完全一致
-        }
+        catch
+          case exception: Exception =>
       })
 
       //加载模型数据
