@@ -223,9 +223,7 @@ object DataFrame {
     }
     else {
 
-      rtks.filter(rtk=> !STOCKS_MAP.get(rtk.ts_code).isEmpty).foreach(rtk=>{
-        STOCKS_MAP.get(rtk.ts_code).get.name = rtk.name
-      })
+      //比较股票的名称
       rtks.foreach(rtk=>{
         val v = STOCKS_MAP.get(rtk.ts_code)
         if(v.isEmpty){
