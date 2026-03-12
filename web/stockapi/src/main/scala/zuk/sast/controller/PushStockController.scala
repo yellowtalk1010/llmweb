@@ -78,6 +78,10 @@ class PushStockController {
   @BeanProperty
   private var stockResultJsonPath: String = null
 
+  /***
+   * 获取结果文件路径
+   * @return
+   */
   private def getStockResultJsonPath(): File = {
     val pro = System.getProperties
     log.info(s"stock result json path: ${this.stockResultJsonPath}")
