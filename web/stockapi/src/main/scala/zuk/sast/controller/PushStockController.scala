@@ -61,7 +61,7 @@ class PushStockController {
           val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
           var dateStr = simpleDateFormat.format(new Date())
           jsonfiles.filter(!_.getName.startsWith(dateStr)).foreach(file => {
-            log.info(s"删除结果文件：${file.getPath}")
+            log.info(s"删除历史结果文件：${file.getPath}")
             file.delete()
           })
         }
