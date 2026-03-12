@@ -1,6 +1,7 @@
 package zuk.sast.controller
 
 import com.alibaba.fastjson2.{JSONArray, JSONObject}
+import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
@@ -13,6 +14,7 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util
 import java.util.Date
+import java.util.concurrent.Executors
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
@@ -46,12 +48,42 @@ class PushStockController {
 
   private val log = LoggerFactory.getLogger(classOf[PushStockController])
 
+  private val Executor_Service = Executors.newSingleThreadExecutor()
+
+  @PostConstruct
+  def init(): Unit = {
+    log.info("PushStockController 初始化完成")
+    Executor_Service.execute(()=>{
+      try {
+        val file: File = getStockResultJsonPath()
+        if (file.exists() && file.isDirectory) {
+          val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
+          val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+          var dateStr = simpleDateFormat.format(new Date())
+          jsonfiles.filter(!_.getName.startsWith(dateStr)).foreach(file => {
+            log.info(s"删除结果文件：${file.getPath}")
+            file.delete()
+          })
+        }
+      }
+      catch
+        case exception: Exception =>
+    })
+  }
+
   /***
    * 获取application.properties中的数据，股票json结果路径
    */
   @Value("${stock.result.json.path}")
   @BeanProperty
   private var stockResultJsonPath: String = null
+
+  private def getStockResultJsonPath(): File = {
+    val pro = System.getProperties
+    log.info(s"stock result json path: ${this.stockResultJsonPath}")
+    val file = new File(this.stockResultJsonPath)
+    file
+  }
 
   @GetMapping(value = Array("list"))
   def all(tradedate: String): util.Map[String, Object] = {
@@ -60,9 +92,7 @@ class PushStockController {
     response.put("code", s"success")
     response.put("time", s"${System.currentTimeMillis()}")
 
-    val pro = System.getProperties
-    log.info(s"stock result json path: ${this.stockResultJsonPath}")
-    val file = new File(this.stockResultJsonPath)
+    val file = getStockResultJsonPath()
     if(file.exists() && file.isDirectory){
       val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
       val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
