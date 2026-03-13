@@ -61,7 +61,7 @@ class MA1_1_Model extends IModel {
   override def getStockDto(): StockDto = this.stockDto
 
   override def desc(): String = {
-    "合力炸板，主力强势介入，缩量上涨"
+    "合力炸板，主力强势介入，缩量上涨，优先无上影线"
   }
 
   override def winRate: Float = {
