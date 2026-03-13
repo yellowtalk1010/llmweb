@@ -56,6 +56,8 @@ class JsonFile extends ISend {
           map.put("modDesc", modDesc)
           map.put("modClsName", modClsName)
 
+          map.put("upperShadow", if(dto.warningUpperShadow) "上影线警告" else  "")
+
           map
         }).asJava
 

@@ -80,4 +80,6 @@ class MA3_3_Model extends IModel {
 
   override def reference: Float = 0.00
 
+  override def warnUpperShadow: Boolean = this.stockDto.warningUpperShadow
+
 }

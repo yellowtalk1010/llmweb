@@ -23,6 +23,9 @@ trait IModel {
 
   def reference: Float
 
+  //上影线警告
+  def warnUpperShadow: Boolean
+
   def filterPriceLimitUp(moduleDay: ModuleDay): Boolean = {
     if(moduleDay.priceLimit == null){
       true
