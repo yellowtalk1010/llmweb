@@ -107,7 +107,7 @@ trait IModel {
       val lowPrice = new BigDecimal(e.low)
       val upperShadowRate = (highPrice.subtract(closePrice)).divide(highPrice.subtract(lowPrice),4,RoundingMode.DOWN)
       upperShadowRate
-    }).filter(e=>e.compareTo(new BigDecimal(0.4))>=0)
+    }).filter(e=>e.compareTo(new BigDecimal(0.35))>=0)
 
     rates.size>0
   }
