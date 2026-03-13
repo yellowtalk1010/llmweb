@@ -36,7 +36,7 @@ case class StockResultJson(){
   @BeanProperty var limitDown: String = ""
   @BeanProperty var modWinRate: String = ""
   @BeanProperty var modClsName: String = ""
-  
+
   @BeanProperty var upperShadow: String = "" //上影线警告
 }
 

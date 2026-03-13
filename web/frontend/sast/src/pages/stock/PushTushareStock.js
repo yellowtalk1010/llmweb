@@ -113,6 +113,7 @@ function StockTable({ list }) {
           <th className="p-2 text-left">换手率</th>
           <th className="p-2 text-left">涨停</th>
           <th className="p-2 text-left">跌停</th>
+          <th className="p-2 text-left">风险</th>
           <th className="p-2 text-left">来源</th>
         </tr>
         </thead>
@@ -136,7 +137,7 @@ function StockTable({ list }) {
               <td className="p-2">{item.turnoverRate}</td>
               <td className="p-2 text-red-500">{item.limitUp}</td>
               <td className="p-2 text-blue-500">{item.limitDown}</td>
-              
+              <td className="p-2">{item.upperShadow}</td>
               <td className="p-2">{item.fileName}</td>
             </tr>
           ))}
