@@ -2,6 +2,7 @@ package zuk.tu_share.module
 
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 
+import java.math
 import scala.collection.mutable.ListBuffer
 import java.math.{BigDecimal, RoundingMode}
 
@@ -108,8 +109,13 @@ trait IModel {
       val closePrice = new BigDecimal(e.close)
       val highPrice = new BigDecimal(e.high)
       val lowPrice = new BigDecimal(e.low)
-      val upperShadowRate = (highPrice.subtract(closePrice)).divide(highPrice.subtract(lowPrice),4,RoundingMode.DOWN)
-      upperShadowRate
+      if(highPrice.subtract(lowPrice).compareTo(math.BigDecimal.ZERO)==0){
+        math.BigDecimal.ZERO
+      }
+      else {
+        val upperShadowRate = (highPrice.subtract(closePrice)).divide(highPrice.subtract(lowPrice), 4, RoundingMode.DOWN)
+        upperShadowRate
+      }
     }).filter(e=>e.compareTo(new BigDecimal(0.35))>=0)
 
     rates.size>0
