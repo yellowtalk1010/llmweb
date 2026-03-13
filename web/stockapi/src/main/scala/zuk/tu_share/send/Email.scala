@@ -36,7 +36,7 @@ class Email extends ISend {
         val e = dto.tsStock
         val href = e.getEastmoneyURL()
         val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
-        s"${e.ts_code}, ${name_href}, ${e.area}，${e.industry}, ${dto.limitUp}, ${dto.limitDown}, ${dto.turnoverRate}活跃"
+        s"${e.ts_code}, ${name_href}, ${e.area}，${e.industry}, ${dto.limitUp}, ${dto.limitDown}, ${dto.turnoverRate}活跃, ${if(dto.warningUpperShadow) "上影线警告" else ""}"
       }).mkString("\n<br><br>\n")
 
       htmlContent =  s"【${moduleList.head.winRate}】${moduleList.head.desc()}, ${moduleList.head.getClass.getSimpleName}<br><br>" + htmlContent
