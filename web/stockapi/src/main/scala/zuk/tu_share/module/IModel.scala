@@ -88,4 +88,28 @@ trait IModel {
       case exception: Exception => 0.0
   }
 
+  /***
+   * 上引线比例
+   * @param days
+   * @return
+   */
+  def upperShadow(days: List[ModuleDay]): Boolean = {
+    val list = new ListBuffer[ModuleDay]()
+    if(days.size==1){
+      list += days.head
+    }
+    else if(days.size>=2) {
+      list ++= days.take(2)
+    }
+    val rates = list.map(e=>{
+      val closePrice = new BigDecimal(e.close)
+      val highPrice = new BigDecimal(e.high)
+      val lowPrice = new BigDecimal(e.low)
+      val upperShadowRate = (highPrice.subtract(closePrice)).divide(highPrice.subtract(lowPrice),4,RoundingMode.DOWN)
+      upperShadowRate
+    }).filter(e=>e.compareTo(new BigDecimal(0.4))>=0)
+
+    rates.size>0
+  }
+
 }
