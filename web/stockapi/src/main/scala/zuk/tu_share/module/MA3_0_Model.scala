@@ -28,6 +28,7 @@ class MA3_0_Model extends IModel {
         val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
         if(tsStock!=null){
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+          stockDto.warningUpperShadow = super.upperShadow(days)
           if(StringUtils.isNotBlank(head.total_mv)){
             stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
             stockDto.preChangeRate = new BigDecimal(head.change).setScale(2, RoundingMode.HALF_UP).floatValue()

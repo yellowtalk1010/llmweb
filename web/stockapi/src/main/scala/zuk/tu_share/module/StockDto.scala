@@ -11,4 +11,5 @@ class StockDto(@BeanProperty var tsStock: TsStock,  //个股详情
               ) {
   @BeanProperty var totalMV: Float = 0.0 //总市值
   @BeanProperty var preChangeRate: Float = 0.0 //买入当天尾盘涨跌幅
+  @BeanProperty var warningUpperShadow: Boolean = false //上影线警告
 }
