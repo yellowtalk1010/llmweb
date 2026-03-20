@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 
 import java.io.{File, FileOutputStream, FileReader, InputStream}
+import java.math
 import java.math.{BigDecimal, RoundingMode}
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -112,6 +113,14 @@ object DataFrame {
 
     //按时间降序
     val sorted = moduleDays.sortBy(_.trade_date).reverse.toList
+//      .filter(e=>{
+//        //移除停牌股票，但是历史数据中，停牌数据不会出现
+//        val tingPai = new BigDecimal(e.open).compareTo(math.BigDecimal.ZERO)==0
+//          || new BigDecimal(e.high).compareTo(math.BigDecimal.ZERO)==0
+//          || new BigDecimal(e.low).compareTo(math.BigDecimal.ZERO)==0
+//          || new BigDecimal(e.close).compareTo(math.BigDecimal.ZERO)==0
+//        !tingPai
+//      })
     sorted
   }
 
@@ -162,7 +171,14 @@ object DataFrame {
     catch
       case exception: Exception => exception.printStackTrace()
 
-    stockDayVoList.toList
+    stockDayVoList.toList.filter(rtk=>{
+      //移除停牌股票
+      val tingPai = new BigDecimal(rtk.open).compareTo(math.BigDecimal.ZERO)==0
+        || new BigDecimal(rtk.high).compareTo(math.BigDecimal.ZERO)==0
+        || new BigDecimal(rtk.low).compareTo(math.BigDecimal.ZERO)==0
+        || new BigDecimal(rtk.close).compareTo(math.BigDecimal.ZERO)==0
+      !tingPai
+    })
   }
 
   private def loadProperties() = {
