@@ -53,7 +53,7 @@ object BackTest {
             val preClose = mod.sells.head.pre_close
             val highStr = mod.sells.map(e => {
               val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
-              if(change.compareTo(new BigDecimal(0.45)) >= 0){
+              if(change.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0){
                 st = true //算入手续费
               }
               s"${e.trade_date}【${change}】【卖出】"
