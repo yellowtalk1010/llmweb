@@ -105,6 +105,7 @@ object BackTest {
       val sdf = new SimpleDateFormat("yyyy-MM-dd")
       val dateStr = sdf.format(new Date())
       output = new FileOutputStream(DataFrame.config_properties)
+      DataFrame.properties.put("wrate", ParseCammandParam.param.wrate)
       DataFrame.properties.store(output, s"${dateStr} stock config")
     }
     catch
