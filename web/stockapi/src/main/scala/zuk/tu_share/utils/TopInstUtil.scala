@@ -20,11 +20,11 @@ object TopInstUtil {
    *
    * 最近30天
    */
-  def loadData(): scala.collection.mutable.HashMap[String, List[TopInst]] = synchronized {
+  def loadData(topInstPath: String): scala.collection.mutable.HashMap[String, List[TopInst]] = synchronized {
     if(topInstMap.size>0){
       return topInstMap
     }
-    val topInstPath = s"tushare/hm/top_inst/"
+//    val topInstPath = s"tushare/hm/top_inst/"
     val topInstFile = new File(topInstPath)
     var files = topInstFile.listFiles().sortBy(_.getName).reverse
     if (files.size > SIZE) {
