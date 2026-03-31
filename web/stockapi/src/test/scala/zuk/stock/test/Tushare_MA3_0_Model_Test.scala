@@ -8,8 +8,8 @@ import zuk.tu_share.module.HM_MOD.handule
 
 class Tushare_MA3_0_Model_Test extends AnyFunSuite {
 
-  val path = "tushare"
-  test("tushare-3"){
+  val path = "D:\\development\\github\\tushare\\111\\tushare"
+  test("模型分析"){
     val args = Array("-path", path, "-pwd", "huangliaofather")
     Main.main(args)
   }
