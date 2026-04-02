@@ -1,13 +1,24 @@
 package zuk.sast;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.Cookie;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PlaywrightTest {
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     public static void main(String[] args) {
         try (Playwright playwright = Playwright.create()) {
 
@@ -18,29 +29,25 @@ public class PlaywrightTest {
                  *    命令执行： .\chrome.exe --remote-debugging-port=9222 --user-data-dir=D:\temp\chrome-debug
                  *    检查端口： netstat -ano | findstr 9222
                  */
+                String deepseekChatURL = "https://chat.deepseek.com";
                 Browser browser = playwright.chromium().connectOverCDP("http://127.0.0.1:9222");
                 List<BrowserContext> browserContexts = browser.contexts();
                 for (BrowserContext browserContext : browserContexts) {
-                    List<Page> pages = browserContext.pages();
-                    Set<String> set = new HashSet<>();
-                    for (Page page : pages) {
-                        set.add(page.url());
+                    List<Page> pages = browserContext.pages().stream().filter(p->{
+                        System.out.println("网页地址：" + p.url());
+                        return p.url().startsWith(deepseekChatURL);
+                    }).toList();
+
+                    Page deepseekPage = null;
+                    if (pages==null || pages.size()==0) {
+                        System.out.println("打开deepseek");
+                        browserContext.newPage().navigate(deepseekChatURL);
+                        deepseekPage = browserContext.pages().get(0);
+                    }
+                    else {
+                        deepseekPage = pages.get(0);
                     }
 
-                    List<String> urls = Arrays.asList(
-                            "https://chat.deepseek.com/",
-                            "https://chatgpt.com/",
-                            "https://www.baidu.com/"
-                    );
-
-                    for (String url : urls) {
-                        if(!set.contains(url)){
-                            browserContext.newPage().navigate(url);
-                            System.out.println("在浏览器中打开网址：" + url);
-                        }
-                    }
-
-                    String deepseekChatURL = urls.get(0);
                     List<Cookie> cookieList = browserContext.cookies(deepseekChatURL);
                     System.out.println(deepseekChatURL + "的cookie输出：");
                     cookieList.stream().forEach(cookie -> {
@@ -50,11 +57,6 @@ public class PlaywrightTest {
                         System.out.println(name + "=" + value);
                     });
 
-                    System.out.println();
-
-                    Page deepseekPage = pages.stream().filter(p->{
-                        return p.url().contains("deepseek.com");
-                    }).toList().get(0);
                     APIResponse apiResponse = deepseekPage.request().get("https://chat.deepseek.com/api/v0/users/current");
                     if(apiResponse.ok()){
                         String data = apiResponse.text();
@@ -146,4 +148,531 @@ public class PlaywrightTest {
 
         }
     }
+
+    private String getChromeWebSocketUrl(String cdpUrl, int requestTimeoutMillis) throws IOException, InterruptedException {
+        String url = cdpUrl.endsWith("/") ? cdpUrl + "json/version" : cdpUrl + "/json/version";
+
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofMillis(requestTimeoutMillis))
+                .build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .timeout(Duration.ofMillis(requestTimeoutMillis))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            return null;
+        }
+
+        try {
+            String body = response.body();
+            JsonNode json = OBJECT_MAPPER.readTree(body);
+            return json.path("webSocketDebuggerUrl").asText(null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
+
+
+
+
+
+//import com.fasterxml.jackson.databind.JsonNode;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.microsoft.playwright.*;
+//        import com.microsoft.playwright.options.Cookie;
+//
+//import java.io.IOException;
+//import java.net.URI;
+//import java.net.http.HttpClient;
+//import java.net.http.HttpRequest;
+//import java.net.http.HttpResponse;
+//import java.time.Duration;
+//import java.util.*;
+//        import java.util.concurrent.*;
+//        import java.util.concurrent.atomic.AtomicBoolean;
+//import java.util.concurrent.atomic.AtomicReference;
+//
+//public class DeepSeekWebLoginService {
+//
+//    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+//
+//    public interface ProgressCallback {
+//        void onProgress(String msg);
+//    }
+//
+//    public interface OpenUrlCallback {
+//        boolean openUrl(String url) throws Exception;
+//    }
+//
+//    public static class DeepSeekWebCredentials {
+//        private final String cookie;
+//        private final String bearer;
+//        private final String userAgent;
+//
+//        public DeepSeekWebCredentials(String cookie, String bearer, String userAgent) {
+//            this.cookie = cookie;
+//            this.bearer = bearer;
+//            this.userAgent = userAgent;
+//        }
+//
+//        public String getCookie() {
+//            return cookie;
+//        }
+//
+//        public String getBearer() {
+//            return bearer;
+//        }
+//
+//        public String getUserAgent() {
+//            return userAgent;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "DeepSeekWebCredentials{" +
+//                    "cookie='" + cookie + '\'' +
+//                    ", bearer='" + bearer + '\'' +
+//                    ", userAgent='" + userAgent + '\'' +
+//                    '}';
+//        }
+//    }
+//
+//    /**
+//     * 只 attach 到已有 Chrome。
+//     */
+//    public DeepSeekWebCredentials loginDeepseekWebAttachOnly(int cdpPort, String cdpUrl, ProgressCallback onProgress) throws Exception {
+//        String finalCdpUrl = (cdpUrl != null && !cdpUrl.isBlank())
+//                ? cdpUrl
+//                : "http://127.0.0.1:" + cdpPort;
+//
+//        onProgress.onProgress("Connecting to existing Chrome...");
+//
+//        try (Playwright playwright = Playwright.create()) {
+//            onProgress.onProgress("Waiting for browser debugger...");
+//
+//            String wsUrl = waitForChromeWebSocketUrl(finalCdpUrl, 10, 500, 2000);
+//            if (wsUrl == null) {
+//                throw new IllegalStateException("Failed to connect to Chrome at " + finalCdpUrl);
+//            }
+//
+//            onProgress.onProgress("Connecting to browser...");
+//            Browser browser = playwright.chromium().connectOverCDP(wsUrl);
+//
+//            try {
+//                BrowserContext context = browser.contexts().isEmpty()
+//                        ? browser.newContext()
+//                        : browser.contexts().get(0);
+//
+//                Page page = findOrCreateDeepSeekPage(context, onProgress);
+//
+//                onProgress.onProgress("Checking for existing DeepSeek session...");
+//
+//                List<Cookie> existingCookies = context.cookies(Arrays.asList(
+//                        "https://chat.deepseek.com",
+//                        "https://deepseek.com"
+//                ));
+//                String cookieString = joinCookies(existingCookies);
+//
+//                boolean hasDeviceId = cookieString.contains("d_id=");
+//                boolean hasSessionId = cookieString.contains("ds_session_id=");
+//                boolean hasSessionInfo = cookieString.contains("HWSID=") || cookieString.contains("uuid=");
+//
+//                String bearer = "";
+//                String userAgent = page.evaluate("() => navigator.userAgent");
+//
+//                if ((hasDeviceId || hasSessionId || hasSessionInfo || existingCookies.size() > 3)
+//                        && cookieString.length() > 10) {
+//                    onProgress.onProgress("Found existing DeepSeek session!");
+//
+//                    try {
+//                        page.navigate("https://chat.deepseek.com/",
+//                                new Page.NavigateOptions().setTimeout(5000));
+//                    } catch (Exception ignored) {
+//                    }
+//
+//                    try {
+//                        Map<String, String> localStorageData = page.evaluate(
+//                                "() => {\n" +
+//                                        "  const data = {};\n" +
+//                                        "  for (let i = 0; i < localStorage.length; i++) {\n" +
+//                                        "    const key = localStorage.key(i);\n" +
+//                                        "    if (key) data[key] = localStorage.getItem(key) || '';\n" +
+//                                        "  }\n" +
+//                                        "  return data;\n" +
+//                                        "}"
+//                        );
+//
+//                        for (Map.Entry<String, String> entry : localStorageData.entrySet()) {
+//                            String key = entry.getKey();
+//                            String value = entry.getValue();
+//
+//                            if (key == null || value == null) {
+//                                continue;
+//                            }
+//
+//                            String lowerKey = key.toLowerCase(Locale.ROOT);
+//                            if (lowerKey.contains("token") || lowerKey.contains("auth")) {
+//                                try {
+//                                    JsonNode parsed = OBJECT_MAPPER.readTree(value);
+//                                    JsonNode tokenNode = parsed.get("token");
+//                                    if (tokenNode != null && tokenNode.isTextual() && !tokenNode.asText().isBlank()) {
+//                                        bearer = tokenNode.asText();
+//                                        break;
+//                                    } else if (parsed.isTextual() && parsed.asText().length() > 20) {
+//                                        bearer = parsed.asText();
+//                                        break;
+//                                    }
+//                                } catch (Exception e) {
+//                                    if (value.length() > 20) {
+//                                        bearer = value;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    } catch (Exception ignored) {
+//                    }
+//
+//                    if (bearer.isBlank()) {
+//                        onProgress.onProgress("Requesting DeepSeek API to capture token...");
+//                        try {
+//                            APIResponse response = context.request().get(
+//                                    "https://chat.deepseek.com/api/v0/users/current",
+//                                    RequestOptions.create().setHeader("Cookie", cookieString)
+//                            );
+//                            if (response.ok()) {
+//                                JsonNode data = OBJECT_MAPPER.readTree(response.text());
+//                                bearer = data.path("data").path("biz_data").path("token").asText("");
+//                            }
+//                        } catch (Exception ignored) {
+//                        }
+//                    }
+//
+//                    return new DeepSeekWebCredentials(cookieString, bearer, userAgent);
+//                }
+//
+//                onProgress.onProgress("No existing session found. Opening DeepSeek for login...");
+//
+//                page.navigate("https://chat.deepseek.com/");
+//                userAgent = page.evaluate("() => navigator.userAgent");
+//
+//                onProgress.onProgress(
+//                        "Please login to DeepSeek in the opened browser window. The session token will be captured automatically once you are logged in."
+//                );
+//
+//                return waitForLogin(context, page, userAgent, false);
+//            } finally {
+//                try {
+//                    browser.close();
+//                } catch (Exception ignored) {
+//                }
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 更接近你 TS 里的 loginDeepseekWeb。
+//     * attachOnly=true 时接管已有 Chrome；否则这里预留给你自行补 launch Chrome 的逻辑。
+//     */
+//    public DeepSeekWebCredentials loginDeepseekWeb(
+//            boolean attachOnly,
+//            int cdpPort,
+//            String cdpUrl,
+//            ProgressCallback onProgress,
+//            OpenUrlCallback openUrlCallback
+//    ) throws Exception {
+//        if (!attachOnly) {
+//            throw new UnsupportedOperationException("当前示例只实现 attachOnly 模式；launch Chrome 的逻辑请按你的工程补上。");
+//        }
+//
+//        String finalCdpUrl = (cdpUrl != null && !cdpUrl.isBlank())
+//                ? cdpUrl
+//                : "http://127.0.0.1:" + cdpPort;
+//
+//        onProgress.onProgress("Connecting to existing Chrome (attach mode)...");
+//
+//        try (Playwright playwright = Playwright.create()) {
+//            onProgress.onProgress("Waiting for browser debugger...");
+//
+//            String wsUrl = waitForChromeWebSocketUrl(finalCdpUrl, 10, 500, 2000);
+//            if (wsUrl == null) {
+//                throw new IllegalStateException("Failed to resolve Chrome WebSocket URL from " + finalCdpUrl);
+//            }
+//
+//            onProgress.onProgress("Connecting to browser...");
+//            Browser browser = playwright.chromium().connectOverCDP(wsUrl);
+//
+//            try {
+//                BrowserContext context = browser.contexts().isEmpty()
+//                        ? browser.newContext()
+//                        : browser.contexts().get(0);
+//
+//                Page page = findOrCreateDeepSeekPage(context, onProgress);
+//
+//                onProgress.onProgress("Checking for existing DeepSeek session...");
+//
+//                List<Cookie> existingCookies = context.cookies(Arrays.asList(
+//                        "https://chat.deepseek.com",
+//                        "https://deepseek.com"
+//                ));
+//                String cookieString = joinCookies(existingCookies);
+//
+//                boolean hasDeviceId = cookieString.contains("d_id=");
+//                boolean hasSessionId = cookieString.contains("ds_session_id=");
+//                boolean hasSessionInfo = cookieString.contains("HWSID=") || cookieString.contains("uuid=");
+//                boolean hasValidSession = (hasDeviceId || hasSessionId || hasSessionInfo || existingCookies.size() > 3)
+//                        && cookieString.length() > 10;
+//
+//                String bearer = "";
+//                String userAgent = page.evaluate("() => navigator.userAgent");
+//
+//                if (hasValidSession) {
+//                    onProgress.onProgress("Found existing session, attempting to capture credentials...");
+//
+//                    try {
+//                        APIResponse response = context.request().get("https://chat.deepseek.com/api/v0/users/current");
+//                        if (response.ok()) {
+//                            JsonNode data = OBJECT_MAPPER.readTree(response.text());
+//                            bearer = data.path("data").path("biz_data").path("token").asText("");
+//                            if (!bearer.isBlank()) {
+//                                onProgress.onProgress("Successfully captured credentials!");
+//                                return new DeepSeekWebCredentials(cookieString, bearer, userAgent);
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        System.out.println("[DeepSeek] Could not auto-capture token: " + e);
+//                    }
+//
+//                    onProgress.onProgress("Session detected but token expired. Redirecting to login page...");
+//                    hasValidSession = false;
+//                }
+//
+//                page.navigate("https://chat.deepseek.com/");
+//                userAgent = page.evaluate("() => navigator.userAgent");
+//
+//                if (hasValidSession) {
+//                    onProgress.onProgress("Session detected but token expired. Please re-login in the browser window.");
+//                } else {
+//                    onProgress.onProgress(
+//                            "Please login to DeepSeek in the opened browser window. The session token will be captured automatically once you are logged in."
+//                    );
+//                }
+//
+//                return waitForLogin(context, page, userAgent, true);
+//            } finally {
+//                try {
+//                    browser.close();
+//                } catch (Exception ignored) {
+//                }
+//            }
+//        }
+//    }
+//
+//    private DeepSeekWebCredentials waitForLogin(
+//            BrowserContext context,
+//            Page page,
+//            String userAgent,
+//            boolean rejectOnPageClose
+//    ) throws Exception {
+//        AtomicReference<String> capturedBearer = new AtomicReference<>(null);
+//        AtomicBoolean resolved = new AtomicBoolean(false);
+//        CompletableFuture<DeepSeekWebCredentials> future = new CompletableFuture<>();
+//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+//
+//        Runnable tryResolve = () -> {
+//            if (resolved.get()) {
+//                return;
+//            }
+//
+//            String bearer = capturedBearer.get();
+//            if (bearer == null || bearer.isBlank()) {
+//                return;
+//            }
+//
+//            try {
+//                List<Cookie> cookies = context.cookies(Arrays.asList(
+//                        "https://chat.deepseek.com",
+//                        "https://deepseek.com"
+//                ));
+//
+//                if (cookies.isEmpty()) {
+//                    return;
+//                }
+//
+//                String cookieString = joinCookies(cookies);
+//                boolean hasDeviceId = cookieString.contains("d_id=");
+//                boolean hasSessionId = cookieString.contains("ds_session_id=");
+//                boolean hasSessionInfo = cookieString.contains("HWSID=") || cookieString.contains("uuid=");
+//
+//                if (hasDeviceId || hasSessionId || hasSessionInfo || cookies.size() > 3) {
+//                    if (resolved.compareAndSet(false, true)) {
+//                        System.out.println("[DeepSeek] Credentials captured");
+//                        future.complete(new DeepSeekWebCredentials(cookieString, bearer, userAgent));
+//                    }
+//                }
+//            } catch (Exception e) {
+//                System.err.println("[DeepSeek] Failed to fetch cookies: " + e);
+//            }
+//        };
+//
+//        page.onRequest(request -> {
+//            try {
+//                String url = request.url();
+//                if (url.contains("/api/v0/")) {
+//                    Map<String, String> headers = request.headers();
+//                    String auth = headers.get("authorization");
+//
+//                    if (auth != null && auth.startsWith("Bearer ")) {
+//                        if (capturedBearer.get() == null) {
+//                            System.out.println("[DeepSeek Research] Captured Bearer Token.");
+//                            capturedBearer.set(auth.substring(7));
+//                        }
+//                        tryResolve.run();
+//                    }
+//
+//                    if (url.contains("/api/v0/chat/completion")) {
+//                        System.out.println("[DeepSeek Research] Completion Request Headers Check: { hasAuth: " + (auth != null) + " }");
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        page.onResponse(response -> {
+//            try {
+//                String url = response.url();
+//                if (url.contains("/api/v0/users/current") && response.ok()) {
+//                    JsonNode body = OBJECT_MAPPER.readTree(response.text());
+//                    JsonNode tokenNode = body.path("data").path("biz_data").path("token");
+//                    String tokenFromResponse = tokenNode.isTextual() ? tokenNode.asText("") : "";
+//
+//                    if (!tokenFromResponse.isBlank()) {
+//                        if (capturedBearer.get() == null) {
+//                            System.out.println("[DeepSeek] Captured token from users/current response");
+//                            capturedBearer.set(tokenFromResponse);
+//                        }
+//                        tryResolve.run();
+//                    }
+//                }
+//            } catch (Exception ignored) {
+//            }
+//        });
+//
+//        if (rejectOnPageClose) {
+//            page.onClose(pageClosed -> {
+//                if (resolved.compareAndSet(false, true)) {
+//                    future.completeExceptionally(
+//                            new IllegalStateException("Browser window closed before login was captured.")
+//                    );
+//                }
+//            });
+//        }
+//
+//        ScheduledFuture<?> pollTask = scheduler.scheduleAtFixedRate(tryResolve, 2, 2, TimeUnit.SECONDS);
+//        ScheduledFuture<?> timeoutTask = scheduler.schedule(() -> {
+//            if (resolved.compareAndSet(false, true)) {
+//                future.completeExceptionally(new TimeoutException("Login timed out (5 minutes)."));
+//            }
+//        }, 5, TimeUnit.MINUTES);
+//
+//        try {
+//            return future.get();
+//        } catch (ExecutionException e) {
+//            Throwable cause = e.getCause();
+//            if (cause instanceof Exception ex) {
+//                throw ex;
+//            }
+//            throw new RuntimeException(cause);
+//        } finally {
+//            pollTask.cancel(true);
+//            timeoutTask.cancel(true);
+//            scheduler.shutdownNow();
+//        }
+//    }
+//
+//    private Page findOrCreateDeepSeekPage(BrowserContext context, ProgressCallback onProgress) {
+//        List<Page> existingPages = context.pages();
+//        for (Page p : existingPages) {
+//            String url = safeUrl(p);
+//            if (url.contains("deepseek.com") || url.contains("chat.deepseek.com")) {
+//                onProgress.onProgress("Found existing DeepSeek page, switching to it...");
+//                try {
+//                    p.bringToFront();
+//                } catch (Exception ignored) {
+//                }
+//                return p;
+//            }
+//        }
+//
+//        onProgress.onProgress("Opening DeepSeek page...");
+//        return context.newPage();
+//    }
+//
+//    private String safeUrl(Page page) {
+//        try {
+//            return page.url();
+//        } catch (Exception e) {
+//            return "";
+//        }
+//    }
+//
+//    private String joinCookies(List<Cookie> cookies) {
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < cookies.size(); i++) {
+//            Cookie c = cookies.get(i);
+//            if (i > 0) {
+//                sb.append("; ");
+//            }
+//            sb.append(c.name).append("=").append(c.value);
+//        }
+//        return sb.toString();
+//    }
+//
+//    /**
+//     * 从 http://127.0.0.1:9222/json/version 取 webSocketDebuggerUrl
+//     */
+//    private String waitForChromeWebSocketUrl(String cdpUrl, int maxRetries, long sleepMillis, int requestTimeoutMillis)
+//            throws IOException, InterruptedException {
+//        for (int i = 0; i < maxRetries; i++) {
+//            String ws = getChromeWebSocketUrl(cdpUrl, requestTimeoutMillis);
+//            if (ws != null && !ws.isBlank()) {
+//                return ws;
+//            }
+//            Thread.sleep(sleepMillis);
+//        }
+//        return null;
+//    }
+//
+//    private String getChromeWebSocketUrl(String cdpUrl, int requestTimeoutMillis)
+//            throws IOException, InterruptedException {
+//        String url = cdpUrl.endsWith("/") ? cdpUrl + "json/version" : cdpUrl + "/json/version";
+//
+//        HttpClient client = HttpClient.newBuilder()
+//                .connectTimeout(Duration.ofMillis(requestTimeoutMillis))
+//                .build();
+//
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(URI.create(url))
+//                .timeout(Duration.ofMillis(requestTimeoutMillis))
+//                .GET()
+//                .build();
+//
+//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//        if (response.statusCode() != 200) {
+//            return null;
+//        }
+//
+//        try {
+//            JsonNode json = OBJECT_MAPPER.readTree(response.body());
+//            return json.path("webSocketDebuggerUrl").asText(null);
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
+//}
