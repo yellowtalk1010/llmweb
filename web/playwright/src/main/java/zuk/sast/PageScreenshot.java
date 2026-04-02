@@ -19,7 +19,15 @@ public class PageScreenshot {
             for (BrowserType browserType : browserTypes) {
 
                 try {
-//                    Browser browser = browserType.launch();
+                    /***
+                     * 启动playwright浏览器
+                     */
+//                    Browser browser = browserType.launch(); //
+
+                    /***
+                     * 启动系统已经安装的chrome
+                     * 前提是系统的chrome启动时，启用了9222端口，命令是： .\chrome.exe --remote-debugging-port=9222 --user-data-dir=D:\temp\chrome-debug
+                     */
                     Browser browser = playwright.chromium().connectOverCDP("http://127.0.0.1:9222");
                     BrowserContext context = browser.newContext();
                     Page page = context.newPage();
