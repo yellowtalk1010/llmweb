@@ -113,44 +113,30 @@ public class PlaywrightTest {
                     System.out.println("User-Agent: " + userAgent); //输出内容： User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
 
 
-                    AtomicReference<String> capturedBearer = new AtomicReference<>(null);
-                    deepseekPage.onRequest(request -> {
-                        //监听一个请求
-                        String url = request.url();
-                        if (url.contains("/api/v0/")) {
-                            Map<String, String> headers = request.headers();
-                            String auth = headers.get("authorization");
-                            System.out.println("auth:" + auth);
-
-                            if (auth != null && auth.startsWith("Bearer ")) {
-                                if (capturedBearer.get() == null) {
-                                    System.out.println("[DeepSeek Research] Captured Bearer Token.");
-                                    capturedBearer.set(auth.substring(7));
-                                }
-
-//                                tryResolve(); // Java 里直接调用方法（同步）
-                            }
-
-                            if (url.contains("/api/v0/chat/completion")) {
-                                System.out.println("[DeepSeek Research] Completion Request Headers Check: { hasAuth: " + (auth != null) + " }");
-                            }
-                        }
-                    });
-
-                    deepseekPage.onResponse(response -> {
-                        String url = response.url();
-
-                        // users/current returns token in data.biz_data.token
-                        if (url.contains("/api/v0/users/current") && response.ok()) {
-                            try {
-                                String bodyText = response.text();
-                                System.out.println(bodyText);
-                            }
-                            catch (Exception exception){
-                                exception.printStackTrace();
-                            }
-                        }
-                    });
+//                    AtomicReference<String> capturedBearer = new AtomicReference<>(null);
+//                    deepseekPage.onRequest(request -> {
+//                        //监听一个请求
+//                        String url = request.url();
+//                        if (url.contains("/api/v0/")) {
+//                            Map<String, String> headers = request.headers();
+//                            String auth = headers.get("authorization");
+//                            System.out.println("auth:" + auth);
+//
+//                            if (auth != null && auth.startsWith("Bearer ")) {
+//                                if (capturedBearer.get() == null) {
+//                                    System.out.println("[DeepSeek Research] Captured Bearer Token.");
+//                                    capturedBearer.set(auth.substring(7));
+//                                }
+//
+////                                tryResolve(); // Java 里直接调用方法（同步）
+//                            }
+//
+//                            if (url.contains("/api/v0/chat/completion")) {
+//                                System.out.println("[DeepSeek Research] Completion Request Headers Check: { hasAuth: " + (auth != null) + " }");
+//                            }
+//                        }
+//                    });
+//
 //                    deepseekPage.onResponse(response -> {
 //                        String url = response.url();
 //
@@ -158,35 +144,25 @@ public class PlaywrightTest {
 //                        if (url.contains("/api/v0/users/current") && response.ok()) {
 //                            try {
 //                                String bodyText = response.text();
-//                                JsonNode body = objectMapper.readTree(bodyText);
-//
-//                                JsonNode tokenNode = body.path("data").path("biz_data").path("token");
-//                                if (tokenNode.isTextual() && !tokenNode.asText().isEmpty()) {
-//                                    if (capturedBearer.get() == null) {
-//                                        System.out.println("[DeepSeek] Captured token from users/current response");
-//                                        capturedBearer.set(tokenNode.asText());
-//                                    }
-//                                    tryResolve();
-//                                }
-//                            } catch (Exception ignored) {
-//                                // ignore
+//                                System.out.println(bodyText);
+//                            }
+//                            catch (Exception exception){
+//                                exception.printStackTrace();
 //                            }
 //                        }
 //                    });
+//                    deepseekPage.onClose(page -> {
+//                        System.out.println("关闭");
+//                    });
 
-                    deepseekPage.onClose(page -> {
-                        System.out.println("关闭");
-                    });
+                    PlaywrightTest playwrightTest = new PlaywrightTest();
+                    playwrightTest.loginDeepseekWebAttachOnly(9222, "", new ProgressCallback());
 
                     System.out.println("等待");
                     Thread.sleep(1000*60 * 30);
 
                 }
 
-//                BrowserContext context = browser.newContext();
-//                Page page = context.newPage();
-//                page.navigate("https://playwright.dev/");
-//                page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshot-" + playwright.chromium().name() + ".png")));
             }
             catch (Exception exception) {
                 exception.printStackTrace();
