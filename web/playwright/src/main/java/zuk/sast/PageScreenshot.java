@@ -17,7 +17,10 @@ public class PageScreenshot {
                     playwright.firefox()
             );
             for (BrowserType browserType : browserTypes) {
-                try (Browser browser = browserType.launch()) {
+
+                try {
+//                    Browser browser = browserType.launch();
+                    Browser browser = playwright.chromium().connectOverCDP("http://127.0.0.1:9222");
                     BrowserContext context = browser.newContext();
                     Page page = context.newPage();
                     page.navigate("https://playwright.dev/");
