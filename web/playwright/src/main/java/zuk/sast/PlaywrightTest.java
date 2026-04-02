@@ -32,7 +32,8 @@ public class PlaywrightTest {
                     List<String> urls = Arrays.asList(
                             "https://chat.deepseek.com/",
                             "https://chatgpt.com/",
-                            "https://www.baidu.com/");
+                            "https://www.baidu.com/"
+                    );
 
                     for (String url : urls) {
                         if(!set.contains(url)){
@@ -41,7 +42,34 @@ public class PlaywrightTest {
                         }
                     }
 
-                    List<Cookie> cookieList = browserContext.cookies(urls);
+                    String deepseekChatURL = urls.get(0);
+                    List<Cookie> cookieList = browserContext.cookies(deepseekChatURL);
+                    System.out.println(deepseekChatURL + "的cookie输出：");
+                    cookieList.stream().forEach(cookie -> {
+                        String name = cookie.name;
+                        String value = cookie.value;
+                        String cURL = cookie.url;
+                        System.out.println(name + "=" + value);
+                    });
+
+                    System.out.println();
+
+                    Page deepseekPage = pages.stream().filter(p->{
+                        return p.url().contains("deepseek.com");
+                    }).toList().get(0);
+                    APIResponse response = deepseekPage.request().get("https://chat.deepseek.com/api/v0/users/current");
+                    if(response.ok()){
+                        String data = response.text();
+                        System.out.println(data);
+                    }
+
+                    try {
+                        String userAgent = deepseekPage.evaluate("() => navigator.userAgent").toString();
+                        System.out.println("User-Agent: " + userAgent);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
 
                 }
