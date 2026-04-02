@@ -18,10 +18,19 @@ public class PlaywrightTest {
                  *    检查端口： netstat -ano | findstr 9222
                  */
                 Browser browser = playwright.chromium().connectOverCDP("http://127.0.0.1:9222");
-                BrowserContext context = browser.newContext();
-                Page page = context.newPage();
-                page.navigate("https://playwright.dev/");
-                page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshot-" + playwright.chromium().name() + ".png")));
+                List<BrowserContext> browserContexts = browser.contexts();
+                for (BrowserContext browserContext : browserContexts) {
+                    List<Page> pages = browserContext.pages();
+                    for (Page page : pages) {
+                        String url = page.url();
+                        System.out.println(url); //输出当前页面的url地址
+                    }
+                }
+
+//                BrowserContext context = browser.newContext();
+//                Page page = context.newPage();
+//                page.navigate("https://playwright.dev/");
+//                page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshot-" + playwright.chromium().name() + ".png")));
             }
             catch (Exception exception) {
                 exception.printStackTrace();
