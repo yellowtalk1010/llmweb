@@ -4,7 +4,9 @@ import com.microsoft.playwright.*;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PlaywrightTest {
     public static void main(String[] args) {
@@ -21,10 +23,24 @@ public class PlaywrightTest {
                 List<BrowserContext> browserContexts = browser.contexts();
                 for (BrowserContext browserContext : browserContexts) {
                     List<Page> pages = browserContext.pages();
+                    Set<String> set = new HashSet<>();
                     for (Page page : pages) {
-                        String url = page.url();
-                        System.out.println(url); //输出当前页面的url地址
+                        set.add(page.url());
                     }
+
+                    List<String> urls = Arrays.asList(
+                            "https://chat.deepseek.com/",
+                            "https://chatgpt.com/",
+                            "https://www.baidu.com/");
+
+                    for (String url : urls) {
+                        if(!set.contains(url)){
+                            browserContext.newPage().navigate(url);
+                            System.out.println("在浏览器中打开网址：" + url);
+                        }
+                    }
+
+
                 }
 
 //                BrowserContext context = browser.newContext();
