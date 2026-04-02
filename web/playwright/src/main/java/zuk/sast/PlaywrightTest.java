@@ -55,9 +55,9 @@ public class PlaywrightTest {
                     Page deepseekPage = pages.stream().filter(p->{
                         return p.url().contains("deepseek.com");
                     }).toList().get(0);
-                    APIResponse response = deepseekPage.request().get("https://chat.deepseek.com/api/v0/users/current");
-                    if(response.ok()){
-                        String data = response.text();
+                    APIResponse apiResponse = deepseekPage.request().get("https://chat.deepseek.com/api/v0/users/current");
+                    if(apiResponse.ok()){
+                        String data = apiResponse.text();
                         System.out.println(data);   //输出: {"code":40002,"msg":"Missing Token","data":null}
                     }
 
@@ -89,7 +89,49 @@ public class PlaywrightTest {
                         }
                     });
 
-                    Thread.sleep(1000);
+                    deepseekPage.onResponse(response -> {
+                        String url = response.url();
+
+                        // users/current returns token in data.biz_data.token
+                        if (url.contains("/api/v0/users/current") && response.ok()) {
+                            try {
+                                String bodyText = response.text();
+                                System.out.println(bodyText);
+                            }
+                            catch (Exception exception){
+                                exception.printStackTrace();
+                            }
+                        }
+                    });
+//                    deepseekPage.onResponse(response -> {
+//                        String url = response.url();
+//
+//                        // users/current returns token in data.biz_data.token
+//                        if (url.contains("/api/v0/users/current") && response.ok()) {
+//                            try {
+//                                String bodyText = response.text();
+//                                JsonNode body = objectMapper.readTree(bodyText);
+//
+//                                JsonNode tokenNode = body.path("data").path("biz_data").path("token");
+//                                if (tokenNode.isTextual() && !tokenNode.asText().isEmpty()) {
+//                                    if (capturedBearer.get() == null) {
+//                                        System.out.println("[DeepSeek] Captured token from users/current response");
+//                                        capturedBearer.set(tokenNode.asText());
+//                                    }
+//                                    tryResolve();
+//                                }
+//                            } catch (Exception ignored) {
+//                                // ignore
+//                            }
+//                        }
+//                    });
+
+                    deepseekPage.onClose(page -> {
+                        System.out.println("关闭");
+                    });
+
+                    System.out.println("等待");
+                    Thread.sleep(1000*60 * 30);
 
                 }
 
