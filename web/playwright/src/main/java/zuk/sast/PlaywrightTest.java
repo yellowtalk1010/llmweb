@@ -4,10 +4,8 @@ import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.Cookie;
 
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PlaywrightTest {
     public static void main(String[] args) {
@@ -66,6 +64,32 @@ public class PlaywrightTest {
                     String userAgent = deepseekPage.evaluate("() => navigator.userAgent").toString();
                     System.out.println("User-Agent: " + userAgent); //输出内容： User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
 
+
+                    AtomicReference<String> capturedBearer = new AtomicReference<>(null);
+                    deepseekPage.onRequest(request -> {
+                        //监听一个请求
+                        String url = request.url();
+                        if (url.contains("/api/v0/")) {
+                            Map<String, String> headers = request.headers();
+                            String auth = headers.get("authorization");
+                            System.out.println("auth:" + auth);
+
+                            if (auth != null && auth.startsWith("Bearer ")) {
+                                if (capturedBearer.get() == null) {
+                                    System.out.println("[DeepSeek Research] Captured Bearer Token.");
+                                    capturedBearer.set(auth.substring(7));
+                                }
+
+//                                tryResolve(); // Java 里直接调用方法（同步）
+                            }
+
+                            if (url.contains("/api/v0/chat/completion")) {
+                                System.out.println("[DeepSeek Research] Completion Request Headers Check: { hasAuth: " + (auth != null) + " }");
+                            }
+                        }
+                    });
+
+                    Thread.sleep(1000);
 
                 }
 
