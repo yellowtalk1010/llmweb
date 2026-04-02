@@ -63,13 +63,8 @@ public class PlaywrightTest {
                         System.out.println(data);   //输出: {"code":40002,"msg":"Missing Token","data":null}
                     }
 
-                    try {
-                        String userAgent = deepseekPage.evaluate("() => navigator.userAgent").toString();
-                        System.out.println("User-Agent: " + userAgent); //输出内容： User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    String userAgent = deepseekPage.evaluate("() => navigator.userAgent").toString();
+                    System.out.println("User-Agent: " + userAgent); //输出内容： User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
 
 
                 }
