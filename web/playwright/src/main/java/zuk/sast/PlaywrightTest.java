@@ -1,6 +1,7 @@
 package zuk.sast;
 
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.Cookie;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -39,6 +40,8 @@ public class PlaywrightTest {
                             System.out.println("在浏览器中打开网址：" + url);
                         }
                     }
+
+                    List<Cookie> cookieList = browserContext.cookies(urls);
 
 
                 }
