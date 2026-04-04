@@ -32,7 +32,8 @@ public class DeepseekWebClient {
 
     private String deviceId = "";
 
-    public void DeepSeekWebClient(DeepSeekWebClientOptions options) {
+    public DeepseekWebClient(DeepSeekWebClientOptions options) {
+
         this.cookie = options.getCookie() == null ? "" : options.getCookie();
         this.bearer = options.getBearer() == null ? "" : options.getBearer();
         this.userAgent = options.getUserAgent() == null || options.getUserAgent().isBlank()
