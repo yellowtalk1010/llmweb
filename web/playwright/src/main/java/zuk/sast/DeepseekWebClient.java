@@ -23,7 +23,7 @@ import java.util.Map;
 public class DeepseekWebClient {
 
     private static final String BASE_URL = "https://chat.deepseek.com";
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+//    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private HttpClient httpClient;
     private String cookie;
@@ -61,6 +61,8 @@ public class DeepseekWebClient {
         headers.put("x-app-version", "20241129.1");
         headers.put("x-client-locale", "zh_CN");
         headers.put("x-client-timezone-offset", "28800");
+
+        headers.put("authorization", "Bearer ah0leAC28XQ+vIjpAMvVGohher7h6UHWNcHGLJ18eYRS2TF6OB4fAFZNQJbs8lTs");  //这里缺少认证信息
         return headers;
     }
 
@@ -96,7 +98,7 @@ public class DeepseekWebClient {
         HttpRequest request = requestBuilder(
                 BASE_URL + "/api/v0/chat/create_pow_challenge",
                 "POST",
-                MAPPER.writeValueAsString(body),
+                DeepseekWebAuth.OBJECT_MAPPER.writeValueAsString(body),
                 fetchHeaders(),
                 null
         ).build();
@@ -107,7 +109,7 @@ public class DeepseekWebClient {
             throw new IOException("Failed to create PoW challenge: " + response.statusCode() + " " + response.body());
         }
 
-        DeepSeekPowResponse data = MAPPER.readValue(response.body(), DeepSeekPowResponse.class);
+        DeepSeekPowResponse data = DeepseekWebAuth.OBJECT_MAPPER.readValue(response.body(), DeepSeekPowResponse.class);
         DeepSeekPowChallenge challenge = null;
 
         if (data != null && data.data != null && data.data.bizData != null && data.data.bizData.challenge != null) {
@@ -182,11 +184,14 @@ public class DeepseekWebClient {
     public DeepSeekChatSession createChatSession() throws IOException, InterruptedException {
         String targetPath = "/api/v0/chat_session/create";
 
+        Map<String, String> headers = fetchHeaders();
+
+
         HttpRequest request = requestBuilder(
                 BASE_URL + targetPath,
                 "POST",
                 "{}",
-                fetchHeaders(),
+                headers,
                 null
         ).build();
 
@@ -196,7 +201,7 @@ public class DeepseekWebClient {
             throw new IOException("Failed to create chat session: " + response.statusCode() + " " + response.body());
         }
 
-        DeepSeekChatSessionResponse data = MAPPER.readValue(response.body(), DeepSeekChatSessionResponse.class);
+        DeepSeekChatSessionResponse data = DeepseekWebAuth.OBJECT_MAPPER.readValue(response.body(), DeepSeekChatSessionResponse.class);
         DeepSeekChatSession bizData = data != null && data.data != null ? data.data.bizData : null;
 
         if (bizData == null) {
@@ -234,7 +239,7 @@ public class DeepseekWebClient {
         powPayload.put("target_path", targetPath);
 
         String powResponse = Base64.getEncoder()
-                .encodeToString(MAPPER.writeValueAsBytes(powPayload));
+                .encodeToString(DeepseekWebAuth.OBJECT_MAPPER.writeValueAsBytes(powPayload));
 
         Map<String, String> headers = new LinkedHashMap<>(fetchHeaders());
         headers.put("x-ds-pow-response", powResponse);
@@ -257,7 +262,7 @@ public class DeepseekWebClient {
         HttpRequest request = requestBuilder(
                 BASE_URL + targetPath,
                 "POST",
-                MAPPER.writeValueAsString(body),
+                DeepseekWebAuth.OBJECT_MAPPER.writeValueAsString(body),
                 headers,
                 params.getTimeout()
         ).build();
