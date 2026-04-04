@@ -7,10 +7,12 @@ import com.microsoft.playwright.options.Cookie;
 import com.microsoft.playwright.options.RequestOptions;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
@@ -62,7 +64,7 @@ public class DeepseekWebAuth {
         }
     }
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static void main(String[] args) {
         try (Playwright playwright = Playwright.create()) {
@@ -95,12 +97,16 @@ public class DeepseekWebAuth {
 
                     List<Cookie> cookieList = browserContext.cookies(deepseekChatURL);
                     System.out.println(deepseekChatURL + "的cookie输出：");
+                    AtomicReference<String> cookieStr = new AtomicReference<>("");
                     cookieList.stream().forEach(cookie -> {
                         String name = cookie.name;
                         String value = cookie.value;
                         String cURL = cookie.url;
-                        System.out.println(name + "=" + value);
+                        System.out.println();
+                        String s = name + "=" + value  + "; " + cookieStr.get();
+                        cookieStr.set(s);
                     });
+                    System.out.println("cookieStr:" + cookieStr.get());
 
                     APIResponse apiResponse = deepseekPage.request().get("https://chat.deepseek.com/api/v0/users/current");
                     if(apiResponse.ok()){
@@ -115,6 +121,32 @@ public class DeepseekWebAuth {
                     deepseekWebAuth.loginDeepseekWebAttachOnly(9222, "", new ProgressCallback());
 
                     System.out.println("等待");
+
+                    DeepseekWebClient.DeepSeekWebClientOptions options = new DeepseekWebClient.DeepSeekWebClientOptions();
+                    options.setBearer("");
+                    options.setCookie(cookieStr.get());
+                    options.setUserAgent(userAgent);
+
+                    DeepseekWebClient client = new DeepseekWebClient(options);
+                    client.init();
+
+                    DeepseekWebClient.DeepSeekChatSession session = client.createChatSession();
+
+                    DeepseekWebClient.ChatCompletionParams params = new DeepseekWebClient.ChatCompletionParams();
+                    params.setSessionId(session.getChatSessionId());
+                    params.setMessage("你好");
+                    params.setModel("deepseek-chat");
+                    params.setSearchEnabled(true);
+                    params.setPreempt(false);
+                    params.setTimeout(Duration.ofSeconds(60));
+
+                    try (InputStream in = client.chatCompletions(params)) {
+                        String text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+                        System.out.println(text);
+                    }
+
+
+                    System.out.println("完成");
                     Thread.sleep(1000*60 * 30);
 
                 }
