@@ -2,8 +2,6 @@ package zuk.sast;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
@@ -17,12 +15,10 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class DeepseekWebClient {
 
@@ -36,7 +32,7 @@ public class DeepseekWebClient {
 
     private String deviceId = "";
 
-    public DeepSeekWebClient(DeepSeekWebClientOptions options) {
+    public void DeepSeekWebClient(DeepSeekWebClientOptions options) {
         this.cookie = options.getCookie() == null ? "" : options.getCookie();
         this.bearer = options.getBearer() == null ? "" : options.getBearer();
         this.userAgent = options.getUserAgent() == null || options.getUserAgent().isBlank()
