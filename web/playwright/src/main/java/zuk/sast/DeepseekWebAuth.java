@@ -11,14 +11,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PlaywrightTest {
+public class DeepseekWebAuth {
 
     public static class ProgressCallback {
         public void onProgress(String s) {
@@ -112,8 +111,8 @@ public class PlaywrightTest {
                     String userAgent = (String) deepseekPage.evaluate("() => navigator.userAgent");
                     System.out.println("User-Agent: " + userAgent); //输出内容： User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
 
-                    PlaywrightTest playwrightTest = new PlaywrightTest();
-                    playwrightTest.loginDeepseekWebAttachOnly(9222, "", new ProgressCallback());
+                    DeepseekWebAuth deepseekWebAuth = new DeepseekWebAuth();
+                    deepseekWebAuth.loginDeepseekWebAttachOnly(9222, "", new ProgressCallback());
 
                     System.out.println("等待");
                     Thread.sleep(1000*60 * 30);
@@ -240,7 +239,7 @@ public class PlaywrightTest {
                         }
                     }
 
-                    return new DeepSeekWebCredentials(cookieString, bearer, userAgent);
+//                    return new DeepSeekWebCredentials(cookieString, bearer, userAgent);
                 }
 
                 onProgress.onProgress("No existing session found. Opening DeepSeek for login...");
@@ -365,6 +364,9 @@ public class PlaywrightTest {
             String userAgent,
             boolean rejectOnPageClose
     ) throws Exception {
+
+        System.out.println("waitForLogin");
+
         AtomicReference<String> capturedBearer = new AtomicReference<>(null);
         AtomicBoolean resolved = new AtomicBoolean(false);
         CompletableFuture<DeepSeekWebCredentials> future = new CompletableFuture<>();
@@ -377,7 +379,7 @@ public class PlaywrightTest {
 
             String bearer = capturedBearer.get();
             if (bearer == null || bearer.isBlank()) {
-                return;
+//                return;
             }
 
             try {
@@ -409,6 +411,7 @@ public class PlaywrightTest {
         page.onRequest(request -> {
             try {
                 String url = request.url();
+                System.out.println("onRequest>>>>>>>>>>>>>>>:" + url);
                 if (url.contains("/api/v0/")) {
                     Map<String, String> headers = request.headers();
                     String auth = headers.get("authorization");
@@ -433,6 +436,7 @@ public class PlaywrightTest {
         page.onResponse(response -> {
             try {
                 String url = response.url();
+                System.out.println("onResponse>>>>>>>>>>>>>>>:" + url);
                 if (url.contains("/api/v0/users/current") && response.ok()) {
                     JsonNode body = OBJECT_MAPPER.readTree(response.text());
                     JsonNode tokenNode = body.path("data").path("biz_data").path("token");
