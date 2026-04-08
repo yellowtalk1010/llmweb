@@ -1,7 +1,9 @@
 package zuk.token.providers
 
-import com.microsoft.playwright.Page
+import com.microsoft.playwright.{Locator, Page, Response}
 
+import java.util
+import java.util.Map
 import scala.jdk.CollectionConverters.*
 
 class DeepseekWebAuth {
@@ -38,6 +40,40 @@ class DeepseekWebAuth {
 
     println(s"Cookie:${cookieStr}")
 
+    val userAgent = deepseekPage.evaluate("() => navigator.userAgent").asInstanceOf[String]
+    println("User-Agent: " + userAgent)
+
+    deepseekPage.onRequest(request=>{
+      try {
+        val url = request.url
+        println(s"onRequest.url:${url}")
+        if (url.contains("/api/v0/") && url.contains("completion")) {
+          val headers = request.headers
+          val authorization = headers.get("authorization")
+          println(authorization)
+        }
+        else {
+          println(url)
+        }
+      } catch {
+        case e: Exception => e.printStackTrace()
+      }
+    })
+    Thread.sleep(1000)
+
+    sayHi(deepseekPage)
+
+  }
+
+  /***
+   * 点击按钮发送：hi
+   */
+  def sayHi(deepseekPage: Page): Unit = {
+    val textarea = deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']")
+    textarea.waitFor()
+    textarea.fill("hi")
+    val sendButton = deepseekPage.locator("div[role='button'][aria-disabled='false']").last
+    sendButton.click()
   }
 
 }
