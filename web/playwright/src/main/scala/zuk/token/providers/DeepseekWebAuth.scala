@@ -19,7 +19,7 @@ class DeepseekWebAuth {
       //如果存在，则输出全部url
       browserContext.pages().asScala.foreach(page => {
         val url = page.url()
-        println(s"url:${url}")
+        println(s"url地址:${url}")
         if(deepseekPage==null && page.url().startsWith(deepseekWebChatURL)){
           deepseekPage = page
         }
@@ -31,7 +31,12 @@ class DeepseekWebAuth {
       //导航到登录页面
       deepseekPage.navigate(deepseekWebChatURL)
     }
-    
+    val cookies = browserContext.cookies(deepseekWebChatURL).asScala
+    val cookieStr = cookies.map(c=>{
+      s"${c.name}=${c.value}"
+    }).mkString("; ")
+
+    println(s"Cookie:${cookieStr}")
 
   }
 
