@@ -9,6 +9,7 @@ import scala.jdk.CollectionConverters.*
 class DeepseekWebAuth {
 
   val deepseekWebChatURL: String = "https://chat.deepseek.com"
+  var isBreak: Boolean = false
 
   def webLogin(): Unit = {
     val browserContext = ChromeBrowser.browserContext
@@ -52,17 +53,20 @@ class DeepseekWebAuth {
           val authorization = headers.get("authorization")
           val postData = request.postData()
           println(authorization)
-        }
-        else {
-          //println(url)
+          if(postData.contains("chat_session_id")){
+            isBreak = true
+            println(s"postData:${postData}")
+          }
         }
       } catch {
         case e: Exception => e.printStackTrace()
       }
     })
-    Thread.sleep(1000)
 
-    sayHi(deepseekPage)
+    while (!isBreak){
+      sayHi(deepseekPage)
+      Thread.sleep(2000)
+    }
 
   }
 
