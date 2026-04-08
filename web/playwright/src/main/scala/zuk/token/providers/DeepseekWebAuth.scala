@@ -50,10 +50,11 @@ class DeepseekWebAuth {
         if (url.contains("/api/v0/") && url.contains("completion")) {
           val headers = request.headers
           val authorization = headers.get("authorization")
+          val postData = request.postData()
           println(authorization)
         }
         else {
-          println(url)
+          //println(url)
         }
       } catch {
         case e: Exception => e.printStackTrace()
