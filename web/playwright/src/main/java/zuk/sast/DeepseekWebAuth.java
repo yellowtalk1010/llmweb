@@ -124,7 +124,8 @@ public class DeepseekWebAuth {
 
                     Locator textarea = deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']");
 //                    textarea.waitFor();
-                    textarea.fill("用joern写一个c/c++/java三种语言的数据溢出功能");
+//                    textarea.fill("用joern写一个c/c++/java三种语言的数据溢出功能");
+                    textarea.fill("halo");
 
                     Locator sendButton = deepseekPage.locator("div[role='button'][aria-disabled='false']").last();
                     sendButton.click();
