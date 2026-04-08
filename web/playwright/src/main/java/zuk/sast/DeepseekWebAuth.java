@@ -118,32 +118,43 @@ public class DeepseekWebAuth {
                     System.out.println("User-Agent: " + userAgent); //输出内容： User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
 
                     DeepseekWebAuth deepseekWebAuth = new DeepseekWebAuth();
-                    deepseekWebAuth.loginDeepseekWebAttachOnly(9222, "", new ProgressCallback());
+                    deepseekWebAuth.waitForLogin(browserContext, deepseekPage, userAgent, true);
 
-                    System.out.println("等待");
+                    Thread.sleep(2000);
 
-                    DeepseekWebClient.DeepSeekWebClientOptions options = new DeepseekWebClient.DeepSeekWebClientOptions();
-                    options.setBearer("");
-                    options.setCookie(cookieStr.get());
-                    options.setUserAgent(userAgent);
+                    Locator textarea = deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']");
+//                    textarea.waitFor();
+                    textarea.fill("用joern写一个c/c++/java三种语言的数据溢出功能");
 
-                    DeepseekWebClient client = new DeepseekWebClient(options);
-                    client.init();
+                    Locator sendButton = deepseekPage.locator("div[role='button'][aria-disabled='false']").last();
+                    sendButton.click();
 
-                    DeepseekWebClient.DeepSeekChatSession session = client.createChatSession();
 
-                    DeepseekWebClient.ChatCompletionParams params = new DeepseekWebClient.ChatCompletionParams();
-                    params.setSessionId(session.getChatSessionId());
-                    params.setMessage("你好");
-                    params.setModel("deepseek-chat");
-                    params.setSearchEnabled(true);
-                    params.setPreempt(false);
-                    params.setTimeout(Duration.ofSeconds(60));
+//                    DeepseekWebAuth deepseekWebAuth = new DeepseekWebAuth();
+//                    deepseekWebAuth.loginDeepseekWebAttachOnly(9222, "", new ProgressCallback());
+//
+//                    System.out.println("等待");
+//
+//                    DeepseekWebClient.DeepSeekWebClientOptions options = new DeepseekWebClient.DeepSeekWebClientOptions();
+//                    options.setBearer("");
+//                    options.setCookie(cookieStr.get());
+//                    options.setUserAgent(userAgent);
 
-                    try (InputStream in = client.chatCompletions(params)) {
-                        String text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-                        System.out.println(text);
-                    }
+//                    DeepseekWebClient client = new DeepseekWebClient(options);
+//                    client.init();
+//                    DeepseekWebClient.DeepSeekChatSession session = client.createChatSession();
+//                    DeepseekWebClient.ChatCompletionParams params = new DeepseekWebClient.ChatCompletionParams();
+//                    params.setSessionId(session.getChatSessionId());
+//                    params.setMessage("你好");
+//                    params.setModel("deepseek-chat");
+//                    params.setSearchEnabled(true);
+//                    params.setPreempt(false);
+//                    params.setTimeout(Duration.ofSeconds(60));
+//
+//                    try (InputStream in = client.chatCompletions(params)) {
+//                        String text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+//                        System.out.println(text);
+//                    }
 
 
                     System.out.println("完成");
@@ -444,10 +455,9 @@ public class DeepseekWebAuth {
             try {
                 String url = request.url();
                 System.out.println("onRequest>>>>>>>>>>>>>>>:" + url);
-                if (url.contains("/api/v0/")) {
+                if (url.contains("/api/v0/") && !url.contains("completion")) {
                     Map<String, String> headers = request.headers();
                     String auth = headers.get("authorization");
-
                     if (auth != null && auth.startsWith("Bearer ")) {
                         if (capturedBearer.get() == null) {
                             System.out.println("[DeepSeek Research] Captured Bearer Token.");
@@ -459,6 +469,13 @@ public class DeepseekWebAuth {
                     if (url.contains("/api/v0/chat/completion")) {
                         System.out.println("[DeepSeek Research] Completion Request Headers Check: { hasAuth: " + (auth != null) + " }");
                     }
+                }
+                else if (url.contains("completion")){
+                    String postData = request.postData();
+                    System.out.println("postData：" + postData);
+                    Response response = request.response();
+                    String responseText = response.text();
+//                    System.out.println("==========================>" + responseText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -481,6 +498,12 @@ public class DeepseekWebAuth {
                         }
                         tryResolve.run();
                     }
+                }
+                else if(url.contains("completion")){
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>responseText:");
+                    String responseText = response.text();
+                    System.out.println(responseText);
+                    System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 }
             } catch (Exception ignored) {
             }

@@ -3,6 +3,7 @@ package zuk.sast;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.playwright.Page;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class DeepseekWebClient {
 
     private static final String BASE_URL = "https://chat.deepseek.com";
+
+    public static Page playwrightPage = null;
 //    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private HttpClient httpClient;
@@ -173,10 +176,15 @@ public class DeepseekWebClient {
         }
 
         if ("DeepSeekHashV1".equalsIgnoreCase(algorithm)) {
-            throw new UnsupportedOperationException(
-                    "DeepSeekHashV1 依赖 WASM 求解器；这版 Java 暂未实现。salt=" + salt + ", expire_at=" + expireAt
-            );
+            if (playwrightPage == null) {
+                throw new IllegalStateException("DeepSeekHashV1 requires Playwright Page");
+            }
+            if (expireAt == null) {
+                throw new IllegalArgumentException("DeepSeekHashV1 requires expire_at");
+            }
+            return solveDeepSeekHashV1WithPlaywright(playwrightPage, challenge);
         }
+
 
         throw new IllegalArgumentException("Unsupported PoW algorithm: " + algorithm);
     }
@@ -326,6 +334,108 @@ public class DeepseekWebClient {
                 sb.append(buf, 0, n);
             }
             return sb.toString();
+        }
+    }
+
+    private Number solveDeepSeekHashV1WithPlaywright(Page page, DeepSeekPowChallenge challenge) throws Exception {
+        long start = System.currentTimeMillis();
+
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("challenge", challenge.getChallenge());
+        payload.put("salt", challenge.getSalt());
+        payload.put("difficulty", challenge.getDifficulty());
+        payload.put("expire_at", challenge.getExpireAt() == null ? null : challenge.getExpireAt().doubleValue());
+//        payload.put("wasmBase64", SHA3_WASM_B64);
+
+        String json = DeepseekWebAuth.OBJECT_MAPPER.writeValueAsString(payload);
+
+        Object result = page.evaluate(
+                """
+                async (json) => {
+                  const arg = JSON.parse(json);
+                  const { challenge, salt, difficulty, expire_at, wasmBase64 } = arg;
+    
+                  const bin = atob(wasmBase64);
+                  const wasmBytes = new Uint8Array(bin.length);
+                  for (let i = 0; i < bin.length; i++) {
+                    wasmBytes[i] = bin.charCodeAt(i);
+                  }
+    
+                  if (
+                    wasmBytes.length < 4 ||
+                    wasmBytes[0] !== 0x00 ||
+                    wasmBytes[1] !== 0x61 ||
+                    wasmBytes[2] !== 0x73 ||
+                    wasmBytes[3] !== 0x6d
+                  ) {
+                    throw new Error(
+                      "Invalid wasm header: " +
+                      Array.from(wasmBytes.slice(0, 8))
+                        .map(x => x.toString(16).padStart(2, "0"))
+                        .join(" ")
+                    );
+                  }
+    
+                  const { instance } = await WebAssembly.instantiate(wasmBytes, { wbg: {} });
+                  const exports = instance.exports;
+    
+                  const memory = exports.memory;
+                  const alloc = exports.__wbindgen_export_0;
+                  const addToStack = exports.__wbindgen_add_to_stack_pointer;
+                  const wasmSolve = exports.wasm_solve;
+    
+                  const prefix = `${salt}_${expire_at}_`;
+    
+                  const encodeString = (str) => {
+                    const buf = new TextEncoder().encode(str);
+                    const ptr = alloc(buf.length, 1);
+                    new Uint8Array(memory.buffer).set(buf, ptr);
+                    return [ptr, buf.length];
+                  };
+    
+                  const [ptrC, lenC] = encodeString(challenge);
+                  const [ptrP, lenP] = encodeString(prefix);
+                  const retptr = addToStack(-16);
+    
+                  wasmSolve(retptr, ptrC, lenC, ptrP, lenP, difficulty);
+    
+                  const view = new DataView(memory.buffer);
+                  const status = view.getInt32(retptr, true);
+                  const answer = view.getFloat64(retptr + 8, true);
+    
+                  addToStack(16);
+    
+                  if (status === 0) {
+                    throw new Error("DeepSeekHashV1 failed to find solution");
+                  }
+    
+                  return answer;
+                }
+                """,
+                json
+        );
+
+        if (!(result instanceof Number)) {
+            throw new IllegalStateException("DeepSeekHashV1 returned unexpected result: " + result);
+        }
+
+        double answer = ((Number) result).doubleValue();
+        System.out.println("[DeepSeekWebClient] DeepSeekHashV1 solved in "
+                + (System.currentTimeMillis() - start) + "ms, answer: " + answer);
+        return answer;
+    }
+
+    private static String loadWasmBase64() {
+        try (InputStream in = DeepseekWebClient.class.getClassLoader().getResourceAsStream("deepseek_sha3_wasm.b64")) {
+            if (in == null) {
+                throw new IllegalStateException("deepseek_sha3_wasm.b64 not found in resources");
+            }
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8)
+                    .replace("\r", "")
+                    .replace("\n", "")
+                    .trim();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load deepseek_sha3_wasm.b64", e);
         }
     }
 
