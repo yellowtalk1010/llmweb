@@ -1,5 +1,6 @@
 package zuk.token.providers
 
+import com.alibaba.fastjson2.JSONObject
 import com.microsoft.playwright.{Locator, Page, Response}
 
 import java.util
@@ -55,7 +56,18 @@ class DeepseekWebAuth {
           println(authorization)
           if(postData.contains("chat_session_id")){
             isBreak = true
+
             println(s"postData:${postData}")
+
+            val jsonObj = JSONObject.parseObject(postData)
+            println()
+
+            val response = request.response()
+            if(response.ok()){
+              val responseText = response.text()
+              println(s"responseText:${responseText}")
+            }
+
           }
         }
       } catch {
@@ -68,6 +80,7 @@ class DeepseekWebAuth {
       Thread.sleep(2000)
     }
 
+    println("over")
   }
 
   /***
