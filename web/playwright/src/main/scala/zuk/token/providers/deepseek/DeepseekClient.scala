@@ -42,7 +42,9 @@ class DeepseekClient {
     headers.put("User-Agent", userAgent)
     headers.put("Content-Type", "application/json")
     headers.put("Accept", "*/*")
-    if (!bearer.isBlank) headers.put("Authorization", "Bearer " + bearer)
+    if (!bearer.isBlank) {
+      headers.put("Authorization", "Bearer " + bearer)
+    }
     headers.put("Referer", BASE_URL + "/")
     headers.put("Origin", BASE_URL)
     headers.put("x-client-platform", "web")
