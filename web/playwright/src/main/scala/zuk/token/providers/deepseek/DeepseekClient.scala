@@ -33,6 +33,7 @@ class DeepseekClient {
   @throws[IOException]
   @throws[InterruptedException]
   def createCompletion(headers: util.Map[String, String], bodyParam: String): Unit = {
+    println(s"bodyParam:${bodyParam}")
 //    val body = new util.HashMap[String, AnyRef]()
 //    body.put("chat_session_id", "a337ef24-2c05-4435-9866-c1df0b3b9033")
 //    body.put("parent_message_id", Int.box(24))

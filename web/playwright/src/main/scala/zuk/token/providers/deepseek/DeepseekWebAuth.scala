@@ -36,8 +36,9 @@ class DeepseekWebAuth {
             println("[intercept] matched, abort request")
             route.abort()
 
+            val updatePostData = postData.replaceAll("hi", "用joern实现c/c++/joern的数据溢出问题")
             val deepseekClient = new DeepseekClient
-            deepseekClient.createCompletion(headers, postData)
+            deepseekClient.createCompletion(headers, updatePostData)
 
           } else {
             // 不符合条件，放行
