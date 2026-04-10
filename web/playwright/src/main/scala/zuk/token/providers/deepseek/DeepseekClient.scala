@@ -30,6 +30,10 @@ class DeepseekClient {
     println(s"response.body:${response.body()}")
   }
 
+  def createCompletion(): Unit = {
+
+  }
+
   def fetchHeaders: util.Map[String, String] = {
 
     val bearer = "ah0leAC28XQ+vIjpAMvVGohher7h6UHWNcHGLJ18eYRS2TF6OB4fAFZNQJbs8lTs"
