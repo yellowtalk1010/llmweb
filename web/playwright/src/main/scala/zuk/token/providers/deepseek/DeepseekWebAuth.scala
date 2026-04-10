@@ -35,6 +35,10 @@ class DeepseekWebAuth {
             // 直接取消，不让它真正发出去
             println("[intercept] matched, abort request")
             route.abort()
+
+            val deepseekClient = new DeepseekClient
+            deepseekClient.createCompletion(headers)
+
           } else {
             // 不符合条件，放行
             route.resume() // 有些版本也常写 route.continue()
