@@ -1,5 +1,7 @@
 package zuk.token.providers.deepseek
 
+import zuk.token.providers.ChromeBrowser
+
 import java.io.IOException
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
@@ -10,8 +12,6 @@ import java.util.Map
 import scala.jdk.CollectionConverters.*
 
 class DeepseekClient {
-
-  private val httpClient = HttpClient.newBuilder.connectTimeout(Duration.ofSeconds(15)).build
 
   @throws[IOException]
   @throws[InterruptedException]
@@ -24,7 +24,7 @@ class DeepseekClient {
       bodyParam,
       headers,
       null).build
-    val response = httpClient.send(request, HttpResponse.BodyHandlers.ofLines())
+    val response = ChromeBrowser.httpClient.send(request, HttpResponse.BodyHandlers.ofLines())
     println(s"response.statusCode:${response.statusCode()}")
     println(s"response.body:${response.body()}")
 

@@ -2,12 +2,15 @@ package zuk.token.providers
 
 import com.microsoft.playwright.{Browser, BrowserContext, Playwright}
 
+import java.net.http.HttpClient
+import java.time.Duration
 import java.util
 import java.util.List
-
 import scala.jdk.CollectionConverters.*
 
 object ChromeBrowser {
+
+  val httpClient = HttpClient.newBuilder.connectTimeout(Duration.ofSeconds(15)).build
 
   private val playwright: Playwright = Playwright.create
 
