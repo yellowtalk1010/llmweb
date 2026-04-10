@@ -30,6 +30,8 @@ class DeepseekClient {
     println(s"response.body:${response.body()}")
   }
 
+  @throws[IOException]
+  @throws[InterruptedException]
   def createCompletion(): Unit = {
 
   }
