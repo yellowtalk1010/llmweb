@@ -34,6 +34,37 @@ class DeepseekClient {
   @throws[InterruptedException]
   def createCompletion(): Unit = {
 
+    //    {
+    //      "chat_session_id": "a337ef24-2c05-4435-9866-c1df0b3b9033"
+    //      ,
+    //      "parent_message_id": 8
+    //      ,
+    //      "model_type": null
+    //      ,
+    //      "prompt": "hi"
+    //      ,
+    //      "ref_file_ids": []
+    //      ,
+    //      "thinking_enabled": true
+    //      ,
+    //      "search_enabled": true
+    //      ,
+    //      "preempt": false
+    //    }
+    val body = new util.HashMap[String, AnyRef]()
+    body.put("chat_session_id", "a337ef24-2c05-4435-9866-c1df0b3b9033")
+    body.put("parent_message_id", Int.box(24))
+    body.put("model_type", null)
+    body.put("prompt", "halo")
+    body.put("ref_file_ids", util.ArrayList[String]().toArray)
+    body.put("thinking_enabled", java.lang.Boolean.TRUE)
+    body.put("search_enabled", java.lang.Boolean.TRUE)
+    body.put("preempt", java.lang.Boolean.FALSE)
+    val request = requestBuilder("https://chat.deepseek.com/api/v0/chat/completion", "POST", DeepseekWebAuth.OBJECT_MAPPER.writeValueAsString(body), fetchHeaders, null).build
+    val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString)
+    println(s"response.statusCode:${response.statusCode()}")
+    println(s"response.body:${response.body()}")
+
   }
 
   def fetchHeaders: util.Map[String, String] = {

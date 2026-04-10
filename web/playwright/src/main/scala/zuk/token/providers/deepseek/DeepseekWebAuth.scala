@@ -1,7 +1,7 @@
 package zuk.token.providers.deepseek
 
 import com.alibaba.fastjson2.JSONObject
-import com.microsoft.playwright.{Locator, Page, Response}
+import com.microsoft.playwright.{BrowserContext, Locator, Page, Response, Route}
 import zuk.token.providers.ChromeBrowser
 
 import java.util
@@ -12,6 +12,43 @@ class DeepseekWebAuth {
 
   val deepseekWebChatURL: String = "https://chat.deepseek.com"
   var isBreak: Boolean = false
+
+  def installIntercept(context: BrowserContext): Unit = {
+    context.route("**/*", (route: Route) => {
+      try {
+        val request = route.request()
+        val url = request.url()
+
+        if (url.contains("/api/v0/") && url.contains("completion")) {
+          val headers = request.headers()
+          val authorization = headers.get("authorization")
+          val postData = request.postData() // 可能为 null
+
+          println(s"[intercept] url = $url")
+          println(s"[intercept] authorization = $authorization")
+          println(s"[intercept] postData = $postData")
+
+          if (postData != null && postData.contains("chat_session_id")) {
+            // 在这里解析参数
+            // val jsonObj = JSONObject.parseObject(postData)
+
+            // 直接取消，不让它真正发出去
+            println("[intercept] matched, abort request")
+            route.abort()
+          } else {
+            // 不符合条件，放行
+            route.resume() // 有些版本也常写 route.continue()
+          }
+        } else {
+          route.resume()
+        }
+      } catch {
+        case exception: Exception =>
+          exception.printStackTrace()
+          route.resume()
+      }
+    })
+  }
 
   def webLogin(): Unit = {
     val browserContext = ChromeBrowser.browserContext
@@ -46,6 +83,9 @@ class DeepseekWebAuth {
     val userAgent = deepseekPage.evaluate("() => navigator.userAgent").asInstanceOf[String]
     println("User-Agent: " + userAgent)
 
+    installIntercept(browserContext)
+
+    // TODO 如何监听
     deepseekPage.onRequest(request=>{
       try {
         val url = request.url
@@ -64,14 +104,15 @@ class DeepseekWebAuth {
             println()
 
             val response = request.response()
-            if(response.ok()){
+            if(response!=null && response.ok()){
               val responseText = response.text()
               println(s"responseText:${responseText}")
 
               Thread.sleep(2000)
 
-              val deepseekClient = new DeepseekClient
-              deepseekClient.createPowChallenge()
+//              val deepseekClient = new DeepseekClient
+//              deepseekClient.createPowChallenge()
+//              deepseekClient.createCompletion()
             }
 
           }
