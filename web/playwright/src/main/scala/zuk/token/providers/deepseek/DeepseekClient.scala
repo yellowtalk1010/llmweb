@@ -32,7 +32,7 @@ class DeepseekClient {
 
   @throws[IOException]
   @throws[InterruptedException]
-  def createCompletion(headers: util.Map[String, String]): Unit = {
+  def createCompletion(headers: util.Map[String, String], bodyParam: String): Unit = {
     val body = new util.HashMap[String, AnyRef]()
     body.put("chat_session_id", "a337ef24-2c05-4435-9866-c1df0b3b9033")
     body.put("parent_message_id", Int.box(24))
@@ -45,7 +45,8 @@ class DeepseekClient {
     val request = requestBuilder(
       "https://chat.deepseek.com/api/v0/chat/completion",
       "POST",
-      DeepseekWebAuth.OBJECT_MAPPER.writeValueAsString(body),
+//      DeepseekWebAuth.OBJECT_MAPPER.writeValueAsString(body),
+      bodyParam,
       headers,
       null).build
     val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString)
