@@ -4,7 +4,7 @@ import zuk.token.providers.ChromeBrowser
 
 import java.io.IOException
 import java.net.URI
-import java.net.http.{HttpClient, HttpRequest, HttpResponse}
+import java.net.http.{HttpRequest, HttpResponse}
 import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util
