@@ -37,7 +37,7 @@ class DeepseekWebAuth {
             route.abort()
 
             val deepseekClient = new DeepseekClient
-            deepseekClient.createCompletion(headers)
+            deepseekClient.createCompletion(headers, postData)
 
           } else {
             // 不符合条件，放行
