@@ -1,7 +1,8 @@
-package zuk.token.providers
+package zuk.token.providers.deepseek
 
 import com.alibaba.fastjson2.JSONObject
 import com.microsoft.playwright.{Locator, Page, Response}
+import zuk.token.providers.ChromeBrowser
 
 import java.util
 import java.util.Map
@@ -66,6 +67,11 @@ class DeepseekWebAuth {
             if(response.ok()){
               val responseText = response.text()
               println(s"responseText:${responseText}")
+
+              Thread.sleep(2000)
+
+              val deepseekClient = new DeepseekClient
+              deepseekClient.createPowChallenge()
             }
 
           }

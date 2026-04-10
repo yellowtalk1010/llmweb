@@ -1,6 +1,6 @@
 package zuk.token
 
-import zuk.token.providers.DeepseekWebAuth
+import zuk.token.providers.deepseek.DeepseekWebAuth
 
 object Main {
 
