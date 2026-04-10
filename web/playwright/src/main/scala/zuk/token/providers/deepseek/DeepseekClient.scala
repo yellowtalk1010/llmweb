@@ -28,15 +28,6 @@ class DeepseekClient {
 
     println(s"response.statusCode:${response.statusCode()}")
     println(s"response.body:${response.body()}")
-
-//    if (response.statusCode / 100 != 2) throw new IOException("Failed to create PoW challenge: " + response.statusCode + " " + response.body)
-//    val data = DeepseekWebAuth.OBJECT_MAPPER.readValue(response.body, classOf[DeepseekWebClient.DeepSeekPowResponse])
-//    var challenge: DeepseekWebClient.DeepSeekPowChallenge = null
-//    if (data != null && data.data != null && data.data.bizData != null && data.data.bizData.challenge != null) challenge = data.data.bizData.challenge
-//    else if (data != null && data.data != null && data.data.challenge != null) challenge = data.data.challenge
-//    else if (data != null && data.challenge != null) challenge = data.challenge
-//    if (challenge == null) throw new IOException("PoW challenge missing in response")
-//    challenge
   }
 
   def fetchHeaders: util.Map[String, String] = {
