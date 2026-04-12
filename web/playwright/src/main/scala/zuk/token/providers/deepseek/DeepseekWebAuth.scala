@@ -2,15 +2,17 @@ package zuk.token.providers.deepseek
 
 import com.alibaba.fastjson2.JSONObject
 import com.microsoft.playwright.{BrowserContext, Locator, Page, Response, Route}
-import zuk.token.providers.ChromeBrowser
+import zuk.token.providers.{ChromeBrowser, IToken}
 
 import java.util
 import java.util.Map
 import scala.jdk.CollectionConverters.*
 
-class DeepseekWebAuth {
+class DeepseekWebAuth extends IToken {
 
   val deepseekWebChatURL: String = "https://chat.deepseek.com"
+  var deepseekPage: Page = null
+
   var isBreak: Boolean = false
 
   def installIntercept(context: BrowserContext): Unit = {
@@ -61,22 +63,21 @@ class DeepseekWebAuth {
       return
     }
     val exist = browserContext.pages().asScala.map(_.url()).toSet.filter(_.startsWith(deepseekWebChatURL)).size > 0
-    var deepseekPage: Page = null
     if(exist){
       //如果存在，则输出全部url
       browserContext.pages().asScala.foreach(page => {
         val url = page.url()
         println(s"url地址:${url}")
-        if(deepseekPage==null && page.url().startsWith(deepseekWebChatURL)){
-          deepseekPage = page
+        if(this.deepseekPage==null && page.url().startsWith(deepseekWebChatURL)){
+          this.deepseekPage = page
         }
       })
     }
     else {
       //创建一个新页面
-      deepseekPage = browserContext.newPage()
+      this.deepseekPage = browserContext.newPage()
       //导航到登录页面
-      deepseekPage.navigate(deepseekWebChatURL)
+      this.deepseekPage.navigate(deepseekWebChatURL)
     }
     val cookies = browserContext.cookies(deepseekWebChatURL).asScala
     val cookieStr = cookies.map(c=>{
@@ -85,13 +86,13 @@ class DeepseekWebAuth {
 
     println(s"Cookie:${cookieStr}")
 
-    val userAgent = deepseekPage.evaluate("() => navigator.userAgent").asInstanceOf[String]
+    val userAgent = this.deepseekPage.evaluate("() => navigator.userAgent").asInstanceOf[String]
     println("User-Agent: " + userAgent)
 
     installIntercept(browserContext)
 
     // TODO 如何监听
-    deepseekPage.onRequest(request=>{
+    this.deepseekPage.onRequest(request=>{
       try {
         val url = request.url
         println(s"onRequest.url:${url}")
@@ -128,7 +129,7 @@ class DeepseekWebAuth {
     })
 
     while (!isBreak){
-      sayHi(deepseekPage)
+      sayHi()
       Thread.sleep(2000)
     }
 
@@ -138,12 +139,17 @@ class DeepseekWebAuth {
   /***
    * 点击按钮发送：hi
    */
-  def sayHi(deepseekPage: Page): Unit = {
-    val textarea = deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']")
+  override def sayHi(): Unit = {
+    val textarea = this.deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']")
     textarea.waitFor()
     textarea.fill("hi")
-    val sendButton = deepseekPage.locator("div[role='button'][aria-disabled='false']").last
+    val sendButton = this.deepseekPage.locator("div[role='button'][aria-disabled='false']").last
     sendButton.click()
   }
 
+  override def llmName(): String = "deepseek"
+
+  override def chat(content: String): Unit = {}
+
+  override def delete(): Unit = {}
 }
