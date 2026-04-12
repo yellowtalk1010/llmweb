@@ -116,9 +116,6 @@ class DeepseekWebAuth extends IToken {
 
               Thread.sleep(2000)
 
-//              val deepseekClient = new DeepseekClient
-//              deepseekClient.createPowChallenge()
-//              deepseekClient.createCompletion()
             }
 
           }
