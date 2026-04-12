@@ -4,13 +4,12 @@ import com.microsoft.playwright.Page
 
 trait IToken {
 
-  def llmName(): String
+  def llmName(): String //web llm 名称
 
-  def llmChatURL(): String
+  def llmChatURL(): String //聊天页面
+  
+  def llmOfficialWebsite(): String //官网地址
 
-  /***
-   * 在聊天页面发送 say hi
-   */
   def sayHi(): Unit
 
   def webLogin(): Unit
