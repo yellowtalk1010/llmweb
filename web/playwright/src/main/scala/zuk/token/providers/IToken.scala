@@ -7,7 +7,7 @@ trait IToken {
   def llmName(): String //web llm 名称
 
   def llmChatURL(): String //聊天页面
-  
+
   def llmOfficialWebsite(): String //官网地址
 
   def sayHi(): Unit
