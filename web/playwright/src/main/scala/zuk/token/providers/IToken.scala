@@ -6,6 +6,8 @@ trait IToken {
 
   def llmName(): String
 
+  def llmChatURL(): String
+
   /***
    * 在聊天页面发送 say hi
    */
