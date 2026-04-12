@@ -10,7 +10,14 @@ import scala.jdk.CollectionConverters.*
 
 class DeepseekWebAuth extends IToken {
 
+  /***
+   * deepseek官网地址
+   */
   val deepseekWebChatURL: String = "https://chat.deepseek.com"
+
+  /***
+   * deepseek聊天界面
+   */
   var deepseekPage: Page = null
 
   var isBreak: Boolean = false
