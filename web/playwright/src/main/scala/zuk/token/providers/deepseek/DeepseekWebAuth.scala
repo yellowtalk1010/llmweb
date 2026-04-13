@@ -144,9 +144,12 @@ class DeepseekWebAuth extends IToken {
    * 点击按钮发送：hi
    */
   override def sayHi(): Unit = {
+    //向输入框中输入hi
     val textarea = this.deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']")
     textarea.waitFor()
     textarea.fill("hi")
+
+    //点击发送按钮
     val sendButton = this.deepseekPage.locator("div[role='button'][aria-disabled='false']").last
     sendButton.click()
   }
