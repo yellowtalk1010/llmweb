@@ -98,40 +98,6 @@ class DeepseekWebAuth extends IToken {
 
     installIntercept(browserContext)
 
-    // TODO 如何监听
-    this.deepseekPage.onRequest(request=>{
-      try {
-        val url = request.url
-        println(s"onRequest.url:${url}")
-        if (url.contains("/api/v0/") && url.contains("completion")) {
-          val headers = request.headers
-          val authorization = headers.get("authorization")
-          val postData = request.postData()
-          println(authorization)
-          if(postData.contains("chat_session_id")){
-            isBreak = true
-
-            println(s"postData:${postData}")
-
-            val jsonObj = JSONObject.parseObject(postData)
-            println()
-
-            val response = request.response()
-            if(response!=null && response.ok()){
-              val responseText = response.text()
-              println(s"responseText:${responseText}")
-
-              Thread.sleep(2000)
-
-            }
-
-          }
-        }
-      } catch {
-        case e: Exception => e.printStackTrace()
-      }
-    })
-
     while (!isBreak){
       sayHi()
       Thread.sleep(2000)
