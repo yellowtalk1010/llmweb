@@ -11,7 +11,7 @@ trait IToken {
   def sayHi(): Unit
   def chat(content: String): Unit
 
-  def webLogin(): Unit
+//  def webLogin(): Unit
 
   def delete(): Unit
 

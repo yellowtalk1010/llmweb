@@ -7,7 +7,7 @@ object Main {
   def main(args: Array[String]): Unit = {
     println("hello")
     val dsWebAuth = new DeepseekWebAuth()
-    dsWebAuth.webLogin()
+    dsWebAuth.chat("用joern实现c/c++/joern的数据溢出问题")
   }
 
 }

@@ -22,7 +22,7 @@ class DeepseekWebAuth extends IToken {
 
   var isBreak: Boolean = false
 
-  def installIntercept(context: BrowserContext): Unit = {
+  private def installIntercept(context: BrowserContext, content: String): Unit = {
     context.route("**/*", (route: Route) => {
       try {
         val request = route.request()
@@ -45,7 +45,7 @@ class DeepseekWebAuth extends IToken {
             println("[intercept] matched, abort request")
             route.abort()
 
-            val updatePostData = postData.replaceAll("hi", "用joern实现c/c++/joern的数据溢出问题")
+            val updatePostData = postData.replaceAll("hi", content)
             val deepseekClient = new DeepseekClient
             deepseekClient.createCompletion(headers, updatePostData)
 
@@ -64,7 +64,7 @@ class DeepseekWebAuth extends IToken {
     })
   }
 
-  def webLogin(): Unit = {
+  override def chat(content: String): Unit = {
     val browserContext = ChromeBrowser.browserContext
     if(browserContext == null){
       return
@@ -86,17 +86,16 @@ class DeepseekWebAuth extends IToken {
       //导航到登录页面
       this.deepseekPage.navigate(deepseekWebChatURL)
     }
-    val cookies = browserContext.cookies(deepseekWebChatURL).asScala
-    val cookieStr = cookies.map(c=>{
-      s"${c.name}=${c.value}"
-    }).mkString("; ")
+//    val cookies = browserContext.cookies(deepseekWebChatURL).asScala
+//    val cookieStr = cookies.map(c=>{
+//      s"${c.name}=${c.value}"
+//    }).mkString("; ")
+//    println(s"Cookie:${cookieStr}")
 
-    println(s"Cookie:${cookieStr}")
+//    val userAgent = this.deepseekPage.evaluate("() => navigator.userAgent").asInstanceOf[String]
+//    println("User-Agent: " + userAgent)
 
-    val userAgent = this.deepseekPage.evaluate("() => navigator.userAgent").asInstanceOf[String]
-    println("User-Agent: " + userAgent)
-
-    installIntercept(browserContext)
+    installIntercept(browserContext, content)
 
     while (!isBreak){
       sayHi()
@@ -120,10 +119,7 @@ class DeepseekWebAuth extends IToken {
     sendButton.click()
   }
 
-  override def chat(content: String): Unit = {
-    this.sayHi()
 
-  }
 
   override def delete(): Unit = {}
 
