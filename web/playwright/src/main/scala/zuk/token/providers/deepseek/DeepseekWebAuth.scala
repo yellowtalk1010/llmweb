@@ -120,13 +120,14 @@ class DeepseekWebAuth extends IToken {
     sendButton.click()
   }
 
-  override def llmName(): String = "deepseek"
+  override def chat(content: String): Unit = {
+    this.sayHi()
 
-  override def llmChatURL(): String = "https://chat.deepseek.com"
-
-  override def llmOfficialWebsite(): String = "https://www.deepseek.com/"
-
-  override def chat(content: String): Unit = {}
+  }
 
   override def delete(): Unit = {}
+
+  override def llmName(): String = "deepseek"
+  override def llmChatURL(): String = "https://chat.deepseek.com"
+  override def llmOfficialWebsite(): String = "https://www.deepseek.com/"
 }
