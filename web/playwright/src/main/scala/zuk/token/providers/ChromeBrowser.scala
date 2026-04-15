@@ -34,18 +34,6 @@ object ChromeBrowser {
   private def onListen(): Unit = {
     if (browserContext != null){
 
-      //输出cookies
-//      if(chatList.size>0){
-//        val cookies = browserContext.cookies(chatList.map(_.llmChatURL()).toList.asJava).asScala
-//        val cookiesStr = cookies.map(c=>{
-//          val k = c.name
-//          val v = c.value
-//          s"${k}=${v}"
-//        }).mkString("\n")
-//        println(cookiesStr)
-//      }
-
-
       browserContext.route("**/*", (route: Route) => {
         try {
           println("输出全部URL地址")
