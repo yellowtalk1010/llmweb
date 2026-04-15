@@ -1,7 +1,7 @@
 package zuk.token.providers.deepseek
 
 import com.alibaba.fastjson2.JSONObject
-import com.microsoft.playwright.{BrowserContext, Locator, Page, Response, Route}
+import com.microsoft.playwright.{BrowserContext, Locator, Page, Request, Response, Route}
 import zuk.token.providers.{ChromeBrowser, IToken}
 
 import java.util
@@ -22,57 +22,104 @@ class DeepseekWebAuth extends IToken {
 
   var isBreak: Boolean = false
 
-  private def installIntercept(context: BrowserContext, content: String): Unit = {
-    context.route("**/*", (route: Route) => {
-      try {
-        val request = route.request()
-        val url = request.url()
+  var content: String = ""
 
-        if (url.contains("/api/v0/") && url.contains("completion")) {
-          val headers = request.headers()
-          val authorization = headers.get("authorization")
-          val postData = request.postData() // 可能为 null
+//  private def installIntercept(context: BrowserContext, content: String): Unit = {
+//    context.route("**/*", (route: Route) => {
+//      try {
+//        val request = route.request()
+//        val url = request.url()
+//
+//        if (url.contains("/api/v0/") && url.contains("completion")) {
+//          val headers = request.headers()
+//          val authorization = headers.get("authorization")
+//          val postData = request.postData() // 可能为 null
+//
+//          println(s"[intercept] url = $url")
+//          println(s"[intercept] authorization = $authorization")
+//          println(s"[intercept] postData = $postData")
+//
+//          if (postData != null && postData.contains("chat_session_id")) {
+//            // 在这里解析参数
+//            // val jsonObj = JSONObject.parseObject(postData)
+//
+//            // 直接取消，不让它真正发出去
+//            println("[intercept] matched, abort request")
+//            route.abort()
+//
+//            headers.asScala.map(h=>{
+//              val k = h._1
+//              val v = h._2
+//              s"${k}=${v}"
+//            }).toList.foreach(println)
+//
+//            val updatePostData = postData.replaceAll("hi", content)
+//            isBreak = true
+//
+//            val deepseekClient = new DeepseekClient
+//            deepseekClient.createCompletion(headers, updatePostData)
+//
+//          } else {
+//            // 不符合条件，放行
+//            route.resume() // 有些版本也常写 route.continue()
+//          }
+//        } else {
+//          route.resume()
+//        }
+//      } catch {
+//        case exception: Exception =>
+//          exception.printStackTrace()
+//          route.resume()
+//      }
+//    })
+//  }
 
-          println(s"[intercept] url = $url")
-          println(s"[intercept] authorization = $authorization")
-          println(s"[intercept] postData = $postData")
+  override def onListen(route: Route): Boolean = {
+    val request = route.request()
+    val url = request.url()
+    if(url.contains("/api/v0/") && url.contains("completion")){
 
-          if (postData != null && postData.contains("chat_session_id")) {
-            // 在这里解析参数
-            // val jsonObj = JSONObject.parseObject(postData)
+      val headers = request.headers()
+      val authorization = headers.get("authorization")
+      val postData = request.postData() // 可能为 null
 
-            // 直接取消，不让它真正发出去
-            println("[intercept] matched, abort request")
-            route.abort()
+      println(s"[intercept] url = ${url}")
+      println(s"[intercept] authorization = ${authorization}")
+      println(s"[intercept] postData = ${postData}")
 
-            headers.asScala.map(h=>{
-              val k = h._1
-              val v = h._2
-              s"${k}=${v}"
-            }).toList.foreach(println)
+      if (postData != null && postData.contains("chat_session_id")) {
+//        isBreak = true
 
-            val updatePostData = postData.replaceAll("hi", content)
-            isBreak = true
+        // 在这里解析参数
+        // val jsonObj = JSONObject.parseObject(postData)
 
-            val deepseekClient = new DeepseekClient
-            deepseekClient.createCompletion(headers, updatePostData)
+        // 直接取消，不让它真正发出去
+        println("[intercept] matched, abort request")
+        route.abort()
 
-          } else {
-            // 不符合条件，放行
-            route.resume() // 有些版本也常写 route.continue()
-          }
-        } else {
-          route.resume()
-        }
-      } catch {
-        case exception: Exception =>
-          exception.printStackTrace()
-          route.resume()
+        headers.asScala.map(h => {
+          val k = h._1
+          val v = h._2
+          s"${k}=${v}"
+        }).toList.foreach(println)
+
+        val updatePostData = postData.replaceAll("hi", content)
+        val deepseekClient = new DeepseekClient
+        deepseekClient.createCompletion(headers, updatePostData)
+
       }
-    })
+
+      return true
+    }
+    else {
+      route.resume()
+    }
+    false
   }
 
-  override def chat(content: String): Unit = synchronized {
+  override def chat(text: String): Unit = synchronized {
+    this.content = text
+
     val browserContext = ChromeBrowser.browserContext
     if(browserContext == null){
       return
@@ -103,14 +150,17 @@ class DeepseekWebAuth extends IToken {
 //    val userAgent = this.deepseekPage.evaluate("() => navigator.userAgent").asInstanceOf[String]
 //    println("User-Agent: " + userAgent)
 
-    installIntercept(browserContext, content)
+//    installIntercept(browserContext, content)
 
-    while (!isBreak){
+
+    println("开始对话")
+    var times = 0
+    while (!isBreak && times < 3){
       sayHi()
+      times = times + 1
       Thread.sleep(2000)
     }
-
-    println("over")
+    println("完成对话")
   }
 
   /***
