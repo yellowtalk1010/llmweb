@@ -25,7 +25,7 @@ class DeepseekWeb extends IToken {
     val request = route.request()
     val url = request.url()
     if(url.contains("/api/v0/") && url.contains("completion")){
-
+      isBreak = true
       val headers = request.headers()
       val authorization = headers.get("authorization")
       val postData = request.postData() // 可能为 null
@@ -35,8 +35,6 @@ class DeepseekWeb extends IToken {
       println(s"[intercept] postData = ${postData}")
 
       if (postData != null && postData.contains("chat_session_id")) {
-//        isBreak = true
-
         // 在这里解析参数
         // val jsonObj = JSONObject.parseObject(postData)
 

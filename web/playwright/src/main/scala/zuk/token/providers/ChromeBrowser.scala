@@ -30,7 +30,7 @@ object ChromeBrowser {
 
   ChromeBrowser.onListen() //添加监听
 
-  val chatList = Array(new DeepseekWeb()).toBuffer
+  val chatList = Array[IToken]().toBuffer
 
   private def onListen(): Unit = {
     if (browserContext != null){
