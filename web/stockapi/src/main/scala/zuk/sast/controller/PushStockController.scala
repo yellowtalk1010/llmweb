@@ -125,8 +125,8 @@ class PushStockController {
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}")
         map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
-        map.put("heads", e._2.filter(!_.name.contains("ST")).toList.asJava) //移除股票名称中带ST的股票
-        map.put("histories", e._3.filter(!_.name.contains("ST")).asJava) //移除股票名称中带ST的股票
+        map.put("heads", e._2.filter(!_.name.toUpperCase.contains("ST")).toList.asJava) //移除股票名称中带ST的股票
+        map.put("histories", e._3.filter(!_.name.toUpperCase.contains("ST")).asJava) //移除股票名称中带ST的股票
         map
       }).asJava
 
