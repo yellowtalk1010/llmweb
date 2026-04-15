@@ -1,7 +1,7 @@
 package zuk.token.providers
 
 import com.microsoft.playwright.{Browser, BrowserContext, Playwright, Route}
-import zuk.token.providers.deepseek.DeepseekWebAuth
+import zuk.token.providers.deepseek.DeepseekWeb
 
 import java.net.http.HttpClient
 import java.time.Duration
@@ -30,7 +30,7 @@ object ChromeBrowser {
 
   ChromeBrowser.onListen() //添加监听
 
-  val chatList = Array(new DeepseekWebAuth()).toBuffer
+  val chatList = Array(new DeepseekWeb()).toBuffer
 
   private def onListen(): Unit = {
     if (browserContext != null){

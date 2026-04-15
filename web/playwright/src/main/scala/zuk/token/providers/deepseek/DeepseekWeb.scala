@@ -8,7 +8,7 @@ import java.util
 import java.util.Map
 import scala.jdk.CollectionConverters.*
 
-class DeepseekWebAuth extends IToken {
+class DeepseekWeb extends IToken {
 
   /***
    * deepseek官网地址
