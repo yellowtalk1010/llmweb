@@ -14,14 +14,14 @@
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <java.version>17</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>21</java.version>
         <maven.compile.encoding>UTF-8</maven.compile.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <exec.args>-Dspring.native.additional-build-args=--initialize-at-build-time=com.alibaba.fastjson2</exec.args>
 
-        <scala.version>3.4.2</scala.version>
+        <scala.version>3.6.4</scala.version>
         <scala.maven.plugin>4.9.2</scala.maven.plugin>
 
     </properties>
@@ -29,8 +29,8 @@
     <modules>
         <module>boot</module>
         <module>stockapi</module>
-        <module>word</module>
-        <module>graalvm_nativeimage</module>
+<!--        <module>word</module>-->
+<!--        <module>graalvm_nativeimage</module>-->
         <module>web_proxy</module>
         <module>playwright</module>
     </modules>

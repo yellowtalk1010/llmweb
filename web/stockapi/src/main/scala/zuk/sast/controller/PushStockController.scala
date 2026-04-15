@@ -18,28 +18,6 @@ import java.util.concurrent.Executors
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
-case class StockResultJson(){
-
-  @BeanProperty var file: File = null
-  @BeanProperty var fileName: String = ""
-  @BeanProperty var eastmoneyURL: String = "" //东方财富地址
-
-
-  @BeanProperty var area: String = ""
-  @BeanProperty var modDesc: String = ""
-  @BeanProperty var ts_code: String = ""
-  @BeanProperty var turnoverRate: String = ""
-  @BeanProperty var name: String = ""
-
-  @BeanProperty var limitUp: String = ""
-  @BeanProperty var industry: String = ""
-  @BeanProperty var limitDown: String = ""
-  @BeanProperty var modWinRate: String = ""
-  @BeanProperty var modClsName: String = ""
-
-  @BeanProperty var upperShadow: String = "" //上影线警告
-}
-
 /***
  * 股票推荐列表
  */
@@ -98,7 +76,7 @@ class PushStockController {
     response.put("code", s"success")
     response.put("time", s"${System.currentTimeMillis()}")
 
-    val file = getStockResultJsonPath()
+    val file: File = getStockResultJsonPath()
     if(file.exists() && file.isDirectory){
       val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
       val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
@@ -147,8 +125,8 @@ class PushStockController {
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}")
         map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
-        map.put("heads", e._2.toList.asJava)
-        map.put("histories", e._3.asJava)
+        map.put("heads", e._2.filter(!_.name.contains("ST")).toList.asJava) //移除股票名称中带ST的股票
+        map.put("histories", e._3.filter(!_.name.contains("ST")).asJava) //移除股票名称中带ST的股票
         map
       }).asJava
 
