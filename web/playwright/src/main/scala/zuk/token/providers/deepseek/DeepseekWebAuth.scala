@@ -45,7 +45,15 @@ class DeepseekWebAuth extends IToken {
             println("[intercept] matched, abort request")
             route.abort()
 
+            headers.asScala.map(h=>{
+              val k = h._1
+              val v = h._2
+              s"${k}=${v}"
+            }).toList.foreach(println)
+
             val updatePostData = postData.replaceAll("hi", content)
+            isBreak = true
+
             val deepseekClient = new DeepseekClient
             deepseekClient.createCompletion(headers, updatePostData)
 
@@ -64,7 +72,7 @@ class DeepseekWebAuth extends IToken {
     })
   }
 
-  override def chat(content: String): Unit = {
+  override def chat(content: String): Unit = synchronized {
     val browserContext = ChromeBrowser.browserContext
     if(browserContext == null){
       return
