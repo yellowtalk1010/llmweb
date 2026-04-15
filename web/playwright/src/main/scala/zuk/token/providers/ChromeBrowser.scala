@@ -35,11 +35,33 @@ object ChromeBrowser {
     if (browserContext != null){
 
       //输出cookies
-//      val cookies = browserContext.cookies(chatList.map(_.llmChatURL()).toList.asJava).asScala
-//      val cookies = browserContext.cookies("https://chat.deepseek.com").asScala
+//      if(chatList.size>0){
+//        val cookies = browserContext.cookies(chatList.map(_.llmChatURL()).toList.asJava).asScala
+//        val cookiesStr = cookies.map(c=>{
+//          val k = c.name
+//          val v = c.value
+//          s"${k}=${v}"
+//        }).mkString("\n")
+//        println(cookiesStr)
+//      }
+
 
       browserContext.route("**/*", (route: Route) => {
         try {
+          println("输出全部URL地址")
+          val urls = browserContext.pages().asScala.map(_.url()).toList
+          urls.foreach(println)
+          println()
+
+          println("输出全部cookie")
+          val cookies = browserContext.cookies(urls.asJava)
+          cookies.asScala.foreach(c=>{
+            val k = c.name
+            val v = c.value
+            println(s"${k}=${v}")
+          })
+          println()
+
           val request = route.request()
           val url = request.url()
           println(s"url:${url}")
