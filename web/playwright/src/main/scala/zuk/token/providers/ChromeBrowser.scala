@@ -24,6 +24,7 @@ object ChromeBrowser {
     browserContexts.asScala.head
   }
   else {
+    println("未监听chrome浏览器")
     null
   }
 
