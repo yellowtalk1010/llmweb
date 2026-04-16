@@ -1,6 +1,7 @@
 package zuk.token.providers.deepseek
 
 import zuk.token.providers.ChromeBrowser
+import zuk.token.task.{TaskRes, TaskResultQuene}
 
 import java.io.IOException
 import java.net.URI
@@ -38,7 +39,8 @@ class DeepseekClient {
 
       if (line != null && line.startsWith("data: ")) {
         val data = line.substring("data: ".length)
-
+        TaskResultQuene.count = TaskResultQuene.count + 1
+        TaskResultQuene.taskResultList.offer(new TaskRes("", data))
         if (data == "[DONE]") {
           println("stream finished")
         } else {
