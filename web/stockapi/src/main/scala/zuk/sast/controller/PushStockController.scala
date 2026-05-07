@@ -149,29 +149,21 @@ class PushStockController {
    */
   @GetMapping(value = Array("addAttention"))
   def addAttention(tushareCode: String): util.Map[String, String] = synchronized {
-    val TUSHARE_CODE = "tushareCode"
-    val DATE = "date"
-    val sdf = new SimpleDateFormat("yyyyMMdd")
-    val map = new util.HashMap[String, String]()
-    map.put(TUSHARE_CODE, tushareCode)
-    map.put(DATE, sdf.format(new Date()))
+
     val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
-    val lines = FileUtils.readLines(file, Charset.forName("UTF-8"))
-    val jsons = lines.asScala.map(l=>{JSONObject.parseObject(l)}).groupBy(_.get(TUSHARE_CODE)).map(_._2.head)
-    val ls = jsons.filter(e=>e.get(TUSHARE_CODE).equals(tushareCode))
+    if (!file.exists()) {
+      log.error(s"${file.getAbsolutePath}文件不存在")
+    }
+    val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
 
     val result = new util.HashMap[String, String]()
-    if(ls.size>0){
-      result.put("status", s"已存在${jsons.size}")
+    if(sets.contains(tushareCode)){
+      result.put("status", s"已存在，${sets.size}")
     }
     else {
-      val newJsonObj = new JSONObject()
-      newJsonObj.put(TUSHARE_CODE, tushareCode)
-      newJsonObj.put(DATE, sdf.format(new Date()))
-      jsons.toBuffer += newJsonObj
-      val newLines = jsons.map(e=>{JSONObject.toJSONString(e, Feature.LargeObject)}).toList.sorted
-      FileUtils.writeLines(file, newLines.asJava)
-      result.put("status", s"成功${jsons.size}")
+      sets.toBuffer += tushareCode
+      FileUtils.writeLines(file, sets.toList.asJava)
+      result.put("status", s"成功，${sets.size}")
     }
     log.info(JSONObject.toJSONString(result))
     result
