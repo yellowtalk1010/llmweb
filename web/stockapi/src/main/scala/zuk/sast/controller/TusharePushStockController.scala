@@ -189,8 +189,12 @@ class TusharePushStockController {
     val file = all._1
     val set = all._2
 
+    val tsStockList = set.toList.map(e=>{
+      allStocksCSVUtil.getTsStock(e)
+    }).map(!_.isEmpty).asJava
+
     val result = new util.HashMap[String, Object]()
-    result.put("data", set)
+    result.put("data", tsStockList)
     result
   }
 
