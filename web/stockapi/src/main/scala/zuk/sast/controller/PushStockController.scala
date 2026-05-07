@@ -124,7 +124,20 @@ class PushStockController {
         (clsName, headList, historyList)
       })
 
+
+      val allAttentionCodes = getAllAttention()._2 //全部关注的股票
+
       val maplist = pushStocks.map(e=>{
+
+        (e._2 ++ e._3).foreach(e=>{
+          if(allAttentionCodes.contains(e.ts_code)){
+            e.attention = "已关注"
+          }
+          else {
+            e.attention = "未关注"
+          }
+        })
+
         val head = (e._2 ++ e._3).head
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}")
@@ -150,6 +163,7 @@ class PushStockController {
    */
   def getAllAttention(): Tuple2[File, Set[String]] = {
     val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
+    log.info(s"关注数据文件路径:${file.getAbsolutePath}")
     if (!file.exists()) {
       log.error(s"${file.getAbsolutePath}文件不存在")
       file.mkdirs()
