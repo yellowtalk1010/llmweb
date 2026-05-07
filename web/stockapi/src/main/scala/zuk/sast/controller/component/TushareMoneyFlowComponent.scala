@@ -120,7 +120,8 @@ class TushareMoneyFlowComponent {
 
     fileRecordList.flatMap(l=>l).groupBy(_.ts_code).foreach(e=>{
       val tsCode = e._1
-      MAP.put(tsCode, e._2.sortBy(_.trade_date.reverse))
+      val ls = e._2.sortBy(_.trade_date).reverse
+      MAP.put(tsCode, ls)
     })
 
 
