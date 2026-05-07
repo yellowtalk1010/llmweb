@@ -34,7 +34,7 @@ object DataFrame {
   /***
    * 加载全部股票基本数据
    */
-  private def loadAllStocks(all_stocks_path: String): List[TsStock] = {
+  def loadAllStocks(all_stocks_path: String): List[TsStock] = {
     val all_stocks_file = new File(all_stocks_path)
     println(s"${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
