@@ -173,9 +173,23 @@ class PushStockController {
     (file, sets)
   }
 
-  /** *
+  /***
+   * 索取全部关注
+   */
+  @GetMapping(value = Array("allAttention"))
+  def allAttention(desc: String): util.Map[String, Object] = synchronized {
+    log.info(s"全部关注:${desc}")
+    val all = getAllAttention()
+
+    val result = new util.HashMap[String, Object]()
+    result.put("data", all)
+    result
+  }
+
+  /***
    * 移除关注
    */
+  @GetMapping(value = Array("deleteAttention"))
   def deleteAttention(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"删除关注:${tsCode}")
     val all = getAllAttention()
