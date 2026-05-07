@@ -177,20 +177,21 @@ class PushStockController {
    * 添加关注
    */
   @GetMapping(value = Array("addAttention"))
-  def addAttention(tushareCode: String): util.Map[String, String] = synchronized {
-
+  def addAttention(tsCode: String): util.Map[String, String] = synchronized {
+    log.info(s"添加关注:${tsCode}")
     val all = getAllAttention()
     val file = all._1
     val set = all._2
 
     val result = new util.HashMap[String, String]()
-    if(set.contains(tushareCode)){
+    if(set.contains(tsCode)){
       result.put("status", s"已存在，${set.size}")
     }
     else {
-      set.toBuffer += tushareCode
-      FileUtils.writeLines(file, set.toList.asJava)
-      result.put("status", s"成功，${set.size}")
+      val list = set.toBuffer
+      list += tsCode
+      FileUtils.writeLines(file, list.asJava)
+      result.put("status", s"成功，${list.size}")
     }
     log.info(JSONObject.toJSONString(result))
     result
