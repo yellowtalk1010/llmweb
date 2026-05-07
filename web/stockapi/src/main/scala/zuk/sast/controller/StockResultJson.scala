@@ -23,5 +23,7 @@ case class StockResultJson(){
   @BeanProperty var modClsName: String = ""
 
   @BeanProperty var upperShadow: String = "" //上影线警告
+
+  @BeanProperty var attention: String = "" //是否关注
 }
 
