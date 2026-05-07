@@ -37,13 +37,13 @@ class PushStockController {
       try {
         val file: File = getStockResultJsonPath()
         if (file.exists() && file.isDirectory) {
-          val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
-          val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
-          var dateStr = simpleDateFormat.format(new Date())
-          jsonfiles.filter(!_.getName.startsWith(dateStr)).foreach(file => {
+//          val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
+//          val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+//          var dateStr = simpleDateFormat.format(new Date())
+//          jsonfiles.filter(!_.getName.startsWith(dateStr)).foreach(file => {
 //            log.info(s"删除历史结果文件：${file.getPath}")
 //            file.delete()
-          })
+//          })
         }
       }
       catch
@@ -63,9 +63,10 @@ class PushStockController {
    * @return
    */
   private def getStockResultJsonPath(): File = {
+    val sdf = new SimpleDateFormat("yyyyMMdd")
     val pro = System.getProperties
     log.info(s"stock result json path: ${this.stockResultJsonPath}")
-    val file = new File(this.stockResultJsonPath)
+    val file = new File(s"${this.stockResultJsonPath}${File.separator}${sdf}")
     file
   }
 
@@ -76,10 +77,12 @@ class PushStockController {
     response.put("code", s"success")
     response.put("time", s"${System.currentTimeMillis()}")
 
+    val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+
     val file: File = getStockResultJsonPath()
     if(file.exists() && file.isDirectory){
       val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
-      val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+
       var dateStr = simpleDateFormat.format(new Date())
       val filterJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
       log.info(s"\njson文件：\n${filterJsonFiles.map(_.getName).mkString("\n")}")
