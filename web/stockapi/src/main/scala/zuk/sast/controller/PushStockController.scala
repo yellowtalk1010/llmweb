@@ -184,14 +184,15 @@ class PushStockController {
     val set = all._2
 
     val result = new util.HashMap[String, String]()
+    result.put("code", "success")
     if(set.contains(tsCode)){
-      result.put("status", s"已存在，${set.size}")
+      result.put("desc", s"已存在，${set.size}")
     }
     else {
       val list = set.toBuffer
       list += tsCode
       FileUtils.writeLines(file, list.asJava)
-      result.put("status", s"成功，${list.size}")
+      result.put("desc", s"添加成功，${set.size}")
     }
     log.info(JSONObject.toJSONString(result))
     result
