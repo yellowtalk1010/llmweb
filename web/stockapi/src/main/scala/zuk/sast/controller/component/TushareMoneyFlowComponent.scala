@@ -4,15 +4,19 @@ import jakarta.annotation.PostConstruct
 import org.apache.commons.csv.{CSVFormat, CSVRecord}
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
+import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
+import java.util.concurrent.ConcurrentHashMap
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
 case class MoneyflowDto() {
+
+  @BeanProperty var ts_code_name: String = ""      // str TS代码名称
 
   @BeanProperty var ts_code: String = ""      // str TS代码
   @BeanProperty var trade_date: String = ""   // str 交易日期
@@ -48,6 +52,11 @@ class TushareMoneyFlowComponent {
 
   private val log = LoggerFactory.getLogger(classOf[TushareMoneyFlowComponent])
 
+  @Autowired
+  private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
+
+  private val MAP = new ConcurrentHashMap[String, List[MoneyflowDto]]()
+
   @Value("${stock.moneyflow.path}")
   @BeanProperty
   var moneyflowPath: String = null
@@ -65,17 +74,19 @@ class TushareMoneyFlowComponent {
       System.exit(1)
     }
 
-    val list = file.listFiles().toList.sortBy(_.getName).reverse
-    val list10 = if(list.size>10) list.take(10) else list
+    val fileList = file.listFiles().toList.sortBy(_.getName).reverse
+    val fileList10 = if(fileList.size>10) fileList.take(10) else fileList
 
-    val records = list10.map(f=>{
+    val fileRecordList = fileList10.map(f=>{
       val filename = f.getName
       val in = new FileReader(f.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
 
-      val moneyflowDtos = records.asScala.map(record=>{
+      val moneyflowDtoList = records.asScala.map(record=>{
         val dto = new MoneyflowDto
+
         dto.ts_code = record.get("ts_code")
+        dto.ts_code_name = tushareAllStocksCSVComponent.getTsStock(dto.ts_code).getOrElse(new TsStock).name
         dto.trade_date = record.get("trade_date")
         dto.buy_sm_vol = record.get("buy_sm_vol")
         dto.buy_sm_amount = record.get("buy_sm_amount")
@@ -103,16 +114,15 @@ class TushareMoneyFlowComponent {
       })
 
       in.close()
-      moneyflowDtos
+
+      moneyflowDtoList.toList
     })
 
-//    val codes = records.map(record: CSVRecord => {
-//        val moneyflowDto = new MoneyflowDto()
-//        record.getn
-//        moneyflowDto.ts_code = record.get("ts_code")
-//        moneyflowDto
-//      })
-//      .toList
+    fileRecordList.flatMap(l=>l).groupBy(_.ts_code).foreach(e=>{
+      val tsCode = e._1
+      MAP.put(tsCode, e._2.sortBy(_.trade_date.reverse))
+    })
+
 
     println("")
   }
