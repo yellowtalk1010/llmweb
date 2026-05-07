@@ -173,6 +173,9 @@ class PushStockController {
     (file, sets)
   }
 
+  /** *
+   * 移除关注
+   */
   def deleteAttention(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"删除关注:${tsCode}")
     val all = getAllAttention()
