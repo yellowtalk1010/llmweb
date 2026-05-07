@@ -18,6 +18,7 @@ import AllStock from "./pages/stock/AllStock"
 import MyStock from "./pages/stock/MyStock"
 import HistoryStock from "./pages/stock/HistoryStock";
 import PushTushareStock from "./pages/stock/PushTushareStock";
+import Moneyflow from "./pages/stock/Moneyflow";
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/pages/MyStock" element={<MyStock />} />
           <Route path="/pages/HistoryStock" element={<HistoryStock/>} />
           <Route path="/pages/PushTushareStock" element={<PushTushareStock/>} />
+          <Route path="/pages/Moneyflow" element= {<Moneyflow/>}/>
 
         </Routes>
       </BrowserRouter>

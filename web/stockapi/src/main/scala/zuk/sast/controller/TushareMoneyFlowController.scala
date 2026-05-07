@@ -29,6 +29,7 @@ class TushareMoneyFlowController {
     val list = tushareMoneyFlowComponent.getTsCode(tsCode).asJava
     val result = new util.HashMap[String, Object]()
     result.put("data", list)
+    result.put("code", "success")
     result
   }
 

@@ -9,6 +9,7 @@ function Stock() {
     { id: "4", title: "我的", url: "MyStock" },
     { id: "5", title: "龙虎榜机构交易单", url: "HistoryStock" },
     { id: "6", title: "股票推荐", url: "PushTushareStock" },
+    { id: "7", title: "资金流向", url: "Moneyflow" },
   ];
 
   const leftPanelRef = useRef(null);

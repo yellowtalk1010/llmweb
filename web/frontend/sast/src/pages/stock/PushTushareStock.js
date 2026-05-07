@@ -135,6 +135,7 @@ function StockTable({ list }) {
         <thead>
         <tr className="border-b bg-gray-50">
           <th className="p-2 text-left">关注</th>
+          <th className="p-2 text-left">资金</th>
           <th className="p-2 text-left">名称</th>
           <th className="p-2 text-left">代码</th>
           <th className="p-2 text-left">行业</th>
@@ -165,7 +166,9 @@ function StockTable({ list }) {
                   </button>
                 )}
               </td>
-
+              <td>
+                
+              </td>
               <td className="p-2 font-medium">
                 <a
                   href={item.eastmoneyURL}
