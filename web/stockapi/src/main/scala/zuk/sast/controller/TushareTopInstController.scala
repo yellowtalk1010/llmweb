@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.{Autowired, Value}
 
 @RestController
 @RequestMapping(value=Array("top_inst"))
-class TopInstController {
+class TushareTopInstController {
 
-  private val log = LoggerFactory.getLogger(classOf[TopInstController])
+  private val log = LoggerFactory.getLogger(classOf[TushareTopInstController])
 
   /** *
    * 获取application.properties中的数据，股票json结果路径
