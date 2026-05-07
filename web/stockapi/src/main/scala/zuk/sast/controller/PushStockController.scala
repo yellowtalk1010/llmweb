@@ -144,6 +144,10 @@ class PushStockController {
 
   }
 
+  /***
+   * 获取关注股票
+   * @return
+   */
   def getAllAttention(): Tuple2[File, Set[String]] = {
     val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
     if (!file.exists()) {
