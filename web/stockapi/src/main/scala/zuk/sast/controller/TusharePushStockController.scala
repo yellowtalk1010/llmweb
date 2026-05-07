@@ -25,9 +25,9 @@ import scala.jdk.CollectionConverters.*
 @RestController
 @RequestMapping(value = Array("push_stocks"))
 @Component
-class PushStockController {
+class TusharePushStockController {
 
-  private val log = LoggerFactory.getLogger(classOf[PushStockController])
+  private val log = LoggerFactory.getLogger(classOf[TusharePushStockController])
 
   private val Executor_Service = Executors.newSingleThreadExecutor()
 
