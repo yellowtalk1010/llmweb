@@ -1,4 +1,4 @@
-package zuk.sast.controller
+package zuk.sast.controller.component
 
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
@@ -14,9 +14,9 @@ import scala.collection.mutable.ListBuffer
  * 自动化加载 all_stocks.csv 数据
  */
 @Component
-class AllStocksCSVComponent {
+class TushareAllStocksCSVComponent {
 
-  private val log = LoggerFactory.getLogger(classOf[AllStocksCSVComponent])
+  private val log = LoggerFactory.getLogger(classOf[TushareAllStocksCSVComponent])
 
   @Value("${stock.all_stocks.csv.path}")
   @BeanProperty
