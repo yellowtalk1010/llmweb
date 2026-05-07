@@ -101,6 +101,9 @@ function PushTushareStock() {
 
 function StockTable({ list }) {
 
+  /***
+   * 添加关注
+   */
   const addAttention = async (tsCode) => {
     try {
       const response = await fetch(
