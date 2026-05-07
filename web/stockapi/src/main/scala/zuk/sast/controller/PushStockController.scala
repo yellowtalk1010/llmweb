@@ -157,9 +157,7 @@ class PushStockController {
     map.put(DATE, sdf.format(new Date()))
     val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
     val lines = FileUtils.readLines(file, Charset.forName("UTF-8"))
-    val jsons = lines.asScala.map(l=>{
-      JSONObject.parseObject(l)
-    }).groupBy(_.get(TUSHARE_CODE)).map(_._2.head)
+    val jsons = lines.asScala.map(l=>{JSONObject.parseObject(l)}).groupBy(_.get(TUSHARE_CODE)).map(_._2.head)
     val ls = jsons.filter(e=>e.get(TUSHARE_CODE).equals(tushareCode))
 
     val result = new util.HashMap[String, String]()
@@ -172,10 +170,7 @@ class PushStockController {
       newJsonObj.put(TUSHARE_CODE, tushareCode)
       newJsonObj.put(DATE, sdf.format(new Date()))
       ls.toBuffer += newJsonObj
-      val newLines = ls.map(e=>{
-        val s = JSONObject.toJSONString(e, Feature.LargeObject)
-        s
-      }).toList
+      val newLines = ls.map(e=>{JSONObject.toJSONString(e, Feature.LargeObject)}).toList
       FileUtils.writeLines(file, newLines.asJava)
       result.put("status", "成功")
     }
