@@ -10,6 +10,9 @@ import zuk.tu_share.dto.TsStock
 import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
 
+/***
+ * 自动化加载 all_stocks.csv 数据
+ */
 @Component
 class AllStocksCSVUtil {
 
