@@ -153,6 +153,8 @@ class PushStockController {
     val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
     if (!file.exists()) {
       log.error(s"${file.getAbsolutePath}文件不存在")
+      file.mkdirs()
+      file.createNewFile()
     }
     val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
 
