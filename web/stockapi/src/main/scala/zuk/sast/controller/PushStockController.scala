@@ -144,12 +144,7 @@ class PushStockController {
 
   }
 
-  /***
-   * 添加关注
-   */
-  @GetMapping(value = Array("addAttention"))
-  def addAttention(tushareCode: String): util.Map[String, String] = synchronized {
-
+  def getAllAttention(): Tuple2[File, Set[String]] = {
     val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
     if (!file.exists()) {
       log.error(s"${file.getAbsolutePath}文件不存在")
@@ -157,15 +152,27 @@ class PushStockController {
       file.createNewFile()
     }
     val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
+    (file, sets)
+  }
+
+  /***
+   * 添加关注
+   */
+  @GetMapping(value = Array("addAttention"))
+  def addAttention(tushareCode: String): util.Map[String, String] = synchronized {
+
+    val all = getAllAttention()
+    val file = all._1
+    val set = all._2
 
     val result = new util.HashMap[String, String]()
-    if(sets.contains(tushareCode)){
-      result.put("status", s"已存在，${sets.size}")
+    if(set.contains(tushareCode)){
+      result.put("status", s"已存在，${set.size}")
     }
     else {
-      sets.toBuffer += tushareCode
-      FileUtils.writeLines(file, sets.toList.asJava)
-      result.put("status", s"成功，${sets.size}")
+      set.toBuffer += tushareCode
+      FileUtils.writeLines(file, set.toList.asJava)
+      result.put("status", s"成功，${set.size}")
     }
     log.info(JSONObject.toJSONString(result))
     result
