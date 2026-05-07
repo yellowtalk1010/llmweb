@@ -162,7 +162,6 @@ class PushStockController {
 
     val result = new util.HashMap[String, String]()
     if(ls.size>0){
-      //存在
       result.put("status", "已存在")
     }
     else {
