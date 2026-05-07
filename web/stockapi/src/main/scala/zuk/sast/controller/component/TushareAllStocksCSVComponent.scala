@@ -39,7 +39,7 @@ class TushareAllStocksCSVComponent {
       allStocks ++= list
     }
 
-    log.info(s"初始化完成，总数：${list.size}")
+    log.info(s"all_stocks.csv初始化完成，总数：${list.size}")
   }
 
   def initAllStocksCSV(): List[TsStock] = {
