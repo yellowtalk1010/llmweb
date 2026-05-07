@@ -162,16 +162,16 @@ class PushStockController {
 
     val result = new util.HashMap[String, String]()
     if(ls.size>0){
-      result.put("status", "已存在")
+      result.put("status", s"已存在${jsons.size}")
     }
     else {
       val newJsonObj = new JSONObject()
       newJsonObj.put(TUSHARE_CODE, tushareCode)
       newJsonObj.put(DATE, sdf.format(new Date()))
-      ls.toBuffer += newJsonObj
-      val newLines = ls.map(e=>{JSONObject.toJSONString(e, Feature.LargeObject)}).toList.sorted
+      jsons.toBuffer += newJsonObj
+      val newLines = jsons.map(e=>{JSONObject.toJSONString(e, Feature.LargeObject)}).toList.sorted
       FileUtils.writeLines(file, newLines.asJava)
-      result.put("status", "成功")
+      result.put("status", s"成功${jsons.size}")
     }
     log.info(JSONObject.toJSONString(result))
     result
