@@ -1,5 +1,6 @@
 package zuk.sast.controller
 
+import com.alibaba.fastjson2.JSONWriter.Feature
 import com.alibaba.fastjson2.{JSONArray, JSONObject}
 import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
@@ -167,7 +168,12 @@ class PushStockController {
       result.put("status", "已存在")
     }
     else {
-
+      val newJsonObj = new JSONObject()
+      newJsonObj.put(TUSHARE_CODE, tushareCode)
+      newJsonObj.put(DATE, sdf.format(new Date()))
+      ls.toBuffer += newJsonObj
+      val str = ls.map(e=>{JSONObject.toJSONString(e, Feature.LargeObject)}).mkString("\n")
+      
       result.put("status", "成功")
     }
     log.info(JSONObject.toJSONString(result))
