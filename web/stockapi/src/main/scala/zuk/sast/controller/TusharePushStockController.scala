@@ -199,7 +199,7 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("deleteAttention"))
   def deleteAttention(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"删除关注:${tsCode}, ${allStocksCSVUtil.getTsStock(tsCode).getOrElse("不存在")}")
+    log.info(s"删除关注:${tsCode}, ${allStocksCSVUtil.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()
 
     val file = all._1
