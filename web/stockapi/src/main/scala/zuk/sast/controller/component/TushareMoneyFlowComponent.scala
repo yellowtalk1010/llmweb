@@ -13,6 +13,7 @@ import java.nio.charset.Charset
 import java.util.concurrent.ConcurrentHashMap
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
+import java.math.BigDecimal
 
 case class MoneyflowDto() {
 
@@ -43,6 +44,13 @@ case class MoneyflowDto() {
 
   @BeanProperty var net_mf_vol: String = ""         // int 净流入量（手）
   @BeanProperty var net_mf_amount: String = ""    // float 净流入额（万元）
+
+  @BeanProperty var elg_net_amount: String = "" //净超大单
+  @BeanProperty var lg_net_amount: String = "" //净大单
+  @BeanProperty var md_net_amount: String = "" //净中单
+  @BeanProperty var sm_net_amount: String = "" //净小单
+  @BeanProperty var main_net_amount: String = ""    // 净主力
+  @BeanProperty var sanhu_net_amount: String = ""    // 净散户
 
 }
 
@@ -111,6 +119,23 @@ class TushareMoneyFlowComponent {
         dto.sell_elg_amount = record.get("sell_elg_amount")
         dto.net_mf_vol = record.get("net_mf_vol")
         dto.net_mf_amount = record.get("net_mf_amount")
+
+
+        dto.elg_net_amount = new BigDecimal(dto.buy_elg_amount).subtract(new BigDecimal(dto.sell_elg_amount)).toString
+        dto.lg_net_amount = new BigDecimal(dto.buy_lg_amount).subtract(new BigDecimal(dto.sell_lg_amount)).toString
+        dto.md_net_amount = new BigDecimal(dto.buy_md_amount).subtract(new BigDecimal(dto.sell_md_amount)).toString
+        dto.sm_net_amount = new BigDecimal(dto.buy_sm_amount).subtract(new BigDecimal(dto.sell_sm_amount)).toString
+        dto.main_net_amount = new BigDecimal(dto.buy_elg_amount)
+          .add(new BigDecimal(dto.buy_lg_amount))
+          .subtract(new BigDecimal(dto.sell_elg_amount))
+          .subtract(new BigDecimal(dto.sell_lg_amount))
+          .toString //主力
+
+        dto.sanhu_net_amount = new BigDecimal(dto.buy_sm_amount)
+          .add(new BigDecimal(dto.buy_md_amount))
+          .subtract(new BigDecimal(dto.sell_sm_amount))
+          .subtract(new BigDecimal(dto.sell_md_amount))
+          .toString //散户
 
         dto
       })
