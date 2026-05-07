@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
+import zuk.sast.controller.component.TushareAllStocksCSVComponent
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
@@ -32,7 +33,7 @@ class TusharePushStockController {
   private val Executor_Service = Executors.newSingleThreadExecutor()
 
   @Autowired
-  private var allStocksCSVUtil: AllStocksCSVUtil = null
+  private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
   @PostConstruct
   def init(): Unit = {
@@ -190,7 +191,7 @@ class TusharePushStockController {
     val set = all._2
 
     val tsStockList = set.toList.map(e=>{
-      allStocksCSVUtil.getTsStock(e)
+      tushareAllStocksCSVComponent.getTsStock(e)
     }).filter(!_.isEmpty).asJava
 
     val result = new util.HashMap[String, Object]()
@@ -203,7 +204,7 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("deleteAttention"))
   def deleteAttention(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"删除关注:${tsCode}, ${allStocksCSVUtil.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"删除关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()
 
     val file = all._1
@@ -223,7 +224,7 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("addAttention"))
   def addAttention(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"添加关注:${tsCode}, ${allStocksCSVUtil.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"添加关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()
     val file = all._1
     val set = all._2
