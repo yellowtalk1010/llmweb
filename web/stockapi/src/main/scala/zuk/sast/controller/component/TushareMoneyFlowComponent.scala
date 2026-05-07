@@ -124,8 +124,17 @@ class TushareMoneyFlowComponent {
       MAP.put(tsCode, ls)
     })
 
-
     println(s"完成历史资金流初始化，${MAP.size()}")
+  }
+
+  def getTsCode(tscode: String): List[MoneyflowDto] = {
+    val v = MAP.get(tscode)
+    if(v==null){
+      List.empty
+    }
+    else {
+      v
+    }
   }
 
 }
