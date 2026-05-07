@@ -100,11 +100,38 @@ function PushTushareStock() {
 }
 
 function StockTable({ list }) {
+
+  const addAttention = async (tsCode) => {
+    try {
+      const response = await fetch(
+        "/push_stocks/addAttention?tsCode=" + tsCode,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("添加关注失败");
+      }
+
+      const result = await response.json();
+
+      if (result.code === "success") {
+        alert(result.desc);
+        window.location.reload(); // 简单刷新
+      }
+    } catch (e) {
+      console.error(e);
+      alert("请求失败");
+    }
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm border-collapse">
         <thead>
         <tr className="border-b bg-gray-50">
+          <th className="p-2 text-left">关注</th>
           <th className="p-2 text-left">名称</th>
           <th className="p-2 text-left">代码</th>
           <th className="p-2 text-left">行业</th>
@@ -120,6 +147,22 @@ function StockTable({ list }) {
         <tbody>
         {list.map((item, idx) => (
             <tr key={idx} className="border-b hover:bg-gray-50">
+              
+              <td className="p-2">
+                {item.attention=="已关注" ? (
+                  <span className="text-red-500 font-bold">
+                    {item.attention}
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => addAttention(item.ts_code)}
+                    className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    关注
+                  </button>
+                )}
+              </td>
+
               <td className="p-2 font-medium">
                 <a
                   href={item.eastmoneyURL}
