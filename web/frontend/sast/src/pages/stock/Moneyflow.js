@@ -58,14 +58,23 @@ function Moneyflow() {
 
             <thead>
               <tr className="bg-gray-100 border-b">
+                <th className="p-3 text-left">日期</th>
                 <th className="p-3 text-left">代码</th>
                 <th className="p-3 text-left">代码名称</th>
-                <th className="p-3 text-left">日期</th>
-                <th className="p-3 text-left">主力净流入</th>
+
                 <th className="p-3 text-left">小单净流入</th>
+                <th className="p-3 text-left">小单净流出</th>
+
                 <th className="p-3 text-left">中单净流入</th>
+                <th className="p-3 text-left">中单净流出</th>
+
                 <th className="p-3 text-left">大单净流入</th>
-                <th className="p-3 text-left">超大单净流入</th>
+                <th className="p-3 text-left">大单净流出</th>
+                
+                <th className="p-3 text-left">特大单净流入</th>
+                <th className="p-3 text-left">特大单净流出</th>
+
+                <th className="p-3 text-left">净流入</th>
               </tr>
             </thead>
 
@@ -77,6 +86,10 @@ function Moneyflow() {
                 >
 
                   <td className="p-3">
+                    {item.trade_date}
+                  </td>
+
+                  <td className="p-3">
                     {item.ts_code}
                   </td>
 
@@ -85,28 +98,37 @@ function Moneyflow() {
                   </td>
 
                   <td className="p-3">
-                    {item.trade_date}
+                    {item.buy_sm_amount}
+                  </td>
+                  <td className="p-3">
+                    {item.sell_sm_amount}
+                  </td>
+
+                  <td className="p-3">
+                    {item.buy_md_amount}
+                  </td>
+                  <td className="p-3">
+                    {item.sell_md_amount}
+                  </td>
+
+                  <td className="p-3">
+                    {item.buy_lg_amount}
+                  </td>
+                <td className="p-3">
+                    {item.sell_lg_amount}
+                  </td>
+
+                  <td className="p-3">
+                    {item.buy_elg_amount}
+                  </td>
+                  <td className="p-3">
+                    {item.sell_elg_amount}
                   </td>
 
                   <td className="p-3 text-red-500 font-medium">
                     {item.net_mf_amount}
                   </td>
 
-                  <td className="p-3">
-                    {item.buy_sm_amount}
-                  </td>
-
-                  <td className="p-3">
-                    {item.buy_md_amount}
-                  </td>
-
-                  <td className="p-3">
-                    {item.buy_lg_amount}
-                  </td>
-
-                  <td className="p-3">
-                    {item.buy_elg_amount}
-                  </td>
                 </tr>
               ))}
             </tbody>
