@@ -125,7 +125,7 @@ class TushareMoneyFlowComponent {
     })
 
 
-    println("")
+    println(s"完成历史资金流初始化，${MAP.size()}")
   }
 
 }
