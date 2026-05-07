@@ -66,7 +66,7 @@ class PushStockController {
     val sdf = new SimpleDateFormat("yyyyMMdd")
     val pro = System.getProperties
     log.info(s"stock result json path: ${this.stockResultJsonPath}")
-    val file = new File(s"${this.stockResultJsonPath}${File.separator}${sdf}")
+    val file = new File(s"${this.stockResultJsonPath}${File.separator}${sdf.format(new Date())}")
     file
   }
 
