@@ -1,6 +1,7 @@
 package zuk.sast.controller.component
 
 import jakarta.annotation.PostConstruct
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -28,6 +29,10 @@ class TushareAllStocksCSVComponent {
   @PostConstruct
   def init(): Unit = synchronized {
     log.info(s"all_stocks.csv文件路径：${all_stocks_csv_path}")
+    if(StringUtils.isEmpty(all_stocks_csv_path)){
+      log.info("all_stocks.csv文件路径错误")
+      System.exit(1)
+    }
     val file = new File(all_stocks_csv_path)
     if(!file.exists() || !file.isFile){
       log.info("all_stocks.csv文件路径错误")
