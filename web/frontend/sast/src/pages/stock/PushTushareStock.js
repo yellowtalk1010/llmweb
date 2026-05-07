@@ -167,7 +167,18 @@ function StockTable({ list }) {
                 )}
               </td>
               <td>
-                
+
+              <td className="p-2">
+                  <a
+                    href={`/pages/Moneyflow?tsCode=${item.ts_code}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline cursor-pointer"
+                  >
+                    资金
+                  </a>
+              </td>  
+
               </td>
               <td className="p-2 font-medium">
                 <a
