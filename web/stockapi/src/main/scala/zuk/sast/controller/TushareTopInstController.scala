@@ -24,6 +24,8 @@ class TushareTopInstController {
   @BeanProperty
   private var stockHmTopInstPath: String = null
 
+  log.info(s"龙虎榜数据存储路径：${stockHmTopInstPath}")
+
   /**
    * 龙虎榜机构交易单
    * top_inst

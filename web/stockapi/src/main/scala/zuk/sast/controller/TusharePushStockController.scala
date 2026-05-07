@@ -59,6 +59,8 @@ class TusharePushStockController {
   @BeanProperty
   private var stockResultJsonPath: String = null
 
+  log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
+
   /***
    * 获取结果文件路径
    * @return
