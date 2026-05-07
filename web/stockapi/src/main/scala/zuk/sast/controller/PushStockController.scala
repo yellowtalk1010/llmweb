@@ -172,8 +172,11 @@ class PushStockController {
       newJsonObj.put(TUSHARE_CODE, tushareCode)
       newJsonObj.put(DATE, sdf.format(new Date()))
       ls.toBuffer += newJsonObj
-      val str = ls.map(e=>{JSONObject.toJSONString(e, Feature.LargeObject)}).mkString("\n")
-      
+      val newLines = ls.map(e=>{
+        val s = JSONObject.toJSONString(e, Feature.LargeObject)
+        s
+      }).toList
+      FileUtils.writeLines(file, newLines.asJava)
       result.put("status", "成功")
     }
     log.info(JSONObject.toJSONString(result))
