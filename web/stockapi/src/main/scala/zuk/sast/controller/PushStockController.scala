@@ -64,7 +64,7 @@ class PushStockController {
    */
   private def getStockResultJsonPath(): File = {
     val sdf = new SimpleDateFormat("yyyyMMdd")
-    val pro = System.getProperties
+//    val pro = System.getProperties
     log.info(s"stock result json path: ${this.stockResultJsonPath}")
     val file = new File(s"${this.stockResultJsonPath}${File.separator}${sdf.format(new Date())}")
     file
@@ -141,5 +141,36 @@ class PushStockController {
 
     response
 
+  }
+
+  /***
+   * 添加关注
+   */
+  @GetMapping(value = Array("addAttention"))
+  def addAttention(tushareCode: String): util.Map[String, String] = synchronized {
+    val TUSHARE_CODE = "tushareCode"
+    val DATE = "date"
+    val sdf = new SimpleDateFormat("yyyyMMdd")
+    val map = new util.HashMap[String, String]()
+    map.put(TUSHARE_CODE, tushareCode)
+    map.put(DATE, sdf.format(new Date()))
+    val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
+    val lines = FileUtils.readLines(file, Charset.forName("UTF-8"))
+    val jsons = lines.asScala.map(l=>{
+      JSONObject.parseObject(l)
+    }).groupBy(_.get(TUSHARE_CODE)).map(_._2.head)
+    val ls = jsons.filter(e=>e.get(TUSHARE_CODE).equals(tushareCode))
+
+    val result = new util.HashMap[String, String]()
+    if(ls.size>0){
+      //存在
+      result.put("status", "已存在")
+    }
+    else {
+
+      result.put("status", "成功")
+    }
+    log.info(JSONObject.toJSONString(result))
+    result
   }
 }
