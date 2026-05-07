@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 
+import java.io.File
 import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
 
@@ -27,6 +28,11 @@ class TushareAllStocksCSVComponent {
   @PostConstruct
   def init(): Unit = synchronized {
     log.info(s"all_stocks.csv文件路径：${all_stocks_csv_path}")
+    val file = new File(all_stocks_csv_path)
+    if(!file.exists() || !file.isFile){
+      log.info("all_stocks.csv文件路径错误")
+      System.exit(1)
+    }
     val list = initAllStocksCSV()
     if(allStocks.size < 5000){
       allStocks.clear()
