@@ -31,6 +31,9 @@ class TusharePushStockController {
 
   private val Executor_Service = Executors.newSingleThreadExecutor()
 
+  @Autowired
+  private var allStocksCSVUtil: AllStocksCSVUtil = null
+
   @PostConstruct
   def init(): Unit = {
     log.info("PushStockController 初始化完成")
@@ -196,7 +199,7 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("deleteAttention"))
   def deleteAttention(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"删除关注:${tsCode}")
+    log.info(s"删除关注:${tsCode}, ${allStocksCSVUtil.getTsStock(tsCode).getOrElse("不存在")}")
     val all = getAllAttention()
 
     val file = all._1
@@ -216,7 +219,7 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("addAttention"))
   def addAttention(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"添加关注:${tsCode}")
+    log.info(s"添加关注:${tsCode}, ${allStocksCSVUtil.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()
     val file = all._1
     val set = all._2
