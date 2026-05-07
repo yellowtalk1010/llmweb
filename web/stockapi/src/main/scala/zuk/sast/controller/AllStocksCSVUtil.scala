@@ -10,9 +10,9 @@ import zuk.tu_share.dto.TsStock
 import scala.beans.BeanProperty
 
 @Component
-class AllStocksUtil {
+class AllStocksCSVUtil {
 
-  private val log = LoggerFactory.getLogger(classOf[AllStocksUtil])
+  private val log = LoggerFactory.getLogger(classOf[AllStocksCSVUtil])
 
   @Value("${stock.all_stocks.csv.path}")
   @BeanProperty
