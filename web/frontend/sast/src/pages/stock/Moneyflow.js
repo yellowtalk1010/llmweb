@@ -62,19 +62,27 @@ function Moneyflow() {
                 <th className="p-3 text-left">代码</th>
                 <th className="p-3 text-left">代码名称</th>
 
-                <th className="p-3 text-left">小单净流入</th>
-                <th className="p-3 text-left">小单净流出</th>
-
-                <th className="p-3 text-left">中单净流入</th>
-                <th className="p-3 text-left">中单净流出</th>
-
-                <th className="p-3 text-left">大单净流入</th>
-                <th className="p-3 text-left">大单净流出</th>
+                {/* <th className="p-3 text-left">主力净流入</th>
+                <th className="p-3 text-left">散户净流入</th> */}
                 
-                <th className="p-3 text-left">特大单净流入</th>
-                <th className="p-3 text-left">特大单净流出</th>
+                {/* <th className="p-3 text-left">小单流入</th>
+                <th className="p-3 text-left">小单流出</th> */}
+                <th className="p-3 text-left">净小单流入</th>
 
-                <th className="p-3 text-left">净流入</th>
+                {/* <th className="p-3 text-left">中单流入</th>
+                <th className="p-3 text-left">中单流出</th> */}
+                <th className="p-3 text-left">净中单流入</th>
+
+                {/* <th className="p-3 text-left">大单流入</th>
+                <th className="p-3 text-left">大单流出</th> */}
+                <th className="p-3 text-left">净大单流入</th>
+                
+                {/* <th className="p-3 text-left">特大单流入</th>
+                <th className="p-3 text-left">特大单流出</th> */}
+                <th className="p-3 text-left">净特大单流入</th>
+
+                <th className="p-3 text-left">合并净流入</th>
+
               </tr>
             </thead>
 
@@ -97,37 +105,61 @@ function Moneyflow() {
                     {item.ts_code_name}
                   </td>
 
-                  <td className="p-3">
+
+                  {/* <td className="p-3 text-red-500 font-medium">
+                    {item.main_net_amount}
+                  </td>
+                  
+                  <td className="p-3 text-red-500 font-medium">
+                    {item.sanhu_net_amount}
+                  </td> */}
+                  
+                  
+
+                  {/* <td className="p-3">
                     {item.buy_sm_amount}
                   </td>
                   <td className="p-3">
                     {item.sell_sm_amount}
+                  </td> */}
+                  <td className="p-3">
+                    {item.sm_net_amount}
                   </td>
 
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     {item.buy_md_amount}
                   </td>
                   <td className="p-3">
                     {item.sell_md_amount}
+                  </td> */}
+                  <td className="p-3">
+                    {item.md_net_amount}
                   </td>
 
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     {item.buy_lg_amount}
                   </td>
                 <td className="p-3">
                     {item.sell_lg_amount}
+                  </td> */}
+                  <td className="p-3">
+                    {item.lg_net_amount}
                   </td>
 
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     {item.buy_elg_amount}
                   </td>
                   <td className="p-3">
                     {item.sell_elg_amount}
+                  </td> */}
+                  <td className="p-3">
+                    {item.elg_net_amount}
                   </td>
 
                   <td className="p-3 text-red-500 font-medium">
                     {item.net_mf_amount}
                   </td>
+
 
                 </tr>
               ))}
