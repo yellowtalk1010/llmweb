@@ -181,8 +181,11 @@ class PushStockController {
     log.info(s"全部关注:${desc}")
     val all = getAllAttention()
 
+    val file = all._1
+    val set = all._2
+
     val result = new util.HashMap[String, Object]()
-    result.put("data", all)
+    result.put("data", set)
     result
   }
 
