@@ -20,11 +20,12 @@ case class MoneyflowDto() {
 
   @BeanProperty var ts_code: String = ""      // str TS代码
   @BeanProperty var trade_date: String = ""   // str 交易日期
+
   @BeanProperty var buy_sm_vol: String = ""       // int 小单买入量（手）
   @BeanProperty var buy_sm_amount: String = ""  // float 小单买入金额（万元）
-
   @BeanProperty var sell_sm_vol: String = ""       // int 小单卖出量（手）
   @BeanProperty var sell_sm_amount: String = ""  // float 小单卖出金额（万元）
+
   @BeanProperty var buy_md_vol: String = ""         // int 中单买入量（手）
   @BeanProperty var buy_md_amount: String = ""    // float 中单买入金额（万元）
   @BeanProperty var sell_md_vol: String = ""        // int 中单卖出量（手）
@@ -34,11 +35,12 @@ case class MoneyflowDto() {
   @BeanProperty var buy_lg_amount: String = ""    // float 大单买入金额（万元 ）
   @BeanProperty var sell_lg_vol: String = ""        // int 大单卖出量（手）
   @BeanProperty var sell_lg_amount: String = ""   // float 大单卖出金额（万元 ）
+
   @BeanProperty var buy_elg_vol: String = ""        // int 特大单买入量（手）
   @BeanProperty var buy_elg_amount: String = ""   // float 特大单买入金额（万元 ）
-
   @BeanProperty var sell_elg_vol: String = ""       // int 特大单卖出量（手）
   @BeanProperty var sell_elg_amount: String = ""  // float 特大单卖出金额（万元）
+
   @BeanProperty var net_mf_vol: String = ""         // int 净流入量（手）
   @BeanProperty var net_mf_amount: String = ""    // float 净流入额（万元）
 
