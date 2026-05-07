@@ -14,9 +14,9 @@ import scala.collection.mutable.ListBuffer
  * 自动化加载 all_stocks.csv 数据
  */
 @Component
-class AllStocksCSVUtil {
+class AllStocksCSVComponent {
 
-  private val log = LoggerFactory.getLogger(classOf[AllStocksCSVUtil])
+  private val log = LoggerFactory.getLogger(classOf[AllStocksCSVComponent])
 
   @Value("${stock.all_stocks.csv.path}")
   @BeanProperty
