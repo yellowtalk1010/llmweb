@@ -90,7 +90,7 @@ class TushareMoneyFlowComponent {
         dto.buy_lg_vol = record.get("buy_lg_vol")
         dto.buy_lg_amount = record.get("buy_lg_amount")
         dto.sell_lg_vol = record.get("sell_lg_vol")
-        dto.sell_lg_amount = record.get("sell_lg_amount)
+        dto.sell_lg_amount = record.get("sell_lg_amount")
         dto.buy_elg_vol = record.get("buy_elg_vol")
         dto.buy_elg_amount = record.get("buy_elg_amount")
 
