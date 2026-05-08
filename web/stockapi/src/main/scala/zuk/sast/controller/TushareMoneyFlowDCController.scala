@@ -16,9 +16,9 @@ import scala.jdk.CollectionConverters.*
 @RestController
 @RequestMapping(value = Array("money_flow"))
 @Component
-class TushareMoneyFlowController {
+class TushareMoneyFlowDCController {
 
-  private val log = LoggerFactory.getLogger(classOf[TushareMoneyFlowController])
+  private val log = LoggerFactory.getLogger(classOf[TushareMoneyFlowDCController])
 
   @Autowired
   private var tushareMoneyFlowComponent: TushareMoneyFlowComponent = null
