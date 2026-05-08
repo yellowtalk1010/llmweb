@@ -50,20 +50,20 @@ class TushareMoneyFlowComponent {
 
   private val MAP = new ConcurrentHashMap[String, List[MoneyflowDCDto]]()
 
-  @Value("${stock.moneyflow.path}")
+  @Value("${stock.moneyflow_dc.path}")
   @BeanProperty
   var moneyflowPath: String = null
 
   @PostConstruct
   def init(): Unit = {
-    log.info(s"资金流路径：${moneyflowPath}")
+    log.info(s"东方财富资金流路径：${moneyflowPath}")
     if(StringUtils.isEmpty(moneyflowPath)){
-      log.error(s"资金流路径${moneyflowPath}，错误")
+      log.error(s"东方财富资金流路径${moneyflowPath}，错误")
       System.exit(1)
     }
     val file = new File(moneyflowPath)
     if(!file.exists() || file.isFile){
-      log.error(s"资金流路径${moneyflowPath}，错误")
+      log.error(s"东方财富资金流路径${moneyflowPath}，错误")
       System.exit(1)
     }
 
