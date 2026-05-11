@@ -25,5 +25,6 @@ case class StockResultJson(){
   @BeanProperty var upperShadow: String = "" //上影线警告
 
   @BeanProperty var attention: String = "" //是否关注
+  @BeanProperty var buy: String = "" //是否购买
 }
 
