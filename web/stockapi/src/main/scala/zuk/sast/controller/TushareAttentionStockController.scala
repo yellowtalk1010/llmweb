@@ -58,7 +58,7 @@ class TushareAttentionStockController {
   }
 
   /***
-   * 索取全部关注
+   * 索取全部关注和购买的股票
    */
   @GetMapping(value = Array("my"))
   def my(): util.Map[String, Object] = {
