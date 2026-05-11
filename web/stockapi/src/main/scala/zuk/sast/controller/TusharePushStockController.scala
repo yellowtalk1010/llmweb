@@ -160,7 +160,7 @@ class TusharePushStockController {
       response.put("data", maplist)
     }
     else {
-      log.info(s"${this.stockResultJsonPath}路径不存在")
+      log.info(s"路径不存在: ${this.stockResultJsonPath}")
     }
 
     response
