@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONWriter.Feature
 import com.alibaba.fastjson2.{JSONArray, JSONObject}
 import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
@@ -59,11 +60,10 @@ class TushareAttentionStockController {
   /***
    * 索取全部关注
    */
-  @GetMapping(value = Array("all"))
-  def all(desc: String): util.Map[String, Object] = synchronized {
-    log.info(s"全部关注:${desc}")
-    val all = getAllAttention()
+  @GetMapping(value = Array("my"))
+  def my(): util.Map[String, Object] = {
 
+    val all = getAllAttention()
     val file = all._1
     val set = all._2
 
@@ -74,6 +74,31 @@ class TushareAttentionStockController {
     val result = new util.HashMap[String, Object]()
     result.put("data", tsStockList)
     result
+  }
+
+  /***
+   * 索取全部股票
+   */
+  @GetMapping(value = Array("all"))
+  def all(desc: String): util.Map[String, Object] = {
+    val list = if(StringUtils.isNotBlank(desc)){
+      tushareAllStocksCSVComponent.getAll().filter(e => {
+        e.ts_code.contains(desc) || e.name.contains(desc)
+      })
+    }
+    else {
+      tushareAllStocksCSVComponent.getAll()
+    }
+
+    val res = if(list.size > 20){
+      list.take(20)
+    }
+    else {
+      list
+    }
+    val map = new util.HashMap[String, Object]()
+    map.put("data", list.asJava)
+    map
   }
 
   /***

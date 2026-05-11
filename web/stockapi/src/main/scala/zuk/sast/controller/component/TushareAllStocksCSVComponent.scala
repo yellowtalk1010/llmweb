@@ -60,4 +60,8 @@ class TushareAllStocksCSVComponent {
     Option.empty
   }
 
+  def getAll(): List[TsStock] = {
+    this.allStocks.toList
+  }
+
 }
