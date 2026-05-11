@@ -35,9 +35,21 @@ class TusharePushStockController {
   @Autowired
   private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
+  /***
+   * 获取application.properties中的数据，股票json结果路径
+   */
+  @Value("${stock.result.json.path}")
+  @BeanProperty
+  private var stockResultJsonPath: String = null
+
   @PostConstruct
   def init(): Unit = {
-    log.info("PushStockController 初始化完成")
+    log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
+    if(!new File(stockResultJsonPath).exists()){
+      log.error(s"tushare推荐结果存储路径：${stockResultJsonPath}。错误")
+      System.exit(1)
+    }
+
     Executor_Service.execute(()=>{
       try {
         val file: File = getStockResultJsonPath()
@@ -56,14 +68,6 @@ class TusharePushStockController {
     })
   }
 
-  /***
-   * 获取application.properties中的数据，股票json结果路径
-   */
-  @Value("${stock.result.json.path}")
-  @BeanProperty
-  private var stockResultJsonPath: String = null
-
-  log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
 
   /***
    * 获取结果文件路径
