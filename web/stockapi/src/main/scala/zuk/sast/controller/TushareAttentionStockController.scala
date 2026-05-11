@@ -58,16 +58,38 @@ class TushareAttentionStockController {
   }
 
   /***
+   * 获取购买股票
+   * @return
+   */
+  def getAllBuy(): Tuple2[File, Set[String]] = {
+    val file = new File(s"${this.stockResultJsonPath}${File.separator}buys.jsons")
+    log.info(s"购买数据文件路径:${file.getAbsolutePath}")
+    if (!file.exists()) {
+      log.error(s"${file.getAbsolutePath}文件不存在")
+      file.mkdirs()
+      file.createNewFile()
+    }
+    val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
+    (file, sets)
+  }
+
+  /***
    * 索取全部关注和购买的股票
    */
   @GetMapping(value = Array("my"))
   def my(): util.Map[String, Object] = {
 
-    val all = getAllAttention()
-    val file = all._1
-    val set = all._2
+    //购买的股票
+    val buy = getAllBuy()
+    val buyFile = buy._1
+    val buySet = buy._2
 
-    val tsStockList = set.toList.map(e=>{
+    //关注的股票
+    val attention = getAllAttention()
+    val attentionFile = attention._1
+    val attentionSet = attention._2
+
+    val tsStockList = (buySet.toList ++ attentionSet.toList).map(e=>{
       tushareAllStocksCSVComponent.getTsStock(e)
     }).filter(!_.isEmpty).asJava
 
