@@ -25,11 +25,11 @@ import scala.jdk.CollectionConverters.*
  * 股票推荐列表
  */
 @RestController
-@RequestMapping(value = Array("attention"))
+@RequestMapping(value = Array("stocks"))
 @Component
-class TushareAttentionStockController {
+class TushareStockController {
 
-  private val log = LoggerFactory.getLogger(classOf[TushareAttentionStockController])
+  private val log = LoggerFactory.getLogger(classOf[TushareStockController])
 
   @Autowired
   private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
@@ -126,7 +126,7 @@ class TushareAttentionStockController {
   /***
    * 移除关注
    */
-  @GetMapping(value = Array("delete"))
+  @GetMapping(value = Array("delete_attention"))
   def delete(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"删除关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()
@@ -146,7 +146,7 @@ class TushareAttentionStockController {
   /***
    * 添加关注
    */
-  @GetMapping(value = Array("add"))
+  @GetMapping(value = Array("add_attention"))
   def add(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"添加关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()

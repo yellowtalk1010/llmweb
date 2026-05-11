@@ -107,7 +107,7 @@ function StockTable({ list }) {
   const addAttention = async (tsCode) => {
     try {
       const response = await fetch(
-        "/attention/add?tsCode=" + tsCode,
+        "/stocks/add_attention?tsCode=" + tsCode,
         {
           method: "GET",
         }
