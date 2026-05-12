@@ -126,7 +126,7 @@ class TushareStockController {
       })
     }
     else {
-      tushareAllStocksCSVComponent.getAll().take(20)
+      tushareAllStocksCSVComponent.getAll()
     }
 
     val res = if(list.size > 20){
@@ -137,7 +137,7 @@ class TushareStockController {
     }
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
-    map.put("data", list.asJava)
+    map.put("data", res.asJava)
     map
   }
 
