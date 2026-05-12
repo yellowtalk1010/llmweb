@@ -263,7 +263,15 @@ function AllStocks() {
                   </td>
 
                   <td className="p-3">
-                    {item.name}
+                    <a
+                      href={item.eastmoneyURL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      {item.name}
+                    </a>
+                    
                   </td>
 
                 </tr>

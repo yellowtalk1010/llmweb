@@ -35,6 +35,9 @@ class TusharePushStockController {
   @Autowired
   private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
+  @Autowired
+  private var tushareStockController: TushareStockController = null
+
   /***
    * 获取application.properties中的数据，股票json结果路径
    */
@@ -135,7 +138,8 @@ class TusharePushStockController {
       })
 
 
-      val allAttentionCodes = getAllAttention()._2 //全部关注的股票
+      val allAttentionCodes = tushareStockController.getAllAttention()._2 //全部关注的股票
+      val allBuyCodes = tushareStockController.getAllBuy()._2 //全部购买的股票
 
       val maplist = pushStocks.map(e=>{
 
@@ -143,8 +147,8 @@ class TusharePushStockController {
           if(allAttentionCodes.contains(e.ts_code)){
             e.attention = "已关注"
           }
-          else {
-            e.attention = "未关注"
+          if(allBuyCodes.contains(e.ts_code)){
+            e.buy = "已购买"
           }
         })
 
@@ -167,20 +171,20 @@ class TusharePushStockController {
 
   }
 
-  /***
-   * 获取关注股票
-   * @return
-   */
-  def getAllAttention(): Tuple2[File, Set[String]] = {
-    val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
-    log.info(s"关注数据文件路径:${file.getAbsolutePath}")
-    if (!file.exists()) {
-      log.error(s"${file.getAbsolutePath}文件不存在")
-      file.mkdirs()
-      file.createNewFile()
-    }
-    val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
-    (file, sets)
-  }
+//  /***
+//   * 获取关注股票
+//   * @return
+//   */
+//  def getAllAttention(): Tuple2[File, Set[String]] = {
+//    val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
+//    log.info(s"关注数据文件路径:${file.getAbsolutePath}")
+//    if (!file.exists()) {
+//      log.error(s"${file.getAbsolutePath}文件不存在")
+//      file.mkdirs()
+//      file.createNewFile()
+//    }
+//    val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
+//    (file, sets)
+//  }
 
 }
