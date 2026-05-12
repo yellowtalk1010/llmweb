@@ -12,10 +12,8 @@ import Run from "./pages/Run";
 import FunctionModule from "./pages/FunctionModule"; //函数模型
 import Flow from "./flows/Flow";
 
-
 import Stock from "./pages/stock/Stock";
-import AllStock from "./pages/stock/AllStock"
-import MyStock from "./pages/stock/MyStock"
+import AllStocks from "./pages/stock/AllStocks";
 import HistoryStock from "./pages/stock/HistoryStock";
 import PushTushareStock from "./pages/stock/PushTushareStock";
 import Moneyflow from "./pages/stock/Moneyflow";
@@ -41,9 +39,9 @@ function App() {
 
           <Route path="/flows/Flow" element={<Flow />}/>
 、
+          {/* tushare股票信息   */}
           <Route path="/pages/Stock" element={<Stock />} />
-          <Route path="/pages/AllStock" element={<AllStock />} />
-          <Route path="/pages/MyStock" element={<MyStock />} />
+          <Route path="/pages/AllStocks" element={<AllStocks />} />
           <Route path="/pages/HistoryStock" element={<HistoryStock/>} />
           <Route path="/pages/PushTushareStock" element={<PushTushareStock/>} />
           <Route path="/pages/Moneyflow" element= {<Moneyflow/>}/>

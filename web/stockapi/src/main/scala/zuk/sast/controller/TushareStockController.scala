@@ -119,13 +119,14 @@ class TushareStockController {
    */
   @GetMapping(value = Array("all"))
   def all(desc: String): util.Map[String, Object] = {
+    log.info(s"索取全部股票:${desc}")
     val list = if(StringUtils.isNotBlank(desc)){
       tushareAllStocksCSVComponent.getAll().filter(e => {
         e.ts_code.contains(desc) || e.name.contains(desc)
       })
     }
     else {
-      tushareAllStocksCSVComponent.getAll()
+      tushareAllStocksCSVComponent.getAll().take(20)
     }
 
     val res = if(list.size > 20){
@@ -135,6 +136,7 @@ class TushareStockController {
       list
     }
     val map = new util.HashMap[String, Object]()
+    map.put("code", "success")
     map.put("data", list.asJava)
     map
   }

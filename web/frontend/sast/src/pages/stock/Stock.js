@@ -3,14 +3,14 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 function Stock() {
   const pages = [
-    { id: "1", title: "stockapi", url: "https://stockapi.com.cn/" },
-    { id: "2", title: "招商", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
-    { id: "3", title: "游资交易每日明细", url: "AllStock" },
-    { id: "4", title: "我的", url: "MyStock" },
-    { id: "5", title: "龙虎榜交易单", url: "HistoryStock" },
-    { id: "6", title: "股票推荐", url: "PushTushareStock" },
-    { id: "7", title: "资金流向", url: "Moneyflow" },
-    { id: "8", title: "购买和关注", url: "BuyAttention" },
+    { id: "1", title: "stockapi地址", url: "https://stockapi.com.cn/" },
+    { id: "2", title: "招商地址", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
+    
+    { id: "4", title: "tushare全部股票", url: "AllStocks" },
+    { id: "5", title: "tushare龙虎榜交易单", url: "HistoryStock" },
+    { id: "6", title: "tushare股票推荐", url: "PushTushareStock" },
+    { id: "7", title: "tushare资金流向", url: "Moneyflow" },
+    { id: "8", title: "tushare购买和关注", url: "BuyAttention" },
   ];
 
   const leftPanelRef = useRef(null);
