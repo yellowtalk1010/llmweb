@@ -89,7 +89,7 @@ class TushareStockController {
     val attentionFile = attention._1
     val attentionSet = attention._2
 
-    val tsStockList = (buySet.toList ++ attentionSet.toList).map(e=>{
+    val tsStockList = (buySet ++ attentionSet).map(e=>{
       tushareAllStocksCSVComponent.getTsStock(e)
     }).filter(!_.isEmpty)
       .map(e=>{
@@ -106,7 +106,7 @@ class TushareStockController {
           stockResultJson.buy = "已购买"
         }
         stockResultJson
-      }).sortBy(e=>e.buy).reverse.asJava
+      }).toList.sortBy(e=>e.buy).reverse.asJava
 
     val result = new util.HashMap[String, Object]()
     result.put("data", tsStockList)
