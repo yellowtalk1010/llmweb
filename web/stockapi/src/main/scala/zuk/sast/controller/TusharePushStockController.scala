@@ -171,20 +171,5 @@ class TusharePushStockController {
 
   }
 
-//  /***
-//   * 获取关注股票
-//   * @return
-//   */
-//  def getAllAttention(): Tuple2[File, Set[String]] = {
-//    val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
-//    log.info(s"关注数据文件路径:${file.getAbsolutePath}")
-//    if (!file.exists()) {
-//      log.error(s"${file.getAbsolutePath}文件不存在")
-//      file.mkdirs()
-//      file.createNewFile()
-//    }
-//    val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
-//    (file, sets)
-//  }
 
 }

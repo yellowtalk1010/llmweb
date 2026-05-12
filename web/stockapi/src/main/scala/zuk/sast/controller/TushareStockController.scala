@@ -76,7 +76,7 @@ class TushareStockController {
   /***
    * 索取全部关注和购买的股票
    */
-  @GetMapping(value = Array("my"))
+//  @GetMapping(value = Array("my"))
   def my(): util.Map[String, Object] = {
 
     //购买的股票
@@ -118,8 +118,13 @@ class TushareStockController {
    * 索取全部股票
    */
   @GetMapping(value = Array("all"))
-  def all(desc: String): util.Map[String, Object] = {
-    log.info(s"索取全部股票:${desc}")
+  def all(desc: String, status: String): util.Map[String, Object] = {
+    log.info(s"索取全部股票:${desc}, ${status}")
+
+    if(StringUtils.isNotBlank(status) && status.equals("my")){
+      return this.my()
+    }
+
     val list = if(StringUtils.isNotBlank(desc)){
       tushareAllStocksCSVComponent.getAll().filter(e => {
         e.ts_code.contains(desc) || e.name.contains(desc)

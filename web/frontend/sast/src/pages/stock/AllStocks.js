@@ -6,6 +6,7 @@ function AllStocks() {
   const [searchParams] = useSearchParams();
 
   const [allStocksData, setAllStocksData] = useState([]);
+  const [status, setStatus] = useState("my");
 
   // 输入框内容
   const [inputKeyword, setInputKeyword] = useState("");
@@ -16,7 +17,7 @@ function AllStocks() {
     try {
 
       const response = await fetch(
-        `/stocks/all?desc=${encodeURIComponent(desc)}`
+        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${status}`
       );
 
       const result = await response.json();
@@ -179,6 +180,32 @@ function AllStocks() {
         >
           检索
         </button>
+
+        <div className="flex items-center gap-4">
+
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="status"
+              value="my"
+              checked={status === "my"}
+              onChange={(e) => setStatus(e.target.value)}
+            />
+            我的
+          </label>
+
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="status"
+              value="all"
+              checked={status === "all"}
+              onChange={(e) => setStatus(e.target.value)}
+            />
+            全部
+          </label>
+
+        </div>
 
       </div>
 
