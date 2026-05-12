@@ -76,6 +76,9 @@ function AllStocks() {
 
           <thead>
             <tr className="bg-gray-100 border-b">
+              <th className="p-3 text-left">购买</th>
+              <th className="p-3 text-left">关注</th>
+              <th className="p-3 text-left">资金</th>
               <th className="p-3 text-left">代码</th>
               <th className="p-3 text-left">代码名称</th>
             </tr>
@@ -89,6 +92,24 @@ function AllStocks() {
                   key={index}
                   className="border-b hover:bg-gray-50"
                 >
+
+                  <td className="p-3">
+                    
+                  </td>
+                  <td className="p-3">
+                    
+                  </td>
+
+                  <td className="p-2">
+                      <a
+                        href={`/pages/Moneyflow?tsCode=${item.ts_code}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline cursor-pointer"
+                      >
+                        资金
+                      </a>
+                  </td>  
 
                   <td className="p-3">
                     {item.ts_code}
