@@ -139,11 +139,57 @@ class TushareStockController {
     map
   }
 
+  /** *
+   * 移除购买
+   */
+  @GetMapping(value = Array("delete_buy"))
+  def delete_buy(tsCode: String): util.Map[String, String] = synchronized {
+    log.info(s"删除购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    val all = getAllBuy()
+
+    val file = all._1
+    val set = all._2
+
+    val result = new util.HashMap[String, String]()
+    result.put("code", "success")
+    result.put("desc", "成功")
+
+    val list = set.filter(!_.equals(tsCode)).toList
+    FileUtils.writeLines(file, list.asJava)
+
+    result
+  }
+
+  /** *
+   * 添加购买
+   */
+  @GetMapping(value = Array("add_buy"))
+  def add_buy(tsCode: String): util.Map[String, String] = synchronized {
+    log.info(s"添加购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    val all = getAllBuy()
+    val file = all._1
+    val set = all._2
+
+    val result = new util.HashMap[String, String]()
+    result.put("code", "success")
+    if (set.contains(tsCode)) {
+      result.put("desc", s"已存在，${tsCode}")
+    }
+    else {
+      val list = set.toBuffer
+      list += tsCode
+      FileUtils.writeLines(file, list.asJava)
+      result.put("desc", s"添加成功，${tsCode}")
+    }
+    log.info(JSONObject.toJSONString(result))
+    result
+  }
+
   /***
    * 移除关注
    */
   @GetMapping(value = Array("delete_attention"))
-  def delete(tsCode: String): util.Map[String, String] = synchronized {
+  def delete_attention(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"删除关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()
 
@@ -152,6 +198,7 @@ class TushareStockController {
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
+    result.put("desc", "成功")
 
     val list = set.filter(! _.equals(tsCode)).toList
     FileUtils.writeLines(file, list.asJava)
@@ -163,7 +210,7 @@ class TushareStockController {
    * 添加关注
    */
   @GetMapping(value = Array("add_attention"))
-  def add(tsCode: String): util.Map[String, String] = synchronized {
+  def add_attention(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"添加关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
     val all = getAllAttention()
     val file = all._1

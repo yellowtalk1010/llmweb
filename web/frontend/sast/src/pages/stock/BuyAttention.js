@@ -42,6 +42,63 @@ function BuyAttention() {
     fetchMoneyFlow();
   }, []);
 
+
+  /***
+   * 删除购买
+   */
+  const deleteBuy = async (tsCode) => {
+    try {
+      const response = await fetch(
+        "/stocks/delete_buy?tsCode=" + tsCode,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("添加关注失败");
+      }
+
+      const result = await response.json();
+
+      if (result.code === "success") {
+        alert(result.desc);
+        window.location.reload(); // 简单刷新
+      }
+    } catch (e) {
+      console.error(e);
+      alert("请求失败");
+    }
+  };
+
+  /***
+   * 删除关注
+   */
+  const deleteAttention = async (tsCode) => {
+    try {
+      const response = await fetch(
+        "/stocks/delete_attention?tsCode=" + tsCode,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("添加关注失败");
+      }
+
+      const result = await response.json();
+
+      if (result.code === "success") {
+        alert(result.desc);
+        window.location.reload(); // 简单刷新
+      }
+    } catch (e) {
+      console.error(e);
+      alert("请求失败");
+    }
+  };
+
   return (
     <div className="p-6">
  
@@ -67,10 +124,38 @@ function BuyAttention() {
                   className="border-b hover:bg-gray-50"
                 >
                   <td className="p-3">
-                    {item.buy}
+                    {
+                      item.buy?(
+                        <span>
+                          {item.buy}
+                          <button
+                            onClick={() => deleteBuy(item.ts_code)}
+                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >移除</button>
+                        </span>
+                      ) : (
+                        <span>
+
+                        </span>
+                      )
+                    }
+                    
                   </td>
                   <td className="p-3">
-                    {item.attention}
+                    {
+                      item.attention?(
+                        <span>
+                          {item.attention}
+                          <button
+                            onClick={() => deleteAttention(item.ts_code)}
+                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >移除</button>
+                        </span>
+                      )
+                      :(
+                        <span></span>
+                      )
+                    }
                   </td>
 
                   <td className="p-2">
