@@ -135,9 +135,29 @@ class TushareStockController {
     else {
       list
     }
+
+    val attentionSet = getAllAttention()._2
+    val buySet = getAllBuy()._2
+
+    val convertRes = res.map(e=>{
+      val stockResultJson = new StockResultJson
+      stockResultJson.ts_code = e.ts_code
+      stockResultJson.name = e.name
+      stockResultJson.eastmoneyURL = e.getEastmoneyURL()
+      stockResultJson.attention = ""
+      if (attentionSet.contains(stockResultJson.ts_code)) {
+        stockResultJson.attention = "已关注"
+      }
+      stockResultJson.buy = ""
+      if (buySet.contains(stockResultJson.ts_code)) {
+        stockResultJson.buy = "已购买"
+      }
+      stockResultJson
+    }).asJava
+
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
-    map.put("data", res.asJava)
+    map.put("data", convertRes)
     map
   }
 
