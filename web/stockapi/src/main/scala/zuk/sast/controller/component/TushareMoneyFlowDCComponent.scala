@@ -68,7 +68,7 @@ class TushareMoneyFlowComponent {
     }
 
     val fileList = file.listFiles().toList.sortBy(_.getName).reverse
-    val fileList10 = if(fileList.size>10) fileList.take(10) else fileList
+    val fileList10 = if(fileList.size>7) fileList.take(7) else fileList
 
     val fileRecordList = fileList10.map(f=>{
       val filename = f.getName
