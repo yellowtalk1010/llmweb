@@ -106,7 +106,7 @@ class TushareStockController {
           stockResultJson.buy = "已购买"
         }
         stockResultJson
-      }).asJava
+      }).sortBy(e=>e.buy).reverse.asJava
 
     val result = new util.HashMap[String, Object]()
     result.put("data", tsStockList)

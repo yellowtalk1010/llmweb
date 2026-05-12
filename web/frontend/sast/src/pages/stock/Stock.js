@@ -10,7 +10,6 @@ function Stock() {
     { id: "5", title: "tushare龙虎榜交易单", url: "HistoryStock" },
     { id: "6", title: "tushare股票推荐", url: "PushTushareStock" },
     { id: "7", title: "tushare资金流向", url: "Moneyflow" },
-    { id: "8", title: "tushare购买和关注", url: "BuyAttention" },
   ];
 
   const leftPanelRef = useRef(null);

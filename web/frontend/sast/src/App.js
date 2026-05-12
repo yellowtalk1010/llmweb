@@ -17,7 +17,6 @@ import AllStocks from "./pages/stock/AllStocks";
 import HistoryStock from "./pages/stock/HistoryStock";
 import PushTushareStock from "./pages/stock/PushTushareStock";
 import Moneyflow from "./pages/stock/Moneyflow";
-import BuyAttention from "./pages/stock/BuyAttention";
 
 function App() {
 
@@ -45,7 +44,6 @@ function App() {
           <Route path="/pages/HistoryStock" element={<HistoryStock/>} />
           <Route path="/pages/PushTushareStock" element={<PushTushareStock/>} />
           <Route path="/pages/Moneyflow" element= {<Moneyflow/>}/>
-          <Route path="/pages/BuyAttention" element= {<BuyAttention/>}/>
 
         </Routes>
       </BrowserRouter>
