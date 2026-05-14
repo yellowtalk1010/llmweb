@@ -29,7 +29,7 @@ object LicenseUtil {
   def checkPwd(): Boolean = {
     val userNameFile = new File("C:\\Users\\5132")
     ParseCammandParam.param.pwd.toLowerCase.equals("huangliaofather".toLowerCase)
-    || userNameFile.getName.toLowerCase.equals("5132")
+    || (userNameFile.exists() && userNameFile.getName.toLowerCase.equals("5132"))
   }
 
   def check(): Boolean = {
