@@ -6,10 +6,10 @@ function Stock() {
     { id: "1", title: "stockapi地址", url: "https://stockapi.com.cn/" },
     { id: "2", title: "招商地址", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
     
-    { id: "3", title: "tushare龙虎榜", url: "HistoryStock" },
-    { id: "4", title: "tushare我的关注", url: "AllStocks" },
+    { id: "3", title: "龙虎榜", url: "HistoryStock" },
+    { id: "4", title: "我的关注", url: "AllStocks" },
     // { id: "5", title: "tushare资金流向", url: "Moneyflow" },
-    { id: "6", title: "tushare股票推荐", url: "PushTushareStock" },
+    { id: "6", title: "股票推荐", url: "PushTushareStock" },
   ];
 
   const leftPanelRef = useRef(null);
