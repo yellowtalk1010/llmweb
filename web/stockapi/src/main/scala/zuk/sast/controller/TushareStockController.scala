@@ -193,6 +193,9 @@ class TushareStockController {
   @GetMapping(value = Array("add_buy"))
   def add_buy(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"添加购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+
+    this.add_attention(tsCode) //购买的股票，默认关注
+
     val all = getAllBuy()
     val file = all._1
     val set = all._2
