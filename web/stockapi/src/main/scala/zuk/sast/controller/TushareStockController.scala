@@ -182,7 +182,7 @@ class TushareStockController {
     result.put("desc", "成功")
 
     val list = set.filter(!_.equals(tsCode)).toList
-    FileUtils.writeLines(file, list.asJava)
+    FileUtils.writeLines(file, list.sorted.asJava)
 
     result
   }
@@ -208,7 +208,7 @@ class TushareStockController {
     else {
       val list = set.toBuffer
       list += tsCode
-      FileUtils.writeLines(file, list.asJava)
+      FileUtils.writeLines(file, list.sorted.asJava)
       result.put("desc", s"添加成功，${tsCode}")
     }
     log.info(JSONObject.toJSONString(result))
@@ -231,7 +231,7 @@ class TushareStockController {
     result.put("desc", "成功")
 
     val list = set.filter(! _.equals(tsCode)).toList
-    FileUtils.writeLines(file, list.asJava)
+    FileUtils.writeLines(file, list.sorted.asJava)
 
     result
   }
@@ -254,7 +254,7 @@ class TushareStockController {
     else {
       val list = set.toBuffer
       list += tsCode
-      FileUtils.writeLines(file, list.asJava)
+      FileUtils.writeLines(file, list.sorted.asJava)
       result.put("desc", s"添加成功，${tsCode}")
     }
     log.info(JSONObject.toJSONString(result))
