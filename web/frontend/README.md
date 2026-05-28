@@ -5,6 +5,8 @@ npm start
 构建
 npm run build
 
+访问： http://localhost:3001/pages/stock
+
 构建完成后，
 1. 将build中的静态资源，复制到  src/main/resources/static中，
 2. 将index.html复制到templates中
