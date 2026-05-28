@@ -5,5 +5,7 @@ npm start
 构建
 npm run build
 
-构建完成后，将build中的静态资源，复制到  src/main/resources/static中，并将index.html复制到templates中
+构建完成后，
+1. 将build中的静态资源，复制到  src/main/resources/static中，
+2. 将index.html复制到templates中
 ```
