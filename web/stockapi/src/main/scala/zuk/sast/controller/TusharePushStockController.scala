@@ -2,7 +2,7 @@ package zuk.sast.controller
 
 import com.alibaba.fastjson2.JSONWriter.Feature
 import com.alibaba.fastjson2.{JSONArray, JSONObject}
-import com.microsoft.playwright.Playwright
+import com.microsoft.playwright.{Page, Playwright, PlaywrightException}
 import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
@@ -56,35 +56,7 @@ class TusharePushStockController {
       System.exit(1)
     }
 
-//    Executor_Service.execute(()=>{
-//
-//      import zuk.token.providers.ChromeBrowser
-//      val browser = ChromeBrowser.browser
-//      val browser1 = Playwright.create.chromium().launch()
-//      println(browser1.contexts().size())
-//      println(s"启动自动刷新东方财富网页:${browser.contexts().size()}")
-//      while (true){
-//        try {
-//          browser.contexts().asScala.foreach(context=>{
-//            val pages = context.pages().asScala
-//            pages.filter(_.url().contains("eastmoney.com")).foreach(p=>{
-//              val url = p.url()
-//              val title = p.title()
-//              println(s"刷新东方财富网址名称[${title}]，url: ${url}")
-////              p.reload()
-//              p.evaluate("location.reload()")
-////              p.keyboard().press("F5")
-//              println(s"完成刷新东方财富网址名称[${title}]，url: ${url}")
-//              Thread.sleep(1000)
-//            })
-//          })
-//          Thread.sleep(10 * 1000)
-//        }
-//        catch {
-//          case exception: Exception => exception.printStackTrace()
-//        }
-//      }
-//    })
+    refreshEasymoney()
 
     Executor_Service.execute(()=>{
       try {
@@ -103,6 +75,42 @@ class TusharePushStockController {
         case exception: Exception =>
     })
 
+  }
+
+  private def refreshEasymoney(): Unit = {
+
+    Executor_Service.execute(()=>{
+
+      val browser = Playwright.create.chromium.connectOverCDP("http://127.0.0.1:9222")
+      log.info(s"启动自动刷新东方财富网页:${browser.contexts().size()}")
+      while (true){
+        try {
+          browser.contexts().asScala.foreach(context=>{
+            val pages = context.pages().asScala
+            pages.filter(p => !p.isClosed && p.url().contains("eastmoney.com")).foreach(p=>{
+
+              val url = p.url()
+              val title = p.title()
+              log.info(s"刷新东方财富网址名称[${title}]，url: ${url}")
+              p.reload()
+//              p.evaluate("location.reload()")
+//              p.waitForLoadState(com.microsoft.playwright.options.LoadState.DOMCONTENTLOADED)
+//              p.keyboard().press("F5")
+//              p.reload(new ReloadOptions().setTimeout(5000))
+              log.info(s"完成刷新东方财富网址名称[${title}]，url: ${url}")
+              Thread.sleep(1000)
+            })
+          })
+          Thread.sleep(1 * 60 * 1000)
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+            log.error(exception.getMessage)
+          case _=>
+        }
+      }
+    })
   }
 
 
