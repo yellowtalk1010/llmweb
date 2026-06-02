@@ -2,6 +2,7 @@ package zuk.sast.controller
 
 import com.alibaba.fastjson2.JSONWriter.Feature
 import com.alibaba.fastjson2.{JSONArray, JSONObject}
+import com.microsoft.playwright.Playwright
 import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
@@ -30,7 +31,7 @@ class TusharePushStockController {
 
   private val log = LoggerFactory.getLogger(classOf[TusharePushStockController])
 
-  private val Executor_Service = Executors.newSingleThreadExecutor()
+  private val Executor_Service = Executors.newCachedThreadPool()
 
   @Autowired
   private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
@@ -45,6 +46,8 @@ class TusharePushStockController {
   @BeanProperty
   private var stockResultJsonPath: String = null
 
+
+
   @PostConstruct
   def init(): Unit = {
     log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
@@ -52,6 +55,36 @@ class TusharePushStockController {
       log.error(s"tushare推荐结果存储路径：${stockResultJsonPath}。错误")
       System.exit(1)
     }
+
+//    Executor_Service.execute(()=>{
+//
+//      import zuk.token.providers.ChromeBrowser
+//      val browser = ChromeBrowser.browser
+//      val browser1 = Playwright.create.chromium().launch()
+//      println(browser1.contexts().size())
+//      println(s"启动自动刷新东方财富网页:${browser.contexts().size()}")
+//      while (true){
+//        try {
+//          browser.contexts().asScala.foreach(context=>{
+//            val pages = context.pages().asScala
+//            pages.filter(_.url().contains("eastmoney.com")).foreach(p=>{
+//              val url = p.url()
+//              val title = p.title()
+//              println(s"刷新东方财富网址名称[${title}]，url: ${url}")
+////              p.reload()
+//              p.evaluate("location.reload()")
+////              p.keyboard().press("F5")
+//              println(s"完成刷新东方财富网址名称[${title}]，url: ${url}")
+//              Thread.sleep(1000)
+//            })
+//          })
+//          Thread.sleep(10 * 1000)
+//        }
+//        catch {
+//          case exception: Exception => exception.printStackTrace()
+//        }
+//      }
+//    })
 
     Executor_Service.execute(()=>{
       try {
@@ -69,6 +102,7 @@ class TusharePushStockController {
       catch
         case exception: Exception =>
     })
+
   }
 
 

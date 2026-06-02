@@ -16,7 +16,7 @@ object ChromeBrowser {
 
   private val playwright: Playwright = Playwright.create
 
-  private val browser: Browser = playwright.chromium.connectOverCDP("http://127.0.0.1:9222")
+  val browser: Browser = playwright.chromium.connectOverCDP("http://127.0.0.1:9222")
 
   private val browserContexts: util.List[BrowserContext] = browser.contexts
 
