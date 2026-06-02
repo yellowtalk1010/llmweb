@@ -57,26 +57,11 @@ class TusharePushStockController {
     }
 
     refreshEasymoney()
-
-    Executor_Service.execute(()=>{
-      try {
-        val file: File = getStockResultJsonPath()
-        if (file.exists() && file.isDirectory) {
-//          val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
-//          val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
-//          var dateStr = simpleDateFormat.format(new Date())
-//          jsonfiles.filter(!_.getName.startsWith(dateStr)).foreach(file => {
-//            log.info(s"删除历史结果文件：${file.getPath}")
-//            file.delete()
-//          })
-        }
-      }
-      catch
-        case exception: Exception =>
-    })
-
   }
 
+  /***
+   * 刷新东方财富网址
+   */
   private def refreshEasymoney(): Unit = {
 
     Executor_Service.execute(()=>{
