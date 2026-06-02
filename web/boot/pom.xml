@@ -136,6 +136,12 @@
             <version>7.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>zuk.sast</groupId>
+            <artifactId>playwright</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+
 
         <!-- DJL Core -->
         <!--        <dependency>-->
