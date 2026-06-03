@@ -126,7 +126,7 @@ class TusharePushStockController {
 
       var dateStr = simpleDateFormat.format(new Date())
       val filterJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
-      log.info(s"\njson文件：\n${filterJsonFiles.map(_.getName).mkString("\n")}")
+      log.info(s"json文件：${filterJsonFiles.map(_.getName).mkString("; ")}")
 
       val stockResultJsonList = filterJsonFiles.map(file=>{
         val array = JSONArray.parseArray(FileUtils.readFileToString(file, Charset.forName("UTF-8")), classOf[StockResultJson])
@@ -141,7 +141,7 @@ class TusharePushStockController {
       })
 
       val modWinRateClsNames = stockResultJsonList.flatMap(e=>e).groupBy(_.modClsName).map(e=>(e._1, e._2.toList.head)).toList.sortBy(_._2.modWinRate).reverse.map(e=>(e._1, e._2.modWinRate))
-      log.info(s"\n胜率：\n${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("\n")}")
+      log.info(s"胜率：${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("; ")}")
 
       val heads = stockResultJsonList.head
       val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
