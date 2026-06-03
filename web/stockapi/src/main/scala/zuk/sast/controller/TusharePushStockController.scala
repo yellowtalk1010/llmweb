@@ -83,10 +83,10 @@ class TusharePushStockController {
 //              p.keyboard().press("F5")
 //              p.reload(new ReloadOptions().setTimeout(5000))
               log.info(s"完成刷新东方财富网址名称[${title}]，url: ${url}")
-              Thread.sleep(1000)
+              Thread.sleep(5 * 1000)
             })
           })
-          Thread.sleep(10 * 1000)
+//          Thread.sleep(10 * 1000)
         }
         catch {
           case exception: Exception =>
