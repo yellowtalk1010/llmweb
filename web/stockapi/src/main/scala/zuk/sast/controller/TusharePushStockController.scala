@@ -86,7 +86,7 @@ class TusharePushStockController {
               Thread.sleep(1000)
             })
           })
-          Thread.sleep(1 * 60 * 1000)
+          Thread.sleep(10 * 1000)
         }
         catch {
           case exception: Exception =>
