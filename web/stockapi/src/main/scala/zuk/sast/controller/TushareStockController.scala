@@ -10,13 +10,15 @@ import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.sast.controller.component.TushareAllStocksCSVComponent
+import zuk.sast.controller.mapper.StockMapper
+import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util
-import java.util.Date
+import java.util.{Date, UUID}
 import java.util.concurrent.Executors
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
@@ -34,6 +36,12 @@ class TushareStockController {
   @Autowired
   private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
+  @Autowired
+  private var stockMapper: StockMapper = null
+
+  private val attention: String = "attention"
+  private val buy: String = "buy"
+
   /** *
    * 获取application.properties中的数据，股票json结果路径
    */
@@ -46,6 +54,9 @@ class TushareStockController {
    * @return
    */
   def getAllAttention(): Tuple2[File, Set[String]] = {
+
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(attention)).map(_.stockCode).toSet
+
     val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
     log.info(s"关注数据文件路径:${file.getAbsolutePath}")
     if (!file.exists()) {
@@ -62,6 +73,9 @@ class TushareStockController {
    * @return
    */
   def getAllBuy(): Tuple2[File, Set[String]] = {
+
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(buy)).map(_.stockCode).toSet
+
     val file = new File(s"${this.stockResultJsonPath}${File.separator}buys.jsons")
     log.info(s"购买数据文件路径:${file.getAbsolutePath}")
     if (!file.exists()) {
@@ -172,6 +186,9 @@ class TushareStockController {
   @GetMapping(value = Array("delete_buy"))
   def delete_buy(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"删除购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+
+    stockMapper.deleteByCode(tsCode, buy)
+
     val all = getAllBuy()
 
     val file = all._1
@@ -193,6 +210,16 @@ class TushareStockController {
   @GetMapping(value = Array("add_buy"))
   def add_buy(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"添加购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+
+    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(buy)).size == 0){
+      val stockEntity: StockEntity = new StockEntity
+      stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
+      stockEntity.stockCode = tsCode
+      stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
+      stockEntity.stockType = buy
+      stockMapper.insert(stockEntity)
+    }
+
 
     this.add_attention(tsCode) //购买的股票，默认关注
 
@@ -221,6 +248,9 @@ class TushareStockController {
   @GetMapping(value = Array("delete_attention"))
   def delete_attention(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"删除关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+
+    stockMapper.deleteByCode(tsCode, attention)
+
     val all = getAllAttention()
 
     val file = all._1
@@ -242,6 +272,16 @@ class TushareStockController {
   @GetMapping(value = Array("add_attention"))
   def add_attention(tsCode: String): util.Map[String, String] = synchronized {
     log.info(s"添加关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+
+    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(attention)).size == 0){
+      val stockEntity: StockEntity = new StockEntity
+      stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
+      stockEntity.stockCode = tsCode
+      stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
+      stockEntity.stockType = attention
+      stockMapper.insert(stockEntity)
+    }
+
     val all = getAllAttention()
     val file = all._1
     val set = all._2
