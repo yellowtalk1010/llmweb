@@ -26,7 +26,7 @@ public class DatabaseInitializer {
     }
 
     private void createProjectTable() {
-        //创建项目表
+        log.info("创建项目表");
         String sql = """
             CREATE TABLE IF NOT EXISTS project (
                 id VARCHAR(100) PRIMARY KEY,
@@ -40,7 +40,7 @@ public class DatabaseInitializer {
 
 
     private void createIssueTable(){
-        //创建issue表
+        log.info("创建issue表");
         String sql = """
             CREATE TABLE IF NOT EXISTS issue (
                 id VARCHAR(100) PRIMARY KEY,
@@ -53,7 +53,7 @@ public class DatabaseInitializer {
     }
 
     private void createStockTable(){
-        //创建stock表
+        log.info("创建stock表");
         String sql = """
             CREATE TABLE IF NOT EXISTS stock (
                 id VARCHAR(100) PRIMARY KEY,
