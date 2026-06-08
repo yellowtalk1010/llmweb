@@ -16,7 +16,7 @@ trait StockMapper {
   ))
   def selectAll(): util.List[StockEntity]
 
-  @Insert(Array("INSERT INTO stock(id, stock_code, name, stock_type) VALUES (#{id}, #{stock_code}, #{name}, #{stock_type})"))
+  @Insert(Array("INSERT INTO stock(id, stock_code, name, stock_type) VALUES (#{id}, #{stockCode}, #{name}, #{stockType})"))
   def insert(stock: StockEntity): Int
 
   @Delete(Array("DELETE FROM stock WHERE stock_code = #{stock_code} AND stock_type = #{stock_type}"))

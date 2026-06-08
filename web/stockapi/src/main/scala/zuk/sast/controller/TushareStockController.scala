@@ -53,38 +53,16 @@ class TushareStockController {
    * 获取关注股票
    * @return
    */
-  def getAllAttention(): Tuple2[File, Set[String]] = {
-
+  def getAllAttention(): Set[String] = {
     this.stockMapper.selectAll().asScala.filter(_.stockType.equals(attention)).map(_.stockCode).toSet
-
-    val file = new File(s"${this.stockResultJsonPath}${File.separator}attention.jsons")
-    log.info(s"关注数据文件路径:${file.getAbsolutePath}")
-    if (!file.exists()) {
-      log.error(s"${file.getAbsolutePath}文件不存在")
-      file.mkdirs()
-      file.createNewFile()
-    }
-    val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
-    (file, sets)
   }
 
   /***
    * 获取购买股票
    * @return
    */
-  def getAllBuy(): Tuple2[File, Set[String]] = {
-
+  def getAllBuy(): Set[String] = {
     this.stockMapper.selectAll().asScala.filter(_.stockType.equals(buy)).map(_.stockCode).toSet
-
-    val file = new File(s"${this.stockResultJsonPath}${File.separator}buys.jsons")
-    log.info(s"购买数据文件路径:${file.getAbsolutePath}")
-    if (!file.exists()) {
-      log.error(s"${file.getAbsolutePath}文件不存在")
-      file.mkdirs()
-      file.createNewFile()
-    }
-    val sets = FileUtils.readLines(file, Charset.forName("UTF-8")).asScala.toSet
-    (file, sets)
   }
 
   /***
@@ -95,13 +73,13 @@ class TushareStockController {
 
     //购买的股票
     val buy = getAllBuy()
-    val buyFile = buy._1
-    val buySet = buy._2
+//    val buyFile = buy._1
+    val buySet = buy
 
     //关注的股票
     val attention = getAllAttention()
-    val attentionFile = attention._1
-    val attentionSet = attention._2
+//    val attentionFile = attention._1
+    val attentionSet = attention
     val sets = buySet ++ attentionSet
     val tsStockList = sets.toList.map(e=>{
       tushareAllStocksCSVComponent.getTsStock(e)
@@ -155,8 +133,8 @@ class TushareStockController {
       list
     }
 
-    val attentionSet = getAllAttention()._2
-    val buySet = getAllBuy()._2
+    val attentionSet = getAllAttention()
+    val buySet = getAllBuy()
 
     val convertRes = res.map(e=>{
       val stockResultJson = new StockResultJson
@@ -191,15 +169,15 @@ class TushareStockController {
 
     val all = getAllBuy()
 
-    val file = all._1
-    val set = all._2
+//    val file = all._1
+    val set = all
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
     result.put("desc", "成功")
 
     val list = set.filter(!_.equals(tsCode)).toList
-    FileUtils.writeLines(file, list.sorted.asJava)
+//    FileUtils.writeLines(file, list.sorted.asJava)
 
     result
   }
@@ -224,8 +202,8 @@ class TushareStockController {
     this.add_attention(tsCode) //购买的股票，默认关注
 
     val all = getAllBuy()
-    val file = all._1
-    val set = all._2
+//    val file = all._1
+    val set = all
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
@@ -235,7 +213,7 @@ class TushareStockController {
     else {
       val list = set.toBuffer
       list += tsCode
-      FileUtils.writeLines(file, list.sorted.asJava)
+//      FileUtils.writeLines(file, list.sorted.asJava)
       result.put("desc", s"添加成功，${tsCode}")
     }
     log.info(JSONObject.toJSONString(result))
@@ -253,15 +231,15 @@ class TushareStockController {
 
     val all = getAllAttention()
 
-    val file = all._1
-    val set = all._2
+//    val file = all._1
+    val set = all
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
     result.put("desc", "成功")
 
     val list = set.filter(! _.equals(tsCode)).toList
-    FileUtils.writeLines(file, list.sorted.asJava)
+//    FileUtils.writeLines(file, list.sorted.asJava)
 
     result
   }
@@ -283,8 +261,8 @@ class TushareStockController {
     }
 
     val all = getAllAttention()
-    val file = all._1
-    val set = all._2
+//    val file = all._1
+    val set = all
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
@@ -294,7 +272,7 @@ class TushareStockController {
     else {
       val list = set.toBuffer
       list += tsCode
-      FileUtils.writeLines(file, list.sorted.asJava)
+//      FileUtils.writeLines(file, list.sorted.asJava)
       result.put("desc", s"添加成功，${tsCode}")
     }
     log.info(JSONObject.toJSONString(result))
