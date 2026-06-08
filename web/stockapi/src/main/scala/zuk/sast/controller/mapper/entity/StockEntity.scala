@@ -8,5 +8,6 @@ class StockEntity {
   @BeanProperty var code: String = null
   @BeanProperty var jys: String = null
   @BeanProperty var name: String = null
+  @BeanProperty var stock_type: String = null
 
 }
