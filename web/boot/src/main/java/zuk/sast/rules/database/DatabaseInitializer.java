@@ -18,9 +18,11 @@ public class DatabaseInitializer {
 
     @PostConstruct
     public void init() {
+        log.info("开始初始化数据库");
         createProjectTable();
         createIssueTable();
         createStockTable();
+        log.info("完成初始化数据库");
     }
 
     private void createProjectTable() {
@@ -55,10 +57,9 @@ public class DatabaseInitializer {
         String sql = """
             CREATE TABLE IF NOT EXISTS stock (
                 id VARCHAR(100) PRIMARY KEY,
-                code VARCHAR(100),
-                jys  VARCHAR(100),
+                stock_code VARCHAR(100),
                 name  VARCHAR(100),
-                type VARCHAR(100)
+                stock_type VARCHAR(100)
             )
             """;
         jdbcTemplate.execute(sql);
