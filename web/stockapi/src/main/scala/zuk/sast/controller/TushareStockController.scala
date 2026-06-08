@@ -42,13 +42,6 @@ class TushareStockController {
   private val attention: String = "attention"
   private val buy: String = "buy"
 
-  /** *
-   * 获取application.properties中的数据，股票json结果路径
-   */
-  @Value("${stock.result.json.path}")
-  @BeanProperty
-  private var stockResultJsonPath: String = null
-
   /***
    * 获取关注股票
    * @return
@@ -68,19 +61,15 @@ class TushareStockController {
   /***
    * 索取全部关注和购买的股票
    */
-//  @GetMapping(value = Array("my"))
   def my(): util.Map[String, Object] = {
 
     //购买的股票
-    val buy = getAllBuy()
-//    val buyFile = buy._1
-    val buySet = buy
-
+    val buySet = getAllBuy()
     //关注的股票
-    val attention = getAllAttention()
-//    val attentionFile = attention._1
-    val attentionSet = attention
+    val attentionSet = getAllAttention()
+
     val sets = buySet ++ attentionSet
+
     val tsStockList = sets.toList.map(e=>{
       tushareAllStocksCSVComponent.getTsStock(e)
     }).filter(!_.isEmpty)
@@ -167,17 +156,11 @@ class TushareStockController {
 
     stockMapper.deleteByCode(tsCode, buy)
 
-    val all = getAllBuy()
-
-//    val file = all._1
-    val set = all
+    val set = getAllBuy()
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
     result.put("desc", "成功")
-
-    val list = set.filter(!_.equals(tsCode)).toList
-//    FileUtils.writeLines(file, list.sorted.asJava)
 
     result
   }
@@ -198,12 +181,9 @@ class TushareStockController {
       stockMapper.insert(stockEntity)
     }
 
-
     this.add_attention(tsCode) //购买的股票，默认关注
 
-    val all = getAllBuy()
-//    val file = all._1
-    val set = all
+    val set = getAllBuy()
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
@@ -211,9 +191,6 @@ class TushareStockController {
       result.put("desc", s"已存在，${tsCode}")
     }
     else {
-      val list = set.toBuffer
-      list += tsCode
-//      FileUtils.writeLines(file, list.sorted.asJava)
       result.put("desc", s"添加成功，${tsCode}")
     }
     log.info(JSONObject.toJSONString(result))
@@ -229,17 +206,11 @@ class TushareStockController {
 
     stockMapper.deleteByCode(tsCode, attention)
 
-    val all = getAllAttention()
-
-//    val file = all._1
-    val set = all
+    val set = getAllAttention()
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
     result.put("desc", "成功")
-
-    val list = set.filter(! _.equals(tsCode)).toList
-//    FileUtils.writeLines(file, list.sorted.asJava)
 
     result
   }
@@ -260,9 +231,7 @@ class TushareStockController {
       stockMapper.insert(stockEntity)
     }
 
-    val all = getAllAttention()
-//    val file = all._1
-    val set = all
+    val set = getAllAttention()
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
@@ -270,9 +239,6 @@ class TushareStockController {
       result.put("desc", s"已存在，${tsCode}")
     }
     else {
-      val list = set.toBuffer
-      list += tsCode
-//      FileUtils.writeLines(file, list.sorted.asJava)
       result.put("desc", s"添加成功，${tsCode}")
     }
     log.info(JSONObject.toJSONString(result))

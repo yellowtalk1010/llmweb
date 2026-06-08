@@ -46,8 +46,6 @@ class TusharePushStockController {
   @BeanProperty
   private var stockResultJsonPath: String = null
 
-
-
   @PostConstruct
   def init(): Unit = {
     log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
