@@ -38,10 +38,16 @@
             </exclusions>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>zuk.sast</groupId>-->
+<!--            <artifactId>playwright</artifactId>-->
+<!--            <version>7.0.0</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>zuk.sast</groupId>
+            <groupId>com.microsoft.playwright</groupId>
             <artifactId>playwright</artifactId>
-            <version>7.0.0</version>
+            <version>1.53.0</version>
         </dependency>
 
     </dependencies>
@@ -91,7 +97,7 @@
                 <version>${maven-assembly-plugin.version}</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <finalName>tushare</finalName>
+                    <finalName>stockapi</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
