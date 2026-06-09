@@ -36,7 +36,7 @@ class JsonFile extends ISend {
 
           map.put("limitUp", limitUp)
           map.put("limitDown", limitDown)
-          map.put("turnoverRate", s"${turnoverRate}活跃")
+          map.put("turnoverRate", s"${turnoverRate}")
 
           val ts_code = dto.tsStock.ts_code //代码
           val name = dto.tsStock.name //名称

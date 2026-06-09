@@ -169,7 +169,7 @@ function StockTable({ list }) {
           <th className="p-2 text-left">行业</th>
           <th className="p-2 text-left">地区</th>
           <th className="p-2 text-left">胜率</th>
-          <th className="p-2 text-left">换手率</th>
+          <th className="p-2 text-left">活跃率</th>
           <th className="p-2 text-left">涨停</th>
           <th className="p-2 text-left">跌停</th>
           <th className="p-2 text-left">风险</th>
