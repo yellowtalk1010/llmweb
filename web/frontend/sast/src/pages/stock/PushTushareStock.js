@@ -221,7 +221,7 @@ function StockTable({ list }) {
                           <button
                             onClick={() => add_stock(item.ts_code, "eliminate")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          >淘汰</button>
+                          >待阅</button>
 
                         </span>
                       )
