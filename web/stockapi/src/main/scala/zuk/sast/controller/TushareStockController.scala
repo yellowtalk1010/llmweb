@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
+import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 import zuk.sast.controller.component.TushareAllStocksCSVComponent
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
@@ -14,6 +14,12 @@ import zuk.tu_share.dto.TsStock
 import java.util
 import java.util.UUID
 import scala.jdk.CollectionConverters.*
+
+object TushareStockController {
+  val attention_str: String = "attention" //关注
+  val buy_str: String = "buy" //购买
+  val eliminate_str: String = "eliminate" //淘汰
+}
 
 /***
  * 股票推荐列表
@@ -31,15 +37,22 @@ class TushareStockController {
   @Autowired
   private var stockMapper: StockMapper = null
 
-  private val attention_str: String = "attention"
-  private val buy_str: String = "buy"
+
 
   /***
    * 获取关注股票
    * @return
    */
   def getAllAttention(): Set[String] = {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(attention_str)).map(_.stockCode).toSet
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareStockController.attention_str)).map(_.stockCode).toSet
+  }
+
+  /**
+   * 获取淘汰股票
+   * @return
+   */
+  def getAllEliminate(): Set[String] = {
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareStockController.eliminate_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -47,7 +60,7 @@ class TushareStockController {
    * @return
    */
   def getAllBuy(): Set[String] = {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(buy_str)).map(_.stockCode).toSet
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareStockController.buy_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -142,11 +155,21 @@ class TushareStockController {
   /** *
    * 移除购买
    */
-  @GetMapping(value = Array("delete_buy"))
-  def delete_buy(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"删除购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+  @GetMapping(value = Array("delete_stock"))
+  def delete_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
+                   @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
 
-    stockMapper.deleteByCode(tsCode, buy_str)
+    log.info(s"删除${stockType}, 购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+
+    tsCode match {
+      case TushareStockController.buy_str =>
+        stockMapper.deleteByCode(tsCode, TushareStockController.buy_str)
+      case TushareStockController.attention_str =>
+        stockMapper.deleteByCode(tsCode, TushareStockController.attention_str)
+      case TushareStockController.eliminate_str =>
+        stockMapper.deleteByCode(tsCode, TushareStockController.eliminate_str)
+      case _=>
+    }
 
     val set = getAllBuy()
 
@@ -160,20 +183,35 @@ class TushareStockController {
   /** *
    * 添加购买
    */
-  @GetMapping(value = Array("add_buy"))
-  def add_buy(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"添加购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+  @GetMapping(value = Array("add_stock"))
+  def add_stock(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
+    log.info(s"添加${stockType}, 购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
-    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(buy_str)).size == 0){
+    stockType match {
+      case TushareStockController.buy_str =>
+        addBuy(TushareStockController.buy_str)
+      case TushareStockController.attention_str =>
+        add_attention(tsCode, TushareStockController.attention_str)
+      case TushareStockController.eliminate_str =>
+        new util.HashMap[String, String]()
+      case _=>
+        new util.HashMap[String, String]()
+    }
+
+  }
+
+  private def addBuy(tsCode: String): util.Map[String, String] = {
+
+    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(TushareStockController.buy_str)).size == 0){
       val stockEntity: StockEntity = new StockEntity
       stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
       stockEntity.stockCode = tsCode
       stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
-      stockEntity.stockType = buy_str
+      stockEntity.stockType = TushareStockController.buy_str
       stockMapper.insert(stockEntity)
     }
 
-    this.add_attention(tsCode) //购买的股票，默认关注
+    this.add_attention(tsCode, TushareStockController.attention_str) //购买的股票，默认关注
 
     val set = getAllBuy()
 
@@ -192,11 +230,11 @@ class TushareStockController {
   /***
    * 移除关注
    */
-  @GetMapping(value = Array("delete_attention"))
-  def delete_attention(tsCode: String): util.Map[String, String] = synchronized {
-    log.info(s"删除关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+//  @GetMapping(value = Array("delete_attention"))
+  def delete_attention(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
+    log.info(s"删除${stockType}, 关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
-    stockMapper.deleteByCode(tsCode, attention_str)
+    stockMapper.deleteByCode(tsCode, TushareStockController.attention_str)
 
     val set = getAllAttention()
 
@@ -210,16 +248,16 @@ class TushareStockController {
   /***
    * 添加关注
    */
-  @GetMapping(value = Array("add_attention"))
-  def add_attention(tsCode: String): util.Map[String, String] = synchronized {
+//  @GetMapping(value = Array("add_attention"))
+  def add_attention(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
     log.info(s"添加关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
-    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(attention_str)).size == 0){
+    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(TushareStockController.attention_str)).size == 0){
       val stockEntity: StockEntity = new StockEntity
       stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
       stockEntity.stockCode = tsCode
       stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
-      stockEntity.stockType = attention_str
+      stockEntity.stockType = TushareStockController.attention_str
       stockMapper.insert(stockEntity)
     }
 
