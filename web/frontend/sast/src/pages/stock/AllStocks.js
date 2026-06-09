@@ -53,10 +53,10 @@ function AllStocks() {
   /***
    * 删除购买
    */
-  const deleteBuy = async (tsCode) => {
+  const deleteStock = async (tsCode, stockType) => {
     try {
       const response = await fetch(
-        "/stocks/delete_buy?tsCode=" + tsCode,
+        "/stocks/delete_stock?tsCode=" + tsCode + "&stockType=" + stockType,
         {
           method: "GET",
         }
@@ -78,67 +78,10 @@ function AllStocks() {
     }
   };
 
-  const addBuy = async (tsCode) => {
+  const addStock = async (tsCode, stockType) => {
     try {
       const response = await fetch(
-        "/stocks/add_buy?tsCode=" + tsCode,
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("添加失败");
-      }
-
-      const result = await response.json();
-
-      if (result.code === "success") {
-        alert(result.desc);
-        window.location.reload(); // 简单刷新
-      }
-    } catch (e) {
-      console.error(e);
-      alert("请求失败");
-    }
-  };
-
-
-  /***
-   * 删除关注
-   */
-  const deleteAttention = async (tsCode) => {
-    try {
-      const response = await fetch(
-        "/stocks/delete_attention?tsCode=" + tsCode,
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("删除失败");
-      }
-
-      const result = await response.json();
-
-      if (result.code === "success") {
-        alert(result.desc);
-        window.location.reload(); // 简单刷新
-      }
-    } catch (e) {
-      console.error(e);
-      alert("请求失败");
-    }
-  };
-
-  /***
-   * 添加关注
-   */
-  const addAttention = async (tsCode) => {
-    try {
-      const response = await fetch(
-        "/stocks/add_attention?tsCode=" + tsCode,
+        "/stocks/add_stock?tsCode=" + tsCode + "&stockType=" + stockType,
         {
           method: "GET",
         }
@@ -237,14 +180,14 @@ function AllStocks() {
                         <span>
                           {item.buy}
                           <button
-                            onClick={() => deleteBuy(item.ts_code)}
+                            onClick={() => deleteStock(item.ts_code, "buy")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >移除</button>
                         </span>
                       ) : (
                         <span>
                           <button
-                            onClick={() => addBuy(item.ts_code)}
+                            onClick={() => addStock(item.ts_code, "buy")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >购买</button>
                         </span>
@@ -257,7 +200,7 @@ function AllStocks() {
                         <span>
                           {item.attention}
                           <button
-                            onClick={() => deleteAttention(item.ts_code)}
+                            onClick={() => deleteStock(item.ts_code, "attention")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >移除</button>
                         </span>
@@ -265,7 +208,7 @@ function AllStocks() {
                       :(
                         <span>
                           <button
-                            onClick={() => addAttention(item.ts_code)}
+                            onClick={() => addStock(item.ts_code, "attention")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >关注</button>
 

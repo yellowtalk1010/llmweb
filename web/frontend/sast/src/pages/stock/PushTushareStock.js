@@ -104,10 +104,10 @@ function StockTable({ list }) {
   /***
    * 删除关注
    */
-  const deleteAttention = async (tsCode) => {
+  const delete_stock = async (tsCode, stockType) => {
     try {
       const response = await fetch(
-        "/stocks/delete_attention?tsCode=" + tsCode,
+        "/stocks/delete_stock?tsCode=" + tsCode + "&stockType=" + stockType,
         {
           method: "GET",
         }
@@ -132,10 +132,10 @@ function StockTable({ list }) {
   /***
    * 添加关注
    */
-  const addAttention = async (tsCode) => {
+  const add_stock = async (tsCode, stockType) => {
     try {
       const response = await fetch(
-        "/stocks/add_attention?tsCode=" + tsCode,
+        "/stocks/add_stock?tsCode=" + tsCode + "&stockType=" + stockType,
         {
           method: "GET",
         }
@@ -186,7 +186,7 @@ function StockTable({ list }) {
                         <span>
                           {item.attention}
                           <button
-                            onClick={() => deleteAttention(item.ts_code)}
+                            onClick={() => delete_stock(item.ts_code, "attention")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >移除</button>
                         </span>
@@ -194,7 +194,7 @@ function StockTable({ list }) {
                       :(
                         <span>
                           <button
-                            onClick={() => addAttention(item.ts_code)}
+                            onClick={() => add_stock(item.ts_code, "attention")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >关注</button>
 

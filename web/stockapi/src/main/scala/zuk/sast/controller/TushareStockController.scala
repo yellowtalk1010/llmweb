@@ -159,9 +159,9 @@ class TushareStockController {
   def delete_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
                    @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
 
-    log.info(s"删除${stockType}, 购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"删除${stockType}, ${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
-    tsCode match {
+    stockType match {
       case TushareStockController.buy_str =>
         stockMapper.deleteByCode(tsCode, TushareStockController.buy_str)
       case TushareStockController.attention_str =>
@@ -184,15 +184,20 @@ class TushareStockController {
    * 添加购买
    */
   @GetMapping(value = Array("add_stock"))
-  def add_stock(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
-    log.info(s"添加${stockType}, 购买:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+  def add_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
+                @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
+    log.info(s"添加${stockType}, ${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
     stockType match {
       case TushareStockController.buy_str =>
+        //购买的股票默认关注
         addBuy(TushareStockController.buy_str)
+        add_attention(tsCode, TushareStockController.attention_str)
       case TushareStockController.attention_str =>
+        //关注股票
         add_attention(tsCode, TushareStockController.attention_str)
       case TushareStockController.eliminate_str =>
+        //
         new util.HashMap[String, String]()
       case _=>
         new util.HashMap[String, String]()
@@ -211,7 +216,6 @@ class TushareStockController {
       stockMapper.insert(stockEntity)
     }
 
-    this.add_attention(tsCode, TushareStockController.attention_str) //购买的股票，默认关注
 
     val set = getAllBuy()
 
@@ -228,28 +232,9 @@ class TushareStockController {
   }
 
   /***
-   * 移除关注
-   */
-//  @GetMapping(value = Array("delete_attention"))
-  def delete_attention(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
-    log.info(s"删除${stockType}, 关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
-
-    stockMapper.deleteByCode(tsCode, TushareStockController.attention_str)
-
-    val set = getAllAttention()
-
-    val result = new util.HashMap[String, String]()
-    result.put("code", "success")
-    result.put("desc", "成功")
-
-    result
-  }
-
-  /***
    * 添加关注
    */
-//  @GetMapping(value = Array("add_attention"))
-  def add_attention(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
+  private def add_attention(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
     log.info(s"添加关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
     if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(TushareStockController.attention_str)).size == 0){
