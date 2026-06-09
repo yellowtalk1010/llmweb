@@ -1,11 +1,13 @@
 package zuk.sast.controller
 
 import com.alibaba.fastjson2.JSONObject
+import jakarta.annotation.PostConstruct
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
+import zuk.sast.controller.TushareStockController.eliminate_str
 import zuk.sast.controller.component.TushareAllStocksCSVComponent
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
@@ -13,6 +15,7 @@ import zuk.tu_share.dto.TsStock
 
 import java.text.SimpleDateFormat
 import java.util
+import java.util.concurrent.Executors
 import java.util.{Date, UUID}
 import scala.jdk.CollectionConverters.*
 
@@ -38,6 +41,30 @@ class TushareStockController {
   @Autowired
   private var stockMapper: StockMapper = null
 
+  private val Executor_Service = Executors.newCachedThreadPool()
+
+  @PostConstruct
+  def init(): Unit = {
+
+    Executor_Service.execute(() => {
+
+      try {
+        val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date())
+        this.stockMapper.selectAll().asScala.filter(e => e.stockType.equals(eliminate_str) && !e.createtime.contains(dateStr)).foreach(s=>{
+          log.info(s"删除推荐淘汰后的股票:${s.stockCode}, ${s.name}, ${s.stockType}, ${s.createtime}")
+          stockMapper.deleteById(s.id)
+        })
+      }
+      catch {
+        case exception: Exception =>
+          exception.printStackTrace()
+          log.error(exception.getMessage)
+        case _ =>
+      }
+
+    })
+
+  }
 
 
   /***
@@ -109,10 +136,11 @@ class TushareStockController {
     log.info(s"索取全部股票:${desc}, ${status}")
 
     if(StringUtils.isNotBlank(status) && status.equals("my")){
+      //
       this.my()
     }
     else {
-
+      //
       val list = if (StringUtils.isNotBlank(desc)) {
         tushareAllStocksCSVComponent.getAll().filter(e => {
           e.ts_code.contains(desc) || e.name.contains(desc)
