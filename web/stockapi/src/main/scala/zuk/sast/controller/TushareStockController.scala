@@ -109,48 +109,51 @@ class TushareStockController {
     log.info(s"索取全部股票:${desc}, ${status}")
 
     if(StringUtils.isNotBlank(status) && status.equals("my")){
-      return this.my()
-    }
-
-    val list = if(StringUtils.isNotBlank(desc)){
-      tushareAllStocksCSVComponent.getAll().filter(e => {
-        e.ts_code.contains(desc) || e.name.contains(desc)
-      })
+      this.my()
     }
     else {
-      tushareAllStocksCSVComponent.getAll()
-    }
 
-    val res = if(list.size > 20){
-      list.take(20)
-    }
-    else {
-      list
-    }
-
-    val attentionSet = getAllAttention()
-    val buySet = getAllBuy()
-
-    val convertRes = res.map(e=>{
-      val stockResultJson = new StockResultJson
-      stockResultJson.ts_code = e.ts_code
-      stockResultJson.name = e.name
-      stockResultJson.eastmoneyURL = e.getEastmoneyURL()
-      stockResultJson.attention = ""
-      if (attentionSet.contains(stockResultJson.ts_code)) {
-        stockResultJson.attention = "已关注"
+      val list = if (StringUtils.isNotBlank(desc)) {
+        tushareAllStocksCSVComponent.getAll().filter(e => {
+          e.ts_code.contains(desc) || e.name.contains(desc)
+        })
       }
-      stockResultJson.buy = ""
-      if (buySet.contains(stockResultJson.ts_code)) {
-        stockResultJson.buy = "已购买"
+      else {
+        tushareAllStocksCSVComponent.getAll()
       }
-      stockResultJson
-    }).asJava
 
-    val map = new util.HashMap[String, Object]()
-    map.put("code", "success")
-    map.put("data", convertRes)
-    map
+      val res = if (list.size > 20) {
+        list.take(20)
+      }
+      else {
+        list
+      }
+
+      val attentionSet = getAllAttention()
+      val buySet = getAllBuy()
+
+      val convertRes = res.map(e => {
+        val stockResultJson = new StockResultJson
+        stockResultJson.ts_code = e.ts_code
+        stockResultJson.name = e.name
+        stockResultJson.eastmoneyURL = e.getEastmoneyURL()
+        stockResultJson.attention = ""
+        if (attentionSet.contains(stockResultJson.ts_code)) {
+          stockResultJson.attention = "已关注"
+        }
+        stockResultJson.buy = ""
+        if (buySet.contains(stockResultJson.ts_code)) {
+          stockResultJson.buy = "已购买"
+        }
+        stockResultJson
+      }).asJava
+
+      val map = new util.HashMap[String, Object]()
+      map.put("code", "success")
+      map.put("data", convertRes)
+      map
+    }
+
   }
 
   /** *
