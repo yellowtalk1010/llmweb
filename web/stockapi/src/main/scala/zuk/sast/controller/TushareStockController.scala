@@ -199,6 +199,7 @@ class TushareStockController {
         add(tsCode, TushareStockController.attention_str)
       case TushareStockController.eliminate_str =>
         //淘汰
+        add(tsCode, TushareStockController.eliminate_str)
       case _ =>
     }
 
