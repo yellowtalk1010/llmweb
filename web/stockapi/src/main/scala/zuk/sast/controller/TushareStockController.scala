@@ -191,72 +191,44 @@ class TushareStockController {
     stockType match {
       case TushareStockController.buy_str =>
         //购买的股票默认关注
-        addBuy(tsCode)
-        add_attention(tsCode, TushareStockController.attention_str)
+        add(tsCode, TushareStockController.buy_str)
+        add(tsCode, TushareStockController.attention_str)
       case TushareStockController.attention_str =>
         //关注股票
-        add_attention(tsCode, TushareStockController.attention_str)
+        add(tsCode, TushareStockController.attention_str)
       case TushareStockController.eliminate_str =>
-        //
-        new util.HashMap[String, String]()
-      case _=>
-        new util.HashMap[String, String]()
+        //淘汰
+      case _ =>
     }
 
-  }
-
-  private def addBuy(tsCode: String): util.Map[String, String] = {
-
-    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(TushareStockController.buy_str)).size == 0){
-      val stockEntity: StockEntity = new StockEntity
-      stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
-      stockEntity.stockCode = tsCode
-      stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
-      stockEntity.stockType = TushareStockController.buy_str
-      stockMapper.insert(stockEntity)
-    }
-
-
-    val set = getAllBuy()
+    val size = this.stockMapper.selectAll().asScala.filter(s => s.stockCode.equals(tsCode) && s.stockType.equals(stockType)).size
 
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
-    if (set.contains(tsCode)) {
-      result.put("desc", s"已存在，${tsCode}")
+    if (size > 0) {
+      result.put("desc", "成功")
     }
     else {
-      result.put("desc", s"添加成功，${tsCode}")
+      result.put("desc", "失败")
     }
-    log.info(JSONObject.toJSONString(result))
     result
   }
+
 
   /***
-   * 添加关注
+   * 添加
    */
-  private def add_attention(tsCode: String, stockType: String): util.Map[String, String] = synchronized {
-    log.info(s"添加关注:${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+  private def add(tsCode: String, stockType: String): Unit = synchronized {
 
-    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(TushareStockController.attention_str)).size == 0){
+    log.info(s"添加${stockType}, ${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(stockType)).size == 0){
       val stockEntity: StockEntity = new StockEntity
       stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
       stockEntity.stockCode = tsCode
       stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
-      stockEntity.stockType = TushareStockController.attention_str
+      stockEntity.stockType = stockType
       stockMapper.insert(stockEntity)
     }
 
-    val set = getAllAttention()
-
-    val result = new util.HashMap[String, String]()
-    result.put("code", "success")
-    if(set.contains(tsCode)){
-      result.put("desc", s"已存在，${tsCode}")
-    }
-    else {
-      result.put("desc", s"添加成功，${tsCode}")
-    }
-    log.info(JSONObject.toJSONString(result))
-    result
   }
 }
