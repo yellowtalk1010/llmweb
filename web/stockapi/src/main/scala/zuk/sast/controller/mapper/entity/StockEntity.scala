@@ -1,5 +1,7 @@
 package zuk.sast.controller.mapper.entity
 
+import java.text.SimpleDateFormat
+import java.util.Date
 import scala.beans.BeanProperty
 
 class StockEntity {
@@ -8,5 +10,6 @@ class StockEntity {
   @BeanProperty var stockCode: String = null
   @BeanProperty var name: String = null
   @BeanProperty var stockType: String = null
+  @BeanProperty var createtime: String = null
 
 }

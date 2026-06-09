@@ -11,8 +11,9 @@ import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 
+import java.text.SimpleDateFormat
 import java.util
-import java.util.UUID
+import java.util.{Date, UUID}
 import scala.jdk.CollectionConverters.*
 
 object TushareStockController {
@@ -227,6 +228,7 @@ class TushareStockController {
       stockEntity.stockCode = tsCode
       stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
       stockEntity.stockType = stockType
+      stockEntity.createtime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date)
       stockMapper.insert(stockEntity)
     }
 
