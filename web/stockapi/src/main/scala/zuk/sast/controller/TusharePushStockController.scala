@@ -181,8 +181,14 @@ class TusharePushStockController {
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}")
         map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
-        map.put("heads", e._2.filter(e=> !e.name.toUpperCase.contains("ST")).toList.asJava) //移除股票名称中带ST的股票
-        map.put("histories", e._3.filter(e=> !e.name.toUpperCase.contains("ST")).sortBy(_.turnoverRate).reverse.asJava) //移除股票名称中带ST的股票
+        map.put("heads", e._2.filter(e=> {
+          val turnoverRate = e.turnoverRate.replaceAll("活跃", "") //在7月份移除这段代码
+          !e.name.toUpperCase.contains("ST") && turnoverRate.toFloat >= 0.3
+        }).toList.asJava) //移除股票名称中带ST的股票
+        map.put("histories", e._3.filter(e=> {
+          val turnoverRate = e.turnoverRate.replaceAll("活跃", "")  //在7月份移除这段代码
+          !e.name.toUpperCase.contains("ST") && turnoverRate.toFloat >= 0.3
+        }).sortBy(_.turnoverRate).reverse.asJava) //移除股票名称中带ST的股票
         map
       }).asJava
 
