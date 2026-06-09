@@ -191,7 +191,7 @@ class TushareStockController {
     stockType match {
       case TushareStockController.buy_str =>
         //购买的股票默认关注
-        addBuy(TushareStockController.buy_str)
+        addBuy(tsCode)
         add_attention(tsCode, TushareStockController.attention_str)
       case TushareStockController.attention_str =>
         //关注股票
