@@ -165,6 +165,7 @@ class TusharePushStockController {
 
       val allAttentionCodes = tushareStockController.getAllAttention() //全部关注的股票
       val allBuyCodes = tushareStockController.getAllBuy() //全部购买的股票
+      val eliminateCodes = tushareStockController.getAllEliminate() //全部淘汰的股票
 
       val maplist = pushStocks.map(e=>{
 
@@ -174,6 +175,9 @@ class TusharePushStockController {
           }
           if(allBuyCodes.contains(e.ts_code)){
             e.buy = "已购买"
+          }
+          if (eliminateCodes.contains(e.ts_code)) {
+            e.eliminate = "已淘汰"
           }
         })
 

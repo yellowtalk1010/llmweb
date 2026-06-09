@@ -26,5 +26,7 @@ case class StockResultJson(){
 
   @BeanProperty var attention: String = "" //是否关注
   @BeanProperty var buy: String = "" //是否购买
+  @BeanProperty var eliminate: String = "" //是否淘汰
+
 }
 
