@@ -162,6 +162,7 @@ function StockTable({ list }) {
       <table className="w-full text-sm border-collapse">
         <thead>
         <tr className="border-b bg-gray-50">
+          <th className="p-2 text-left">淘汰</th>
           <th className="p-2 text-left">关注</th>
           <th className="p-2 text-left">资金</th>
           <th className="p-2 text-left">名称</th>
@@ -180,6 +181,29 @@ function StockTable({ list }) {
         {list.map((item, idx) => (
             <tr key={idx} className="border-b hover:bg-gray-50">
               
+              <td className="p-2">
+                {
+                      item.attention?(
+                        <span>
+                          {item.attention}
+                          <button
+                            onClick={() => delete_stock(item.ts_code, "eliminate")}
+                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >恢复</button>
+                        </span>
+                      )
+                      :(
+                        <span>
+                          <button
+                            onClick={() => add_stock(item.ts_code, "eliminate")}
+                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >淘汰</button>
+
+                        </span>
+                      )
+                    }
+              </td>
+
               <td className="p-2">
                 {
                       item.attention?(
