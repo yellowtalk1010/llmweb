@@ -1,0 +1,1 @@
+java -agentlib:native-image-agent=config-output-dir=./native-config -jar .\stockapi.jar  -json
