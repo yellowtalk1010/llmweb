@@ -162,7 +162,9 @@ class TusharePushStockController {
         (clsName, headList, historyList)
       })
 
+      //获取MA4_MODEL分析到的股票代码
       val ma4Set = pushStocks.filter(_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).map(_.ts_code).toSet
+      //非MA4_MODEL模块击中MA4股票
       pushStocks.filter(!_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).filter(e=>ma4Set.contains(e.ts_code)).foreach(e=>{
         e.name = s"${e.name}【击中MA4】"
       })
