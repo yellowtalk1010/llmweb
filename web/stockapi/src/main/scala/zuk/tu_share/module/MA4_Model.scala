@@ -18,7 +18,7 @@ class MA4_Model extends IModel {
     }
     val head = days.head
     val list = days.take(num)
-    val ls = days.filter(day=>{
+    val ls = list.filter(day=>{
       day.ma.ma5.compareTo(day.ma.ma10) > 0
       && day.ma.ma10.compareTo(day.ma.ma20) > 0
       && day.ma.ma20.compareTo(day.ma.ma30) > 0
