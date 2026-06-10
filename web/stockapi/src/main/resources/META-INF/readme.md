@@ -1,0 +1,1 @@
+# 运行 stockapi.bat 生成需要配置的 native-config数据。
