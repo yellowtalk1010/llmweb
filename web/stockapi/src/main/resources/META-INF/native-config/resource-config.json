@@ -1,27 +1,29 @@
 {
-  "resources": {
-    "includes": [
-      {
-        "pattern": "META-INF/javamail\\.providers"
-      },
-      {
-        "pattern": "META-INF/javamail\\.default\\.address\\.map"
-      },
-      {
-        "pattern": "META-INF/mailcap"
-      },
-      {
-        "pattern": "META-INF/mailcap\\.default"
-      },
-      {
-        "pattern": "META-INF/services/javax\\.mail\\.Provider"
-      },
-      {
-        "pattern": "META-INF/services/javax\\.activation\\.DataContentHandler"
-      },
-      {
-        "pattern": ".*\\.properties$"
-      }
-    ]
-  }
+  "resources":{
+  "includes":[{
+    "pattern":"\\QMETA-INF/javamail.address.map\\E"
+  }, {
+    "pattern":"\\QMETA-INF/javamail.charset.map\\E"
+  }, {
+    "pattern":"\\QMETA-INF/javamail.default.address.map\\E"
+  }, {
+    "pattern":"\\QMETA-INF/mailcap.default\\E"
+  }, {
+    "pattern":"\\QMETA-INF/mailcap\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.lang.System$LoggerFinder\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.net.spi.InetAddressResolverProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.net.spi.URLStreamHandlerProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.time.zone.ZoneRulesProvider\\E"
+  }, {
+    "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfkc.nrm\\E"
+  }, {
+    "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/uprops.icu\\E"
+  }, {
+    "pattern":"java.base:\\Qsun/net/idn/uidna.spp\\E"
+  }]},
+  "bundles":[]
 }
