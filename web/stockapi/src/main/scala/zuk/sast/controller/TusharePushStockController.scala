@@ -162,6 +162,11 @@ class TusharePushStockController {
         (clsName, headList, historyList)
       })
 
+      val ma4Set = pushStocks.filter(_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).map(_.ts_code).toSet
+      pushStocks.filter(!_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).filter(e=>ma4Set.contains(e.ts_code)).foreach(e=>{
+        e.name = s"${e.name}【击中MA4】"
+      })
+
 
       val allAttentionCodes = tushareStockController.getAllAttention() //全部关注的股票
       val allBuyCodes = tushareStockController.getAllBuy() //全部购买的股票
