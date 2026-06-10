@@ -18,7 +18,8 @@ object PassFactory {
         new MA3_0_Model,
         new MA3_1_Model,
         new MA3_2_Model,
-        new MA3_3_Model
+        new MA3_3_Model,
+        new MA4_Model
     )
   }
 

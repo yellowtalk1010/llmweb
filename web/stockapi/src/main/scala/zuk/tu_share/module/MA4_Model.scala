@@ -18,11 +18,20 @@ class MA4_Model extends IModel {
     }
     val head = days.head
     val list = days.take(num)
+    if(list.filter(e=>e.ma==null
+      || e.ma.ma5==null
+      || e.ma.ma10==null
+      || e.ma.ma20==null
+      || e.ma.ma30==null).size>0){
+      return
+    }
     val ls = list.filter(day=>{
       day.ma.ma5.compareTo(day.ma.ma10) > 0
       && day.ma.ma10.compareTo(day.ma.ma20) > 0
       && day.ma.ma20.compareTo(day.ma.ma30) > 0
-      && List(day.open, day.close, day.high, day.low).map(new BigDecimal(_)).filter(_.compareTo(day.ma.ma5) >= 0).size > 0
+      && List(day.open, day.close, day.high, day.low).map(new BigDecimal(_)).filter(_.compareTo(day.ma.ma5) >= 0).size > 0 //上穿ma5
+      && List(day.open, day.close, day.high, day.low).map(new BigDecimal(_)).filter(_.compareTo(day.ma.ma10) <= 0).size == 0 //不能下穿ma10
+      && head.change.toFloat > 0
     })
     val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
     if(ls.size == num && tsStock != null){
