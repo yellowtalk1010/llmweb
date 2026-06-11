@@ -31,7 +31,7 @@ class TushareInitMA4ModelcCompont {
   private var stockMapper: StockMapper = _
 
 
-  def get_MD4_MODEL_LIST(): List[StockEntity] = {
+  def get_MD4_MODEL_LIST(): List[StockEntity] = synchronized {
     this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR)).toList
   }
 
@@ -39,7 +39,7 @@ class TushareInitMA4ModelcCompont {
    * 添加推荐数据
    * @param list
    */
-  def add_MA4_MODEL(list: List[StockResultJson]): Unit = {
+  def add_MA4_MODEL(list: List[StockResultJson]): Unit = synchronized {
 
     try {
       list.filter(_.modClsName.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR)).map(e=>{
@@ -73,7 +73,7 @@ class TushareInitMA4ModelcCompont {
   /***
    * 初始化历史 MA4_MODEL 模型生成的历史数据
    */
-  def init_MA4_MODEL_HISTORY(): Unit = {
+  def init_MA4_MODEL_HISTORY(): Unit = synchronized {
     val file = new File("D:\\development\\github\\llmweb\\web\\MA4_MODEL.txt")
     if(!file.exists()){
       log.info(s"${file.getAbsolutePath} 不存在")
