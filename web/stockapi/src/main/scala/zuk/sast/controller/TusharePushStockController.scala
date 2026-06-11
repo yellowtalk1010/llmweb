@@ -60,6 +60,7 @@ class TusharePushStockController {
     }
 
     refreshEasymoney()
+    init_MA4_MODEL_HISTORY()
 
   }
 
@@ -67,25 +68,31 @@ class TusharePushStockController {
   /***
    * 初始化历史 MA4_MODEL 模型生成的历史数据
    */
-  private init_MA4_MODEL_HISTORY(): Unit = {
-//    val file = new File("D:\\development\\github\\llmweb\\web\\MA4_MODEL.txt")
-//    val lines = FileUtils.readLines(file, "UTF-8")
-//    lines.asScala.foreach(line=>{
-//      val arr = line.split(",").toList
-//      val stockType = arr(0)
-//      val stockCode = arr(1)
-//      val name = arr(2)
-//      val time = arr(4).replaceAll("【买入】", "") + "101010"
-//      println(s"${stockType}, ${stockCode}, ${name}, ${time}")
-//
-//      val stock = new StockEntity
-//      stock.id = UUID.randomUUID().toString.replaceAll("-", "")
-//      stock.stockCode = stockCode
-//      stock.name = name
-//      stock.stockType = "MA4_MODEL"
-//      stock.createtime = time
-//      stockMapper.insert(stock)
-//    })
+  private def init_MA4_MODEL_HISTORY(): Unit = {
+    val file = new File("D:\\development\\github\\llmweb\\web\\MA4_MODEL.txt")
+    val lines = FileUtils.readLines(file, "UTF-8")
+    val allEntitys = this.stockMapper.selectAll().asScala.filter(_.stockType.equals("MA4_MODEL"))
+    lines.asScala.foreach(line=>{
+      val arr = line.split(",").toList
+      val stockType = arr(0)
+      val stockCode = arr(1)
+      val name = arr(2)
+      val time = arr(4).replaceAll("【买入】", "")
+      println(s"${stockType}, ${stockCode}, ${name}, ${time}")
+
+      if(allEntitys.filter(e=>e.stockCode.equals(stockCode) && e.createtime.startsWith(time)).size == 0){
+        val stock = new StockEntity
+        stock.id = UUID.randomUUID().toString.replaceAll("-", "")
+        stock.stockCode = stockCode
+        stock.name = name
+        stock.stockType = "MA4_MODEL"
+        stock.createtime = time + "101010"
+        stockMapper.insert(stock)
+      }
+      else {
+        println("已存在")
+      }
+    })
   }
 
 
