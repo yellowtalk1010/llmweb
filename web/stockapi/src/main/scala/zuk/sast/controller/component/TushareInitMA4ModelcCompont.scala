@@ -92,7 +92,7 @@ class TushareInitMA4ModelcCompont {
       if(allEntitys.filter(e=>e.stockCode.equals(stockCode) && e.createtime.startsWith(time)).size == 0){
         val stock = new StockEntity
         stock.id = UUID.randomUUID().toString.replaceAll("-", "")
-        stock.stockCode = stockCode
+        stock.stockCode = stockCode.trim
         stock.name = name
         stock.stockType = "MA4_MODEL"
         stock.createtime = time + TIME

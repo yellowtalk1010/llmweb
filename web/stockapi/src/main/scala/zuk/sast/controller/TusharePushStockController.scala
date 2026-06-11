@@ -60,7 +60,7 @@ class TusharePushStockController {
     }
 
     refreshEasymoney()
-    tushareInitMA4ModelcCompont.init_MA4_MODEL_HISTORY()
+//    tushareInitMA4ModelcCompont.init_MA4_MODEL_HISTORY()
 
   }
 
