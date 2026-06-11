@@ -14,7 +14,7 @@ class MA4_Model extends IModel {
   override def getStockDto(): StockDto = stockDto
 
   override def run(days: List[ModuleDay]): Unit = {
-    val num = 4
+    val num = 5
     if (days.size < num){
       return
     }
