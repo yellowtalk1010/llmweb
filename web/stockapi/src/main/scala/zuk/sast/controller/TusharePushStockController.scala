@@ -63,6 +63,7 @@ class TusharePushStockController {
 
   }
 
+
   /***
    * 初始化历史 MA4_MODEL 模型生成的历史数据
    */
