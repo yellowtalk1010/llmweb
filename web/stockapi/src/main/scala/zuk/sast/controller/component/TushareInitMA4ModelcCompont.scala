@@ -59,7 +59,7 @@ class TushareInitMA4ModelcCompont {
             entity.name = e.name
             entity.createtime = dateStr + TIME
 
-//            this.stockMapper.insert(entity)
+            this.stockMapper.insert(entity)
           }
         }
 
