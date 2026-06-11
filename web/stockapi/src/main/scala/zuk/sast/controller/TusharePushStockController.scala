@@ -10,13 +10,15 @@ import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.sast.controller.component.TushareAllStocksCSVComponent
+import zuk.sast.controller.mapper.StockMapper
+import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util
-import java.util.Date
+import java.util.{Date, UUID}
 import java.util.concurrent.Executors
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
@@ -39,6 +41,9 @@ class TusharePushStockController {
   @Autowired
   private var tushareStockController: TushareStockController = null
 
+  @Autowired
+  private var stockMapper: StockMapper = _
+
   /***
    * 获取application.properties中的数据，股票json结果路径
    */
@@ -55,7 +60,33 @@ class TusharePushStockController {
     }
 
     refreshEasymoney()
+
   }
+
+  /***
+   * 初始化历史 MA4_MODEL 模型生成的历史数据
+   */
+  private init_MA4_MODEL_HISTORY(): Unit = {
+//    val file = new File("D:\\development\\github\\llmweb\\web\\MA4_MODEL.txt")
+//    val lines = FileUtils.readLines(file, "UTF-8")
+//    lines.asScala.foreach(line=>{
+//      val arr = line.split(",").toList
+//      val stockType = arr(0)
+//      val stockCode = arr(1)
+//      val name = arr(2)
+//      val time = arr(4).replaceAll("【买入】", "") + "101010"
+//      println(s"${stockType}, ${stockCode}, ${name}, ${time}")
+//
+//      val stock = new StockEntity
+//      stock.id = UUID.randomUUID().toString.replaceAll("-", "")
+//      stock.stockCode = stockCode
+//      stock.name = name
+//      stock.stockType = "MA4_MODEL"
+//      stock.createtime = time
+//      stockMapper.insert(stock)
+//    })
+  }
+
 
   /***
    * 刷新东方财富网址
