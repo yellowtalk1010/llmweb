@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.component.TushareAllStocksCSVComponent
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelcCompont}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -42,7 +42,7 @@ class TusharePushStockController {
   private var tushareStockController: TushareStockController = null
 
   @Autowired
-  private var stockMapper: StockMapper = _
+  private var tushareInitMA4ModelcCompont: TushareInitMA4ModelcCompont = _
 
   /***
    * 获取application.properties中的数据，股票json结果路径
@@ -60,40 +60,11 @@ class TusharePushStockController {
     }
 
     refreshEasymoney()
-//    init_MA4_MODEL_HISTORY()
+    tushareInitMA4ModelcCompont.init_MA4_MODEL_HISTORY()
 
   }
 
 
-  /***
-   * 初始化历史 MA4_MODEL 模型生成的历史数据
-   */
-  private def init_MA4_MODEL_HISTORY(): Unit = {
-    val file = new File("D:\\development\\github\\llmweb\\web\\MA4_MODEL.txt")
-    val lines = FileUtils.readLines(file, "UTF-8")
-    val allEntitys = this.stockMapper.selectAll().asScala.filter(_.stockType.equals("MA4_MODEL"))
-    lines.asScala.foreach(line=>{
-      val arr = line.split(",").toList
-      val stockType = arr(0)
-      val stockCode = arr(1)
-      val name = arr(2)
-      val time = arr(4).replaceAll("【买入】", "")
-      println(s"${stockType}, ${stockCode}, ${name}, ${time}")
-
-      if(allEntitys.filter(e=>e.stockCode.equals(stockCode) && e.createtime.startsWith(time)).size == 0){
-        val stock = new StockEntity
-        stock.id = UUID.randomUUID().toString.replaceAll("-", "")
-        stock.stockCode = stockCode
-        stock.name = name
-        stock.stockType = "MA4_MODEL"
-        stock.createtime = time + "101010"
-        stockMapper.insert(stock)
-      }
-      else {
-        println("已存在")
-      }
-    })
-  }
 
 
   /***
@@ -183,6 +154,8 @@ class TusharePushStockController {
       val heads = stockResultJsonList.head
       val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
+      tushareInitMA4ModelcCompont.add_MA4_MODEL(heads.toList ++ histories.toList)
+
       val pushStocks = modWinRateClsNames.map(_._1).map(clsName=>{
         //最新数据
         val headList = heads.filter(_.modClsName.equals(clsName)).sortBy(_.turnoverRate).reverse
@@ -202,7 +175,11 @@ class TusharePushStockController {
       })
 
       //获取MA4_MODEL分析到的股票代码
-      val ma4Set = pushStocks.filter(_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).map(_.ts_code).toSet
+      val stockEntityList = tushareInitMA4ModelcCompont.get_MD4_MODEL_LIST()
+      val ma4Set = pushStocks.filter(_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).map(e=>{
+        e.name = s"${e.name}【${stockEntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
+        e.ts_code
+      }).toSet
       //非MA4_MODEL模块击中MA4股票
       pushStocks.filter(!_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).filter(e=>ma4Set.contains(e.ts_code)).foreach(e=>{
         e.name = s"${e.name}【击中MA4】"
