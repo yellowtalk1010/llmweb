@@ -24,9 +24,6 @@ class TushareInitMA4ModelcCompont {
 
   private val log = LoggerFactory.getLogger(classOf[TushareInitMA4ModelcCompont])
 
-  private val TIME: String = "101010"
-
-
   @Autowired
   private var stockMapper: StockMapper = _
 
@@ -57,7 +54,7 @@ class TushareInitMA4ModelcCompont {
             entity.stockCode = e.ts_code
             entity.stockType = TushareInitMA4ModelcCompont.MA4_MODEL_STR
             entity.name = e.name
-            entity.createtime = dateStr + TIME
+            entity.createtime = dateStr
 
             this.stockMapper.insert(entity)
           }
@@ -82,24 +79,27 @@ class TushareInitMA4ModelcCompont {
     val lines = FileUtils.readLines(file, "UTF-8")
     val allEntitys = this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR))
     lines.asScala.foreach(line=>{
+      println(s"ma4.line:${line}")
       val arr = line.split(",").toList
-      val stockType = arr(0)
-      val stockCode = arr(1)
-      val name = arr(2)
-      val time = arr(4).replaceAll("【买入】", "")
-      println(s"${stockType}, ${stockCode}, ${name}, ${time}")
+      if(arr.size>4){
+        val stockType = arr(0)
+        val stockCode = arr(1)
+        val name = arr(2)
+        val time = arr(4).replaceAll("【买入】", "")
+        println(s"${stockType}, ${stockCode}, ${name}, ${time}")
 
-      if(allEntitys.filter(e=>e.stockCode.equals(stockCode) && e.createtime.startsWith(time)).size == 0){
-        val stock = new StockEntity
-        stock.id = UUID.randomUUID().toString.replaceAll("-", "")
-        stock.stockCode = stockCode.trim
-        stock.name = name
-        stock.stockType = "MA4_MODEL"
-        stock.createtime = time + TIME
-        stockMapper.insert(stock)
-      }
-      else {
-        println("已存在")
+        if (allEntitys.filter(e => e.stockCode.equals(stockCode) && e.createtime.startsWith(time)).size == 0) {
+          val stock = new StockEntity
+          stock.id = UUID.randomUUID().toString.replaceAll("-", "")
+          stock.stockCode = stockCode.trim
+          stock.name = name
+          stock.stockType = "MA4_MODEL"
+          stock.createtime = time
+          stockMapper.insert(stock)
+        }
+        else {
+          println("已存在")
+        }
       }
     })
   }
