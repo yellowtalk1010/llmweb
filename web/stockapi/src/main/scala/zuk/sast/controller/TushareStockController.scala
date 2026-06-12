@@ -94,7 +94,7 @@ class TushareStockController {
   /***
    * 索取全部关注和购买的股票
    */
-  def my(): util.Map[String, Object] = {
+  def getMy(): util.Map[String, Object] = {
 
     //购买的股票
     val buySet = getAllBuy()
@@ -129,6 +129,52 @@ class TushareStockController {
   }
 
   /***
+   * 获取全部股票信息
+   * @return
+   */
+  private def getAll(): util.Map[String, Object] = {
+    val list = if (StringUtils.isNotBlank(desc)) {
+      tushareAllStocksCSVComponent.getAll().filter(e => {
+        e.ts_code.contains(desc) || e.name.contains(desc)
+      })
+    }
+    else {
+      tushareAllStocksCSVComponent.getAll()
+    }
+
+    val res = if (list.size > 20) {
+      list.take(20)
+    }
+    else {
+      list
+    }
+
+    val attentionSet = getAllAttention()
+    val buySet = getAllBuy()
+
+    val convertRes = res.map(e => {
+      val stockResultJson = new StockResultJson
+      stockResultJson.ts_code = e.ts_code
+      stockResultJson.name = e.name
+      stockResultJson.eastmoneyURL = e.getEastmoneyURL()
+      stockResultJson.attention = ""
+      if (attentionSet.contains(stockResultJson.ts_code)) {
+        stockResultJson.attention = "已关注"
+      }
+      stockResultJson.buy = ""
+      if (buySet.contains(stockResultJson.ts_code)) {
+        stockResultJson.buy = "已购买"
+      }
+      stockResultJson
+    }).asJava
+
+    val map = new util.HashMap[String, Object]()
+    map.put("code", "success")
+    map.put("data", convertRes)
+    map
+  }
+
+  /***
    * 索取全部股票
    */
   @GetMapping(value = Array("all"))
@@ -137,49 +183,10 @@ class TushareStockController {
 
     if(StringUtils.isNotBlank(status) && status.equals("my")){
       //
-      this.my()
+      this.getMy()
     }
     else {
-      //
-      val list = if (StringUtils.isNotBlank(desc)) {
-        tushareAllStocksCSVComponent.getAll().filter(e => {
-          e.ts_code.contains(desc) || e.name.contains(desc)
-        })
-      }
-      else {
-        tushareAllStocksCSVComponent.getAll()
-      }
-
-      val res = if (list.size > 20) {
-        list.take(20)
-      }
-      else {
-        list
-      }
-
-      val attentionSet = getAllAttention()
-      val buySet = getAllBuy()
-
-      val convertRes = res.map(e => {
-        val stockResultJson = new StockResultJson
-        stockResultJson.ts_code = e.ts_code
-        stockResultJson.name = e.name
-        stockResultJson.eastmoneyURL = e.getEastmoneyURL()
-        stockResultJson.attention = ""
-        if (attentionSet.contains(stockResultJson.ts_code)) {
-          stockResultJson.attention = "已关注"
-        }
-        stockResultJson.buy = ""
-        if (buySet.contains(stockResultJson.ts_code)) {
-          stockResultJson.buy = "已购买"
-        }
-        stockResultJson
-      }).asJava
-
-      val map = new util.HashMap[String, Object]()
-      map.put("code", "success")
-      map.put("data", convertRes)
-      map
+      this.getAll()
     }
 
   }
