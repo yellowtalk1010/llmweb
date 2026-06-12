@@ -94,7 +94,7 @@ class TushareStockController {
   /***
    * 索取全部关注和购买的股票
    */
-  def getMy(): util.Map[String, Object] = {
+  def getMy(): util.List[StockResultJson] = {
 
     //购买的股票
     val buySet = getAllBuy()
@@ -177,25 +177,20 @@ class TushareStockController {
   def all(desc: String, status: String): util.Map[String, Object] = {
     log.info(s"索取全部股票:${desc}, ${status}")
 
-    status match {
+    val list = status match {
       case "my" =>
-        val list = this.getMy()
-        val map = new util.HashMap[String, Object]()
-        map.put("code", "success")
-        map.put("data", list)
-        map
+        this.getMy()
       case "all" =>
-        val list = this.getAll(desc)
-        val map = new util.HashMap[String, Object]()
-        map.put("code", "success")
-        map.put("data", list)
-        map
+        this.getAll(desc)
       case _=>
-        val map = new util.HashMap[String, Object]()
-        map.put("code", "success")
-        map
+        new util.ArrayList[StockResultJson]()
     }
 
+    val map = new util.HashMap[String, Object]()
+    map.put("code", "success")
+    map.put("data", list)
+
+    map
   }
 
   /** *
