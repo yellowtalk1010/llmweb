@@ -16,7 +16,7 @@ import scala.jdk.CollectionConverters.*
 
 object TushareInitMA4ModelcCompont {
   private val stockSet = new mutable.HashSet[String]
-  private val MA4_MODEL_STR: String = "MA4_MODEL"
+  val MA4_MODEL_STR: String = "MA4_MODEL"
 }
 
 @Component

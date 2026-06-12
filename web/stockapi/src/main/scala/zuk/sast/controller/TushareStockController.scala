@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 import zuk.sast.controller.TushareStockController.eliminate_str
-import zuk.sast.controller.component.TushareAllStocksCSVComponent
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelcCompont}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -170,6 +170,31 @@ class TushareStockController {
 
   }
 
+
+  /***
+   *
+   * @return
+   */
+  def getMa4(): java.util.List[StockResultJson] = {
+    this.stockMapper.selectAll().asScala
+      .filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR))
+      .groupBy(_.stockCode)
+      .map(e=>{
+        val ls = e._2.toList.sortBy(_.createtime)
+        val head = ls.head
+        head.name = s"${head.name}【${ls.size}次】"
+        head
+      })
+      .map(entity=>{
+        val resjson = new StockResultJson
+        resjson.ts_code = entity.stockCode
+        resjson.name = entity.name
+        resjson.eastmoneyURL = e.getEastmoneyURL()
+        resjson
+      })
+      .asJava
+  }
+
   /***
    * 索取全部股票
    */
@@ -182,6 +207,8 @@ class TushareStockController {
         this.getMy()
       case "all" =>
         this.getAll(desc)
+      case "ma4" =>
+        this.getMa4()
       case _=>
         new util.ArrayList[StockResultJson]()
     }
