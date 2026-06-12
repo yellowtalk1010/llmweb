@@ -148,6 +148,17 @@ function AllStocks() {
             全部
           </label>
 
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="status"
+              value="ma4"
+              checked={status === "ma4"}
+              onChange={(e) => setStatus(e.target.value)}
+            />
+            ma4
+          </label>
+
         </div>
 
       </div>
@@ -157,6 +168,7 @@ function AllStocks() {
 
           <thead>
             <tr className="bg-gray-100 border-b">
+              <th className="p-3 text-left">序号</th>
               <th className="p-3 text-left">购买</th>
               <th className="p-3 text-left">关注</th>
               <th className="p-3 text-left">资金</th>
@@ -173,7 +185,7 @@ function AllStocks() {
                   key={index}
                   className="border-b hover:bg-gray-50"
                 >
-
+                  <td>{index}</td>    
                   <td className="p-3">
                     {
                       item.buy?(

@@ -176,23 +176,30 @@ class TushareStockController {
    * @return
    */
   def getMa4(): java.util.List[StockResultJson] = {
-    this.stockMapper.selectAll().asScala
+    val list = this.stockMapper.selectAll().asScala
       .filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR))
       .groupBy(_.stockCode)
       .map(e=>{
-        val ls = e._2.toList.sortBy(_.createtime)
+        val ls = e._2.toList.sortBy(_.createtime).reverse
         val head = ls.head
-        head.name = s"${head.name}【${ls.size}次】"
+        head.name = s"${head.name}【${ls.size}次】${head.createtime}"
         head
       })
+      .toList.sortBy(_.createtime).reverse
       .map(entity=>{
         val resjson = new StockResultJson
         resjson.ts_code = entity.stockCode
         resjson.name = entity.name
-        resjson.eastmoneyURL = e.getEastmoneyURL()
+        val tsStock = new TsStock()
+        tsStock.ts_code = entity.stockCode
+        resjson.eastmoneyURL = tsStock.getEastmoneyURL()
         resjson
       })
       .asJava
+
+    log.info(s"ma4总数据：${list.size()}")
+    list
+
   }
 
   /***
