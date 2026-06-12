@@ -122,17 +122,14 @@ class TushareStockController {
         stockResultJson
       }).sortBy(e=>e.buy).reverse.asJava
 
-    val result = new util.HashMap[String, Object]()
-    result.put("data", tsStockList)
-    result.put("code", "success")
-    result
+    tsStockList
   }
 
   /***
    * 获取全部股票信息
    * @return
    */
-  private def getAll(desc: String): util.Map[String, Object] = {
+  private def getAll(desc: String): java.util.List[StockResultJson] = {
     val list = if (StringUtils.isNotBlank(desc)) {
       tushareAllStocksCSVComponent.getAll().filter(e => {
         e.ts_code.contains(desc) || e.name.contains(desc)
@@ -142,8 +139,9 @@ class TushareStockController {
       tushareAllStocksCSVComponent.getAll()
     }
 
-    val res = if (list.size > 20) {
-      list.take(20)
+    val num = 20
+    val res = if (list.size > num) {
+      list.take(num)
     }
     else {
       list
@@ -168,10 +166,8 @@ class TushareStockController {
       stockResultJson
     }).asJava
 
-    val map = new util.HashMap[String, Object]()
-    map.put("code", "success")
-    map.put("data", convertRes)
-    map
+    convertRes
+
   }
 
   /***
@@ -181,12 +177,23 @@ class TushareStockController {
   def all(desc: String, status: String): util.Map[String, Object] = {
     log.info(s"索取全部股票:${desc}, ${status}")
 
-    if(StringUtils.isNotBlank(status) && status.equals("my")){
-      //
-      this.getMy()
-    }
-    else {
-      this.getAll(desc)
+    status match {
+      case "my" =>
+        val list = this.getMy()
+        val map = new util.HashMap[String, Object]()
+        map.put("code", "success")
+        map.put("data", list)
+        map
+      case "all" =>
+        val list = this.getAll(desc)
+        val map = new util.HashMap[String, Object]()
+        map.put("code", "success")
+        map.put("data", list)
+        map
+      case _=>
+        val map = new util.HashMap[String, Object]()
+        map.put("code", "success")
+        map
     }
 
   }
