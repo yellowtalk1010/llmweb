@@ -132,7 +132,7 @@ class TushareStockController {
    * 获取全部股票信息
    * @return
    */
-  private def getAll(): util.Map[String, Object] = {
+  private def getAll(desc: String): util.Map[String, Object] = {
     val list = if (StringUtils.isNotBlank(desc)) {
       tushareAllStocksCSVComponent.getAll().filter(e => {
         e.ts_code.contains(desc) || e.name.contains(desc)
@@ -186,7 +186,7 @@ class TushareStockController {
       this.getMy()
     }
     else {
-      this.getAll()
+      this.getAll(desc)
     }
 
   }
