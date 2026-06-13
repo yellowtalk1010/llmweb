@@ -806,7 +806,8 @@ public class Server extends Tool implements Runnable, ShutdownHandler {
         if (ignoreProperties) {
             args = new String[] { "-webPort", "0", "-properties", "null"};
         } else {
-            args = new String[] { "-webPort", "0" };
+//            args = new String[] { "-webPort", "0" };  //默认设置端口为1010
+            args = new String[] { "-webPort", "1010" };
         }
         Server web = new Server(webServer, args);
         web.start();
