@@ -35,9 +35,12 @@ class MA4_Model extends IModel {
       && List(day.open, day.close, day.high, day.low).map(new BigDecimal(_)).filter(_.compareTo(day.ma.ma10) <= 0).size == 0 //不能下穿ma10
       && head.change.toFloat > 0
     })
-    val ls1 = list.map(_.ma.ma5.floatValue())
+
     val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
-    if(ls.size == num && tsStock != null && ListOrderCheck.isDecreasing(ls1)){
+    if(ls.size == num
+      && tsStock != null
+      && ListOrderCheck.isDecreasing(list.map(_.ma.ma5.floatValue())) //ma5是递增的
+    ){
       stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       stockDto.warningUpperShadow = super.upperShadow(days)
       if (StringUtils.isNotBlank(head.total_mv)) {
