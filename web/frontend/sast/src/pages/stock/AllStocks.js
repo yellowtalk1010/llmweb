@@ -6,7 +6,7 @@ function AllStocks() {
   const [searchParams] = useSearchParams();
 
   const [allStocksData, setAllStocksData] = useState([]);
-  const [status, setStatus] = useState("my");
+  const [status, setStatus] = useState("ma4");
 
   // 输入框内容
   const [inputKeyword, setInputKeyword] = useState("");
@@ -130,6 +130,17 @@ function AllStocks() {
             <input
               type="radio"
               name="status"
+              value="ma4"
+              checked={status === "ma4"}
+              onChange={(e) => setStatus(e.target.value)}
+            />
+            ma4
+          </label>
+
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="status"
               value="my"
               checked={status === "my"}
               onChange={(e) => setStatus(e.target.value)}
@@ -148,16 +159,7 @@ function AllStocks() {
             全部
           </label>
 
-          <label className="flex items-center gap-1 cursor-pointer">
-            <input
-              type="radio"
-              name="status"
-              value="ma4"
-              checked={status === "ma4"}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            ma4
-          </label>
+
 
         </div>
 

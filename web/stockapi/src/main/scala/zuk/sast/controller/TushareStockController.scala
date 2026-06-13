@@ -176,6 +176,12 @@ class TushareStockController {
    * @return
    */
   def getMa4(): java.util.List[StockResultJson] = {
+
+    //购买的股票
+    val buySet = getAllBuy()
+    //关注的股票
+    val attentionSet = getAllAttention()
+
     val list = this.stockMapper.selectAll().asScala
       .filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR))
       .groupBy(_.stockCode)
@@ -193,6 +199,15 @@ class TushareStockController {
         val tsStock = new TsStock()
         tsStock.ts_code = entity.stockCode
         resjson.eastmoneyURL = tsStock.getEastmoneyURL()
+
+        if (attentionSet.contains(resjson.ts_code)) {
+          resjson.attention = "已关注"
+        }
+        resjson.buy = ""
+        if (buySet.contains(resjson.ts_code)) {
+          resjson.buy = "已购买"
+        }
+
         resjson
       })
       .asJava
