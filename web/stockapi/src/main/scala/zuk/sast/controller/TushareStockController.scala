@@ -17,12 +17,20 @@ import java.text.SimpleDateFormat
 import java.util
 import java.util.concurrent.Executors
 import java.util.{Date, UUID}
+import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
 object TushareStockController {
   val attention_str: String = "attention" //关注
   val buy_str: String = "buy" //购买
   val eliminate_str: String = "eliminate" //淘汰
+}
+
+class TushareStockControllerDTO extends StockEntity {
+  @BeanProperty var eastmoneyURL: String = null
+  @BeanProperty var attention: String = null
+  @BeanProperty var buy: String = null
+  @BeanProperty var eliminate: String = null
 }
 
 /***
@@ -94,7 +102,7 @@ class TushareStockController {
   /***
    * 索取全部关注和购买的股票
    */
-  def getMy(): util.List[StockResultJson] = {
+  def getMy(): util.List[TushareStockControllerDTO] = {
 
     //购买的股票
     val buySet = getAllBuy()
@@ -107,19 +115,19 @@ class TushareStockController {
       tushareAllStocksCSVComponent.getTsStock(e)
     }).filter(!_.isEmpty)
       .map(e=>{
-        val stockResultJson = new StockResultJson
-        stockResultJson.ts_code = e.get.ts_code
-        stockResultJson.name = e.get.name
-        stockResultJson.eastmoneyURL = e.get.getEastmoneyURL()
-        stockResultJson.attention = ""
-        if (attentionSet.contains(stockResultJson.ts_code)) {
-          stockResultJson.attention = "已关注"
+        val dto = new TushareStockControllerDTO
+        dto.stockCode = e.get.ts_code
+        dto.name = e.get.name
+        dto.eastmoneyURL = e.get.getEastmoneyURL()
+        dto.attention = ""
+        if (attentionSet.contains(dto.stockCode)) {
+          dto.attention = "已关注"
         }
-        stockResultJson.buy = ""
-        if(buySet.contains(stockResultJson.ts_code)){
-          stockResultJson.buy = "已购买"
+        dto.buy = ""
+        if(buySet.contains(dto.stockCode)){
+          dto.buy = "已购买"
         }
-        stockResultJson
+        dto
       }).sortBy(e=>e.buy).reverse.asJava
 
     tsStockList
@@ -129,7 +137,7 @@ class TushareStockController {
    * 获取全部股票信息
    * @return
    */
-  private def getAll(desc: String): java.util.List[StockResultJson] = {
+  private def getAll(desc: String): java.util.List[TushareStockControllerDTO] = {
     val list = if (StringUtils.isNotBlank(desc)) {
       tushareAllStocksCSVComponent.getAll().filter(e => {
         e.ts_code.contains(desc) || e.name.contains(desc)
@@ -151,19 +159,19 @@ class TushareStockController {
     val buySet = getAllBuy()
 
     val convertRes = res.map(e => {
-      val stockResultJson = new StockResultJson
-      stockResultJson.ts_code = e.ts_code
-      stockResultJson.name = e.name
-      stockResultJson.eastmoneyURL = e.getEastmoneyURL()
-      stockResultJson.attention = ""
-      if (attentionSet.contains(stockResultJson.ts_code)) {
-        stockResultJson.attention = "已关注"
+      val dto = new TushareStockControllerDTO
+      dto.stockCode = e.ts_code
+      dto.name = e.name
+      dto.eastmoneyURL = e.getEastmoneyURL()
+      dto.attention = ""
+      if (attentionSet.contains(dto.stockCode)) {
+        dto.attention = "已关注"
       }
-      stockResultJson.buy = ""
-      if (buySet.contains(stockResultJson.ts_code)) {
-        stockResultJson.buy = "已购买"
+      dto.buy = ""
+      if (buySet.contains(dto.stockCode)) {
+        dto.buy = "已购买"
       }
-      stockResultJson
+      dto
     }).asJava
 
     convertRes
@@ -175,7 +183,7 @@ class TushareStockController {
    *
    * @return
    */
-  def getMa4(): java.util.List[StockResultJson] = {
+  def getMa4(): java.util.List[TushareStockControllerDTO] = {
 
     //购买的股票
     val buySet = getAllBuy()
@@ -193,22 +201,22 @@ class TushareStockController {
       })
       .toList.sortBy(_.createtime).reverse
       .map(entity=>{
-        val resjson = new StockResultJson
-        resjson.ts_code = entity.stockCode
-        resjson.name = entity.name
+        val dto = new TushareStockControllerDTO
+        dto.stockCode = entity.stockCode
+        dto.name = entity.name
         val tsStock = new TsStock()
         tsStock.ts_code = entity.stockCode
-        resjson.eastmoneyURL = tsStock.getEastmoneyURL()
-
-        if (attentionSet.contains(resjson.ts_code)) {
-          resjson.attention = "已关注"
+        dto.eastmoneyURL = tsStock.getEastmoneyURL()
+        dto.remark = entity.remark
+        if (attentionSet.contains(dto.stockCode)) {
+          dto.attention = "已关注"
         }
-        resjson.buy = ""
-        if (buySet.contains(resjson.ts_code)) {
-          resjson.buy = "已购买"
+        dto.buy = ""
+        if (buySet.contains(dto.stockCode)) {
+          dto.buy = "已购买"
         }
 
-        resjson
+        dto
       })
       .asJava
 

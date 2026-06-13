@@ -176,6 +176,7 @@ function AllStocks() {
               <th className="p-3 text-left">资金</th>
               <th className="p-3 text-left">代码</th>
               <th className="p-3 text-left">代码名称</th>
+              <th className="p-3 text-left">备注</th>
             </tr>
           </thead>
 
@@ -243,7 +244,7 @@ function AllStocks() {
                   </td>  
 
                   <td className="p-3">
-                    {item.ts_code}
+                    {item.stockCode}
                   </td>
 
                   <td className="p-3">
@@ -256,6 +257,10 @@ function AllStocks() {
                       {item.name}
                     </a>
                     
+                  </td>
+                  
+                  <td>
+                    {item.remark}
                   </td>
 
                 </tr>
