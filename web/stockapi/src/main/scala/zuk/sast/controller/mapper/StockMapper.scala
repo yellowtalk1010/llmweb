@@ -7,13 +7,14 @@ import java.util
 @Mapper
 trait StockMapper {
 
-  @Select(Array("SELECT id, stock_code, name, stock_type, createtime FROM stock"))
+  @Select(Array("SELECT id, stock_code, name, stock_type, createtime, remark FROM stock"))
   @Results(Array(
     new Result(property = "id", column = "id"),
     new Result(property = "stock_code", column = "stockCode"),
     new Result(property = "name", column = "name"),
     new Result(property = "stock_type", column = "stockType"),
     new Result(property = "createtime", column = "createtime"),
+    new Result(property = "remark", column = "remark")
   ))
   def selectAll(): util.List[StockEntity]
 
