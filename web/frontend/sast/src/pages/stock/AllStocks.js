@@ -184,7 +184,7 @@ function AllStocks() {
             {allStocksData.length > 0 ? (
               allStocksData.map((item, index) => (
                 <tr
-                  key={index}
+                  key={index+1}
                   className="border-b hover:bg-gray-50"
                 >
                   <td>{index}</td>    
