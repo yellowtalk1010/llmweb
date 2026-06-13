@@ -60,7 +60,8 @@ public class DatabaseInitializer {
                 stock_code VARCHAR(100),
                 name  VARCHAR(100),
                 stock_type VARCHAR(100),
-                createtime VARCHAR(100)
+                createtime VARCHAR(100),
+                remark TEXT
             )
             """;
         jdbcTemplate.execute(sql);
