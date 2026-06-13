@@ -184,10 +184,10 @@ function AllStocks() {
             {allStocksData.length > 0 ? (
               allStocksData.map((item, index) => (
                 <tr
-                  key={index+1}
+                  key={index}
                   className="border-b hover:bg-gray-50"
                 >
-                  <td>{index}</td>    
+                  <td>{index+1}</td>    
                   <td className="p-3">
                     {
                       item.buy?(
