@@ -217,7 +217,7 @@ public class WebServer implements Service {
     private static String generateSessionId() {
 //        byte[] buff = MathUtils.secureRandomBytes(16);
 //        return StringUtils.convertBytesToHex(buff);
-        String sessionId = "1234567890abcdef";
+        String sessionId = "31f6e75368954a14";
         System.out.println("生成sessionId:" + sessionId);
         return sessionId;
     }
