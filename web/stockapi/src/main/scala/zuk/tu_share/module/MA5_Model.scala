@@ -54,7 +54,7 @@ class MA5_Model extends IModel {
     }
   }
 
-  override def desc(): String = "日线、周线开口上扬"
+  override def desc(): String = "MA5_Model"
 
   override def winRate: Float = {
     val v = DataFrame.properties.get(classOf[MA3_3_Model].getSimpleName.toUpperCase)
