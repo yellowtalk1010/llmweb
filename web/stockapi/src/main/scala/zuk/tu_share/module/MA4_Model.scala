@@ -40,6 +40,9 @@ class MA4_Model extends IModel {
     if(ls.size == num
       && tsStock != null
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma5.floatValue())) //ma5是递增的
+      && ListOrderCheck.isDecreasing(list.map(_.ma.ma10.floatValue())) //ma10是递增的
+      && ListOrderCheck.isDecreasing(list.map(_.ma.ma20.floatValue())) //ma20是递增的
+      && ListOrderCheck.isDecreasing(list.map(_.ma.ma30.floatValue())) //ma30是递增的
     ){
       stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       stockDto.warningUpperShadow = super.upperShadow(days)
