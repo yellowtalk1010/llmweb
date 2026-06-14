@@ -209,10 +209,12 @@ class TusharePushStockController {
         map.put("time", s"${head.file.getName}")
         map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
         map.put("heads", e._2.filter(e=> {
-          !e.name.toUpperCase.contains("ST") && e.turnoverRate.toFloat >= 0.3
+          !e.name.toUpperCase.contains("ST")
+//            && e.turnoverRate.toFloat >= 0.3
         }).toList.asJava) //移除股票名称中带ST的股票
         map.put("histories", e._3.filter(e=> {
-          !e.name.toUpperCase.contains("ST") && e.turnoverRate.toFloat >= 0.3
+          !e.name.toUpperCase.contains("ST")
+//            && e.turnoverRate.toFloat >= 0.3
         }).sortBy(_.turnoverRate).reverse.asJava) //移除股票名称中带ST的股票
         map
       }).asJava
