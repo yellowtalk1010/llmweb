@@ -49,7 +49,8 @@ class TushareInitMA4ModelcCompont {
         if(!TushareInitMA4ModelcCompont.stockSet.contains(e.ts_code)){
           TushareInitMA4ModelcCompont.stockSet += e.ts_code
 
-          val allEntitys = this.stockMapper.selectAll().asScala.filter(e=>List(TushareInitMA4ModelcCompont.MA4_MODEL_STR, TushareInitMA4ModelcCompont.MA5_MODEL_STR).contains(e.stockType))
+          val allEntitys = this.stockMapper.selectAll().asScala
+            .filter(e=>List(TushareInitMA4ModelcCompont.MA4_MODEL_STR, TushareInitMA4ModelcCompont.MA5_MODEL_STR).contains(e.stockType))
 
           val dateStr = e.fileName.substring(0, 8)
           if (allEntitys.filter(entity => entity.stockCode.equals(e.ts_code) && entity.createtime.startsWith(dateStr)).size == 0) {
