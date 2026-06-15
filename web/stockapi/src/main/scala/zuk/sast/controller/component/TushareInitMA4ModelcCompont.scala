@@ -17,6 +17,7 @@ import scala.jdk.CollectionConverters.*
 object TushareInitMA4ModelcCompont {
   private val stockSet = new mutable.HashSet[String]
   val MA4_MODEL_STR: String = "MA4_MODEL"
+  val MA5_MODEL_STR: String = "MA5_MODEL"
 }
 
 @Component
@@ -68,20 +69,23 @@ class TushareInitMA4ModelcCompont {
   }
 
   /***
-   * 初始化历史 MA4_MODEL 模型生成的历史数据
+   * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
    */
-  def init_MA4_MODEL_HISTORY(): Unit = synchronized {
-    val file = new File("D:\\development\\github\\llmweb\\web\\MA4_MODEL.txt")
+  def init_MODEL_BACK_TEST_RESULT(): Unit = synchronized {
+    val file = new File("D:\\development\\github\\llmweb\\web\\MODEL_BACK_TEST_RESULT.txt")
     if(!file.exists()){
       log.info(s"${file.getAbsolutePath} 不存在")
       return
     }
     val lines = FileUtils.readLines(file, "UTF-8")
-    val allEntitys = this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR))
+    val modelSet = List(TushareInitMA4ModelcCompont.MA4_MODEL_STR, TushareInitMA4ModelcCompont.MA5_MODEL_STR).map(_.toUpperCase).toSet
+    val allEntitys = this.stockMapper.selectAll().asScala
+      .filter(e=>modelSet.contains(e.stockType.toUpperCase))
+
     lines.asScala.foreach(line=>{
-      println(s"ma4.line:${line}")
+      println(s"MODEL_BACK_TEST_RESULT.line:${line}")
       val arr = line.split(",").toList
-      if(arr.size>4){
+      if(arr.size>4 && modelSet.contains(arr(0).toUpperCase)){
         val stockType = arr(0)
         val stockCode = arr(1)
         val name = arr(2)
@@ -93,7 +97,7 @@ class TushareInitMA4ModelcCompont {
           stock.id = UUID.randomUUID().toString.replaceAll("-", "")
           stock.stockCode = stockCode.trim
           stock.name = name
-          stock.stockType = "MA4_MODEL"
+          stock.stockType = stockType.toUpperCase
           stock.createtime = time
           stockMapper.insert(stock)
         }
