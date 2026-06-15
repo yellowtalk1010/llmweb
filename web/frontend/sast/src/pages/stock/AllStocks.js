@@ -70,7 +70,8 @@ function AllStocks() {
 
       if (result.code === "success") {
         alert(result.desc);
-        window.location.reload(); // 简单刷新
+        // window.location.reload(); // 简单刷新
+        handleSearch()
       }
     } catch (e) {
       console.error(e);
@@ -95,7 +96,8 @@ function AllStocks() {
 
       if (result.code === "success") {
         alert(result.desc);
-        window.location.reload(); // 简单刷新
+        // window.location.reload(); // 简单刷新
+        handleSearch()
       }
     } catch (e) {
       console.error(e);
