@@ -12,7 +12,7 @@ function PushTushareStock() {
    * 下来菜单中选择项
    */
   const [modules, setModules] = useState([]);
-  const [selectedModule, setSelectedModule] = useState("MA4_Model");
+  const [selectedModule, setSelectedModule] = useState("ALL_MODEL");
 
   const fetchData = async (modType = "") => {
     try {
@@ -93,6 +93,7 @@ useEffect(() => {
           className="border rounded px-3 py-2"
         >
           {modules.map((item) => (
+            
             <option
               key={item.cls}
               value={item.cls}

@@ -124,18 +124,26 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("moduleList"))
   def moduleList(): util.Map[String, Object] = {
-    val list = PassFactory.moduleList().map(e=>{
+
+    var list = PassFactory.moduleList().map(e=>{
       val map = util.HashMap[String, String]()
       val cls = e.getClass.getSimpleName
       val name = e.desc()
       map.put("cls", cls)
       map.put("name", s"${cls}模型")
       map
-    }).asJava
-    log.info(s"模型类型列表：${list.asScala.map(JSONObject.toJSONString(_)).mkString("; ")}")
+    }).toBuffer
+
+    val allMap = new util.HashMap[String, String]()
+    allMap.put("cls", "ALL_MODEL")
+    allMap.put("name", "全部模型")
+
+    list += allMap
+
+    log.info(s"模型类型列表：${list.map(JSONObject.toJSONString(_)).mkString("; ")}")
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
-    map.put("data", list)
+    map.put("data", list.asJava)
     map
   }
 
