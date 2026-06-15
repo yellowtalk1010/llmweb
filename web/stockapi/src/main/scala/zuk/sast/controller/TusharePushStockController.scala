@@ -128,7 +128,8 @@ class TusharePushStockController {
       val map = util.HashMap[String, String]()
       val cls = e.getClass.getSimpleName
       val name = e.desc()
-      map.put(cls, name)
+      map.put("cls", cls)
+      map.put("name", s"${cls}模型")
       map
     }).asJava
     log.info(s"模型类型列表：${list.asScala.map(JSONObject.toJSONString(_)).mkString("; ")}")
@@ -139,7 +140,9 @@ class TusharePushStockController {
   }
 
   @GetMapping(value = Array("list"))
-  def list(tradedate: String): util.Map[String, Object] = {
+  def list(tradedate: String, modType: String): util.Map[String, Object] = {
+
+    log.info(s"选择模型:${modType}")
 
     val response = new util.HashMap[String, Object]()
     response.put("code", s"success")

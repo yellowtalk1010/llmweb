@@ -8,10 +8,16 @@ function PushTushareStock() {
   const [error, setError] = useState(null);
   const [expandedModules, setExpandedModules] = useState({});
 
-  const fetchData = async () => {
+  /**
+   * 下来菜单中选择项
+   */
+  const [modules, setModules] = useState([]);
+  const [selectedModule, setSelectedModule] = useState("MA4_Model");
+
+  const fetchData = async (modType = "") => {
     try {
       setLoading(true);
-      const response = await fetch("/push_stocks/list");
+      const response = await fetch("/push_stocks/list?modType=" + modType);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -27,21 +33,75 @@ function PushTushareStock() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, 10000);
-    return () => clearInterval(interval);
-  }, []);
+  /***
+   * 拉取模型类型数据
+   */
+  const fetchModules = async () => {
+  try {
+    const response = await fetch("/push_stocks/moduleList");
+
+    if (!response.ok) {
+      throw new Error("获取模块列表失败");
+    }
+
+    const result = await response.json();
+
+    if (result.code === "success") {
+      setModules(result.data || []);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+useEffect(() => {
+  fetchModules();
+}, []);
+
+useEffect(() => {
+
+  fetchData(selectedModule);
+
+  const interval = setInterval(() => {
+    fetchData(selectedModule);
+  }, 10000);
+
+  return () => clearInterval(interval);
+
+}, [selectedModule]);
 
   const toggleModule = (index) => {
     setExpandedModules((prev) => ({ ...prev, [index]: !prev[index] }));
   };
+
+ 
 
   return (
     <div className="p-6 space-y-6">
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
+
+      <div className="mb-4">
+        <label className="mr-2 font-medium">
+          模型：
+        </label>
+
+        <select
+          value={selectedModule}
+          onChange={(e) => setSelectedModule(e.target.value)}
+          className="border rounded px-3 py-2"
+        >
+          {modules.map((item) => (
+            <option
+              key={item.cls}
+              value={item.cls}
+            >
+              {item.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {data.map((moduleItem, index) => (
         <div

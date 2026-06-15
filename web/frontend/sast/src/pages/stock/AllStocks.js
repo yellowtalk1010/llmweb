@@ -69,7 +69,7 @@ function AllStocks() {
       const result = await response.json();
 
       if (result.code === "success") {
-        alert(result.desc);
+        // alert(result.desc);
         // window.location.reload(); // 简单刷新
         handleSearch()
       }
@@ -95,7 +95,7 @@ function AllStocks() {
       const result = await response.json();
 
       if (result.code === "success") {
-        alert(result.desc);
+        // alert(result.desc);
         // window.location.reload(); // 简单刷新
         handleSearch()
       }
