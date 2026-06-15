@@ -139,6 +139,17 @@ function AllStocks() {
             ma4
           </label>
 
+           <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="status"
+              value="ma5"
+              checked={status === "ma5"}
+              onChange={(e) => setStatus(e.target.value)}
+            />
+            ma5
+          </label>
+
           <label className="flex items-center gap-1 cursor-pointer">
             <input
               type="radio"

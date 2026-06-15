@@ -183,7 +183,7 @@ class TushareStockController {
    *
    * @return
    */
-  def getMa4(): java.util.List[TushareStockControllerDTO] = {
+  def getMa(maStr: String): java.util.List[TushareStockControllerDTO] = {
 
     //购买的股票
     val buySet = getAllBuy()
@@ -191,7 +191,7 @@ class TushareStockController {
     val attentionSet = getAllAttention()
 
     val list = this.stockMapper.selectAll().asScala
-      .filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR))
+      .filter(_.stockType.equals(maStr))
       .groupBy(_.stockCode)
       .map(e=>{
         val ls = e._2.toList.sortBy(_.createtime).reverse
@@ -238,7 +238,9 @@ class TushareStockController {
       case "all" =>
         this.getAll(desc)
       case "ma4" =>
-        this.getMa4()
+        this.getMa(TushareInitMA4ModelcCompont.MA4_MODEL_STR)
+      case "ma5" =>
+        this.getMa(TushareInitMA4ModelcCompont.MA5_MODEL_STR)
       case _=>
         new util.ArrayList[StockResultJson]()
     }
