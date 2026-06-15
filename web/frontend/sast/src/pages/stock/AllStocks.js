@@ -195,14 +195,14 @@ function AllStocks() {
                         <span>
                           {item.buy}
                           <button
-                            onClick={() => deleteStock(item.ts_code, "buy")}
+                            onClick={() => deleteStock(item.stockCode, "buy")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >移除</button>
                         </span>
                       ) : (
                         <span>
                           <button
-                            onClick={() => addStock(item.ts_code, "buy")}
+                            onClick={() => addStock(item.stockCode, "buy")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >购买</button>
                         </span>
@@ -215,7 +215,7 @@ function AllStocks() {
                         <span>
                           {item.attention}
                           <button
-                            onClick={() => deleteStock(item.ts_code, "attention")}
+                            onClick={() => deleteStock(item.stockCode, "attention")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >移除</button>
                         </span>
