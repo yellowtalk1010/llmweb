@@ -13,6 +13,7 @@ import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitM
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
+import zuk.tu_share.pass.PassFactory
 
 import java.io.File
 import java.nio.charset.Charset
@@ -123,7 +124,17 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("moduleList"))
   def moduleList(): util.Map[String, Object] = {
+    val list = PassFactory.moduleList().map(e=>{
+      val map = util.HashMap[String, String]()
+      val cls = e.getClass.getSimpleName
+      val name = e.desc()
+      map.put(cls, name)
+      map
+    }).asJava
+    log.info(s"模型类型列表：${list.asScala.map(JSONObject.toJSONString(_)).mkString("; ")}")
     val map = new util.HashMap[String, Object]()
+    map.put("code", "success")
+    map.put("data", list)
     map
   }
 
