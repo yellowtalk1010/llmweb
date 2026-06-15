@@ -138,7 +138,7 @@ class TusharePushStockController {
     allMap.put("cls", "ALL_MODEL")
     allMap.put("name", "全部模型")
 
-    list += allMap
+    list.prepend(allMap)
 
     log.info(s"模型类型列表：${list.map(JSONObject.toJSONString(_)).mkString("; ")}")
     val map = new util.HashMap[String, Object]()
@@ -151,6 +151,13 @@ class TusharePushStockController {
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
     log.info(s"选择模型:${modType}")
+
+    val modSet = if(PassFactory.moduleList().map(_.getClass.getSimpleName).contains(modType)) {
+      Array(modType).toSet
+    }
+    else {
+      PassFactory.moduleList().map(_.getClass.getSimpleName).toSet
+    }
 
     val response = new util.HashMap[String, Object]()
     response.put("code", s"success")
@@ -178,12 +185,19 @@ class TusharePushStockController {
         }).sortBy(_.modWinRate).reverse
       })
 
-      val modWinRateClsNames = stockResultJsonList.flatMap(e=>e).groupBy(_.modClsName).map(e=>(e._1, e._2.toList.head)).toList.sortBy(_._2.modWinRate).reverse.map(e=>(e._1, e._2.modWinRate))
+      val modWinRateClsNames = stockResultJsonList.flatMap(e=>e)
+        .groupBy(_.modClsName)
+        .filter(e=>modSet.map(_.toUpperCase).contains(e._1.toUpperCase))
+        .map(e=>(e._1, e._2.toList.head)).toList
+        .sortBy(_._2.modWinRate).reverse
+        .map(e=>(e._1, e._2.modWinRate))
+
       log.info(s"胜率：${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("; ")}")
 
       val heads = stockResultJsonList.head
       val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
+      //保存MA4_MODEL模型数据
       tushareInitMA4ModelcCompont.add_MA4_MODEL(heads.toList ++ histories.toList)
 
       val pushStocks = modWinRateClsNames.map(_._1).map(clsName=>{
