@@ -116,6 +116,17 @@ class TusharePushStockController {
     file
   }
 
+
+  /***
+   * 获取模型列表
+   * @return
+   */
+  @GetMapping(value = Array("moduleList"))
+  def moduleList(): util.Map[String, Object] = {
+    val map = new util.HashMap[String, Object]()
+    map
+  }
+
   @GetMapping(value = Array("list"))
   def list(tradedate: String): util.Map[String, Object] = {
 
