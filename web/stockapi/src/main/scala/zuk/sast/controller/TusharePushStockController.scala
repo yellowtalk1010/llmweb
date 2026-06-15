@@ -130,7 +130,7 @@ class TusharePushStockController {
       val cls = e.getClass.getSimpleName
       val name = e.desc()
       map.put("cls", cls)
-      map.put("name", s"${e.desc()}")
+      map.put("name", s"${cls}：${e.desc()}")
       map
     }).toBuffer
 
