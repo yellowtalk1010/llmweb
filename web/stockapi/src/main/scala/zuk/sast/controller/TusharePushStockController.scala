@@ -59,18 +59,15 @@ class TusharePushStockController {
       System.exit(1)
     }
 
-//    refreshEasymoney()
+//    autoRefreshEasymoney()
 //    tushareInitMA4ModelcCompont.init_MA4_MODEL_HISTORY()
 
   }
 
-
-
-
   /***
-   * 刷新东方财富网址
+   * 自动刷新东方财富网址
    */
-  private def refreshEasymoney(): Unit = {
+  private def autoRefreshEasymoney(): Unit = {
 
     Executor_Service.execute(()=>{
 
