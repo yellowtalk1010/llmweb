@@ -223,7 +223,7 @@ function AllStocks() {
                       :(
                         <span>
                           <button
-                            onClick={() => addStock(item.ts_code, "attention")}
+                            onClick={() => addStock(item.stockCode, "attention")}
                             className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >关注</button>
 
@@ -234,7 +234,7 @@ function AllStocks() {
 
                   <td className="p-2">
                       <a
-                        href={`/pages/Moneyflow?tsCode=${item.ts_code}`}
+                        href={`/pages/Moneyflow?tsCode=${item.stockCode}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 underline cursor-pointer"
