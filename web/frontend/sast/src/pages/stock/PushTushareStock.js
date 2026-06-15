@@ -142,7 +142,10 @@ useEffect(() => {
           {moduleItem.heads && moduleItem.heads.length > 0 && (
             <div className="mb-4">
               <h3 className="font-medium mb-2">最新信号</h3>
-              <StockTable list={moduleItem.heads} />
+              <StockTable 
+                list={moduleItem.heads} 
+                refresh={() => fetchData(selectedModule)}
+              />
             </div>
           )}
 
@@ -150,7 +153,10 @@ useEffect(() => {
           {expandedModules[index] && moduleItem.histories && moduleItem.histories.length > 0 && (
             <div>
               <h3 className="font-medium mb-2">历史记录</h3>
-              <StockTable list={moduleItem.histories} />
+              <StockTable 
+                list={moduleItem.histories} 
+                refresh={() => fetchData(selectedModule)}
+              />
             </div>
           )}
         </div>
@@ -160,7 +166,7 @@ useEffect(() => {
   );
 }
 
-function StockTable({ list }) {
+function StockTable({ list, refresh  }) {
 
   /***
    * 删除关注
@@ -181,8 +187,11 @@ function StockTable({ list }) {
       const result = await response.json();
 
       if (result.code === "success") {
-        alert(result.desc);
-        window.location.reload(); // 简单刷新
+        // alert(result.desc);
+        // window.location.reload(); // 简单刷新
+        if (refresh) {
+          refresh();
+        }
       }
     } catch (e) {
       console.error(e);
@@ -209,8 +218,11 @@ function StockTable({ list }) {
       const result = await response.json();
 
       if (result.code === "success") {
-        alert(result.desc);
-        window.location.reload(); // 简单刷新
+        // alert(result.desc);
+        // window.location.reload(); // 简单刷新
+        if (refresh) {
+          refresh();
+        }
       }
     } catch (e) {
       console.error(e);
