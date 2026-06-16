@@ -245,6 +245,9 @@ class TusharePushStockController {
           if(e.ts_code.startsWith("688")){
             e.name = e.name + "【科创】"
           }
+          else if (e.ts_code.startsWith("920")) {
+            e.name = s"${e.name}【北交所】"
+          }
           if(allAttentionCodes.contains(e.ts_code)){
             e.attention = "已关注"
           }
