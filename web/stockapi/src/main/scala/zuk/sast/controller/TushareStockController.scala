@@ -121,6 +121,9 @@ class TushareStockController {
         dto.stockCode = e.get.ts_code
         val codeList = ma5List.filter(_.stockCode.equals(e.get.ts_code)).sortBy(_.createtime).reverse
         dto.name = if(codeList.size==0) e.get.name else s"${e.get.name}【${codeList.size}次】${codeList.head.createtime}"
+        if(dto.stockCode.startsWith("688")){
+          dto.name = s"${dto.name}【科创】"
+        }
         dto.eastmoneyURL = e.get.getEastmoneyURL()
         dto.attention = ""
         if (attentionSet.contains(dto.stockCode)) {
@@ -207,6 +210,9 @@ class TushareStockController {
         val dto = new TushareStockControllerDTO
         dto.stockCode = entity.stockCode
         dto.name = entity.name
+        if(dto.stockCode.startsWith("688")){
+          dto.name = s"${dto.name}【科创】"
+        }
         val tsStock = new TsStock()
         tsStock.ts_code = entity.stockCode
         dto.eastmoneyURL = tsStock.getEastmoneyURL()

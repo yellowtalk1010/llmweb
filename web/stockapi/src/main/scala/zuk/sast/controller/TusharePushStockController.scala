@@ -242,6 +242,9 @@ class TusharePushStockController {
       val maplist = pushStocks.map(e=>{
 
         (e._2 ++ e._3).foreach(e=>{
+          if(e.ts_code.startsWith("688")){
+            e.name = e.name + "【科创】"
+          }
           if(allAttentionCodes.contains(e.ts_code)){
             e.attention = "已关注"
           }
