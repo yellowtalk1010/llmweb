@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 import zuk.sast.controller.TushareStockController.eliminate_str
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelcCompont}
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -111,7 +111,7 @@ class TushareStockController {
     val sets = buySet ++ attentionSet
 
     //ma4次数
-    val ma5List = this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA5_MODEL_STR))
+    val ma5List = this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
       tushareAllStocksCSVComponent.getTsStock(e)
@@ -241,9 +241,9 @@ class TushareStockController {
       case "all" =>
         this.getAll(desc)
       case "ma4" =>
-        this.getMa(TushareInitMA4ModelcCompont.MA4_MODEL_STR)
+        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)
       case "ma5" =>
-        this.getMa(TushareInitMA4ModelcCompont.MA5_MODEL_STR)
+        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)
       case _=>
         new util.ArrayList[StockResultJson]()
     }

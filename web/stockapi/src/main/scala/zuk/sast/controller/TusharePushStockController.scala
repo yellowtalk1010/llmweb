@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelcCompont}
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -43,7 +43,7 @@ class TusharePushStockController {
   private var tushareStockController: TushareStockController = null
 
   @Autowired
-  private var tushareInitMA4ModelcCompont: TushareInitMA4ModelcCompont = _
+  private var tushareInitMA4ModelMA5ModelComponent: TushareInitMA4ModelMA5ModelComponent = _
 
   /***
    * 获取application.properties中的数据，股票json结果路径
@@ -61,7 +61,7 @@ class TusharePushStockController {
     }
 
 //    autoRefreshEasymoney()
-//    tushareInitMA4ModelcCompont.init_MODEL_BACK_TEST_RESULT()
+//    tushareInitMA4ModelMA5ModelComponent.init_MODEL_BACK_TEST_RESULT()
 
   }
 
@@ -198,7 +198,7 @@ class TusharePushStockController {
       val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
       //保存MA4_MODEL模型数据
-      tushareInitMA4ModelcCompont.add_MA4_MODEL(heads.toList ++ histories.toList)
+      tushareInitMA4ModelMA5ModelComponent.add_MA4_MA5_MODEL(heads.toList ++ histories.toList)
 
       val pushStocks = modWinRateClsNames.map(_._1).map(clsName=>{
         //最新数据
@@ -219,7 +219,7 @@ class TusharePushStockController {
       })
 
       //获取MA4_MODEL分析到的股票代码
-      val stockModel4EntityList = tushareInitMA4ModelcCompont.get_MD4_MODEL_LIST()
+      val stockModel4EntityList = tushareInitMA4ModelMA5ModelComponent.get_MD4_MODEL_LIST()
       val ma4Set = pushStocks.filter(_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).map(e=>{
         e.name = s"${e.name}【${stockModel4EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
         e.ts_code
@@ -229,7 +229,7 @@ class TusharePushStockController {
         e.name = s"${e.name}【击中MA4】"
       })
 
-      val stockModel5EntityList = tushareInitMA4ModelcCompont.get_MD5_MODEL_LIST()
+      val stockModel5EntityList = tushareInitMA4ModelMA5ModelComponent.get_MD5_MODEL_LIST()
       val ma5Set = pushStocks.filter(_._1.equals("MA5_MODEL")).flatMap(e => e._2 ++ e._3).map(e => {
         e.name = s"${e.name}【${stockModel5EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
         e.ts_code

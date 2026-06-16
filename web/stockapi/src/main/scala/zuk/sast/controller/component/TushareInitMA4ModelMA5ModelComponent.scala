@@ -14,43 +14,43 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
-object TushareInitMA4ModelcCompont {
+object TushareInitMA4ModelMA5ModelComponent {
   private val stockSet = new mutable.HashSet[String]
   val MA4_MODEL_STR: String = "MA4_MODEL"
   val MA5_MODEL_STR: String = "MA5_MODEL"
 }
 
 @Component
-class TushareInitMA4ModelcCompont {
+class TushareInitMA4ModelMA5ModelComponent {
 
-  private val log = LoggerFactory.getLogger(classOf[TushareInitMA4ModelcCompont])
+  private val log = LoggerFactory.getLogger(classOf[TushareInitMA4ModelMA5ModelComponent])
 
   @Autowired
   private var stockMapper: StockMapper = _
 
 
   def get_MD4_MODEL_LIST(): List[StockEntity] = synchronized {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR)).toList
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)).toList
   }
 
   def get_MD5_MODEL_LIST(): List[StockEntity] = synchronized {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA5_MODEL_STR)).toList
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)).toList
   }
 
   /***
    * 添加推荐数据
    * @param list
    */
-  def add_MA4_MODEL(list: List[StockResultJson]): Unit = synchronized {
+  def add_MA4_MA5_MODEL(list: List[StockResultJson]): Unit = synchronized {
 
     try {
-      list.filter(_.modClsName.equals(TushareInitMA4ModelcCompont.MA4_MODEL_STR)).map(e=>{
+      list.filter(_.modClsName.equals(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)).map(e=>{
 
-        if(!TushareInitMA4ModelcCompont.stockSet.contains(e.ts_code)){
-          TushareInitMA4ModelcCompont.stockSet += e.ts_code
+        if(!TushareInitMA4ModelMA5ModelComponent.stockSet.contains(e.ts_code)){
+          TushareInitMA4ModelMA5ModelComponent.stockSet += e.ts_code
 
           val allEntitys = this.stockMapper.selectAll().asScala
-            .filter(e=>List(TushareInitMA4ModelcCompont.MA4_MODEL_STR, TushareInitMA4ModelcCompont.MA5_MODEL_STR).contains(e.stockType))
+            .filter(e=>List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(e.stockType))
 
           val dateStr = e.fileName.substring(0, 8)
           if (allEntitys.filter(entity => entity.stockCode.equals(e.ts_code) && entity.createtime.startsWith(dateStr)).size == 0) {
@@ -58,7 +58,7 @@ class TushareInitMA4ModelcCompont {
             val entity = new StockEntity
             entity.id = UUID.randomUUID().toString.replaceAll("-", "")
             entity.stockCode = e.ts_code
-            entity.stockType = TushareInitMA4ModelcCompont.MA4_MODEL_STR
+            entity.stockType = TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR
             entity.name = e.name
             entity.createtime = dateStr
 
@@ -83,7 +83,7 @@ class TushareInitMA4ModelcCompont {
       return
     }
     val lines = FileUtils.readLines(file, "UTF-8")
-    val modelSet = List(TushareInitMA4ModelcCompont.MA4_MODEL_STR, TushareInitMA4ModelcCompont.MA5_MODEL_STR).map(_.toUpperCase).toSet
+    val modelSet = List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).map(_.toUpperCase).toSet
     val allEntitys = this.stockMapper.selectAll().asScala
       .filter(e=>modelSet.contains(e.stockType.toUpperCase))
 
