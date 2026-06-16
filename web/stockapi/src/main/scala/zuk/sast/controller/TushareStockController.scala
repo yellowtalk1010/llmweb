@@ -108,8 +108,10 @@ class TushareStockController {
     val buySet = getAllBuy()
     //关注的股票
     val attentionSet = getAllAttention()
-
     val sets = buySet ++ attentionSet
+
+    //ma4次数
+    val ma5List = this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelcCompont.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
       tushareAllStocksCSVComponent.getTsStock(e)
@@ -117,7 +119,8 @@ class TushareStockController {
       .map(e=>{
         val dto = new TushareStockControllerDTO
         dto.stockCode = e.get.ts_code
-        dto.name = e.get.name
+        val size = ma5List.filter(_.stockCode.equals(e.get.ts_code)).size
+        dto.name = if(size==0) e.get.name else s"${e.get.name}【${size}次】"
         dto.eastmoneyURL = e.get.getEastmoneyURL()
         dto.attention = ""
         if (attentionSet.contains(dto.stockCode)) {
