@@ -8,7 +8,8 @@ import java.util
 trait StockMapper {
 
   @Select(Array("SELECT id, stock_code, name, stock_type, createtime, remark FROM stock"))
-  @Results(Array(
+  @Results(id = "stockResultMap",
+    value = Array(
     new Result(property = "id", column = "id"),
     new Result(property = "stock_code", column = "stockCode"),
     new Result(property = "name", column = "name"),
@@ -19,14 +20,7 @@ trait StockMapper {
   def selectAll(): util.List[StockEntity]
 
   @Select(Array("SELECT id, stock_code, name, stock_type, createtime, remark FROM stock WHERE createtime = #{createtime}"))
-  @Results(Array(
-    new Result(property = "id", column = "id"),
-    new Result(property = "stock_code", column = "stockCode"),
-    new Result(property = "name", column = "name"),
-    new Result(property = "stock_type", column = "stockType"),
-    new Result(property = "createtime", column = "createtime"),
-    new Result(property = "remark", column = "remark")
-  ))
+  @ResultMap(Array("stockResultMap")) //共用selectAll的返回
   def select_MA4_MA5_By_Createtime(@Param("createtime") createtime: String): util.List[StockEntity]
 
   @Insert(Array("INSERT INTO stock(id, stock_code, name, stock_type, createtime) VALUES (#{id}, #{stockCode}, #{name}, #{stockType}, #{createtime})"))
