@@ -1,16 +1,19 @@
 package zuk.tu_share.backtest
 
+import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.DataFrame.config_properties
 import zuk.tu_share.module.IModel
 import zuk.utils.SendMail
 
-import java.io.FileOutputStream
+import java.io.{File, FileOutputStream}
 import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
 import java.util.Date
 import scala.collection.mutable.ListBuffer
+
+import scala.jdk.CollectionConverters.*
 
 object BackTest {
 
@@ -91,6 +94,7 @@ object BackTest {
     })
 
     storeProperties()
+    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), lines.asJava)
     sendMail(lines.mkString("<br>\n"))
 
   }
