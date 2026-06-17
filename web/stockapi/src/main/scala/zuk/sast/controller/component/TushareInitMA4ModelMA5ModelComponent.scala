@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import zuk.sast.controller.StockResultJson
+import zuk.sast.controller.component.TushareInitMA4ModelMA5ModelComponent.{MA4_MODEL_STR, MA5_MODEL_STR}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -33,7 +34,7 @@ class TushareInitMA4ModelMA5ModelComponent {
 
   private val log = LoggerFactory.getLogger(classOf[TushareInitMA4ModelMA5ModelComponent])
 
-//  private val excecute: ExecutorService = Executors.newSingleThreadExecutor()
+  private val excecute: ExecutorService = Executors.newSingleThreadExecutor()
 
   @Autowired
   private var stockMapper: StockMapper = _
@@ -52,42 +53,44 @@ class TushareInitMA4ModelMA5ModelComponent {
 
   @PostConstruct
   def init(): Unit = {
-//    excecute.execute(()=>{
-//      log.info("启动队列处理程序")
-//      while (true){
-//        try {
-//          val ele = TushareInitMA4ModelMA5ModelComponent.queue.poll() //从队列中取元素，如果为空，则等待
-//          if(ele==null){
-//            Thread.sleep(1000)
-//          }
-//          else {
-//            val dateStr = ele.fileName.substring(0, 8)
-//            if (TushareInitMA4ModelMA5ModelComponent.stockEntityList.isEmpty) {
-//              TushareInitMA4ModelMA5ModelComponent.stockEntityList ++= this.stockMapper.select_MA4_MA5_create(dateStr).asScala.toList
-//            }
-//            val resList = TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(e => e.stockType.equals(ele.modClsName.toUpperCase) && e.createtime.equals(dateStr))
-//            if (resList.size == 0) {
-//              val entity = new StockEntity
-//              entity.id = UUID.randomUUID().toString.replaceAll("-", "")
-//              entity.stockCode = ele.ts_code
-//              entity.stockType = ele.modClsName.toUpperCase
-//              entity.name = tushareAllStocksCSVComponent.getTsStock(ele.ts_code).getOrElse(new TsStock).name
-//              entity.createtime = dateStr
-//              this.stockMapper.insert(entity)
-//
-//              log.info(s"\n处理队列元素：${JSONObject.toJSONString(ele)}")
-//              TushareInitMA4ModelMA5ModelComponent.stockEntityList.clear()
-//            }
-//          }
-//
-//        }
-//        catch {
-//          case exception: Exception =>
-//            exception.printStackTrace()
-//            log.error(exception.getMessage)
-//        }
-//      }
-//    })
+    excecute.execute(()=>{
+      log.info("启动队列处理程序")
+      while (true) {
+        try {
+          deleteRepeatMA4_MA5()
+          Thread.sleep(5000)
+        }
+        catch {
+          case exception: Exception => exception.printStackTrace()
+        }
+      }
+    })
+  }
+
+  /***
+   * 删除ma4，ma5在同日期中的相同元素
+   */
+  private def deleteRepeatMA4_MA5() = {
+    this.stockMapper.selectAll().asScala.filter(e => List(MA4_MODEL_STR).contains(e.stockType))
+      .groupBy(_.createtime)
+      .map(_._2.toList)
+      .foreach(ls => {
+        ls.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2.last).foreach(e => {
+          log.info(s"删除${MA4_MODEL_STR}中${e.createtime}重复元素：${JSONObject.toJSONString(e, Feature.LargeObject)}")
+          this.stockMapper.deleteById(e.id)
+        })
+      })
+
+    this.stockMapper.selectAll().asScala.filter(e => List(MA5_MODEL_STR).contains(e.stockType))
+      .groupBy(_.createtime)
+      .map(_._2.toList)
+      .foreach(ls => {
+        ls.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2.last).foreach(e => {
+          log.info(s"删除${MA5_MODEL_STR}中${e.createtime}重复元素：${JSONObject.toJSONString(e, Feature.LargeObject)}")
+          this.stockMapper.deleteById(e.id)
+        })
+      })
+
   }
 
   /***
