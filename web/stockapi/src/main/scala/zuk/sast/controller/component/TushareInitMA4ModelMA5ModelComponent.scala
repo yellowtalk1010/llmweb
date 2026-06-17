@@ -22,7 +22,7 @@ import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object TushareInitMA4ModelMA5ModelComponent {
-  private var stockEntityList = new ConcurrentHashMap[String, java.util.List[StockEntity]]()
+  private val CacheStockEntityMap = new ConcurrentHashMap[String, java.util.List[StockEntity]]()
   val MA4_MODEL_STR: String = "MA4_MODEL"
   val MA5_MODEL_STR: String = "MA5_MODEL"
 
@@ -74,7 +74,7 @@ class TushareInitMA4ModelMA5ModelComponent {
    * 删除ma4，ma5在同日期中的相同元素
    */
   private def deleteRepeatMA4_MA5() = {
-    log.info("删除ma4，ma5在同日期中的相同元素")
+    log.info("删除ma4在同日期中的相同元素")
     this.stockMapper.selectAll().asScala.filter(e => List(MA4_MODEL_STR).contains(e.stockType))
       .groupBy(_.createtime)
       .map(_._2.toList)
@@ -85,6 +85,7 @@ class TushareInitMA4ModelMA5ModelComponent {
         })
       })
 
+    log.info("删除ma5在同日期中的相同元素")
     this.stockMapper.selectAll().asScala.filter(e => List(MA5_MODEL_STR).contains(e.stockType))
       .groupBy(_.createtime)
       .map(_._2.toList)
@@ -110,15 +111,16 @@ class TushareInitMA4ModelMA5ModelComponent {
         val stockType = stockResult.modClsName.toUpperCase
         val dateStr = stockResult.fileName.substring(0, 8)
 
-        if(TushareInitMA4ModelMA5ModelComponent.stockEntityList.get(dateStr)==null){
-          TushareInitMA4ModelMA5ModelComponent.stockEntityList.put(dateStr, this.stockMapper.select_MA4_MA5_create(dateStr))
+        if(TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr)==null){
+          //写入缓存
+          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
         }
-        val list = TushareInitMA4ModelMA5ModelComponent.stockEntityList.get(dateStr).asScala
+        val list = TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr).asScala
           .filter(entity=>{
             entity.stockCode.equals(stockCode) && entity.stockType.equals(stockType)
           }).toList
 
-        if(list.size==0 && this.stockMapper.select_MA4_MA5_create(dateStr).asScala.filter(e=>e.stockCode.equals(stockCode) && e.stockType.equals(stockType) && e.createtime.equals(dateStr)).size == 0){
+        if(list.size==0 && this.stockMapper.select_MA4_MA5_By_Createtime(dateStr).asScala.filter(e=>e.stockCode.equals(stockCode) && e.stockType.equals(stockType) && e.createtime.equals(dateStr)).size == 0){
           val entity = new StockEntity
           entity.id = UUID.randomUUID().toString.replaceAll("-", "")
           entity.stockCode = stockCode
@@ -128,7 +130,7 @@ class TushareInitMA4ModelMA5ModelComponent {
           this.stockMapper.insert(entity)
           //更新缓存
           log.info(s"写入推荐MA4,MA5数据：${JSONObject.toJSONString(entity, Feature.LargeObject)}")
-          TushareInitMA4ModelMA5ModelComponent.stockEntityList.put(dateStr, this.stockMapper.select_MA4_MA5_create(dateStr))
+          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
         }
       })
 

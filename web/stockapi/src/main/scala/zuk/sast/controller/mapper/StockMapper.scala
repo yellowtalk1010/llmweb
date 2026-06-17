@@ -27,7 +27,7 @@ trait StockMapper {
     new Result(property = "createtime", column = "createtime"),
     new Result(property = "remark", column = "remark")
   ))
-  def select_MA4_MA5_create(@Param("createtime") createtime: String): util.List[StockEntity]
+  def select_MA4_MA5_By_Createtime(@Param("createtime") createtime: String): util.List[StockEntity]
 
   @Insert(Array("INSERT INTO stock(id, stock_code, name, stock_type, createtime) VALUES (#{id}, #{stockCode}, #{name}, #{stockType}, #{createtime})"))
   def insert(stock: StockEntity): Int
