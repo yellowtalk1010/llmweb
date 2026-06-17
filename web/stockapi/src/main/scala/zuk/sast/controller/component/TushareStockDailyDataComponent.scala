@@ -31,15 +31,16 @@ case class StockDailyData() {
 object TushareStockDailyDataComponent {
   val StockEntityMap = new ConcurrentHashMap[String, StockEntity]()
   val StockDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
-  private val DAY_NUM = 60
+  private val DAY_NUM = 60 //过去6个交易日
 
-  def increateRate(stockCode: String): String = {
+  def getIncreateRate(stockCode: String): String = {
     if(StockDailyDataMap.get(stockCode)!=null){
       val list = StockDailyDataMap.get(stockCode)
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
-      val head = new BigDecimal(ls.head.close)
-      val last = new BigDecimal(ls.last.close)
-      last.divide(head, 2, RoundingMode.DOWN).toString
+      val head = ls.head
+      val lowest = ls.slice(1, ls.size).sortBy(_.close.toFloat).reverse.last
+      val rate = new BigDecimal(head.close).divide(new BigDecimal(lowest.close), 2, RoundingMode.DOWN).toString
+      s"【较${lowest.trade_date}低位${rate}】"
     }
     else {
       ""

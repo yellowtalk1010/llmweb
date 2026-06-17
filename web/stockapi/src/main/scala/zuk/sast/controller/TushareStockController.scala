@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 import zuk.sast.controller.TushareStockController.eliminate_str
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent}
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -127,6 +127,7 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
+        dto.remark = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.eastmoneyURL = e.get.getEastmoneyURL()
         dto.attention = ""
         if (attentionSet.contains(dto.stockCode)) {
@@ -219,10 +220,11 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
+        dto.remark = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         val tsStock = new TsStock()
         tsStock.ts_code = entity.stockCode
         dto.eastmoneyURL = tsStock.getEastmoneyURL()
-        dto.remark = entity.remark
+        dto.remark = dto.remark + entity.remark
         if (attentionSet.contains(dto.stockCode)) {
           dto.attention = "已关注"
         }
