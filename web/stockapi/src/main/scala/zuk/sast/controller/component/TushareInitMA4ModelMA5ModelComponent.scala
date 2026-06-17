@@ -53,24 +53,28 @@ class TushareInitMA4ModelMA5ModelComponent {
 
   @PostConstruct
   def init(): Unit = {
-    excecute.execute(()=>{
-      log.info("启动队列处理程序")
-      while (true) {
-        try {
-          deleteRepeatMA4_MA5()
-          Thread.sleep(5000)
-        }
-        catch {
-          case exception: Exception => exception.printStackTrace()
-        }
-      }
-    })
+
+    deleteRepeatMA4_MA5()
+
+//    excecute.execute(()=>{
+//      log.info("启动队列处理程序")
+//      while (true) {
+//        try {
+//          deleteRepeatMA4_MA5()
+//          Thread.sleep(5000)
+//        }
+//        catch {
+//          case exception: Exception => exception.printStackTrace()
+//        }
+//      }
+//    })
   }
 
   /***
    * 删除ma4，ma5在同日期中的相同元素
    */
   private def deleteRepeatMA4_MA5() = {
+    log.info("删除ma4，ma5在同日期中的相同元素")
     this.stockMapper.selectAll().asScala.filter(e => List(MA4_MODEL_STR).contains(e.stockType))
       .groupBy(_.createtime)
       .map(_._2.toList)
