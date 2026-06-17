@@ -19,7 +19,9 @@ trait StockMapper {
   ))
   def selectAll(): util.List[StockEntity]
 
-  @Select(Array("SELECT id, stock_code, name, stock_type, createtime, remark FROM stock WHERE createtime = #{createtime}"))
+  @Select(Array("SELECT id, stock_code, name, stock_type, createtime, remark " +
+    " FROM stock " +
+    " WHERE stock_type in ('MA4_MODEL', 'MA5_MODEL') and  createtime = #{createtime}"))
   @ResultMap(Array("stockResultMap")) //共用selectAll的返回
   def select_MA4_MA5_By_Createtime(@Param("createtime") createtime: String): util.List[StockEntity]
 
