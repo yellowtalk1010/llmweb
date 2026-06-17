@@ -76,6 +76,7 @@ class TushareStockDailyDataComponent {
     executor.execute(()=>{
       while (true){
         refresh_MA4_MA5_Stockentity()
+        log.info(s"\n${TushareStockDailyDataComponent.StockEntityMap.asScala.map(e=>s"${e._2.stockCode},${e._2.name},${e._2.createtime}").mkString("\n")}")
         refresh_stock_daily_data()
         Thread.sleep(5000)
       }
@@ -87,10 +88,11 @@ class TushareStockDailyDataComponent {
       log.info(s"股票基本数据路径：${stock_daily_data_path}")
       val today = LocalDate.now()
       val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd")
-      for (i <- 0 until 7) {
+      for (i <- 0 until 14) {
         val date = today.minusDays(i) //从今天开始往回测7天
         val dateStr = date.format(dateFormat)
         val list = this.stockMapper.select_MA4_MA5_By_Createtime(dateStr)
+        println(s"${list.size()}")
         list.forEach(e => {
           TushareStockDailyDataComponent.StockEntityMap.put(e.stockCode, e)
         })

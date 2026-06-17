@@ -170,9 +170,9 @@ class TushareInitMA4ModelMA5ModelComponent {
           val stock = new StockEntity
           stock.id = UUID.randomUUID().toString.replaceAll("-", "")
           stock.stockCode = stockCode.trim
-          stock.name = name
-          stock.stockType = stockType.toUpperCase
-          stock.createtime = time
+          stock.name = name.trim
+          stock.stockType = stockType.toUpperCase.trim
+          stock.createtime = time.trim
           stockMapper.insert(stock)
         }
         else {
