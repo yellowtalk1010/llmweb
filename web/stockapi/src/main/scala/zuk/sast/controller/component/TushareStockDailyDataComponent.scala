@@ -38,9 +38,11 @@ object TushareStockDailyDataComponent {
       val list = StockDailyDataMap.get(stockCode)
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
       val head = ls.head
-      val lowest = ls.slice(1, ls.size).sortBy(_.close.toFloat).reverse.last
-      val rate = new BigDecimal(head.close).divide(new BigDecimal(lowest.close), 2, RoundingMode.DOWN).toString
-      s"【较${lowest.trade_date}低位${rate}】"
+      val lowest = ls.sortBy(_.close.toFloat).reverse.last //过去60个交易日最低价
+      val highest = ls.sortBy(_.close.toFloat).last //过去60个交易日最高价
+      val lowRate = new BigDecimal(head.close).divide(new BigDecimal(lowest.close), 2, RoundingMode.DOWN).toString
+      val hightRate = new BigDecimal(head.close).divide(new BigDecimal(highest.close), 2, RoundingMode.DOWN).toString
+      s"【${head.close}】【较${lowest.trade_date}低位${lowRate}】【较${highest.trade_date}高位${hightRate}】"
     }
     else {
       ""
@@ -76,7 +78,7 @@ class TushareStockDailyDataComponent {
     executor.execute(()=>{
       while (true){
         refresh_MA4_MA5_Stockentity()
-        log.info(s"\n${TushareStockDailyDataComponent.StockEntityMap.asScala.map(e=>s"${e._2.stockCode},${e._2.name},${e._2.createtime}").mkString("\n")}")
+//        log.info(s"\n${TushareStockDailyDataComponent.StockEntityMap.asScala.map(e=>s"${e._2.stockCode},${e._2.name},${e._2.createtime}").mkString("\n")}")
         refresh_stock_daily_data()
         Thread.sleep(5000)
       }
@@ -85,14 +87,13 @@ class TushareStockDailyDataComponent {
 
   private def refresh_MA4_MA5_Stockentity(): Unit = {
     try {
-      log.info(s"股票基本数据路径：${stock_daily_data_path}")
       val today = LocalDate.now()
       val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd")
       for (i <- 0 until 14) {
         val date = today.minusDays(i) //从今天开始往回测7天
         val dateStr = date.format(dateFormat)
         val list = this.stockMapper.select_MA4_MA5_By_Createtime(dateStr)
-        println(s"${list.size()}")
+//        println(s"${list.size()}")
         list.forEach(e => {
           TushareStockDailyDataComponent.StockEntityMap.put(e.stockCode, e)
         })
