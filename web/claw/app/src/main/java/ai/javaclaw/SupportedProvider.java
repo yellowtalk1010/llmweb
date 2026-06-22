@@ -13,7 +13,6 @@ public enum SupportedProvider {
 
     OLLAMA("ollama", "Ollama", "Local-first setup. No API key required.", false, "qwen3.5:27b"),
     OPENAI("openai", "OpenAI", "Uses OpenAI API key for ChatGPT as an agent.", true, "gpt-5.4"),
-    DEEPSEEK("deepseek", "DeepSeek", "Uses DeepSeek API key as an agent.", true, "deepseek-r1"),
     ANTHROPIC("anthropic", "Anthropic", "Uses Claude Code or Anthropic credentials for Claude-based chat", true, "claude-sonnet-4-6") {
         @Override
         public Optional<SystemWideToken> systemWideToken() {
