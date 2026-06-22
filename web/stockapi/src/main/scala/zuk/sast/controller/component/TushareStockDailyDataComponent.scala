@@ -46,7 +46,7 @@ object TushareStockDailyDataComponent {
       Some((head.close.toFloat, lowRate.toFloat, hightRate.toFloat, str))
     }
     else {
-      Option.empty
+      Some((0,0,0,""))
     }
   }
 }

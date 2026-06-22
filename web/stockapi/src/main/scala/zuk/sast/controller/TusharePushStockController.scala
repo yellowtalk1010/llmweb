@@ -182,7 +182,7 @@ class TusharePushStockController {
           e.file=file
           e.fileName=file.getName
           val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
-          e.remark = optionTp3.getOrElse((0,0,0,""))._4
+          e.remark = optionTp3.get._4
           e
         }).sortBy(_.modWinRate).reverse
       })
