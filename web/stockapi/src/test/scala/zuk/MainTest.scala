@@ -4,6 +4,8 @@ import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.File
+import scala.collection.mutable.ListBuffer
+import scala.jdk.CollectionConverters.*
 
 class MainTest extends AnyFunSuite {
 
@@ -18,12 +20,15 @@ class MainTest extends AnyFunSuite {
   }
 
   test("pom依赖生成器"){
+
+    val projectName = "claw"
+    val version = "1.0.0"
+
     val file = new File("C:\\Users\\5132\\Desktop\\JavaClaw\\app-1.0.0-SNAPSHOT\\BOOT-INF\\lib")
     val list = file.listFiles().toList.sortBy(_.getName)
 
-    val groupId = "a"
-    val artifactId = "b"
-    val version = "1.0.0"
+    val groupId = "zuk"
+    val artifactId = "merge"
 
     list.zipWithIndex.foreach(e=>{
       val filename = e._1.getName
@@ -44,7 +49,7 @@ class MainTest extends AnyFunSuite {
       val str = {
         s"<!-- ${filename} -->\n" +
         "<dependency>\n" +
-        s"<groupId>${groupId}</groupId>\n" +
+        s"<groupId>${groupId}.${projectName}</groupId>\n" +
         s"<artifactId>artifactId${myArtifactId}</artifactId>\n" +
         s"<version>${version}</version>\n" +
         "<systemPath>${project.basedir}/libs/" + s"${filename}</systemPath>\n" +
@@ -56,6 +61,7 @@ class MainTest extends AnyFunSuite {
 
     println("\n\n\n-------------------------------------m2依赖----------------------------------------\n\n\n")
 
+    val strList = new ListBuffer[String]
     list.zipWithIndex.foreach(e=>{
       val filename = e._1.getName
       val index = e._2
@@ -65,14 +71,14 @@ class MainTest extends AnyFunSuite {
       val str = {
         s"<!-- ${filename} -->\n" +
           "<dependency>\n" +
-          s"<groupId>${groupId}</groupId>\n" +
+          s"<groupId>${groupId}.${projectName}</groupId>\n" +
           s"<artifactId>${myArtifactId}</artifactId>\n" +
           s"<version>${version}</version>\n" +
           "</dependency>\n"
       }
 
-      val jarPath = s"${groupId}/${myArtifactId}/${version}/${myArtifactId}-${version}.jar"
-      val pomPath = s"${groupId}/${myArtifactId}/${version}/${myArtifactId}-${version}.pom"
+      val jarPath = s"${groupId}/${projectName}/${myArtifactId}/${version}/${myArtifactId}-${version}.jar"
+      val pomPath = s"${groupId}/${projectName}/${myArtifactId}/${version}/${myArtifactId}-${version}.pom"
 
       val jarFile = new File(jarPath)
       val pomFile = new File(pomPath)
@@ -87,7 +93,38 @@ class MainTest extends AnyFunSuite {
 
       println(str)
 
+      strList += str
+
     })
+
+    val parentGroupId = "zuk"
+    val parentArtifactId = s"${artifactId}-parent"
+    val parentStartStr =
+      """<project xmlns="http://maven.apache.org/POM/4.0.0"
+        |        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        |        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        |<modelVersion>4.0.0</modelVersion>
+      """.stripMargin +
+        s"\n<groupId>${parentGroupId}.${projectName}</groupId>\n" +
+        s"<artifactId>${parentArtifactId}</artifactId>\n" +
+        s"<version>${version}</version>\n" +
+      """
+        |<packaging>pom</packaging>
+        |<dependencies>
+        |""".stripMargin
+
+    strList.prepend(parentStartStr)
+
+    val parentEndStr =
+      """
+        |</dependencies>
+        |</project>
+        |""".stripMargin
+
+    strList.append(parentEndStr)
+
+
+    FileUtils.writeLines(new File(s"${parentGroupId}/${projectName}/${parentArtifactId}/${version}/${parentArtifactId}-${version}.pom"), strList.toList.asJava)
 
   }
 }
