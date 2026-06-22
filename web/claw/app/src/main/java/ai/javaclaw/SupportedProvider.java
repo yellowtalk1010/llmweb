@@ -7,23 +7,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-//import static ai.javaclaw.providers.anthropic.AnthropticClaudeCodeConfiguration.CLAUDE_CODE_OATH_TOKEN_PLACEHOLDER;
+import static ai.javaclaw.providers.anthropic.AnthropticClaudeCodeConfiguration.CLAUDE_CODE_OATH_TOKEN_PLACEHOLDER;
 
 public enum SupportedProvider {
 
     OLLAMA("ollama", "Ollama", "Local-first setup. No API key required.", false, "qwen3.5:27b"),
     OPENAI("openai", "OpenAI", "Uses OpenAI API key for ChatGPT as an agent.", true, "gpt-5.4"),
-    DEEPSEEK("deepseek", "DeepSeek", "Uses DeepSeek API key as an agent.", true, "deepseek-r1")
-//    ANTHROPIC("anthropic", "Anthropic", "Uses Claude Code or Anthropic credentials for Claude-based chat", true, "claude-sonnet-4-6") {
-//        @Override
-//        public Optional<SystemWideToken> systemWideToken() {
-//            Optional<String> token = AnthropicClaudeCodeOAuthTokenExtractor.getToken();
-//            if (token.isEmpty()) return Optional.empty();
-//
-//            return Optional.of(new SystemWideToken("Claude Code", CLAUDE_CODE_OATH_TOKEN_PLACEHOLDER));
-//        }
-//    }
-    ;
+    DEEPSEEK("deepseek", "DeepSeek", "Uses DeepSeek API key as an agent.", true, "deepseek-r1"),
+    ANTHROPIC("anthropic", "Anthropic", "Uses Claude Code or Anthropic credentials for Claude-based chat", true, "claude-sonnet-4-6") {
+        @Override
+        public Optional<SystemWideToken> systemWideToken() {
+            Optional<String> token = AnthropicClaudeCodeOAuthTokenExtractor.getToken();
+            if (token.isEmpty()) return Optional.empty();
+
+            return Optional.of(new SystemWideToken("Claude Code", CLAUDE_CODE_OATH_TOKEN_PLACEHOLDER));
+        }
+    };
 
     private final String id;
     private final String label;
