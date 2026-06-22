@@ -1,0 +1,18 @@
+spring:
+  ai:
+    model:
+      chat: deepseek
+    deepseek:
+      chat:
+        options:
+          model: deepseek-chat
+      api-key: sk-f768a0f88a674065b49566555bdf088e
+agent:
+  tools:
+    playwright:
+      enabled: true
+  onboarding:
+    completed: true
+logging:
+  level:
+    org.apache.hc.client5: DEBUG
