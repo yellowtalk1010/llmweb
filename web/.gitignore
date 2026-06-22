@@ -6,3 +6,6 @@ target/*
 
 tushare/module/*
 tushare/.idea
+
+*.bak
+*.zip
