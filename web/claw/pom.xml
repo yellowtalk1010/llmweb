@@ -14,7 +14,8 @@
     <modules>
 <!--        <module>base</module>-->
         <module>app</module>
-<!--        <module>aaa</module>-->
+        <module>base</module>
+        <!--        <module>aaa</module>-->
     </modules>
 
     <parent>
