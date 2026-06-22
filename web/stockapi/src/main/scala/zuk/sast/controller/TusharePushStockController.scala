@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent}
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -181,6 +181,7 @@ class TusharePushStockController {
           e.eastmoneyURL = tsStock.getEastmoneyURL()
           e.file=file
           e.fileName=file.getName
+          e.remark = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
           e
         }).sortBy(_.modWinRate).reverse
       })
