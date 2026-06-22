@@ -127,7 +127,8 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
-        dto.remark = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+        dto.remark = optionTp3.getOrElse((0,0,0,""))._4
         dto.eastmoneyURL = e.get.getEastmoneyURL()
         dto.attention = ""
         if (attentionSet.contains(dto.stockCode)) {
@@ -220,7 +221,8 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
-        dto.remark = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+        dto.remark = optionTp3.getOrElse((0,0,0,""))._4
         val tsStock = new TsStock()
         tsStock.ts_code = entity.stockCode
         dto.eastmoneyURL = tsStock.getEastmoneyURL()

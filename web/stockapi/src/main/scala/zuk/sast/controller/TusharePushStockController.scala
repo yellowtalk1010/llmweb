@@ -181,7 +181,8 @@ class TusharePushStockController {
           e.eastmoneyURL = tsStock.getEastmoneyURL()
           e.file=file
           e.fileName=file.getName
-          e.remark = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
+          val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
+          e.remark = optionTp3.getOrElse((0,0,0,""))._4
           e
         }).sortBy(_.modWinRate).reverse
       })

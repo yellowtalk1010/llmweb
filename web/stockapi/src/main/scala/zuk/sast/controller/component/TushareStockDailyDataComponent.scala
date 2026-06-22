@@ -33,7 +33,7 @@ object TushareStockDailyDataComponent {
   val StockDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val DAY_NUM = 60 //过去6个交易日
 
-  def getIncreateRate(stockCode: String): String = {
+  def getIncreateRate(stockCode: String): Option[(Float, Float, Float, String)] = {
     if(StockDailyDataMap.get(stockCode)!=null){
       val list = StockDailyDataMap.get(stockCode)
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
@@ -42,10 +42,11 @@ object TushareStockDailyDataComponent {
       val highest = ls.sortBy(_.close.toFloat).last //过去60个交易日最高价
       val lowRate = new BigDecimal(head.close).divide(new BigDecimal(lowest.close), 2, RoundingMode.DOWN).toString
       val hightRate = new BigDecimal(head.close).divide(new BigDecimal(highest.close), 2, RoundingMode.DOWN).toString
-      s"【${head.close}】【较${lowest.trade_date}低位${lowRate}】【较${highest.trade_date}高位${hightRate}】"
+      val str = s"【${head.close}】【较${lowest.trade_date}低位${lowRate}】【较${highest.trade_date}高位${hightRate}】"
+      Some((head.close.toFloat, lowRate.toFloat, hightRate.toFloat, str))
     }
     else {
-      ""
+      Option.empty
     }
   }
 }
