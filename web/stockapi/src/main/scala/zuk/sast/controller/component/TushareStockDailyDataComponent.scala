@@ -17,6 +17,8 @@ import java.util.concurrent.{ConcurrentHashMap, Executors}
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
+import java.text.SimpleDateFormat
+import java.util.Date
 
 case class StockDailyData() {
   @BeanProperty var ts_code: String = ""
@@ -81,17 +83,21 @@ class TushareStockDailyDataComponent {
         refresh_MA4_MA5_Stockentity()
 //        log.info(s"\n${TushareStockDailyDataComponent.StockEntityMap.asScala.map(e=>s"${e._2.stockCode},${e._2.name},${e._2.createtime}").mkString("\n")}")
         refresh_stock_daily_data()
+        refresh_rtk()
         Thread.sleep(5000)
       }
     })
   }
 
+  /***
+   * 获取历史数据
+   */
   private def refresh_MA4_MA5_Stockentity(): Unit = {
     try {
       val today = LocalDate.now()
       val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd")
       for (i <- 0 until 14) {
-        val date = today.minusDays(i) //从今天开始往回测7天
+        val date = today.minusDays(i) //从数据库中获取过去7天（含今天）中ma4， ma5的股票
         val dateStr = date.format(dateFormat)
         val list = this.stockMapper.select_MA4_MA5_By_Createtime(dateStr)
 //        println(s"${list.size()}")
@@ -107,18 +113,70 @@ class TushareStockDailyDataComponent {
     }
   }
 
+  /***
+   * 更新实时数据
+   */
+  private def refresh_rtk(): Unit = {
+    try {
+      val path = this.stock_daily_data_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
+      val rtkFile = new File(path)
+      if(rtkFile.exists() && rtkFile.isFile){
+        log.info(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")
+        val list = loadAllStocks(rtkFile)
+        list.map(e=>{
+          e.trade_date = new SimpleDateFormat("yyyyMMdd").format(new Date)
+        })
+        val map = new ConcurrentHashMap[String, StockDailyData]()
+        list.foreach(e=>{
+          map.put(e.ts_code, e)
+        })
+
+        TushareStockDailyDataComponent.StockDailyDataMap.asScala.map(_._1).foreach(stockCode=>{
+          if(map.get(stockCode)!=null){
+            val list = TushareStockDailyDataComponent.StockDailyDataMap.get(stockCode).toBuffer
+            list.prepend(map.get(stockCode))
+            TushareStockDailyDataComponent.StockDailyDataMap.put(stockCode, list.toList)
+          }
+        })
+
+        TushareStockDailyDataComponent.StockDailyDataMap.asScala.foreach(e=>{
+          val stockCode = e._1
+          if(map.get(stockCode)!=null){
+            val rtk = map.get(stockCode)
+            e._2.toBuffer.prepend(rtk).toList
+          }
+        })
+
+        println()
+
+      }
+      else {
+        log.error(s"不存在实时股票基本数据路径:${rtkFile.getAbsolutePath}")
+      }
+    }
+    catch {
+      case exception: Exception =>
+        exception.printStackTrace()
+        log.error(exception.getMessage)
+    }
+  }
+
+
   private def refresh_stock_daily_data(): Unit = {
     try {
       TushareStockDailyDataComponent.StockEntityMap.asScala.map(_._2)
         .filter(e=>TushareStockDailyDataComponent.StockDailyDataMap.get(e.stockCode)==null)
         .foreach(e=>{
           val filename = e.stockCode.replaceAll("\\.", "_") + ".csv"
-          val path = this.stock_daily_data_path + File.separator + filename
+          val path = this.stock_daily_data_path + File.separator + "module" + File.separator + filename
           val file = new File(path)
           if(file.isFile && file.exists()){
             log.info(s"加载股票基本数据路径:${file.getAbsolutePath}")
             val list = loadAllStocks(file)
             TushareStockDailyDataComponent.StockDailyDataMap.put(e.stockCode, list)
+          }
+          else {
+            log.error(s"不存在加载股票基本数据路径:${file.getAbsolutePath}")
           }
         })
     }
@@ -141,7 +199,13 @@ class TushareStockDailyDataComponent {
           val stockDailyData = new StockDailyData()
           stockDailyData.ts_code = record.get("ts_code")
           stockDailyData.name = record.get("name")
-          stockDailyData.trade_date = record.get("trade_date")
+          if(record.isMapped("trade_date")){
+            stockDailyData.trade_date = record.get("trade_date")
+          }
+          else {
+            stockDailyData.trade_date = ""
+          }
+
           stockDailyData.open = record.get("open")
           stockDailyData.high = record.get("high")
           stockDailyData.low = record.get("low")
