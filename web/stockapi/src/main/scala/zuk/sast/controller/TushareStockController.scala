@@ -222,21 +222,30 @@ class TushareStockController {
           dto.name = s"${dto.name}【北交所】"
         }
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
-        dto.remark = optionTp3.get._4
-        val tsStock = new TsStock()
-        tsStock.ts_code = entity.stockCode
-        dto.eastmoneyURL = tsStock.getEastmoneyURL()
-        dto.remark = dto.remark + entity.remark
-        if (attentionSet.contains(dto.stockCode)) {
-          dto.attention = "已关注"
+        if(optionTp3.get._1 > 0 && optionTp3.get._1 < 120.0  //当前价位
+          && optionTp3.get._2 < 2.5  //翻倍
+        ){
+          dto.remark = optionTp3.get._4
+          val tsStock = new TsStock()
+          tsStock.ts_code = entity.stockCode
+          dto.eastmoneyURL = tsStock.getEastmoneyURL()
+          dto.remark = dto.remark + entity.remark
+          if (attentionSet.contains(dto.stockCode)) {
+            dto.attention = "已关注"
+          }
+          dto.buy = ""
+          if (buySet.contains(dto.stockCode)) {
+            dto.buy = "已购买"
+          }
+
+          Some(dto)
         }
-        dto.buy = ""
-        if (buySet.contains(dto.stockCode)) {
-          dto.buy = "已购买"
+        else {
+          Option.empty
         }
 
-        dto
       })
+      .filter(!_.isEmpty).map(_.get)
       .asJava
 
     log.info(s"ma4总数据：${list.size()}")
