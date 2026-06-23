@@ -11,11 +11,13 @@ import zuk.sast.controller.StockResultJson
 import zuk.sast.controller.component.TushareInitMA4ModelMA5ModelComponent.{MA4_MODEL_STR, MA5_MODEL_STR}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
+import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
 import java.util
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.{ArrayBlockingQueue, ConcurrentHashMap, ExecutorService, Executors, LinkedBlockingQueue}
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -106,45 +108,45 @@ class TushareInitMA4ModelMA5ModelComponent {
    * 添加推荐数据
    * @param list
    */
-  def add_MA4_MA5_MODEL(stockResultList: List[StockResultJson]): Unit = synchronized {
-
-    try {
-      val ma4ma5List = stockResultList.filter(e=>List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(e.modClsName.toUpperCase))
-      ma4ma5List.foreach(stockResult=>{
-        val stockCode= stockResult.ts_code
-        val stockType = stockResult.modClsName.toUpperCase
-        val dateStr = stockResult.fileName.substring(0, 8)
-
-        if(TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr)==null){
-          //写入缓存
-          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
-        }
-        val list = TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr).asScala
-          .filter(entity=>{
-            entity.stockCode.equals(stockCode) && entity.stockType.equals(stockType)
-          }).toList
-
-        if(list.size==0 && this.stockMapper.select_MA4_MA5_By_Createtime(dateStr).asScala.filter(e=>e.stockCode.equals(stockCode) && e.stockType.equals(stockType) && e.createtime.equals(dateStr)).size == 0){
-          val entity = new StockEntity
-          entity.id = UUID.randomUUID().toString.replaceAll("-", "")
-          entity.stockCode = stockCode
-          entity.stockType = stockType
-          entity.name = tushareAllStocksCSVComponent.getTsStock(stockCode).getOrElse(new TsStock).name
-          entity.createtime = dateStr
-          this.stockMapper.insert(entity)
-          //更新缓存
-          log.info(s"写入推荐MA4,MA5数据：${JSONObject.toJSONString(entity, Feature.LargeObject)}")
-          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
-        }
-      })
-
-    }
-    catch {
-      case exception: Exception =>
-        exception.printStackTrace()
-        log.error(exception.getMessage)
-    }
-  }
+//  def add_MA4_MA5_MODEL(stockResultList: List[StockResultJson]): Unit = synchronized {
+//
+//    try {
+//      val ma4ma5List = stockResultList.filter(e=>List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(e.modClsName.toUpperCase))
+//      ma4ma5List.foreach(stockResult=>{
+//        val stockCode= stockResult.ts_code
+//        val stockType = stockResult.modClsName.toUpperCase
+//        val dateStr = stockResult.fileName.substring(0, 8)
+//
+//        if(TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr)==null){
+//          //写入缓存
+//          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
+//        }
+//        val list = TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr).asScala
+//          .filter(entity=>{
+//            entity.stockCode.equals(stockCode) && entity.stockType.equals(stockType)
+//          }).toList
+//
+//        if(list.size==0 && this.stockMapper.select_MA4_MA5_By_Createtime(dateStr).asScala.filter(e=>e.stockCode.equals(stockCode) && e.stockType.equals(stockType) && e.createtime.equals(dateStr)).size == 0){
+//          val entity = new StockEntity
+//          entity.id = UUID.randomUUID().toString.replaceAll("-", "")
+//          entity.stockCode = stockCode
+//          entity.stockType = stockType
+//          entity.name = tushareAllStocksCSVComponent.getTsStock(stockCode).getOrElse(new TsStock).name
+//          entity.createtime = dateStr
+//          this.stockMapper.insert(entity)
+//          //更新缓存
+//          log.info(s"写入推荐MA4,MA5数据：${JSONObject.toJSONString(entity, Feature.LargeObject)}")
+//          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
+//        }
+//      })
+//
+//    }
+//    catch {
+//      case exception: Exception =>
+//        exception.printStackTrace()
+//        log.error(exception.getMessage)
+//    }
+//  }
 
   /***
    * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
@@ -155,34 +157,38 @@ class TushareInitMA4ModelMA5ModelComponent {
       log.info(s"${file.getAbsolutePath} 不存在")
       return
     }
-    val lines = FileUtils.readLines(file, "UTF-8")
+
     val modelSet = List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).map(_.toUpperCase).toSet
-    val allEntitys = this.stockMapper.selectAll().asScala
-      .filter(e=>modelSet.contains(e.stockType.toUpperCase))
+    var allEntitys = this.stockMapper.selectAll().asScala.filter(e=>modelSet.contains(e.stockType.toUpperCase))
 
+    val lines = FileUtils.readLines(file, "UTF-8")
+    val num = new AtomicLong(0)
     lines.asScala.foreach(line=>{
-      println(s"MODEL_BACK_TEST_RESULT.line:${line}")
-      val arr = line.split(",").toList
-      if(arr.size>4 && modelSet.contains(arr(0).toUpperCase)){
-        val stockType = arr(0)
-        val stockCode = arr(1)
-        val name = arr(2)
-        val time = arr(4).replaceAll("【买入】", "")
-        println(s"${stockType}, ${stockCode}, ${name}, ${time}")
 
-        if (allEntitys.filter(e => e.stockCode.equals(stockCode) && e.createtime.startsWith(time)).size == 0) {
-          val stock = new StockEntity
-          stock.id = UUID.randomUUID().toString.replaceAll("-", "")
-          stock.stockCode = stockCode.trim
-          stock.name = name.trim
-          stock.stockType = stockType.toUpperCase.trim
-          stock.createtime = time.trim
-          stockMapper.insert(stock)
-        }
-        else {
-          println("已存在")
-        }
+      val backTestDto = JSONObject.parseObject(line, classOf[BackTestDto])
+      val stockType = backTestDto.stockType
+      val stockCode = backTestDto.stockCode
+      val name = backTestDto.stockName
+      val time = backTestDto.tradedate
+
+      log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
+
+      val existList = allEntitys.filter(e => e.stockCode.equals(stockCode) && e.createtime.startsWith(time))
+      if (existList.size == 0) {
+        val stockEntity = new StockEntity
+        stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
+        stockEntity.stockCode = stockCode.trim
+        stockEntity.name = name.trim
+        stockEntity.stockType = stockType.toUpperCase.trim
+        stockEntity.createtime = time.trim
+        stockMapper.insert(stockEntity)
+
+        allEntitys += stockEntity
       }
+      else {
+        log.info("已存在")
+      }
+
     })
   }
 
