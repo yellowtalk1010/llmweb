@@ -19,6 +19,7 @@ import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
 import java.util.Date
+import scala.collection.mutable.ListBuffer
 
 case class StockDailyData() {
   @BeanProperty var ts_code: String = ""
@@ -31,13 +32,19 @@ case class StockDailyData() {
 }
 
 object TushareStockDailyDataComponent {
-  val StockEntityMap = new ConcurrentHashMap[String, StockEntity]()
-  val StockDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
+  private val StockEntityMap = new ConcurrentHashMap[String, StockEntity]()
+  private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
+  private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
   private val DAY_NUM = 60 //过去6个交易日
 
   def getIncreateRate(stockCode: String): Option[(Float, Float, Float, String)] = {
-    if(StockDailyDataMap.get(stockCode)!=null){
-      val list = StockDailyDataMap.get(stockCode)
+    if(StockHistoryDailyDataMap.get(stockCode)!=null){
+      val list = new ListBuffer[StockDailyData]
+      list ++= StockHistoryDailyDataMap.get(stockCode)
+      if(StockRtkDataMap.get(stockCode)!=null){
+        list.prepend(StockRtkDataMap.get(stockCode))
+      }
+
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
       val head = ls.head
       val lowest = ls.sortBy(_.close.toFloat).reverse.last //过去60个交易日最低价
@@ -126,46 +133,8 @@ class TushareStockDailyDataComponent {
         val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date)
         list.map(e=>{
           e.trade_date = dateStr
+          TushareStockDailyDataComponent.StockRtkDataMap.put(e.ts_code, e)
         })
-        val map = new ConcurrentHashMap[String, StockDailyData]()
-        list.foreach(e=>{
-          map.put(e.ts_code, e)
-        })
-
-        TushareStockDailyDataComponent.StockDailyDataMap.asScala.map(_._1).foreach(stockCode=>{
-          if(map.get(stockCode)!=null){
-            val list = TushareStockDailyDataComponent.StockDailyDataMap.get(stockCode).toBuffer
-            list.prepend(map.get(stockCode))
-            TushareStockDailyDataComponent.StockDailyDataMap.put(stockCode, list.toList)
-          }
-        })
-
-        TushareStockDailyDataComponent.StockDailyDataMap.asScala.foreach(e=>{
-          val stockCode = e._1
-
-          if(map.get(stockCode)!=null){
-            val rtk = map.get(stockCode)
-            if(e._2.filter(_.trade_date.equals(dateStr)).size>0){
-              //更新
-              e._2.filter(_.trade_date.equals(dateStr)).foreach(e=>{
-                val name1 = e.name
-                val name2 = rtk.name
-                e.low = rtk.low
-                e.high = rtk.high
-                e.open = rtk.open
-                e.close = rtk.close
-//                println()
-              })
-            }
-            else {
-              //添加
-              e._2.toBuffer.prepend(rtk).toList
-            }
-
-          }
-        })
-
-//        println()
 
       }
       else {
@@ -183,7 +152,7 @@ class TushareStockDailyDataComponent {
   private def refresh_stock_daily_data(): Unit = {
     try {
       TushareStockDailyDataComponent.StockEntityMap.asScala.map(_._2)
-        .filter(e=>TushareStockDailyDataComponent.StockDailyDataMap.get(e.stockCode)==null)
+        .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e.stockCode)==null)
         .foreach(e=>{
           val filename = e.stockCode.replaceAll("\\.", "_") + ".csv"
           val path = this.stock_daily_data_path + File.separator + "module" + File.separator + filename
@@ -191,7 +160,7 @@ class TushareStockDailyDataComponent {
           if(file.isFile && file.exists()){
             log.info(s"加载股票基本数据路径:${file.getAbsolutePath}")
             val list = loadAllStocks(file)
-            TushareStockDailyDataComponent.StockDailyDataMap.put(e.stockCode, list)
+            TushareStockDailyDataComponent.StockHistoryDailyDataMap.put(e.stockCode, list)
           }
           else {
             log.error(s"不存在加载股票基本数据路径:${file.getAbsolutePath}")
