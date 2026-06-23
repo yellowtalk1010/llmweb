@@ -123,8 +123,9 @@ class TushareStockDailyDataComponent {
       if(rtkFile.exists() && rtkFile.isFile){
         log.info(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")
         val list = loadAllStocks(rtkFile)
+        val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date)
         list.map(e=>{
-          e.trade_date = new SimpleDateFormat("yyyyMMdd").format(new Date)
+          e.trade_date = dateStr
         })
         val map = new ConcurrentHashMap[String, StockDailyData]()
         list.foreach(e=>{
@@ -141,13 +142,30 @@ class TushareStockDailyDataComponent {
 
         TushareStockDailyDataComponent.StockDailyDataMap.asScala.foreach(e=>{
           val stockCode = e._1
+
           if(map.get(stockCode)!=null){
             val rtk = map.get(stockCode)
-            e._2.toBuffer.prepend(rtk).toList
+            if(e._2.filter(_.trade_date.equals(dateStr)).size>0){
+              //更新
+              e._2.filter(_.trade_date.equals(dateStr)).foreach(e=>{
+                val name1 = e.name
+                val name2 = rtk.name
+                e.low = rtk.low
+                e.high = rtk.high
+                e.open = rtk.open
+                e.close = rtk.close
+//                println()
+              })
+            }
+            else {
+              //添加
+              e._2.toBuffer.prepend(rtk).toList
+            }
+
           }
         })
 
-        println()
+//        println()
 
       }
       else {
