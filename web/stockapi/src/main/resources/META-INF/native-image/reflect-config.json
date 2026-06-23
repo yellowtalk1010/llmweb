@@ -12,6 +12,32 @@
   "name":"[Lsun.security.pkcs.SignerInfo;"
 },
 {
+  "name":"com.alibaba.fastjson.JSONArray"
+},
+{
+  "name":"com.alibaba.fastjson.JSONObject"
+},
+{
+  "name":"com.alibaba.fastjson2.JSONFactory$CacheItem",
+  "fields":[{"name":"bytes"}, {"name":"chars"}]
+},
+{
+  "name":"com.alibaba.fastjson2.JSONObject",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"com.alibaba.fastjson2.util.TypeUtils$Cache",
+  "fields":[{"name":"chars"}]
+},
+{
+  "name":"com.alibaba.fastjson2.writer.FieldWriter",
+  "fields":[{"name":"initObjectWriter"}]
+},
+{
+  "name":"com.alibaba.fastjson2.writer.OWG_1_4_BackTestDto",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Class","java.lang.String","java.lang.String","long","java.util.List"] }]
+},
+{
   "name":"com.sun.crypto.provider.AESCipher$General",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -55,21 +81,51 @@
   "name":"java.awt.Image"
 },
 {
+  "name":"java.beans.Transient"
+},
+{
   "name":"java.io.InputStream"
 },
 {
   "name":"java.lang.ClassValue"
 },
 {
-  "name":"java.lang.String"
+  "name":"java.lang.String",
+  "fields":[{"name":"COMPACT_STRINGS"}, {"name":"coder"}, {"name":"value"}],
+  "methods":[{"name":"<init>","parameterTypes":["byte[]","byte"] }, {"name":"coder","parameterTypes":[] }, {"name":"isASCII","parameterTypes":["byte[]"] }, {"name":"value","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.StringCoding",
+  "methods":[{"name":"hasNegatives","parameterTypes":["byte[]","int","int"] }]
 },
 {
   "name":"java.lang.Thread",
   "fields":[{"name":"threadLocalRandomProbe"}]
 },
 {
+  "name":"java.lang.invoke.MethodHandles$Lookup",
+  "fields":[{"name":"IMPL_LOOKUP"}],
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Class","java.lang.Class","int"] }]
+},
+{
   "name":"java.lang.invoke.VarHandle",
   "methods":[{"name":"releaseFence","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.management.ManagementFactory",
+  "methods":[{"name":"getRuntimeMXBean","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.management.RuntimeMXBean",
+  "methods":[{"name":"getInputArguments","parameterTypes":[] }]
+},
+{
+  "name":"java.math.BigDecimal",
+  "fields":[{"name":"intCompact"}]
+},
+{
+  "name":"java.math.BigInteger",
+  "fields":[{"name":"mag"}]
 },
 {
   "name":"java.security.AlgorithmParametersSpi"
@@ -93,10 +149,29 @@
   "name":"java.security.interfaces.RSAPublicKey"
 },
 {
+  "name":"java.sql.Clob"
+},
+{
+  "name":"java.sql.Date"
+},
+{
+  "name":"java.sql.Timestamp"
+},
+{
+  "name":"java.util.Collections$UnmodifiableCollection"
+},
+{
+  "name":"java.util.Collections$UnmodifiableMap"
+},
+{
   "name":"java.util.Date"
 },
 {
   "name":"java.util.List"
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicReference",
+  "fields":[{"name":"value"}]
 },
 {
   "name":"java.util.concurrent.atomic.Striped64",
@@ -110,6 +185,20 @@
   "name":"javax.security.auth.x500.X500Principal",
   "fields":[{"name":"thisX500Name"}],
   "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
+},
+{
+  "name":"javax.sql.DataSource"
+},
+{
+  "name":"javax.sql.RowSet"
+},
+{
+  "name":"scala.Product",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"sun.misc.Unsafe",
+  "fields":[{"name":"theUnsafe"}]
 },
 {
   "name":"sun.security.pkcs12.PKCS12KeyStore",
@@ -244,5 +333,12 @@
 {
   "name":"sun.security.x509.SubjectKeyIdentifierExtension",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"zuk.tu_share.backtest.BackTestDto",
+  "allDeclaredFields":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 }
 ]
