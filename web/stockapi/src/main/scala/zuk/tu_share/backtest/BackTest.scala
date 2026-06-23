@@ -47,7 +47,7 @@ object BackTest {
 
               val buyReason = s"<span title='${mod.buyReason()}'>买入</span>"
 
-              val txtLine = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${mod.buyReason()}】, 【未交易】"
+              val txtLine = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${"买入"}】, 【未交易】"
               txtLines += txtLine
 
               val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, 【未交易】"
