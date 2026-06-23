@@ -200,7 +200,7 @@ class TusharePushStockController {
       val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
       //保存MA4_MODEL模型数据
-      tushareInitMA4ModelMA5ModelComponent.add_MA4_MA5_MODEL(heads.toList ++ histories.toList)
+      //tushareInitMA4ModelMA5ModelComponent.add_MA4_MA5_MODEL(heads.toList ++ histories.toList)
 
       val pushStocks = modWinRateClsNames.map(_._1).map(clsName=>{
         //最新数据
