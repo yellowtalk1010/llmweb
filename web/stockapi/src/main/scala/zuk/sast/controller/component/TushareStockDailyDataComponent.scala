@@ -35,7 +35,7 @@ object TushareStockDailyDataComponent {
   private val StockEntityMap = new ConcurrentHashMap[String, StockEntity]()
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
-  private val DAY_NUM = 60 //过去6个交易日
+  private val DAY_NUM = 120 //过去6个交易日
 
   def getIncreateRate(stockCode: String): Option[(Float, Float, Float, String)] = {
     if(StockHistoryDailyDataMap.get(stockCode)!=null){
