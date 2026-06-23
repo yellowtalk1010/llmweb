@@ -54,20 +54,18 @@ class TushareInitMA4ModelMA5ModelComponent {
   @PostConstruct
   def init(): Unit = {
 
-    deleteRepeatMA4_MA5()
+    excecute.execute(()=>{
+      log.info("启动队列处理程序")
 
-//    excecute.execute(()=>{
-//      log.info("启动队列处理程序")
-//      while (true) {
-//        try {
-//          deleteRepeatMA4_MA5()
-//          Thread.sleep(5000)
-//        }
-//        catch {
-//          case exception: Exception => exception.printStackTrace()
-//        }
-//      }
-//    })
+      try {
+        init_MODEL_BACK_TEST_RESULT()
+        deleteRepeatMA4_MA5()
+      }
+      catch {
+        case exception: Exception => exception.printStackTrace()
+      }
+
+    })
   }
 
   /***
@@ -78,10 +76,13 @@ class TushareInitMA4ModelMA5ModelComponent {
     this.stockMapper.selectAll().asScala.filter(e => List(MA4_MODEL_STR).contains(e.stockType))
       .groupBy(_.createtime)
       .map(_._2.toList)
-      .foreach(ls => {
-        ls.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2.last).foreach(e => {
-          log.info(s"删除${MA4_MODEL_STR}中${e.createtime}重复元素：${JSONObject.toJSONString(e, Feature.LargeObject)}")
-          this.stockMapper.deleteById(e.id)
+      .foreach(dailyList => {
+        dailyList.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls=>{
+          log.info(s"重复${ls.size}条数据:${ls.head.stockType},${ls.head.createtime},${ls.head.stockCode}")
+          for (i <- 1 until ls.size) {
+            val e = ls(i)
+            log.info(s"删除${MA4_MODEL_STR}中${e.createtime}重复元素：${JSONObject.toJSONString(e, Feature.LargeObject)}")
+          }
         })
       })
 
@@ -89,10 +90,13 @@ class TushareInitMA4ModelMA5ModelComponent {
     this.stockMapper.selectAll().asScala.filter(e => List(MA5_MODEL_STR).contains(e.stockType))
       .groupBy(_.createtime)
       .map(_._2.toList)
-      .foreach(ls => {
-        ls.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2.last).foreach(e => {
-          log.info(s"删除${MA5_MODEL_STR}中${e.createtime}重复元素：${JSONObject.toJSONString(e, Feature.LargeObject)}")
-          this.stockMapper.deleteById(e.id)
+      .foreach(dailyList => {
+        dailyList.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls=>{
+          log.info(s"重复${ls.size}条数据:${ls.head.stockType},${ls.head.createtime},${ls.head.stockCode}")
+          for (i <- 1 until ls.size) {
+            val e = ls(i)
+            log.info(s"删除${MA4_MODEL_STR}中${e.createtime}重复元素：${JSONObject.toJSONString(e, Feature.LargeObject)}")
+          }
         })
       })
 

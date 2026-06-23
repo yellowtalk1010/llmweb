@@ -222,8 +222,9 @@ class TushareStockController {
           dto.name = s"${dto.name}【北交所】"
         }
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
-        if(optionTp3.get._1 > 0 && optionTp3.get._1 < 120.0  //当前价位
-          && optionTp3.get._2 < 2.5  //翻倍
+        if(optionTp3.get._1 > 0
+//          && optionTp3.get._1 < 120.0  //当前价位
+//          && optionTp3.get._2 < 2.5  //翻倍
         ){
           dto.remark = optionTp3.get._4
           val tsStock = new TsStock()

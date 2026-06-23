@@ -61,7 +61,7 @@ class TusharePushStockController {
     }
 
 //    autoRefreshEasymoney()
-    tushareInitMA4ModelMA5ModelComponent.init_MODEL_BACK_TEST_RESULT()
+
 
   }
 
