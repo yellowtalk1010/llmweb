@@ -36,8 +36,7 @@ object BackTest {
   def analysis(): Unit = {
 
     val lines = new ListBuffer[String]()
-    val backTestDtoList = new ListBuffer[BackTestDto]
-
+    val backTestMapList = new ListBuffer[util.HashMap[String, String]]
 
     backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
@@ -62,13 +61,13 @@ object BackTest {
               val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, 【未交易】"
               lines += line
 
-              val dto = new BackTestDto
-              dto.stockType = clsName.toUpperCase.trim
-              dto.stockCode = mod.buy.ts_code.trim
-              dto.stockName = mod.buy.name.trim
-              dto.tradedate = mod.buy.trade_date.trim
-              backTestDtoList += dto
 
+              val map = new util.HashMap[String, String]()
+              map.put("stockType", clsName.toUpperCase.trim)
+              map.put("stockCode", mod.buy.ts_code.trim)
+              map.put("stockName", mod.buy.name.trim)
+              map.put("tradedate", mod.buy.trade_date.trim)
+              backTestMapList += map
 
             }
             mod.sells.size>0
@@ -101,13 +100,12 @@ object BackTest {
             val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, ${highStr}, ${ok}"
             lines += line
 
-
-            val dto = new BackTestDto
-            dto.stockType = clsName.toUpperCase.trim
-            dto.stockCode = mod.buy.ts_code.trim
-            dto.stockName = mod.buy.name.trim
-            dto.tradedate = mod.buy.trade_date.trim
-            backTestDtoList += dto
+            val map = new util.HashMap[String, String]()
+            map.put("stockType", clsName.toUpperCase.trim)
+            map.put("stockCode", mod.buy.ts_code.trim)
+            map.put("stockName", mod.buy.name.trim)
+            map.put("tradedate", mod.buy.trade_date.trim)
+            backTestMapList += map
 
 
           st
@@ -124,8 +122,12 @@ object BackTest {
 
     storeProperties()
 
-//    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), backTestMapList.map(dto=>{JSONObject.toJSONString(dto, Feature.LargeObject)}).asJava)
-    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), backTestDtoList.map(dto=>{JSONObject.toJSONString(dto, Feature.LargeObject)}).asJava)
+
+    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), backTestMapList.map(m => {
+      val l = JSONObject.toJSONString(m, Feature.LargeObject)
+//      println(s"txtLine.map:${l}")
+      l
+    }).asJava)
 
     sendMail(lines.mkString("<br>\n"))
 
