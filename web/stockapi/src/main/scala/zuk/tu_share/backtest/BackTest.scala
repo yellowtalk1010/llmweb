@@ -25,6 +25,7 @@ object BackTest {
   def analysis(): Unit = {
 
     val lines = new ListBuffer[String]()
+    val txtLines = new ListBuffer[String]
 
     backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
@@ -76,12 +77,15 @@ object BackTest {
 
             val buyReason = s"<span title='${mod.buyReason()}'>买入</span>"
 
+            val txtLine = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${"买入"}】, ${highStr}, ${ok}"
+            println(txtLine)
+            txtLines += txtLine
+
+
             val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, ${highStr}, ${ok}"
             lines += line
-            println(line)
 
             st
-
           })
 
         //计算胜率
@@ -94,7 +98,7 @@ object BackTest {
     })
 
     storeProperties()
-    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), lines.asJava)
+    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), txtLines.asJava)
     sendMail(lines.mkString("<br>\n"))
 
   }
