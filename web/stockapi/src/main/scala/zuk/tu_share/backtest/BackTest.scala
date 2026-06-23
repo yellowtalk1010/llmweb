@@ -1,5 +1,7 @@
 package zuk.tu_share.backtest
 
+import com.alibaba.fastjson2.JSONObject
+import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.{DataFrame, ParseCammandParam}
@@ -10,10 +12,19 @@ import zuk.utils.SendMail
 import java.io.{File, FileOutputStream}
 import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
+import java.util
 import java.util.Date
+import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
-
 import scala.jdk.CollectionConverters.*
+
+case class BackTestDto() {
+  @BeanProperty var stockCode: String = null
+  @BeanProperty var stockName: String = null
+  @BeanProperty var stockType: String = null
+  @BeanProperty var tradedate: String = null
+
+}
 
 object BackTest {
 
@@ -25,7 +36,8 @@ object BackTest {
   def analysis(): Unit = {
 
     val lines = new ListBuffer[String]()
-    val txtLines = new ListBuffer[String]
+    val backTestDtoList = new ListBuffer[BackTestDto]
+
 
     backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
@@ -47,11 +59,17 @@ object BackTest {
 
               val buyReason = s"<span title='${mod.buyReason()}'>买入</span>"
 
-              val txtLine = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${"买入"}】, 【未交易】"
-              txtLines += txtLine
-
               val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, 【未交易】"
               lines += line
+
+              val dto = new BackTestDto
+              dto.stockType = clsName.toUpperCase.trim
+              dto.stockCode = mod.buy.ts_code.trim
+              dto.stockName = mod.buy.name.trim
+              dto.tradedate = mod.buy.trade_date.trim
+              backTestDtoList += dto
+
+
             }
             mod.sells.size>0
           }).filter(mod => {
@@ -80,15 +98,19 @@ object BackTest {
 
             val buyReason = s"<span title='${mod.buyReason()}'>买入</span>"
 
-            val txtLine = s"${clsName}, ${mod.buy.ts_code}, ${mod.buy.name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${"买入"}】, ${highStr}, ${ok}"
-            println(txtLine)
-            txtLines += txtLine
-
-
             val line = s"${clsName}, ${mod.buy.ts_code}, ${name},【${mod.getStockDto().totalMV}亿，${mod.getStockDto().limitUp}，${mod.getStockDto().limitDown}，${mod.getStockDto().turnoverRate}，涨跌${mod.getStockDto().preChangeRate}】, ${mod.buy.trade_date}【${buyReason}】, ${highStr}, ${ok}"
             lines += line
 
-            st
+
+            val dto = new BackTestDto
+            dto.stockType = clsName.toUpperCase.trim
+            dto.stockCode = mod.buy.ts_code.trim
+            dto.stockName = mod.buy.name.trim
+            dto.tradedate = mod.buy.trade_date.trim
+            backTestDtoList += dto
+
+
+          st
           })
 
         //计算胜率
@@ -101,7 +123,10 @@ object BackTest {
     })
 
     storeProperties()
-    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), txtLines.asJava)
+
+//    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), backTestMapList.map(dto=>{JSONObject.toJSONString(dto, Feature.LargeObject)}).asJava)
+    FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), backTestDtoList.map(dto=>{JSONObject.toJSONString(dto, Feature.LargeObject)}).asJava)
+
     sendMail(lines.mkString("<br>\n"))
 
   }
