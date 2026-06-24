@@ -75,7 +75,7 @@ class TushareInitMA4ModelMA5ModelComponent {
    */
   private def deleteRepeatMA4_MA5() = {
     log.info("删除ma4在同日期中的相同元素")
-    this.stockMapper.selectAll().asScala.filter(e => List(MA4_MODEL_STR).contains(e.stockType))
+    this.stockMapper.selectAll().asScala.filter(e => List(MA4_MODEL_STR).equals(e.stockType))
       .groupBy(_.createtime)
       .map(_._2.toList)
       .foreach(dailyList => {
@@ -89,7 +89,7 @@ class TushareInitMA4ModelMA5ModelComponent {
       })
 
     log.info("删除ma5在同日期中的相同元素")
-    this.stockMapper.selectAll().asScala.filter(e => List(MA5_MODEL_STR).contains(e.stockType))
+    this.stockMapper.selectAll().asScala.filter(e => List(MA5_MODEL_STR).equals(e.stockType))
       .groupBy(_.createtime)
       .map(_._2.toList)
       .foreach(dailyList => {
@@ -173,7 +173,7 @@ class TushareInitMA4ModelMA5ModelComponent {
 
       log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
 
-      val existList = allEntitys.filter(e => e.stockCode.equals(stockCode) && e.createtime.startsWith(time))
+      val existList = allEntitys.filter(e => e.stockType.equals(stockType) && e.stockCode.equals(stockCode) && e.createtime.equals(time))
       if (existList.size == 0) {
         val stockEntity = new StockEntity
         stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
