@@ -300,8 +300,6 @@ class TushareStockController {
       case _=>
     }
 
-    val set = getAllBuy()
-
     val result = new util.HashMap[String, String]()
     result.put("code", "success")
     result.put("desc", "成功")

@@ -20,6 +20,7 @@ import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
 import java.util.Date
 import scala.collection.mutable.ListBuffer
+import scala.math
 
 case class StockDailyData() {
   @BeanProperty var ts_code: String = ""
@@ -49,6 +50,10 @@ object TushareStockDailyDataComponent {
       val head = ls.head
       val lowest = ls.sortBy(_.close.toFloat).reverse.last //过去60个交易日最低价
       val highest = ls.sortBy(_.close.toFloat).last //过去60个交易日最高价
+      if(new java.math.BigDecimal(lowest.close).compareTo(java.math.BigDecimal.ZERO) == 0 
+        || new BigDecimal(highest.close).compareTo(java.math.BigDecimal.ZERO)==0){
+        println()
+      }
       val lowRate = new BigDecimal(head.close).divide(new BigDecimal(lowest.close), 2, RoundingMode.DOWN).toString
       val hightRate = new BigDecimal(head.close).divide(new BigDecimal(highest.close), 2, RoundingMode.DOWN).toString
       val str = s"【${head.close}】【较${lowest.trade_date}低位${lowRate}】【较${highest.trade_date}高位${hightRate}】"
