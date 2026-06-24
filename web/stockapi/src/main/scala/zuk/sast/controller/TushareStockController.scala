@@ -139,7 +139,7 @@ class TushareStockController {
           dto.buy = "已购买"
         }
         dto
-      }).sortBy(e=>e.buy).reverse.asJava
+      }).sortBy(e=>(e.buy, e.stockCode)).reverse.asJava
 
     tsStockList
   }
