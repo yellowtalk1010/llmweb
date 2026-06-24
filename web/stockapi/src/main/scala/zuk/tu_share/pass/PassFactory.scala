@@ -85,7 +85,7 @@ object PassFactory {
         catch
           case exception: Exception => exception.printStackTrace()
       })
-      finishModules ++= modules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
+      finishModules ++= modules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).sortBy(e=>(e.getStockDto().turnoverRate, e.getStockDto().tsStock.ts_code)).reverse
     })
 
     println("完成模型分析")

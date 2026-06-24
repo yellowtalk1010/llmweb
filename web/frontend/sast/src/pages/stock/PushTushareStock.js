@@ -235,8 +235,8 @@ function StockTable({ list, refresh  }) {
       <table className="w-full text-sm border-collapse">
         <thead>
         <tr className="border-b bg-gray-50">
+          <th>序号</th>
           <th className="p-2 text-left">关注</th>
-          <th className="p-2 text-left">淘汰</th>
           <th className="p-2 text-left">资金</th>
           <th className="p-2 text-left">名称</th>
           <th className="p-2 text-left">代码</th>
@@ -255,7 +255,7 @@ function StockTable({ list, refresh  }) {
         {list.map((item, idx) => (
             <tr key={idx} className="border-b hover:bg-gray-50">
 
-              
+              <td>{idx + 1}</td>
               <td className="p-2">
                 {
                       item.attention?(
@@ -278,32 +278,7 @@ function StockTable({ list, refresh  }) {
                       )
                     }
               </td>
-              
-              <td className="p-2">
-                {
-                      item.eliminate?(
-                        <span>
-                          {item.eliminate}
-                          <button
-                            onClick={() => delete_stock(item.ts_code, "eliminate")}
-                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          >恢复</button>
-                        </span>
-                      )
-                      :(
-                        <span>
-                          <button
-                            onClick={() => add_stock(item.ts_code, "eliminate")}
-                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          >待阅</button>
-
-                        </span>
-                      )
-                    }
-              </td>
-
             
-
               <td className="p-2">
                   <a
                     href={`/pages/Moneyflow?tsCode=${item.ts_code}`}
