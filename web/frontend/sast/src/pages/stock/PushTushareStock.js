@@ -238,9 +238,9 @@ function StockTable({ list, refresh  }) {
           <th>序号</th>
           <th className="p-2 text-left">关注</th>
           <th className="p-2 text-left">资金</th>
+          <th className="p-2 text-left">备注</th>
           <th className="p-2 text-left">名称</th>
           <th className="p-2 text-left">代码</th>
-          <th className="p-2 text-left">备注</th>
           <th className="p-2 text-left">行业</th>
           <th className="p-2 text-left">地区</th>
           <th className="p-2 text-left">胜率</th>
@@ -289,8 +289,8 @@ function StockTable({ list, refresh  }) {
                     资金
                   </a>
               </td>  
-
              
+              <td className="p-2">{item.remark}</td>
               <td className="p-2 font-medium">
                 <a
                   href={item.eastmoneyURL}
@@ -302,7 +302,6 @@ function StockTable({ list, refresh  }) {
                 </a>
               </td>
               <td className="p-2">{item.ts_code}</td>
-              <td className="p-2">{item.remark}</td>
               <td className="p-2">{item.industry}</td>
               <td className="p-2">{item.area}</td>
               <td className="p-2 text-green-600">{item.modWinRate}</td>

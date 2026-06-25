@@ -193,10 +193,10 @@ class TusharePushStockController {
 
         if(Array(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(stockModleType.toUpperCase)){
           val closePrice = optionTp3.get._1
-          if(closePrice > 200.0){
+          if(closePrice >= 110.0){
             //如果当前价格大于200，不显示
-            Some(e)
-//            Option.empty
+//            Some(e)
+            Option.empty
           }
           else{
             Some(e)
