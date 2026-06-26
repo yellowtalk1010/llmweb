@@ -30,7 +30,7 @@ class ParseCammandParam {
   var back: Boolean = false
   var back_step: Int = 80
   var json: Boolean = false
-  var wrate: Float = 0.45
+  var wrate: Float = 1.00
 
   override def toString: String = {
     s"CammandParam=path:${path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"
