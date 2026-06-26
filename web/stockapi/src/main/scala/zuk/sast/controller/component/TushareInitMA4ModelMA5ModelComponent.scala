@@ -171,10 +171,9 @@ class TushareInitMA4ModelMA5ModelComponent {
       val name = backTestDto.stockName
       val time = backTestDto.tradedate
 
-      log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
-
       val existList = allEntitys.filter(e => e.stockType.equals(stockType) && e.stockCode.equals(stockCode) && e.createtime.equals(time))
       if (existList.size == 0) {
+        log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
         val stockEntity = new StockEntity
         stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
         stockEntity.stockCode = stockCode.trim
@@ -186,7 +185,7 @@ class TushareInitMA4ModelMA5ModelComponent {
         allEntitys += stockEntity
       }
       else {
-        log.info("已存在")
+        //log.info("已存在")
       }
 
     })
