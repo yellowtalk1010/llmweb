@@ -50,9 +50,10 @@ object TushareStockDailyDataComponent {
       val head = ls.head
       val lowest = ls.sortBy(_.close.toFloat).reverse.last //过去60个交易日最低价
       val highest = ls.sortBy(_.close.toFloat).last //过去60个交易日最高价
-      if(new java.math.BigDecimal(lowest.close).compareTo(java.math.BigDecimal.ZERO) == 0 
+      if(new java.math.BigDecimal(lowest.close).compareTo(java.math.BigDecimal.ZERO) == 0
         || new BigDecimal(highest.close).compareTo(java.math.BigDecimal.ZERO)==0){
-        println()
+        //可能是停牌
+        Some((0,0,0,""))
       }
       val lowRate = new BigDecimal(head.close).divide(new BigDecimal(lowest.close), 2, RoundingMode.DOWN).toString
       val hightRate = new BigDecimal(head.close).divide(new BigDecimal(highest.close), 2, RoundingMode.DOWN).toString
@@ -134,7 +135,14 @@ class TushareStockDailyDataComponent {
       val rtkFile = new File(path)
       if(rtkFile.exists() && rtkFile.isFile){
         log.info(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")
-        val list = loadAllStocks(rtkFile)
+        val list = loadAllStocks(rtkFile).filter(e=>{
+          //过滤掉停牌的数据
+          val isTingPai = new BigDecimal(e.close).compareTo(java.math.BigDecimal.ZERO) == 0
+            || new BigDecimal(e.low).compareTo(java.math.BigDecimal.ZERO) == 0
+            || new BigDecimal(e.high).compareTo(java.math.BigDecimal.ZERO) == 0
+            || new BigDecimal(e.open).compareTo(java.math.BigDecimal.ZERO) == 0
+          !isTingPai
+        })
         val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date)
         list.map(e=>{
           e.trade_date = dateStr
