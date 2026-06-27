@@ -9,7 +9,6 @@ trait IToken {
   def llmChatURL(): String //聊天页面
   def llmOfficialWebsite(): String //官网地址
 
-//  def sayHi(): Unit
   def chat(task: ITask): Unit
 
   def onListenRequest(request: Request): Boolean
