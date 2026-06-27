@@ -20,7 +20,8 @@ object PassFactory {
 //        new MA3_2_Model, //反包两日阴线后继续下跌
         new MA3_3_Model,
         new MA4_Model,
-        new MA5_Model
+        new MA5_Model,
+//        new MA6_Model
     )
   }
 
