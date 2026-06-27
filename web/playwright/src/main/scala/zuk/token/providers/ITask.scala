@@ -9,7 +9,7 @@ trait ITask {
   @BeanProperty var chatContent: String = null
   @BeanProperty var responseText: String = null
   @BeanProperty var parserText: String = null
-  @BeanProperty var finished = null
+  @BeanProperty var finished:Boolean = false
 
   /***
    * 将deepseek、gpt进行解析

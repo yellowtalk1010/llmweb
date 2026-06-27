@@ -36,39 +36,70 @@ class TushareConceptComponent {
       tsStock.ts_code = stockCode
       val conceptURL = tsStock.getConceptURL()
 
-      val task = new DeepseekTask_easymoneyConcept
-      task.stockCode = stockCode
-      task.stockName = stockName
-      task.stockConceptURL = conceptURL
-      task.chatContent = task.createPrompt()
-      println(s"创建Prompt提示词：${task.chatContent}")
-      TaskHandleFactory.TASK_QUEUE.push(task)
+      val task1 = new DeepseekTask_easymoneyConcept
+      task1.stockCode = stockCode
+      task1.stockName = stockName
+      task1.stockConceptURL = conceptURL
+      task1.chatContent = task1.createPrompt()
+//      println(s"创建Prompt提示词：${task1.chatContent}")
+      TaskHandleFactory.TASK_QUEUE.push(task1)
+
+//      val task2 = new DeepseekTask_easymoneyConcept
+//      task2.stockCode = stockCode
+//      task2.stockName = stockName
+//      task2.stockConceptURL = conceptURL
+//      task2.chatContent = task1.createPrompt()
+//      //      println(s"创建Prompt提示词：${task2.chatContent}")
+//      TaskHandleFactory.TASK_QUEUE.push(task2)
     })
 
 
     executor.execute(()=>{
       while (true){
         try {
-          val task = TaskHandleFactory.TASK_QUEUE.peek()
-          if(task!=null){
-            if(task.checkResult()){
-              val rmTask = TaskHandleFactory.TASK_QUEUE.pop()
-              if(rmTask.checkResult()){
-                rmTask match {
-                  case deepseekTask_easymoneyConcept: DeepseekTask_easymoneyConcept =>
+
+          Thread.sleep(30 * 1000)
+
+          if(TaskHandleFactory.TASK_QUEUE.size()>0){
+            val firstTask = TaskHandleFactory.TASK_QUEUE.poll()
+            if (firstTask != null) {
+              firstTask match {
+                case deepseekTask_easymoneyConcept: DeepseekTask_easymoneyConcept =>
+
+                  var exist = false
+                  val queueSize = TaskHandleFactory.TASK_QUEUE.size()
+                  val answerSize = TaskHandleFactory.ANSWER_LIST.size
+                  val answerList = TaskHandleFactory.ANSWER_LIST
+                  answerList.foreach(e=>{
+                    val tsStock = new TsStock
+                    tsStock.ts_code = deepseekTask_easymoneyConcept.stockCode
+                    tsStock.splitTsCode(tsStock.ts_code)
+                    if(e.contains(tsStock.s_0) || e.contains(deepseekTask_easymoneyConcept.stockName)){
+                      deepseekTask_easymoneyConcept.parserText = e
+                      exist = true
+                    }
+                  })
+
+                  if(exist){
+
                     val stockInfo = new StockInfoEntity
                     stockInfo.id = UUID.randomUUID().toString.replaceAll("-", "")
                     stockInfo.stockCode = deepseekTask_easymoneyConcept.stockCode
                     stockInfo.stockName = deepseekTask_easymoneyConcept.stockName
-                    stockInfo.concept = deepseekTask_easymoneyConcept.parserText
+                    stockInfo.concept = firstTask.parserText
                     this.stockInfoMapper.insert(stockInfo)
-                  case _=>
-                }
+                  }
+                  else {
+                    TaskHandleFactory.TASK_QUEUE.push(firstTask)
+                  }
+
+
+                case _ =>
 
               }
             }
           }
-          Thread.sleep(5 * 1000)
+
         }
         catch {
           case exception: Exception =>

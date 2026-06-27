@@ -21,7 +21,7 @@ trait DeepseekTask extends ITask {
 
     val stringBuilder = new StringBuilder()
     lines.foreach(l=>{
-      println(l)
+      //println(l)
       val jsonObj = JSONObject.parseObject(l)
       if(jsonObj.get("v")!=null && jsonObj.get("v").isInstanceOf[String]){
         stringBuilder.append(jsonObj.get("v"))

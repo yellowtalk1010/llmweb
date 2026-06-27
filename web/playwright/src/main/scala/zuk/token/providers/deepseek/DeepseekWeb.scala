@@ -2,8 +2,8 @@ package zuk.token.providers.deepseek
 
 import com.microsoft.playwright.{Page, Request, Response, Route}
 import zuk.token.TaskHandleFactory
-import zuk.token.providers.deepseek.tasks.DeepseekTask_easymoneyConcept
-import zuk.token.providers.{ChromeBrowser, ITask, IProviderToken}
+import zuk.token.providers.deepseek.tasks.{DeepseekTask, DeepseekTask_easymoneyConcept}
+import zuk.token.providers.{ChromeBrowser, IProviderToken, ITask}
 
 import scala.jdk.CollectionConverters.*
 
@@ -23,27 +23,22 @@ class DeepseekWeb extends IProviderToken {
 
   var chatContext: String = null
 
-  override def onListenRequest(request: Request): Boolean = {
+
+  override def onListenRequest(request: Request): Boolean = synchronized {
     try {
+
       val url = request.url()
-      if(url.startsWith("https://chat.deepseek.com/api/v0/chat/completion")){
+      if(url.contains("deepseek") && url.contains("completion")){
         println(s"监听onListenResponse.url:${url}")
         val response = request.response()
         val text = response.text()
-        println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
-        println(text)
-        val iTask = TaskHandleFactory.TASK_QUEUE.peek()
-        if(iTask!=null){
-          iTask.responseText = text //注意读写安全
-          iTask.parseProvider()
-        }
-//        if(chatContext!=null){
-//          val task: ITask = new DeepseekTask_easymoneyConcept(chatContext)
-//          task.responseText = text
-//          val parseResult = task.parse()
-//          println(parseResult)
-//        }
-        println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+
+        val task = new DeepseekTask_easymoneyConcept()
+        task.responseText = text
+        task.parseProvider()
+
+        //println("")
+        TaskHandleFactory.ANSWER_LIST += task.parserText
       }
       true
     }
@@ -52,51 +47,6 @@ class DeepseekWeb extends IProviderToken {
         exception.printStackTrace()
         false
     }
-  }
-
-  /***
-   * 这个方式容易出现阻塞导致不问题
-   */
-  @Deprecated
-  override def onListenRoute(route: Route): Boolean = {
-    val request = route.request()
-    val url = request.url()
-    if(url.contains("/api/v0/") && url.contains("completion")){
-      isBreak = true
-      val headers = request.headers()
-      val authorization = headers.get("authorization")
-      val postData = request.postData() // 可能为 null
-
-      println(s"[intercept] url = ${url}")
-      println(s"[intercept] authorization = ${authorization}")
-      println(s"[intercept] postData = ${postData}")
-
-      if (postData != null && postData.contains("chat_session_id")) {
-        // 在这里解析参数
-        // val jsonObj = JSONObject.parseObject(postData)
-
-        // 直接取消，不让它真正发出去
-        println("[intercept] matched, abort request")
-        route.abort()
-
-        headers.asScala.map(h => {
-          val k = h._1
-          val v = h._2
-          s"${k}=${v}"
-        }).toList.foreach(println)
-
-//        val updatePostData = postData.replaceAll("hi", content)
-//        val deepseekClient = new DeepseekClient
-//        deepseekClient.createCompletion(headers, updatePostData)
-
-      }
-
-      return true
-    }
-    else {
-      route.resume()
-    }
-    false
   }
 
   override def chat(context: String): Unit = synchronized {
@@ -136,6 +86,8 @@ class DeepseekWeb extends IProviderToken {
     sendButton.click()
 
     println("发送对话")
+    println("等待回复")
+    //Thread.sleep(30 * 1000)
   }
 
 
@@ -149,6 +101,7 @@ class DeepseekWeb extends IProviderToken {
     while (true){
       try {
         val itask = TaskHandleFactory.TASK_QUEUE.peek()
+        println(s"队列长度:${TaskHandleFactory.TASK_QUEUE.size()}")
         if(itask!=null){
           chat(itask.chatContent)
         }
@@ -162,4 +115,49 @@ class DeepseekWeb extends IProviderToken {
   }
 
 
+
+  /***
+   * 这个方式容易出现阻塞导致不问题
+   */
+  @Deprecated
+  override def onListenRoute(route: Route): Boolean = {
+    val request = route.request()
+    val url = request.url()
+    if(url.contains("/api/v0/") && url.contains("completion")){
+      isBreak = true
+      val headers = request.headers()
+      val authorization = headers.get("authorization")
+      val postData = request.postData() // 可能为 null
+
+      println(s"[intercept] url = ${url}")
+      println(s"[intercept] authorization = ${authorization}")
+      println(s"[intercept] postData = ${postData}")
+
+      if (postData != null && postData.contains("chat_session_id")) {
+        // 在这里解析参数
+        // val jsonObj = JSONObject.parseObject(postData)
+
+        // 直接取消，不让它真正发出去
+        println("[intercept] matched, abort request")
+        route.abort()
+
+        headers.asScala.map(h => {
+          val k = h._1
+          val v = h._2
+          s"${k}=${v}"
+        }).toList.foreach(println)
+
+        //        val updatePostData = postData.replaceAll("hi", content)
+        //        val deepseekClient = new DeepseekClient
+        //        deepseekClient.createCompletion(headers, updatePostData)
+
+      }
+
+      return true
+    }
+    else {
+      route.resume()
+    }
+    false
+  }
 }

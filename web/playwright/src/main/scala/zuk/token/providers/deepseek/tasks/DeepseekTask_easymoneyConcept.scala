@@ -74,9 +74,12 @@ class DeepseekTask_easymoneyConcept extends DeepseekTask {
     }
     val parseResult = this.parseProvider()
     val lines = parseResult.split("\n").toList
+//    this.finished = true
 //    lines.filter(_.contains(this.stockCode)).size>0
 //      &&
-      lines.filter(_.contains(this.stockName)).size>0
+    this.finished = lines.filter(_.contains(this.stockName)).size>0
+    this.finished
+
   }
 
 }
