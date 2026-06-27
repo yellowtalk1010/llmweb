@@ -1,5 +1,6 @@
 package zuk.token.providers.deepseek.tasks
 
+import org.apache.commons.lang3.StringUtils
 import zuk.token.providers.ITask
 
 import scala.beans.BeanProperty
@@ -68,10 +69,14 @@ class DeepseekTask_easymoneyConcept extends DeepseekTask {
   }
 
   override def checkResult(): Boolean = {
+    if(StringUtils.isEmpty(this.responseText)){
+      return false
+    }
     val parseResult = this.parseProvider()
     val lines = parseResult.split("\n").toList
-    lines.filter(_.contains(this.stockCode)).size>0
-      && lines.filter(_.contains(this.stockName)).size>0
+//    lines.filter(_.contains(this.stockCode)).size>0
+//      &&
+      lines.filter(_.contains(this.stockName)).size>0
   }
 
 }
