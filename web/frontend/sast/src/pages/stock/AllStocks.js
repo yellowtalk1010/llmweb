@@ -187,9 +187,9 @@ function AllStocks() {
               <th className="p-3 text-left">购买</th>
               <th className="p-3 text-left">关注</th>
               <th className="p-3 text-left">资金</th>
-              <th className="p-3 text-left">概念</th>
               <th className="p-3 text-left">代码</th>
               <th className="p-3 text-left">代码名称</th>
+              <th className="p-3 text-left">概念</th>
               <th className="p-3 text-left">备注</th>
             </tr>
           </thead>
@@ -257,20 +257,10 @@ function AllStocks() {
                       </a>
                   </td>  
 
-                  <td className="p-2">
-                      <a
-                        href={item.conceptURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline cursor-pointer"
-                      >
-                        概念
-                      </a>
-                  </td>  
-
                   <td className="p-3">
                     {item.stockCode}
                   </td>
+
 
                   <td className="p-3">
                     <a
@@ -283,9 +273,22 @@ function AllStocks() {
                     </a>
                     
                   </td>
+
+                  
+                  <td className="p-2">
+                      <a
+                        href={item.conceptURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline cursor-pointer"
+                      >
+                        概念
+                      </a>
+                  </td>  
                   
                   <td>
                     {item.remark}
+                    <br/>
                   </td>
 
                 </tr>

@@ -34,36 +34,60 @@ object ChromeBrowser {
 
   private def onListen(): Unit = {
     if (browserContext != null){
+      //this.onListenRoute()
+      this.onListenRequest()
+    }
+  }
 
-      browserContext.route("**/*", (route: Route) => {
-        try {
-          println("输出全部URL地址")
-          val urls = browserContext.pages().asScala.map(_.url()).toList
-          urls.foreach(println)
-          println()
 
-          println("输出全部cookie")
-          val cookies = browserContext.cookies(urls.asJava)
-          cookies.asScala.foreach(c=>{
-            val k = c.name
-            val v = c.value
-            println(s"${k}=${v}")
-          })
-          println()
-
-          val request = route.request()
-          val url = request.url()
-          println(s"url:${url}")
-
-          chatList.foreach(chat=>{
-            chat.onListen(route)
-          })
-        }
-        catch {
-          case exception: Exception => exception.printStackTrace()
-        }
+  private def onListenRequest(): Unit = {
+    try {
+      browserContext.onRequest(handle=>{
+        val url = handle.url()
+        chatList.foreach(c=>{
+          c.onListenRequest(handle)
+        })
       })
     }
+    catch {
+      case exception: Exception =>
+    }
+  }
+
+  /***
+   * 会出现阻塞情况
+   */
+  @Deprecated
+  private def onListenRoute(): Unit = {
+
+    browserContext.route("**/*", (route: Route) => {
+      try {
+        println("输出全部URL地址")
+        val urls = browserContext.pages().asScala.map(_.url()).toList
+        urls.foreach(println)
+        println()
+
+        println("输出全部cookie")
+        val cookies = browserContext.cookies(urls.asJava)
+        cookies.asScala.foreach(c => {
+          val k = c.name
+          val v = c.value
+          println(s"${k}=${v}")
+        })
+        println()
+
+        val request = route.request()
+        val url = request.url()
+        println(s"url:${url}")
+
+        chatList.foreach(chat => {
+          chat.onListenRoute(route)
+        })
+      }
+      catch {
+        case exception: Exception => exception.printStackTrace()
+      }
+    })
   }
 
 }

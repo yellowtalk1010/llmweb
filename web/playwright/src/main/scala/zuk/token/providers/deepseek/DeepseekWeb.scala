@@ -1,6 +1,6 @@
 package zuk.token.providers.deepseek
 
-import com.microsoft.playwright.{Page, Route}
+import com.microsoft.playwright.{Page, Request, Response, Route}
 import zuk.token.providers.{ChromeBrowser, IToken}
 
 import scala.jdk.CollectionConverters.*
@@ -21,7 +21,30 @@ class DeepseekWeb extends IToken {
 
   var content: String = ""
 
-  override def onListen(route: Route): Boolean = {
+  override def onListenRequest(request: Request): Boolean = {
+    try {
+      val url = request.url()
+      if(url.startsWith("https://chat.deepseek.com/api/v0/chat/completion")){
+        println(s"onListenResponse.url:${url}")
+        val response = request.response()
+        val text = response.text()
+        println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+        println(text)
+        println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+      }
+      true
+    }
+    catch {
+      case exception: Exception =>
+        exception.printStackTrace()
+        false
+    }
+  }
+
+  /***
+   *
+   */
+  override def onListenRoute(route: Route): Boolean = {
     val request = route.request()
     val url = request.url()
     if(url.contains("/api/v0/") && url.contains("completion")){
@@ -107,7 +130,7 @@ class DeepseekWeb extends IToken {
     textarea.fill("hi")
 
     //点击发送按钮
-    val sendButton = this.deepseekPage.locator("div[role='button'][aria-disabled='false']").last
+    val sendButton = this.deepseekPage.locator("div[class='ds-button__background']").last
     sendButton.click()
   }
 

@@ -1,6 +1,6 @@
 package zuk.token.providers
 
-import com.microsoft.playwright.{Page, Request, Route}
+import com.microsoft.playwright.{Page, Request, Response, Route}
 
 trait IToken {
 
@@ -11,8 +11,8 @@ trait IToken {
   def sayHi(): Unit
   def chat(content: String): Unit
 
-  def onListen(route: Route): Boolean
-//  def webLogin(): Unit
+  def onListenRequest(request: Request): Boolean
+  def onListenRoute(route: Route): Boolean
 
   def delete(): Unit
 
