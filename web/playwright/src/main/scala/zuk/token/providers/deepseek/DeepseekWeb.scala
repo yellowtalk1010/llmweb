@@ -1,6 +1,7 @@
 package zuk.token.providers.deepseek
 
 import com.microsoft.playwright.{Page, Request, Response, Route}
+import zuk.token.TaskHandleFactory
 import zuk.token.providers.deepseek.tasks.{DeepseekTask_easymoneyConcept, ITask}
 import zuk.token.providers.{ChromeBrowser, IToken}
 
@@ -31,12 +32,17 @@ class DeepseekWeb extends IToken {
         val text = response.text()
         println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         println(text)
-        if(chatContext!=null){
-          val task: ITask = new DeepseekTask_easymoneyConcept(chatContext)
-          task.responseText = text
-          val parseResult = task.parse()
-          println(parseResult)
+        val iTask = TaskHandleFactory.TASK_QUEUE.peek()
+        if(iTask!=null){
+          iTask.responseText = text //注意读写安全
+          iTask.parse()
         }
+//        if(chatContext!=null){
+//          val task: ITask = new DeepseekTask_easymoneyConcept(chatContext)
+//          task.responseText = text
+//          val parseResult = task.parse()
+//          println(parseResult)
+//        }
         println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
       }
       true
@@ -133,12 +139,27 @@ class DeepseekWeb extends IToken {
   }
 
 
-
-
-
   override def delete(): Unit = {}
 
   override def llmName(): String = "deepseek"
   override def llmChatURL(): String = "https://chat.deepseek.com"
   override def llmOfficialWebsite(): String = "https://www.deepseek.com/"
+
+  override def run(): Unit = {
+    while (true){
+      try {
+        val itask = TaskHandleFactory.TASK_QUEUE.peek()
+        if(itask!=null){
+          chat(itask.chatContent)
+        }
+      }
+      catch {
+        case exception: Exception=>
+          exception.printStackTrace()
+      }
+      Thread.sleep(30 * 1000) //每30秒执行一次
+    }
+  }
+
+
 }

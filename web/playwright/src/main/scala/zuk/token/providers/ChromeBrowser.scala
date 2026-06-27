@@ -6,7 +6,8 @@ import zuk.token.providers.deepseek.DeepseekWeb
 import java.net.http.HttpClient
 import java.time.Duration
 import java.util
-import java.util.List
+import java.util.{List, concurrent}
+import java.util.concurrent.Executors
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
@@ -28,11 +29,21 @@ object ChromeBrowser {
     null
   }
 
-  ChromeBrowser.onListen() //添加监听
-
   val chatList = Array[IToken]().toBuffer
 
+  def init(): Unit = {
+    chatList += new DeepseekWeb()
+    onListen()
+
+    val executors = concurrent.Executors.newCachedThreadPool()
+    chatList.foreach(e => {
+      println("启动任务处理线程池")
+      executors.execute(e)
+    })
+  }
+
   private def onListen(): Unit = {
+    println("启动监听")
     if (browserContext != null){
       //this.onListenRoute()
       this.onListenRequest()

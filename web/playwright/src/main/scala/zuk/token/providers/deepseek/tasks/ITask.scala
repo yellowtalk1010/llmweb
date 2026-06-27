@@ -3,13 +3,16 @@ package zuk.token.providers.deepseek.tasks
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.lang3.StringUtils
 
+import java.util.UUID
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
 trait ITask(@BeanProperty val chatContent: String) {
 
+  @BeanProperty var id: String = UUID.randomUUID().toString.replaceAll("-", "")
   @BeanProperty var responseText: String = null
-  @BeanProperty var finished = false
+  @BeanProperty var parserText: String = null
+  @BeanProperty var finished = null
 
   def parse(): String = {
     println(s"分析结果：${responseText}")
@@ -32,7 +35,8 @@ trait ITask(@BeanProperty val chatContent: String) {
 
     println(stringBuilder)
 
-    stringBuilder.toString()
+    parserText = stringBuilder.toString()
+    parserText
   }
 
 }

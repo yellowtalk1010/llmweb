@@ -8,7 +8,7 @@ object Main {
 
   def main(args: Array[String]): Unit = {
     println("hello")
-    val content =
+    val content: String = {
       """
         |提取 https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=SH688323&color=b#/hxtc/tcxq 里面的板块和概念。输出的格式严格采用如下格式：
         |```
@@ -24,16 +24,30 @@ object Main {
         |```
         |不需要附加任何其他信息的补充说明。
         |""".stripMargin
-    ChromeBrowser.chatList.clear()
+//    ChromeBrowser.chatList.clear()
+//
+//    (ChromeBrowser.chatList ++= Array(new DeepseekWeb())).foreach(c=>{
+//      println(c.getClass.getName)
+//      for (i <- 0 until 2) {
+//        val task = new DeepseekTask_easymoneyConcept(content)
+//        c.chat(content)
+//        Thread.sleep(10000)
+//      }
+//    })
 
-    (ChromeBrowser.chatList ++= Array(new DeepseekWeb())).foreach(c=>{
-      println(c.getClass.getName)
-      for (i <- 0 until 2) {
-        val task = new DeepseekTask_easymoneyConcept(content)
-        c.chat(task)
-        Thread.sleep(10000)
-      }
-    })
+    }
+    try {
+      TaskHandleFactory.initTask()
+      val task = new DeepseekTask_easymoneyConcept(content)
+      TaskHandleFactory.TASK_QUEUE.push(task)
+      Thread.sleep(99999)
+    }
+    catch {
+      case exception: Exception=>
+    }
+
+
+
   }
 
 

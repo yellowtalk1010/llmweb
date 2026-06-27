@@ -3,7 +3,7 @@ package zuk.token.providers
 import com.microsoft.playwright.{Page, Request, Response, Route}
 import zuk.token.providers.deepseek.tasks.ITask
 
-trait IToken {
+trait IToken extends Runnable{
 
   def llmName(): String //web llm 名称
   def llmChatURL(): String //聊天页面
