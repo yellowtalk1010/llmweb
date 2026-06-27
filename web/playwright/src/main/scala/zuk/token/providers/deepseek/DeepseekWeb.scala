@@ -20,7 +20,7 @@ class DeepseekWeb extends IToken {
 
   var isBreak: Boolean = false
 
-  var task: ITask = null
+  var chatContext: String = null
 
   override def onListenRequest(request: Request): Boolean = {
     try {
@@ -31,7 +31,8 @@ class DeepseekWeb extends IToken {
         val text = response.text()
         println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         println(text)
-        if(task!=null){
+        if(chatContext!=null){
+          val task: ITask = new DeepseekTask_easymoneyConcept(chatContext)
           task.responseText = text
           val parseResult = task.parse()
           println(parseResult)
@@ -92,9 +93,9 @@ class DeepseekWeb extends IToken {
     false
   }
 
-  override def chat(tk: ITask): Unit = synchronized {
+  override def chat(context: String): Unit = synchronized {
 
-    this.task = tk
+    chatContext = context
     val browserContext = ChromeBrowser.browserContext
     if(browserContext == null){
       return
@@ -122,7 +123,7 @@ class DeepseekWeb extends IToken {
     //向输入框中输入聊天内容
     val textarea = this.deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']")
     textarea.waitFor()
-    textarea.fill(task.chatContent)
+    textarea.fill(chatContext)
 
     //点击发送按钮
     val sendButton = this.deepseekPage.locator("div[class='ds-button__background']").last
