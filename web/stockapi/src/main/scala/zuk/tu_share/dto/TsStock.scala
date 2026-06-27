@@ -28,6 +28,18 @@ class TsStock extends TsCodeSplit{
     }
   }
 
+  private var conceptURL: String = ""     //东方财富股票所属概念url
+  def getConceptURL(): String = {
+    try {
+      splitTsCode(this.ts_code)
+      val code: String = s"${s_1}${s_0}"
+      this.conceptURL = s"https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=${code}&color=b#/hxtc/tcxq"
+      this.conceptURL
+    }
+    catch {
+      case exception: Exception => this.conceptURL
+    }
+  }
 
 }
 
