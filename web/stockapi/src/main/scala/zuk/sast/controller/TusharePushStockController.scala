@@ -186,6 +186,8 @@ class TusharePushStockController {
         val tsStock = new TsStock()
         tsStock.ts_code = e.ts_code
         e.eastmoneyURL = tsStock.getEastmoneyURL()
+        e.conceptURL = tsStock.getConceptURL()
+
         e.file = file
         e.fileName = file.getName
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)

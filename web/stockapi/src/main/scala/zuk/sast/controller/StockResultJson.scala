@@ -8,7 +8,7 @@ case class StockResultJson(){
   @BeanProperty var file: File = null
   @BeanProperty var fileName: String = ""
   @BeanProperty var eastmoneyURL: String = "" //东方财富地址
-
+  @BeanProperty var conceptURL: String = "" //东方财务概念地址
 
   @BeanProperty var area: String = ""
   @BeanProperty var modDesc: String = ""

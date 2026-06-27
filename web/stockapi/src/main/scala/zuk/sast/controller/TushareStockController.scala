@@ -27,6 +27,7 @@ object TushareStockController {
 }
 
 class TushareStockControllerDTO extends StockEntity {
+  @BeanProperty var conceptURL: String = null
   @BeanProperty var eastmoneyURL: String = null
   @BeanProperty var attention: String = null
   @BeanProperty var buy: String = null
@@ -130,6 +131,7 @@ class TushareStockController {
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.remark = optionTp3.get._4
         dto.eastmoneyURL = e.get.getEastmoneyURL()
+        dto.conceptURL = e.get.getConceptURL()
         dto.attention = ""
         if (attentionSet.contains(dto.stockCode)) {
           dto.attention = "已关注"
@@ -174,6 +176,7 @@ class TushareStockController {
       dto.stockCode = e.ts_code
       dto.name = e.name
       dto.eastmoneyURL = e.getEastmoneyURL()
+      dto.conceptURL = e.getConceptURL()
       dto.attention = ""
       if (attentionSet.contains(dto.stockCode)) {
         dto.attention = "已关注"
@@ -230,6 +233,7 @@ class TushareStockController {
           val tsStock = new TsStock()
           tsStock.ts_code = entity.stockCode
           dto.eastmoneyURL = tsStock.getEastmoneyURL()
+          dto.conceptURL = tsStock.getConceptURL()
           dto.remark = dto.remark + entity.remark
           if (attentionSet.contains(dto.stockCode)) {
             dto.attention = "已关注"
