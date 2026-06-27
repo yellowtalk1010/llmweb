@@ -73,7 +73,7 @@ class MA6_Model extends IModel {
 
 
     val moreList = sufList.map(_.vol.toFloat).filter(v=>{
-      new BigDecimal(v).divide(maxVol, 2, RoundingMode.UP).compareTo(new BigDecimal(3)) >= 0 //连续多天放3倍量
+      new BigDecimal(v).divide(avgVol, 2, RoundingMode.UP).compareTo(new BigDecimal(2)) >= 0 //连续多天放3倍量
     })
 
     moreList.size == sufList.size
@@ -84,7 +84,7 @@ class MA6_Model extends IModel {
    */
   private def calaChange(list: List[ModuleDay]): Boolean = {
     val sufList = list.reverse.slice(7, list.size)
-    val st = sufList.filter(_.change.toFloat > 3.0).size == sufList.size
+    val st = sufList.filter(_.change.toFloat > 0.0).size == sufList.size
 
 //    var n = 0
 //    for (i <- 1 until sufList.size) {
