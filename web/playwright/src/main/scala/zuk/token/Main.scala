@@ -38,7 +38,8 @@ object Main {
     }
     try {
       TaskHandleFactory.initTask()
-      val task = new DeepseekTask_easymoneyConcept(content)
+      val task = new DeepseekTask_easymoneyConcept()
+      task.chatContent = content
       TaskHandleFactory.TASK_QUEUE.push(task)
       Thread.sleep(99999)
     }
