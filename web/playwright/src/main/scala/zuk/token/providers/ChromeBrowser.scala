@@ -32,9 +32,13 @@ object ChromeBrowser {
   val chatList = Array[IToken]().toBuffer
 
   def init(): Unit = {
+    //添加deepseek人工智能
     chatList += new DeepseekWeb()
+
+    //启动监听程序
     onListen()
 
+    //执行ai分析
     val executors = concurrent.Executors.newCachedThreadPool()
     chatList.foreach(e => {
       println("启动任务处理线程池")
@@ -45,7 +49,6 @@ object ChromeBrowser {
   private def onListen(): Unit = {
     println("启动监听")
     if (browserContext != null){
-      //this.onListenRoute()
       this.onListenRequest()
     }
   }
@@ -53,6 +56,20 @@ object ChromeBrowser {
 
   private def onListenRequest(): Unit = {
     try {
+
+      println("输出全部URL地址")
+      val urls = browserContext.pages().asScala.map(_.url()).toList
+      urls.foreach(println)
+      println()
+
+      println("输出全部cookie")
+      val cookies = browserContext.cookies(urls.asJava)
+      cookies.asScala.foreach(c => {
+        val k = c.name
+        val v = c.value
+        println(s"${k}=${v}")
+      })
+
       browserContext.onRequest(handle=>{
         val url = handle.url()
         chatList.foreach(c=>{
@@ -63,42 +80,6 @@ object ChromeBrowser {
     catch {
       case exception: Exception =>
     }
-  }
-
-  /***
-   * 会出现阻塞情况
-   */
-  @Deprecated
-  private def onListenRoute(): Unit = {
-
-    browserContext.route("**/*", (route: Route) => {
-      try {
-        println("输出全部URL地址")
-        val urls = browserContext.pages().asScala.map(_.url()).toList
-        urls.foreach(println)
-        println()
-
-        println("输出全部cookie")
-        val cookies = browserContext.cookies(urls.asJava)
-        cookies.asScala.foreach(c => {
-          val k = c.name
-          val v = c.value
-          println(s"${k}=${v}")
-        })
-        println()
-
-        val request = route.request()
-        val url = request.url()
-        println(s"url:${url}")
-
-        chatList.foreach(chat => {
-          chat.onListenRoute(route)
-        })
-      }
-      catch {
-        case exception: Exception => exception.printStackTrace()
-      }
-    })
   }
 
 }
