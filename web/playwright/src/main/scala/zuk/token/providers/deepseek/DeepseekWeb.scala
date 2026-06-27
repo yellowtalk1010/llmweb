@@ -26,7 +26,7 @@ class DeepseekWeb extends IToken {
     try {
       val url = request.url()
       if(url.startsWith("https://chat.deepseek.com/api/v0/chat/completion")){
-        println(s"onListenResponse.url:${url}")
+        println(s"监听onListenResponse.url:${url}")
         val response = request.response()
         val text = response.text()
         println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
