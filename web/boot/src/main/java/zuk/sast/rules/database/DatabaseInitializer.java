@@ -22,6 +22,7 @@ public class DatabaseInitializer {
         createProjectTable();
         createIssueTable();
         createStockTable();
+        createStockInfoTable();
         log.info("完成初始化数据库");
     }
 
@@ -64,6 +65,22 @@ public class DatabaseInitializer {
                 remark TEXT
             )
             """;
+        jdbcTemplate.execute(sql);
+    }
+
+    private void createStockInfoTable(){
+        log.info("创建stock_info表");
+        String sql = """
+                CREATE TABLE IF NOT EXISTS STOCK_INFO(
+                    id VARCHAR(100)  PRIMARY KEY,
+                    stock_code  VARCHAR(100),
+                    stock_name VARCHAR(100),
+                    concept text,
+                    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+                
+                """;
+
         jdbcTemplate.execute(sql);
     }
 
