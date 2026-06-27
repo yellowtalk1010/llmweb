@@ -29,7 +29,7 @@ object ChromeBrowser {
     null
   }
 
-  val chatList = Array[IToken]().toBuffer
+  val chatList = Array[IProviderToken]().toBuffer
 
   def init(): Unit = {
     //添加deepseek人工智能

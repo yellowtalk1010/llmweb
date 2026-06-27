@@ -2,7 +2,11 @@ package zuk.token.providers
 
 import com.microsoft.playwright.{Page, Request, Response, Route}
 
-trait IToken extends Runnable{
+/***
+ * 提供服务的接口：
+ * deepseek、qwen、chatgpt等等
+ */
+trait IProviderToken extends Runnable{
 
   def llmName(): String //web llm 名称
   def llmChatURL(): String //聊天页面

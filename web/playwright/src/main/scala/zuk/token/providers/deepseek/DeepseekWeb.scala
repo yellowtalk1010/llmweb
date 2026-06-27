@@ -3,11 +3,11 @@ package zuk.token.providers.deepseek
 import com.microsoft.playwright.{Page, Request, Response, Route}
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.deepseek.tasks.DeepseekTask_easymoneyConcept
-import zuk.token.providers.{ChromeBrowser, ITask, IToken}
+import zuk.token.providers.{ChromeBrowser, ITask, IProviderToken}
 
 import scala.jdk.CollectionConverters.*
 
-class DeepseekWeb extends IToken {
+class DeepseekWeb extends IProviderToken {
 
   /***
    * deepseek官网地址
