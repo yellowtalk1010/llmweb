@@ -111,12 +111,7 @@ class DeepseekWeb extends IToken {
     }
 
     println("开始对话")
-    var times = 0
-    while (!isBreak && times < 3){
-      sayHi()
-      times = times + 1
-      Thread.sleep(2000)
-    }
+    sayHi()
     println("完成对话")
   }
 
