@@ -42,8 +42,9 @@ class DeepseekWeb extends IToken {
   }
 
   /***
-   *
+   * 这个方式容易出现阻塞导致不问题
    */
+  @Deprecated
   override def onListenRoute(route: Route): Boolean = {
     val request = route.request()
     val url = request.url()

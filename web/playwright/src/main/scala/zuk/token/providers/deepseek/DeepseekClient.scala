@@ -12,6 +12,7 @@ import java.util
 import java.util.Map
 import scala.jdk.CollectionConverters.*
 
+@Deprecated
 class DeepseekClient {
 
   @throws[IOException]
