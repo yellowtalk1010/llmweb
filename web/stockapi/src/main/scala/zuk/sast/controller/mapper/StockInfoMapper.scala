@@ -20,7 +20,7 @@ trait StockInfoMapper {
 
 
   @Insert(Array("INSERT INTO " +
-    "stock(id, stock_code, stock_name, concept) " +
+    "stock_info(id, stock_code, stock_name, concept) " +
     "VALUES (#{id}, #{stockCode}, #{stockName}, #{concept}"))
   def insert(stock: StockInfoEntity): Int
 
