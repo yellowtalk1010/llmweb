@@ -1,6 +1,7 @@
 package zuk.token.providers.deepseek
 
 import com.microsoft.playwright.{Page, Request, Response, Route}
+import zuk.token.providers.deepseek.tasks.{DeepseekTask_easymoneyConcept, ITask}
 import zuk.token.providers.{ChromeBrowser, IToken}
 
 import scala.jdk.CollectionConverters.*
@@ -19,7 +20,7 @@ class DeepseekWeb extends IToken {
 
   var isBreak: Boolean = false
 
-  var content: String = ""
+  var task: ITask = null
 
   override def onListenRequest(request: Request): Boolean = {
     try {
@@ -30,6 +31,11 @@ class DeepseekWeb extends IToken {
         val text = response.text()
         println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         println(text)
+        if(task!=null){
+          task.responseText = text
+          val parseResult = task.parse()
+          println(parseResult)
+        }
         println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
       }
       true
@@ -72,9 +78,9 @@ class DeepseekWeb extends IToken {
           s"${k}=${v}"
         }).toList.foreach(println)
 
-        val updatePostData = postData.replaceAll("hi", content)
-        val deepseekClient = new DeepseekClient
-        deepseekClient.createCompletion(headers, updatePostData)
+//        val updatePostData = postData.replaceAll("hi", content)
+//        val deepseekClient = new DeepseekClient
+//        deepseekClient.createCompletion(headers, updatePostData)
 
       }
 
@@ -86,9 +92,9 @@ class DeepseekWeb extends IToken {
     false
   }
 
-  override def chat(text: String): Unit = synchronized {
-    this.content = text
+  override def chat(tk: ITask): Unit = synchronized {
 
+    this.task = tk
     val browserContext = ChromeBrowser.browserContext
     if(browserContext == null){
       return
@@ -112,23 +118,20 @@ class DeepseekWeb extends IToken {
     }
 
     println("开始对话")
-    sayHi()
-    println("完成对话")
-  }
 
-  /***
-   * 点击按钮发送：hi
-   */
-  override def sayHi(): Unit = {
-    //向输入框中输入hi
+    //向输入框中输入聊天内容
     val textarea = this.deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']")
     textarea.waitFor()
-    textarea.fill("hi")
+    textarea.fill(task.chatContent)
 
     //点击发送按钮
     val sendButton = this.deepseekPage.locator("div[class='ds-button__background']").last
     sendButton.click()
+
+    println("发送对话")
   }
+
+
 
 
 
