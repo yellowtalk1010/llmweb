@@ -239,6 +239,7 @@ function StockTable({ list, refresh  }) {
           <th className="p-2 text-left">关注</th>
           <th className="p-2 text-left">资金</th>
           <th className="p-2 text-left">备注</th>
+          <th className="p-2 text-left">概念</th>
           <th className="p-2 text-left">名称</th>
           <th className="p-2 text-left">代码</th>
           <th className="p-2 text-left">行业</th>
@@ -291,6 +292,16 @@ function StockTable({ list, refresh  }) {
               </td>  
              
               <td className="p-2">{item.remark}</td>
+              <td className="p-2">
+                <a
+                  href={item.conceptURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  概念
+                </a>
+              </td>
               <td className="p-2 font-medium">
                 <a
                   href={item.eastmoneyURL}
