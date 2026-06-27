@@ -12,6 +12,8 @@ trait IToken extends Runnable{
   def chat(chatContent: String): Unit
 
   def onListenRequest(request: Request): Boolean
+
+  @Deprecated
   def onListenRoute(route: Route): Boolean
 
   def delete(): Unit
