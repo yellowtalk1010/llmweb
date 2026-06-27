@@ -38,7 +38,12 @@ class TushareConceptComponent {
 
     cacheStockInfoList ++= this.stockInfoMapper.selectAll().asScala
 
-    this.stockMapper.selectAll().asScala.map(_.stockCode).toSet.foreach(stockCode=>{
+    val lls = this.stockMapper.selectAll().asScala.groupBy(_.stockCode).map(e=>{
+      val ls = e._2.sortBy(_.createtime).reverse
+      ls.head
+    }).toList.sortBy(_.createtime).reverse
+
+    lls.map(_.stockCode).foreach(stockCode=>{
       val stockName = tushareAllStocksCSVComponent.getTsStock(stockCode).getOrElse(new TsStock).name
       if(StringUtils.isNotEmpty(stockName) && !cacheStockInfoList.map(_.stockCode).toSet.contains(stockCode)){
 
