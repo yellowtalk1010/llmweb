@@ -110,7 +110,7 @@ class DeepseekWeb extends IProviderToken {
         case exception: Exception=>
           exception.printStackTrace()
       }
-      Thread.sleep(30 * 1000) //每30秒执行一次
+      Thread.sleep(15 * 1000) //每30秒执行一次
     }
   }
 

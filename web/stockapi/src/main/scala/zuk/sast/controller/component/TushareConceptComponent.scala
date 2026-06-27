@@ -1,6 +1,7 @@
 package zuk.sast.controller.component
 
 import jakarta.annotation.PostConstruct
+import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import zuk.sast.controller.mapper.entity.StockInfoEntity
@@ -11,6 +12,7 @@ import zuk.tu_share.dto.TsStock
 
 import java.util.UUID
 import java.util.concurrent.Executors
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 @Component
 class TushareConceptComponent {
@@ -21,44 +23,47 @@ class TushareConceptComponent {
   @Autowired
   var stockInfoMapper: StockInfoMapper = null
 
+  @Autowired
+  var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
+
   var executor = Executors.newSingleThreadExecutor()
+
+  var cacheStockInfoList = new ListBuffer[StockInfoEntity]
+
 
   @PostConstruct
   def init(): Unit = {
 
     TaskHandleFactory.initTask()
 
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals("buy")).foreach(e=>{
-      val stockCode = e.stockCode
-      val stockName = e.name
+    cacheStockInfoList ++= this.stockInfoMapper.selectAll().asScala
 
-      val tsStock = new TsStock
-      tsStock.ts_code = stockCode
-      val conceptURL = tsStock.getConceptURL()
+    this.stockMapper.selectAll().asScala.map(_.stockCode).toSet.foreach(stockCode=>{
+      val stockName = tushareAllStocksCSVComponent.getTsStock(stockCode).getOrElse(new TsStock).name
+      if(StringUtils.isNotEmpty(stockName) && !cacheStockInfoList.map(_.stockCode).toSet.contains(stockCode)){
 
-      val task1 = new DeepseekTask_easymoneyConcept
-      task1.stockCode = stockCode
-      task1.stockName = stockName
-      task1.stockConceptURL = conceptURL
-      task1.chatContent = task1.createPrompt()
-//      println(s"创建Prompt提示词：${task1.chatContent}")
-      TaskHandleFactory.TASK_QUEUE.push(task1)
 
-//      val task2 = new DeepseekTask_easymoneyConcept
-//      task2.stockCode = stockCode
-//      task2.stockName = stockName
-//      task2.stockConceptURL = conceptURL
-//      task2.chatContent = task1.createPrompt()
-//      //      println(s"创建Prompt提示词：${task2.chatContent}")
-//      TaskHandleFactory.TASK_QUEUE.push(task2)
+        val tsStock = new TsStock
+        tsStock.ts_code = stockCode
+        val conceptURL = tsStock.getConceptURL()
+
+        val task1 = new DeepseekTask_easymoneyConcept
+        task1.stockCode = stockCode
+        task1.stockName = stockName
+        task1.stockConceptURL = conceptURL
+        task1.chatContent = task1.createPrompt()
+        //      println(s"创建Prompt提示词：${task1.chatContent}")
+        TaskHandleFactory.TASK_QUEUE.push(task1)
+      }
     })
 
+    println(s"任务总数：${TaskHandleFactory.TASK_QUEUE.size()}")
 
     executor.execute(()=>{
       while (true){
         try {
 
-          Thread.sleep(30 * 1000)
+          Thread.sleep(10 * 1000)
 
           if(TaskHandleFactory.TASK_QUEUE.size()>0){
             val firstTask = TaskHandleFactory.TASK_QUEUE.poll()
@@ -88,6 +93,8 @@ class TushareConceptComponent {
                     stockInfo.stockName = deepseekTask_easymoneyConcept.stockName
                     stockInfo.concept = firstTask.parserText
                     this.stockInfoMapper.insert(stockInfo)
+
+                    cacheStockInfoList += stockInfo
                   }
                   else {
                     TaskHandleFactory.TASK_QUEUE.push(firstTask)
