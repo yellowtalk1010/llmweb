@@ -1,7 +1,6 @@
 package zuk.token.providers
 
 import com.microsoft.playwright.{Page, Request, Response, Route}
-import zuk.token.providers.deepseek.tasks.ITask
 
 trait IToken extends Runnable{
 

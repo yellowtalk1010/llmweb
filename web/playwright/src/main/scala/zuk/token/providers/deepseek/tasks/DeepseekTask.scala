@@ -2,18 +2,13 @@ package zuk.token.providers.deepseek.tasks
 
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.lang3.StringUtils
+import zuk.token.providers.ITask
 
-import java.util.UUID
-import scala.beans.BeanProperty
-import scala.jdk.CollectionConverters.*
+trait DeepseekTask extends ITask{
 
-trait ITask(@BeanProperty val chatContent: String) {
-
-  @BeanProperty var id: String = UUID.randomUUID().toString.replaceAll("-", "")
-  @BeanProperty var responseText: String = null
-  @BeanProperty var parserText: String = null
-  @BeanProperty var finished = null
-
+  /***
+   * deepseek解析策略
+   */
   def parse(): String = {
     println(s"分析结果：${responseText}")
 

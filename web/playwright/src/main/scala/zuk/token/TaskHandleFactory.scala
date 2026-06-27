@@ -1,7 +1,6 @@
 package zuk.token
 
-import zuk.token.providers.ChromeBrowser
-import zuk.token.providers.deepseek.tasks.ITask
+import zuk.token.providers.{ChromeBrowser, ITask}
 
 import java.util
 
