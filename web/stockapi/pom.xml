@@ -38,17 +38,17 @@
             </exclusions>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>zuk.sast</groupId>-->
-<!--            <artifactId>playwright</artifactId>-->
-<!--            <version>7.0.0</version>-->
-<!--        </dependency>-->
-
         <dependency>
-            <groupId>com.microsoft.playwright</groupId>
+            <groupId>zuk.sast</groupId>
             <artifactId>playwright</artifactId>
-            <version>1.53.0</version>
+            <version>7.0.0</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.playwright</groupId>-->
+<!--            <artifactId>playwright</artifactId>-->
+<!--            <version>1.53.0</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
