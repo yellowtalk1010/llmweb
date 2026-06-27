@@ -11,6 +11,16 @@ trait ITask {
   @BeanProperty var parserText: String = null
   @BeanProperty var finished = null
 
+  /***
+   * 将deepseek、gpt进行解析
+   * @return
+   */
   def parseProvider(): String
+
+  /***
+   * 检测结果
+   * @return
+   */
+  def checkResult(): Boolean
 
 }
