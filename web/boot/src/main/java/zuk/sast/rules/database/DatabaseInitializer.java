@@ -77,10 +77,8 @@ public class DatabaseInitializer {
                     stock_name VARCHAR(100),
                     concept text,
                     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );
-                
+                )
                 """;
-
         jdbcTemplate.execute(sql);
     }
 
