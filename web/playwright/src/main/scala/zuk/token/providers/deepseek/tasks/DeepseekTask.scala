@@ -9,7 +9,7 @@ trait DeepseekTask extends ITask{
   /***
    * deepseek解析策略
    */
-  def parse(): String = {
+  def parseProvider(): String = {
     println(s"分析结果：${responseText}")
 
     val data = "data:"

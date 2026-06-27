@@ -35,7 +35,7 @@ class DeepseekWeb extends IProviderToken {
         val iTask = TaskHandleFactory.TASK_QUEUE.peek()
         if(iTask!=null){
           iTask.responseText = text //注意读写安全
-          iTask.parse()
+          iTask.parseProvider()
         }
 //        if(chatContext!=null){
 //          val task: ITask = new DeepseekTask_easymoneyConcept(chatContext)

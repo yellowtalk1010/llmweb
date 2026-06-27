@@ -10,6 +10,6 @@ trait ITask(@BeanProperty val chatContent: String) {
   @BeanProperty var parserText: String = null
   @BeanProperty var finished = null
 
-  def parse(): String
+  def parseProvider(): String
 
 }
