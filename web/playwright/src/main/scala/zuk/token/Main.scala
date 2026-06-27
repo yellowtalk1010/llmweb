@@ -16,4 +16,18 @@ object Main {
     })
   }
 
+
+  /***
+   * ChromeBrowser.browserContext.onRequest(handle=>{
+   * println("onrequest:" + handle.url())
+   * if(handle.url().contains("/completion")){
+   * val response = handle.response()
+   * val text = response.text()
+   * println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+   * println(s"text:${text}")
+   * println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+   *
+   * }
+   * })
+   */
 }
