@@ -3,6 +3,7 @@ package zuk.token.task
 import java.util
 import java.util.concurrent.{Executors, LinkedBlockingQueue}
 
+@Deprecated
 object TaskResultQuene {
 
   val taskResultList = new LinkedBlockingQueue[TaskRes]()

@@ -1,5 +1,6 @@
 package zuk.token.task
 
+@Deprecated
 case class TaskRes(taskId: String, result: String) {
 
 
