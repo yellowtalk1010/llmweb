@@ -4,12 +4,12 @@ import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.lang3.StringUtils
 import zuk.token.providers.ITask
 
-trait DeepseekTask extends ITask{
+trait DeepseekTask extends ITask {
 
   /***
    * deepseek解析策略
    */
-  def parseProvider(): String = {
+  override def parseProvider(): String = {
     println(s"分析结果：${responseText}")
 
     val data = "data:"
