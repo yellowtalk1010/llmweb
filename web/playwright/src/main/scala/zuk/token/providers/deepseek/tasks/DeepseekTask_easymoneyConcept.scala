@@ -44,9 +44,9 @@ import scala.jdk.CollectionConverters.*
  */
 class DeepseekTask_easymoneyConcept extends DeepseekTask {
 
-  val stockCode: String = ""
-  val stockName: String = ""
-  val stockConceptURL: String = ""
+  var stockCode: String = ""
+  var stockName: String = ""
+  var stockConceptURL: String = ""
   //https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=SH688323&color=b#/hxtc/tcxq
 
   def createPrompt(): String = {
