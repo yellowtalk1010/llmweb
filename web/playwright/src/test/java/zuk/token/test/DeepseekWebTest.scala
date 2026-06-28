@@ -2,7 +2,8 @@ package zuk.token.test
 
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.token.TaskHandleFactory
-import zuk.token.providers.{ChromeBrowser, ITask}
+import zuk.token.providers.ChromeBrowser
+import zuk.token.providers.tasks.ITask
 
 class DeepseekWebTest extends AnyFunSuite{
 

@@ -2,7 +2,8 @@ package zuk.token
 
 //import zuk.token.providers.ChromeBrowser.chatList
 import zuk.token.providers.deepseek.DeepseekWeb
-import zuk.token.providers.{ChromeBrowser, IProviderToken, ITask}
+import zuk.token.providers.tasks.ITask
+import zuk.token.providers.{ChromeBrowser, IProviderToken}
 
 import java.util
 import scala.collection.mutable.ListBuffer

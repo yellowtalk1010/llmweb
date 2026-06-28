@@ -1,7 +1,6 @@
-package zuk.token.providers.deepseek.tasks
+package zuk.token.providers.tasks
 
 import org.apache.commons.lang3.StringUtils
-import zuk.token.providers.ITask
 
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
@@ -43,14 +42,14 @@ import scala.jdk.CollectionConverters.*
 /***
  * @param chatContent
  */
-class DeepseekTask_easymoneyConcept extends DeepseekTask {
+class EasymoneyConcept extends ITask {
 
   var stockCode: String = ""
   var stockName: String = ""
   var stockConceptURL: String = ""
   //https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=SH688323&color=b#/hxtc/tcxq
 
-  def createPrompt(): String = {
+  override def createPrompt(): String = {
     s"""
       |#任务id：23jl2j42lm323nk42j332lkj4l32kj32ljlj3l2j3l
       |#任务名称：股票所属概念和板块
@@ -72,18 +71,6 @@ class DeepseekTask_easymoneyConcept extends DeepseekTask {
       |""".stripMargin
   }
 
-  override def checkResult(): Boolean = {
-    if(StringUtils.isEmpty(this.responseText)){
-      return false
-    }
-    val parseResult = this.parseProvider()
-    val lines = parseResult.split("\n").toList
-//    this.finished = true
-//    lines.filter(_.contains(this.stockCode)).size>0
-//      &&
-    this.finished = lines.filter(_.contains(this.stockName)).size>0
-    this.finished
 
-  }
 
 }

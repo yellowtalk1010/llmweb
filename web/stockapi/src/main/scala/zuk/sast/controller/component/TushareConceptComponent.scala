@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import zuk.sast.controller.mapper.entity.{StockEntity, StockInfoEntity}
 import zuk.sast.controller.mapper.{StockInfoMapper, StockMapper}
 import zuk.token.TaskHandleFactory
-import zuk.token.providers.deepseek.tasks.DeepseekTask_easymoneyConcept
+import zuk.token.providers.tasks.EasymoneyConcept
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
