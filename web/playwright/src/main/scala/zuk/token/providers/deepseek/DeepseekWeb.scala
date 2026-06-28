@@ -98,7 +98,7 @@ class DeepseekWeb extends IProviderToken {
       //如果存在，则输出全部url
       browserContext.pages().asScala.foreach(page => {
         val url = page.url()
-        println(s"deepseek聊天url地址:${url}")
+        println(s"${llmName()}任务url:${url}")
         if(this.deepseekPage==null && page.url().startsWith(llmChatURL())){
           this.deepseekPage = page
         }
@@ -111,7 +111,7 @@ class DeepseekWeb extends IProviderToken {
       this.deepseekPage.navigate(llmChatURL())
     }
 
-    println("开始对话")
+    println(s"${llmName()}开始对话")
 
     //向输入框中输入聊天内容
     val textarea = this.deepseekPage.locator("textarea[placeholder='给 DeepSeek 发送消息 ']")
@@ -122,8 +122,8 @@ class DeepseekWeb extends IProviderToken {
     val sendButton = this.deepseekPage.locator("div[class='ds-button__background']").last
     sendButton.click()
 
-    println("发送对话")
-    println("等待回复")
+    println(s"${llmName()}发送对话")
+    println(s"${llmName()}等待回复")
     //Thread.sleep(30 * 1000)
   }
 
@@ -134,8 +134,8 @@ class DeepseekWeb extends IProviderToken {
   override def run(): Unit = {
     while (true){
       try {
-        val itask = TaskHandleFactory.TASK_QUEUE.poll()
         println(s"队列长度:${TaskHandleFactory.TASK_QUEUE.size()}")
+        val itask = TaskHandleFactory.TASK_QUEUE.poll()
         if(itask!=null){
           println(s"deepseek执行任务id:${itask.id}")
           chat(itask.chatContent)

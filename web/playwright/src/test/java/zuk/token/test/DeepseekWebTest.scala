@@ -8,6 +8,7 @@ class DeepseekWebTest extends AnyFunSuite{
 
   test("deepseek测试"){
 
+    TaskHandleFactory.initTask()
 
     val t1 = new TaskTest
     t1.chatContent = "你好"
@@ -17,8 +18,6 @@ class DeepseekWebTest extends AnyFunSuite{
     t2.chatContent = "你好"
     TaskHandleFactory.TASK_QUEUE.push(t2)
 
-
-    TaskHandleFactory.initTask()
 
     Thread.sleep(999999)
 
