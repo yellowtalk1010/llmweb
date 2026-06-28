@@ -106,6 +106,7 @@ class TushareConceptComponent {
       val conceptURL = tsStock.getConceptURL()
 
       val task = new Task_EasymoneyConcept
+      task.id = e.id
       task.stockCode = e.stockCode
       task.stockName = e.stockName
       task.stockConceptURL = conceptURL

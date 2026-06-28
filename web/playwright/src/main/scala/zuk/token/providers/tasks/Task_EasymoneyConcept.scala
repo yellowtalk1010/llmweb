@@ -51,14 +51,14 @@ class Task_EasymoneyConcept extends ITask {
 
   override def createPrompt(): String = {
     s"""
-      |#任务id：23jl2j42lm323nk42j332lkj4l32kj32ljlj3l2j3l
+      |#任务id：${id}
       |#任务名称：股票所属概念和板块
       |##提取 ${stockConceptURL} 里面的板块和概念。输出的格式严格采用如下格式：
       |```
       |##########
       | 股票分析结果如下：
       | 任务名称：股票所属概念和板块
-      | 任务id：23jl2j42lm323nk42j332lkj4l32kj32ljlj3l2j3l
+      | 任务id：${id}
       | 股票代码：填写股票的代码
       | 股票名称：填写股票的名称
       | 概念：概念1，概念2
