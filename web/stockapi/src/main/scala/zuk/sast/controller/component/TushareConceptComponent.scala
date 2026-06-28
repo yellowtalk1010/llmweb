@@ -5,7 +5,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import zuk.sast.controller.mapper.entity.StockInfoEntity
+import zuk.sast.controller.mapper.entity.{StockEntity, StockInfoEntity}
 import zuk.sast.controller.mapper.{StockInfoMapper, StockMapper}
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.deepseek.tasks.DeepseekTask_easymoneyConcept
@@ -16,6 +16,10 @@ import java.util.UUID
 import java.util.concurrent.Executors
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
+
+/***
+ * ai分析股票的概念和板块
+ */
 @Component
 class TushareConceptComponent {
 
@@ -30,8 +34,34 @@ class TushareConceptComponent {
 
   var executor = Executors.newSingleThreadExecutor()
 
-  var cacheStockInfoList = new ListBuffer[StockInfoEntity]
 
+  /***
+   * 获取待处理的股票
+   * @return
+   */
+  private def getHandleTaskStockList(): List[StockEntity] = {
+
+    //todo 删除重复的数据
+    this.stockInfoMapper.selectAll().asScala.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls => {
+      for (i <- 1 until ls.size) {
+        this.stockInfoMapper.deleteById(ls(i).id)
+      }
+    })
+
+    val cacheStockInfoList = new ListBuffer[StockInfoEntity]
+    cacheStockInfoList ++= this.stockInfoMapper.selectAll().asScala
+
+    //todo 获取ai提取概念和板块的热点股票
+    val lls = this.stockMapper.selectAll().asScala.groupBy(_.stockCode).map(e => {
+      val ls = e._2.sortBy(_.createtime).reverse
+      ls.head
+    }).toList.sortBy(_.createtime).reverse.filter(e => {
+      !cacheStockInfoList.map(_.stockCode).toSet.contains(e.stockCode)
+    })
+
+    lls
+
+  }
 
   @PostConstruct
   def init(): Unit = {
@@ -62,27 +92,34 @@ class TushareConceptComponent {
     println(s"任务总数：${TaskHandleFactory.TASK_QUEUE.size()}")
 
     executor.execute(()=>{
+      //启动
       while (false){
         try {
 
-          this.stockInfoMapper.selectAll().asScala.groupBy(_.stockCode).filter(_._2.size>1).map(_._2).foreach(ls=>{
-            for (i <- 1 until ls.size) {
-              this.stockInfoMapper.deleteById(ls(i).id)
+          Thread.sleep(30 * 1000)
+
+          if(TaskHandleFactory.TASK_QUEUE.size() < 50){
+            val lls = getHandleTaskStockList()
+            if(lls.size>50){
+              lls.take(50).foreach(e=>{
+                  //todo 将待处理的股票转成任务
+                  val tsStock = new TsStock
+                  tsStock.ts_code = e.stockCode
+                  val conceptURL = tsStock.getConceptURL()
+
+                  val task1 = new DeepseekTask_easymoneyConcept
+                  task1.stockCode = e.stockCode
+                  task1.stockName = e.name
+                  task1.stockConceptURL = conceptURL
+                  task1.chatContent = task1.createPrompt()
+                  //      println(s"创建Prompt提示词：${task1.chatContent}")
+                  TaskHandleFactory.TASK_QUEUE.push(task1)
+              })
             }
-          })
+          }
 
-
-          cacheStockInfoList.clear()
-          cacheStockInfoList ++= this.stockInfoMapper.selectAll().asScala
-
-          //todo 获取ai提取概念和板块的热点股票
-          val lls = this.stockMapper.selectAll().asScala.groupBy(_.stockCode).map(e => {
-            val ls = e._2.sortBy(_.createtime).reverse
-            ls.head
-          }).toList.sortBy(_.createtime).reverse.filter(e => {
-            !cacheStockInfoList.map(_.stockCode).toSet.contains(e.stockCode)
-          })
-
+          
+          val lls = getHandleTaskStockList()
 
           val taskResDir = new File("task_ai")
           if(taskResDir.exists()){
@@ -92,7 +129,7 @@ class TushareConceptComponent {
                 val tsStock = new TsStock
                 tsStock.ts_code = e.stockCode
                 tsStock.splitTsCode(tsStock.ts_code)
-                taskResStr.contains(tsStock.s_0) //|| taskResStr.contains(e.name)
+                taskResStr.contains(tsStock.s_0)
               })
               if(hits.size==1){
 
@@ -101,7 +138,7 @@ class TushareConceptComponent {
                 stockInfo.stockCode = hits.head.stockCode
                 stockInfo.stockName = hits.head.name
                 stockInfo.concept = taskResStr
-//                this.stockInfoMapper.insert(stockInfo)
+                //this.stockInfoMapper.insert(stockInfo)
 
               }
               else if (hits.size==0) {
@@ -113,7 +150,6 @@ class TushareConceptComponent {
             })
           }
 
-          Thread.sleep(2 * 1000)
 
         }
         catch {
