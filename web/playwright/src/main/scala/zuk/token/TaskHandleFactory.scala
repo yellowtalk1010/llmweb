@@ -15,7 +15,9 @@ object TaskHandleFactory {
    */
   val TASK_QUEUE = new util.LinkedList[ITask]()
 
-
+  def initTaskTest(list: List[IProviderToken]): Unit = {
+    ChromeBrowser.init(list)
+  }
 
   def initTask(): Unit = {
 

@@ -3,6 +3,7 @@ package zuk.token.test
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.ChromeBrowser
+import zuk.token.providers.deepseek.DeepseekWeb
 import zuk.token.providers.tasks.ITask
 
 import java.util.UUID
@@ -14,7 +15,7 @@ class DeepseekWebTest extends AnyFunSuite{
    */
   test("deepseek测试"){
 
-    TaskHandleFactory.initTask()
+    TaskHandleFactory.initTaskTest(Array(new DeepseekWeb).toList)
 
     val t1 = new TaskTest
     t1.id = UUID.randomUUID().toString.replaceAll("-", "")
