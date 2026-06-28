@@ -21,7 +21,6 @@ class DeepseekWeb extends IProviderToken {
    */
   var deepseekPage: Page = null
 
-  var isBreak: Boolean = false
 
   var chatContext: String = null
 
@@ -72,7 +71,7 @@ class DeepseekWeb extends IProviderToken {
 
         val parserText = parseProvider(text)
 
-        val resultFile = new File("releases/" + s"${llmName()}_" + UUID.randomUUID().toString.replaceAll("-", ""))
+        val resultFile = new File(s"${task_ai_result_path}/" + s"${llmName()}_" + UUID.randomUUID().toString.replaceAll("-", ""))
         println(s"deepseek任务结果写入文件:${resultFile.getAbsolutePath}")
         FileUtils.write(resultFile, parserText, "UTF-8")
 

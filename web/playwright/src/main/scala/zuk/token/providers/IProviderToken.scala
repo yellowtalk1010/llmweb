@@ -22,4 +22,5 @@ trait IProviderToken extends Runnable{
 
   def parseProvider(responseText: String): String
 
+  val task_ai_result_path = "task_ai"
 }
