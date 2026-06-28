@@ -1,10 +1,14 @@
 package zuk.token.providers.deepseek
 
 import com.microsoft.playwright.{Page, Request, Response, Route}
+import org.apache.commons.io.FileUtils
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.deepseek.tasks.{DeepseekTask, DeepseekTask_easymoneyConcept}
 import zuk.token.providers.{ChromeBrowser, IProviderToken, ITask}
 
+import java.io.File
+import java.security.MessageDigest
+import java.util.UUID
 import scala.jdk.CollectionConverters.*
 
 class DeepseekWeb extends IProviderToken {
@@ -37,8 +41,10 @@ class DeepseekWeb extends IProviderToken {
         task.responseText = text
         task.parseProvider()
 
+        FileUtils.write(new File("releases/"+UUID.randomUUID().toString.replaceAll("-", "")), task.parserText, "UTF-8")
+
         //println("")
-        TaskHandleFactory.ANSWER_LIST += task.parserText
+//        TaskHandleFactory.ANSWER_LIST += task.parserText
       }
       true
     }

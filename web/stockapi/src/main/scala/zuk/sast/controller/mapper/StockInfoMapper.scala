@@ -1,6 +1,6 @@
 package zuk.sast.controller.mapper
 
-import org.apache.ibatis.annotations.{Insert, Mapper, Result, Results, Select}
+import org.apache.ibatis.annotations.{Delete, Insert, Mapper, Param, Result, Results, Select}
 import zuk.sast.controller.mapper.entity.StockInfoEntity
 
 import java.util
@@ -23,5 +23,8 @@ trait StockInfoMapper {
     "stock_info(id, stock_code, stock_name, concept) " +
     "VALUES (#{id}, #{stockCode}, #{stockName}, #{concept})"))
   def insert(stock: StockInfoEntity): Int
+
+  @Delete(Array("DELETE FROM stock_info WHERE id = #{id}"))
+  def deleteById(@Param("id") id: String): Int
 
 }
