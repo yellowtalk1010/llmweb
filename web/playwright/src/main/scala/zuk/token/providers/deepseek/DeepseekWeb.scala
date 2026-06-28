@@ -15,10 +15,6 @@ import scala.jdk.CollectionConverters.*
 
 class DeepseekWeb extends IProviderToken {
 
-  /***
-   * deepseek官网地址
-   */
-  val deepseekWebChatURL: String = "https://chat.deepseek.com"
 
   /***
    * deepseek聊天界面
@@ -28,6 +24,10 @@ class DeepseekWeb extends IProviderToken {
   var isBreak: Boolean = false
 
   var chatContext: String = null
+
+
+  override def llmName(): String = "deepseek"
+  override def llmChatURL(): String = "https://chat.deepseek.com"
 
   /***
    * 解析
@@ -72,7 +72,7 @@ class DeepseekWeb extends IProviderToken {
 
         val parserText = parseProvider(text)
 
-        val resultFile = new File("releases/" + "deepseek_" + UUID.randomUUID().toString.replaceAll("-", ""))
+        val resultFile = new File("releases/" + s"${llmName()}_" + UUID.randomUUID().toString.replaceAll("-", ""))
         println(s"任务结果写入文件:${resultFile.getAbsolutePath}")
         FileUtils.write(resultFile, parserText, "UTF-8")
 
@@ -93,13 +93,13 @@ class DeepseekWeb extends IProviderToken {
     if(browserContext == null){
       return
     }
-    val exist = browserContext.pages().asScala.map(_.url()).toSet.filter(_.startsWith(deepseekWebChatURL)).size > 0
+    val exist = browserContext.pages().asScala.map(_.url()).toSet.filter(_.startsWith(llmChatURL())).size > 0
     if(exist){
       //如果存在，则输出全部url
       browserContext.pages().asScala.foreach(page => {
         val url = page.url()
         println(s"deepseek聊天url地址:${url}")
-        if(this.deepseekPage==null && page.url().startsWith(deepseekWebChatURL)){
+        if(this.deepseekPage==null && page.url().startsWith(llmChatURL())){
           this.deepseekPage = page
         }
       })
@@ -108,7 +108,7 @@ class DeepseekWeb extends IProviderToken {
       //创建一个新页面
       this.deepseekPage = browserContext.newPage()
       //导航到登录页面
-      this.deepseekPage.navigate(deepseekWebChatURL)
+      this.deepseekPage.navigate(llmChatURL())
     }
 
     println("开始对话")
@@ -130,9 +130,6 @@ class DeepseekWeb extends IProviderToken {
 
   override def delete(): Unit = {}
 
-  override def llmName(): String = "deepseek"
-  override def llmChatURL(): String = "https://chat.deepseek.com"
-  override def llmOfficialWebsite(): String = "https://www.deepseek.com/"
 
   override def run(): Unit = {
     while (true){
@@ -140,6 +137,7 @@ class DeepseekWeb extends IProviderToken {
         val itask = TaskHandleFactory.TASK_QUEUE.poll()
         println(s"队列长度:${TaskHandleFactory.TASK_QUEUE.size()}")
         if(itask!=null){
+          println(s"deepseek执行任务id:${itask.id}")
           chat(itask.chatContent)
         }
       }

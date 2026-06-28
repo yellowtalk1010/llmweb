@@ -11,9 +11,7 @@ class ChatGPTWeb extends IProviderToken {
   override def llmName(): String = "chatGPT"
 
   override def llmChatURL(): String = "https://chatgpt.com/"
-
-  override def llmOfficialWebsite(): String = "https://chatgpt.com/"
-
+  
   override def chat(chatContent: String): Unit = {
 
   }
