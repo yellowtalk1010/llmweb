@@ -27,7 +27,7 @@ trait StockInfoMapper {
   @Delete(Array("DELETE FROM stock_info WHERE id = #{id}"))
   def deleteById(@Param("id") id: String): Int
 
-  @Update(Array(s"UPDATE stock_info SET concept=#{concept} WHERE id = #{id}"))
+  @Update(Array("UPDATE stock_info SET concept=#{concept} WHERE id = #{id}"))
   def updateConceptById(@Param("concept") concept: String, @Param("id") id: String): Int
 
 }
