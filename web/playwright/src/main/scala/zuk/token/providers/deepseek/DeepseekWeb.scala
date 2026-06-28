@@ -1,7 +1,9 @@
 package zuk.token.providers.deepseek
 
+import com.alibaba.fastjson2.JSONObject
 import com.microsoft.playwright.{Page, Request, Response, Route}
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.StringUtils
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.deepseek.tasks.{DeepseekTask, DeepseekTask_easymoneyConcept}
 import zuk.token.providers.{ChromeBrowser, IProviderToken, ITask}
@@ -27,24 +29,51 @@ class DeepseekWeb extends IProviderToken {
 
   var chatContext: String = null
 
+  /***
+   * 解析
+   * @param responseText
+   * @return
+   */
+  override def parseProvider(responseText: String): String = {
+    println(s"分析结果：${responseText}")
+
+    val data = "data:"
+    val lines = responseText.split("\n").toList.filter(e => StringUtils.isNotEmpty(e.trim) && e.trim.startsWith(data)).map(e => {
+      e.substring(data.size).trim
+    }).map(_.trim)
+
+    lines.foreach(println)
+
+    val stringBuilder = new StringBuilder()
+    lines.foreach(l => {
+      //println(l)
+      val jsonObj = JSONObject.parseObject(l)
+      if (jsonObj.get("v") != null && jsonObj.get("v").isInstanceOf[String]) {
+        stringBuilder.append(jsonObj.get("v"))
+      }
+    })
+
+    println(stringBuilder)
+
+    val parserText = stringBuilder.toString()
+    parserText
+  }
 
   override def onListenRequest(request: Request): Boolean = synchronized {
     try {
 
       val url = request.url()
+      println(s"deepseekWeb监听的url:${url}")
       if(url.contains("deepseek") && url.contains("completion")){
         println(s"监听onListenResponse.url:${url}")
         val response = request.response()
+
         val text = response.text()
 
-        val task = new DeepseekTask_easymoneyConcept()
-        task.responseText = text
-        task.parseProvider()
+        val parserText = parseProvider(text)
 
-        FileUtils.write(new File("releases/"+UUID.randomUUID().toString.replaceAll("-", "")), task.parserText, "UTF-8")
+        FileUtils.write(new File("releases/"+UUID.randomUUID().toString.replaceAll("-", "")), parserText, "UTF-8")
 
-        //println("")
-//        TaskHandleFactory.ANSWER_LIST += task.parserText
       }
       true
     }

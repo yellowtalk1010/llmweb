@@ -29,4 +29,10 @@ class ChatGPTWeb extends IProviderToken {
   override def run(): Unit = {
 
   }
+
+
+  def parseProvider(responseText: String): String = {
+    ""
+  }
+  
 }

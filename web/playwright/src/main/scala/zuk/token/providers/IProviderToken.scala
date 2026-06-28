@@ -21,4 +21,6 @@ trait IProviderToken extends Runnable{
 
   def delete(): Unit
 
+  def parseProvider(responseText: String): String
+
 }

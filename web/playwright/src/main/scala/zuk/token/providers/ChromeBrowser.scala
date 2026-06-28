@@ -39,11 +39,11 @@ object ChromeBrowser {
     onListen()
 
     //执行ai分析
-    val executors = concurrent.Executors.newCachedThreadPool()
-    chatList.foreach(e => {
-      println("启动任务处理线程池")
-      executors.execute(e)
-    })
+//    val executors = concurrent.Executors.newCachedThreadPool()
+//    chatList.foreach(e => {
+//      println("启动任务处理线程池")
+//      executors.execute(e)
+//    })
   }
 
   private def onListen(): Unit = {
@@ -60,7 +60,6 @@ object ChromeBrowser {
       println("输出全部URL地址")
       val urls = browserContext.pages().asScala.map(_.url()).toList
       urls.foreach(println)
-      println()
 
       println("输出全部cookie")
       val cookies = browserContext.cookies(urls.asJava)
@@ -73,6 +72,7 @@ object ChromeBrowser {
       browserContext.onRequest(handle=>{
         val url = handle.url()
         chatList.foreach(c=>{
+          println(s"启动${c.getClass.getSimpleName}模型监听")
           c.onListenRequest(handle)
         })
       })
