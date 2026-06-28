@@ -9,6 +9,9 @@ import java.util.UUID
 
 class DeepseekWebTest extends AnyFunSuite{
 
+  /***
+   * 会丢失数据，问题未找到，所以时发送两次
+   */
   test("deepseek测试"){
 
     TaskHandleFactory.initTask()
