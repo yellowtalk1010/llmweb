@@ -149,12 +149,12 @@ class TushareConceptComponent {
               println(s"删除结果文件:${f.getAbsolutePath}")
               f.delete()
             })
-            Thread.sleep(30 * 1000)
           }
           else {
-            st = false
+            //st = false
           }
 
+          Thread.sleep(30 * 1000)
         }
         catch {
           case exception: Exception =>
