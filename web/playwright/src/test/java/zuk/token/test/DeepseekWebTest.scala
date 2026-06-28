@@ -5,6 +5,8 @@ import zuk.token.TaskHandleFactory
 import zuk.token.providers.ChromeBrowser
 import zuk.token.providers.tasks.ITask
 
+import java.util.UUID
+
 class DeepseekWebTest extends AnyFunSuite{
 
   test("deepseek测试"){
@@ -12,10 +14,12 @@ class DeepseekWebTest extends AnyFunSuite{
     TaskHandleFactory.initTask()
 
     val t1 = new TaskTest
+    t1.id = UUID.randomUUID().toString.replaceAll("-", "")
     t1.chatContent = "你好"
     TaskHandleFactory.TASK_QUEUE.push(t1)
 
     val t2 = new TaskTest
+    t2.id = UUID.randomUUID().toString.replaceAll("-", "")
     t2.chatContent = "你好"
     TaskHandleFactory.TASK_QUEUE.push(t2)
 
