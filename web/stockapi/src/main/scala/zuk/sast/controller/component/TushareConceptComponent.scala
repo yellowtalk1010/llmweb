@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import zuk.sast.controller.mapper.entity.{StockEntity, StockInfoEntity}
 import zuk.sast.controller.mapper.{StockInfoMapper, StockMapper}
 import zuk.token.TaskHandleFactory
-import zuk.token.providers.tasks.EasymoneyConcept
+import zuk.token.providers.tasks.Task_EasymoneyConcept
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
@@ -60,17 +60,17 @@ class TushareConceptComponent {
    * 获取待处理的股票
    * @return
    */
-  private def getHandleTaskStockList(): List[StockEntity] = {
+  private def getHandleTaskStockList(): Unit = synchronized {
 
-    //todo 删除重复的数据
+    //todo 删除stock_info表中重复的数据
     this.stockInfoMapper.selectAll().asScala.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls => {
       for (i <- 1 until ls.size) {
         this.stockInfoMapper.deleteById(ls(i).id)
       }
     })
 
-    val cacheStockInfoList = new ListBuffer[StockInfoEntity]
-    cacheStockInfoList ++= this.stockInfoMapper.selectAll().asScala
+
+    val cacheStockInfoList = this.stockInfoMapper.selectAll().asScala
 
     //todo 获取ai提取概念和板块的热点股票
     val lls = this.stockMapper.selectAll().asScala.groupBy(_.stockCode).map(e => {
@@ -80,7 +80,15 @@ class TushareConceptComponent {
       !cacheStockInfoList.map(_.stockCode).toSet.contains(e.stockCode)
     })
 
-    lls
+    lls.foreach(se=>{
+      val stockInfoEntity = new StockInfoEntity
+      stockInfoEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
+      stockInfoEntity.stockCode = se.stockCode
+      stockInfoEntity.stockName = se.name
+      this.stockInfoMapper.insert(stockInfoEntity)
+    })
+
+
 
   }
 
@@ -88,67 +96,61 @@ class TushareConceptComponent {
   def init(): Unit = {
 
     TaskHandleFactory.initTask()
+    getHandleTaskStockList()
 
-//    if (TaskHandleFactory.TASK_QUEUE.size() < 500) {
-//      val lls = getHandleTaskStockList()
-//      if (lls.size > 500) {
-//        lls.take(500).foreach(e => {
-//          //todo 将待处理的股票转成任务
-//          val tsStock = new TsStock
-//          tsStock.ts_code = e.stockCode
-//          val conceptURL = tsStock.getConceptURL()
-//
-//          val task1 = new DeepseekTask_easymoneyConcept
-//          task1.stockCode = e.stockCode
-//          task1.stockName = e.name
-//          task1.stockConceptURL = conceptURL
-//          task1.chatContent = task1.createPrompt()
-//          //      println(s"创建Prompt提示词：${task1.chatContent}")
-//          TaskHandleFactory.TASK_QUEUE.push(task1)
-//        })
-//      }
-//    }
+    val list = this.stockInfoMapper.selectAll().asScala.filter(e=>StringUtils.isEmpty(e.concept))
+
+    list.foreach(e=>{
+      val tsStock = new TsStock
+      tsStock.ts_code = e.stockCode
+      val conceptURL = tsStock.getConceptURL()
+
+      val task = new Task_EasymoneyConcept
+      task1.stockCode = e.stockCode
+      task1.stockName = e.stockName
+      task1.stockConceptURL = conceptURL
+      task1.chatContent = task1.createPrompt()
+      TaskHandleFactory.TASK_QUEUE.push(task1)
+    })
 
     println(s"任务总数：${TaskHandleFactory.TASK_QUEUE.size()}")
 
     executor.execute(()=>{
       //启动
-      while (true){
+      val st = true
+      while (st){
         try {
 
-          val lls = getHandleTaskStockList()
-
-          val taskResDir = new File("task_ai")
-          if(taskResDir.exists()){
-            taskResDir.listFiles().foreach(f=>{
-              val taskResStr = FileUtils.readLines(f, "utf-8").asScala.mkString("\n")
-              val hits = lls.filter(e=>{
-                val tsStock = new TsStock
-                tsStock.ts_code = e.stockCode
-                tsStock.splitTsCode(tsStock.ts_code)
-                taskResStr.contains(tsStock.s_0)
-              })
-              if(hits.size==1){
-
-                val stockInfo = new StockInfoEntity
-                stockInfo.id = UUID.randomUUID().toString.replaceAll("-", "")
-                stockInfo.stockCode = hits.head.stockCode
-                stockInfo.stockName = hits.head.name
-                stockInfo.concept = taskResStr
-                this.stockInfoMapper.insert(stockInfo)
-
-              }
-              else if (hits.size==0) {
-                //
-              }
-              else {
-                println()
-              }
+          val taskResultDir = new File("task_ai")
+          if(taskResultDir.exists() && taskResultDir.isDirectory){
+            //获取全部结果文件
+            val files = taskResultDir.listFiles()
+            val filecontextList = files.map(f=>{
+              val lines = FileUtils.readLines(f, "UTF-8")
+              val str = lines.asScala.mkString("\n")
+              (f, str)
             })
+
+            val delFiles = new ListBuffer[File]
+
+            //任务与结果进行匹配
+            list.foreach(entity => {
+              val id = entity.id
+              filecontextList.filter(tp2=>tp2._2.contains(id)).foreach(tp2=>{
+                entity.concept = tp2._2
+                this.stockInfoMapper.updateConceptById(tp2._2, id)
+                delFiles += tp2._1
+              })
+            })
+            //删除结果
+            delFiles.foreach(f=>{
+              println(s"删除结果文件:${f.getAbsolutePath}")
+              f.delete()
+            })
+            Thread.sleep(30 * 1000)
           }
+          st = false
 
-
-          Thread.sleep(30 * 1000)
         }
         catch {
           case exception: Exception =>

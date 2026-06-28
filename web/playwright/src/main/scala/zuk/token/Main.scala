@@ -2,7 +2,7 @@ package zuk.token
 
 import zuk.token.providers.ChromeBrowser
 import zuk.token.providers.deepseek.DeepseekWeb
-import zuk.token.providers.tasks.EasymoneyConcept
+import zuk.token.providers.tasks.Task_EasymoneyConcept
 
 object Main {
 
@@ -27,7 +27,7 @@ object Main {
 
     try {
       TaskHandleFactory.initTask()
-      val task = new EasymoneyConcept()
+      val task = new Task_EasymoneyConcept()
       task.chatContent = content
       TaskHandleFactory.TASK_QUEUE.push(task)
       Thread.sleep(99999)

@@ -5,7 +5,7 @@ import com.microsoft.playwright.{Page, Request, Response, Route}
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.token.TaskHandleFactory
-import zuk.token.providers.tasks.{EasymoneyConcept, ITask}
+import zuk.token.providers.tasks.{Task_EasymoneyConcept, ITask}
 import zuk.token.providers.{ChromeBrowser, IProviderToken}
 
 import java.io.File

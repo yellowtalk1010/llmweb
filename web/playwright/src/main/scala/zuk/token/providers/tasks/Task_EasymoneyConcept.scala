@@ -42,7 +42,7 @@ import scala.jdk.CollectionConverters.*
 /***
  * @param chatContent
  */
-class EasymoneyConcept extends ITask {
+class Task_EasymoneyConcept extends ITask {
 
   var stockCode: String = ""
   var stockName: String = ""
