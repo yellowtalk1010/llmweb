@@ -9,3 +9,5 @@ tushare/.idea
 
 *.bak
 *.zip
+
+task_ai/*
