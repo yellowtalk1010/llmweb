@@ -106,11 +106,11 @@ class TushareConceptComponent {
       val conceptURL = tsStock.getConceptURL()
 
       val task = new Task_EasymoneyConcept
-      task1.stockCode = e.stockCode
-      task1.stockName = e.stockName
-      task1.stockConceptURL = conceptURL
-      task1.chatContent = task1.createPrompt()
-      TaskHandleFactory.TASK_QUEUE.push(task1)
+      task.stockCode = e.stockCode
+      task.stockName = e.stockName
+      task.stockConceptURL = conceptURL
+      task.chatContent = task1.createPrompt()
+      TaskHandleFactory.TASK_QUEUE.push(task)
     })
 
     println(s"任务总数：${TaskHandleFactory.TASK_QUEUE.size()}")
