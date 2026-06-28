@@ -140,6 +140,7 @@ class TushareConceptComponent {
               filecontextList.filter(tp2=>tp2._2.contains(id)).foreach(tp2=>{
                 entity.concept = tp2._2
                 this.stockInfoMapper.updateConceptById(tp2._2, id)
+                println(s"删除${entity.stockCode}, ${entity.stockName}, ${tp2._1.getAbsolutePath}")
                 delFiles += tp2._1
               })
             })
@@ -150,7 +151,9 @@ class TushareConceptComponent {
             })
             Thread.sleep(30 * 1000)
           }
-          st = false
+          else {
+            st = false
+          }
 
         }
         catch {
