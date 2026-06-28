@@ -109,7 +109,7 @@ class TushareConceptComponent {
       task.stockCode = e.stockCode
       task.stockName = e.stockName
       task.stockConceptURL = conceptURL
-      task.chatContent = task1.createPrompt()
+      task.chatContent = task.createPrompt()
       TaskHandleFactory.TASK_QUEUE.push(task)
     })
 
