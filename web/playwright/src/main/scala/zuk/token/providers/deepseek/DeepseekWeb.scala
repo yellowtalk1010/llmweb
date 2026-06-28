@@ -120,50 +120,49 @@ class DeepseekWeb extends IProviderToken {
     }
   }
 
-
-
   /***
    * 这个方式容易出现阻塞导致不问题
    */
-  @Deprecated
-  override def onListenRoute(route: Route): Boolean = {
-    val request = route.request()
-    val url = request.url()
-    if(url.contains("/api/v0/") && url.contains("completion")){
-      isBreak = true
-      val headers = request.headers()
-      val authorization = headers.get("authorization")
-      val postData = request.postData() // 可能为 null
+//  @Deprecated
+//  override def onListenRoute(route: Route): Boolean = {
+//    val request = route.request()
+//    val url = request.url()
+//    if(url.contains("/api/v0/") && url.contains("completion")){
+//      isBreak = true
+//      val headers = request.headers()
+//      val authorization = headers.get("authorization")
+//      val postData = request.postData() // 可能为 null
+//
+//      println(s"[intercept] url = ${url}")
+//      println(s"[intercept] authorization = ${authorization}")
+//      println(s"[intercept] postData = ${postData}")
+//
+//      if (postData != null && postData.contains("chat_session_id")) {
+//        // 在这里解析参数
+//        // val jsonObj = JSONObject.parseObject(postData)
+//
+//        // 直接取消，不让它真正发出去
+//        println("[intercept] matched, abort request")
+//        route.abort()
+//
+//        headers.asScala.map(h => {
+//          val k = h._1
+//          val v = h._2
+//          s"${k}=${v}"
+//        }).toList.foreach(println)
+//
+//        //        val updatePostData = postData.replaceAll("hi", content)
+//        //        val deepseekClient = new DeepseekClient
+//        //        deepseekClient.createCompletion(headers, updatePostData)
+//
+//      }
+//
+//      return true
+//    }
+//    else {
+//      route.resume()
+//    }
+//    false
+//  }
 
-      println(s"[intercept] url = ${url}")
-      println(s"[intercept] authorization = ${authorization}")
-      println(s"[intercept] postData = ${postData}")
-
-      if (postData != null && postData.contains("chat_session_id")) {
-        // 在这里解析参数
-        // val jsonObj = JSONObject.parseObject(postData)
-
-        // 直接取消，不让它真正发出去
-        println("[intercept] matched, abort request")
-        route.abort()
-
-        headers.asScala.map(h => {
-          val k = h._1
-          val v = h._2
-          s"${k}=${v}"
-        }).toList.foreach(println)
-
-        //        val updatePostData = postData.replaceAll("hi", content)
-        //        val deepseekClient = new DeepseekClient
-        //        deepseekClient.createCompletion(headers, updatePostData)
-
-      }
-
-      return true
-    }
-    else {
-      route.resume()
-    }
-    false
-  }
 }

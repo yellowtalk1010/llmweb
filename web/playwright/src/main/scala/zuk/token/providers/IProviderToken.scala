@@ -16,8 +16,8 @@ trait IProviderToken extends Runnable{
 
   def onListenRequest(request: Request): Boolean
 
-  @Deprecated
-  def onListenRoute(route: Route): Boolean
+//  @Deprecated
+//  def onListenRoute(route: Route): Boolean
 
   def delete(): Unit
 
