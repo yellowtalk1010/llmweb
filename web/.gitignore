@@ -11,3 +11,4 @@ tushare/.idea
 *.zip
 
 task_ai/*
+releases/*
