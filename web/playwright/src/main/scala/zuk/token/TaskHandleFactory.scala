@@ -1,6 +1,8 @@
 package zuk.token
 
-import zuk.token.providers.{ChromeBrowser, ITask}
+//import zuk.token.providers.ChromeBrowser.chatList
+import zuk.token.providers.deepseek.DeepseekWeb
+import zuk.token.providers.{ChromeBrowser, IProviderToken, ITask}
 
 import java.util
 import scala.collection.mutable.ListBuffer
@@ -12,19 +14,13 @@ object TaskHandleFactory {
    */
   val TASK_QUEUE = new util.LinkedList[ITask]()
 
-  /***
-   * 答案列表
-   */
-  val ANSWER_LIST = new ListBuffer[String]()
 
-
-  /***
-   * 已经完结的任务队列
-   */
-//  val TASK_FINISH = new util.LinkedList[ITask]()
 
   def initTask(): Unit = {
-    ChromeBrowser.init()
+
+    val array = Array(new DeepseekWeb)
+    ChromeBrowser.init(array.toList)
+
   }
 
 
