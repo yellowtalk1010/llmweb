@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 import zuk.sast.controller.TushareStockController.eliminate_str
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -28,6 +28,7 @@ object TushareStockController {
 
 class TushareStockControllerDTO extends StockEntity {
   @BeanProperty var conceptURL: String = null
+  @BeanProperty var concept: String = null
   @BeanProperty var eastmoneyURL: String = null
   @BeanProperty var attention: String = null
   @BeanProperty var buy: String = null
@@ -49,6 +50,9 @@ class TushareStockController {
 
   @Autowired
   private var stockMapper: StockMapper = null
+
+  @Autowired
+  private var tushareConceptComponent: TushareConceptComponent = null
 
   private val Executor_Service = Executors.newCachedThreadPool()
 
@@ -130,6 +134,7 @@ class TushareStockController {
         }
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.remark = optionTp3.get._4
+        dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
         dto.eastmoneyURL = e.get.getEastmoneyURL()
         dto.conceptURL = e.get.getConceptURL()
         dto.attention = ""
@@ -230,6 +235,7 @@ class TushareStockController {
 //          && optionTp3.get._2 < 2.5  //翻倍
         ){
           dto.remark = optionTp3.get._4
+          dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
           val tsStock = new TsStock()
           tsStock.ts_code = entity.stockCode
           dto.eastmoneyURL = tsStock.getEastmoneyURL()

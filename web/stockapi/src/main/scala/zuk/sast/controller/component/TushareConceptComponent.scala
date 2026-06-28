@@ -34,6 +34,27 @@ class TushareConceptComponent {
 
   var executor = Executors.newSingleThreadExecutor()
 
+  var stockInfoEntityList = new ListBuffer[StockInfoEntity]
+
+  def getStockConceptInfo(stockCode: String): String = synchronized {
+    if(stockInfoEntityList.size==0){
+      stockInfoEntityList ++= this.stockInfoMapper.selectAll().asScala
+    }
+    val ls = this.stockInfoEntityList.filter(_.stockCode.equals(stockCode))
+    if(ls.size>0){
+      val concept = ls.head.concept.split("\n").filter(l=>{
+        l.trim.startsWith("概念")
+          || l.startsWith("一级行业")
+          || l.startsWith("二级行业")
+          || l.startsWith("三级行业")
+      }).map(l=>s"【${l}】").mkString("")
+
+      concept
+    }
+    else {
+      ""
+    }
+  }
 
   /***
    * 获取待处理的股票
@@ -68,26 +89,25 @@ class TushareConceptComponent {
 
     TaskHandleFactory.initTask()
 
-
-
-//    lls.take(500).map(_.stockCode).foreach(stockCode=>{
-//      val stockName = tushareAllStocksCSVComponent.getTsStock(stockCode).getOrElse(new TsStock).name
-//      if(StringUtils.isNotEmpty(stockName) && !cacheStockInfoList.map(_.stockCode).toSet.contains(stockCode)){
+//    if (TaskHandleFactory.TASK_QUEUE.size() < 500) {
+//      val lls = getHandleTaskStockList()
+//      if (lls.size > 500) {
+//        lls.take(500).foreach(e => {
+//          //todo 将待处理的股票转成任务
+//          val tsStock = new TsStock
+//          tsStock.ts_code = e.stockCode
+//          val conceptURL = tsStock.getConceptURL()
 //
-//
-//        val tsStock = new TsStock
-//        tsStock.ts_code = stockCode
-//        val conceptURL = tsStock.getConceptURL()
-//
-//        val task1 = new DeepseekTask_easymoneyConcept
-//        task1.stockCode = stockCode
-//        task1.stockName = stockName
-//        task1.stockConceptURL = conceptURL
-//        task1.chatContent = task1.createPrompt()
-//        //      println(s"创建Prompt提示词：${task1.chatContent}")
-////        TaskHandleFactory.TASK_QUEUE.push(task1)
+//          val task1 = new DeepseekTask_easymoneyConcept
+//          task1.stockCode = e.stockCode
+//          task1.stockName = e.name
+//          task1.stockConceptURL = conceptURL
+//          task1.chatContent = task1.createPrompt()
+//          //      println(s"创建Prompt提示词：${task1.chatContent}")
+//          TaskHandleFactory.TASK_QUEUE.push(task1)
+//        })
 //      }
-//    })
+//    }
 
     println(s"任务总数：${TaskHandleFactory.TASK_QUEUE.size()}")
 
@@ -96,29 +116,6 @@ class TushareConceptComponent {
       while (false){
         try {
 
-          Thread.sleep(30 * 1000)
-
-          if(TaskHandleFactory.TASK_QUEUE.size() < 50){
-            val lls = getHandleTaskStockList()
-            if(lls.size>50){
-              lls.take(50).foreach(e=>{
-                  //todo 将待处理的股票转成任务
-                  val tsStock = new TsStock
-                  tsStock.ts_code = e.stockCode
-                  val conceptURL = tsStock.getConceptURL()
-
-                  val task1 = new DeepseekTask_easymoneyConcept
-                  task1.stockCode = e.stockCode
-                  task1.stockName = e.name
-                  task1.stockConceptURL = conceptURL
-                  task1.chatContent = task1.createPrompt()
-                  //      println(s"创建Prompt提示词：${task1.chatContent}")
-                  TaskHandleFactory.TASK_QUEUE.push(task1)
-              })
-            }
-          }
-
-          
           val lls = getHandleTaskStockList()
 
           val taskResDir = new File("task_ai")
@@ -138,7 +135,7 @@ class TushareConceptComponent {
                 stockInfo.stockCode = hits.head.stockCode
                 stockInfo.stockName = hits.head.name
                 stockInfo.concept = taskResStr
-                //this.stockInfoMapper.insert(stockInfo)
+                this.stockInfoMapper.insert(stockInfo)
 
               }
               else if (hits.size==0) {
@@ -151,6 +148,7 @@ class TushareConceptComponent {
           }
 
 
+          Thread.sleep(30 * 1000)
         }
         catch {
           case exception: Exception =>
