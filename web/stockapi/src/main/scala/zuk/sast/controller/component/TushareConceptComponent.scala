@@ -117,7 +117,7 @@ class TushareConceptComponent {
 
     executor.execute(()=>{
       //启动
-      val st = true
+      var st = true
       while (st){
         try {
 
