@@ -52,22 +52,22 @@ object ChromeBrowser {
   private def onListenRequest(): Unit = {
     try {
 
-      println("输出全部URL地址")
+      //println("输出全部URL地址")
       val urls = browserContext.pages().asScala.map(_.url()).toList
-      urls.foreach(println)
+      //urls.foreach(println)
 
-      println("输出全部cookie")
+      //println("输出全部cookie")
       val cookies = browserContext.cookies(urls.asJava)
       cookies.asScala.foreach(c => {
         val k = c.name
         val v = c.value
-        println(s"${k}=${v}")
+        //println(s"${k}=${v}")
       })
 
+      //todo 添加监听
       browserContext.onRequest(handle=>{
         val url = handle.url()
         chatList.foreach(c=>{
-          println(s"启动${c.getClass.getSimpleName}模型监听")
           c.onListenRequest(handle)
         })
       })

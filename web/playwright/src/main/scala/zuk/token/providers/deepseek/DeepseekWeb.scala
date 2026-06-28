@@ -35,14 +35,14 @@ class DeepseekWeb extends IProviderToken {
    * @return
    */
   override def parseProvider(responseText: String): String = {
-    println(s"分析结果：${responseText}")
+    //println(s"分析结果：${responseText}")
 
     val data = "data:"
     val lines = responseText.split("\n").toList.filter(e => StringUtils.isNotEmpty(e.trim) && e.trim.startsWith(data)).map(e => {
       e.substring(data.size).trim
     }).map(_.trim)
 
-    lines.foreach(println)
+    //lines.foreach(println)
 
     val stringBuilder = new StringBuilder()
     lines.foreach(l => {
@@ -53,7 +53,7 @@ class DeepseekWeb extends IProviderToken {
       }
     })
 
-    println(stringBuilder)
+    //println(stringBuilder)
 
     val parserText = stringBuilder.toString()
     parserText
@@ -63,7 +63,7 @@ class DeepseekWeb extends IProviderToken {
     try {
 
       val url = request.url()
-      println(s"deepseekWeb监听的url:${url}")
+      //println(s"deepseekWeb监听的url:${url}")
       if(url.contains("deepseek") && url.contains("completion")){
         println(s"监听onListenResponse.url:${url}")
         val response = request.response()
@@ -72,7 +72,9 @@ class DeepseekWeb extends IProviderToken {
 
         val parserText = parseProvider(text)
 
-        FileUtils.write(new File("releases/"+UUID.randomUUID().toString.replaceAll("-", "")), parserText, "UTF-8")
+        val resultFile = new File("releases/" + "deepseek_" + UUID.randomUUID().toString.replaceAll("-", ""))
+        println(s"任务结果写入文件:${resultFile.getAbsolutePath}")
+        FileUtils.write(resultFile, parserText, "UTF-8")
 
       }
       true
@@ -96,7 +98,7 @@ class DeepseekWeb extends IProviderToken {
       //如果存在，则输出全部url
       browserContext.pages().asScala.foreach(page => {
         val url = page.url()
-        println(s"url地址:${url}")
+        println(s"deepseek聊天url地址:${url}")
         if(this.deepseekPage==null && page.url().startsWith(deepseekWebChatURL)){
           this.deepseekPage = page
         }
