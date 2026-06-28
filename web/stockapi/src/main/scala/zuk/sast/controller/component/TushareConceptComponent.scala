@@ -113,7 +113,7 @@ class TushareConceptComponent {
 
     executor.execute(()=>{
       //启动
-      while (false){
+      while (true){
         try {
 
           val lls = getHandleTaskStockList()
