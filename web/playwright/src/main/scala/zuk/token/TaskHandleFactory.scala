@@ -25,7 +25,7 @@ object TaskHandleFactory {
     try {
       val array = Array(
         new DeepseekWeb,
-        new KimiWeb
+//        new KimiWeb
       )
       ChromeBrowser.init(array.toList)
       true

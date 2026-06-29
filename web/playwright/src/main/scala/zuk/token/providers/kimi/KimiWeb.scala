@@ -104,7 +104,7 @@ class KimiWeb extends IProviderToken{
       val array = responseText.toCharArray
       val splitStr = "" + array(0) + array(1) + array(2) + array(3)
       val ls = responseText.split(splitStr).toList
-      val lines = ls.filter(e => e.size >= 2).map(l => l.substring(1)).filter(l => l.contains("\"op\":\"append\""))
+      val lines = ls.filter(e => e.size >= 2).map(l => l.substring(1)).filter(l => !l.contains("\"op\":\"set\"") && l.contains("\"op\":\"append\""))
       lines.foreach(println)
       val stringBuilder = new StringBuilder()
       lines.map(json => {
