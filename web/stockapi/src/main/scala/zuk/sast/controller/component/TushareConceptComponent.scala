@@ -121,7 +121,7 @@ class TushareConceptComponent {
     executor.execute(()=>{
       //启动
       var st = true
-      while (st){
+      while (st && false){
         try {
 
           val taskResultDir = new File("task_ai")
@@ -153,7 +153,7 @@ class TushareConceptComponent {
             })
           }
           else {
-            //st = false
+            st = false
           }
 
           Thread.sleep(5 * 60 * 1000)
