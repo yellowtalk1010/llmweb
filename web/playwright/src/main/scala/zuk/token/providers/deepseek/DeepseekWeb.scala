@@ -86,9 +86,9 @@ class DeepseekWeb extends IProviderToken {
   override def chat(chatContext: String): Unit = synchronized {
 
     this.deepseekChatTime = this.deepseekChatTime + 1
-    if(this.deepseekChatTime >= 50){
-      println("deepseek执行50次，等待5分钟")
-      Thread.sleep(5 * 60 * 1000) //等待5分钟
+    if(this.deepseekChatTime >= 30){
+      println("deepseek执行30次，等待6分钟")
+      Thread.sleep(6 * 60 * 1000)
       if(this.deepseekPage!=null){
         this.deepseekPage.close()
       }
