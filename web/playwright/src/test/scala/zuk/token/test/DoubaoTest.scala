@@ -14,7 +14,7 @@ class DoubaoTest extends AnyFunSuite{
   /***
    * 会丢失数据，问题未找到，所以时发送两次
    */
-  test("deepseek测试"){
+  test("doubao测试"){
 
     TaskHandleFactory.initTaskTest(Array(new DoubaoWeb).toList)
 

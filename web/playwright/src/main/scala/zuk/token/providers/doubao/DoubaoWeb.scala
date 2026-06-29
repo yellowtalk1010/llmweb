@@ -1,6 +1,7 @@
 package zuk.token.providers.doubao
 
 import com.microsoft.playwright.{Page, Request}
+import zuk.token.TaskHandleFactory
 import zuk.token.providers.{ChromeBrowser, IProviderToken}
 
 import scala.jdk.CollectionConverters.*
@@ -74,6 +75,22 @@ class DoubaoWeb extends IProviderToken{
   }
 
   override def run(): Unit = {
+
+    while (true) {
+      try {
+        println(s"队列长度:${TaskHandleFactory.TASK_QUEUE.size()}")
+        val itask = TaskHandleFactory.TASK_QUEUE.poll()
+        if (itask != null) {
+          println(s"豆包执行任务id:${itask.id}")
+          chat(itask.chatContent)
+        }
+      }
+      catch {
+        case exception: Exception =>
+          exception.printStackTrace()
+      }
+      Thread.sleep(30 * 1000) //每30秒执行一次
+    }
 
   }
 }
