@@ -126,7 +126,7 @@ class DoubaoWeb extends IProviderToken{
 
         try {
 
-          print(s"编码：${e}")
+          println(s"编码：${e}")
 //          val bodyStr = new String(response.text().getBytes(e), StandardCharsets.UTF_8)
 //          val parseStr = parseProvider(bodyStr)
 
