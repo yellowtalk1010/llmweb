@@ -13,28 +13,32 @@ import scala.jdk.CollectionConverters.*
 
 object ChromeBrowser {
 
-  val httpClient = HttpClient.newBuilder.connectTimeout(Duration.ofSeconds(15)).build
+  //val httpClient = HttpClient.newBuilder.connectTimeout(Duration.ofSeconds(15)).build
 
-  private val playwright: Playwright = Playwright.create
+  private var playwright: Playwright = null
 
-  val browser: Browser = playwright.chromium.connectOverCDP("http://127.0.0.1:9222")
+  private var browser: Browser = null
 
-  private val browserContexts: util.List[BrowserContext] = browser.contexts
+  private var browserContexts: util.List[BrowserContext] = null
 
-  val browserContext: BrowserContext = if(browserContexts!=null && browserContexts.size()>0){
-    browserContexts.asScala.head
-  }
-  else {
-    println("未监听chrome浏览器")
-    null
-  }
+  var browserContext: BrowserContext = null
 
   private val chatList = Array[IProviderToken]().toBuffer
-
 
   val executors = concurrent.Executors.newCachedThreadPool()
 
   def init(list: List[IProviderToken]): Unit = {
+
+    playwright = Playwright.create
+    browser = playwright.chromium.connectOverCDP("http://127.0.0.1:9222")
+    browserContexts = browser.contexts
+    browserContext = if (browserContexts != null && browserContexts.size() > 0) {
+      browserContexts.asScala.head
+    }
+    else {
+      println("未监听chrome浏览器")
+      null
+    }
 
     chatList ++= list
 

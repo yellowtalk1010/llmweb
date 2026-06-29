@@ -19,10 +19,18 @@ object TaskHandleFactory {
     ChromeBrowser.init(list)
   }
 
-  def initTask(): Unit = {
+  def initTask(): Boolean = {
 
-    val array = Array(new DeepseekWeb)
-    ChromeBrowser.init(array.toList)
+    try {
+      val array = Array(new DeepseekWeb)
+      ChromeBrowser.init(array.toList)
+      true
+    }
+    catch {
+      case exception: Exception =>
+        exception.printStackTrace()
+        false
+    }
 
   }
 

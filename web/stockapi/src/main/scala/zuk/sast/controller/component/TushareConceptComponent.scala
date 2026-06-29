@@ -95,7 +95,9 @@ class TushareConceptComponent {
   @PostConstruct
   def init(): Unit = {
 
-    TaskHandleFactory.initTask()
+    if(!TaskHandleFactory.initTask()){
+      return
+    }
     getHandleTaskStockList()
 
     val list = this.stockInfoMapper.selectAll().asScala.filter(e=>StringUtils.isEmpty(e.concept))
@@ -154,7 +156,7 @@ class TushareConceptComponent {
             //st = false
           }
 
-          Thread.sleep(30 * 1000)
+          Thread.sleep(50 * 1000)
         }
         catch {
           case exception: Exception =>
