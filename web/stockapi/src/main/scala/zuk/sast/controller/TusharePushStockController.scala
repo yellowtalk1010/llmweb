@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -44,6 +44,9 @@ class TusharePushStockController {
 
   @Autowired
   private var tushareInitMA4ModelMA5ModelComponent: TushareInitMA4ModelMA5ModelComponent = _
+
+  @Autowired
+  private var tushareConceptComponent: TushareConceptComponent = null
 
   /***
    * 获取application.properties中的数据，股票json结果路径
@@ -191,7 +194,9 @@ class TusharePushStockController {
         e.file = file
         e.fileName = file.getName
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
-        e.remark = optionTp3.get._4
+
+        val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
+        e.remark = optionTp3.get._4 + concept
 
         if(Array(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(stockModleType.toUpperCase)){
           val closePrice = optionTp3.get._1
