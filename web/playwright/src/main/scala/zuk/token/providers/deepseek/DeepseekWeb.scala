@@ -21,10 +21,6 @@ class DeepseekWeb extends IProviderToken {
    */
   var deepseekPage: Page = null
 
-
-  var chatContext: String = null
-
-
   override def llmName(): String = "deepseek"
   override def llmChatURL(): String = "https://chat.deepseek.com"
 
@@ -85,9 +81,8 @@ class DeepseekWeb extends IProviderToken {
     }
   }
 
-  override def chat(context: String): Unit = synchronized {
+  override def chat(chatContext: String): Unit = synchronized {
 
-    chatContext = context
     val browserContext = ChromeBrowser.browserContext
     if(browserContext == null){
       return
