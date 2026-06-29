@@ -2,21 +2,15 @@ package zuk.token.test
 
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.token.TaskHandleFactory
-import zuk.token.providers.ChromeBrowser
-import zuk.token.providers.deepseek.DeepseekWeb
-import zuk.token.providers.doubao.DoubaoWeb
-import zuk.token.providers.tasks.ITask
+import zuk.token.providers.kimi.KimiWeb
 
 import java.util.UUID
 
-class DoubaoTest extends AnyFunSuite{
+class KimiTest extends AnyFunSuite{
 
-  /***
-   * 会丢失数据，问题未找到，所以时发送两次
-   */
-  test("doubao测试"){
 
-    TaskHandleFactory.initTaskTest(Array(new DoubaoWeb).toList)
+  test("kimi"){
+    TaskHandleFactory.initTaskTest(Array(new KimiWeb).toList)
 
     val t1 = new TaskTest
     t1.id = UUID.randomUUID().toString.replaceAll("-", "")
@@ -30,7 +24,6 @@ class DoubaoTest extends AnyFunSuite{
 
 
     Thread.sleep(999999)
-
   }
 
 }

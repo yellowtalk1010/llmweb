@@ -131,7 +131,6 @@ class DeepseekWeb extends IProviderToken {
 
     println(s"deepseek发送对话")
     println(s"deepseek等待回复")
-    //Thread.sleep(30 * 1000)
   }
 
 
