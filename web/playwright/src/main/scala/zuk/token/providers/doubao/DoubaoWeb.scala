@@ -1,5 +1,6 @@
 package zuk.token.providers.doubao
 
+import com.alibaba.fastjson2.JSONObject
 import com.microsoft.playwright.{Page, Request}
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.{ChromeBrowser, IProviderToken}
@@ -54,6 +55,7 @@ class DoubaoWeb extends IProviderToken{
 
     println(s"豆包发送对话")
     println(s"豆包等待回复")
+//    this.doubaoChatPage.waitForResponse()
   }
 
   override def onListenRequest(request: Request): Boolean = {
@@ -64,21 +66,106 @@ class DoubaoWeb extends IProviderToken{
       val response = request.response()
       response.headers().asScala.map(e=>{
         s"${e._1}:${e._2}"
-      }).foreach(println)
-      val responseText = response.text()
-      val bodyStr = new String(responseText.getBytes("ISO-8859-1"), StandardCharsets.UTF_8)
-      println("豆包回复内容：" + bodyStr)
+      }).foreach(l=>{
+//        println(l)
+      })
+//      val responseText = response.text() //中文乱码
+//      val bodyStr = new String(responseText.getBytes("ISO-8859-1"), StandardCharsets.UTF_8)
+//      println(responseText)
+
+//      response.body().take(100).foreach(b => {
+//        print(f"${b & 0xff}%02X ")
+//      })
+
+
+//      println(response.body().length)
+//      var bodyStr = new String(response.body(), "UTF-8")
+//      println(bodyStr)
+//
+//      println(response.body().length)
+//      bodyStr = new String(response.body(), "GBK")
+//      println(bodyStr)
+//
+//      println(response.body().length)
+//      bodyStr = new String(response.body(), "ISO-8859-1")
+//      println(bodyStr)
+
+//      val bodyStr = new String(response.text().getBytes("ISO-8859-1"), StandardCharsets.UTF_8)
+
+
+      val data = response.body
+
+      import org.mozilla.universalchardet.UniversalDetector
+
+      val detector = new UniversalDetector(null)
+      detector.handleData(data, 0, data.length)
+      detector.dataEnd
+
+      val charset = detector.getDetectedCharset
+
+      System.out.println("编码: " + charset)
+
+      val array = Array(
+        "UTF-8",
+        "UTF-16",
+        "UTF-16LE",
+        "UTF-16BE",
+        "GBK",
+        "GB2312",
+        "GB18030",
+        "ISO-8859-1",
+        "US-ASCII",
+        "Windows-1252",
+        "Shift_JIS",
+        "Big5",
+        "EUC-KR",
+        "KOI8-R"
+        )
+
+      array.foreach(e=>{
+
+        try {
+
+          print(s"编码：${e}")
+//          val bodyStr = new String(response.text().getBytes(e), StandardCharsets.UTF_8)
+//          val parseStr = parseProvider(bodyStr)
+
+          val bodyStr = new String(response.body(), e)
+          val parseStr = parseProvider(bodyStr)
+
+          println("豆包回复内容：" + parseStr)
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+        }
+      })
+
     }
     true
+  }
+
+
+  override def parseProvider(responseText: String): String = {
+    val stringBuilder = new StringBuilder()
+    responseText.split("\n").filter(_.trim.startsWith("data:")).foreach(l=>{
+      val json = l.substring("data:".size)
+      val jsonObj = JSONObject.parseObject(json)
+      val content = jsonObj.get("text")
+      if(content!=null){
+        stringBuilder.append(content)
+      }
+
+    })
+    val str = stringBuilder.toString()
+    println(str)
+    str
   }
 
   override def delete(): Unit = {
 
   }
 
-  override def parseProvider(responseText: String): String = {
-    ""
-  }
 
   override def run(): Unit = {
 
