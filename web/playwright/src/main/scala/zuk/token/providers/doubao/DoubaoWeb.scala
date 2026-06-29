@@ -4,6 +4,7 @@ import com.microsoft.playwright.{Page, Request}
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.{ChromeBrowser, IProviderToken}
 
+import java.nio.charset.StandardCharsets
 import scala.jdk.CollectionConverters.*
 /***
  * 字节豆包
@@ -56,12 +57,17 @@ class DoubaoWeb extends IProviderToken{
   }
 
   override def onListenRequest(request: Request): Boolean = {
+
     val url = request.url()
     //https://www.doubao.com/chat/completion
     if(url.contains("doubao") && url.contains("completion")){
       val response = request.response()
+      response.headers().asScala.map(e=>{
+        s"${e._1}:${e._2}"
+      }).foreach(println)
       val responseText = response.text()
-      println("豆包回复内容：" + responseText)
+      val bodyStr = new String(responseText.getBytes("ISO-8859-1"), StandardCharsets.UTF_8)
+      println("豆包回复内容：" + bodyStr)
     }
     true
   }
