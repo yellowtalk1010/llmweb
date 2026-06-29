@@ -87,6 +87,9 @@ class DeepseekWeb extends IProviderToken {
 
     if(this.deepseekChatTime >= 50){
       println("deepseek执行50次，等待5分钟")
+      if(this.deepseekPage!=null){
+        this.deepseekPage.close()
+      }
       this.deepseekPage = null
       this.deepseekChatTime = 0
       Thread.sleep(5 * 60 * 1000) //等待5分钟
