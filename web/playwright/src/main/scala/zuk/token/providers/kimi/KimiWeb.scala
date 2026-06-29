@@ -2,9 +2,13 @@ package zuk.token.providers.kimi
 
 import com.alibaba.fastjson2.JSONObject
 import com.microsoft.playwright.{Page, Request}
+import org.apache.commons.io.FileUtils
+import org.thymeleaf.util.StringUtils
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.{ChromeBrowser, IProviderToken}
 
+import java.io.File
+import java.util.UUID
 import scala.jdk.CollectionConverters.*
 /***
  * 月之暗面 kimi
@@ -82,7 +86,11 @@ class KimiWeb extends IProviderToken{
     if(url.contains("kimi") && url.contains("kimi.gateway.chat.v1.ChatService") && url.contains("Chat")){
       println(s"kimi监听接口：${url}")
       val responseText = request.response().text()
-      parseProvider(responseText)
+      val parserText = parseProvider(responseText)
+
+      val resultFile = new File(s"${task_ai_result_path}/" + s"${llmName()}_" + UUID.randomUUID().toString.replaceAll("-", ""))
+      println(s"kimi任务结果写入文件:${resultFile.getAbsolutePath}")
+      FileUtils.write(resultFile, parserText, "UTF-8")
     }
     true
   }
@@ -92,31 +100,40 @@ class KimiWeb extends IProviderToken{
   }
 
   override def parseProvider(responseText: String): String = {
-    val array = responseText.toCharArray
-    val splitStr = "" + array(0) + array(1) + array(2) + array(3)
-    val ls = responseText.split(splitStr).toList
-    val lines = ls.filter(e=>e.size>=2).map(l=>l.substring(1)).filter(l=>l.contains("\"op\":\"append\""))
-    lines.foreach(println)
-    val stringBuilder = new StringBuilder()
-    lines.map(json=>{
-      val jsonObj = JSONObject.parseObject(json)
-      val block = jsonObj.get("block")
-      if (block!=null) {
-        block match {
-          case blockJsonObj: JSONObject =>
-            val textObj = blockJsonObj.get("text")
-            textObj match {
-              case textJsonObj: JSONObject =>
-                val content = textJsonObj.get("content").asInstanceOf[String]
-                stringBuilder.append(content)
-              case _=>
-            }
-          case _=>
+    try {
+      val array = responseText.toCharArray
+      val splitStr = "" + array(0) + array(1) + array(2) + array(3)
+      val ls = responseText.split(splitStr).toList
+      val lines = ls.filter(e => e.size >= 2).map(l => l.substring(1)).filter(l => l.contains("\"op\":\"append\""))
+      lines.foreach(println)
+      val stringBuilder = new StringBuilder()
+      lines.map(json => {
+        val jsonObj = JSONObject.parseObject(json)
+        val block = jsonObj.get("block")
+        if (block != null) {
+          block match {
+            case blockJsonObj: JSONObject =>
+              val textObj = blockJsonObj.get("text")
+              textObj match {
+                case textJsonObj: JSONObject =>
+                  val content = textJsonObj.get("content").asInstanceOf[String]
+                  stringBuilder.append(content)
+                case _ =>
+              }
+            case _ =>
+          }
         }
-      }
-    })
-    val str = stringBuilder.toString()
-    str
+      })
+      val str = stringBuilder.toString()
+      str
+    }
+    catch {
+      case exception: Exception =>
+        exception.printStackTrace()
+        ""
+
+    }
+
   }
 
   override def run(): Unit = {
