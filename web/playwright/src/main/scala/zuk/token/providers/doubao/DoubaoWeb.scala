@@ -55,6 +55,13 @@ class DoubaoWeb extends IProviderToken{
   }
 
   override def onListenRequest(request: Request): Boolean = {
+    val url = request.url()
+    //https://www.doubao.com/chat/completion
+    if(url.contains("doubao") && url.contains("completion")){
+      val response = request.response()
+      val responseText = response.text()
+      println("豆包回复内容：" + responseText)
+    }
     true
   }
 
