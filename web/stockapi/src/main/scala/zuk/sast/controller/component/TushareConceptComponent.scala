@@ -41,7 +41,7 @@ class TushareConceptComponent {
       stockInfoEntityList ++= this.stockInfoMapper.selectAll().asScala
     }
     val ls = this.stockInfoEntityList.filter(_.stockCode.equals(stockCode))
-    if(ls.size>0){
+    if(ls.size>0 && StringUtils.isNotEmpty(ls.head.concept)){
       val concept = ls.head.concept.split("\n").filter(l=>{
         l.trim.startsWith("概念")
           || l.startsWith("一级行业")
