@@ -236,10 +236,9 @@ class TushareStockController {
         ){
           dto.remark = optionTp3.get._4
           dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-          val tsStock = new TsStock()
-          tsStock.ts_code = entity.stockCode
-          dto.eastmoneyURL = tsStock.getEastmoneyURL()
-          dto.conceptURL = tsStock.getConceptURL()
+          val tsStock = new TsStock(entity.stockCode)
+          dto.eastmoneyURL = tsStock.eastmoneyURL
+          dto.conceptURL = tsStock.conceptURL
           dto.remark = dto.remark + entity.remark
           if (attentionSet.contains(dto.stockCode)) {
             dto.attention = "已关注"

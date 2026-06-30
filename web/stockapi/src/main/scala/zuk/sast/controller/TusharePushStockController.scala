@@ -186,10 +186,9 @@ class TusharePushStockController {
       fileJsonResultArray.asScala.map(e=>{
         val stockModleType = e.modClsName
 
-        val tsStock = new TsStock()
-        tsStock.ts_code = e.ts_code
-        e.eastmoneyURL = tsStock.getEastmoneyURL()
-        e.conceptURL = tsStock.getConceptURL()
+        val tsStock = new TsStock(e.ts_code)
+        e.eastmoneyURL = tsStock.eastmoneyURL
+        e.conceptURL = tsStock.conceptURL
 
         e.file = file
         e.fileName = file.getName

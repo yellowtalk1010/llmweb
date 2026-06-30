@@ -16,8 +16,8 @@ class TsStock extends TsCodeSplit{
   @BeanProperty var industry: String = _    //所属行业
   @BeanProperty var market: String = _      //市场类型（主板/创业板/科创板/CDR）
 
-  private var eastmoneyURL: String = ""     //东方财富跳转url
-  private var conceptURL: String = ""       //东方财富股票所属概念url
+  var eastmoneyURL: String = ""     //东方财富跳转url
+  var conceptURL: String = ""       //东方财富股票所属概念url
 
   def this(@BeanProperty stockCode: String) = {
     this()
