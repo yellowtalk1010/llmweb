@@ -1,5 +1,7 @@
 package zuk.tu_share.dto
 
+import zuk.sast.controller.component.{TushareAllStocks, TushareAllStocksCSVComponent}
+
 import scala.beans.BeanProperty
 
 /***
@@ -15,6 +17,20 @@ class TsStock extends TsCodeSplit{
   @BeanProperty var market: String = _      //市场类型（主板/创业板/科创板/CDR）
 
   private var eastmoneyURL: String = ""     //东方财富跳转url
+  private var conceptURL: String = ""       //东方财富股票所属概念url
+
+  def this(@BeanProperty stockCode: String) = {
+    this()
+    ts_code = stockCode
+    val optStock = TushareAllStocks.getTsStock(ts_code)
+    if(!optStock.isEmpty){
+      super.splitTsCode(ts_code)
+      name = optStock.get.name
+      eastmoneyURL = getEastmoneyURL()
+      conceptURL = getConceptURL()
+    }
+  }
+
   def getEastmoneyURL(): String = {
     try {
       val splits = this.ts_code.split("\\.")
@@ -31,7 +47,6 @@ class TsStock extends TsCodeSplit{
     }
   }
 
-  private var conceptURL: String = ""     //东方财富股票所属概念url
   def getConceptURL(): String = {
     try {
       splitTsCode(this.ts_code)

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 import zuk.sast.controller.TushareStockController.eliminate_str
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.controller.component.{TushareAllStocks, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -119,7 +119,7 @@ class TushareStockController {
     val ma5List = this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
-      tushareAllStocksCSVComponent.getTsStock(e)
+        TushareAllStocks.getTsStock(e)
     }).filter(!_.isEmpty)
       .map(e=>{
         val dto = new TushareStockControllerDTO
@@ -157,12 +157,12 @@ class TushareStockController {
    */
   private def getAll(desc: String): java.util.List[TushareStockControllerDTO] = {
     val list = if (StringUtils.isNotBlank(desc)) {
-      tushareAllStocksCSVComponent.getAll().filter(e => {
+      TushareAllStocks.getAll().filter(e => {
         e.ts_code.contains(desc) || e.name.contains(desc)
       })
     }
     else {
-      tushareAllStocksCSVComponent.getAll()
+      TushareAllStocks.getAll()
     }
 
     val num = 20
@@ -298,7 +298,7 @@ class TushareStockController {
   def delete_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
                    @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
 
-    log.info(s"删除${stockType}, ${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"删除${stockType}, ${tsCode}, ${TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
     stockType match {
       case TushareStockController.buy_str =>
@@ -323,7 +323,7 @@ class TushareStockController {
   @GetMapping(value = Array("add_stock"))
   def add_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
                 @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
-    log.info(s"添加${stockType}, ${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"添加${stockType}, ${tsCode}, ${TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
     stockType match {
       case TushareStockController.buy_str =>
@@ -358,12 +358,12 @@ class TushareStockController {
    */
   private def add(tsCode: String, stockType: String): Unit = synchronized {
 
-    log.info(s"添加${stockType}, ${tsCode}, ${tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"添加${stockType}, ${tsCode}, ${TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name}")
     if(this.stockMapper.selectAll().asScala.filter(s=>s.stockCode.equals(tsCode) && s.stockType.equals(stockType)).size == 0){
       val stockEntity: StockEntity = new StockEntity
       stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
       stockEntity.stockCode = tsCode
-      stockEntity.name = tushareAllStocksCSVComponent.getTsStock(tsCode).getOrElse(new TsStock).name
+      stockEntity.name = TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name
       stockEntity.stockType = stockType
       stockEntity.createtime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date)
       stockMapper.insert(stockEntity)
