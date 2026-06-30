@@ -3,6 +3,7 @@ package zuk.token
 //import zuk.token.providers.ChromeBrowser.chatList
 import zuk.token.providers.deepseek.DeepseekWeb
 import zuk.token.providers.kimi.KimiWeb
+import zuk.token.providers.qianwen.QianwenWeb
 import zuk.token.providers.tasks.ITask
 import zuk.token.providers.{ChromeBrowser, IProviderToken}
 
@@ -25,6 +26,7 @@ object TaskHandleFactory {
     try {
       val array = Array(
         new DeepseekWeb,
+        new QianwenWeb,
 //        new KimiWeb
       )
       ChromeBrowser.init(array.toList)

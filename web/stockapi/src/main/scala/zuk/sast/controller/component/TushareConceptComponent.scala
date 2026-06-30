@@ -121,7 +121,7 @@ class TushareConceptComponent {
     executor.execute(()=>{
       //启动
       var st = true
-      while (st && false){
+      while (st){
         try {
 
           val taskResultDir = new File("task_ai")
