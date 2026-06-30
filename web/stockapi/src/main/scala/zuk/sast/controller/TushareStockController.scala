@@ -135,8 +135,8 @@ class TushareStockController {
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.remark = optionTp3.get._4
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-        dto.eastmoneyURL = e.get.getEastmoneyURL()
-        dto.conceptURL = e.get.getConceptURL()
+        dto.eastmoneyURL = e.get.eastmoneyURL
+        dto.conceptURL = e.get.conceptURL
         dto.attention = ""
         if (attentionSet.contains(dto.stockCode)) {
           dto.attention = "已关注"
@@ -180,8 +180,8 @@ class TushareStockController {
       val dto = new TushareStockControllerDTO
       dto.stockCode = e.ts_code
       dto.name = e.name
-      dto.eastmoneyURL = e.getEastmoneyURL()
-      dto.conceptURL = e.getConceptURL()
+      dto.eastmoneyURL = e.eastmoneyURL
+      dto.conceptURL = e.conceptURL
       dto.attention = ""
       if (attentionSet.contains(dto.stockCode)) {
         dto.attention = "已关注"
