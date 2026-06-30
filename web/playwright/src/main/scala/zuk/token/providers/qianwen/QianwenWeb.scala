@@ -12,19 +12,6 @@ import java.util.UUID
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
-class QianwenMessage {
-  @BeanProperty var content: String = ""
-  @BeanProperty var status: String = ""
-}
-
-class QianwenData {
-  @BeanProperty var messages: java.util.List[QianwenMessage] = null
-}
-
-class QianwebDto {
-  @BeanProperty val data: QianwenData = null
-}
-
 
 class QianwenWeb extends IProviderToken{
 
