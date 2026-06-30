@@ -1,12 +1,30 @@
 package zuk.token.providers.qianwen
 
+import com.alibaba.fastjson2.{JSONArray, JSONObject}
 import com.microsoft.playwright.{Page, Request}
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.StringUtils
+import zuk.token.TaskHandleFactory
 import zuk.token.providers.{ChromeBrowser, IProviderToken}
 
 import java.io.File
 import java.util.UUID
+import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
+
+class QianwenMessage {
+  @BeanProperty var content: String = ""
+  @BeanProperty var status: String = ""
+}
+
+class QianwenData {
+  @BeanProperty var messages: java.util.List[QianwenMessage] = null
+}
+
+class QianwebDto {
+  @BeanProperty val data: QianwenData = null
+}
+
 
 class QianwenWeb extends IProviderToken{
 
@@ -55,13 +73,13 @@ class QianwenWeb extends IProviderToken{
     println(s"qianwen开始对话")
 
     //向输入框中输入聊天内容
-    val chatInput = this.qianwenPage.locator("div[data-chat-input-layout='true']")
+    val chatInput = this.qianwenPage.locator("div[contenteditable='true']")
     chatInput.click()
     chatInput.waitFor()
     chatInput.fill(chatContext)
 
     //点击发送按钮
-    val sendButton = this.qianwenPage.locator("button[发送消息']").last
+    val sendButton = this.qianwenPage.locator("button[aria-label='发送消息']").last
     sendButton.click()
 
     println(s"qianwen发送对话")
@@ -79,9 +97,11 @@ class QianwenWeb extends IProviderToken{
 
         val text = response.text()
 
-        println(text)
+        //println(text)
 
         val parserText = parseProvider(text)
+
+        //println(parserText)
 
         val resultFile = new File(s"${task_ai_result_path}/" + s"${llmName()}_" + UUID.randomUUID().toString.replaceAll("-", ""))
         println(s"qianwen任务结果写入文件:${resultFile.getAbsolutePath}")
@@ -102,10 +122,53 @@ class QianwenWeb extends IProviderToken{
   }
 
   override def parseProvider(responseText: String): String = {
-    ""
+    var parseText: String = ""
+    responseText.split("\n")
+      .filter(e=>StringUtils.isNotEmpty(e) && e.startsWith("data:"))
+      .map(_.substring("data:".size))
+      .filter(l=>l.contains("\"agent_name\":\"AgentProxy\"") && l.contains("\"route_name\":\"Agent代理\""))
+      .foreach(json=>{
+        try {
+          //println(json)
+          val jsonObj = JSONObject.parseObject(json)
+          val data = jsonObj.get("data")
+          if(data!=null && data.isInstanceOf[JSONObject]){
+            val messages = data.asInstanceOf[JSONObject].get("messages")
+            if (messages!=null && messages.isInstanceOf[JSONArray]){
+              val array = messages.asInstanceOf[JSONArray]
+              if(array!=null && array.size()>0 && array.asScala.head.isInstanceOf[JSONObject]){
+                val head = array.asScala.head.asInstanceOf[JSONObject]
+                val status = head.get("status").asInstanceOf[String]
+                val content = head.get("content").asInstanceOf[String]
+                if(status.equals("complete") && StringUtils.isNotEmpty(content)){
+                  parseText = content
+                }
+              }
+            }
+          }
+        }
+        catch {
+          case exception: Exception=>
+        }
+      })
+    parseText
   }
 
   override def run(): Unit = {
-
+    while (true){
+      try {
+        println(s"队列长度:${TaskHandleFactory.TASK_QUEUE.size()}")
+        val itask = TaskHandleFactory.TASK_QUEUE.poll()
+        if(itask!=null){
+          println(s"qianwen执行任务id:${itask.id}")
+          chat(itask.chatContent)
+        }
+      }
+      catch {
+        case exception: Exception=>
+          exception.printStackTrace()
+      }
+      Thread.sleep(30 * 1000) //每30秒执行一次
+    }
   }
 }
