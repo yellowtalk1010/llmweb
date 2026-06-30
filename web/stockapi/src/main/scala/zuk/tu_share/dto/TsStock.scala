@@ -2,6 +2,9 @@ package zuk.tu_share.dto
 
 import scala.beans.BeanProperty
 
+/***
+ * tuShare 股票信息
+ */
 class TsStock extends TsCodeSplit{
 
   @BeanProperty var ts_code: String = _     //ts代码
