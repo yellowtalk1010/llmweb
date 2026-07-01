@@ -180,6 +180,7 @@ class TushareStockController {
       val dto = new TushareStockControllerDTO
       dto.stockCode = e.ts_code
       dto.name = e.name
+      dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
       dto.eastmoneyURL = e.eastmoneyURL
       dto.conceptURL = e.conceptURL
       dto.attention = ""
