@@ -23,8 +23,8 @@ class TsStock extends TsCodeSplit{
     this()
     this.ts_code = stockCode
     super.splitTsCode(ts_code)
-    this.eastmoneyURL = getEastmoneyURL()
-    this.conceptURL = getConceptURL()
+    this.eastmoneyURL = createEastmoneyURL()
+    this.conceptURL = createConceptURL()
 
   }
 
@@ -46,7 +46,7 @@ class TsStock extends TsCodeSplit{
     this
   }
 
-  private def getEastmoneyURL(): String = {
+  private def createEastmoneyURL(): String = {
     try {
       val splits = this.ts_code.split("\\.")
       this.eastmoneyURL = if (splits(1).toUpperCase.contains("BJ")) {
@@ -62,7 +62,7 @@ class TsStock extends TsCodeSplit{
     }
   }
 
-  private def getConceptURL(): String = {
+  private def createConceptURL(): String = {
     try {
       splitTsCode(this.ts_code)
       val code: String = s"${s_1}${s_0}"

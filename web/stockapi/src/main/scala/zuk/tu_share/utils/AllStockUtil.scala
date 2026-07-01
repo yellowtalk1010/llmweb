@@ -32,10 +32,11 @@ object AllStockUtil {
     val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
 
     val codes = records.asScala.map(record => {
-        val tsStock = new TsStock()
-        tsStock.ts_code = record.get("ts_code")
+        val stockCode = record.get("ts_code")
+        val stockName = record.get("name")
+
+        val tsStock = new TsStock(stockCode, stockName)
         tsStock.symbol = record.get("symbol")
-        tsStock.name = record.get("name")
         tsStock.area = record.get("area")
         tsStock.industry = record.get("industry")
         tsStock.market = record.get("market")
