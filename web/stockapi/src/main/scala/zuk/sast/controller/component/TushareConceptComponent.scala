@@ -103,15 +103,13 @@ class TushareConceptComponent {
     val list = this.stockInfoMapper.selectAll().asScala.filter(e=>StringUtils.isEmpty(e.concept))
 
     list.foreach(e=>{
-      val tsStock = new TsStock
-      tsStock.ts_code = e.stockCode
-      val conceptURL = tsStock.getConceptURL()
+      val tsStock = new TsStock(e.stockCode)
 
       val task = new Task_EasymoneyConcept
       task.id = e.id
       task.stockCode = e.stockCode
       task.stockName = e.stockName
-      task.stockConceptURL = conceptURL
+      task.stockConceptURL = tsStock.conceptURL
       task.chatContent = task.createPrompt()
       TaskHandleFactory.TASK_QUEUE.push(task)
     })

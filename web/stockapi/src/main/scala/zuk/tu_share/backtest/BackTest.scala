@@ -48,7 +48,7 @@ object BackTest {
             if(mod.sells.size==0){
               val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
               val name = if(!tsStock.isEmpty){
-                val url = tsStock.get.getEastmoneyURL()
+                val url = tsStock.get.eastmoneyURL
                 val href = s"<a href='${url}'>${mod.buy.name}</a>"
                 href
               }
@@ -87,7 +87,7 @@ object BackTest {
 
             val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
             val name = if (!tsStock.isEmpty) {
-              val url = tsStock.get.getEastmoneyURL()
+              val url = tsStock.get.eastmoneyURL
               val href = s"<a href='${url}'>${mod.buy.name}</a>"
               href
             }

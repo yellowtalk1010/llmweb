@@ -34,7 +34,7 @@ class Email extends ISend {
 
       var htmlContent = stockDtos.sortBy(_.turnoverRate).reverse.map(dto => {
         val e = dto.tsStock
-        val href = e.getEastmoneyURL()
+        val href = e.eastmoneyURL
         val name_href = s"<a href=\"${href}\">" + e.name + "</a>"
         s"${e.ts_code}, ${name_href}, ${e.area}，${e.industry}, ${dto.limitUp}, ${dto.limitDown}, ${dto.turnoverRate}活跃, ${if(dto.warningUpperShadow) "上影线警告" else ""}"
       }).mkString("\n<br><br>\n")
