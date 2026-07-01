@@ -21,14 +21,29 @@ class TsStock extends TsCodeSplit{
 
   def this(@BeanProperty stockCode: String) = {
     this()
-    ts_code = stockCode
-    val optStock = TushareAllStocks.getTsStock(ts_code)
+    this.ts_code = stockCode
+    super.splitTsCode(ts_code)
+    this.eastmoneyURL = getEastmoneyURL()
+    this.conceptURL = getConceptURL()
+
+  }
+
+  def this(@BeanProperty stockCode: String,
+           @BeanProperty stockName: String) = {
+    this(stockCode)
+    this.name = stockName
+  }
+
+  /***
+   * 更新最新名字
+   * @return
+   */
+  def updateLastestName(): TsStock = {
+    val optStock = TushareAllStocks.getTsStock(this.ts_code)
     if(!optStock.isEmpty){
-      super.splitTsCode(ts_code)
-      name = optStock.get.name
-      eastmoneyURL = getEastmoneyURL()
-      conceptURL = getConceptURL()
+      this.name = optStock.get.name
     }
+    this
   }
 
   def getEastmoneyURL(): String = {

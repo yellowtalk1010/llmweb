@@ -45,19 +45,18 @@ object DataFrame {
     val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
 
     val codes = records.asScala.map(record => {
-        val tsStock = new TsStock()
+        //股票代码
+        val stockCode = record.get("ts_code")
+        val stockName = record.get("name")
 
-        tsStock.ts_code = record.get("ts_code")
-        tsStock.splitTsCode(tsStock.ts_code)
-
+        val tsStock = new TsStock(stockCode, stockName)
         tsStock.symbol = record.get("symbol")
-        tsStock.name = record.get("name")
         tsStock.area = record.get("area")
         tsStock.industry = record.get("industry")
         tsStock.market = record.get("market")
 
-        tsStock.eastmoneyURL = tsStock.getEastmoneyURL()
-        tsStock.conceptURL = tsStock.getConceptURL()
+//        tsStock.eastmoneyURL = tsStock.getEastmoneyURL()
+//        tsStock.conceptURL = tsStock.getConceptURL()
 
         tsStock
       })
