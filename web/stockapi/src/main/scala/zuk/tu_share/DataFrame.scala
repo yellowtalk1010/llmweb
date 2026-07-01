@@ -55,9 +55,6 @@ object DataFrame {
         tsStock.industry = record.get("industry")
         tsStock.market = record.get("market")
 
-//        tsStock.eastmoneyURL = tsStock.getEastmoneyURL()
-//        tsStock.conceptURL = tsStock.getConceptURL()
-
         tsStock
       })
       .toList
