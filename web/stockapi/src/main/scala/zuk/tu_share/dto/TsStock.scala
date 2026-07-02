@@ -48,7 +48,7 @@ class TsStock(@BeanProperty var ts_code: String) extends TsCodeSplit{
    * 更新最新名字
    * @return
    */
-  def updateLastestName(): TsStock = {
+  def lastestName(): TsStock = {
     val optStock = TushareAllStocks.getTsStock(this.ts_code)
     if(!optStock.isEmpty){
       this.name = optStock.get.name
