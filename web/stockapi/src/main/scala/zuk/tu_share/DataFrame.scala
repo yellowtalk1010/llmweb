@@ -187,6 +187,7 @@ object DataFrame {
   private def loadProperties() = {
     try{
       val configFile = new File(config_properties)
+      println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
       if (!configFile.exists()) {
         val output = new FileOutputStream(config_properties)
         properties.put(turnover, "100")
@@ -205,16 +206,15 @@ object DataFrame {
 
     loadProperties()
 
-    //判断路径是否存在
-    val dir = new File(path)
-    println(s"${dir.getAbsolutePath}，${dir.exists()}")
-    if (!dir.exists() || !dir.isDirectory) {
+    //加载股票信息
+    val all_stocks_path = path + File.separator + "all_stocks.csv"
+    val allStocksFile = new File(all_stocks_path)
+    println(s"加载all_stocks.csv文件路径:${allStocksFile.getAbsolutePath}，${allStocksFile.exists()}")
+    if (!allStocksFile.exists()) {
       System.exit(1)
     }
 
-    //加载股票信息
-    val all_stocks_path = path + File.separator + "all_stocks.csv"
-    val stocks = loadAllStocks(all_stocks_path)
+    val stocks = loadAllStocks(allStocksFile.getAbsolutePath)
 
     stocks.foreach(e => {
       //转成MAP格式
