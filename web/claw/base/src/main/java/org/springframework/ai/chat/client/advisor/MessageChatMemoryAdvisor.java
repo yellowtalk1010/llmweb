@@ -122,7 +122,8 @@ public final class MessageChatMemoryAdvisor implements BaseChatMemoryAdvisor {
 
     public static final class Builder {
 
-        private String conversationId = ChatMemory.DEFAULT_CONVERSATION_ID;
+//        private String conversationId = ChatMemory.DEFAULT_CONVERSATION_ID; //default
+        private String conversationId = "default";
 
         private int order = Advisor.DEFAULT_CHAT_MEMORY_PRECEDENCE_ORDER;
 
