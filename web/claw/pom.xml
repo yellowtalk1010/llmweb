@@ -24,6 +24,11 @@
 <!--        <version>1.0.0</version>-->
 <!--        <relativePath/>-->
 <!--    </parent>-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.3</version>
+    </parent>
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
@@ -44,6 +49,11 @@
 <!--    <dependencyManagement>-->
 
         <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+            </dependency>
 
             <!-- HdrHistogram-2.2.2.jar -->
             <dependency>
@@ -431,11 +441,11 @@
             </dependency>
 
             <!-- jackson-annotations-2.20.jar -->
-            <!--<dependency>-->
-            <!--<groupId>zuk.claw</groupId>-->
-            <!--<artifactId>merge-55</artifactId>-->
-            <!--<version>1.0.0</version>-->
-            <!--</dependency>-->
+<!--            <dependency>-->
+<!--            <groupId>zuk.claw</groupId>-->
+<!--            <artifactId>merge-55</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- jackson-core-2.20.2.jar -->
             <dependency>
@@ -667,18 +677,18 @@
             </dependency>
 
             <!-- logback-classic-1.5.32.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-88</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-88</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- logback-core-1.5.32.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-89</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-89</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- logging-interceptor-4.12.0.jar -->
             <dependency>
