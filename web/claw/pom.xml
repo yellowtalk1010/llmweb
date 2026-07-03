@@ -18,18 +18,6 @@
         <!--        <module>aaa</module>-->
     </modules>
 
-<!--    <parent>-->
-<!--        <groupId>zuk.claw</groupId>-->
-<!--        <artifactId>merge-parent</artifactId>-->
-<!--        <version>1.0.0</version>-->
-<!--        <relativePath/>-->
-<!--    </parent>-->
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.3</version>
-    </parent>
-
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
 
@@ -49,6 +37,14 @@
         <dependencies>
 
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>4.0.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>org.springframework.modulith</groupId>
                 <artifactId>spring-modulith-bom</artifactId>
                 <version>2.0.3</version>
@@ -56,13 +52,14 @@
                 <scope>import</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>2.0.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-bom -->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-bom</artifactId>-->
+<!--                <version>2.0.0</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
@@ -1070,10 +1067,15 @@
             </dependency>
 
             <!-- spring-ai-anthropic-2.0.0-SNAPSHOT.jar -->
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-141</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-141</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-anthropic</artifactId>
+                <version>2.0.0</version>
             </dependency>
 
             <!-- spring-ai-autoconfigure-mcp-client-common-2.0.0-SNAPSHOT.jar -->
@@ -1091,10 +1093,15 @@
             </dependency>
 
             <!-- spring-ai-autoconfigure-model-anthropic-2.0.0-SNAPSHOT.jar -->
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-144</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-144</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-autoconfigure-model-anthropic</artifactId>
+                <version>2.0.0</version>
             </dependency>
 
             <!-- spring-ai-autoconfigure-model-chat-client-2.0.0-SNAPSHOT.jar -->
@@ -1119,11 +1126,17 @@
             </dependency>
 
             <!-- spring-ai-autoconfigure-model-deepseek-2.0.0-SNAPSHOT.jar -->
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-148</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-148</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-autoconfigure-model-deepseek</artifactId>
+                <version>2.0.0</version>
             </dependency>
+
 
             <!-- spring-ai-autoconfigure-model-embedding-observation-2.0.0-SNAPSHOT.jar -->
             <dependency>
@@ -1168,11 +1181,11 @@
             </dependency>
 
             <!-- spring-ai-client-chat-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-155</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-155</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-commons-2.0.0-SNAPSHOT.jar -->
             <dependency>
@@ -1182,10 +1195,15 @@
             </dependency>
 
             <!-- spring-ai-deepseek-2.0.0-SNAPSHOT.jar -->
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-157</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-157</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-deepseek</artifactId>
+                <version>2.0.0</version>
             </dependency>
 
             <!-- spring-ai-mcp-2.0.0-SNAPSHOT.jar -->
@@ -1203,11 +1221,11 @@
             </dependency>
 
             <!-- spring-ai-model-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-160</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-160</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-ollama-2.0.0-SNAPSHOT.jar -->
             <dependency>
@@ -1238,17 +1256,27 @@
             </dependency>
 
             <!-- spring-ai-starter-model-anthropic-2.0.0-SNAPSHOT.jar -->
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-165</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-165</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-starter-model-anthropic</artifactId>
+                <version>2.0.0</version>
             </dependency>
 
             <!-- spring-ai-starter-model-deepseek-2.0.0-SNAPSHOT.jar -->
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-166</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-166</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-starter-model-deepseek</artifactId>
+                <version>2.0.0</version>
             </dependency>
 
             <!-- spring-ai-starter-model-ollama-2.0.0-SNAPSHOT.jar -->
@@ -1615,23 +1643,12 @@
 
             <!-- spring-modulith-api-2.0.3.jar -->
 <!--            <dependency>-->
-<!--                <groupId>zuk.claw</groupId>-->
-<!--                <artifactId>merge-206</artifactId>-->
-<!--                <version>1.0.0</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
 <!--                <groupId>org.springframework.modulith</groupId>-->
 <!--                <artifactId>spring-modulith-api</artifactId>-->
 <!--                <version>2.0.3</version>-->
 <!--            </dependency>-->
 
             <!-- spring-modulith-apt-2.0.3.jar -->
-<!--            <dependency>-->
-<!--                <groupId>zuk.claw</groupId>-->
-<!--                <artifactId>merge-207</artifactId>-->
-<!--                <version>1.0.0</version>-->
-<!--            </dependency>-->
-
 <!--            <dependency>-->
 <!--                <groupId>org.springframework.modulith</groupId>-->
 <!--                <artifactId>spring-modulith-apt</artifactId>-->
@@ -1640,23 +1657,12 @@
 
             <!-- spring-modulith-core-2.0.3.jar -->
 <!--            <dependency>-->
-<!--                <groupId>zuk.claw</groupId>-->
-<!--                <artifactId>merge-208</artifactId>-->
-<!--                <version>1.0.0</version>-->
-<!--            </dependency>-->
-
-<!--            <dependency>-->
 <!--                <groupId>org.springframework.modulith</groupId>-->
 <!--                <artifactId>spring-modulith-core</artifactId>-->
 <!--                <version>2.0.3</version>-->
 <!--            </dependency>-->
 
             <!-- spring-modulith-moments-2.0.3.jar -->
-<!--            <dependency>-->
-<!--                <groupId>zuk.claw</groupId>-->
-<!--                <artifactId>merge-209</artifactId>-->
-<!--                <version>1.0.0</version>-->
-<!--            </dependency>-->
 <!--            <dependency>-->
 <!--                <groupId>org.springframework.modulith</groupId>-->
 <!--                <artifactId>spring-modulith-moments</artifactId>-->

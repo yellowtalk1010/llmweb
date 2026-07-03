@@ -56,7 +56,8 @@ public final class MessageChatMemoryAdvisor implements BaseChatMemoryAdvisor {
 
     @Override
     public ChatClientRequest before(ChatClientRequest chatClientRequest, AdvisorChain advisorChain) {
-        String conversationId = getConversationId(chatClientRequest.context(), this.defaultConversationId);
+//        String conversationId = getConversationId(chatClientRequest.context(), this.defaultConversationId);
+        String conversationId = getConversationId(chatClientRequest.context());
 
         List<Message> instructions = chatClientRequest.prompt().getInstructions();
 
@@ -96,8 +97,14 @@ public final class MessageChatMemoryAdvisor implements BaseChatMemoryAdvisor {
                     .map(g -> (Message) g.getOutput())
                     .toList();
         }
-        this.chatMemory.add(this.getConversationId(chatClientResponse.context(), this.defaultConversationId),
+
+//        this.chatMemory.add(this.getConversationId(chatClientResponse.context(), this.defaultConversationId),
+//                assistantMessages);
+
+        this.chatMemory.add(this.getConversationId(chatClientResponse.context()),
                 assistantMessages);
+
+
         return chatClientResponse;
     }
 
