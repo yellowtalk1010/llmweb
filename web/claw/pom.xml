@@ -45,6 +45,27 @@
 
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-bom</artifactId>
+                <version>2.0.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>2.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
 <!--    <dependencyManagement>-->
 
@@ -53,6 +74,14 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>2.0.0</version>
+                <type>pom</type>
+                <scope>provided</scope>
             </dependency>
 
             <!-- HdrHistogram-2.2.2.jar -->
@@ -1597,11 +1626,11 @@
 <!--                <artifactId>merge-206</artifactId>-->
 <!--                <version>1.0.0</version>-->
 <!--            </dependency>-->
-            <dependency>
-                <groupId>org.springframework.modulith</groupId>
-                <artifactId>spring-modulith-api</artifactId>
-                <version>2.0.3</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.modulith</groupId>-->
+<!--                <artifactId>spring-modulith-api</artifactId>-->
+<!--                <version>2.0.3</version>-->
+<!--            </dependency>-->
 
             <!-- spring-modulith-apt-2.0.3.jar -->
 <!--            <dependency>-->
@@ -1610,11 +1639,11 @@
 <!--                <version>1.0.0</version>-->
 <!--            </dependency>-->
 
-            <dependency>
-                <groupId>org.springframework.modulith</groupId>
-                <artifactId>spring-modulith-apt</artifactId>
-                <version>2.0.3</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.modulith</groupId>-->
+<!--                <artifactId>spring-modulith-apt</artifactId>-->
+<!--                <version>2.0.3</version>-->
+<!--            </dependency>-->
 
             <!-- spring-modulith-core-2.0.3.jar -->
 <!--            <dependency>-->
@@ -1623,11 +1652,11 @@
 <!--                <version>1.0.0</version>-->
 <!--            </dependency>-->
 
-            <dependency>
-                <groupId>org.springframework.modulith</groupId>
-                <artifactId>spring-modulith-core</artifactId>
-                <version>2.0.3</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.modulith</groupId>-->
+<!--                <artifactId>spring-modulith-core</artifactId>-->
+<!--                <version>2.0.3</version>-->
+<!--            </dependency>-->
 
             <!-- spring-modulith-moments-2.0.3.jar -->
 <!--            <dependency>-->
@@ -1635,11 +1664,11 @@
 <!--                <artifactId>merge-209</artifactId>-->
 <!--                <version>1.0.0</version>-->
 <!--            </dependency>-->
-            <dependency>
-                <groupId>org.springframework.modulith</groupId>
-                <artifactId>spring-modulith-moments</artifactId>
-                <version>2.0.3</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.modulith</groupId>-->
+<!--                <artifactId>spring-modulith-moments</artifactId>-->
+<!--                <version>2.0.3</version>-->
+<!--            </dependency>-->
 
             <!-- spring-tx-7.0.5.jar -->
             <!--<dependency>-->
