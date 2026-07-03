@@ -536,20 +536,6 @@
                 <version>1.0.0</version>
             </dependency>
 
-            <!-- jobrunr-8.5.1.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-66</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-
-            <!-- jobrunr-spring-boot-4-starter-8.5.1.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-67</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-
             <!-- json-path-2.10.0.jar -->
             <dependency>
                 <groupId>zuk.claw</groupId>
