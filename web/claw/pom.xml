@@ -53,13 +53,13 @@
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-bom -->
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.ai</groupId>-->
-<!--                <artifactId>spring-ai-bom</artifactId>-->
-<!--                <version>2.0.0</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>2.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1066,11 +1066,11 @@
                 <version>1.0.0</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-anthropic</artifactId>
-                <version>2.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-anthropic</artifactId>-->
+<!--                <version>2.0.0</version>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>org.springframework.ai</groupId>
@@ -1078,11 +1078,11 @@
                 <version>2.0.0</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-autoconfigure-model-anthropic</artifactId>
-                <version>2.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-autoconfigure-model-anthropic</artifactId>-->
+<!--                <version>2.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-autoconfigure-mcp-client-common-2.0.0-SNAPSHOT.jar -->
             <dependency>
@@ -1100,18 +1100,18 @@
 
 
             <!-- spring-ai-autoconfigure-model-chat-client-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-145</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-145</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-autoconfigure-model-chat-memory-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-146</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-146</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-autoconfigure-model-chat-observation-2.0.0-SNAPSHOT.jar -->
 <!--            <dependency>-->
@@ -1120,21 +1120,21 @@
 <!--                <version>1.0.0</version>-->
 <!--            </dependency>-->
 
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-autoconfigure-model-deepseek</artifactId>
-                <version>2.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-deepseek</artifactId>
-                <version>2.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-starter-model-deepseek</artifactId>
-                <version>2.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-autoconfigure-model-deepseek</artifactId>-->
+<!--                <version>2.0.0</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-deepseek</artifactId>-->
+<!--                <version>2.0.0</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-starter-model-deepseek</artifactId>-->
+<!--                <version>2.0.0</version>-->
+<!--            </dependency>-->
 
 
             <!-- spring-ai-autoconfigure-model-embedding-observation-2.0.0-SNAPSHOT.jar -->
