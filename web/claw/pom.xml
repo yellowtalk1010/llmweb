@@ -1114,11 +1114,11 @@
             </dependency>
 
             <!-- spring-ai-autoconfigure-model-chat-observation-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-147</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-147</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>org.springframework.ai</groupId>
@@ -1166,25 +1166,25 @@
             </dependency>
 
             <!-- spring-ai-autoconfigure-model-tool-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-153</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-153</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-autoconfigure-retry-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-154</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-154</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-commons-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-156</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-156</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
 
             <!-- spring-ai-mcp-2.0.0-SNAPSHOT.jar -->
@@ -1223,11 +1223,11 @@
             </dependency>
 
             <!-- spring-ai-retry-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-163</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-163</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-ai-starter-mcp-client-2.0.0-SNAPSHOT.jar -->
             <dependency>
@@ -1254,11 +1254,11 @@
             </dependency>
 
             <!-- spring-ai-template-st-2.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-169</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-169</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- spring-aop-7.0.5.jar -->
             <!--<dependency>-->
