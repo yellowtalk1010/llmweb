@@ -12,11 +12,9 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
     <modules>
-<!--        <module>base</module>-->
         <module>app</module>
         <module>base</module>
         <module>plugins</module>
-        <!--        <module>aaa</module>-->
     </modules>
 
     <properties>
@@ -181,11 +179,11 @@
             <!--</dependency>-->
 
             <!-- brave-1.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-15</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-15</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- byte-buddy-1.17.8.jar -->
             <dependency>
@@ -977,18 +975,18 @@
             </dependency>
 
             <!-- playwright-1.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-130</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-130</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- playwright-1.57.0.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-131</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-131</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- reactive-streams-1.0.4.jar -->
             <dependency>
@@ -1651,11 +1649,11 @@
             </dependency>
 
             <!-- telegram-1.0.0-SNAPSHOT.jar -->
-            <dependency>
-                <groupId>zuk.claw</groupId>
-                <artifactId>merge-217</artifactId>
-                <version>1.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>zuk.claw</groupId>-->
+<!--                <artifactId>merge-217</artifactId>-->
+<!--                <version>1.0.0</version>-->
+<!--            </dependency>-->
 
             <!-- telegrambots-client-9.4.0.jar -->
             <dependency>

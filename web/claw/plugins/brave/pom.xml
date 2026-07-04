@@ -5,24 +5,45 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ai.javaclaw</groupId>
-        <artifactId>JavaClaw</artifactId>
+        <artifactId>plugins</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>plugins</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>brave</artifactId>
 
-    <modules>
-        <module>brave</module>
-        <module>playwright</module>
-        <module>telegram</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>ai.javaclaw</groupId>
+            <artifactId>base</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springaicommunity</groupId>
+            <artifactId>spring-ai-agent-utils</artifactId>
+            <version>0.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
     <build>
         <plugins>

@@ -19,9 +19,26 @@
         <dependency>
             <groupId>ai.javaclaw</groupId>
             <artifactId>base</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>ai.javaclaw</groupId>
+            <artifactId>brave</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ai.javaclaw</groupId>
+            <artifactId>playwright</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ai.javaclaw</groupId>
+            <artifactId>telegram</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <!-- Spring AI -->
         <dependency>
