@@ -56,6 +56,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     @SuppressWarnings("unchecked")
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        log.info("处理websocket请求");
         Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
         String type = (String) payload.get("type");
 
@@ -80,7 +81,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private void handleUserMessage(Map<String, Object> payload) throws Exception {
         String conversationId = (String) payload.get("conversationId");
         String userMessage = (String) payload.get("message");
-
+        log.info("用户提交数据：" + userMessage);
         if (userMessage == null || userMessage.isBlank()) return;
         userMessage = userMessage.trim();
         if (conversationId == null || conversationId.isBlank()) conversationId = "web";
@@ -93,6 +94,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         try {
             // Call agent (blocking — background tasks may push messages via ChatChannel during this)
             String response = chatChannel.chat(conversationId, userMessage);
+            log.info("回复数据：" + response);
             chatChannel.sendHtml(
                     Htmx.oobAppend("chat-messages", ChatHtml.agentBubble(response)),
                     Htmx.oobReplace("typing-indicator", ""));
