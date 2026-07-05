@@ -21,11 +21,13 @@ class MainTest extends AnyFunSuite {
 
   test("pom依赖生成器"){
 
-    val projectName = "claw"
+    val file = new File("C:\\cobot-install-创景\\cobot-v4.3\\resources\\restapp\\cobot-web-4.0.0-SNAPSHOT\\BOOT-INF\\lib")
+    val projectName = "web"
     val version = "1.0.0"
 
-    val file = new File("C:\\Users\\5132\\Desktop\\JavaClaw\\app-1.0.0-SNAPSHOT\\BOOT-INF\\lib")
     val list = file.listFiles().toList.sortBy(_.getName)
+
+    val repositoryPath = ".m2/repository/"
 
     val groupId = "zuk"
     val artifactId = "merge"
@@ -80,8 +82,8 @@ class MainTest extends AnyFunSuite {
       val jarPath = s"${groupId}/${projectName}/${myArtifactId}/${version}/${myArtifactId}-${version}.jar"
       val pomPath = s"${groupId}/${projectName}/${myArtifactId}/${version}/${myArtifactId}-${version}.pom"
 
-      val jarFile = new File(jarPath)
-      val pomFile = new File(pomPath)
+      val jarFile = new File(repositoryPath + jarPath)
+      val pomFile = new File(repositoryPath + pomPath)
       if(jarFile.exists()){
         jarFile.delete()
       }
@@ -89,7 +91,22 @@ class MainTest extends AnyFunSuite {
         pomFile.delete()
       }
       FileUtils.copyFile(e._1, jarFile)
-      pomFile.createNewFile()
+
+      val pomFileText =
+        s"""<?xml version="1.0" encoding="UTF-8"?>
+          |<project xmlns="http://maven.apache.org/POM/4.0.0"
+          |         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          |         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+          |    <modelVersion>4.0.0</modelVersion>
+          |
+          |    <groupId>${groupId}.${projectName}</groupId>
+          |    <artifactId>${myArtifactId}</artifactId>
+          |    <version>${version}</version>
+          |
+          |</project>
+          |""".stripMargin
+      //pomFile.createNewFile()
+      FileUtils.writeLines(pomFile, pomFileText.lines().toList)
 
       println(str)
 
@@ -124,7 +141,8 @@ class MainTest extends AnyFunSuite {
     strList.append(parentEndStr)
 
 
-    FileUtils.writeLines(new File(s"${parentGroupId}/${projectName}/${parentArtifactId}/${version}/${parentArtifactId}-${version}.pom"), strList.toList.asJava)
+    FileUtils.writeLines(new File(repositoryPath + s"${parentGroupId}/${projectName}/${parentArtifactId}/${version}/${parentArtifactId}-${version}.pom"), strList.toList.asJava)
 
+    println(s"保存路径：${new File(repositoryPath).getAbsolutePath}")
   }
 }
