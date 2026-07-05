@@ -9,6 +9,7 @@ tushare/.idea
 
 *.bak
 *.zip
+*.m2
 
 task_ai/*
 releases/*
