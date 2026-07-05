@@ -73,9 +73,9 @@ class MainTest extends AnyFunSuite {
       val str = {
         s"<!-- ${filename} -->\n" +
           "<dependency>\n" +
-          s"<groupId>${groupId}.${projectName}</groupId>\n" +
-          s"<artifactId>${myArtifactId}</artifactId>\n" +
-          s"<version>${version}</version>\n" +
+          s"    <groupId>${groupId}.${projectName}</groupId>\n" +
+          s"    <artifactId>${myArtifactId}</artifactId>\n" +
+          s"    <version>${version}</version>\n" +
           "</dependency>\n"
       }
 
@@ -117,23 +117,26 @@ class MainTest extends AnyFunSuite {
     val parentGroupId = "zuk"
     val parentArtifactId = s"${artifactId}-parent"
     val parentStartStr =
-      """<project xmlns="http://maven.apache.org/POM/4.0.0"
+      s"""<project xmlns="http://maven.apache.org/POM/4.0.0"
         |        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         |        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
         |<modelVersion>4.0.0</modelVersion>
-      """.stripMargin +
-        s"\n<groupId>${parentGroupId}.${projectName}</groupId>\n" +
-        s"<artifactId>${parentArtifactId}</artifactId>\n" +
-        s"<version>${version}</version>\n" +
-      """
+        |
+        |<groupId>${parentGroupId}.${projectName}</groupId>
+        |<artifactId>${parentArtifactId}</artifactId>
+        |<version>${version}</version>
+        |
         |<packaging>pom</packaging>
+        |
         |<dependencies>
+        |
         |""".stripMargin
 
     strList.prepend(parentStartStr)
 
     val parentEndStr =
       """
+        |
         |</dependencies>
         |</project>
         |""".stripMargin
