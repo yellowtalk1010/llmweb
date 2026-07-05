@@ -14,5 +14,6 @@ tushare/.idea
 task_ai/*
 releases/*
 result_json/*
-kubo/*
-kubo/*.java
+
+
+chat-web.yaml
