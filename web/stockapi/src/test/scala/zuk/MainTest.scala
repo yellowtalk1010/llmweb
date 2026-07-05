@@ -71,12 +71,20 @@ class MainTest extends AnyFunSuite {
       val myArtifactId = s"${artifactId}-${index}"
 
       val str = {
-        s"<!-- ${filename} -->\n" +
-          "<dependency>\n" +
-          s"    <groupId>${groupId}.${projectName}</groupId>\n" +
-          s"    <artifactId>${myArtifactId}</artifactId>\n" +
-          s"    <version>${version}</version>\n" +
-          "</dependency>\n"
+        s"""
+           |<!-- ${filename} -->
+           |<dependency>
+           |    <groupId>${groupId}.${projectName}</groupId>
+           |    <artifactId>${myArtifactId}</artifactId>
+           |    <version>${version}</version>
+           |</dependency>
+           |""".stripMargin
+
+//          "<dependency>\n" +
+//          s"    <groupId>${groupId}.${projectName}</groupId>\n" +
+//          s"    <artifactId>${myArtifactId}</artifactId>\n" +
+//          s"    <version>${version}</version>\n" +
+//          "</dependency>\n"
       }
 
       val jarPath = s"${groupId}/${projectName}/${myArtifactId}/${version}/${myArtifactId}-${version}.jar"
