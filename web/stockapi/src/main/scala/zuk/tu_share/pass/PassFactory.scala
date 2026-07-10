@@ -21,7 +21,7 @@ object PassFactory {
         new MA3_3_Model,
         new MA4_Model,
         new MA5_Model,
-//        new MA6_Model
+        new MA6_Model
     )
   }
 
