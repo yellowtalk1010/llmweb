@@ -34,8 +34,8 @@ class MA6_Model extends IModel {
     val ls = list.filter(day=>{
       day.ma.ma5.compareTo(day.ma.ma10) > 0
         && day.ma.ma10.compareTo(day.ma.ma20) > 0
-//        && day.ma.ma10.compareTo(day.ma.ma30) > 0
-//        && day.ma.ma30.compareTo(day.ma.ma20) > 0
+        && day.ma.ma10.compareTo(day.ma.ma30) > 0
+//        && day.ma.ma20.compareTo(day.ma.ma30) < 0
     })
 
     val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
