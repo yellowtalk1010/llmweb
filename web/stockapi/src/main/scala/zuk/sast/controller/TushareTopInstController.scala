@@ -8,8 +8,8 @@ import zuk.tu_share.utils.TopInstUtil
 import java.util
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
-
 import org.springframework.beans.factory.annotation.{Autowired, Value}
+import zuk.sast.controller.component.ApplicationProperties
 
 @RestController
 @RequestMapping(value=Array("top_inst"))
@@ -17,14 +17,8 @@ class TushareTopInstController {
 
   private val log = LoggerFactory.getLogger(classOf[TushareTopInstController])
 
-  /** *
-   * 获取application.properties中的数据，股票json结果路径
-   */
-  @Value("${stock.hm.top_inst.path}")
-  @BeanProperty
-  private var stockHmTopInstPath: String = null
-
-  log.info(s"龙虎榜数据存储路径：${stockHmTopInstPath}")
+  @Autowired
+  private var applicationProperties: ApplicationProperties = null
 
   /**
    * 龙虎榜机构交易单
@@ -32,6 +26,7 @@ class TushareTopInstController {
    */
   @GetMapping(value=Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
+    val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
     TopInstUtil.loadData(stockHmTopInstPath)
     log.info(s"search: ${search}, tradedate: ${tradedate}")
 

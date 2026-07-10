@@ -1,19 +1,17 @@
 package zuk.sast.controller.component
 
 import jakarta.annotation.PostConstruct
-import org.apache.commons.csv.{CSVFormat, CSVRecord}
+import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.{Autowired, Value}
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
 import java.util.concurrent.ConcurrentHashMap
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
-import java.math.BigDecimal
 
 case class MoneyflowDCDto() {
 
@@ -50,12 +48,12 @@ class TushareMoneyFlowComponent {
 
   private val MAP = new ConcurrentHashMap[String, List[MoneyflowDCDto]]()
 
-  @Value("${stock.moneyflow_dc.path}")
-  @BeanProperty
-  var moneyflowPath: String = null
+  @Autowired
+  private var applicationProperties: ApplicationProperties = null
 
   @PostConstruct
   def init(): Unit = {
+    val moneyflowPath = applicationProperties.getStockDatasourceBuildSystem_moneyflowPath
     log.info(s"东方财富资金流路径：${moneyflowPath}")
     if(StringUtils.isEmpty(moneyflowPath)){
       log.error(s"东方财富资金流路径${moneyflowPath}，错误")
