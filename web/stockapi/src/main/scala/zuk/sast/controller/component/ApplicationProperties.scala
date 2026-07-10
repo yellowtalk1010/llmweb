@@ -20,8 +20,10 @@ class ApplicationProperties {
   @BeanProperty
   var stock_analysis_system_path: String = null
 
-  def get_stock_result_json_path: String = this.stock_analysis_system_path + File.separator + "result_json"
-  def get_stock_all_stocks_csv_path: String = this.stock_analysis_system_path + File.separator + "all_stocks.csv"
+  //股票分析系统结果存储路径
+  def getStockAnalysisSystem_resultJsonSavePath: String = this.stock_analysis_system_path + File.separator + "result_json"
+  //股票分析系统待分析的股票详情
+  def getStockAnalysisSystem_allStocksCsvPath: String = this.stock_analysis_system_path + File.separator + "all_stocks.csv"
 
 
 

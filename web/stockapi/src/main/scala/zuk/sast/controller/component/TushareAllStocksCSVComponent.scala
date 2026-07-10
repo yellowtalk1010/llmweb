@@ -73,7 +73,7 @@ class TushareAllStocksCSVComponent {
   @PostConstruct
   def init(): Unit = synchronized {
 
-    val all_stocks_csv_path = applicationProperties.get_stock_all_stocks_csv_path
+    val all_stocks_csv_path = applicationProperties.getStockAnalysisSystem_allStocksCsvPath
 
     if(TushareAllStocks.allStocks.size < 5000){
       log.info("")

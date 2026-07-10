@@ -53,7 +53,7 @@ class TusharePushStockController {
 
   @PostConstruct
   def init(): Unit = {
-    val stockResultJsonPath = applicationProperties.get_stock_result_json_path
+    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
     log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
     if(!new File(stockResultJsonPath).exists()){
       log.error(s"tushare推荐结果存储路径：${stockResultJsonPath}。错误")
@@ -110,7 +110,7 @@ class TusharePushStockController {
    * @return
    */
   private def getStockResultJsonPath(): File = {
-    val stockResultJsonPath = applicationProperties.get_stock_result_json_path
+    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
     val sdf = new SimpleDateFormat("yyyyMMdd")
 //    val pro = System.getProperties
     log.info(s"stock result json path: ${stockResultJsonPath}")
@@ -151,7 +151,7 @@ class TusharePushStockController {
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
-    val stockResultJsonPath = applicationProperties.get_stock_result_json_path
+    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
 
     log.info(s"选择模型:${modType}")
 
