@@ -8,11 +8,11 @@ import zuk.tu_share.utils.ListOrderCheck
 import java.math.{BigDecimal, RoundingMode}
 
 /***
- * 从交易量角度分析
+ * 超越MA30
  */
 class MA6_Model extends IModel {
 
-  val num = 10
+  val num = 6
   var stockDto: StockDto = _
 
   override def getStockDto(): StockDto = stockDto
@@ -33,8 +33,9 @@ class MA6_Model extends IModel {
 
     val ls = list.filter(day=>{
       day.ma.ma5.compareTo(day.ma.ma10) > 0
-//        && day.ma.ma10.compareTo(day.ma.ma20) > 0
-//        && day.ma.ma20.compareTo(day.ma.ma30) > 0
+        && day.ma.ma10.compareTo(day.ma.ma20) > 0
+        && day.ma.ma10.compareTo(day.ma.ma30) > 0
+        && day.ma.ma30.compareTo(day.ma.ma20) > 0
     })
 
     val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
@@ -42,11 +43,11 @@ class MA6_Model extends IModel {
       && tsStock != null
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma5.floatValue())) //ma5是递增的
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma10.floatValue())) //ma10是递增的
-//      && ListOrderCheck.isDecreasing(list.map(_.ma.ma20.floatValue())) //ma20是递增的
+      && ListOrderCheck.isDecreasing(list.map(_.ma.ma20.floatValue())) //ma20是递增的
 //      && ListOrderCheck.isDecreasing(list.map(_.ma.ma30.floatValue())) //ma30是递增的
 
       && calaChange(list)
-      && calaVol(list)
+//      && calaVol(list)
     ){
       stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       stockDto.warningUpperShadow = super.upperShadow(days)
@@ -83,7 +84,7 @@ class MA6_Model extends IModel {
    * 连续上涨
    */
   private def calaChange(list: List[ModuleDay]): Boolean = {
-    val sufList = list.reverse.slice(7, list.size)
+    val sufList = list.reverse
     val st = sufList.filter(_.change.toFloat > 0.0).size == sufList.size
 
 //    var n = 0
@@ -100,7 +101,7 @@ class MA6_Model extends IModel {
     st
   }
 
-  override def desc(): String = "放量倍量连续上涨"
+  override def desc(): String = "超越MA30"
 
   override def winRate: Float = {
     val v = DataFrame.properties.get(classOf[MA5_Model].getSimpleName.toUpperCase)
@@ -108,7 +109,7 @@ class MA6_Model extends IModel {
       v.toString.toFloat
     }
     else {
-      0.8818
+      0.8572
     }
   }
 
