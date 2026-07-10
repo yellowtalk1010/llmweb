@@ -73,9 +73,8 @@ class TushareStockDailyDataComponent {
 
   private val log = LoggerFactory.getLogger(classOf[TushareStockDailyDataComponent])
 
-  @Value("${stock.daily.data.path}")
-  @BeanProperty
-  private var stock_daily_data_path: String = null
+  @Autowired
+  private var applicationProperties: ApplicationProperties = null
 
   @Autowired
   private var stockMapper: StockMapper = null
@@ -84,12 +83,6 @@ class TushareStockDailyDataComponent {
 
   @PostConstruct
   def init(): Unit = synchronized {
-
-    val file = new File(stock_daily_data_path)
-    if (!file.isDirectory || !file.exists()) {
-      log.error(s"股票基本数据路径：${stock_daily_data_path}，路径不存在")
-      System.exit(1)
-    }
 
     executor.execute(()=>{
       while (true){
@@ -131,7 +124,8 @@ class TushareStockDailyDataComponent {
    */
   private def refresh_rtk(): Unit = {
     try {
-      val path = this.stock_daily_data_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
+      val stock_daily_data_path: String = applicationProperties.stock_daily_data_path
+      val path = stock_daily_data_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
       val rtkFile = new File(path)
       if(rtkFile.exists() && rtkFile.isFile){
         log.info(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")
@@ -168,7 +162,8 @@ class TushareStockDailyDataComponent {
         .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e.stockCode)==null)
         .foreach(e=>{
           val filename = e.stockCode.replaceAll("\\.", "_") + ".csv"
-          val path = this.stock_daily_data_path + File.separator + "module" + File.separator + filename
+          val stock_daily_data_path: String = applicationProperties.stock_daily_data_path
+          val path = stock_daily_data_path + File.separator + "module" + File.separator + filename
           val file = new File(path)
           if(file.isFile && file.exists()){
             log.info(s"加载股票基本数据路径:${file.getAbsolutePath}")
