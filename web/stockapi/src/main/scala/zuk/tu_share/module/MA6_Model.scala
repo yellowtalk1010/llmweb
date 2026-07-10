@@ -87,9 +87,11 @@ class MA6_Model extends IModel {
 //    val sufList = list.reverse.slice(5, list.size)
 //    val st = sufList.filter(_.change.toFloat > 0.0).size == sufList.size
 
+    //最近几天里70%以上是向上涨的
     val result = new BigDecimal(list.filter(_.change.toFloat > 0).size).divide(new BigDecimal(list.size), 2, RoundingMode.UP)
     val st1 = result.compareTo(new BigDecimal(0.7)) > 0
 
+    //最近几天里最大回撤90%以内
     val max = list.slice(1, list.size).map(_.high.toFloat).max
     val st2 = new BigDecimal(list.head.high).divide(new BigDecimal(max), 2, RoundingMode.UP).compareTo(new BigDecimal(0.9)) > 0
 
