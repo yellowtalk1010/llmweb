@@ -31,8 +31,8 @@ class MA4_Model extends IModel {
       day.ma.ma5.compareTo(day.ma.ma10) > 0
       && day.ma.ma10.compareTo(day.ma.ma20) > 0
       && day.ma.ma20.compareTo(day.ma.ma30) > 0
-      && List(day.open, day.close, day.high, day.low).map(new BigDecimal(_)).filter(_.compareTo(day.ma.ma5) >= 0).size > 0 //上穿ma5
-      && List(day.open, day.close, day.high, day.low).map(new BigDecimal(_)).filter(_.compareTo(day.ma.ma10) <= 0).size == 0 //不能下穿ma10
+      && day.high.toFloat > day.ma.ma5.floatValue() //最大值超越ma5
+      && day.low.toFloat > day.ma.ma10.floatValue() //最小值没有跌出ma10
       && head.change.toFloat > 0
     })
 
