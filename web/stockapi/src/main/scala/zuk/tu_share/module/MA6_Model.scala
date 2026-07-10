@@ -12,7 +12,7 @@ import java.math.{BigDecimal, RoundingMode}
  */
 class MA6_Model extends IModel {
 
-  val num = 6
+  val num = 10
   var stockDto: StockDto = _
 
   override def getStockDto(): StockDto = stockDto
@@ -34,8 +34,8 @@ class MA6_Model extends IModel {
     val ls = list.filter(day=>{
       day.ma.ma5.compareTo(day.ma.ma10) > 0
         && day.ma.ma10.compareTo(day.ma.ma20) > 0
-        && day.ma.ma10.compareTo(day.ma.ma30) > 0
-        && day.ma.ma30.compareTo(day.ma.ma20) > 0
+//        && day.ma.ma10.compareTo(day.ma.ma30) > 0
+//        && day.ma.ma30.compareTo(day.ma.ma20) > 0
     })
 
     val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
@@ -43,7 +43,7 @@ class MA6_Model extends IModel {
       && tsStock != null
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma5.floatValue())) //ma5是递增的
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma10.floatValue())) //ma10是递增的
-      && ListOrderCheck.isDecreasing(list.map(_.ma.ma20.floatValue())) //ma20是递增的
+//      && ListOrderCheck.isDecreasing(list.map(_.ma.ma20.floatValue())) //ma20是递增的
 //      && ListOrderCheck.isDecreasing(list.map(_.ma.ma30.floatValue())) //ma30是递增的
 
       && calaChange(list)
@@ -84,8 +84,16 @@ class MA6_Model extends IModel {
    * 连续上涨
    */
   private def calaChange(list: List[ModuleDay]): Boolean = {
-    val sufList = list.reverse
-    val st = sufList.filter(_.change.toFloat > 0.0).size == sufList.size
+//    val sufList = list.reverse.slice(5, list.size)
+//    val st = sufList.filter(_.change.toFloat > 0.0).size == sufList.size
+
+    val result = new BigDecimal(list.filter(_.change.toFloat > 0).size).divide(new BigDecimal(list.size), 2, RoundingMode.UP)
+    val st1 = result.compareTo(new BigDecimal(0.7)) > 0
+
+    val max = list.slice(1, list.size).map(_.high.toFloat).max
+    val st2 = new BigDecimal(list.head.high).divide(new BigDecimal(max), 2, RoundingMode.UP).compareTo(new BigDecimal(0.9)) > 0
+
+    st1 && st2
 
 //    var n = 0
 //    for (i <- 1 until sufList.size) {
@@ -98,7 +106,7 @@ class MA6_Model extends IModel {
 //      }
 //    }
 
-    st
+//    st
   }
 
   override def desc(): String = "超越MA30"
@@ -109,7 +117,7 @@ class MA6_Model extends IModel {
       v.toString.toFloat
     }
     else {
-      0.8572
+      0.8818
     }
   }
 
