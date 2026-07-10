@@ -18,8 +18,6 @@ class ApplicationProperties {
    */
   @Value("${stock.analysis.system.path}")
   private var stock_analysis_system_path: String = null
-
-
   //股票分析系统路径
   def getStockAnalysisSystemPath: String = this.stock_analysis_system_path
   //股票分析系统结果存储路径
@@ -33,9 +31,12 @@ class ApplicationProperties {
    */
   @Value("${stock.datasource.build.system.path}")
   private var stock_datasource_build_system_path: String = null
-
   //股票数据源构建系统路径
   def getStockDatasourceBuildSystemPath: String = this.stock_datasource_build_system_path
+  //龙虎榜数据存储路径
+  def getStockDatasourceBuildSystem_stockHmTopInstPath: String = stock_datasource_build_system_path + "/hm/top_inst/"
+  //东方财富资金流路径
+  def getStockDatasourceBuildSystem_moneyflowPath: String =  stock_datasource_build_system_path + "/moneyflow/data/moneyflow_dc/"
 
 
   @PostConstruct
