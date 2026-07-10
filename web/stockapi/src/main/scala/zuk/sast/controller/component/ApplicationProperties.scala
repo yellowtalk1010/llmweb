@@ -18,8 +18,10 @@ class ApplicationProperties {
    */
   @Value("${stock.analysis.system.path}")
   @BeanProperty
-  var stock_analysis_system_path: String = null
+  private var stock_analysis_system_path: String = null
 
+  //股票分析系统路径
+  def getStockAnalysisSystem: String = this.stock_analysis_system_path
   //股票分析系统结果存储路径
   def getStockAnalysisSystem_resultJsonSavePath: String = this.stock_analysis_system_path + File.separator + "result_json"
   //股票分析系统待分析的股票详情
