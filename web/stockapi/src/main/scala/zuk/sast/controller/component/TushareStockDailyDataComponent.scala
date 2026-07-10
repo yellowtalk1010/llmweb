@@ -124,7 +124,7 @@ class TushareStockDailyDataComponent {
    */
   private def refresh_rtk(): Unit = {
     try {
-      val stock_daily_data_path: String = applicationProperties.getStockAnalysisSystem
+      val stock_daily_data_path: String = applicationProperties.getStockAnalysisSystemPath
       val path = stock_daily_data_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
       val rtkFile = new File(path)
       if(rtkFile.exists() && rtkFile.isFile){
@@ -162,7 +162,7 @@ class TushareStockDailyDataComponent {
         .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e.stockCode)==null)
         .foreach(e=>{
           val filename = e.stockCode.replaceAll("\\.", "_") + ".csv"
-          val stock_daily_data_path: String = applicationProperties.getStockAnalysisSystem
+          val stock_daily_data_path: String = applicationProperties.getStockAnalysisSystemPath
           val path = stock_daily_data_path + File.separator + "module" + File.separator + filename
           val file = new File(path)
           if(file.isFile && file.exists()){
