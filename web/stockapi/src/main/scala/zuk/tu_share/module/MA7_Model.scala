@@ -12,7 +12,7 @@ import java.math.{BigDecimal, RoundingMode}
  */
 class MA7_Model extends IModel {
 
-  val num = 120
+  val num = 60
   var stockDto: StockDto = _
 
   override def getStockDto(): StockDto = stockDto
@@ -21,22 +21,32 @@ class MA7_Model extends IModel {
     if (days.size < num){
       return
     }
-    val historyDays = days.slice(10, days.length)
+    val head = days.head
+    val size = 1
+    val historyDays = days.slice(size, days.length)
     val historyHigh = historyDays.map(_.high.toFloat).max //过去历史最高价
     val avgVol = new BigDecimal(historyDays.map(_.vol.toFloat).sum).divide(new BigDecimal(historyDays.size), 2, RoundingMode.UP).floatValue() //平均交易量
 
-    val lastestDays = days.take(10)
-    val lastestLow = lastestDays.map(_.low.toFloat).min //最近最低价
-    val lastestMaxVol = lastestDays.map(_.vol.toFloat).max //最近最大的一次交易量
+    //最近20天
+    val history_40 = days.slice(1, 20)
+    val avgVol_40 = new BigDecimal(history_40.map(_.vol.toFloat).sum).divide(new BigDecimal(history_40.size), 2, RoundingMode.UP).floatValue()
+
+//    val lastestDays = days.take(size)
+//    val lastestLow = lastestDays.map(_.low.toFloat).min //最近最低价
+//    val lastestMaxVol = lastestDays.map(_.vol.toFloat).max //最近最大的一次交易量
 
 
-    val downRate = new BigDecimal(historyHigh - lastestLow).divide(new BigDecimal(historyHigh),2,RoundingMode.UP) //相比最高价，跌去的比例
-    val volRate = new BigDecimal(lastestMaxVol).divide(new BigDecimal(avgVol), 2, RoundingMode.UP).floatValue() //
+    val downRate = new BigDecimal(historyHigh - head.low.toFloat).divide(new BigDecimal(historyHigh),2,RoundingMode.UP) //相比最高价，跌去的比例
+    val volRate = new BigDecimal(head.vol).divide(new BigDecimal(avgVol), 2, RoundingMode.UP).floatValue() //
+    val volRate_40 = new BigDecimal(head.vol).divide(new BigDecimal(avgVol_40), 2, RoundingMode.UP).floatValue() //
 
     if(0.4 <= downRate.floatValue() //跌超4个点
-      && volRate >= 2.0 //两倍放量
-      && lastestDays.map(_.change.toFloat).max > 5
-
+      && volRate_40 > 2.0 //放量2倍
+      && ListOrderCheck.isDecreasing(history_40.reverse.map(_.ma.ma30.floatValue()))
+      && ListOrderCheck.isDecreasing(history_40.reverse.map(_.ma.ma20.floatValue()))
+      && head.ma.ma30.floatValue() > head.ma.ma20.floatValue()
+//      && head.ma.ma20.floatValue() > List(head.ma.ma10.floatValue(), head.ma.ma5.floatValue()).max
+      && head.change.toFloat > 2.0
     ){
 
       val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
