@@ -16,12 +16,12 @@ class ApplicationProperties {
   /***
    * 股票分析系统路径
    */
-  @Value("${stock.daily.data.path}")
+  @Value("${stock.analysis.system.path}")
   @BeanProperty
-  var stock_daily_data_path: String = null
+  var stock_analysis_system_path: String = null
 
-  def get_stock_result_json_path: String = this.stock_daily_data_path + File.separator + "result_json"
-  def get_stock_all_stocks_csv_path: String = this.stock_daily_data_path + File.separator + "all_stocks.csv"
+  def get_stock_result_json_path: String = this.stock_analysis_system_path + File.separator + "result_json"
+  def get_stock_all_stocks_csv_path: String = this.stock_analysis_system_path + File.separator + "all_stocks.csv"
 
 
 
@@ -29,12 +29,12 @@ class ApplicationProperties {
   def init() = {
     log.info("初始化 application.properties ")
 
-    val file = new File(this.stock_daily_data_path)
+    val file = new File(this.stock_analysis_system_path)
     if(file.exists()){
-      log.info(s"股票分析系统路径:${stock_daily_data_path}, ${file.exists()}")
+      log.info(s"股票分析系统路径:${stock_analysis_system_path}, ${file.exists()}")
     }
     else {
-      log.info(s"股票分析系统路径:${stock_daily_data_path}，路径错误")
+      log.info(s"股票分析系统路径:${stock_analysis_system_path}，路径错误")
       System.exit(1)
     }
 
