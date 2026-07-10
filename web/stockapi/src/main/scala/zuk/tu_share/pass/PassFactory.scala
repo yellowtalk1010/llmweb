@@ -14,7 +14,7 @@ object PassFactory {
   def moduleList(): List[IModel] = {
     List(
 //        new MA1_Model,
-        new MA1_1_Model,
+        new MA1_1_Model, //最高胜率
 ////        new MA3_0_Model, //上穿MA5
 //        new MA3_1_Model,
 ////        new MA3_2_Model, //反包两日阴线后继续下跌
