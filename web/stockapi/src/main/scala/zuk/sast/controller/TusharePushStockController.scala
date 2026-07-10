@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.component.{TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.controller.component.{ApplicationProperties, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -48,15 +48,12 @@ class TusharePushStockController {
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
 
-  /***
-   * 获取application.properties中的数据，股票json结果路径
-   */
-  @Value("${stock.result.json.path}")
-  @BeanProperty
-  private var stockResultJsonPath: String = null
+  @Autowired
+  val applicationProperties: ApplicationProperties = null
 
   @PostConstruct
   def init(): Unit = {
+    val stockResultJsonPath = applicationProperties.get_stock_result_json_path
     log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
     if(!new File(stockResultJsonPath).exists()){
       log.error(s"tushare推荐结果存储路径：${stockResultJsonPath}。错误")
@@ -113,10 +110,11 @@ class TusharePushStockController {
    * @return
    */
   private def getStockResultJsonPath(): File = {
+    val stockResultJsonPath = applicationProperties.get_stock_result_json_path
     val sdf = new SimpleDateFormat("yyyyMMdd")
 //    val pro = System.getProperties
-    log.info(s"stock result json path: ${this.stockResultJsonPath}")
-    val file = new File(s"${this.stockResultJsonPath}${File.separator}${sdf.format(new Date())}")
+    log.info(s"stock result json path: ${stockResultJsonPath}")
+    val file = new File(s"${stockResultJsonPath}${File.separator}${sdf.format(new Date())}")
     file
   }
 
@@ -153,6 +151,8 @@ class TusharePushStockController {
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
+    val stockResultJsonPath = applicationProperties.get_stock_result_json_path
+
     log.info(s"选择模型:${modType}")
 
     val response = new util.HashMap[String, Object]()
@@ -161,7 +161,7 @@ class TusharePushStockController {
 
     val file: File = getStockResultJsonPath()
     if(!file.exists() || !file.isDirectory){
-      log.info(s"路径不存在: ${this.stockResultJsonPath}")
+      log.info(s"路径不存在: ${stockResultJsonPath}")
       return response
     }
 
