@@ -12,12 +12,14 @@ import zuk.sast.controller.component.{TushareAllStocks, TushareAllStocksCSVCompo
 import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
+import zuk.tu_share.pass.PassFactory
 
 import java.text.SimpleDateFormat
 import java.util
 import java.util.concurrent.Executors
-import java.util.{Date, UUID}
+import java.util.{Date, Properties, UUID}
 import scala.beans.BeanProperty
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object TushareStockController {
@@ -288,6 +290,48 @@ class TushareStockController {
     map.put("code", "success")
     map.put("data", list)
 
+    map
+  }
+
+  /** *
+   * 获取模型列表
+   *
+   * @return
+   */
+  @GetMapping(value = Array("moduleList"))
+  def moduleList(): util.Map[String, Object] = {
+
+    val list = ListBuffer[util.HashMap[String, String]]()
+
+    val myMap = new util.HashMap[String, String]()
+    myMap.put("cls", "my")
+    myMap.put("name", "我的")
+    list.append(myMap)
+
+    val allMap = new util.HashMap[String, String]()
+    allMap.put("cls", "all")
+    allMap.put("name", "全部")
+    list.append(allMap)
+
+    val ma4Map = new util.HashMap[String, String]()
+    ma4Map.put("cls", "ma4")
+    ma4Map.put("name", "ma4")
+    list.append(ma4Map)
+
+    val ma5Map = new util.HashMap[String, String]()
+    ma5Map.put("cls", "ma5")
+    ma5Map.put("name", "ma5")
+    list.append(ma5Map)
+
+    val ma7Map = new util.HashMap[String, String]()
+    ma7Map.put("cls", "ma7")
+    ma7Map.put("name", "ma7")
+    list.append(ma7Map)
+
+
+    val map = new util.HashMap[String, Object]()
+    map.put("code", "success")
+    map.put("data", list.asJava)
     map
   }
 

@@ -5,8 +5,40 @@ function AllStocks() {
 
   const [searchParams] = useSearchParams();
 
+    /**
+   * 下来菜单中选择项
+   */
+  const [modules, setModules] = useState([]);
+  const [selectedModule, setSelectedModule] = useState("my");
+
+  /***
+   * 拉取模型类型数据
+   */
+  const fetchModules = async () => {
+  try {
+    const response = await fetch("/stocks/moduleList");
+
+    if (!response.ok) {
+      throw new Error("获取模块列表失败");
+    }
+
+    const result = await response.json();
+
+    if (result.code === "success") {
+      setModules(result.data || []);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+useEffect(() => {
+  fetchModules();
+}, []);
+
+
+
   const [allStocksData, setAllStocksData] = useState([]);
-  const [status, setStatus] = useState("ma4");
 
   // 输入框内容
   const [inputKeyword, setInputKeyword] = useState("");
@@ -17,7 +49,7 @@ function AllStocks() {
     try {
 
       const response = await fetch(
-        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${status}`
+        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${selectedModule}`
       );
 
       const result = await response.json();
@@ -42,7 +74,7 @@ function AllStocks() {
   // 页面初始化加载
   useEffect(() => {
     fetchMoneyFlow();
-  }, []);
+  }, [selectedModule]);
 
   // 点击检索按钮
   const handleSearch = () => {
@@ -111,6 +143,30 @@ function AllStocks() {
       {/* 检索区域 */}
       <div className="mb-4 flex gap-2">
 
+        <label className="mr-2 font-medium">
+          模型：
+        </label>
+
+        <select
+          value={selectedModule}
+          onChange={(e) => {
+            setSelectedModule(e.target.value)
+          }}
+          className="border rounded px-3 py-2"
+        >
+
+          {modules.map((item) => (
+            
+            <option
+              key={item.cls}
+              value={item.cls}
+            >
+              {item.name}
+            </option>
+          ))}
+        </select>
+   
+
         <input
           type="text"
           placeholder="输入股票代码或名称检索"
@@ -125,56 +181,11 @@ function AllStocks() {
         >
           检索
         </button>
-
-        <div className="flex items-center gap-4">
-
-          <label className="flex items-center gap-1 cursor-pointer">
-            <input
-              type="radio"
-              name="status"
-              value="ma4"
-              checked={status === "ma4"}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            ma4
-          </label>
-
-           <label className="flex items-center gap-1 cursor-pointer">
-            <input
-              type="radio"
-              name="status"
-              value="ma5"
-              checked={status === "ma5"}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            ma5
-          </label>
-
-          <label className="flex items-center gap-1 cursor-pointer">
-            <input
-              type="radio"
-              name="status"
-              value="my"
-              checked={status === "my"}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            我的
-          </label>
-
-          <label className="flex items-center gap-1 cursor-pointer">
-            <input
-              type="radio"
-              name="status"
-              value="all"
-              checked={status === "all"}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            全部
-          </label>
+ 
 
 
-
-        </div>
+      <br></br>
+ 
 
       </div>
 
