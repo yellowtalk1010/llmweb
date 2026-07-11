@@ -159,8 +159,12 @@ class TushareInitMA4ModelMA5ModelComponent {
       return
     }
 
-    val modelSet = List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).map(_.toUpperCase).toSet
-    var allEntitys = this.stockMapper.selectAll().asScala.filter(e=>modelSet.contains(e.stockType.toUpperCase))
+    val modelSet = List(
+      TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
+      TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR,
+      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR
+    ).map(_.toUpperCase).toSet
+    val allEntitys = this.stockMapper.selectAll().asScala.filter(e=>modelSet.contains(e.stockType.toUpperCase))
 
     val lines = FileUtils.readLines(file, "UTF-8")
     val num = new AtomicLong(0)
