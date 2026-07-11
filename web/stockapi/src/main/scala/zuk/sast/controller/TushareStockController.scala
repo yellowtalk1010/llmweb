@@ -255,12 +255,15 @@ class TushareStockController {
         }
 
         Some(dto)
-      
+
       })
       .filter(!_.isEmpty).map(_.get)
       .asJava
 
-    list1
+    if(list1.size() > 200)
+      list1.asScala.take(200).asJava
+    else
+      list1
   }
 
   /***
