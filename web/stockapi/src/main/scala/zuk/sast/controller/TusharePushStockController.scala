@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.{JSONArray, JSONObject}
 import com.microsoft.playwright.{Page, Playwright, PlaywrightException}
 import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
@@ -15,11 +16,11 @@ import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
 
-import java.io.File
+import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util
-import java.util.{Date, UUID}
+import java.util.{Date, Properties, UUID}
 import java.util.concurrent.Executors
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
@@ -126,12 +127,28 @@ class TusharePushStockController {
   @GetMapping(value = Array("moduleList"))
   def moduleList(): util.Map[String, Object] = {
 
-    var list = PassFactory.moduleList().map(e=>{
+    val properties = new Properties()
+    try {
+      val propertiesPath = this.applicationProperties.getStockAnalysisSystemPath + File.separator + "stock_config.properties"
+      properties.load(new FileInputStream(propertiesPath))
+    }
+    catch {
+      case exception: Exception => exception.printStackTrace()
+    }
+
+    val list = PassFactory.moduleList().map(e=>{
+
       val map = util.HashMap[String, String]()
       val cls = e.getClass.getSimpleName
+      //胜率
+      val winRate = if(StringUtils.isEmpty(properties.getProperty(cls.toUpperCase)))
+        ""
+      else
+        properties.getProperty(cls.toUpperCase)
+
       val name = e.desc()
       map.put("cls", cls)
-      map.put("name", s"${cls}：${e.desc()}")
+      map.put("name", s"${cls}：${winRate}, ${e.desc()}")
       map
     }).toBuffer
 
