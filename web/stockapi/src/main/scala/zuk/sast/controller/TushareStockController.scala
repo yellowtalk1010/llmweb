@@ -217,6 +217,58 @@ class TushareStockController {
 
   }
 
+  def getMa7(maStr: String): java.util.List[TushareStockControllerDTO] = {
+    //购买的股票
+    val buySet = getAllBuy()
+    //关注的股票
+    val attentionSet = getAllAttention()
+
+    val list = this.stockMapper.selectAll().asScala
+      .filter(_.stockType.equals(maStr))
+      .sortBy(e=>(e.createtime, e.stockCode))
+      .reverse
+      .map(entity => {
+        val dto = new TushareStockControllerDTO
+        dto.selectModel = entity.stockType
+        dto.stockCode = entity.stockCode
+        dto.name = entity.name
+        if (dto.stockCode.startsWith("688")) {
+          dto.name = s"${dto.name}【科创】"
+        }
+        else if (dto.stockCode.startsWith("920")) {
+          dto.name = s"${dto.name}【北交所】"
+        }
+        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+        if (optionTp3.get._1 > 0
+        //          && optionTp3.get._1 < 120.0  //当前价位
+        //          && optionTp3.get._2 < 2.5  //翻倍
+        ) {
+          dto.remark = entity.createtime
+          dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
+          val tsStock = new TsStock(entity.stockCode)
+          dto.eastmoneyURL = tsStock.eastmoneyURL
+          dto.conceptURL = tsStock.conceptURL
+          dto.remark = dto.remark + entity.remark
+          if (attentionSet.contains(dto.stockCode)) {
+            dto.attention = "已关注"
+          }
+          dto.buy = ""
+          if (buySet.contains(dto.stockCode)) {
+            dto.buy = "已购买"
+          }
+
+          Some(dto)
+        }
+        else {
+          Option.empty
+        }
+
+      })
+      .filter(!_.isEmpty).map(_.get)
+      .asJava
+
+    list
+  }
 
   /***
    *
@@ -301,7 +353,7 @@ class TushareStockController {
       case "ma5" =>
         this.getMa(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)
       case "ma7" =>
-        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)
       case _=>
         new util.ArrayList[StockResultJson]()
     }

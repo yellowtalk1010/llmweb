@@ -15,6 +15,8 @@ import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
 import java.util
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
@@ -149,6 +151,23 @@ class TushareInitMA4ModelMA5ModelComponent {
 //    }
 //  }
 
+  private def createId(stockCode: String, stockType: String, createtime: String): String = {
+    try {
+      val text = s"${stockCode.trim.toUpperCase}${stockType.trim.toUpperCase}${createtime.trim.toUpperCase}"
+      val md = MessageDigest.getInstance("MD5")
+      val digest = md.digest(text.getBytes(StandardCharsets.UTF_8))
+      val sb = new StringBuilder()
+      digest.foreach(b=>{
+        sb.append(String.format("%02x", b & 0xff))
+      })
+      sb.toString()
+    }
+    catch {
+      case exception: Exception =>
+        s"${UUID.randomUUID().toString.replaceAll("-","")}-error"
+    }
+  }
+
   /***
    * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
    */
@@ -171,23 +190,32 @@ class TushareInitMA4ModelMA5ModelComponent {
     lines.asScala.foreach(line=>{
 
       val backTestDto = JSONObject.parseObject(line, classOf[BackTestDto])
-      val stockType = backTestDto.stockType
-      val stockCode = backTestDto.stockCode
-      val name = backTestDto.stockName
-      val time = backTestDto.tradedate
+      val stockType = backTestDto.stockType.trim.toUpperCase
+      val stockCode = backTestDto.stockCode.trim
+      val name = backTestDto.stockName.trim
+      val time = backTestDto.tradedate.trim
+      val id = createId(stockCode, stockType, time)
 
-      val existList = allEntitys.filter(e => e.stockType.equals(stockType) && e.stockCode.equals(stockCode) && e.createtime.equals(time))
-      if (existList.size == 0) {
+      val existList = allEntitys.filter(e=>e.id.equals(id))
+      if (existList.size == 0 && modelSet.contains(stockType)) {
         log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
-        val stockEntity = new StockEntity
-        stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
-        stockEntity.stockCode = stockCode.trim
-        stockEntity.name = name.trim
-        stockEntity.stockType = stockType.toUpperCase.trim
-        stockEntity.createtime = time.trim
-        stockMapper.insert(stockEntity)
+        try {
+          val stockEntity = new StockEntity
+          stockEntity.id = id
+          stockEntity.stockCode = stockCode
+          stockEntity.name = name
+          stockEntity.stockType = stockType
+          stockEntity.createtime = time
+          stockMapper.insert(stockEntity)
 
-        allEntitys += stockEntity
+
+//          allEntitys += stockEntity
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+        }
+
       }
       else {
         //log.info("已存在")
