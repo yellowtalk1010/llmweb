@@ -27,6 +27,7 @@ object TushareInitMA4ModelMA5ModelComponent {
   private val CacheStockEntityMap = new ConcurrentHashMap[String, java.util.List[StockEntity]]()
   val MA4_MODEL_STR: String = "MA4_MODEL"
   val MA5_MODEL_STR: String = "MA5_MODEL"
+  val MA7_MODEL_STR: String = "MA7_MODEL"
 
 //  private val queue = new LinkedBlockingQueue[StockResultJson]()
 }
