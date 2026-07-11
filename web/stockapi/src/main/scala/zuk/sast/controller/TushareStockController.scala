@@ -227,7 +227,8 @@ class TushareStockController {
       .filter(_.stockType.equals(maStr))
       .sortBy(e=>(e.createtime, e.stockCode))
       .reverse
-      .map(entity => {
+
+    val list1 = list.map(entity => {
         val dto = new TushareStockControllerDTO
         dto.selectModel = entity.stockType
         dto.stockCode = entity.stockCode
@@ -238,36 +239,28 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
-        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
-        if (optionTp3.get._1 > 0
-        //          && optionTp3.get._1 < 120.0  //当前价位
-        //          && optionTp3.get._2 < 2.5  //翻倍
-        ) {
-          dto.remark = entity.createtime
-          dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-          val tsStock = new TsStock(entity.stockCode)
-          dto.eastmoneyURL = tsStock.eastmoneyURL
-          dto.conceptURL = tsStock.conceptURL
-          dto.remark = dto.remark + entity.remark
-          if (attentionSet.contains(dto.stockCode)) {
-            dto.attention = "已关注"
-          }
-          dto.buy = ""
-          if (buySet.contains(dto.stockCode)) {
-            dto.buy = "已购买"
-          }
 
-          Some(dto)
+        dto.remark = entity.createtime
+        dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
+        val tsStock = new TsStock(entity.stockCode)
+        dto.eastmoneyURL = tsStock.eastmoneyURL
+        dto.conceptURL = tsStock.conceptURL
+        dto.remark = dto.remark + entity.remark
+        if (attentionSet.contains(dto.stockCode)) {
+          dto.attention = "已关注"
         }
-        else {
-          Option.empty
+        dto.buy = ""
+        if (buySet.contains(dto.stockCode)) {
+          dto.buy = "已购买"
         }
 
+        Some(dto)
+      
       })
       .filter(!_.isEmpty).map(_.get)
       .asJava
 
-    list
+    list1
   }
 
   /***
