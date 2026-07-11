@@ -17,7 +17,7 @@ class MainTest extends AnyFunSuite {
   }
 
   test("main回测测试") {
-    PassFactory.modules = List(new MA7_Model)
+//    PassFactory.models = List(new MA7_Model)
     val args = Array("-path", "D:\\development\\github\\stockapi\\", "-json", "-back")
     zuk.Main.main(args)
   }
