@@ -300,6 +300,8 @@ class TushareStockController {
         this.getMa(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)
       case "ma5" =>
         this.getMa(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)
+      case "ma7" =>
+        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)
       case _=>
         new util.ArrayList[StockResultJson]()
     }
