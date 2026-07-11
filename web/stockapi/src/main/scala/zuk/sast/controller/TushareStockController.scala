@@ -160,13 +160,35 @@ class TushareStockController {
    * @return
    */
   private def getAll(desc: String): java.util.List[TushareStockControllerDTO] = {
+
+
+    val allList = TushareAllStocks.getAll().map(e=>{
+      val dto = new TushareStockControllerDTO
+      dto.selectModel = "全部"
+      dto.stockCode = e.ts_code
+      dto.name = e.name
+      dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
+      dto.eastmoneyURL = e.eastmoneyURL
+      dto.conceptURL = e.conceptURL
+      dto.attention = ""
+//      if (attentionSet.contains(dto.stockCode)) {
+//        dto.attention = "已关注"
+//      }
+//      dto.buy = ""
+//      if (buySet.contains(dto.stockCode)) {
+//        dto.buy = "已购买"
+//      }
+      dto
+    })
+
+    //
     val list = if (StringUtils.isNotBlank(desc)) {
-      TushareAllStocks.getAll().filter(e => {
-        e.ts_code.contains(desc) || e.name.contains(desc)
+      allList.filter(e => {
+        e.stockCode.contains(desc) || e.name.contains(desc)
       })
     }
     else {
-      TushareAllStocks.getAll()
+      allList
     }
 
     val num = 20
@@ -177,29 +199,23 @@ class TushareStockController {
       list
     }
 
+
     val attentionSet = getAllAttention()
     val buySet = getAllBuy()
 
-    val convertRes = res.map(e => {
-      val dto = new TushareStockControllerDTO
-      dto.selectModel = "全部"
-      dto.stockCode = e.ts_code
-      dto.name = e.name
-      dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-      dto.eastmoneyURL = e.eastmoneyURL
-      dto.conceptURL = e.conceptURL
-      dto.attention = ""
-      if (attentionSet.contains(dto.stockCode)) {
-        dto.attention = "已关注"
-      }
-      dto.buy = ""
-      if (buySet.contains(dto.stockCode)) {
-        dto.buy = "已购买"
-      }
-      dto
-    }).asJava
+    res.foreach(e => {
 
-    convertRes
+      if (attentionSet.contains(e.stockCode)) {
+        e.attention = "已关注"
+      }
+      e.buy = ""
+      if (buySet.contains(e.stockCode)) {
+        e.buy = "已购买"
+      }
+      e
+    })
+
+    res.asJava
 
   }
 
