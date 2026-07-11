@@ -11,18 +11,24 @@ import scala.jdk.CollectionConverters.*
 
 object PassFactory {
 
-  def moduleList(): List[IModel] = {
-    List(
+  def moduleList(models: List[IModel] = List.empty): List[IModel] = {
+
+    if (models == null || models.isEmpty) {
+      List(
 //        new MA1_Model,
         new MA1_1_Model, //最高胜率
-////        new MA3_0_Model, //上穿MA5
+//        new MA3_0_Model, //上穿MA5
 //        new MA3_1_Model,
-////        new MA3_2_Model, //反包两日阴线后继续下跌
+//        new MA3_2_Model, //反包两日阴线后继续下跌
 //        new MA3_3_Model,
         new MA4_Model,
         new MA5_Model,
         new MA6_Model
-    )
+      )
+    }
+    else
+      models
+
   }
 
   private def passList(): List[IPass] = {
