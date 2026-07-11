@@ -18,36 +18,37 @@ class MA7_Model extends IModel {
   override def getStockDto(): StockDto = stockDto
 
   override def run(days: List[ModuleDay]): Unit = {
-    if (days.size < 120){
+    if (days.size < num){
       return
     }
-
     val head = days.head
 
-    //历史最高价
-    val historyHigh = days.map(_.high.toFloat).max
-    //历史最低价
-    val historyLow = days.map(_.low.toFloat).min
+    val historyDays = days.slice(1, days.length)
+    //过去历史最高价
+    val historyHigh = historyDays.map(_.high.toFloat).max
+    //过去历史最低价
+    val historyLow = historyDays.map(_.low.toFloat).min
+    //平均交易量
+    val avgVol = new BigDecimal(historyDays.map(_.vol.toFloat).sum).divide(new BigDecimal(historyDays.size), 2, RoundingMode.UP).floatValue()
 
-    //最近
-    val recentDays = days.slice(1, num)
-    //最近平均交易量
-    val avgVol = new BigDecimal(recentDays.map(_.vol.toFloat).sum).divide(new BigDecimal(recentDays.size), 2, RoundingMode.UP).floatValue()
+    //最近20天
+    val recentDays = days.slice(1, 20)
+    val recentAvgVol = new BigDecimal(recentDays.map(_.vol.toFloat).sum).divide(new BigDecimal(recentDays.size), 2, RoundingMode.UP).floatValue()
 
     //相比最高价，跌去的比例
     val downRate = new BigDecimal(historyHigh - head.low.toFloat).divide(new BigDecimal(historyHigh),2,RoundingMode.UP)
-    //相比最低价，涨幅的比例
+    //相比最高加，涨幅的比例
     val upRate = new BigDecimal(head.high.toFloat - historyLow).divide(new BigDecimal(historyLow),2,RoundingMode.UP)
+    //交易量的比例
+    val recentVolRate = new BigDecimal(head.vol).divide(new BigDecimal(recentAvgVol), 2, RoundingMode.UP).floatValue() //
 
-    val volRate = new BigDecimal(head.vol).divide(new BigDecimal(avgVol), 2, RoundingMode.UP).floatValue()
-
-    if(downRate.floatValue() > 0.4 //跌超大于4个点
+    if(downRate.floatValue() > 0.4 //跌超4个点
       && upRate.floatValue() < 0.5 //涨幅小于5个点
-      && volRate > 2.0 //放量2倍
-      && (ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma30.floatValue()))
-        || ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma20.floatValue())))
+      && recentVolRate > 2.0 //放量2倍
+      && ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma30.floatValue()))
+      && ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma20.floatValue()))
       && head.ma.ma30.floatValue() > head.ma.ma20.floatValue()
-//      && head.ma.ma20.floatValue() > List(head.ma.ma10.floatValue(), head.ma.ma5.floatValue()).max
+      //      && head.ma.ma20.floatValue() > List(head.ma.ma10.floatValue(), head.ma.ma5.floatValue()).max
       && head.change.toFloat > 2.0
     ){
 
