@@ -171,27 +171,25 @@ class TushareStockController {
       dto.eastmoneyURL = e.eastmoneyURL
       dto.conceptURL = e.conceptURL
       dto.attention = ""
-//      if (attentionSet.contains(dto.stockCode)) {
-//        dto.attention = "已关注"
-//      }
-//      dto.buy = ""
-//      if (buySet.contains(dto.stockCode)) {
-//        dto.buy = "已购买"
-//      }
       dto
     })
 
+    val splits = desc.split("&").map(_.trim)
     //
     val list = if (StringUtils.isNotBlank(desc)) {
       allList.filter(e => {
-        e.stockCode.contains(desc) || e.name.contains(desc)
+        val size = splits.filter(s=>{
+          e.stockCode.contains(s) || e.name.contains(s) || e.concept.contains(s)
+        }).size
+        size == splits.size
+//        e.stockCode.contains(desc) || e.name.contains(desc) || e.concept.contains(desc)
       })
     }
     else {
       allList
     }
 
-    val num = 20
+    val num = 100
     val res = if (list.size > num) {
       list.take(num)
     }
