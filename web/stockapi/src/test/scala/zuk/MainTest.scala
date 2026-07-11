@@ -2,6 +2,8 @@ package zuk
 
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
+import zuk.tu_share.module.MA7_Model
+import zuk.tu_share.pass.PassFactory
 
 import java.io.File
 import scala.collection.mutable.ListBuffer
@@ -15,6 +17,7 @@ class MainTest extends AnyFunSuite {
   }
 
   test("main回测测试") {
+    PassFactory.modules = List(new MA7_Model)
     val args = Array("-path", "D:\\development\\github\\stockapi\\", "-json", "-back")
     zuk.Main.main(args)
   }
