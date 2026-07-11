@@ -35,6 +35,7 @@ class TushareStockControllerDTO extends StockEntity {
   @BeanProperty var attention: String = null
   @BeanProperty var buy: String = null
   @BeanProperty var eliminate: String = null
+  @BeanProperty var selectModel: String = null
 }
 
 /***
@@ -125,6 +126,7 @@ class TushareStockController {
     }).filter(!_.isEmpty)
       .map(e=>{
         val dto = new TushareStockControllerDTO
+        dto.selectModel = "我的"
         dto.stockCode = e.get.ts_code
         val codeList = ma5List.filter(_.stockCode.equals(e.get.ts_code)).sortBy(_.createtime).reverse
         dto.name = if(codeList.size==0) e.get.name else s"${e.get.name}【${codeList.size}次】${codeList.head.createtime}"
@@ -180,6 +182,7 @@ class TushareStockController {
 
     val convertRes = res.map(e => {
       val dto = new TushareStockControllerDTO
+      dto.selectModel = "全部"
       dto.stockCode = e.ts_code
       dto.name = e.name
       dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
@@ -224,6 +227,7 @@ class TushareStockController {
       .toList.sortBy(_.createtime).reverse
       .map(entity=>{
         val dto = new TushareStockControllerDTO
+        dto.selectModel = maStr
         dto.stockCode = entity.stockCode
         dto.name = entity.name
         if(dto.stockCode.startsWith("688")){

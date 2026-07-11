@@ -213,7 +213,7 @@ useEffect(() => {
                   key={index}
                   className="border-b hover:bg-gray-50"
                 >
-                  <td>{index+1}</td>    
+                  <td>{index+1}-{item.selectModel}</td>    
                   <td className="p-3">
                     {
                       item.buy?(
