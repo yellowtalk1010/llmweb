@@ -145,7 +145,7 @@ class TushareStockDailyDataComponent {
 
       }
       else {
-        log.error(s"不存在实时股票基本数据路径:${rtkFile.getAbsolutePath}")
+        //log.error(s"不存在实时股票基本数据路径:${rtkFile.getAbsolutePath}")
       }
     }
     catch {
