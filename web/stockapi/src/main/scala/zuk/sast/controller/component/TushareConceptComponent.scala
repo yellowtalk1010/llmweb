@@ -73,10 +73,20 @@ class TushareConceptComponent {
     val cacheStockInfoList = this.stockInfoMapper.selectAll().asScala
 
     //todo 获取ai提取概念和板块的热点股票
-    val lls = this.stockMapper.selectAll().asScala.groupBy(_.stockCode).map(e => {
-      val ls = e._2.sortBy(_.createtime).reverse
-      ls.head
-    }).toList.sortBy(_.createtime).reverse.filter(e => {
+//    val lls = this.stockMapper.selectAll().asScala.groupBy(_.stockCode).map(e => {
+//      val ls = e._2.sortBy(_.createtime).reverse
+//      ls.head
+//    }).toList.sortBy(_.createtime).reverse.filter(e => {
+//      !cacheStockInfoList.map(_.stockCode).toSet.contains(e.stockCode)
+//    })
+
+    //全量股票概念数据获取任务
+    val lls = TushareAllStocks.allStocks.map(e=>{
+      val stock = new StockEntity
+      stock.name = e.name
+      stock.stockCode = e.ts_code
+      stock
+    }).filter(e=>{
       !cacheStockInfoList.map(_.stockCode).toSet.contains(e.stockCode)
     })
 
