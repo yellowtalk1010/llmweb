@@ -15,6 +15,7 @@ import zuk.sast.controller.mapper.StockMapper
 import zuk.sast.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
+import zuk.tu_share.utils.HanLPUtil
 
 import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
@@ -23,6 +24,7 @@ import java.util
 import java.util.{Date, Properties, UUID}
 import java.util.concurrent.Executors
 import scala.beans.BeanProperty
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 /***
@@ -168,6 +170,8 @@ class TusharePushStockController {
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
+    val conceptList = new ListBuffer[String]()//
+
     val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
 
     log.info(s"选择模型:${modType}")
@@ -212,6 +216,7 @@ class TusharePushStockController {
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
 
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
+        conceptList += concept
         e.remark = optionTp3.get._4 + concept
 
         if(Array(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(stockModleType.toUpperCase)){
@@ -322,9 +327,9 @@ class TusharePushStockController {
       map
     }).asJava
 
+    println(s"推荐分词结果:${HanLPUtil.createFenCi(conceptList.toList)}")
+
     response.put("data", maplist)
-
-
     response
 
   }
