@@ -327,9 +327,12 @@ class TusharePushStockController {
       map
     }).asJava
 
-    println(s"推荐分词结果:${HanLPUtil.createFenCi(conceptList.toList)}")
+    val fenci = HanLPUtil.createFenCi(conceptList.toList)
+    println(s"推荐分词结果:${fenci}")
 
     response.put("data", maplist)
+    response.put("fenci", fenci)
+
     response
 
   }
