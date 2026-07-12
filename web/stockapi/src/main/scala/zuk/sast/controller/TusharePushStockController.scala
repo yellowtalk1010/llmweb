@@ -170,8 +170,6 @@ class TusharePushStockController {
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
-    val conceptList = new ListBuffer[String]()//
-
     val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
 
     log.info(s"选择模型:${modType}")
@@ -216,7 +214,7 @@ class TusharePushStockController {
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
 
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
-        conceptList += concept
+        e.concept = concept
         e.remark = optionTp3.get._4 + concept
 
         if(Array(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(stockModleType.toUpperCase)){
@@ -294,6 +292,11 @@ class TusharePushStockController {
 
     val maplist = pushStocks.map(e=>{
 
+
+      val conceptList = new ListBuffer[String]() //
+      val fenci = HanLPUtil.createFenCi((e._2 ++ e._3).map(_.concept).toList)
+
+
       (e._2 ++ e._3).foreach(e=>{
         if(e.ts_code.startsWith("688")){
           e.name = e.name + "【科创】"
@@ -314,7 +317,7 @@ class TusharePushStockController {
 
       val head = (e._2 ++ e._3).head
       val map = new util.HashMap[String, Object]()
-      map.put("time", s"${head.file.getName}")
+      map.put("time", s"${head.file.getName}-----${fenci}")
       map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
       map.put("heads", e._2.filter(e=> {
         !e.name.toUpperCase.contains("ST")
@@ -327,11 +330,8 @@ class TusharePushStockController {
       map
     }).asJava
 
-    val fenci = HanLPUtil.createFenCi(conceptList.toList)
-    println(s"推荐分词结果:${fenci}")
 
     response.put("data", maplist)
-    response.put("fenci", fenci)
 
     response
 

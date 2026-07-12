@@ -29,6 +29,7 @@ case class StockResultJson(){
   @BeanProperty var eliminate: String = "" //是否淘汰
 
   @BeanProperty var remark: String = "" //备注
+  @BeanProperty var concept: String = ""//股票的概念和板块
 
 }
 
