@@ -24,6 +24,10 @@ class ApplicationProperties {
   def getStockAnalysisSystem_resultJsonSavePath: String = this.stock_analysis_system_path + File.separator + "result_json"
   //股票分析系统待分析的股票详情
   def getStockAnalysisSystem_allStocksCsvPath: String = this.stock_analysis_system_path + File.separator + "all_stocks.csv"
+  //股票分析系统，股票所属板块和概念路径
+  def getStockAnalysisSystem_conceptPath: String = this.stock_analysis_system_path + File.separator + "concept"
+  //股票分析系统，及时股票信息路径
+  def getStockAnalysisSystem_rtkPath: String = this.stock_analysis_system_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
 
 
   /***
