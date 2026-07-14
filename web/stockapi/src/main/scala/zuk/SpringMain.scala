@@ -1,5 +1,7 @@
 package zuk
 
+import org.apache.ibatis.annotations.Mapper
+import org.mybatis.spring.mapper.MapperScannerConfigurer
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.{AnnotationConfigApplicationContext, ClassPathScanningCandidateComponentProvider}
 import org.springframework.core.`type`.filter.AnnotationTypeFilter
@@ -16,18 +18,25 @@ object SpringMain {
   def main(args: Array[String]): Unit = {
 
     val annotationConfigApplicationContext = new AnnotationConfigApplicationContext
-//    annotationConfigApplicationContext.getBeanFactory.registerSingleton("dataFrame", DataFrame)
 
     val scanner = new ClassPathScanningCandidateComponentProvider(false)
     scanner.addIncludeFilter(new AnnotationTypeFilter(classOf[Component]))
-    val candidates = scanner.findCandidateComponents("zuk.**")
 
+    val candidates = scanner.findCandidateComponents("zuk.**")
     candidates.asScala.foreach(bd=>{
       val beanClassName =  bd.getBeanClassName
+      println(beanClassName)
       val clazz = Class.forName(beanClassName)
       annotationConfigApplicationContext.registerBeanDefinition(clazz.getSimpleName, bd)
     })
 
+    //注册mapper
+    val mapperScanner = new MapperScannerConfigurer()
+    mapperScanner.setApplicationContext(annotationConfigApplicationContext)
+    mapperScanner.setBasePackage("zuk.sast.controller.mapper")
+    annotationConfigApplicationContext.getBeanFactory.registerSingleton("mapperScannerConfigurer", mapperScanner)
+
+    //注册资源文件
     val source = new ResourcePropertySource("file:/d:/development/github/llmweb/web/boot/src/main/resources/application.properties")
     val env = annotationConfigApplicationContext.getEnvironment
     env.getPropertySources.addLast(source)
