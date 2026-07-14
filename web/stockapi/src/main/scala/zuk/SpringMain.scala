@@ -14,7 +14,7 @@ object SpringMain {
   def main(args: Array[String]): Unit = {
 
     val annotationConfigApplicationContext = new AnnotationConfigApplicationContext
-    annotationConfigApplicationContext.getBeanFactory.registerSingleton("dataFrame", DataFrame)
+//    annotationConfigApplicationContext.getBeanFactory.registerSingleton("dataFrame", DataFrame)
     SpringContextUtil.context = annotationConfigApplicationContext
     val scanner = new ClassPathScanningCandidateComponentProvider(false)
     scanner.addIncludeFilter(new AnnotationTypeFilter(classOf[Component]))
