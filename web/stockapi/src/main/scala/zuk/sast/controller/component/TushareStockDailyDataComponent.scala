@@ -124,8 +124,7 @@ class TushareStockDailyDataComponent {
    */
   private def refresh_rtk(): Unit = {
     try {
-      val stock_daily_data_path: String = applicationProperties.getStockAnalysisSystemPath
-      val path = stock_daily_data_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
+      val path = applicationProperties.getStockAnalysisSystem_rtkPath
       val rtkFile = new File(path)
       if(rtkFile.exists() && rtkFile.isFile){
         log.info(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")
