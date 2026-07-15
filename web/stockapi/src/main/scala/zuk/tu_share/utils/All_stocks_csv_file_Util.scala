@@ -6,6 +6,8 @@ import zuk.tu_share.dto.TsStock
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
 
+import scala.jdk.CollectionConverters.*
+
 object All_stocks_csv_file_Util {
 
   /**
