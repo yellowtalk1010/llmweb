@@ -202,6 +202,12 @@ object DataFrame {
       case exception: Exception =>
   }
 
+  /***
+   * 加载待分析数据
+   *
+   * @param path 数据路径
+   * @return map中的key是股票代码， list是组装的股票数据
+   */
   def load(path: String): mutable.HashMap[String, List[ModuleDay]] = {
 
     loadProperties()
