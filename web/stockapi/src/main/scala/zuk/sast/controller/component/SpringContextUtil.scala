@@ -1,4 +1,4 @@
-package zuk.utils
+package zuk.sast.controller.component
 
 import org.springframework.beans.BeansException
 import org.springframework.context.{ApplicationContext, ApplicationContextAware}
