@@ -1,11 +1,11 @@
-package zuk
+package zuk.sast.spring
 
 import org.apache.ibatis.annotations.Mapper
 import org.mybatis.spring.mapper.MapperScannerConfigurer
 import org.springframework.beans.factory.config.BeanDefinition
-import org.springframework.boot.{SpringApplication, WebApplicationType}
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.boot.{SpringApplication, WebApplicationType}
 import org.springframework.context.annotation.{AnnotationConfigApplicationContext, ClassPathScanningCandidateComponentProvider}
 import org.springframework.core.`type`.filter.AnnotationTypeFilter
 import org.springframework.core.io.support.ResourcePropertySource
