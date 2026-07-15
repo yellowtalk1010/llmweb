@@ -5,7 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "zuk.sast")
+@ComponentScan(basePackages = {
+        "zuk.sast.rules",   //静态程序分析引擎包
+        "zuk.sast.spring"   //股票分析引擎包
+})
 public class RulesApplication {
 
     public static void main(String[] args) {
