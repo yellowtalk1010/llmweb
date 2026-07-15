@@ -1,6 +1,10 @@
 package zuk.tu_share.utils
 
+import org.apache.commons.csv.CSVFormat
 import zuk.tu_share.dto.TsStock
+
+import java.io.{File, FileReader}
+import java.nio.charset.Charset
 
 object All_stocks_csv_file_Util {
 
