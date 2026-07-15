@@ -1,12 +1,12 @@
-package zuk.sast.controller.component
+package zuk.sast.spring.controller.component
 
 import jakarta.annotation.PostConstruct
 import org.apache.commons.csv.CSVFormat
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
-import zuk.sast.controller.mapper.StockMapper
-import zuk.sast.controller.mapper.entity.StockEntity
+import zuk.sast.spring.controller.mapper.StockMapper
+import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}

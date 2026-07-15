@@ -1,4 +1,4 @@
-package zuk.sast.controller.component
+package zuk.sast.spring.controller.component
 
 import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.JSONWriter.Feature
@@ -7,10 +7,10 @@ import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import zuk.sast.controller.StockResultJson
-import zuk.sast.controller.component.TushareInitMA4ModelMA5ModelComponent.{MA4_MODEL_STR, MA5_MODEL_STR}
-import zuk.sast.controller.mapper.StockMapper
-import zuk.sast.controller.mapper.entity.StockEntity
+import TushareInitMA4ModelMA5ModelComponent.{MA4_MODEL_STR, MA5_MODEL_STR}
+import zuk.sast.spring.controller.StockResultJson
+import zuk.sast.spring.controller.mapper.StockMapper
+import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.TsStock
 

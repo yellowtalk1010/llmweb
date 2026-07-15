@@ -1,4 +1,4 @@
-package zuk.sast.controller
+package zuk.sast.spring.controller
 
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
@@ -9,7 +9,7 @@ import java.util
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 import org.springframework.beans.factory.annotation.{Autowired, Value}
-import zuk.sast.controller.component.ApplicationProperties
+import zuk.sast.spring.controller.component.ApplicationProperties
 
 @RestController
 @RequestMapping(value=Array("top_inst"))

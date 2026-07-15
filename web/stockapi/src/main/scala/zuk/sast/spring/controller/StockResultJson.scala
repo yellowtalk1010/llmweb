@@ -1,4 +1,4 @@
-package zuk.sast.controller
+package zuk.sast.spring.controller
 
 import java.io.File
 import scala.beans.BeanProperty

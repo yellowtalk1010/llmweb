@@ -1,7 +1,7 @@
-package zuk.sast.controller.mapper
+package zuk.sast.spring.controller.mapper
 
 import org.apache.ibatis.annotations.{Delete, Insert, Mapper, Param, Result, Results, Select, Update}
-import zuk.sast.controller.mapper.entity.StockInfoEntity
+import zuk.sast.spring.controller.mapper.entity.StockInfoEntity
 
 import java.util
 

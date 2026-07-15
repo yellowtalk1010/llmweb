@@ -1,10 +1,10 @@
-package zuk.sast.controller
+package zuk.sast.spring.controller
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.component.{MoneyflowDCDto, TushareMoneyFlowComponent}
+import zuk.sast.spring.controller.component.{MoneyflowDCDto, TushareMoneyFlowComponent}
 
 import java.util
 import scala.jdk.CollectionConverters.*

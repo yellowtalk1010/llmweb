@@ -1,7 +1,7 @@
-package zuk.sast.controller.mapper
+package zuk.sast.spring.controller.mapper
 
 import org.apache.ibatis.annotations._
-import zuk.sast.controller.mapper.entity.{StockEntity}
+import zuk.sast.spring.controller.mapper.entity.StockEntity
 import java.util
 
 @Mapper

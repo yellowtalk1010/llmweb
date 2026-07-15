@@ -1,4 +1,4 @@
-package zuk.sast.controller.mapper.entity
+package zuk.sast.spring.controller.mapper.entity
 
 import java.text.SimpleDateFormat
 import java.util.Date

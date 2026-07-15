@@ -1,4 +1,4 @@
-package zuk.sast.controller
+package zuk.sast.spring.controller
 
 import com.alibaba.fastjson2.JSONObject
 import jakarta.annotation.PostConstruct
@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
-import zuk.sast.controller.TushareStockController.eliminate_str
-import zuk.sast.controller.component.{TushareAllStocks, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
-import zuk.sast.controller.mapper.StockMapper
-import zuk.sast.controller.mapper.entity.StockEntity
+import TushareStockController.eliminate_str
+import zuk.sast.spring.controller.component.{TushareAllStocks, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.spring.controller.mapper.StockMapper
+import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
 

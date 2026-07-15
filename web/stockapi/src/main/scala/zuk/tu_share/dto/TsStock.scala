@@ -1,6 +1,6 @@
 package zuk.tu_share.dto
 
-import zuk.sast.controller.component.{TushareAllStocks, TushareAllStocksCSVComponent}
+import zuk.sast.spring.controller.component.{TushareAllStocks, TushareAllStocksCSVComponent}
 
 import scala.beans.BeanProperty
 

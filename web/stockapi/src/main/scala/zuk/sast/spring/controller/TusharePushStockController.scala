@@ -1,4 +1,4 @@
-package zuk.sast.controller
+package zuk.sast.spring.controller
 
 import com.alibaba.fastjson2.JSONWriter.Feature
 import com.alibaba.fastjson2.{JSONArray, JSONObject}
@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.controller.component.{ApplicationProperties, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
-import zuk.sast.controller.mapper.StockMapper
-import zuk.sast.controller.mapper.entity.StockEntity
+import zuk.sast.spring.controller.component.{ApplicationProperties, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.spring.controller.mapper.StockMapper
+import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.HanLPUtil

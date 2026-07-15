@@ -1,4 +1,4 @@
-package zuk.sast.controller.component
+package zuk.sast.spring.controller.component
 
 import jakarta.annotation.PostConstruct
 import org.apache.commons.csv.CSVFormat
