@@ -3,6 +3,9 @@ package zuk
 import org.apache.ibatis.annotations.Mapper
 import org.mybatis.spring.mapper.MapperScannerConfigurer
 import org.springframework.beans.factory.config.BeanDefinition
+import org.springframework.boot.{SpringApplication, WebApplicationType}
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.annotation.{AnnotationConfigApplicationContext, ClassPathScanningCandidateComponentProvider}
 import org.springframework.core.`type`.filter.AnnotationTypeFilter
 import org.springframework.core.io.support.ResourcePropertySource
@@ -13,9 +16,26 @@ import zuk.utils.SpringContextUtil
 
 import scala.jdk.CollectionConverters.*
 
+@SpringBootApplication
+class SpringMain {
+
+}
+
 object SpringMain {
 
   def main(args: Array[String]): Unit = {
+
+    new SpringApplicationBuilder()
+      .sources(classOf[SpringMain])
+      .web(WebApplicationType.NONE)
+      .properties(
+        "spring.config.location=file:D:/development/github/llmweb/web/boot/src/main/resources/application.properties"
+      )
+      .run(args: _*)
+
+  }
+
+  def test_main(args: Array[String]): Unit = {
 
     val annotationConfigApplicationContext = new AnnotationConfigApplicationContext
 
