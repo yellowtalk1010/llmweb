@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
+import zuk.tu_share.utils.All_stocks_csv_file_Util
 
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -28,7 +29,7 @@ object TushareAllStocks {
     println(s"TushareAllStocks在Object中加载全量股票数据文件:${file.getAbsolutePath},${file.exists()}")
     if(file.exists()){
       if(allStocks.size < 5000){
-        val list = DataFrame.load__all_Stocks_csv(all_stocks_csv_path)
+        val list = All_stocks_csv_file_Util.load(all_stocks_csv_path)
         allStocks.clear()
         allStocks ++= list
         allStocks.foreach(e=>{

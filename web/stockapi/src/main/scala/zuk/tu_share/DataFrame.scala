@@ -3,6 +3,7 @@ package zuk.tu_share
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.{ModuleDay, TsStock}
+import zuk.tu_share.utils.All_stocks_csv_file_Util
 
 import java.io.{File, FileOutputStream, FileReader, InputStream}
 import java.math
@@ -34,7 +35,8 @@ object DataFrame {
   /***
    * 加载 all_stocks.csv 中的数据
    */
-  def load__all_Stocks_csv(all_stocks_path: String): List[TsStock] = {
+  @Deprecated
+  private def load__all_Stocks_csv(all_stocks_path: String): List[TsStock] = {
     val all_stocks_file = new File(all_stocks_path)
     println(s"加载all_stocks.csv文件，路径：${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
@@ -220,7 +222,7 @@ object DataFrame {
       System.exit(1)
     }
 
-    val stocks = load__all_Stocks_csv(allStocksFile.getAbsolutePath)
+    val stocks = All_stocks_csv_file_Util.load(allStocksFile.getAbsolutePath)
 
     stocks.foreach(e => {
       //转成MAP格式
