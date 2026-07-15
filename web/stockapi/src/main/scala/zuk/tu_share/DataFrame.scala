@@ -32,11 +32,11 @@ object DataFrame {
   val STOCKS_MAP= new mutable.HashMap[String, TsStock]()
 
   /***
-   * 加载全部股票基本数据
+   * 加载 all_stocks.csv 中的数据
    */
-  def loadAllStocks(all_stocks_path: String): List[TsStock] = {
+  def load__all_Stocks_csv(all_stocks_path: String): List[TsStock] = {
     val all_stocks_file = new File(all_stocks_path)
-    println(s"${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
+    println(s"加载all_stocks.csv文件，路径：${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
       System.exit(1)
     }
@@ -220,7 +220,7 @@ object DataFrame {
       System.exit(1)
     }
 
-    val stocks = loadAllStocks(allStocksFile.getAbsolutePath)
+    val stocks = load__all_Stocks_csv(allStocksFile.getAbsolutePath)
 
     stocks.foreach(e => {
       //转成MAP格式

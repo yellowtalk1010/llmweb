@@ -28,7 +28,7 @@ object TushareAllStocks {
     println(s"TushareAllStocks在Object中加载全量股票数据文件:${file.getAbsolutePath},${file.exists()}")
     if(file.exists()){
       if(allStocks.size < 5000){
-        val list = DataFrame.loadAllStocks(all_stocks_csv_path)
+        val list = DataFrame.load__all_Stocks_csv(all_stocks_csv_path)
         allStocks.clear()
         allStocks ++= list
         allStocks.foreach(e=>{
