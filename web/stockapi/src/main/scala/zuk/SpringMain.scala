@@ -23,6 +23,10 @@ class SpringMain {
 
 object SpringMain {
 
+  /***
+   * 直接运行springboot，但是不启动tomcat
+   * @param args
+   */
   def main(args: Array[String]): Unit = {
 
     new SpringApplicationBuilder()
@@ -35,6 +39,10 @@ object SpringMain {
 
   }
 
+  /***
+   * 第一种方式
+   * @param args
+   */
   def test_main(args: Array[String]): Unit = {
 
     val annotationConfigApplicationContext = new AnnotationConfigApplicationContext
