@@ -3,7 +3,6 @@ package zuk.tu_share.module
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
-import zuk.tu_share.utils.ListOrderCheck
 
 import java.math.{BigDecimal, RoundingMode}
 
@@ -65,7 +64,7 @@ class MA1_1_Model extends IModel {
   }
 
   override def winRate: Float = {
-    val v = DataFrame.properties.get(classOf[MA1_Model].getSimpleName.toUpperCase)
+    val v = DataFrame.properties.get(classOf[MA1_1_Model].getSimpleName.toUpperCase)
     if(v!=null){
       v.toString.toFloat
     }
