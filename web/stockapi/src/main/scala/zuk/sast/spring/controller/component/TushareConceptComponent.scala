@@ -32,6 +32,9 @@ class TushareConceptComponent {
   @Autowired
   var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
+  @Autowired
+  var applicationProperties: ApplicationProperties = null
+
   var executor = Executors.newSingleThreadExecutor()
 
   var stockInfoEntityList = new ListBuffer[StockInfoEntity]
@@ -71,6 +74,16 @@ class TushareConceptComponent {
 
     val cacheStockInfoList = this.stockInfoMapper.selectAll().asScala
 
+    //将概念数据已文件形式保存
+    cacheStockInfoList.foreach(stockInfo=>{
+      val stockCode = stockInfo.stockCode
+      val stockName = stockInfo.stockName
+      val stockConceptPath = this.applicationProperties.getStockAnalysisSystem_conceptPath + File.separator + stockCode + ".txt"
+      val stockConceptFile = new File(stockConceptPath)
+      println(s"${stockCode},${stockName},${stockConceptFile.getAbsolutePath}")
+      FileUtils.writeStringToFile(stockConceptFile, stockInfo.concept, "UTF-8")
+    })
+
     //全量股票概念数据获取任务
     val lls = TushareAllStocks.allStocks.map(e=>{
       val stock = new StockEntity
@@ -99,6 +112,7 @@ class TushareConceptComponent {
     if(!TaskHandleFactory.initTask()){
       return
     }
+
     getHandleTaskStockList()
 
     val list = this.stockInfoMapper.selectAll().asScala.filter(e=>StringUtils.isEmpty(e.concept))
