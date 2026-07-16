@@ -108,7 +108,7 @@ class TushareConceptComponent {
 
   @PostConstruct
   def init(): Unit = {
-
+ 
     if(!TaskHandleFactory.initTask()){
       return
     }
