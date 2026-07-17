@@ -178,12 +178,16 @@ class TushareInitMA4ModelMA5ModelComponent {
       return
     }
 
+    //需要记录的模型
     val modelSet = List(
       TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR
     ).map(_.toUpperCase).toSet
     val allEntitys = this.stockMapper.selectAll().asScala.filter(e=>modelSet.contains(e.stockType.toUpperCase))
+
+    //
+    val tradetimes = mutable.HashSet[String]()
 
     val lines = FileUtils.readLines(file, "UTF-8")
     val num = new AtomicLong(0)
@@ -195,6 +199,8 @@ class TushareInitMA4ModelMA5ModelComponent {
       val name = backTestDto.stockName.trim
       val time = backTestDto.tradedate.trim
       val id = createId(stockCode, stockType, time)
+
+      tradetimes += time
 
       val existList = allEntitys.filter(e=>e.id.equals(id))
       if (existList.size == 0 && modelSet.contains(stockType)) {
@@ -208,8 +214,6 @@ class TushareInitMA4ModelMA5ModelComponent {
           stockEntity.createtime = time
           stockMapper.insert(stockEntity)
 
-
-//          allEntitys += stockEntity
         }
         catch {
           case exception: Exception =>
@@ -222,6 +226,13 @@ class TushareInitMA4ModelMA5ModelComponent {
       }
 
     })
+
+    allEntitys.filter(e=> !tradetimes.contains(e.createtime)).zipWithIndex.foreach(z=>{
+      val e = z._1
+      println(s"${z._2}删除记录:${e.id}, ${e.stockCode}, ${e.name}, ${e.stockType}, ${e.createtime}")
+      this.stockMapper.deleteById(e.id)
+    })
+
   }
 
 }
