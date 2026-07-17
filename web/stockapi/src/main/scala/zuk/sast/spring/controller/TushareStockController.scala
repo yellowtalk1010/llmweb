@@ -218,6 +218,7 @@ class TushareStockController {
   }
 
   def getMa7(maStr: String, tradedate: String): java.util.List[TushareStockControllerDTO] = {
+    log.info(s"getMa7, maStr:${maStr}, tradedate:${tradedate}")
     //购买的股票
     val buySet = getAllBuy()
     //关注的股票
@@ -253,11 +254,20 @@ class TushareStockController {
         if (buySet.contains(dto.stockCode)) {
           dto.buy = "已购买"
         }
-
+        dto.createtime = entity.createtime
         Some(dto)
 
       })
-      .filter(!_.isEmpty).map(_.get)
+      .filter(!_.isEmpty)
+      .map(_.get)
+      .filter(e=>{
+        if(StringUtils.isNotBlank(tradedate)){
+          e.createtime.trim.equals(tradedate.trim)
+        }
+        else {
+          true
+        }
+      })
       .asJava
 
 
