@@ -217,7 +217,7 @@ class TushareStockController {
 
   }
 
-  def getMa7(maStr: String): java.util.List[TushareStockControllerDTO] = {
+  def getMa7(maStr: String, tradedate: String): java.util.List[TushareStockControllerDTO] = {
     //购买的股票
     val buySet = getAllBuy()
     //关注的股票
@@ -268,7 +268,7 @@ class TushareStockController {
    *
    * @return
    */
-  def getMa(maStr: String): java.util.List[TushareStockControllerDTO] = {
+  def getMa(maStr: String, tradedate: String): java.util.List[TushareStockControllerDTO] = {
 
     //购买的股票
     val buySet = getAllBuy()
@@ -334,8 +334,8 @@ class TushareStockController {
    * 索取全部股票
    */
   @GetMapping(value = Array("all"))
-  def all(desc: String, status: String): util.Map[String, Object] = {
-    log.info(s"索取全部股票:${desc}, ${status}")
+  def all(desc: String, status: String, tradedate: String): util.Map[String, Object] = {
+    log.info(s"索取全部股票:desc:${desc}, status:${status}, tradedate:${tradedate}")
 
     val list = status match {
       case "my" =>
@@ -343,11 +343,11 @@ class TushareStockController {
       case "all" =>
         this.getAll(desc)
       case "ma4" =>
-        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)
+        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, tradedate.replaceAll("-",""))
       case "ma5" =>
-        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)
+        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, tradedate.replaceAll("-",""))
       case "ma7" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, tradedate.replaceAll("-",""))
       case _=>
         new util.ArrayList[StockResultJson]()
     }

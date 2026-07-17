@@ -10,6 +10,7 @@ function AllStocks() {
    */
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState("my");
+  const [selectedDate, setSelectedDate] = useState("")
 
   /***
    * 拉取模型类型数据
@@ -49,7 +50,7 @@ useEffect(() => {
     try {
 
       const response = await fetch(
-        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${selectedModule}`
+        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${selectedModule}&tradedate=${selectedDate}`
       );
 
       const result = await response.json();
@@ -143,9 +144,12 @@ useEffect(() => {
       {/* 检索区域 */}
       <div className="mb-4 flex gap-2">
 
-        <label className="mr-2 font-medium">
-          模型：
-        </label>
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="border rounded px-3 py-2"
+        />
 
         <select
           value={selectedModule}
@@ -184,7 +188,7 @@ useEffect(() => {
  
 
 
-      <br></br>
+        <br></br>
  
 
       </div>
