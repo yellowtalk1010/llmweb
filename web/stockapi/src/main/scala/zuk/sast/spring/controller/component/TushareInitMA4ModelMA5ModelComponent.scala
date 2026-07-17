@@ -229,7 +229,7 @@ class TushareInitMA4ModelMA5ModelComponent {
 
     allEntitys.filter(e=> !tradetimes.contains(e.createtime)).zipWithIndex.foreach(z=>{
       val e = z._1
-      println(s"${z._2}删除记录:${e.id}, ${e.stockCode}, ${e.name}, ${e.stockType}, ${e.createtime}")
+      log.info(s"${z._2}删除记录:${e.id}, ${e.stockCode}, ${e.name}, ${e.stockType}, ${e.createtime}")
       this.stockMapper.deleteById(e.id)
     })
 
