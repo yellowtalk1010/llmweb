@@ -107,50 +107,6 @@ class TushareInitMA4ModelMA5ModelComponent {
 
   }
 
-  /***
-   * 添加推荐数据
-   * @param list
-   */
-//  def add_MA4_MA5_MODEL(stockResultList: List[StockResultJson]): Unit = synchronized {
-//
-//    try {
-//      val ma4ma5List = stockResultList.filter(e=>List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(e.modClsName.toUpperCase))
-//      ma4ma5List.foreach(stockResult=>{
-//        val stockCode= stockResult.ts_code
-//        val stockType = stockResult.modClsName.toUpperCase
-//        val dateStr = stockResult.fileName.substring(0, 8)
-//
-//        if(TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr)==null){
-//          //写入缓存
-//          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
-//        }
-//        val list = TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.get(dateStr).asScala
-//          .filter(entity=>{
-//            entity.stockCode.equals(stockCode) && entity.stockType.equals(stockType)
-//          }).toList
-//
-//        if(list.size==0 && this.stockMapper.select_MA4_MA5_By_Createtime(dateStr).asScala.filter(e=>e.stockCode.equals(stockCode) && e.stockType.equals(stockType) && e.createtime.equals(dateStr)).size == 0){
-//          val entity = new StockEntity
-//          entity.id = UUID.randomUUID().toString.replaceAll("-", "")
-//          entity.stockCode = stockCode
-//          entity.stockType = stockType
-//          entity.name = tushareAllStocksCSVComponent.getTsStock(stockCode).getOrElse(new TsStock).name
-//          entity.createtime = dateStr
-//          this.stockMapper.insert(entity)
-//          //更新缓存
-//          log.info(s"写入推荐MA4,MA5数据：${JSONObject.toJSONString(entity, Feature.LargeObject)}")
-//          TushareInitMA4ModelMA5ModelComponent.CacheStockEntityMap.put(dateStr, this.stockMapper.select_MA4_MA5_By_Createtime(dateStr))
-//        }
-//      })
-//
-//    }
-//    catch {
-//      case exception: Exception =>
-//        exception.printStackTrace()
-//        log.error(exception.getMessage)
-//    }
-//  }
-
   private def createId(stockCode: String, stockType: String, createtime: String): String = {
     try {
       val text = s"${stockCode.trim.toUpperCase}${stockType.trim.toUpperCase}${createtime.trim.toUpperCase}"
