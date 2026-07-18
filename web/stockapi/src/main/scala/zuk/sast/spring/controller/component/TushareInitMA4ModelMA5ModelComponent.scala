@@ -201,10 +201,10 @@ class TushareInitMA4ModelMA5ModelComponent {
       val id = createId(stockCode, stockType, time)
 
       tradetimes += time
+      log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
 
       val existList = allEntitys.filter(e=>e.id.equals(id))
       if (existList.size == 0 && modelSet.contains(stockType)) {
-        log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
         try {
           val stockEntity = new StockEntity
           stockEntity.id = id
@@ -227,7 +227,9 @@ class TushareInitMA4ModelMA5ModelComponent {
 
     })
 
-    allEntitys.filter(e=> !tradetimes.contains(e.createtime)).zipWithIndex.foreach(z=>{
+    val delList = allEntitys.filter(e=> !tradetimes.contains(e.createtime))
+    log.info(s"待删除stock表中的记录总数:${delList.size}")
+    delList.zipWithIndex.foreach(z=>{
       val e = z._1
       log.info(s"${z._2}删除stock表中记录:${e.id}, ${e.stockCode}, ${e.name}, ${e.stockType}, ${e.createtime}")
       this.stockMapper.deleteById(e.id)
