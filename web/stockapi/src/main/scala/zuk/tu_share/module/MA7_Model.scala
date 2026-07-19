@@ -1,11 +1,52 @@
 package zuk.tu_share.module
 
+import com.alibaba.fastjson2.JSONObject
+import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
-import zuk.tu_share.DataFrame
+import zuk.tu_share.backtest.BackTestDto
+import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.ModuleDay
 import zuk.tu_share.utils.ListOrderCheck
 
+import java.io.File
 import java.math.{BigDecimal, RoundingMode}
+import java.nio.charset.Charset
+import scala.collection.mutable.ListBuffer
+import scala.jdk.CollectionConverters.*
+
+object MA7_Model {
+
+  val modelBlckTestResult = ListBuffer[BackTestDto]()
+
+  def load(): Unit = synchronized {
+    if(modelBlckTestResult==null || modelBlckTestResult.isEmpty){
+      val modelBlckTestResultPath = ParseCammandParam.param.path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
+      val modelBlckTestResultFile = new File(modelBlckTestResultPath)
+      val lines = FileUtils.readLines(modelBlckTestResultFile, Charset.forName("UTF-8"))
+      lines.asScala.foreach(line=>{
+        try {
+          val jsonObj = JSONObject.parseObject(line)
+          if (jsonObj != null
+            && jsonObj.get("stockType") != null
+            && jsonObj.get("stockType").toString.toUpperCase.equals(classOf[MA7_Model].getSimpleName.toUpperCase)) {
+            val backTestDto = new BackTestDto
+            backTestDto.stockType = jsonObj.get("stockType").toString
+            backTestDto.stockCode = jsonObj.get("stockCode").toString
+            backTestDto.stockName = jsonObj.get("stockName").toString
+            backTestDto.tradedate = jsonObj.get("tradedate").toString
+            modelBlckTestResult += backTestDto
+          }
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+        }
+
+      })
+    }
+
+  }
+}
 
 /***
  * 底部放巨量
