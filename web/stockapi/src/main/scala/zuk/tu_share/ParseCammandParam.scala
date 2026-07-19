@@ -25,11 +25,17 @@ object ParseCammandParam {
 }
 
 class ParseCammandParam {
+  //股票分析系统路径
   var path: String = "."
+  //密码
   var pwd: String = ""
+  //是否执行回测
   var back: Boolean = false
+  //回测80个交易日
   var back_step: Int = 80
+  //是否输出json格式
   var json: Boolean = false
+  //回测涨幅: 1.0%
   var wrate: Float = 1.00
 
   override def toString: String = {
