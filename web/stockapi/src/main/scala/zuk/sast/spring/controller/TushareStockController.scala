@@ -246,7 +246,6 @@ class TushareStockController {
         val tsStock = new TsStock(entity.stockCode)
         dto.eastmoneyURL = tsStock.eastmoneyURL
         dto.conceptURL = tsStock.conceptURL
-        dto.remark = dto.remark + entity.remark
         if (attentionSet.contains(dto.stockCode)) {
           dto.attention = "已关注"
         }
@@ -270,6 +269,11 @@ class TushareStockController {
       })
       .asJava
 
+      list1.asScala.groupBy(e=>e.stockCode).filter(e=>e._2.size>1).map(_._2).foreach(ls=>{
+        ls.map(e=>{
+          e.remark = s"${e.remark}【${ls.size}次】"
+        })
+      })
 
       list1
   }
