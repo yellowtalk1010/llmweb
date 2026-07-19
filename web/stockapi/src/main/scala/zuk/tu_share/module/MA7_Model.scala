@@ -11,15 +11,17 @@ import zuk.tu_share.utils.ListOrderCheck
 import java.io.File
 import java.math.{BigDecimal, RoundingMode}
 import java.nio.charset.Charset
+import java.util
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object MA7_Model {
 
-  val modelBlckTestResult = ListBuffer[BackTestDto]()
+  val modelBlackTestResultList = ListBuffer[BackTestDto]()
+  val modelBlackTestResultMap = new util.HashMap[String, List[BackTestDto]]()
 
   def load(): Unit = synchronized {
-    if(modelBlckTestResult==null || modelBlckTestResult.isEmpty){
+    if(modelBlackTestResultList==null || modelBlackTestResultList.isEmpty){
       val modelBlckTestResultPath = ParseCammandParam.param.path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
       val modelBlckTestResultFile = new File(modelBlckTestResultPath)
       val lines = FileUtils.readLines(modelBlckTestResultFile, Charset.forName("UTF-8"))
@@ -34,7 +36,7 @@ object MA7_Model {
             backTestDto.stockCode = jsonObj.get("stockCode").toString
             backTestDto.stockName = jsonObj.get("stockName").toString
             backTestDto.tradedate = jsonObj.get("tradedate").toString
-            modelBlckTestResult += backTestDto
+            modelBlackTestResultList += backTestDto
           }
         }
         catch {
@@ -42,6 +44,16 @@ object MA7_Model {
             exception.printStackTrace()
         }
 
+      })
+      modelBlackTestResultList.groupBy(_.stockCode).foreach(tp2=>{
+        val stockCode = tp2._1
+        val ls = tp2._2.sortBy(e=>(e.tradedate)).reverse.toList
+        val list = if(ls.size>5){
+          ls.take(5)
+        } else {
+          ls
+        }
+        modelBlackTestResultMap.put(stockCode, list)
       })
     }
 
@@ -58,11 +70,24 @@ class MA7_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def run(days: List[ModuleDay]): Unit = {
+  override def run(days1: List[ModuleDay]): Unit = {
+
+    val head = days1.head
+
+    val list = MA7_Model.modelBlackTestResultMap.get(head.ts_code)
+    val days = if(list!= null && list.size > 0){
+      val ls = days1.filter(e=>{
+        !list.map(_.tradedate).contains(e.ts_code)
+      })
+      ls
+    }
+    else{
+      days1
+    }
+
     if (days.size < num){
       return
     }
-    val head = days.head
 
     val historyDays = days.slice(1, days.length)
     //过去历史最高价
