@@ -20,6 +20,8 @@ object MA7_Model {
   val modelBlackTestResultList = ListBuffer[BackTestDto]()
   val modelBlackTestResultMap = new util.HashMap[String, List[BackTestDto]]()
 
+  load()
+
   def load(): Unit = synchronized {
     if(modelBlackTestResultList==null || modelBlackTestResultList.isEmpty){
       val modelBlckTestResultPath = ParseCammandParam.param.path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
@@ -77,7 +79,7 @@ class MA7_Model extends IModel {
     val list = MA7_Model.modelBlackTestResultMap.get(head.ts_code)
     val days = if(list!= null && list.size > 0){
       val ls = days1.filter(e=>{
-        !list.map(_.tradedate).contains(e.ts_code)
+        !list.map(_.tradedate).contains(e.trade_date)
       })
       ls
     }
