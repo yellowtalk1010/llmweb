@@ -291,7 +291,7 @@ class TusharePushStockController {
         s"${e.name}"
       }
       else{
-        s"${e.name}【${}次】"
+        s"${e.name}【${size}次】"
       }
       e.ts_code
     }).toSet
