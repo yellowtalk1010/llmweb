@@ -56,6 +56,10 @@ class TushareInitMA4ModelMA5ModelComponent {
     this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)).toList
   }
 
+  def get_MD7_MODEL_LIST(): List[StockEntity] = synchronized {
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)).toList
+  }
+
   @PostConstruct
   def init(): Unit = {
 

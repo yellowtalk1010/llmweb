@@ -284,6 +284,12 @@ class TusharePushStockController {
       e.ts_code
     }).toSet
 
+    val stockModel7EntityList = tushareInitMA4ModelMA5ModelComponent.get_MD7_MODEL_LIST()
+    val ma7Set = pushStocks.filter(_._1.equals("MA7_MODEL")).flatMap(e => e._2 ++ e._3).map(e => {
+      e.name = s"${e.name}【${stockModel7EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
+      e.ts_code
+    }).toSet
+
     val allAttentionCodes = tushareStockController.getAllAttention() //全部关注的股票
     val allBuyCodes = tushareStockController.getAllBuy() //全部购买的股票
     val eliminateCodes = tushareStockController.getAllEliminate() //全部淘汰的股票
