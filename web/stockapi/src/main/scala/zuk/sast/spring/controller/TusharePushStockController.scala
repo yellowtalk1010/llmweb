@@ -286,7 +286,13 @@ class TusharePushStockController {
 
     val stockModel7EntityList = tushareInitMA4ModelMA5ModelComponent.get_MD7_MODEL_LIST()
     val ma7Set = pushStocks.filter(_._1.equals("MA7_MODEL")).flatMap(e => e._2 ++ e._3).map(e => {
-      e.name = s"${e.name}【${stockModel7EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
+      val size = stockModel7EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
+      e.name = if(size==0){
+        s"${e.name}"
+      }
+      else{
+        s"${e.name}【${}次】"
+      }
       e.ts_code
     }).toSet
 
