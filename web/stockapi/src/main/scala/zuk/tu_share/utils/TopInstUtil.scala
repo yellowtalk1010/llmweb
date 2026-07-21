@@ -11,7 +11,7 @@ import scala.jdk.CollectionConverters.*
 
 object TopInstUtil {
 
-  val SIZE = 10 //只考虑过去10个交易日的龙虎榜
+  val SIZE = 20 //只考虑过去10个交易日的龙虎榜
 
   private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 
@@ -35,7 +35,7 @@ object TopInstUtil {
       try{
         val topInstFile = e._1
         //路径存在
-        println(s"龙虎榜文件路径${e._2}/${files.size}:${topInstFile.getAbsolutePath}")
+        println(s"龙虎榜文件路径${e._2 + 1}/${files.size}:${topInstFile.getAbsolutePath}")
         val in = new FileReader(topInstFile.getAbsolutePath, Charset.forName("UTF-8"))
         val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
         val codes = records.asScala.map(record => {
