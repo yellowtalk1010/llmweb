@@ -26,15 +26,26 @@ class TushareTopInstController {
    */
   @GetMapping(value=Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
+
+    log.info(s"search: ${search}, tradedate: ${tradedate}")
+
     val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
     TopInstUtil.loadData(stockHmTopInstPath)
-    log.info(s"search: ${search}, tradedate: ${tradedate}")
 
     val list = new util.ArrayList[TopInst]()
     if(TopInstUtil.loadData(stockHmTopInstPath).get(tradedate).nonEmpty){
-      list.addAll(TopInstUtil.loadData(stockHmTopInstPath).get(tradedate).get.asScala.filter(e=>{
+      //根据日期选择
+      val ls = TopInstUtil.loadData(stockHmTopInstPath).get(tradedate).get.asScala.filter(e=>{
         scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
-      }).asJava)
+      })
+      list.addAll(ls.asJava)
+    }
+    else {
+      //根据日期排序
+      val ls = TopInstUtil.loadData(stockHmTopInstPath).toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala).filter(e=>{
+        scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
+      })
+      list.addAll(ls.asJava)
     }
 
     val map = new util.HashMap[String, Object]()
