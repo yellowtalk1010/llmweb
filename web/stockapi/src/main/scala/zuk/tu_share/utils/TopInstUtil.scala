@@ -31,7 +31,7 @@ object TopInstUtil {
       }
     })
     val groupLs = ls.groupBy(_.trade_date).toList.sortBy(e=>(e._1)).reverse
-    groupLs.map(_._1).foreach(println)
+    //groupLs.map(_._1).foreach(println)
     val size = groupLs.size
     size
   }
