@@ -36,7 +36,7 @@ class TushareTopInstController {
   @GetMapping(value=Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
 
-    log.info(s"search: ${search}, tradedate: ${tradedate}")
+    log.info(s"龙虎榜查询接口入参：search: ${search}, tradedate: ${tradedate}")
 
     if(StringUtils.isEmpty(search)
       && StringUtils.isEmpty(tradedate)){
