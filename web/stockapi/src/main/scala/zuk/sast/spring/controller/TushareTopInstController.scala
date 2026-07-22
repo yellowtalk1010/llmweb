@@ -63,9 +63,30 @@ class TushareTopInstController {
     }
 
     //
-    val buySum = list.asScala.map(_.buy.toDouble).sum
-    val selSum = list.asScala.map(_.sell.toDouble).sum
-    val netSum = list.asScala.map(_.net_buy.toDouble).sum
+    val buySum = list.asScala.map(e=>{
+      if(e.buy==null){
+        0.0d
+      }
+      else {
+        e.buy.toDouble
+      }
+    }).sum
+    val selSum = list.asScala.map(e=>{
+      if(e.sell==null){
+        0.0d
+      }
+      else {
+        e.sell.toDouble
+      }
+    }).sum
+    val netSum = list.asScala.map(e=>{
+      if(e.net_buy==null){
+        0.0d
+      }
+      else {
+        e.net_buy.toDouble
+      }
+    }).sum
     val sumTopInst = new TopInst
     sumTopInst.buy = "+" + buySum.toString
     sumTopInst.sell = "-" + selSum.toString
