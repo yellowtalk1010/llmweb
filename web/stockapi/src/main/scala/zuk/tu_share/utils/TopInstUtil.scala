@@ -30,7 +30,9 @@ object TopInstUtil {
         e.trade_date.equals(tradedate) && e.ts_code.equals(tscode)
       }
     })
-    val size = ls.groupBy(_.trade_date).size
+    val groupLs = ls.groupBy(_.trade_date).toList.sortBy(e=>(e._1)).reverse
+    groupLs.map(_._1).foreach(println)
+    val size = groupLs.size
     size
   }
 
