@@ -20,12 +20,12 @@ public class LocalhostInterceptor implements HandlerInterceptor {
         CheckLicenseUtil.checkLicense(); //许可是否过期
 
         String ip = request.getRemoteAddr();
-        if (!"127.0.0.1".equals(ip) && !"0:0:0:0:0:0:0:1".equals(ip)) {
-            // 限制只能localhost、127.0.0.1访问
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("403 - Only localhost allowed");
-            return false;
-        }
+//        if (!"127.0.0.1".equals(ip) && !"0:0:0:0:0:0:0:1".equals(ip)) {
+//            // 限制只能localhost、127.0.0.1访问
+//            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//            response.getWriter().write("403 - Only localhost allowed");
+//            return false;
+//        }
         return true;
     }
 
