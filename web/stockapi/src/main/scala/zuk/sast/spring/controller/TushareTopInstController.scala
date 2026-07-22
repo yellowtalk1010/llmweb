@@ -1,5 +1,6 @@
 package zuk.sast.spring.controller
 
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.tu_share.dto.TopInst
@@ -33,7 +34,7 @@ class TushareTopInstController {
     TopInstUtil.loadData(stockHmTopInstPath)
 
     val list = new util.ArrayList[TopInst]()
-    if(TopInstUtil.loadData(stockHmTopInstPath).get(tradedate).nonEmpty){
+    if(StringUtils.isNotBlank(tradedate)){
       //根据日期选择
       val ls = TopInstUtil.loadData(stockHmTopInstPath).get(tradedate).get.asScala.filter(e=>{
         scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
