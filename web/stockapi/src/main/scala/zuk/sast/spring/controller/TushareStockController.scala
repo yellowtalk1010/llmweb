@@ -249,7 +249,7 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
-        if (TopInstUtil.existTopInst(dto.stockCode)) {
+        if (TopInstUtil.existTopInst(dto.stockCode, entity.createtime)) {
           dto.name = s"${dto.name}【龙虎榜】"
         }
         dto.remark = entity.createtime
