@@ -100,11 +100,11 @@ function HistoryStock() {
                             </a>
                         </td>
                         <td className="td">{row.ts_name}【{row.count}】<br/>{row.hm_name}</td>
-                        <td className="td">{row.buy}</td>
+                        <td className="td">{row.buy}【{row.buyDesc}】</td>
                         <td className="td">{row.buy_rate}</td>
-                        <td className="td">{row.sell}</td>
+                        <td className="td">{row.sell}【{row.sellDesc}】</td>
                         <td className="td">{row.sell_rate}</td>
-                        <td className="td">{row.net_buy}</td>
+                        <td className="td">{row.net_buy}【{row.netBuyDesc}】</td>
                         <td className="td">{row.side_desc}</td>
                         <td className="td">{row.reason}</td>
                         <td className="td">{row.exalter}</td>

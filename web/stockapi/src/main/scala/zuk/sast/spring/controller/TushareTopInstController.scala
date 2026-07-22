@@ -101,13 +101,13 @@ class TushareTopInstController {
 
     list.asScala.map(e=>{
       if(StringUtils.isNotBlank(e.buy)){
-        e.buy = formatChineseUnit(e.buy.toDouble)
+        e.buyDesc = formatChineseUnit(e.buy.toDouble)
       }
       if (StringUtils.isNotBlank(e.sell)) {
-        e.sell = formatChineseUnit(e.sell.toDouble)
+        e.sellDesc = formatChineseUnit(e.sell.toDouble)
       }
       if (StringUtils.isNotBlank(e.net_buy)) {
-        e.net_buy = formatChineseUnit(e.net_buy.toDouble)
+        e.netBuyDesc = formatChineseUnit(e.net_buy.toDouble)
       }
     })
     val map = new util.HashMap[String, Object]()

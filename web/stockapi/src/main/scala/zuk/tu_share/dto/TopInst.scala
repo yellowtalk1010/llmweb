@@ -24,5 +24,9 @@ class TopInst extends TsCodeSplit{
   @BeanProperty var hm_name: String = _     //游资名称
   @BeanProperty var count: Int = _          //数量
 
+  @BeanProperty var buyDesc: String = _
+  @BeanProperty var sellDesc: String = _
+  @BeanProperty var netBuyDesc: String = _
+
 
 }
