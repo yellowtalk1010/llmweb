@@ -141,6 +141,10 @@ class TushareStockController {
           dto.name = s"${dto.name}【龙虎榜】"
         }
 
+        if (TopInstUtil.existTopInst(dto.stockCode)) {
+          dto.name = s"${dto.name}【龙虎榜】"
+        }
+
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.remark = optionTp3.get._4
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)

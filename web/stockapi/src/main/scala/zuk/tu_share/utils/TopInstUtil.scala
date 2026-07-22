@@ -1,12 +1,12 @@
 package zuk.tu_share.utils
 
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.TopInst
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
 import java.util.List
-
 import scala.jdk.CollectionConverters.*
 
 object TopInstUtil {
@@ -21,12 +21,18 @@ object TopInstUtil {
    * @param tscode
    * @return
    */
-  def existTopInst(tscode: String): Boolean = {
+  def existTopInst(tscode: String, tradedate: String = null): Boolean = {
     val ls = topInstMap.toList.flatMap(_._2.asScala).filter(e=>{
-      e.ts_code.equals(tscode)
+      if(StringUtils.isNotBlank(tradedate)){
+        e.ts_code.equals(tscode)
+      }
+      else {
+        e.trade_date.equals(tradedate) && e.ts_code.equals(tscode)
+      }
     })
     ls.size>0
   }
+
 
   /***
    * 龙虎榜机构交易单
