@@ -48,6 +48,13 @@ class TushareTopInstController {
       list.addAll(ls.asJava)
     }
 
+    //
+    val sum = list.asScala.map(_.net_buy.toDouble).sum
+    val sumTopInst = new TopInst
+    sumTopInst.net_buy = sum.toString
+    list.add(sumTopInst)
+
+
     val map = new util.HashMap[String, Object]()
     map.put("code", s"success")
     map.put("time", s"${System.currentTimeMillis()}")
