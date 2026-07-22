@@ -141,7 +141,7 @@ class TushareStockController {
 
         val topInstSize = TopInstUtil.existTopInst(dto.stockCode)
         if (topInstSize > 0) {
-          dto.name = s"${dto.name}【龙虎榜${topInstSize}】"
+          dto.name = s"${dto.name}【龙虎榜${topInstSize}次】"
         }
 
 
@@ -252,7 +252,7 @@ class TushareStockController {
 
         val topInstSize = TopInstUtil.existTopInst(dto.stockCode)
         if (topInstSize > 0) {
-          dto.name = s"${dto.name}【龙虎榜${topInstSize}】"
+          dto.name = s"${dto.name}【龙虎榜${topInstSize}次】"
         }
 
         dto.remark = entity.createtime
