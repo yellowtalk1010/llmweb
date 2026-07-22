@@ -15,7 +15,7 @@ import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.HanLPUtil
+import zuk.tu_share.utils.{HanLPUtil, TopInstUtil}
 
 import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
@@ -316,6 +316,14 @@ class TusharePushStockController {
         else if (e.ts_code.startsWith("920")) {
           e.name = s"${e.name}【北交所】"
         }
+
+        //是否出现在龙虎榜中
+        if (TopInstUtil.existTopInst(e.ts_code)) {
+          e.name = s"${e.name}【龙虎榜】"
+        }
+
+
+        //
         if(allAttentionCodes.contains(e.ts_code)){
           e.attention = "已关注"
         }

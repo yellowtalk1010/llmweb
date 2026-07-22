@@ -13,6 +13,7 @@ import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
+import zuk.tu_share.utils.TopInstUtil
 
 import java.text.SimpleDateFormat
 import java.util
@@ -136,6 +137,10 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
+        if(TopInstUtil.existTopInst(dto.stockCode)){
+          dto.name = s"${dto.name}【龙虎榜】"
+        }
+
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.remark = optionTp3.get._4
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
