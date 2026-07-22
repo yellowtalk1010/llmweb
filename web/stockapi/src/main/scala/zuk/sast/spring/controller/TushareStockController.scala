@@ -285,7 +285,7 @@ class TushareStockController {
 
       list1.asScala.groupBy(e=>e.stockCode).filter(e=>e._2.size>1).map(_._2).foreach(ls=>{
         ls.map(e=>{
-          e.remark = s"${e.remark}【${ls.size}次】"
+          e.remark = s"${e.remark}【历史出现${ls.size}次】"
         })
       })
 
@@ -309,7 +309,7 @@ class TushareStockController {
       .map(e=>{
         val ls = e._2.toList.sortBy(_.createtime).reverse
         val head = ls.head
-        head.name = s"${head.name}【${ls.size}次】${head.createtime}"
+        head.name = s"${head.name}【历史出现${ls.size}次】${head.createtime}"
         head
       })
       .toList.sortBy(_.createtime).reverse
