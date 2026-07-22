@@ -245,7 +245,9 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
-
+        if (TopInstUtil.existTopInst(dto.stockCode)) {
+          dto.name = s"${dto.name}【龙虎榜】"
+        }
         dto.remark = entity.createtime
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
         val tsStock = new TsStock(entity.stockCode)
