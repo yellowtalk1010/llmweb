@@ -99,12 +99,51 @@ class TushareTopInstController {
     sumTopInst.net_buy = netSum.toString
     list.add(sumTopInst)
 
-
+    list.asScala.map(e=>{
+      if(StringUtils.isNotBlank(e.buy)){
+        e.buy = formatChineseUnit(e.buy.toDouble)
+      }
+      if (StringUtils.isNotBlank(e.sell)) {
+        e.sell = formatChineseUnit(e.sell.toDouble)
+      }
+      if (StringUtils.isNotBlank(e.net_buy)) {
+        e.net_buy = formatChineseUnit(e.net_buy.toDouble)
+      }
+    })
     val map = new util.HashMap[String, Object]()
     map.put("code", s"success")
     map.put("time", s"${System.currentTimeMillis()}")
     map.put("data", list)
     map
+  }
+
+  def formatChineseUnit(value: Double): String = {
+    import java.math.BigDecimal
+    import java.math.RoundingMode
+    val negative = value < 0
+
+    val num = BigDecimal.valueOf(Math.abs(value))
+
+    var result: String = null
+
+    if (num.compareTo(new BigDecimal("100000000")) >= 0) {
+      result = num.divide(new BigDecimal("100000000"), 2, RoundingMode.HALF_UP).stripTrailingZeros.toPlainString + "亿"
+    } else if (num.compareTo(new BigDecimal("10000000")) >= 0) {
+      result = num.divide(new BigDecimal("10000000"), 2, RoundingMode.HALF_UP).stripTrailingZeros.toPlainString + "千万"
+    } else if (num.compareTo(new BigDecimal("10000")) >= 0) {
+      result = num.divide(new BigDecimal("10000"), 2, RoundingMode.HALF_UP).stripTrailingZeros.toPlainString + "万"
+    } else {
+      result = num.stripTrailingZeros.toPlainString
+    }
+
+    val res = if (negative) {
+      "-" + result
+    } else {
+      result
+    }
+
+    res
+
   }
 
 }
