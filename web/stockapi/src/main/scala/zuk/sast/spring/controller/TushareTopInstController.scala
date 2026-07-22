@@ -38,6 +38,11 @@ class TushareTopInstController {
 
     log.info(s"search: ${search}, tradedate: ${tradedate}")
 
+    if(StringUtils.isEmpty(search)
+      && StringUtils.isEmpty(tradedate)){
+      return new util.HashMap[String, Object]()
+    }
+
     val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
     TopInstUtil.loadData(stockHmTopInstPath)
 
