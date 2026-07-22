@@ -1,5 +1,6 @@
 package zuk.sast.spring.controller
 
+import jakarta.annotation.PostConstruct
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
@@ -20,6 +21,13 @@ class TushareTopInstController {
 
   @Autowired
   private var applicationProperties: ApplicationProperties = null
+
+  @PostConstruct
+  def init(): Unit = {
+    log.info("加载龙虎榜数据")
+    val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
+    TopInstUtil.loadData(stockHmTopInstPath)
+  }
 
   /**
    * 龙虎榜机构交易单
