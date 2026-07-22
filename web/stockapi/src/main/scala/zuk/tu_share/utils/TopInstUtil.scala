@@ -15,6 +15,19 @@ object TopInstUtil {
 
   private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 
+
+  /***
+   * 是否出现在龙虎榜中
+   * @param tscode
+   * @return
+   */
+  def existTopInst(tscode: String): Boolean = {
+    val ls = topInstMap.toList.flatMap(_._2.asScala).filter(e=>{
+      e.ts_code.equals(tscode)
+    })
+    ls.size>0
+  }
+
   /***
    * 龙虎榜机构交易单
    *
