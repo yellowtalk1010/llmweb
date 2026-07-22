@@ -309,7 +309,7 @@ class TushareStockController {
       .map(e=>{
         val ls = e._2.toList.sortBy(_.createtime).reverse
         val head = ls.head
-        head.name = s"${head.name}【历史出现${ls.size}次】${head.createtime}"
+        head.name = s"${head.name}【历史出现${ls.size}次${head.createtime}】"
         head
       })
       .toList.sortBy(_.createtime).reverse
