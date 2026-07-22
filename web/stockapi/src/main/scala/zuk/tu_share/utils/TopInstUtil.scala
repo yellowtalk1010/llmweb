@@ -21,16 +21,17 @@ object TopInstUtil {
    * @param tscode
    * @return
    */
-  def existTopInst(tscode: String, tradedate: String = null): Boolean = {
+  def existTopInst(tscode: String, tradedate: String = null): Int = {
     val ls = topInstMap.toList.flatMap(_._2.asScala).filter(e=>{
-      if(StringUtils.isNotBlank(tradedate)){
+      if(StringUtils.isBlank(tradedate)){
         e.ts_code.equals(tscode)
       }
       else {
         e.trade_date.equals(tradedate) && e.ts_code.equals(tscode)
       }
     })
-    ls.size>0
+    val size = ls.groupBy(_.trade_date).size
+    size
   }
 
 

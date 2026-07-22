@@ -137,13 +137,13 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
-        if(TopInstUtil.existTopInst(dto.stockCode)){
-          dto.name = s"${dto.name}【龙虎榜】"
+
+
+        val topInstSize = TopInstUtil.existTopInst(dto.stockCode)
+        if (topInstSize > 0) {
+          dto.name = s"${dto.name}【龙虎榜${topInstSize}】"
         }
 
-        if (TopInstUtil.existTopInst(dto.stockCode)) {
-          dto.name = s"${dto.name}【龙虎榜】"
-        }
 
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.remark = optionTp3.get._4
@@ -249,9 +249,12 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
-        if (TopInstUtil.existTopInst(dto.stockCode, entity.createtime)) {
-          dto.name = s"${dto.name}【龙虎榜】"
+
+        val topInstSize = TopInstUtil.existTopInst(dto.stockCode)
+        if (topInstSize > 0) {
+          dto.name = s"${dto.name}【龙虎榜${topInstSize}】"
         }
+
         dto.remark = entity.createtime
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
         val tsStock = new TsStock(entity.stockCode)
