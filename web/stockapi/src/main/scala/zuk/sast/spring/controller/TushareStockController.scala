@@ -250,9 +250,9 @@ class TushareStockController {
           dto.name = s"${dto.name}【北交所】"
         }
 
-        val topInstSize = TopInstUtil.existTopInst(dto.stockCode)
+        val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
         if (topInstSize > 0) {
-          dto.name = s"${dto.name}【龙虎榜${topInstSize}次】"
+          dto.name = s"${dto.name}【${entity.createtime}上龙虎榜】"
         }
 
         dto.remark = entity.createtime
@@ -309,7 +309,7 @@ class TushareStockController {
       .map(e=>{
         val ls = e._2.toList.sortBy(_.createtime).reverse
         val head = ls.head
-        head.name = s"${head.name}【历史出现${ls.size}次${head.createtime}】"
+        head.name = s"${head.name}【历史出现${ls.size}次最近${head.createtime}】"
         head
       })
       .toList.sortBy(_.createtime).reverse
@@ -324,6 +324,12 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
+
+        val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
+        if (topInstSize > 0) {
+          dto.name = s"${dto.name}【${entity.createtime}上龙虎榜】"
+        }
+
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         if(optionTp3.get._1 > 0
 //          && optionTp3.get._1 < 120.0  //当前价位
