@@ -97,7 +97,7 @@ class TushareTopInstController {
     sumTopInst.buy = "+" + buySum.toString
     sumTopInst.sell = "-" + selSum.toString
     sumTopInst.net_buy = netSum.toString
-    list.add(sumTopInst)
+    list.addFirst(sumTopInst)
 
     list.asScala.map(e=>{
       if(StringUtils.isNotBlank(e.buy)){
