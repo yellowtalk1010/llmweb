@@ -250,9 +250,15 @@ class TushareStockController {
           dto.name = s"${dto.name}【北交所】"
         }
 
-        val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
-        if (topInstSize > 0) {
-          dto.name = s"${dto.name}【${entity.createtime}上龙虎榜】"
+        val topInstSizeTotal = TopInstUtil.existTopInst(dto.stockCode)
+        if (topInstSizeTotal > 0) {
+          val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
+          if (topInstSize > 0) {
+            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次最近${entity.createtime}】"
+          }
+          else {
+            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次】"
+          }
         }
 
         dto.remark = entity.createtime
@@ -325,9 +331,15 @@ class TushareStockController {
           dto.name = s"${dto.name}【北交所】"
         }
 
-        val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
-        if (topInstSize > 0) {
-          dto.name = s"${dto.name}【${entity.createtime}上龙虎榜】"
+        val topInstSizeTotal = TopInstUtil.existTopInst(dto.stockCode)
+        if (topInstSizeTotal > 0) {
+          val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
+          if(topInstSize > 0){
+            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次最近${entity.createtime}】"
+          }
+          else {
+            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次】"
+          }
         }
 
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
