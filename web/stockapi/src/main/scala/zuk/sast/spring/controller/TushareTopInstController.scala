@@ -94,6 +94,7 @@ class TushareTopInstController {
       }
     }).sum
     val sumTopInst = new TopInst
+    sumTopInst.ts_name = "合并结果"
     sumTopInst.buy = "+" + buySum.toString
     sumTopInst.sell = "-" + selSum.toString
     sumTopInst.net_buy = netSum.toString
