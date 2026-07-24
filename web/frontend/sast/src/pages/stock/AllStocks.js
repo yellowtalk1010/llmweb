@@ -205,6 +205,7 @@ useEffect(() => {
               <th className="p-3 text-left">代码</th>
               <th className="p-3 text-left">代码名称</th>
               <th className="p-3 text-left">备注</th>
+              <th className="p-3 text-left">龙虎榜</th>
               <th className="p-3 text-left">概念</th>
             </tr>
           </thead>
@@ -217,7 +218,12 @@ useEffect(() => {
                   key={index}
                   className="border-b hover:bg-gray-50"
                 >
-                  <td>{index+1}-{item.selectModel}</td>    
+                  <td>
+                    {index+1}
+                    <br/>
+                    {item.selectModel}
+                    <br/>
+                    {item.tradedate}</td>    
                   <td className="p-3">
                     {
                       item.buy?(
@@ -291,8 +297,12 @@ useEffect(() => {
 
                   <td>
                     {item.remark}
-                    <br/>
                   </td>
+
+                  <td>
+                    {item.topInstitutions}
+                  </td>
+
                   
                   <td className="p-2">
                       <a
