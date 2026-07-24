@@ -300,7 +300,13 @@ useEffect(() => {
                   </td>
 
                   <td>
-                    {item.topInstitutions}
+                    <a href="/pages/HistoryStock"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                      >
+                      {item.topInstitutions}
+                    </a>
                   </td>
 
                   
