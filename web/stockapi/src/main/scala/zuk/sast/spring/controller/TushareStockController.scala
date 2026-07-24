@@ -149,7 +149,7 @@ class TushareStockController {
 
         val topInstSize = TopInstUtil.existTopInst(dto.stockCode)
         if (topInstSize > 0) {
-          dto.name = s"${dto.name}【龙虎榜${topInstSize}次】"
+          dto.topInstitutions = s"龙虎榜${topInstSize}次"
         }
 
 
@@ -262,10 +262,10 @@ class TushareStockController {
         if (topInstSizeTotal > 0) {
           val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
           if (topInstSize > 0) {
-            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次最近${entity.createtime}】"
+            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次最近${entity.createtime}"
           }
           else {
-            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次】"
+            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次"
           }
         }
 
@@ -343,10 +343,10 @@ class TushareStockController {
         if (topInstSizeTotal > 0) {
           val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
           if(topInstSize > 0){
-            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次最近${entity.createtime}】"
+            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次最近${entity.createtime}"
           }
           else {
-            dto.name = s"${dto.name}【上龙虎榜${topInstSizeTotal}次】"
+            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次"
           }
         }
 
