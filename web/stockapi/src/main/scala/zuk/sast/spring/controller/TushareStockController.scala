@@ -30,13 +30,21 @@ object TushareStockController {
 }
 
 class TushareStockControllerDTO extends StockEntity {
+  //概念url
   @BeanProperty var conceptURL: String = null
+  //概念
   @BeanProperty var concept: String = null
+  //东方财富url
   @BeanProperty var eastmoneyURL: String = null
+  //关注
   @BeanProperty var attention: String = null
+  //购买
   @BeanProperty var buy: String = null
   @BeanProperty var eliminate: String = null
   @BeanProperty var selectModel: String = null
+
+  //龙虎榜
+  @BeanProperty var topInstitutions: String = null
 }
 
 /***
