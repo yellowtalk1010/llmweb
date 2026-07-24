@@ -300,7 +300,7 @@ useEffect(() => {
                   </td>
 
                   <td>
-                    <a href="/pages/HistoryStock"
+                    <a href={`/pages/HistoryStock?ts_code=${item.stockCode}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 underline"

@@ -88,9 +88,13 @@ function HistoryStock() {
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f5f5f5"}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = "#fff"}
                         >
-                        <td className="td">{row.trade_date}</td>    
                         <td className="td">
-                            {row.name}
+                            {index}
+                            <br/>
+                            {row.trade_date}
+                        </td>    
+                        <td className="td">
+                            {row.ts_name}
                             <br/>
                             <a
                             href="#"
