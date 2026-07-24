@@ -30,6 +30,7 @@ case class StockResultJson(){
 
   @BeanProperty var remark: String = "" //备注
   @BeanProperty var concept: String = ""//股票的概念和板块
+  @BeanProperty var topInstitutions: String = ""//龙虎榜信息
 
 }
 
