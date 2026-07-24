@@ -320,7 +320,7 @@ class TusharePushStockController {
         //是否出现在龙虎榜中
         val topInstSize = TopInstUtil.existTopInst(e.ts_code)
         if (topInstSize > 0) {
-          e.name = s"${e.name}【龙虎榜${topInstSize}次】"
+          e.topInstitutions = s"【龙虎榜${topInstSize}次】"
         }
 
 

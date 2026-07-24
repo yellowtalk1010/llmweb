@@ -241,6 +241,7 @@ function StockTable({ list, refresh  }) {
           <th className="p-2 text-left">备注</th>
           <th className="p-2 text-left">概念</th>
           <th className="p-2 text-left">名称</th>
+          <th className="p-2 text-left">龙虎榜</th>
           <th className="p-2 text-left">代码</th>
           <th className="p-2 text-left">胜率</th>
           <th className="p-2 text-left">活跃率</th>
@@ -308,6 +309,15 @@ function StockTable({ list, refresh  }) {
                   className="text-blue-600 underline"
                 >
                 {item.name} 
+                </a>
+              </td>
+              <td>
+                <a href={`/pages/HistoryStock?ts_code=${item.ts_code}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                  >
+                  {item.topInstitutions}
                 </a>
               </td>
               <td className="p-2">{item.ts_code}</td>
