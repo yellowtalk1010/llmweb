@@ -45,6 +45,8 @@ class TushareStockControllerDTO extends StockEntity {
 
   //龙虎榜
   @BeanProperty var topInstitutions: String = null
+
+  @BeanProperty var tradedate: String = ""
 }
 
 /***
@@ -257,6 +259,7 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
+        dto.tradedate = entity.createtime
 
         val topInstSizeTotal = TopInstUtil.existTopInst(dto.stockCode)
         if (topInstSizeTotal > 0) {
@@ -338,6 +341,7 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
+        dto.tradedate = entity.createtime
 
         val topInstSizeTotal = TopInstUtil.existTopInst(dto.stockCode)
         if (topInstSizeTotal > 0) {
