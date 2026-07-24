@@ -35,11 +35,17 @@ class TushareTopInstController {
    */
   @GetMapping(value=Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
-
     log.info(s"龙虎榜查询接口入参：search: ${search}, tradedate: ${tradedate}")
+    val date = if(StringUtils.isNotBlank(tradedate)){
+      tradedate.replaceAll("-", "")
+    }
+    else {
+      tradedate
+    }
+    log.info(s"龙虎榜查询接口入参：search: ${search}, date: ${date}")
 
     if(StringUtils.isEmpty(search)
-      && StringUtils.isEmpty(tradedate)){
+      && StringUtils.isEmpty(date)){
       return new util.HashMap[String, Object]()
     }
 
@@ -47,9 +53,9 @@ class TushareTopInstController {
     TopInstUtil.loadData(stockHmTopInstPath)
 
     val list = new util.ArrayList[TopInst]()
-    if(StringUtils.isNotBlank(tradedate)){
+    if(StringUtils.isNotBlank(date)){
       //根据日期选择
-      val ls = TopInstUtil.loadData(stockHmTopInstPath).get(tradedate).get.asScala.filter(e=>{
+      val ls = TopInstUtil.loadData(stockHmTopInstPath).get(date).get.asScala.filter(e=>{
         scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
       })
       list.addAll(ls.asJava)

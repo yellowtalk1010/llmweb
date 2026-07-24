@@ -1,12 +1,29 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./StockTable.css"
 
 /***
  * 历史数据查询
  */
 function HistoryStock() {
+
+    const [searchParams] = useSearchParams();
  
-    const [search, setSearch] = useState("")  //查询的数据
+    //交易日期
+    const [tradedate, setTradedate] = useState("");
+    //查询的数据
+    const [search, setSearch] = useState("")  
+
+
+    useEffect(() => {
+        const tsCode = searchParams.get("ts_code");
+        console.info(tsCode)
+        if (tsCode) {
+            setTradedate("")
+            setSearch(tsCode);
+            handleSearch(tsCode, "");
+        }
+    }, []);
 
     const [stockDatas, setStockDatas] = useState({
         code: "",
@@ -14,22 +31,9 @@ function HistoryStock() {
         data: []
     });
 
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}${month}${day}`;
-  };
-  //交易日期
-  const [tradedate, setTradedate] = useState(getTodayDate());
-
-
-    const handleSearch = () => {
-        const search = document.getElementById("search").value
-        console.info(search + ", " + tradedate)
-
-        fetch("/top_inst/list?search="+search+"&tradedate="+tradedate, {
+    const handleSearch = (searchValue = search, tradeDateValue = tradedate) => {
+        console.info(searchValue + ", " + tradeDateValue)
+        fetch("/top_inst/list?search="+searchValue+"&tradedate="+tradeDateValue, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             })
@@ -48,19 +52,20 @@ function HistoryStock() {
             <div className="form">
                 <input
                     type="date"
-                    value={`${tradedate.slice(0, 4)}-${tradedate.slice(4, 6)}-${tradedate.slice(6, 8)}`}
-                    onChange={(e) => {
-                        const value = e.target.value.replace(/-/g, '');
-                        setTradedate(value);
-                    }}
+                    value={tradedate}
+                    onChange={(e) => setTradedate(e.target.value)}
                     className="input"
                 />
                 <input
                     type="text"
                     id="search"
                     className="input"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                 />
-                <button onClick={handleSearch}>查询</button>
+                <button onClick={() => handleSearch(search, tradedate)}>
+                    查询
+                </button>
             </div>
             <div style={{ padding: "20px" }}>
                 <table className="table">
