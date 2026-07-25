@@ -212,9 +212,11 @@ useEffect(() => {
                   key={index}
                   // 购买的行设置为绿色，其他颜色设置为灰色，鼠标划过颜色加深
                   className={`border-b ${
-                    item.buy
-                      ? "bg-green-100 hover:bg-green-300"
-                      : "bg-gray-100 hover:bg-gray-300"
+                        item.buy
+                        ? "bg-green-100 hover:bg-green-300"
+                        : item.attention
+                        ? "bg-yellow-100 hover:bg-yellow-300"
+                        : "bg-gray-100 hover:bg-gray-300"
                   }`}
                 >
                   <td>
