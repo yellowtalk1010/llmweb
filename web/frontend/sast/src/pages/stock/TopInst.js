@@ -1,7 +1,6 @@
 import './../../index.css';
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-// import "./StockTable.css"
 
 /***
  * 历史数据查询
