@@ -42,6 +42,8 @@ object TopInstUtil {
    * 龙虎榜机构交易单
    *
    * 最近30天
+   *
+   * @return key 是交易日
    */
   def loadData(topInstPath: String): scala.collection.mutable.HashMap[String, List[TopInst]] = synchronized {
     if(topInstMap.size>0){
