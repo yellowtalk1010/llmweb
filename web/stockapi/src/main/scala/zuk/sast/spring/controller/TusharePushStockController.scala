@@ -170,9 +170,9 @@ class TusharePushStockController {
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
-    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
-
     log.info(s"选择模型:${modType}")
+
+    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
 
     val response = new util.HashMap[String, Object]()
     response.put("code", s"success")

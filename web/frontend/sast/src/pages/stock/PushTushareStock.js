@@ -1,3 +1,4 @@
+import './../../index.css';
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -116,16 +117,17 @@ useEffect(() => {
         >
 
 
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col">
             
+            <h4 className="text-lg font-semibold mb-3">
+              {moduleItem.module}
+            </h4>
+            <br></br>  
             <h2>
               <span style={{ color: "red" }}>
                   {moduleItem.time}
                 </span>
             </h2>
-            <h4 className="text-lg font-semibold mb-3">
-              {moduleItem.module}
-            </h4>
             {moduleItem.histories && moduleItem.histories.length > 0 && (
               <button
                 onClick={() => toggleModule(index)}
@@ -232,28 +234,28 @@ function StockTable({ list, refresh  }) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm border-collapse">
+      <table className="w-full text-sm border-collapse bg-white">
         <thead>
-        <tr className="border-b bg-gray-50">
+        <tr className="border-b bg-gray-100 hover:bg-gray-100">
           <th>序号</th>
-          <th className="p-2 text-left">关注</th>
-          <th className="p-2 text-left">资金</th>
-          <th className="p-2 text-left">备注</th>
-          <th className="p-2 text-left">概念</th>
-          <th className="p-2 text-left">名称</th>
-          <th className="p-2 text-left">龙虎榜</th>
-          <th className="p-2 text-left">代码</th>
-          <th className="p-2 text-left">胜率</th>
-          <th className="p-2 text-left">活跃率</th>
-          <th className="p-2 text-left">涨停</th>
-          <th className="p-2 text-left">跌停</th>
-          <th className="p-2 text-left">风险</th>
-          <th className="p-2 text-left">来源</th>
+          <th className="p-2 text-left border border-gray-200">关注</th>
+          <th className="p-2 text-left border border-gray-200">资金</th>
+          <th className="p-2 text-left border border-gray-200">备注</th>
+          <th className="p-2 text-left border border-gray-200">概念</th>
+          <th className="p-2 text-left border border-gray-200">名称</th>
+          <th className="p-2 text-left border border-gray-200">龙虎榜</th>
+          <th className="p-2 text-left border border-gray-200">代码</th>
+          <th className="p-2 text-left border border-gray-200">胜率</th>
+          <th className="p-2 text-left border border-gray-200">活跃率</th>
+          <th className="p-2 text-left border border-gray-200">涨停</th>
+          <th className="p-2 text-left border border-gray-200">跌停</th>
+          <th className="p-2 text-left border border-gray-200">风险</th>
+          <th className="p-2 text-left border border-gray-200">来源</th>
         </tr>
         </thead>
         <tbody>
         {list.map((item, idx) => (
-            <tr key={idx} className="border-b hover:bg-gray-50">
+            <tr key={idx} className="border-b group">
 
               <td>{idx + 1}</td>
               <td className="p-2">
@@ -284,7 +286,7 @@ function StockTable({ list, refresh  }) {
                     href={`/pages/Moneyflow?tsCode=${item.ts_code}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 underline cursor-pointer"
+                    className="text-blue-600 underline"
                   >
                     资金
                   </a>
@@ -312,7 +314,7 @@ function StockTable({ list, refresh  }) {
                 </a>
               </td>
               <td>
-                <a href={`/pages/HistoryStock?ts_code=${item.ts_code}`}
+                <a href={`/pages/TopInst?ts_code=${item.stockCode}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 underline"
