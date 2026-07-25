@@ -148,12 +148,8 @@ class TushareStockController {
           dto.name = s"${dto.name}【北交所】"
         }
 
-
-        val topInstSize = TopInstUtil.existTopInst(dto.stockCode)
-        if (topInstSize > 0) {
-          dto.topInstitutions = s"龙虎榜${topInstSize}次"
-        }
-
+        //龙虎榜
+        dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
 
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         dto.remark = optionTp3.get._4
@@ -261,16 +257,7 @@ class TushareStockController {
         }
         dto.tradedate = entity.createtime
 
-        val topInstSizeTotal = TopInstUtil.existTopInst(dto.stockCode)
-        if (topInstSizeTotal > 0) {
-          val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
-          if (topInstSize > 0) {
-            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次最近${entity.createtime}"
-          }
-          else {
-            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次"
-          }
-        }
+        dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
 
         dto.remark = entity.createtime
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
@@ -343,16 +330,7 @@ class TushareStockController {
         }
         dto.tradedate = entity.createtime
 
-        val topInstSizeTotal = TopInstUtil.existTopInst(dto.stockCode)
-        if (topInstSizeTotal > 0) {
-          val topInstSize = TopInstUtil.existTopInst(dto.stockCode, entity.createtime.trim)
-          if(topInstSize > 0){
-            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次最近${entity.createtime}"
-          }
-          else {
-            dto.topInstitutions = s"上龙虎榜${topInstSizeTotal}次"
-          }
-        }
+        dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
 
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
         if(optionTp3.get._1 > 0

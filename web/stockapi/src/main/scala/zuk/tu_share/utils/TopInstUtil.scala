@@ -22,7 +22,7 @@ object TopInstUtil {
    * @param tscode
    * @return
    */
-  def existTopInst(tscode: String, tradedate: String = null): Int = {
+  def existTopInst(tscode: String, tradedate: String = null): String = {
     val ls = topInstMap.toList.flatMap(_._2.asScala).filter(e=>{
       if(StringUtils.isBlank(tradedate)){
         e.ts_code.equals(tscode)
@@ -33,8 +33,14 @@ object TopInstUtil {
     })
     val groupLs = ls.groupBy(_.trade_date).toList.sortBy(e=>(e._1)).reverse
     //groupLs.map(_._1).foreach(println)
-    val size = groupLs.size
-    size
+//    val size = groupLs.size
+//    size
+    if(groupLs.size==0){
+      ""
+    }
+    else {
+      s"上龙虎榜${groupLs.size}次"
+    }
   }
 
 
