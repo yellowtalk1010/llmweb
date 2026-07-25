@@ -433,6 +433,7 @@ public class ConfigController {
                                         
                 """;
         html = html.replace("{{{projectList}}}", stringBuilder.toString());
+        log.info("\n" + html);
         return html;
     }
 
