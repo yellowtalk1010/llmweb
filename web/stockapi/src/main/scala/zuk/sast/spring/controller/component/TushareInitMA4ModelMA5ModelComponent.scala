@@ -47,6 +47,8 @@ class TushareInitMA4ModelMA5ModelComponent {
   @Autowired
   private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = _
 
+  @Autowired
+  private var applicationProperties: ApplicationProperties = _
 
   def get_MD4_MODEL_LIST(): List[StockEntity] = synchronized {
     this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)).toList
@@ -132,7 +134,7 @@ class TushareInitMA4ModelMA5ModelComponent {
    * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
    */
   def init_MODEL_BACK_TEST_RESULT(): Unit = synchronized {
-    val file = new File("D:\\development\\github\\stockapi\\MODEL_BACK_TEST_RESULT.txt")
+    val file = new File(this.applicationProperties.getStockAanlysisSystem_backTestResultPath)
     if(!file.exists()){
       log.info(s"${file.getAbsolutePath} 不存在")
       return
@@ -161,7 +163,8 @@ class TushareInitMA4ModelMA5ModelComponent {
       val id = createId(stockCode, stockType, time)
 
       tradetimes += time
-      log.info(s"${num.getAndAdd(1)}/${lines.size()}, MODEL_BACK_TEST_RESULT.line:${line}，【${stockType}, ${stockCode}, ${name}, ${time}】")
+
+      num.getAndAdd(1)
 
       val existList = allEntitys.filter(e=>e.id.equals(id))
       if (existList.size == 0 && modelSet.contains(stockType)) {
@@ -186,6 +189,8 @@ class TushareInitMA4ModelMA5ModelComponent {
       }
 
     })
+
+    log.info(s"${num.getAndAdd(1)}/${lines.size()}，加载回测结果文件：${file.getAbsolutePath}")
 
     val delList = allEntitys.filter(e=> !tradetimes.contains(e.createtime))
     log.info(s"待删除stock表中的记录总数:${delList.size}")

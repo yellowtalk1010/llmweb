@@ -28,6 +28,8 @@ class ApplicationProperties {
   def getStockAnalysisSystem_conceptPath: String = this.stock_analysis_system_path + File.separator + "concept"
   //股票分析系统，及时股票信息路径
   def getStockAnalysisSystem_rtkPath: String = this.stock_analysis_system_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
+  //股票分析系统，回测结果路径
+  def getStockAanlysisSystem_backTestResultPath: String = this.stock_analysis_system_path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
 
 
   /***
