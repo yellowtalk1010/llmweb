@@ -399,6 +399,7 @@ public class ConfigController {
 
     @GetMapping("config")
     public  String config(){
+        log.info("打开静态分析结果展示页面");
         StringBuilder stringBuilder = new StringBuilder();
         List<ProjectEntity> projectEntityList = this.projectMapper.selectAll();
         projectEntityList.stream().forEach(e->{
@@ -410,7 +411,7 @@ public class ConfigController {
                         <html lang="zh-CN">
                         <head>
                           <meta charset="UTF-8">
-                          <title>配置文件</title>
+                          <title>静态分析配置文件</title>
                         </head>
                         <body>
                           <form action="/upload_config" method="post" enctype="multipart/form-data">
