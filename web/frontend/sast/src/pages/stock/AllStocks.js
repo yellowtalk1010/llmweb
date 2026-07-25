@@ -192,15 +192,15 @@ useEffect(() => {
 
           <thead>
             <tr className="bg-gray-100 border-b">
-              <th className="p-3 text-left">序号</th>
-              <th className="p-3 text-left">购买</th>
-              <th className="p-3 text-left">关注</th>
-              <th className="p-3 text-left">资金</th>
-              <th className="p-3 text-left">代码</th>
-              <th className="p-3 text-left">代码名称</th>
-              <th className="p-3 text-left">备注</th>
-              <th className="p-3 text-left">龙虎榜</th>
-              <th className="p-3 text-left">概念</th>
+              <th className="p-3 text-left border border-gray-200">序号</th>
+              <th className="p-3 text-left border border-gray-200">购买</th>
+              <th className="p-3 text-left border border-gray-200">关注</th>
+              <th className="p-3 text-left border border-gray-200">资金</th>
+              <th className="p-3 text-left border border-gray-200">代码</th>
+              <th className="p-3 text-left border border-gray-200">代码名称</th>
+              <th className="p-3 text-left border border-gray-200">备注</th>
+              <th className="p-3 text-left border border-gray-200">龙虎榜</th>
+              <th className="p-3 text-left border border-gray-200">概念</th>
             </tr>
           </thead>
 
@@ -301,7 +301,7 @@ useEffect(() => {
                   </td>
 
                   <td>
-                    <a href={`/pages/HistoryStock?ts_code=${item.stockCode}`}
+                    <a href={`/pages/TopInst?ts_code=${item.stockCode}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 underline"
