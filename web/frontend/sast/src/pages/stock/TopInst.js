@@ -5,7 +5,7 @@ import "./StockTable.css"
 /***
  * 历史数据查询
  */
-function HistoryStock() {
+function TopInst() {
 
     const [searchParams] = useSearchParams();
  
@@ -129,4 +129,4 @@ function HistoryStock() {
     );
 }
 
-export default HistoryStock;
+export default TopInst;
