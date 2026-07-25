@@ -4,7 +4,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 function Stock() {
   const pages = [
-    { id: "0", title: "静态分析", url: "http://localhost:8080/config"},
+    { id: "0", title: "sast", url: "http://localhost:8080/config"},
     { id: "1", title: "stockapi地址", url: "https://stockapi.com.cn/" },
     { id: "2", title: "招商地址", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
     
