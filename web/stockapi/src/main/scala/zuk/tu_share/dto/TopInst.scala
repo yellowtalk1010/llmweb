@@ -28,5 +28,7 @@ class TopInst extends TsCodeSplit{
   @BeanProperty var sellDesc: String = _
   @BeanProperty var netBuyDesc: String = _
 
+  @BeanProperty var easyMoneyURL: String = _ //东方财务URL
+
 
 }

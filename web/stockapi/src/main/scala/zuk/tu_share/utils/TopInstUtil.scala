@@ -3,7 +3,7 @@ package zuk.tu_share.utils
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
 import zuk.sast.spring.controller.component.TushareAllStocks
-import zuk.tu_share.dto.TopInst
+import zuk.tu_share.dto.{TopInst, TsStock}
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
@@ -97,6 +97,8 @@ object TopInstUtil {
             else {
               topInst.hm_name = "unknow"
             }
+
+            topInst.easyMoneyURL = new TsStock(topInst.ts_code).eastmoneyURL
 
             topInst
           })

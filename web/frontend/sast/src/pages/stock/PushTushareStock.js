@@ -255,7 +255,9 @@ function StockTable({ list, refresh  }) {
         </thead>
         <tbody>
         {list.map((item, idx) => (
-            <tr key={idx} className="border-b group">
+            <tr key={idx} 
+                className="border-b group"
+            >
 
               <td>{idx + 1}</td>
               <td className="p-2">

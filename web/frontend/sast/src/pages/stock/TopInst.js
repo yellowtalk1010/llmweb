@@ -72,9 +72,9 @@ function TopInst() {
                 </button>
             </div>
             <div style={{ padding: "20px" }}>
-                <table className="table">
+                <table className="w-full text-sm border-collapse bg-white">
                     <thead>
-                    <tr className="bg-gray-100 border-b">
+                    <tr className="border-b bg-gray-100 hover:bg-gray-100">
                         <th className="p-3 text-left border border-gray-200">交易日</th>
                         <th className="p-3 text-left border border-gray-200">代码</th>
                         <th className="p-3 text-left border border-gray-200">名称</th>
@@ -92,35 +92,36 @@ function TopInst() {
                     <tbody>
                     {stockDatas.data.map((row, index) => (
                         <tr
-                        key={index}
-                        style={{ cursor: "default" }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = "#f5f5f5"}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = "#fff"}
+                            key={index}
+                            className="border-b group"
                         >
-                        <td className="td">
+                        <td className="p-2">
                             {index}
                             <br/>
                             {row.trade_date}
                         </td>    
-                        <td className="td">
-                            {row.ts_name}
-                            <br/>
+                        <td className="p-2">
                             <a
                             href="#"
-                            onClick={() => window.open("https://quote.eastmoney.com/" + row.s_1 + row.s_0 + ".html")}
+                            onClick={() => window.open(row.easyMoneyURL)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
                             >
+                            {row.ts_name}
+                            <br/>
                             {row.ts_code}
                             </a>
                         </td>
-                        <td className="td">{row.ts_name}【{row.count}】<br/>{row.hm_name}</td>
-                        <td className="td">{row.buy}【{row.buyDesc}】</td>
-                        <td className="td">{row.buy_rate}</td>
-                        <td className="td">{row.sell}【{row.sellDesc}】</td>
-                        <td className="td">{row.sell_rate}</td>
-                        <td className="td">{row.net_buy}【{row.netBuyDesc}】</td>
-                        <td className="td">{row.side_desc}</td>
-                        <td className="td">{row.reason}</td>
-                        <td className="td">{row.exalter}</td>
+                        <td className="p-2">{row.ts_name}【{row.count}】<br/>{row.hm_name}</td>
+                        <td className="p-2">{row.buy}【{row.buyDesc}】</td>
+                        <td className="p-2">{row.buy_rate}</td>
+                        <td className="p-2">{row.sell}【{row.sellDesc}】</td>
+                        <td className="p-2">{row.sell_rate}</td>
+                        <td className="p-2">{row.net_buy}【{row.netBuyDesc}】</td>
+                        <td className="p-2">{row.side_desc}</td>
+                        <td className="p-2">{row.reason}</td>
+                        <td className="p-2">{row.exalter}</td>
                         </tr>
                     ))}
                     </tbody>
