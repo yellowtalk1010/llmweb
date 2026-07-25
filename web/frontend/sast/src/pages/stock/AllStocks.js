@@ -1,3 +1,4 @@
+import './../../index.css';
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -150,7 +151,6 @@ useEffect(() => {
           onChange={(e) => setSelectedDate(e.target.value)}
           className="border rounded px-3 py-2"
         />
-        <span>-</span>
         <select
           value={selectedModule}
           onChange={(e) => {
@@ -169,7 +169,6 @@ useEffect(() => {
             </option>
           ))}
         </select>
-        <span>-</span>
 
         <input
           type="text"
@@ -178,18 +177,13 @@ useEffect(() => {
           onChange={(e) => setInputKeyword(e.target.value)}
           className="w-full md:w-80 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <span>-</span>
+
         <button
           onClick={handleSearch}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         >
           检索
         </button>
- 
-
-
-        <br></br>
- 
 
       </div>
 
@@ -216,10 +210,15 @@ useEffect(() => {
               allStocksData.map((item, index) => (
                 <tr
                   key={index}
-                  className="border-b hover:bg-gray-50"
+                  // 购买的行设置为绿色，其他颜色设置为灰色，鼠标划过颜色加深
+                  className={`border-b ${
+                    item.buy
+                      ? "bg-green-100 hover:bg-green-300"
+                      : "bg-gray-100 hover:bg-gray-300"
+                  }`}
                 >
                   <td>
-                    {index+1}
+                    {index + 2}
                     <br/>
                     {item.selectModel}
                     <br/>
