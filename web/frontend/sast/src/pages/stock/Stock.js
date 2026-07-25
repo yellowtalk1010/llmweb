@@ -1,3 +1,4 @@
+import './../../index.css';
 import { useRef, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -113,14 +114,11 @@ function Stock() {
               {openedPages.map((page) => (
                 <div
                   key={page.id}
-                  style={{
-                    padding: "5px 10px",
-                    cursor: "pointer",
-                    backgroundColor: page.id === activePageId ? "white" : "gray",
-                    borderRight: "1px solid #ccc",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
+                    className={`px-3 py-1 cursor-pointer border-r flex items-center ${
+                    page.id === activePageId
+                      ? "bg-green-100"
+                      : "bg-white"
+                  }`}
                 >
                   <span onClick={() => setActivePageId(page.id)}>{page.title}</span>
                   <button
