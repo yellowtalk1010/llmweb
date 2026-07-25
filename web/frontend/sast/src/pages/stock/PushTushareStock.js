@@ -316,7 +316,7 @@ function StockTable({ list, refresh  }) {
                 </a>
               </td>
               <td>
-                <a href={`/pages/TopInst?ts_code=${item.stockCode}`}
+                <a href={`/pages/TopInst?ts_code=${item.ts_code}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 underline"
