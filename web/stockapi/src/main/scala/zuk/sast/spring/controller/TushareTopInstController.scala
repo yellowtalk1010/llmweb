@@ -46,7 +46,10 @@ class TushareTopInstController {
 
     if(StringUtils.isEmpty(search)
       && StringUtils.isEmpty(date)){
-      return new util.HashMap[String, Object]()
+      val map = new util.HashMap[String, Object]()
+      map.put("code", s"success")
+      map.put("time", s"${System.currentTimeMillis()}")
+      return map
     }
 
     val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
