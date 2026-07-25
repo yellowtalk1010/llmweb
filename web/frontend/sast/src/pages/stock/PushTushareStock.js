@@ -2,6 +2,9 @@ import './../../index.css';
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
+/***
+ * 模型推荐股票页
+ */
 function PushTushareStock() {
   const [searchParams] = useSearchParams();
   const [data, setData] = useState([]);

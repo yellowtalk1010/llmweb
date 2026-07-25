@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 /***
- * 历史数据查询
+ * 查看股票龙虎榜数据
  */
 function TopInst() {
 

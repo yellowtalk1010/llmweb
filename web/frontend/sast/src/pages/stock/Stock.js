@@ -2,6 +2,9 @@ import './../../index.css';
 import { useRef, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
+/***
+ * 股票分析系统前端展示首页
+ */
 function Stock() {
   const pages = [
     { id: "0", title: "sast", url: "http://localhost:8080/config"},

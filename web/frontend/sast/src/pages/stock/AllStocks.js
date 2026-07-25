@@ -2,6 +2,9 @@ import './../../index.css';
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+/***
+ * 我的购买/关注/历史模型推荐的股票展示
+ */
 function AllStocks() {
 
   const [searchParams] = useSearchParams();

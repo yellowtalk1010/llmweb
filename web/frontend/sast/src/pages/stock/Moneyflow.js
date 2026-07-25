@@ -1,6 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 
+/***
+ * 股票资金流
+ */
 function Moneyflow() {
 
   const [searchParams] = useSearchParams();
