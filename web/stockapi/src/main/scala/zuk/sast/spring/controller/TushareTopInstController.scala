@@ -44,18 +44,21 @@ class TushareTopInstController {
     }
     log.info(s"龙虎榜查询接口入参：search: ${search}, date: ${date}")
 
-    if(StringUtils.isEmpty(search)
-      && StringUtils.isEmpty(date)){
+
+    val list = new util.ArrayList[TopInst]()
+
+    if(StringUtils.isBlank(search)
+      && StringUtils.isBlank(date)){
       val map = new util.HashMap[String, Object]()
       map.put("code", s"success")
       map.put("time", s"${System.currentTimeMillis()}")
+      map.put("data", list)
       return map
     }
 
     val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
     TopInstUtil.loadData(stockHmTopInstPath)
 
-    val list = new util.ArrayList[TopInst]()
     if(StringUtils.isNotBlank(date)){
       //根据日期选择
       val ls = TopInstUtil.loadData(stockHmTopInstPath).get(date).get.asScala.filter(e=>{
