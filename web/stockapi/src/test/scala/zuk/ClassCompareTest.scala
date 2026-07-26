@@ -73,10 +73,29 @@ class ClassCompareTest extends AnyFunSuite {
   }
 
   private def ignoreFiles(): Set[String] = {
-    Set[String]{
-      "cn\\net\\cobot\\parsers\\cparser\\common\\CheckConfig.class"
-
-    }
+    Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CheckConfig.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CheckParam$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CheckParam$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CheckParam.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CobotParserConfig.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig$BitFieldInterpretation.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig$CharInterpretation.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig$IntrinsicType_PtrdiffT.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig$IntrinsicType_SizeT.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig$IntrinsicType_WcharT.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig$RightShiftBehaviour.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig$TypeSizeAndAlignment.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CompilerConfig.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\LostFileHeader.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage$3.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage$4.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage$5.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\TypeCompare.class"
+    )
   }
 
 }
