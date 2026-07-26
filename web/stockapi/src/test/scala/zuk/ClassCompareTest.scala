@@ -41,6 +41,7 @@ class ClassCompareTest extends AnyFunSuite {
     })
 
     val num = new AtomicInteger(0)
+    val num1 = new AtomicInteger(0)
     jarClassPathFiles.asScala.foreach(p=>{
       val path = targetClassPathMap.get(p.toString)
       if(path==null){
@@ -57,10 +58,10 @@ class ClassCompareTest extends AnyFunSuite {
 
 
         if(!md5_1.equals(md5_2)){
-          println(s"文件不相同：cn\\${p.toString}")
+          println(s"${num1.addAndGet(1)}文件不相同：${p2}")
         }
         else {
-          println("文件相同")
+          //println("文件相同")
         }
       }
     })
