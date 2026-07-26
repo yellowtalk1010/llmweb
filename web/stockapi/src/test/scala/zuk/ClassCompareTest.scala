@@ -5,6 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import java.io.IOException
 import java.nio.file.{Files, Path, Paths}
 import java.util
+import java.util.concurrent.atomic.AtomicInteger
 import scala.jdk.CollectionConverters.*
 
 class ClassCompareTest extends AnyFunSuite {
@@ -24,6 +25,7 @@ class ClassCompareTest extends AnyFunSuite {
   test("class比较") {
     val jarClassPath = "C:\\Users\\5132\\.m2\\repository\\zuk\\cbsast\\merge-93\\2.0.0\\merge-93-2.0.0\\cn"
     val jarClassPathFiles = getAllFiles(jarClassPath)
+    println(s"${jarClassPathFiles.size()}")
     val jarClassPathMap = new util.HashMap[String, Path]()
     jarClassPathFiles.asScala.foreach(p=>{
       jarClassPathMap.put(p.toString, p)
@@ -31,12 +33,20 @@ class ClassCompareTest extends AnyFunSuite {
 
     val targetClassPath = "D:\\development\\github\\webb\\web\\cobot-parsers\\target\\classes\\cn"
     val targetClassPathFiles = getAllFiles(targetClassPath)
+    println(s"${targetClassPathFiles.size()}")
     val targetClassPathMap = new util.HashMap[String, Path]()
     targetClassPathFiles.asScala.foreach(p=>{
       targetClassPathMap.put(p.toString, p)
     })
 
-    
+    val num = new AtomicInteger(0)
+    jarClassPathFiles.asScala.foreach(p=>{
+      val path = targetClassPathMap.get(p.toString)
+      if(path==null){
+        println(s"${num.addAndGet(1)}缺少文件：cn${p.toString}")
+      }
+    })
+
     println()
   }
 
