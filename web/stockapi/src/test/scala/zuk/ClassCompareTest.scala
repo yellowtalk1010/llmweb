@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.IOException
 import java.nio.file.{Files, Path, Paths}
-
+import java.util
 import scala.jdk.CollectionConverters.*
 
 class ClassCompareTest extends AnyFunSuite {
@@ -22,13 +22,21 @@ class ClassCompareTest extends AnyFunSuite {
   }
 
   test("class比较") {
-    var jarClassPath = "C:\\Users\\5132\\.m2\\repository\\zuk\\cbsast\\merge-93\\2.0.0\\merge-93-2.0.0\\cn"
+    val jarClassPath = "C:\\Users\\5132\\.m2\\repository\\zuk\\cbsast\\merge-93\\2.0.0\\merge-93-2.0.0\\cn"
     val jarClassPathFiles = getAllFiles(jarClassPath)
+    val jarClassPathMap = new util.HashMap[String, Path]()
+    jarClassPathFiles.asScala.foreach(p=>{
+      jarClassPathMap.put(p.toString, p)
+    })
 
-
-    var targetClassPath = "D:\\development\\github\\webb\\web\\cobot-parsers\\target\\classes\\cn"
+    val targetClassPath = "D:\\development\\github\\webb\\web\\cobot-parsers\\target\\classes\\cn"
     val targetClassPathFiles = getAllFiles(targetClassPath)
+    val targetClassPathMap = new util.HashMap[String, Path]()
+    targetClassPathFiles.asScala.foreach(p=>{
+      targetClassPathMap.put(p.toString, p)
+    })
 
+    
     println()
   }
 
