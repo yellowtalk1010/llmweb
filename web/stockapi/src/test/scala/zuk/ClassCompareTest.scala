@@ -94,7 +94,8 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage$4.class",
       "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage$5.class",
       "cn\\net\\cobot\\parsers\\cparser\\common\\ProgrammingLanguage.class",
-      "cn\\net\\cobot\\parsers\\cparser\\common\\TypeCompare.class"
+      "cn\\net\\cobot\\parsers\\cparser\\common\\TypeCompare.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\AbstractCExtension.class"
     )
   }
 
