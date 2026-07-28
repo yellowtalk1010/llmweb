@@ -14,7 +14,7 @@ object TopInstUtil {
 
   val SIZE = 20 //只考虑过去10个交易日的龙虎榜
 
-  private val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
+  val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
 
 
   /***

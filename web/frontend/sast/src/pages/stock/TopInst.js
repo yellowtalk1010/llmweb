@@ -14,7 +14,6 @@ function TopInst() {
     //查询的数据
     const [search, setSearch] = useState("")  
 
-
     useEffect(() => {
         const tsCode = searchParams.get("ts_code");
         console.info(tsCode)
@@ -28,7 +27,8 @@ function TopInst() {
     const [stockDatas, setStockDatas] = useState({
         code: "",
         msg: "",
-        data: []
+        data: [],
+        date: []
     });
 
     const handleSearch = (searchValue = search, tradeDateValue = tradedate) => {
@@ -56,6 +56,20 @@ function TopInst() {
                     onChange={(e) => setTradedate(e.target.value)}
                     className="border rounded px-3 py-2"
                 />
+                <select
+                    value={tradedate}
+                    onChange={(e) => setTradedate(e.target.value)}
+                    className="border rounded px-3 py-2"
+                >
+                    <option value=""></option>
+                    {
+                        (stockDatas.date || []).map((date, index) => (
+                            <option key={index} value={date}>
+                                {date}
+                            </option>
+                        ))
+                    }
+                </select>
                 <input
                     type="text"
                     id="search"

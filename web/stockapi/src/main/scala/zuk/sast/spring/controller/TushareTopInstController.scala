@@ -13,6 +13,9 @@ import scala.jdk.CollectionConverters.*
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import zuk.sast.spring.controller.component.ApplicationProperties
 
+import java.text.SimpleDateFormat
+import scala.collection.mutable.ListBuffer
+
 @RestController
 @RequestMapping(value=Array("top_inst"))
 class TushareTopInstController {
@@ -35,6 +38,7 @@ class TushareTopInstController {
    */
   @GetMapping(value=Array("list"))
   def all(search: String, tradedate: String): util.Map[String, Object] = {
+
     log.info(s"龙虎榜查询接口入参：search: ${search}, tradedate: ${tradedate}")
     val date = if(StringUtils.isNotBlank(tradedate)){
       tradedate.replaceAll("-", "")
@@ -44,39 +48,43 @@ class TushareTopInstController {
     }
     log.info(s"龙虎榜查询接口入参：search: ${search}, date: ${date}")
 
+    //数据
+    val dataList = new util.ArrayList[TopInst]()
+    //日期
+    val dateList = new util.ArrayList[String]()
 
-    val list = new util.ArrayList[TopInst]()
-    val dateSet = new util.HashSet[String]()
-    if(StringUtils.isBlank(search)
-      && StringUtils.isBlank(date)){
-      val map = new util.HashMap[String, Object]()
-      map.put("code", s"success")
-      map.put("time", s"${System.currentTimeMillis()}")
-      map.put("data", list)
-      map.put("date", dateSet)
-      return map
-    }
-
-    val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
-    TopInstUtil.loadData(stockHmTopInstPath)
-
-    if(StringUtils.isNotBlank(date)){
-      //根据日期选择
-      val ls = TopInstUtil.loadData(stockHmTopInstPath).get(date).get.asScala.filter(e=>{
-        scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
+    val ls = if(StringUtils.isNotBlank(search)){
+      //如果输入了查询数据
+      TopInstUtil.topInstMap.toList.sortBy(e => e._1).reverse.flatMap(_._2.asScala).filter(e => {
+        scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.exalter).filter(s => s != null && s.contains(search)).size > 0
       })
-      list.addAll(ls.asJava)
     }
     else {
-      //根据日期排序
-      val ls = TopInstUtil.loadData(stockHmTopInstPath).toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala).filter(e=>{
-        scala.collection.mutable.ListBuffer(e.ts_code,e.ts_name,e.hm_name,e.exalter).filter(s=>s!=null && s.contains(search)).size>0
-      })
-      list.addAll(ls.asJava)
+      //如果没有输入查询数据
+      TopInstUtil.topInstMap.toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala)
     }
 
+    log.info(s"根据条件获取龙虎榜总数据:${ls.size}")
+    dateList.addAll(ls.map(_.trade_date).toSet.toList.asJava)
+
+    if(StringUtils.isBlank(search) && StringUtils.isBlank(date)){
+      //数据返回空
+    }
+    else {
+      dataList.addAll(ls.filter(e => {
+        if (StringUtils.isNotBlank(date)) {
+          e.trade_date.equals(date)
+        }
+        else {
+          true
+        }
+      }).asJava)
+
+    }
+    log.info(s"过滤日期龙虎榜总数据:${dataList.size}")
+
     //
-    val buySum = list.asScala.filter(e=>StringUtils.isNotBlank(e.buy)).map(e=>{
+    val buySum = dataList.asScala.filter(e=>StringUtils.isNotBlank(e.buy)).map(e=>{
       try {
         e.buy.toDouble
       }
@@ -86,7 +94,7 @@ class TushareTopInstController {
           0.0
       }
     }).sum
-    val selSum = list.asScala.filter(e=>StringUtils.isNotBlank(e.sell)).map(e=>{
+    val selSum = dataList.asScala.filter(e=>StringUtils.isNotBlank(e.sell)).map(e=>{
       try {
         e.sell.toDouble
       }
@@ -96,7 +104,7 @@ class TushareTopInstController {
           0.0
       }
     }).sum
-    val netSum = list.asScala.filter(e=>StringUtils.isNotBlank(e.net_buy)).map(e=>{
+    val netSum = dataList.asScala.filter(e=>StringUtils.isNotBlank(e.net_buy)).map(e=>{
       try {
         e.net_buy.toDouble
       }
@@ -111,9 +119,9 @@ class TushareTopInstController {
     sumTopInst.buy = "+" + buySum.toString
     sumTopInst.sell = "-" + selSum.toString
     sumTopInst.net_buy = netSum.toString
-    list.addFirst(sumTopInst)
+    dataList.addFirst(sumTopInst)
 
-    list.asScala.map(e=>{
+    dataList.asScala.map(e=>{
       if(StringUtils.isNotBlank(e.buy)){
         e.buyDesc = formatChineseUnit(e.buy.toDouble)
       }
@@ -127,8 +135,10 @@ class TushareTopInstController {
     val map = new util.HashMap[String, Object]()
     map.put("code", s"success")
     map.put("time", s"${System.currentTimeMillis()}")
-    map.put("data", list)
-    map.put("date", list.asScala.map(_.trade_date).filter(e=>StringUtils.isNotBlank(e)).toSet.toList.sorted.reverse.asJava)
+    map.put("data", dataList)
+    map.put("date", dateList.asScala.filter(e=>StringUtils.isNotBlank(e)).toSet.toList.sorted.reverse.map(e=>{
+      s"${e.substring(0,4)}-${e.substring(4,6)}-${e.substring(6,8)}"
+    }).asJava)
     map
   }
 
