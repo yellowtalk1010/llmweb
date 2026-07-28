@@ -136,7 +136,7 @@ useEffect(() => {
             {moduleItem.histories && moduleItem.histories.length > 0 && (
               <button
                 onClick={() => toggleModule(index)}
-                className="self-start text-blue-600 underline"
+                className="self-start px-3 py-1 text-xs text-white bg-blue-600 rounded hover:bg-blue-400"
               >
                 {expandedModules[index] ? "收起历史" : "展开历史"}
               </button>
