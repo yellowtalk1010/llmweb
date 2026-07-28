@@ -131,10 +131,12 @@ useEffect(() => {
                   {moduleItem.time}
                 </span>
             </h2>
+            
+            <br></br> 
             {moduleItem.histories && moduleItem.histories.length > 0 && (
               <button
                 onClick={() => toggleModule(index)}
-                className="text-blue-600 underline"
+                className="self-start text-blue-600 underline"
               >
                 {expandedModules[index] ? "收起历史" : "展开历史"}
               </button>

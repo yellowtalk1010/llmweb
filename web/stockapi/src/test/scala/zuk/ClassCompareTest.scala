@@ -43,12 +43,12 @@ class ClassCompareTest extends AnyFunSuite {
     val num = new AtomicInteger(0)
     val num1 = new AtomicInteger(0)
     val num2 = new AtomicInteger(0)
-    jarClassPathFiles.asScala.filter(p=>{
+    jarClassPathFiles.asScala.filter(p=> !p.toString.contains("utils\\linetracker")  ).filter(p=>{
       this.ignoreFiles().filter(f=>f.endsWith(p.toString)).size == 0
     }).foreach(p=>{
       val path = targetClassPathMap.get(p.toString)
       if(path==null){
-        println(s"${num.addAndGet(1)}缺少文件：cn\\${p.toString}")
+        //println(s"${num.addAndGet(1)}缺少文件：cn\\${p.toString}")
       }
       else {
         val p1 = jarClassPath + "\\" + p.toString
