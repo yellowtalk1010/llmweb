@@ -46,13 +46,14 @@ class TushareTopInstController {
 
 
     val list = new util.ArrayList[TopInst]()
-
+    val dateSet = new util.HashSet[String]()
     if(StringUtils.isBlank(search)
       && StringUtils.isBlank(date)){
       val map = new util.HashMap[String, Object]()
       map.put("code", s"success")
       map.put("time", s"${System.currentTimeMillis()}")
       map.put("data", list)
+      map.put("date", dateSet)
       return map
     }
 
@@ -127,6 +128,7 @@ class TushareTopInstController {
     map.put("code", s"success")
     map.put("time", s"${System.currentTimeMillis()}")
     map.put("data", list)
+    map.put("date", list.asScala.map(_.trade_date).filter(e=>StringUtils.isNotBlank(e)).toSet.toList.sorted.reverse.asJava)
     map
   }
 
