@@ -223,7 +223,7 @@ useEffect(() => {
                   }`}
                 >
                   <td>
-                    {index + 2}
+                    {index + 1}
                     <br/>
                     {item.selectModel}
                     <br/>

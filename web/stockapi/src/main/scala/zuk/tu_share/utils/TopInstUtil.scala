@@ -39,7 +39,7 @@ object TopInstUtil {
       ""
     }
     else {
-      s"上龙虎榜${groupLs.size}次"
+      s"上龙虎榜${groupLs.size}次最近${groupLs.head._1}"
     }
   }
 

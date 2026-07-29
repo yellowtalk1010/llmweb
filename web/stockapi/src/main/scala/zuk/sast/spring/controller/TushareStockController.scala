@@ -255,6 +255,15 @@ class TushareStockController {
         else if (dto.stockCode.startsWith("920")) {
           dto.name = s"${dto.name}【北交所】"
         }
+
+        //计算历史出现的次数
+        val totalList = list.filter(_.stockCode.equals(dto.stockCode)).sortBy(e=>(e.createtime)).reverse
+        val totalSize = totalList.size
+        if(totalSize > 1){
+          dto.name = s"${dto.name}【历史总出现${totalSize}次最近${totalList.head.createtime}】"
+        }
+
+        //
         dto.tradedate = entity.createtime
 
         dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
@@ -286,12 +295,6 @@ class TushareStockController {
         }
       })
       .asJava
-
-      list1.asScala.groupBy(e=>e.stockCode).filter(e=>e._2.size>1).map(_._2).foreach(ls=>{
-        ls.map(e=>{
-          e.remark = s"${e.remark}【历史出现${ls.size}次】"
-        })
-      })
 
       list1
   }
