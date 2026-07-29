@@ -93,13 +93,24 @@ class TushareStockController {
 
   }
 
+  /***
+   * 一次性加载stock表中的全部数据
+   */
+  private var stockEntityList = new ListBuffer[StockEntity]()
+  private def selectStockEntityAll(): List[StockEntity] = synchronized {
+    if (stockEntityList.isEmpty) {
+      stockEntityList ++= this.stockMapper.selectAll().asScala
+    }
+    stockEntityList.toList
+  }
+
 
   /***
    * 获取关注股票
    * @return
    */
   def getAllAttention(): Set[String] = {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareStockController.attention_str)).map(_.stockCode).toSet
+    this.selectStockEntityAll().filter(_.stockType.equals(TushareStockController.attention_str)).map(_.stockCode).toSet
   }
 
   /**
@@ -107,7 +118,7 @@ class TushareStockController {
    * @return
    */
   def getAllEliminate(): Set[String] = {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareStockController.eliminate_str)).map(_.stockCode).toSet
+    this.selectStockEntityAll().filter(_.stockType.equals(TushareStockController.eliminate_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -115,7 +126,7 @@ class TushareStockController {
    * @return
    */
   def getAllBuy(): Set[String] = {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareStockController.buy_str)).map(_.stockCode).toSet
+    this.selectStockEntityAll().filter(_.stockType.equals(TushareStockController.buy_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -130,7 +141,7 @@ class TushareStockController {
     val sets = buySet ++ attentionSet
 
     //ma4次数
-    val ma5List = this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
+    val ma5List = this.selectStockEntityAll().filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
         TushareAllStocks.getTsStock(e)
@@ -239,7 +250,7 @@ class TushareStockController {
     //关注的股票
     val attentionSet = getAllAttention()
 
-    val list = this.stockMapper.selectAll().asScala
+    val list = this.selectStockEntityAll()
       .filter(_.stockType.equals(maStr))
       .sortBy(e=>(e.createtime, e.stockCode))
       .reverse
@@ -310,7 +321,7 @@ class TushareStockController {
     //关注的股票
     val attentionSet = getAllAttention()
 
-    val list = this.stockMapper.selectAll().asScala
+    val list = this.selectStockEntityAll()
       .filter(_.stockType.equals(maStr))
       .groupBy(_.stockCode)
       .map(e=>{
