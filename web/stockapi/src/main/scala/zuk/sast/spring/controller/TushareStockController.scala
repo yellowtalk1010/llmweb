@@ -99,7 +99,7 @@ class TushareStockController {
   private var stockEntityList = new ListBuffer[StockEntity]()
   private def selectStockEntityAll(): List[StockEntity] = synchronized {
     if (stockEntityList.isEmpty) {
-      stockEntityList ++= this.stockMapper.selectAll().asScala
+      stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e=>(e.createtime, e.stockCode)).reverse
     }
     stockEntityList.toList
   }
@@ -250,10 +250,14 @@ class TushareStockController {
     //关注的股票
     val attentionSet = getAllAttention()
 
-    val list = this.selectStockEntityAll()
-      .filter(_.stockType.equals(maStr))
-      .sortBy(e=>(e.createtime, e.stockCode))
-      .reverse
+    //仅取前1000条记录
+    val ls = this.selectStockEntityAll().filter(_.stockType.equals(maStr))
+    val list = if(ls.size>1000){
+      ls.take(1000)
+    }
+    else{
+      ls
+    }
 
     val list1 = list.map(entity => {
         val dto = new TushareStockControllerDTO
@@ -306,6 +310,8 @@ class TushareStockController {
         }
       })
       .asJava
+
+    log.info(s"时间范围:${list1.asScala.head.createtime}至${list1.asScala.last.createtime}")
 
       list1
   }
@@ -393,9 +399,9 @@ class TushareStockController {
       case "all" =>
         this.getAll(desc)
       case "ma4" =>
-        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, tradedate.replaceAll("-",""))
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, tradedate.replaceAll("-",""))
       case "ma5" =>
-        this.getMa(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, tradedate.replaceAll("-",""))
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, tradedate.replaceAll("-",""))
       case "ma7" =>
         this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, tradedate.replaceAll("-",""))
       case _=>
