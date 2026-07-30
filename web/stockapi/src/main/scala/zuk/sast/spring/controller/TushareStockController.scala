@@ -93,16 +93,16 @@ class TushareStockController {
 
   }
 
-  /***
-   * 一次性加载stock表中的全部数据
-   */
-  private var stockEntityList = new ListBuffer[StockEntity]()
-  private def selectStockEntityAll(): List[StockEntity] = synchronized {
-    if (stockEntityList.isEmpty) {
-      stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e=>(e.createtime, e.stockCode)).reverse
-    }
-    stockEntityList.toList
-  }
+//  /***
+//   * 一次性加载stock表中的全部数据
+//   */
+//  private var stockEntityList = new ListBuffer[StockEntity]()
+//  private def selectStockEntityAll(): List[StockEntity] = synchronized {
+//    if (stockEntityList.isEmpty) {
+//      stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e=>(e.createtime, e.stockCode)).reverse
+//    }
+//    stockEntityList.toList
+//  }
 
 
   /***
@@ -110,7 +110,7 @@ class TushareStockController {
    * @return
    */
   def getAllAttention(): Set[String] = {
-    this.selectStockEntityAll().filter(_.stockType.equals(TushareStockController.attention_str)).map(_.stockCode).toSet
+    TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareStockController.attention_str)).map(_.stockCode).toSet
   }
 
   /**
@@ -118,7 +118,7 @@ class TushareStockController {
    * @return
    */
   def getAllEliminate(): Set[String] = {
-    this.selectStockEntityAll().filter(_.stockType.equals(TushareStockController.eliminate_str)).map(_.stockCode).toSet
+    TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareStockController.eliminate_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -126,7 +126,7 @@ class TushareStockController {
    * @return
    */
   def getAllBuy(): Set[String] = {
-    this.selectStockEntityAll().filter(_.stockType.equals(TushareStockController.buy_str)).map(_.stockCode).toSet
+    TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareStockController.buy_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -141,7 +141,7 @@ class TushareStockController {
     val sets = buySet ++ attentionSet
 
     //ma4次数
-    val ma5List = this.selectStockEntityAll().filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
+    val ma5List = TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
         TushareAllStocks.getTsStock(e)
@@ -251,7 +251,7 @@ class TushareStockController {
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
-    val ls = this.selectStockEntityAll().filter(_.stockType.equals(maStr))
+    val ls = TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(maStr))
     val list = if(ls.size>1000){
       ls.take(1000)
     }
@@ -283,7 +283,9 @@ class TushareStockController {
 
         dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
 
-        dto.remark = entity.createtime
+        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+
+        dto.remark = optionTp3.get._4
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
         val tsStock = new TsStock(entity.stockCode)
         dto.eastmoneyURL = tsStock.eastmoneyURL
@@ -320,71 +322,71 @@ class TushareStockController {
    *
    * @return
    */
-  def getMa(maStr: String, tradedate: String): java.util.List[TushareStockControllerDTO] = {
-
-    //购买的股票
-    val buySet = getAllBuy()
-    //关注的股票
-    val attentionSet = getAllAttention()
-
-    val list = this.selectStockEntityAll()
-      .filter(_.stockType.equals(maStr))
-      .groupBy(_.stockCode)
-      .map(e=>{
-        val ls = e._2.toList.sortBy(_.createtime).reverse
-        val head = ls.head
-        head.name = s"${head.name}【历史出现${ls.size}次最近${head.createtime}】"
-        head
-      })
-      .toList.sortBy(_.createtime).reverse
-      .map(entity=>{
-        val dto = new TushareStockControllerDTO
-        dto.selectModel = maStr
-        dto.stockCode = entity.stockCode
-        dto.name = entity.name
-        if(dto.stockCode.startsWith("688")){
-          dto.name = s"${dto.name}【科创】"
-        }
-        else if (dto.stockCode.startsWith("920")) {
-          dto.name = s"${dto.name}【北交所】"
-        }
-        dto.tradedate = entity.createtime
-
-        dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
-
-        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
-        if(optionTp3.get._1 > 0
-//          && optionTp3.get._1 < 120.0  //当前价位
-//          && optionTp3.get._2 < 2.5  //翻倍
-        ){
-          dto.remark = optionTp3.get._4
-          dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-          val tsStock = new TsStock(entity.stockCode)
-          dto.eastmoneyURL = tsStock.eastmoneyURL
-          dto.conceptURL = tsStock.conceptURL
-          dto.remark = dto.remark + entity.remark
-          if (attentionSet.contains(dto.stockCode)) {
-            dto.attention = "已关注"
-          }
-          dto.buy = ""
-          if (buySet.contains(dto.stockCode)) {
-            dto.buy = "已购买"
-          }
-
-          Some(dto)
-        }
-        else {
-          Option.empty
-        }
-
-      })
-      .filter(!_.isEmpty).map(_.get)
-      .asJava
-
-    log.info(s"ma4总数据：${list.size()}")
-    list
-
-  }
+//  def getMa(maStr: String, tradedate: String): java.util.List[TushareStockControllerDTO] = {
+//
+//    //购买的股票
+//    val buySet = getAllBuy()
+//    //关注的股票
+//    val attentionSet = getAllAttention()
+//
+//    val list = this.selectStockEntityAll()
+//      .filter(_.stockType.equals(maStr))
+//      .groupBy(_.stockCode)
+//      .map(e=>{
+//        val ls = e._2.toList.sortBy(_.createtime).reverse
+//        val head = ls.head
+//        head.name = s"${head.name}【历史出现${ls.size}次最近${head.createtime}】"
+//        head
+//      })
+//      .toList.sortBy(_.createtime).reverse
+//      .map(entity=>{
+//        val dto = new TushareStockControllerDTO
+//        dto.selectModel = maStr
+//        dto.stockCode = entity.stockCode
+//        dto.name = entity.name
+//        if(dto.stockCode.startsWith("688")){
+//          dto.name = s"${dto.name}【科创】"
+//        }
+//        else if (dto.stockCode.startsWith("920")) {
+//          dto.name = s"${dto.name}【北交所】"
+//        }
+//        dto.tradedate = entity.createtime
+//
+//        dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
+//
+//        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+//        if(optionTp3.get._1 > 0
+////          && optionTp3.get._1 < 120.0  //当前价位
+////          && optionTp3.get._2 < 2.5  //翻倍
+//        ){
+//          dto.remark = optionTp3.get._4
+//          dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
+//          val tsStock = new TsStock(entity.stockCode)
+//          dto.eastmoneyURL = tsStock.eastmoneyURL
+//          dto.conceptURL = tsStock.conceptURL
+//          dto.remark = dto.remark + entity.remark
+//          if (attentionSet.contains(dto.stockCode)) {
+//            dto.attention = "已关注"
+//          }
+//          dto.buy = ""
+//          if (buySet.contains(dto.stockCode)) {
+//            dto.buy = "已购买"
+//          }
+//
+//          Some(dto)
+//        }
+//        else {
+//          Option.empty
+//        }
+//
+//      })
+//      .filter(!_.isEmpty).map(_.get)
+//      .asJava
+//
+//    log.info(s"ma4总数据：${list.size()}")
+//    list
+//
+//  }
 
   /***
    * 索取全部股票

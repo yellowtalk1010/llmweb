@@ -2,6 +2,7 @@ package zuk.sast.spring.controller.component
 
 import jakarta.annotation.PostConstruct
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
@@ -33,17 +34,28 @@ case class StockDailyData() {
 }
 
 object TushareStockDailyDataComponent {
-  private val StockEntityMap = new ConcurrentHashMap[String, StockEntity]()
+
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
   private val DAY_NUM = 120 //过去6个交易日
 
+  /** *
+   * 一次性加载stock表中的全部数据
+   */
+  var stockEntityList = new ListBuffer[StockEntity]()
+
+
+
+  /***
+   *
+   * @param stockCode
+   * @return (最近收盘价，较最近低位涨了多少，较最近最高位跌去多少，字符串描述)
+   */
   def getIncreateRate(stockCode: String): Option[(Float, Float, Float, String)] = {
-    if(StockHistoryDailyDataMap.get(stockCode)!=null){
-      val list = new ListBuffer[StockDailyData]
-      list ++= StockHistoryDailyDataMap.get(stockCode)
+    val list = StockHistoryDailyDataMap.get(stockCode)
+    if(list!=null){
       if(StockRtkDataMap.get(stockCode)!=null){
-        list.prepend(StockRtkDataMap.get(stockCode))
+        list.toBuffer.prepend(StockRtkDataMap.get(stockCode))
       }
 
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
@@ -83,11 +95,11 @@ class TushareStockDailyDataComponent {
 
   @PostConstruct
   def init(): Unit = synchronized {
+    //
+    selectStockEntityAll()
 
     executor.execute(()=>{
       while (true){
-        refresh_MA4_MA5_Stockentity()
-//        log.info(s"\n${TushareStockDailyDataComponent.StockEntityMap.asScala.map(e=>s"${e._2.stockCode},${e._2.name},${e._2.createtime}").mkString("\n")}")
         refresh_stock_daily_data()
         refresh_rtk()
         Thread.sleep(5000)
@@ -95,28 +107,15 @@ class TushareStockDailyDataComponent {
     })
   }
 
-  /***
-   * 获取历史数据
+  /** *
+   * 一次性加载stock表中的全部数据
    */
-  private def refresh_MA4_MA5_Stockentity(): Unit = {
-    try {
-      val today = LocalDate.now()
-      val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd")
-      for (i <- 0 until 14) {
-        val date = today.minusDays(i) //从数据库中获取过去7天（含今天）中ma4， ma5的股票
-        val dateStr = date.format(dateFormat)
-        val list = this.stockMapper.select_MA4_MA5_By_Createtime(dateStr)
-//        println(s"${list.size()}")
-        list.forEach(e => {
-          TushareStockDailyDataComponent.StockEntityMap.put(e.stockCode, e)
-        })
-      }
+  private def selectStockEntityAll(): List[StockEntity] = synchronized {
+    if (TushareStockDailyDataComponent.stockEntityList.isEmpty) {
+      TushareStockDailyDataComponent.stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e => (e.createtime, e.stockCode)).reverse
+      log.info(s"一次性加载stock表中的全部数据，总数:${TushareStockDailyDataComponent.stockEntityList.size}")
     }
-    catch {
-      case exception: Exception =>
-        exception.printStackTrace()
-        log.error(exception.getMessage)
-    }
+    TushareStockDailyDataComponent.stockEntityList.toList
   }
 
   /***
@@ -155,19 +154,22 @@ class TushareStockDailyDataComponent {
   }
 
 
+  /***
+   * 加载历史股票日线数据
+   */
   private def refresh_stock_daily_data(): Unit = {
     try {
-      TushareStockDailyDataComponent.StockEntityMap.asScala.map(_._2)
-        .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e.stockCode)==null)
-        .foreach(e=>{
-          val filename = e.stockCode.replaceAll("\\.", "_") + ".csv"
+      TushareStockDailyDataComponent.stockEntityList.map(_.stockCode).toSet
+        .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e)==null)
+        .foreach(stockCode=>{
+          val filename = stockCode.replaceAll("\\.", "_") + ".csv"
           val stock_daily_data_path: String = applicationProperties.getStockAnalysisSystemPath
           val path = stock_daily_data_path + File.separator + "module" + File.separator + filename
           val file = new File(path)
           if(file.isFile && file.exists()){
             log.info(s"加载股票基本数据路径:${file.getAbsolutePath}")
             val list = loadAllStocks(file)
-            TushareStockDailyDataComponent.StockHistoryDailyDataMap.put(e.stockCode, list)
+            TushareStockDailyDataComponent.StockHistoryDailyDataMap.put(stockCode, list)
           }
           else {
             log.error(s"不存在加载股票基本数据路径:${file.getAbsolutePath}")
