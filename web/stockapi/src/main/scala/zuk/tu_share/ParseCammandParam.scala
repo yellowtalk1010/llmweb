@@ -12,6 +12,7 @@ object ParseCammandParam {
         case "-pwd" =>
           ParseCammandParam.param.pwd = args(i + 1)
         case "-back" =>
+          //回测数据必须发邮件
           ParseCammandParam.param.back = true
           ParseCammandParam.param.email = true
         case "-back_step" =>
