@@ -19,6 +19,8 @@ object ParseCammandParam {
           ParseCammandParam.param.json = true
         case "-wrate" =>
           ParseCammandParam.param.wrate = args(i + 1).toFloat
+        case  "email" =>
+          ParseCammandParam.param.email = true
         case _ =>
     }
   }
@@ -35,8 +37,11 @@ class ParseCammandParam {
   var back_step: Int = 80
   //是否输出json格式
   var json: Boolean = false
+  //是否发送邮件
+  var email: Boolean = false
   //回测涨幅: 1.0%
   var wrate: Float = 1.00
+
 
   override def toString: String = {
     s"CammandParam=path:${path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"

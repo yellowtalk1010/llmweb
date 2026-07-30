@@ -17,7 +17,9 @@ class Email extends ISend {
 
   override def doSend(list: List[IModel]): Unit = {
     try {
-      doEmail(list)
+      if(ParseCammandParam.param.email){
+        doEmail(list)
+      }
     }
     catch
       case exception: Exception =>
