@@ -1,24 +1,22 @@
 package zuk.sast.spring.controller
 
-import com.alibaba.fastjson2.JSONObject
 import jakarta.annotation.PostConstruct
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
-import TushareStockController.eliminate_str
-import zuk.sast.spring.controller.component.{TushareAllStocks, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.spring.controller.TushareStockController.eliminate_str
+import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
-import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.TopInstUtil
 
 import java.text.SimpleDateFormat
 import java.util
 import java.util.concurrent.Executors
-import java.util.{Date, Properties, UUID}
+import java.util.{Date, UUID}
 import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -27,6 +25,11 @@ object TushareStockController {
   val attention_str: String = "attention" //关注
   val buy_str: String = "buy" //购买
   val eliminate_str: String = "eliminate" //淘汰
+
+  /** *
+   * 一次性加载stock表中的全部数据
+   */
+  var stockEntityList = new ListBuffer[StockEntity]()
 }
 
 class TushareStockControllerDTO extends StockEntity {
@@ -72,6 +75,8 @@ class TushareStockController {
 
   @PostConstruct
   def init(): Unit = {
+    //
+    selectStockEntityAll()
 
     Executor_Service.execute(() => {
 
@@ -93,24 +98,23 @@ class TushareStockController {
 
   }
 
-//  /***
-//   * 一次性加载stock表中的全部数据
-//   */
-//  private var stockEntityList = new ListBuffer[StockEntity]()
-//  private def selectStockEntityAll(): List[StockEntity] = synchronized {
-//    if (stockEntityList.isEmpty) {
-//      stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e=>(e.createtime, e.stockCode)).reverse
-//    }
-//    stockEntityList.toList
-//  }
-
+  /** *
+   * 一次性加载stock表中的全部数据
+   */
+  private def selectStockEntityAll(): List[StockEntity] = synchronized {
+    if (TushareStockController.stockEntityList.isEmpty) {
+      TushareStockController.stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e => (e.createtime, e.stockCode)).reverse
+      log.info(s"一次性加载stock表中的全部数据，总数:${TushareStockController.stockEntityList.size}")
+    }
+    TushareStockController.stockEntityList.toList
+  }
 
   /***
    * 获取关注股票
    * @return
    */
   def getAllAttention(): Set[String] = {
-    TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareStockController.attention_str)).map(_.stockCode).toSet
+    TushareStockController.stockEntityList.filter(_.stockType.equals(TushareStockController.attention_str)).map(_.stockCode).toSet
   }
 
   /**
@@ -118,7 +122,7 @@ class TushareStockController {
    * @return
    */
   def getAllEliminate(): Set[String] = {
-    TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareStockController.eliminate_str)).map(_.stockCode).toSet
+    TushareStockController.stockEntityList.filter(_.stockType.equals(TushareStockController.eliminate_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -126,7 +130,7 @@ class TushareStockController {
    * @return
    */
   def getAllBuy(): Set[String] = {
-    TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareStockController.buy_str)).map(_.stockCode).toSet
+    TushareStockController.stockEntityList.filter(_.stockType.equals(TushareStockController.buy_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -141,7 +145,7 @@ class TushareStockController {
     val sets = buySet ++ attentionSet
 
     //ma4次数
-    val ma5List = TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
+    val ma5List = TushareStockController.stockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
         TushareAllStocks.getTsStock(e)
@@ -251,7 +255,7 @@ class TushareStockController {
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
-    val ls = TushareStockDailyDataComponent.stockEntityList.filter(_.stockType.equals(maStr))
+    val ls = TushareStockController.stockEntityList.filter(_.stockType.equals(maStr))
     val list = if(ls.size>1000){
       ls.take(1000)
     }

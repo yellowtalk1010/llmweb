@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
+import zuk.sast.spring.controller.TushareStockController
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
@@ -39,13 +40,6 @@ object TushareStockDailyDataComponent {
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
   private val DAY_NUM = 120 //过去6个交易日
 
-  /** *
-   * 一次性加载stock表中的全部数据
-   */
-  var stockEntityList = new ListBuffer[StockEntity]()
-
-
-
   /***
    *
    * @param stockCode
@@ -69,7 +63,7 @@ object TushareStockDailyDataComponent {
       }
       val lowRate = new BigDecimal(head.close).divide(new BigDecimal(lowest.close), 2, RoundingMode.DOWN).toString
       val hightRate = new BigDecimal(head.close).divide(new BigDecimal(highest.close), 2, RoundingMode.DOWN).toString
-      val str = s"【${head.close}】【较${lowest.trade_date}低位${lowRate}】【较${highest.trade_date}高位${hightRate}】"
+      val str = s"【${head.close}】【较${lowest.trade_date}低位涨了${lowRate}】【较${highest.trade_date}高位跌去${hightRate}】"
       Some((head.close.toFloat, lowRate.toFloat, hightRate.toFloat, str))
     }
     else {
@@ -95,9 +89,6 @@ class TushareStockDailyDataComponent {
 
   @PostConstruct
   def init(): Unit = synchronized {
-    //
-    selectStockEntityAll()
-
     executor.execute(()=>{
       while (true){
         refresh_stock_daily_data()
@@ -105,17 +96,6 @@ class TushareStockDailyDataComponent {
         Thread.sleep(5000)
       }
     })
-  }
-
-  /** *
-   * 一次性加载stock表中的全部数据
-   */
-  private def selectStockEntityAll(): List[StockEntity] = synchronized {
-    if (TushareStockDailyDataComponent.stockEntityList.isEmpty) {
-      TushareStockDailyDataComponent.stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e => (e.createtime, e.stockCode)).reverse
-      log.info(s"一次性加载stock表中的全部数据，总数:${TushareStockDailyDataComponent.stockEntityList.size}")
-    }
-    TushareStockDailyDataComponent.stockEntityList.toList
   }
 
   /***
@@ -159,7 +139,7 @@ class TushareStockDailyDataComponent {
    */
   private def refresh_stock_daily_data(): Unit = {
     try {
-      TushareStockDailyDataComponent.stockEntityList.map(_.stockCode).toSet
+      TushareStockController.stockEntityList.map(_.stockCode).toSet
         .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e)==null)
         .foreach(stockCode=>{
           val filename = stockCode.replaceAll("\\.", "_") + ".csv"
