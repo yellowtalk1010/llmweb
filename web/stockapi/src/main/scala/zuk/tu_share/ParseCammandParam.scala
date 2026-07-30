@@ -13,6 +13,7 @@ object ParseCammandParam {
           ParseCammandParam.param.pwd = args(i + 1)
         case "-back" =>
           ParseCammandParam.param.back = true
+          ParseCammandParam.param.email = true
         case "-back_step" =>
           ParseCammandParam.param.back_step = args(i + 1).toInt
         case "-json" =>
