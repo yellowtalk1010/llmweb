@@ -3,7 +3,7 @@ package zuk
 import org.apache.commons.codec.digest.DigestUtils
 import org.scalatest.funsuite.AnyFunSuite
 
-import java.io.{FileInputStream, IOException}
+import java.io.{File, FileInputStream, IOException}
 import java.nio.file.{Files, Path, Paths}
 import java.util
 import java.util.concurrent.atomic.AtomicInteger
@@ -48,7 +48,7 @@ class ClassCompareTest extends AnyFunSuite {
     }).foreach(p=>{
       val path = targetClassPathMap.get(p.toString)
       if(path==null){
-        //println(s"${num.addAndGet(1)}缺少文件：cn\\${p.toString}")
+        println(s"${num.addAndGet(1)}缺少文件：cn\\${p.toString}")
       }
       else {
         val p1 = jarClassPath + "\\" + p.toString
@@ -62,6 +62,17 @@ class ClassCompareTest extends AnyFunSuite {
 
         if(!md5_1.equals(md5_2)){
           println(s"${num1.addAndGet(1)}文件不相同：${p2}")
+          val javaPath = if(p2.contains("$")){
+            s"D:\\development\\github\\webb\\web\\cobot-parsers\\src\\main\\java\\cn\\${path.toString.split("\\$")(0)}.java"
+          }
+          else {
+            s"D:\\development\\github\\webb\\web\\cobot-parsers\\src\\main\\java\\cn\\${path.toString.replaceAll(".class",".java")}"
+          }
+//          val javaPath = s"D:\\development\\github\\webb\\web\\cobot-parsers\\src\\main\\java\\cn\\${path.toString.replaceAll(".class",".java")}"
+          if(new File(javaPath).exists()){
+            println(s"           ${javaPath}，${new File(javaPath).exists()}")
+            new File(javaPath).delete()
+          }
         }
         else {
           println(s"${num2.addAndGet(1)}文件相同")
