@@ -37,8 +37,6 @@ object TushareInitMA4ModelMA5ModelComponent {
   val MA5_MODEL_STR: String = "MA5_MODEL"
   val MA7_MODEL_STR: String = "MA7_MODEL"
 
-//  private val queue = new LinkedBlockingQueue[StockResultJson]()
-
 
   /** *
    * 一次性加载stock表中的全部数据
@@ -49,6 +47,10 @@ object TushareInitMA4ModelMA5ModelComponent {
     stockEntityList.clear()
     val component = SpringApplicationUtil.context.getBean(classOf[TushareInitMA4ModelMA5ModelComponent])
     component.selectStockEntityAll()
+  }
+
+  def get_MODEL_LIST(modelType: String): List[StockEntity] = synchronized {
+    stockEntityList.filter(_.stockType.equals(modelType)).toList
   }
 }
 
@@ -67,10 +69,6 @@ class TushareInitMA4ModelMA5ModelComponent {
 
   @Autowired
   private var applicationProperties: ApplicationProperties = _
-
-  def get_MODEL_LIST(modelType: String): List[StockEntity] = synchronized {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(modelType)).toList
-  }
 
   @PostConstruct
   def init(): Unit = {
