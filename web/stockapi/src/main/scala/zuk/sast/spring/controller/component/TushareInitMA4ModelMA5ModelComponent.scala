@@ -45,7 +45,11 @@ object TushareInitMA4ModelMA5ModelComponent {
    */
   var stockEntityList = new ListBuffer[StockEntity]()
 
-  def clearStockEntityList(): Unit = stockEntityList.clear()
+  def clearStockEntityList(): Unit = {
+    stockEntityList.clear()
+    val component = SpringApplicationUtil.context.getBean(classOf[TushareInitMA4ModelMA5ModelComponent])
+    component.selectStockEntityAll()
+  }
 }
 
 @Component
@@ -83,26 +87,17 @@ class TushareInitMA4ModelMA5ModelComponent {
       }
 
       //
-      while (true) {
-        try {
-          //
-          selectStockEntityAll()
-
-//          val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date())
-//          TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(e => e.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str) && !e.createtime.contains(dateStr)).foreach(s => {
-//            log.info(s"删除推荐淘汰后的股票:${s.stockCode}, ${s.name}, ${s.stockType}, ${s.createtime}")
-//            stockMapper.deleteById(s.id)
-//          })
-        }
-        catch {
-          case exception: Exception =>
-            exception.printStackTrace()
-            log.error(exception.getMessage)
-          case _ =>
-        }
-        finally {
-          Thread.sleep(3000)
-        }
+      try {
+        selectStockEntityAll()
+      }
+      catch {
+        case exception: Exception =>
+          exception.printStackTrace()
+          log.error(exception.getMessage)
+        case _ =>
+      }
+      finally {
+        Thread.sleep(2000)
       }
 
     })
