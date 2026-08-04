@@ -17,8 +17,9 @@ import zuk.tu_share.dto.TsStock
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
 import java.util
-import java.util.UUID
+import java.util.{Date, UUID}
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.{ArrayBlockingQueue, ConcurrentHashMap, ExecutorService, Executors, LinkedBlockingQueue}
 import scala.collection.mutable
@@ -26,12 +27,25 @@ import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object TushareInitMA4ModelMA5ModelComponent {
-  private val CacheStockEntityMap = new ConcurrentHashMap[String, java.util.List[StockEntity]]()
+
+  val attention_str: String = "attention" //关注
+  val buy_str: String = "buy" //购买
+  @Deprecated
+  val eliminate_str: String = "eliminate" //淘汰
+
   val MA4_MODEL_STR: String = "MA4_MODEL"
   val MA5_MODEL_STR: String = "MA5_MODEL"
   val MA7_MODEL_STR: String = "MA7_MODEL"
 
 //  private val queue = new LinkedBlockingQueue[StockResultJson]()
+
+
+  /** *
+   * 一次性加载stock表中的全部数据
+   */
+  var stockEntityList = new ListBuffer[StockEntity]()
+
+  def clearStockEntityList(): Unit = stockEntityList.clear()
 }
 
 @Component
@@ -76,8 +90,40 @@ class TushareInitMA4ModelMA5ModelComponent {
         case exception: Exception => exception.printStackTrace()
       }
 
+      //
+      while (true) {
+        try {
+          //
+          selectStockEntityAll()
+
+//          val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date())
+//          TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(e => e.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str) && !e.createtime.contains(dateStr)).foreach(s => {
+//            log.info(s"删除推荐淘汰后的股票:${s.stockCode}, ${s.name}, ${s.stockType}, ${s.createtime}")
+//            stockMapper.deleteById(s.id)
+//          })
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+            log.error(exception.getMessage)
+          case _ =>
+        }
+        finally {
+          Thread.sleep(3000)
+        }
+      }
+
     })
   }
+
+  private def selectStockEntityAll(): List[StockEntity] = synchronized {
+    if (TushareInitMA4ModelMA5ModelComponent.stockEntityList.isEmpty) {
+      TushareInitMA4ModelMA5ModelComponent.stockEntityList ++= this.stockMapper.selectAll().asScala.sortBy(e => (e.createtime, e.stockCode)).reverse
+      log.info(s"一次性加载stock表中的全部数据，总数:${TushareInitMA4ModelMA5ModelComponent.stockEntityList.size}")
+    }
+    TushareInitMA4ModelMA5ModelComponent.stockEntityList.toList
+  }
+
 
   /***
    * 删除ma4，ma5在同日期中的相同元素

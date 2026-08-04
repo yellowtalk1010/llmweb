@@ -35,7 +35,8 @@ trait StockMapper {
   @Delete(Array("DELETE FROM stock WHERE id = #{id}"))
   def deleteById(@Param("id") id: String): Int
 
-  @Select(Array("SELECT * FROM stock WHERE stock_code = #{stock_code}"))
-  def selectByCode(@Param("stock_code") stock_code: String): util.List[String]
+  @Select(Array("SELECT id, stock_code, name, stock_type, createtime, remark FROM stock WHERE stock_code = #{stock_code}"))
+  @ResultMap(Array("stockResultMap")) //共用selectAll的返回
+  def selectByCode(@Param("stock_code") stock_code: String): util.List[StockEntity]
 
 }
