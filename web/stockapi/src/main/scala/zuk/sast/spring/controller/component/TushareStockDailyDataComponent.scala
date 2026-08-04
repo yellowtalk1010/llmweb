@@ -139,7 +139,7 @@ class TushareStockDailyDataComponent {
    */
   private def refresh_stock_daily_data(): Unit = {
     try {
-      TushareInitMA4ModelMA5ModelComponent.stockEntityList.map(_.stockCode).toSet
+      TushareInitMA4ModelMA5ModelComponent.getStockEntityList.map(_.stockCode).toSet
         .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e)==null)
         .foreach(stockCode=>{
           val filename = stockCode.replaceAll("\\.", "_") + ".csv"

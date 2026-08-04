@@ -76,7 +76,7 @@ class TushareStockController {
    * @return
    */
   def getAllAttention(): Set[String] = {
-    TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.attention_str)).map(_.stockCode).toSet
+    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.attention_str)).map(_.stockCode).toSet
   }
 
   /**
@@ -84,7 +84,7 @@ class TushareStockController {
    * @return
    */
   def getAllEliminate(): Set[String] = {
-    TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str)).map(_.stockCode).toSet
+    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -92,7 +92,7 @@ class TushareStockController {
    * @return
    */
   def getAllBuy(): Set[String] = {
-    TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.buy_str)).map(_.stockCode).toSet
+    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.buy_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -107,7 +107,7 @@ class TushareStockController {
     val sets = buySet ++ attentionSet
 
     //ma4次数
-    val ma5List = TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
+    val ma5List = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
         TushareAllStocks.getTsStock(e)
@@ -217,7 +217,7 @@ class TushareStockController {
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
-    val ls = TushareInitMA4ModelMA5ModelComponent.stockEntityList.filter(_.stockType.equals(maStr))
+    val ls = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(maStr))
     val list = if(ls.size>1000){
       ls.take(1000)
     }

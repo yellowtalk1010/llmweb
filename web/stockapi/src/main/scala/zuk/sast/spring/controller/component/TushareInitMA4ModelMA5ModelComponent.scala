@@ -43,6 +43,8 @@ object TushareInitMA4ModelMA5ModelComponent {
    */
   var stockEntityList = new ListBuffer[StockEntity]()
 
+  def getStockEntityList: List[StockEntity] = stockEntityList.toList
+
   def clearStockEntityList(): Unit = {
     stockEntityList.clear()
     val component = SpringApplicationUtil.context.getBean(classOf[TushareInitMA4ModelMA5ModelComponent])
