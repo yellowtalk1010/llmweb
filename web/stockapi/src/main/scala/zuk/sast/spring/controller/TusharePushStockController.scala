@@ -268,7 +268,7 @@ class TusharePushStockController {
     })
 
     //获取MA4_MODEL分析到的股票代码
-    val stockModel4EntityList = tushareInitMA4ModelMA5ModelComponent.get_MD4_MODEL_LIST()
+    val stockModel4EntityList = tushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)
     val ma4Set = pushStocks.filter(_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).map(e=>{
       e.name = s"${e.name}【${stockModel4EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
       e.ts_code
@@ -278,13 +278,13 @@ class TusharePushStockController {
       e.name = s"${e.name}【击中MA4】"
     })
 
-    val stockModel5EntityList = tushareInitMA4ModelMA5ModelComponent.get_MD5_MODEL_LIST()
+    val stockModel5EntityList = tushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)
     val ma5Set = pushStocks.filter(_._1.equals("MA5_MODEL")).flatMap(e => e._2 ++ e._3).map(e => {
       e.name = s"${e.name}【${stockModel5EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
       e.ts_code
     }).toSet
 
-    val stockModel7EntityList = tushareInitMA4ModelMA5ModelComponent.get_MD7_MODEL_LIST()
+    val stockModel7EntityList = tushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)
     val ma7Set = pushStocks.filter(_._1.equals("MA7_MODEL")).flatMap(e => e._2 ++ e._3).map(e => {
       val size = stockModel7EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
       e.name = if(size==0){

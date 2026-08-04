@@ -64,16 +64,8 @@ class TushareInitMA4ModelMA5ModelComponent {
   @Autowired
   private var applicationProperties: ApplicationProperties = _
 
-  def get_MD4_MODEL_LIST(): List[StockEntity] = synchronized {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)).toList
-  }
-
-  def get_MD5_MODEL_LIST(): List[StockEntity] = synchronized {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)).toList
-  }
-
-  def get_MD7_MODEL_LIST(): List[StockEntity] = synchronized {
-    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)).toList
+  def get_MODEL_LIST(modelType: String): List[StockEntity] = synchronized {
+    this.stockMapper.selectAll().asScala.filter(_.stockType.equals(modelType)).toList
   }
 
   @PostConstruct
