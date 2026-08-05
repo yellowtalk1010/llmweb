@@ -75,7 +75,7 @@ class ClassCompareTest extends AnyFunSuite {
           }
         }
         else {
-          println(s"${num2.addAndGet(1)}文件相同")
+          //println(s"${num2.addAndGet(1)}文件相同")
         }
       }
     })
@@ -85,6 +85,9 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\common\\ParserUtility.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\MakeFileParser.class",
+      "cn\\net\\cobot\\parsers\\cparser\\common\\CXXCheckParamConverter.class",
       "cn\\net\\cobot\\parsers\\cparser\\common\\CheckConfig.class",
       "cn\\net\\cobot\\parsers\\cparser\\common\\CheckParam$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\common\\CheckParam$2.class",

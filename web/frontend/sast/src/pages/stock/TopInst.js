@@ -13,6 +13,8 @@ function TopInst() {
     const [tradedate, setTradedate] = useState("");
     //查询的数据
     const [search, setSearch] = useState("")  
+    // 是否聚合
+    const [group, setGroup] = useState(false);
 
     useEffect(() => {
         const tsCode = searchParams.get("ts_code");
@@ -32,8 +34,8 @@ function TopInst() {
     });
 
     const handleSearch = (searchValue = search, tradeDateValue = tradedate) => {
-        console.info(searchValue + ", " + tradeDateValue)
-        fetch("/top_inst/list?search="+searchValue+"&tradedate="+tradeDateValue, {
+        console.info(searchValue + ", " + tradeDateValue + ", " + group)
+        fetch("/top_inst/list?search="+searchValue+"&tradedate="+tradeDateValue+"&group="+group, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             })
@@ -77,6 +79,14 @@ function TopInst() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
+                <label className="  items-center gap-1">
+                    <input
+                        type="checkbox"
+                        checked={group}
+                        onChange={(e) => setGroup(e.target.checked)}
+                    />
+                    聚合
+                </label>
                 <button 
                     onClick={() => handleSearch(search, tradedate)}
                     className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"

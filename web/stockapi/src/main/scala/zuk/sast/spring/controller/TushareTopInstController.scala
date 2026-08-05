@@ -37,19 +37,19 @@ class TushareTopInstController {
    * top_inst
    */
   @GetMapping(value=Array("list"))
-  def all(search: String, tradedate: String): util.Map[String, Object] = {
+  def all(search: String, tradedate: String, group: Boolean): util.Map[String, Object] = {
 
-    log.info(s"龙虎榜查询接口入参：search: ${search}, tradedate: ${tradedate}")
+    log.info(s"龙虎榜查询接口入参：search: ${search}, tradedate: ${tradedate}, group: ${group}")
     val date = if(StringUtils.isNotBlank(tradedate)){
       tradedate.replaceAll("-", "")
     }
     else {
       tradedate
     }
-    log.info(s"龙虎榜查询接口入参：search: ${search}, date: ${date}")
+    log.info(s"龙虎榜查询接口入参：search: ${search}, date: ${date}, group: ${group}")
 
     //数据
-    val dataList = new util.ArrayList[TopInst]()
+    var dataList = new util.ArrayList[TopInst]()
     //日期
     val dateList = new util.ArrayList[String]()
 
@@ -81,7 +81,29 @@ class TushareTopInstController {
       }).asJava)
 
     }
+    if(group){
+      //如何选择聚合
+//      log.info("龙虎榜数据进行聚合")
+//      val ls1 = dataList.asScala.groupBy(e=>e.ts_code).map(tp2=>{
+//        val ls = tp2._2.filter(e=>StringUtils.isNotBlank(e.buy) && StringUtils.isNotBlank(e.sell) && StringUtils.isNotBlank(e.net_buy))
+//        ls.head.buy = ls.map(_.buy.toFloat).sum.toString
+//        ls.head.sell = ls.map(_.sell.toFloat).sum.toString
+//        ls.head.net_buy = ls.map(_.net_buy.toFloat).sum.toString
+//        ls.head.reason = ""
+//        ls.head.buyDesc = ""
+//        ls.head.sellDesc = ""
+//        ls.head.buy_rate = ""
+//        ls.head.sell_rate = ""
+//        ls.head
+//      }).toList.asJava
+//
+//      dataList.clear()
+//      dataList.addAll(ls1)
+    }
+
     log.info(s"过滤日期龙虎榜总数据:${dataList.size}")
+
+    log.info(s"龙虎榜聚合输出:\n${dataList.asScala.map(e => s"${e.ts_code}, ${e.ts_name}, ${e.easyMoneyURL}").toSet.toList.sorted.mkString("\n")}")
 
     //
     val buySum = dataList.asScala.filter(e=>StringUtils.isNotBlank(e.buy)).map(e=>{
@@ -132,6 +154,7 @@ class TushareTopInstController {
         e.netBuyDesc = formatChineseUnit(e.net_buy.toDouble)
       }
     })
+
     val map = new util.HashMap[String, Object]()
     map.put("code", s"success")
     map.put("time", s"${System.currentTimeMillis()}")
