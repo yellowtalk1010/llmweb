@@ -87,16 +87,17 @@ class TushareTopInstController {
       val ls1 = dataList.asScala.groupBy(e=>e.ts_code)
         .filter(tp2=>tp2._2.filter(e=>StringUtils.isNotEmpty(e.buy) && StringUtils.isNotEmpty(e.sell) && StringUtils.isNotEmpty(e.net_buy)).toList.size>0)
         .map(tp2=>{
-        println(s"${tp2._1}, ${tp2._2.toList.size}")
-        val ls = tp2._2.toList
-        val topInst = new TopInst
-        topInst.ts_code = ls.head.ts_code
-        topInst.ts_name = ls.head.ts_name
-        topInst.buy = ls.map(_.buy.toFloat).sum.toString
-        topInst.sell = ls.map(_.sell.toFloat).sum.toString
-        topInst.net_buy = ls.map(_.net_buy.toFloat).sum.toString
-        topInst
-      }).toList.asJava
+          println(s"${tp2._1}, ${tp2._2.toList.size}")
+          val ls = tp2._2.toList
+          val topInst = new TopInst
+          topInst.ts_code = ls.head.ts_code
+          topInst.ts_name = ls.head.ts_name
+          topInst.buy = ls.map(_.buy.toFloat).sum.toString
+          topInst.sell = ls.map(_.sell.toFloat).sum.toString
+          topInst.net_buy = ls.map(_.net_buy.toFloat).sum.toString
+          topInst.easyMoneyURL = ls.head.easyMoneyURL
+          topInst
+        }).toList.asJava
 
       dataList.clear()
       dataList.addAll(ls1)
