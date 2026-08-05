@@ -107,43 +107,50 @@ class TushareTopInstController {
 
     log.info(s"龙虎榜聚合输出:\n${dataList.asScala.map(e => s"${e.ts_code}, ${e.ts_name}, ${e.easyMoneyURL}").toSet.toList.sorted.mkString("\n")}")
 
-    //
-    val buySum = dataList.asScala.filter(e=>StringUtils.isNotBlank(e.buy)).map(e=>{
-      try {
-        e.buy.toDouble
-      }
-      catch {
-        case exception: Exception =>
-          exception.printStackTrace()
-          0.0
-      }
-    }).sum
-    val selSum = dataList.asScala.filter(e=>StringUtils.isNotBlank(e.sell)).map(e=>{
-      try {
-        e.sell.toDouble
-      }
-      catch {
-        case exception: Exception =>
-          exception.printStackTrace()
-          0.0
-      }
-    }).sum
-    val netSum = dataList.asScala.filter(e=>StringUtils.isNotBlank(e.net_buy)).map(e=>{
-      try {
-        e.net_buy.toDouble
-      }
-      catch {
-        case exception: Exception =>
-          exception.printStackTrace()
-          0.0
-      }
-    }).sum
-    val sumTopInst = new TopInst
-    sumTopInst.ts_name = "合并结果"
-    sumTopInst.buy = "+" + buySum.toString
-    sumTopInst.sell = "-" + selSum.toString
-    sumTopInst.net_buy = netSum.toString
-    dataList.addFirst(sumTopInst)
+
+
+    if(dataList.size()>0){
+
+      //
+      val buySum = dataList.asScala.filter(e => StringUtils.isNotBlank(e.buy)).map(e => {
+        try {
+          e.buy.toDouble
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+            0.0
+        }
+      }).sum
+      val selSum = dataList.asScala.filter(e => StringUtils.isNotBlank(e.sell)).map(e => {
+        try {
+          e.sell.toDouble
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+            0.0
+        }
+      }).sum
+      val netSum = dataList.asScala.filter(e => StringUtils.isNotBlank(e.net_buy)).map(e => {
+        try {
+          e.net_buy.toDouble
+        }
+        catch {
+          case exception: Exception =>
+            exception.printStackTrace()
+            0.0
+        }
+      }).sum
+
+      val sumTopInst = new TopInst
+      sumTopInst.ts_name = "合并结果"
+      sumTopInst.buy = "+" + buySum.toString
+      sumTopInst.sell = "-" + selSum.toString
+      sumTopInst.net_buy = netSum.toString
+      dataList.addFirst(sumTopInst)
+    }
+
 
     dataList.asScala.map(e=>{
       if(StringUtils.isNotBlank(e.buy)){
