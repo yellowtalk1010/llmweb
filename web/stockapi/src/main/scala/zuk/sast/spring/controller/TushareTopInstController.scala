@@ -83,22 +83,23 @@ class TushareTopInstController {
     }
     if(group){
       //如何选择聚合
-//      log.info("龙虎榜数据进行聚合")
-//      val ls1 = dataList.asScala.groupBy(e=>e.ts_code).map(tp2=>{
-//        val ls = tp2._2.filter(e=>StringUtils.isNotBlank(e.buy) && StringUtils.isNotBlank(e.sell) && StringUtils.isNotBlank(e.net_buy))
-//        ls.head.buy = ls.map(_.buy.toFloat).sum.toString
-//        ls.head.sell = ls.map(_.sell.toFloat).sum.toString
-//        ls.head.net_buy = ls.map(_.net_buy.toFloat).sum.toString
-//        ls.head.reason = ""
-//        ls.head.buyDesc = ""
-//        ls.head.sellDesc = ""
-//        ls.head.buy_rate = ""
-//        ls.head.sell_rate = ""
-//        ls.head
-//      }).toList.asJava
-//
-//      dataList.clear()
-//      dataList.addAll(ls1)
+      log.info("龙虎榜数据进行聚合")
+      val ls1 = dataList.asScala.groupBy(e=>e.ts_code)
+        .filter(tp2=>tp2._2.filter(e=>StringUtils.isNotEmpty(e.buy) && StringUtils.isNotEmpty(e.sell) && StringUtils.isNotEmpty(e.net_buy)).toList.size>0)
+        .map(tp2=>{
+        println(s"${tp2._1}, ${tp2._2.toList.size}")
+        val ls = tp2._2.toList
+        val topInst = new TopInst
+        topInst.ts_code = ls.head.ts_code
+        topInst.ts_name = ls.head.ts_name
+        topInst.buy = ls.map(_.buy.toFloat).sum.toString
+        topInst.sell = ls.map(_.sell.toFloat).sum.toString
+        topInst.net_buy = ls.map(_.net_buy.toFloat).sum.toString
+        topInst
+      }).toList.asJava
+
+      dataList.clear()
+      dataList.addAll(ls1)
     }
 
     log.info(s"过滤日期龙虎榜总数据:${dataList.size}")
