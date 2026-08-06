@@ -71,7 +71,7 @@ class ClassCompareTest extends AnyFunSuite {
 //          val javaPath = s"D:\\development\\github\\webb\\web\\cobot-parsers\\src\\main\\java\\cn\\${path.toString.replaceAll(".class",".java")}"
           if(new File(javaPath).exists()){
             println(s"           ${javaPath}，${new File(javaPath).exists()}")
-            new File(javaPath).delete()
+//            new File(javaPath).delete()
           }
         }
         else {
