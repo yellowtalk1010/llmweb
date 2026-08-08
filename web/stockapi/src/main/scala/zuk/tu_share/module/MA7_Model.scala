@@ -156,4 +156,6 @@ class MA7_Model extends IModel {
   override def reference: Float = 0.0
 
   override def warnUpperShadow: Boolean = false
+
+  override def backTestStep: Int = 5
 }
