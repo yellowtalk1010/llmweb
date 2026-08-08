@@ -279,9 +279,11 @@ class TushareStockController {
       })
       .asJava
 
-    log.info(s"时间范围:${list1.asScala.head.createtime}至${list1.asScala.last.createtime}")
+    if(list1.size()>0){
+      log.info(s"时间范围:${list1.asScala.head.createtime}至${list1.asScala.last.createtime}")
+    }
 
-      list1
+    list1
   }
 
   /***
