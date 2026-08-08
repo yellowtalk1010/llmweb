@@ -62,20 +62,13 @@ object PassFactory {
           val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
           if (ParseCammandParam.param.back) {
             //如果回测
-            var startIndex = backtestLenght - 3
-            if (startIndex < 0) {
-              startIndex = backtestLenght - 2
-            }
-            if (startIndex < 0) {
-              startIndex = backtestLenght - 1
-            }
 
-            var startIndex_1 = 0
+            var startIndex = 0
             var isBreak = false
-            for (i <- 3 to 1 by -1){
+            for (i <- backTestStep to 1 by -1){
               if(!isBreak){
-                startIndex_1 = backtestLenght - i
-                if (startIndex_1 < 0) {
+                startIndex = backtestLenght - i
+                if (startIndex < 0) {
                   //继续
                 }
                 else {
@@ -83,10 +76,6 @@ object PassFactory {
                   //中断
                 }
               }
-            }
-
-            if(startIndex != startIndex_1){
-              println("不相同")
             }
 
             if (startIndex < 0) {
