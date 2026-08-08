@@ -55,6 +55,8 @@ object PassFactory {
       val modules = moduleList()
       modules.foreach(module=>{
         try {
+          val backTestStep = module.backTestStep //回测未来多少天的步长
+          //
           val stock = e._1
           //
           val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
@@ -67,6 +69,26 @@ object PassFactory {
             if (startIndex < 0) {
               startIndex = backtestLenght - 1
             }
+
+            var startIndex_1 = 0
+            var isBreak = false
+            for (i <- 3 to 1 by -1){
+              if(!isBreak){
+                startIndex_1 = backtestLenght - i
+                if (startIndex_1 < 0) {
+                  //继续
+                }
+                else {
+                  isBreak = true
+                  //中断
+                }
+              }
+            }
+
+            if(startIndex != startIndex_1){
+              println("不相同")
+            }
+
             if (startIndex < 0) {
               //只有当backtestLenght等于0时才会出现
               module.sells ++= List()
@@ -87,7 +109,8 @@ object PassFactory {
             s":${count}/${map.size * modules.size}")  //进度
         }
         catch
-          case exception: Exception => exception.printStackTrace()
+          case exception: Exception =>
+            exception.printStackTrace()
       })
       finishModules ++= modules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).sortBy(e=>(e.getStockDto().turnoverRate, e.getStockDto().tsStock.ts_code)).reverse
     })
