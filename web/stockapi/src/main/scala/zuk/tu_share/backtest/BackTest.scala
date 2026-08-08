@@ -147,6 +147,7 @@ object BackTest {
     }
     catch
       case exception: Exception =>
+        println("backTestFail.")
     finally {
       if(output!=null){
         output.close()
