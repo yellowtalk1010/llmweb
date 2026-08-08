@@ -24,6 +24,9 @@ trait IModel {
 
   def reference: Float
 
+  //默认回测天数是3
+  def backTestStep: Int = 3
+
   //上影线警告
   def warnUpperShadow: Boolean
 
