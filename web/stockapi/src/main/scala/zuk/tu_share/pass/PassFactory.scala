@@ -55,8 +55,6 @@ object PassFactory {
       val modules = moduleList()
       modules.foreach(module=>{
         try {
-          val backTestStep = module.backTestStep //回测未来多少天的步长
-          //
           val stock = e._1
           //
           val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
@@ -65,6 +63,7 @@ object PassFactory {
 
             var startIndex = 0
             var isBreak = false
+            val backTestStep = module.backTestStep //回测未来多少天的步长
             for (i <- backTestStep to 1 by -1){
               if(!isBreak){
                 startIndex = backtestLenght - i
