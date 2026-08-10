@@ -35,7 +35,7 @@ object BackTest {
 
   def analysis(): Unit = {
 
-    val lines = new ListBuffer[String]()
+    val linesMap = new util.HashMap[String, ListBuffer[String]]()
     val backTestMapList = new ListBuffer[util.HashMap[String, String]]
 
     backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
@@ -44,6 +44,7 @@ object BackTest {
       .foreach(e=>{
         val clsName = e._1
         val ls = e._2
+        val lines = new ListBuffer[String]()
         val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse.filter(mod=>{
             if(mod.sells.size==0){
               val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
@@ -107,9 +108,8 @@ object BackTest {
             map.put("tradedate", mod.buy.trade_date.trim)
             backTestMapList += map
 
-
-          st
-          })
+            st
+        })
 
         //计算胜率
         val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.filter(_.sells.size>0).size), 4, RoundingMode.UP)
@@ -118,6 +118,8 @@ object BackTest {
         val line = s"${clsName}胜率：${victoryRate}, ${ls.head.desc()}"
         lines += line
         println(line)
+
+        linesMap.put(clsName, lines)
     })
 
     storeProperties()
@@ -129,7 +131,11 @@ object BackTest {
       l
     }).asJava)
 
-    sendMail(lines.mkString("<br>\n"))
+    linesMap.entrySet().asScala.foreach(entry=>{
+      val key = entry.getKey
+      val lines = entry.getValue
+      sendMail(key, lines.mkString("<br>\n"))
+    })
 
   }
 
@@ -155,10 +161,10 @@ object BackTest {
     }
   }
 
-  private def sendMail(htmlContent: String) = {
+  private def sendMail(clsName: String, htmlContent: String) = {
     val mailAddress = "513283439@qq.com"
     val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
-    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"${tradeDate}【backtest】【${ParseCammandParam.param.wrate} 】", htmlContent)
+    SendMail.sendSimpleEmail(mailAddress, mailAddress, s"【${clsName}】${tradeDate}【backtest】【${ParseCammandParam.param.wrate} 】", htmlContent)
   }
 
 }
