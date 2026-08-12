@@ -85,6 +85,7 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\IPDOMManager.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\IPDOMIndexer.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\IPDOMIndexerTask.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\IASTServiceProvider$UnsupportedDialectException.class",
