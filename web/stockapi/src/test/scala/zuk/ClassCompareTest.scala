@@ -103,7 +103,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\IASTNodeLocation.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\IASTEnumerationSpecifier$IASTEnumerator.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\IASTEnumerationSpecifier.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTComment.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTComment.class", //XXX 从这里开始下面，是纯逆向
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\IASTComment.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\ASTTypeUtil$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\ASTTypeUtil.class",
