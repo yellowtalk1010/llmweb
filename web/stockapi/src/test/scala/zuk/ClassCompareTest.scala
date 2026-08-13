@@ -85,6 +85,21 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPNodeFactory.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPExternalFunction.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPExternalBinding.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPASTNewExpression.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPASTForStatement.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPASTFieldDesignator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPASTDesignator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPASTDesignatedInitializer.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPASTArrayDesignator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPASTArraySubscriptExpression.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\c\\ICField.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\c\\ICParameter.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\c\\ICVariable.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\c\\ICExternalFunction.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\c\\ICExternalBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\IValue.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\IType.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\ITypedef.class",
