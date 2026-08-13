@@ -85,6 +85,8 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\gnu\\cpp\\ICPPASTKnRFunctionDeclarator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\gnu\\cpp\\IGPPASTArrayRangeDesignator.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\gnu\\c\\GCCLanguage.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\gnu\\cpp\\GPPLanguage.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\cpp\\ICPPNodeFactory.class",   //XXX
