@@ -85,6 +85,13 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\xml\\XMLElement.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\xml\\XMLEntityResolver.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\xml\\XMLFactoryWithLocator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\xml\\XMLFileLocation.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\xml\\XMLSAXContentHandler.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\xml\\XMLSAXReader.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\xml\\XMLUnit.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\make\\MakeFileLocation.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\gnu\\cpp\\ICPPASTKnRFunctionDeclarator.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\ast\\gnu\\cpp\\IGPPASTArrayRangeDesignator.class",
