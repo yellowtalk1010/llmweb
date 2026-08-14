@@ -87,7 +87,7 @@ class ClassCompareTest extends AnyFunSuite {
     Set[String](
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMFile$Comparator.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMFile$Finder.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMFile.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMFile.class", //XXX 仅完成一半
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\IIndexFragmentFile.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\index\\IIndexFile.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\index\\IIndexBinding.class",
