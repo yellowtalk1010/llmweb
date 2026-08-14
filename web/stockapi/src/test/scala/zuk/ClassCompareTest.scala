@@ -92,8 +92,8 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\rewrite\\ASTRewrite$CommentPosition.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\rewrite\\ASTRewrite$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\cpp\\AbstractCPPParserExtensionConfiguration.class",
-      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\cpp\\GPPParserExtensionConfiguration.class",
-      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\cpp\\GPPScannerExtensionConfiguration.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\cpp\\GPPParserExtensionConfiguration.class",  //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\cpp\\GPPScannerExtensionConfiguration.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\cpp\\POPCPPParserExtensionConfiguration.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\cpp\\POPCPPScannerExtensionConfiguration.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\dom\\parser\\c\\GCCParserExtensionConfiguration.class",
