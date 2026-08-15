@@ -98,7 +98,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$9$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$9.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$PCL.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager.class",   /// XXX，变动很大，是不是版本不对？
       "cn\\net\\cobot\\parsers\\cparser\\core\\index\\IIndexName.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\IIndexFragmentName.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMMacroDefinitionName.class",
