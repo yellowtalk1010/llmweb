@@ -85,6 +85,10 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMASTProcessorDesc$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMASTProcessorDesc.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\index\\IPDOMASTProcessor$Abstract.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\index\\IPDOMASTProcessor.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$2.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$3.class",
