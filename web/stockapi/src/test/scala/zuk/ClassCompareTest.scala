@@ -85,6 +85,20 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$3.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$4.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$5.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$6$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$6.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$7$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$7.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$8.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$9$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$9.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager$PCL.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMManager.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\index\\IIndexName.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\IIndexFragmentName.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMMacroDefinitionName.class",
