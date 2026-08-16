@@ -36,6 +36,7 @@ object TushareInitMA4ModelMA5ModelComponent {
   val MA4_MODEL_STR: String = "MA4_MODEL"
   val MA5_MODEL_STR: String = "MA5_MODEL"
   val MA7_MODEL_STR: String = "MA7_MODEL"
+  val MA8_MODEL_STR: String = "MA8_MODEL"
 
 
   /** *
@@ -177,7 +178,8 @@ class TushareInitMA4ModelMA5ModelComponent {
     val modelSet = List(
       TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR,
-      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR
+      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR,
+      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR
     ).map(_.toUpperCase).toSet
     val allEntitys = this.stockMapper.selectAll().asScala.filter(e=>modelSet.contains(e.stockType.toUpperCase))
 

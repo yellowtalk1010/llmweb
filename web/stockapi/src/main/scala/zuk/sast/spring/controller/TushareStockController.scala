@@ -304,6 +304,8 @@ class TushareStockController {
         this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, tradedate.replaceAll("-",""))
       case "ma7" =>
         this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, tradedate.replaceAll("-",""))
+      case "ma8" =>
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR, tradedate.replaceAll("-",""))
       case _=>
         new util.ArrayList[StockResultJson]()
     }
