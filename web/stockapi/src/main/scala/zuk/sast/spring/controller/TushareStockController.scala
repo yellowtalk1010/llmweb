@@ -350,6 +350,11 @@ class TushareStockController {
     ma7Map.put("name", "ma7")
     list.append(ma7Map)
 
+    val ma8Map = new util.HashMap[String, String]()
+    ma8Map.put("cls", "ma8")
+    ma8Map.put("name", "ma8")
+    list.append(ma8Map)
+
 
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
