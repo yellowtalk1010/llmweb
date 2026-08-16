@@ -125,7 +125,7 @@ class MA8_Model extends IModel {
   }
 
   override def winRate: Float = {
-    0.0
+    0.8308
   }
 
   override def reference: Float = {
