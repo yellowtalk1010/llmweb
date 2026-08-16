@@ -1,7 +1,7 @@
 package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
-import zuk.tu_share.ParseCammandParam
+import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.{ModuleDay, TopInst}
 import zuk.tu_share.utils.TopInstUtil
 
@@ -9,7 +9,13 @@ import java.io.File
 import java.nio.file.{Path, Paths}
 import java.util
 import scala.collection.mutable.ListBuffer
+
+
+import java.math.BigDecimal
+
 import scala.jdk.CollectionConverters.*
+
+
 
 object MA8_Model {
 
@@ -66,6 +72,8 @@ object MA8_Model {
 
 class MA8_Model extends IModel {
 
+  var stockDto: StockDto = _
+
   override def buyReason(): String = super.buyReason()
 
   override def backTestStep: Int = super.backTestStep
@@ -89,10 +97,25 @@ class MA8_Model extends IModel {
   override def run(days: List[ModuleDay]): Unit = {
     println(MA8_Model.topInstMap.size)
     val head = days.head
+    val second = days(1)
+    val topInstList = MA8_Model.topInstMap.get(second.ts_code)
+    if(topInstList!=null && topInstList.size>0 && topInstList.head.trade_date.equals(second.trade_date)){
+      println(s"${second.ts_code}, ${second.name}, ${second.trade_date}")
+      val topInstHead = topInstList.head
+      if(topInstHead.net_buy.toFloat<0){
+        //如果上一个交易日，龙虎榜卖出为负
+        if(head.close.toFloat > second.high.toFloat){
+          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
+          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+        }
+      }
+    }
+
+
   }
 
   override def getStockDto(): StockDto = {
-    null
+    stockDto
   }
 
   override def desc(): String = {
