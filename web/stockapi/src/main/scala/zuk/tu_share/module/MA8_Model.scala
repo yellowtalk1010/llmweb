@@ -104,7 +104,8 @@ class MA8_Model extends IModel {
         val min = List(Math.abs(topInstHead.buy.toFloat), Math.abs(topInstHead.sell.toFloat)).min
         val divideValue = new BigDecimal(Math.abs(topInstHead.net_buy.toFloat)).divide(new BigDecimal(min), 4, RoundingMode.UP).floatValue()
         if(head.high.toFloat > second.close.toFloat
-          && head.change.toFloat > 0
+//          && head.change.toFloat > 0
+//          && second.change.toFloat > 0
           && head.vol.toFloat < second.vol.toFloat
           && divideValue > 0.3
         ){
