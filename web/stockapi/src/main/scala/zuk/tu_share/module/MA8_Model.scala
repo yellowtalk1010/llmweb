@@ -35,20 +35,20 @@ object MA8_Model {
         val map = TopInstUtil.loadData(file.getAbsolutePath)
         val ls = map.toList.map(_._2)
         ls.flatMap(e=>e.asScala)
-      }).groupBy(e=>createKey(e))
+      }).groupBy(e=>createKey(e)) //日期 + 股票代码
         .filter(_._2.size>0)
         .toList
         .sortBy(_._1)
         .reverse
-        .map(e=>{
-          val head = e._2.head
+        .map(ls=>{
+          val head = ls._2.head
           val topInst = new TopInst
           topInst.ts_code = head.ts_code
           topInst.ts_name = head.ts_name
           topInst.trade_date = head.trade_date
-          topInst.sell = e._2.map(_.sell.toFloat).sum.toString
-          topInst.buy = e._2.map(_.buy.toFloat).sum.toString
-          topInst.net_buy = e._2.map(_.net_buy.toFloat).sum.toString
+          topInst.sell = ls._2.map(_.sell.toFloat).sum.toString
+          topInst.buy = ls._2.map(_.buy.toFloat).sum.toString
+          topInst.net_buy = ls._2.map(_.net_buy.toFloat).sum.toString
           topInst
         })
 
