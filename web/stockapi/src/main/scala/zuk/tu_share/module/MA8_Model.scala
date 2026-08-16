@@ -92,7 +92,7 @@ class MA8_Model extends IModel {
   override def upperShadow(days: List[ModuleDay]): Boolean = super.upperShadow(days)
 
   override def run(days: List[ModuleDay]): Unit = {
-    println(MA8_Model.topInstMap.size)
+//    println(MA8_Model.topInstMap.size)
     val head = days.head
     val second = days(1)
     val topInstList = MA8_Model.topInstMap.get(second.ts_code)
@@ -104,6 +104,7 @@ class MA8_Model extends IModel {
         val min = List(Math.abs(topInstHead.buy.toFloat), Math.abs(topInstHead.sell.toFloat)).min
         val divideValue = new BigDecimal(Math.abs(topInstHead.net_buy.toFloat)).divide(new BigDecimal(min), 4, RoundingMode.UP).floatValue()
         if(head.high.toFloat > second.close.toFloat
+          && head.change.toFloat > 0
           && head.vol.toFloat < second.vol.toFloat
           && divideValue > 0.3
         ){
