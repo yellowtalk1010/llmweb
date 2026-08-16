@@ -5,11 +5,13 @@ import zuk.tu_share.dto.ModuleDay
 
 import java.io.File
 import java.nio.file.{Path, Paths}
+import java.util
 import scala.collection.mutable.ListBuffer
 
 object MA8_Model {
 
   val topInstFiles = new ListBuffer[File]
+//  val topInstMap = new util.HashMap[String, ]()
 
   load()
 
@@ -23,7 +25,10 @@ object MA8_Model {
           topInstFiles += f
         }
       })
-      topInstFiles.map(_.getName).foreach(println)
+      topInstFiles.foreach(file=>{
+        println(file.getName)
+
+      })
     }
   }
 }
@@ -51,7 +56,8 @@ class MA8_Model extends IModel {
   override def upperShadow(days: List[ModuleDay]): Boolean = super.upperShadow(days)
 
   override def run(days: List[ModuleDay]): Unit = {
-    
+//    println(MA8_Model.topInstFiles.size)
+    val head = days.head
   }
 
   override def getStockDto(): StockDto = {
