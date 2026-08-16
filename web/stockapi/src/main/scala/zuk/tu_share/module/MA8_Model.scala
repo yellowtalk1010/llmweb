@@ -13,7 +13,7 @@ import scala.jdk.CollectionConverters.*
 
 object MA8_Model {
 
-  val topInstFiles = new ListBuffer[File]
+
   val topInstMap = new util.HashMap[String, List[TopInst]]()
 
   load()
@@ -21,10 +21,10 @@ object MA8_Model {
   def createKey(topInst: TopInst): String = topInst.trade_date + "." + topInst.ts_code
 
   def load(): Unit = synchronized {
-    if(topInstFiles==null || topInstFiles.isEmpty){
+    if(topInstMap==null || topInstMap.isEmpty){
       val topInstDirPath = Paths.get("D:\\development\\github\\tushare\\111\\tushare\\hm\\top_inst\\")
       println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
-
+      val topInstFiles = new ListBuffer[File]
       topInstDirPath.toFile.listFiles().toList.sortBy(e=>e.getName).reverse.foreach(yearDir=>{
         for(f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size<=100) {
           topInstFiles += f
@@ -87,7 +87,7 @@ class MA8_Model extends IModel {
   override def upperShadow(days: List[ModuleDay]): Boolean = super.upperShadow(days)
 
   override def run(days: List[ModuleDay]): Unit = {
-    println(MA8_Model.topInstFiles.size)
+    println(MA8_Model.topInstMap.size)
     val head = days.head
   }
 
