@@ -121,7 +121,7 @@ class MA8_Model extends IModel {
   }
 
   override def desc(): String = {
-    ""
+    "龙虎榜净卖出为负，缩量上涨"
   }
 
   override def winRate: Float = {
