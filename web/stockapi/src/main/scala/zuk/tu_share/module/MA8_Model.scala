@@ -1,19 +1,23 @@
 package zuk.tu_share.module
 
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.{ModuleDay, TopInst}
+import zuk.tu_share.utils.TopInstUtil
 
 import java.io.File
 import java.nio.file.{Path, Paths}
 import java.util
 import scala.collection.mutable.ListBuffer
+import scala.jdk.CollectionConverters.*
 
 object MA8_Model {
 
   val topInstFiles = new ListBuffer[File]
-//  val topInstMap = new util.HashMap[String, ]()
+  val topInstMap = new util.HashMap[String, List[TopInst]]()
 
   load()
+
+  def createKey(topInst: TopInst): String = topInst.trade_date + "." + topInst.ts_code
 
   def load(): Unit = synchronized {
     if(topInstFiles==null || topInstFiles.isEmpty){
@@ -25,10 +29,29 @@ object MA8_Model {
           topInstFiles += f
         }
       })
-      topInstFiles.foreach(file=>{
-        println(file.getName)
 
-      })
+      topInstFiles.flatMap(file=>{
+        println(file.getName)
+        val map = TopInstUtil.loadData(file.getAbsolutePath)
+        val ls = map.toList.map(_._2)
+        ls.flatMap(e=>e.asScala)
+      }).groupBy(e=>createKey(e))
+        .filter(_._2.size>0)
+        .toList
+        .sortBy(_._1)
+        .reverse
+        .map(e=>{
+          val head = e._2.head
+          val topInst = new TopInst
+          topInst.ts_code = head.ts_code
+          topInst.ts_name = head.ts_name
+          topInst.trade_date = head.trade_date
+          topInst.sell = e._2.map(_.sell.toFloat).sum.toString
+          topInst.buy = e._2.map(_.buy.toFloat).sum.toString
+          topInst.net_buy = e._2.map(_.net_buy.toFloat).sum.toString
+          topInst
+        })
+
     }
   }
 }
