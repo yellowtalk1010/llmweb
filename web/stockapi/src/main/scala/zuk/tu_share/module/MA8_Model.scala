@@ -104,7 +104,7 @@ class MA8_Model extends IModel {
       val topInstHead = topInstList.head
       if(topInstHead.net_buy.toFloat<0){
         //如果上一个交易日，龙虎榜卖出为负
-        if(head.close.toFloat > second.high.toFloat){
+        if(head.high.toFloat > second.close.toFloat && head.vol.toFloat < second.vol.toFloat){
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
