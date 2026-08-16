@@ -1,5 +1,6 @@
 package zuk.tu_share.module
 
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.{ModuleDay, TopInst}
 import zuk.tu_share.utils.TopInstUtil
@@ -25,17 +26,17 @@ object MA8_Model {
       println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
 
       topInstDirPath.toFile.listFiles().toList.sortBy(e=>e.getName).reverse.foreach(yearDir=>{
-        for(f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size<=200) {
+        for(f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size<=100) {
           topInstFiles += f
         }
       })
 
-      topInstFiles.flatMap(file=>{
-        println(file.getName)
-        val map = TopInstUtil.loadData(file.getAbsolutePath)
-        val ls = map.toList.map(_._2)
-        ls.flatMap(e=>e.asScala)
-      }).groupBy(e=>createKey(e)) //日期 + 股票代码
+      val mapList = topInstFiles.flatMap(file=>{
+          println(file.getName)
+          val topInstList = TopInstUtil.loadData(file)
+          topInstList.asScala
+        }).groupBy(e=>createKey(e)) //日期 + 股票代码
+        .map(tp2=>(tp2._1, tp2._2.filter(e=>StringUtils.isNotBlank(e.sell) && StringUtils.isNotBlank(e.buy) && StringUtils.isNotBlank(e.net_buy))))
         .filter(_._2.size>0)
         .toList
         .sortBy(_._1)
@@ -51,6 +52,13 @@ object MA8_Model {
           topInst.net_buy = ls._2.map(_.net_buy.toFloat).sum.toString
           topInst
         })
+        .groupBy(_.ts_code)
+
+      mapList.foreach(tp2 => {
+        topInstMap.put(tp2._1, tp2._2)
+      })
+
+      println(s"股票总数:${topInstMap.size}")
 
     }
   }
@@ -79,7 +87,7 @@ class MA8_Model extends IModel {
   override def upperShadow(days: List[ModuleDay]): Boolean = super.upperShadow(days)
 
   override def run(days: List[ModuleDay]): Unit = {
-//    println(MA8_Model.topInstFiles.size)
+    println(MA8_Model.topInstFiles.size)
     val head = days.head
   }
 
