@@ -13,6 +13,7 @@ import scala.jdk.CollectionConverters.*
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import zuk.sast.spring.controller.component.ApplicationProperties
 
+import java.io.File
 import java.text.SimpleDateFormat
 import scala.collection.mutable.ListBuffer
 
@@ -28,7 +29,7 @@ class TushareTopInstController {
   @PostConstruct
   def init(): Unit = {
     log.info("加载龙虎榜数据")
-    val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath
+    val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath + File.separator + "2026"
     TopInstUtil.loadData(stockHmTopInstPath)
   }
 
