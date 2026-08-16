@@ -9,10 +9,7 @@ import java.io.File
 import java.nio.file.{Path, Paths}
 import java.util
 import scala.collection.mutable.ListBuffer
-
-
-import java.math.BigDecimal
-
+import java.math.{BigDecimal, RoundingMode}
 import scala.jdk.CollectionConverters.*
 
 
@@ -76,7 +73,7 @@ class MA8_Model extends IModel {
 
   override def buyReason(): String = super.buyReason()
 
-  override def backTestStep: Int = super.backTestStep
+  override def backTestStep: Int = 5
 
   override def filterPriceLimitUp(moduleDay: ModuleDay): Boolean = super.filterPriceLimitUp(moduleDay)
 
@@ -104,7 +101,12 @@ class MA8_Model extends IModel {
       val topInstHead = topInstList.head
       if(topInstHead.net_buy.toFloat<0){
         //如果上一个交易日，龙虎榜卖出为负
-        if(head.high.toFloat > second.close.toFloat && head.vol.toFloat < second.vol.toFloat){
+        val min = List(Math.abs(topInstHead.buy.toFloat), Math.abs(topInstHead.sell.toFloat)).min
+        val divideValue = new BigDecimal(Math.abs(topInstHead.net_buy.toFloat)).divide(new BigDecimal(min), 4, RoundingMode.UP).floatValue()
+        if(head.high.toFloat > second.close.toFloat
+          && head.vol.toFloat < second.vol.toFloat
+          && divideValue > 0.3
+        ){
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
