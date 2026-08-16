@@ -9,16 +9,22 @@ import scala.collection.mutable.ListBuffer
 
 object MA8_Model {
 
-  def load(): Unit = {
-    val topInstDirPath = Paths.get("D:\\development\\github\\tushare\\111\\tushare\\hm\\top_inst\\")
-    println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
-    val files = new ListBuffer[File]
-    topInstDirPath.toFile.listFiles().toList.sortBy(e=>e.getName).reverse.foreach(yearDir=>{
-      for(f <- yearDir.listFiles().sortBy(_.getName).reverse if files.size<=200) {
-        files += f
-      }
-    })
-    files.map(_.getName).foreach(println)
+  val topInstFiles = new ListBuffer[File]
+
+  load()
+
+  def load(): Unit = synchronized {
+    if(topInstFiles==null || topInstFiles.isEmpty){
+      val topInstDirPath = Paths.get("D:\\development\\github\\tushare\\111\\tushare\\hm\\top_inst\\")
+      println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
+
+      topInstDirPath.toFile.listFiles().toList.sortBy(e=>e.getName).reverse.foreach(yearDir=>{
+        for(f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size<=200) {
+          topInstFiles += f
+        }
+      })
+      topInstFiles.map(_.getName).foreach(println)
+    }
   }
 }
 
@@ -44,15 +50,27 @@ class MA8_Model extends IModel {
    */
   override def upperShadow(days: List[ModuleDay]): Boolean = super.upperShadow(days)
 
-  override def run(days: List[ModuleDay]): Unit = ???
+  override def run(days: List[ModuleDay]): Unit = {
 
-  override def getStockDto(): StockDto = ???
+  }
 
-  override def desc(): String = ???
+  override def getStockDto(): StockDto = {
+    null
+  }
 
-  override def winRate: Float = ???
+  override def desc(): String = {
+    ""
+  }
 
-  override def reference: Float = ???
+  override def winRate: Float = {
+    0.0
+  }
 
-  override def warnUpperShadow: Boolean = ???
+  override def reference: Float = {
+    0.0
+  }
+
+  override def warnUpperShadow: Boolean = {
+    true
+  }
 }
