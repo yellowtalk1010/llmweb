@@ -51,7 +51,7 @@ class MA8_Model extends IModel {
   override def upperShadow(days: List[ModuleDay]): Boolean = super.upperShadow(days)
 
   override def run(days: List[ModuleDay]): Unit = {
-
+    
   }
 
   override def getStockDto(): StockDto = {
