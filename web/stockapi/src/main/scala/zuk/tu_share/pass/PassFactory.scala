@@ -56,6 +56,7 @@ object PassFactory {
       val modules = moduleList()
       modules.foreach(module=>{
         try {
+          println(s"模型分析:${module.getClass.getSimpleName.toUpperCase}")
           val stock = e._1
           //
           val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
