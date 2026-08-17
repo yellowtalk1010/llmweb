@@ -26,7 +26,7 @@ object MA8_Model {
   def load(): Unit = synchronized {
     if(topInstMap==null || topInstMap.isEmpty){
       val topInstDirPath = Paths.get("D:\\development\\github\\tushare\\111\\tushare\\hm\\top_inst\\")
-      println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
+//      println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
       val topInstFiles = new ListBuffer[File]
       topInstDirPath.toFile.listFiles().toList.sortBy(e=>e.getName).reverse.foreach(yearDir=>{
         for(f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size<=100) {
@@ -35,7 +35,7 @@ object MA8_Model {
       })
 
       val mapList = topInstFiles.flatMap(file=>{
-          println(file.getName)
+//          println(file.getName)
           val topInstList = TopInstUtil.loadData(file)
           topInstList.asScala
         }).groupBy(e=>createKey(e)) //日期 + 股票代码
@@ -61,7 +61,7 @@ object MA8_Model {
         topInstMap.put(tp2._1, tp2._2)
       })
 
-      println(s"股票总数:${topInstMap.size}")
+//      println(s"股票总数:${topInstMap.size}")
 
     }
   }
