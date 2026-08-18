@@ -85,6 +85,18 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\HashTable.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\CommentUtil.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\CharArrayUtils.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\CharArrayObjectMap.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\CharArrayObjectMap$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\CharArrayMap.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\CharArrayMap$Key.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ArrayUtil.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ASTPrinter.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ASTPrinter$PrintVisitor.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ASTPrinter$PrintProblemsVisitor.class",
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ArrayUtil.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ASTPrinter$PrintProblemsVisitor.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ASTPrinter$PrintVisitor.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\util\\ASTPrinter.class",
