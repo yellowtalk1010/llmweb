@@ -71,25 +71,11 @@ class MA8_Model extends IModel {
 
   var stockDto: StockDto = _
 
-  override def buyReason(): String = super.buyReason()
+  override def getStockDto(): StockDto = {
+    stockDto
+  }
 
   override def backTestStep: Int = 5
-
-  override def filterPriceLimitUp(moduleDay: ModuleDay): Boolean = super.filterPriceLimitUp(moduleDay)
-
-  override def limitUp(days: List[ModuleDay]): String = super.limitUp(days)
-
-  override def limitDown(days: List[ModuleDay]): String = super.limitDown(days)
-
-  override def changeUpRate(days: List[ModuleDay]): Float = super.changeUpRate(days)
-
-  /** *
-   * 上引线比例
-   *
-   * @param days
-   * @return
-   */
-  override def upperShadow(days: List[ModuleDay]): Boolean = super.upperShadow(days)
 
   override def run(days: List[ModuleDay]): Unit = {
 //    println(MA8_Model.topInstMap.size)
@@ -118,9 +104,6 @@ class MA8_Model extends IModel {
 
   }
 
-  override def getStockDto(): StockDto = {
-    stockDto
-  }
 
   override def desc(): String = {
     "龙虎榜净卖出为负，缩量上涨"
@@ -135,6 +118,6 @@ class MA8_Model extends IModel {
   }
 
   override def warnUpperShadow: Boolean = {
-    true
+    false
   }
 }
