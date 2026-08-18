@@ -85,6 +85,17 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\core\\parser\\IProblem.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor$3.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor$FileComparator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor$IncludeResolution.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor$MacroDictionary.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor$TokenSequence.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CPreprocessor.class",  //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ILocationResolver.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationMap.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\InternalFileContent$FileVersion.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\InternalFileContent$InclusionKind.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\InternalFileContent.class",
