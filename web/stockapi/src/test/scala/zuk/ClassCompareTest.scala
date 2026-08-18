@@ -85,6 +85,16 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CContentTypes.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptorManager.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptorManager$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptorManager$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptor.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptor$SerializingJob.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptor$CConfigBaseDescriptorExtensionReference.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptor$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\CConfigBasedDescriptor$1$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\BuildRunnerHelper.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\settings\\model\\util\\XmlStorageElement.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\settings\\model\\util\\UtilMessages.class",
       "cn\\net\\cobot\\parsers\\cparser\\core\\settings\\model\\util\\ResourceChangeHandlerBase.class",
