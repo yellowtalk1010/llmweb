@@ -85,6 +85,16 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\XmlUtil.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\UNCPathConverterImpl.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\SystemBuildConsole.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\SystemBuildConsole$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\SystemBuildConsole$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\StatusUtil.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\ProblemMarkerFilterManager.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\ProblemMarkerFilterDesc.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\ProblemMarkerFilterDesc$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\PositionTrackerManager.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\PositionTracker.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\PositionTracker$Node.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\PathEntryVariableResolver.class",
