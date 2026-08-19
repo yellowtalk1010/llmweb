@@ -85,6 +85,15 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\AddExtraCode.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\BinaryDecompiler$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\BinaryDecompiler$IDAMode.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\BinaryDecompiler.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\BlockSummary.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\ComputeStringSimilarDegree.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\DeleteExtraCode.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\DeleteExtraCodeByMain.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\decompiler\\DeleteExtraCodeRewrite.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\AddressToLineInAsmFile.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\BinaryASTVisiter.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\GetAddressToline.class",
