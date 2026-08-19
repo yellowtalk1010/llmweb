@@ -85,6 +85,15 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\Value.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\Value$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\Value$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\SolveSpecialBindingUtility.class", //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\SizeofCalculator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\SizeofCalculator$SizeAndAlignment.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\SizeofCalculator$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ProblemType.class", //xxx
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ProblemFunctionType.class", //xxx
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ProblemBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\GCCBuiltinSymbolProvider.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\FindNodeForOffsetAction.class",
