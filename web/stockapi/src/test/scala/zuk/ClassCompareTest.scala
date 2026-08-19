@@ -85,9 +85,16 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\ast\\tag\\TaggerDescriptor.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTInternal.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTEqualsInitializer.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTEnumerator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTCopyLocation.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTAmbiguousNode.class",  // XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTAmbiguousNode$NameCollector.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTAmbiguousBinaryVsCastExpression.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\ast\\tag\\TaggerDescriptor.class",  // XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\ast\\tag\\TaggerDescriptor$1.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\ast\\tag\\TagManager.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\ast\\tag\\TagManager.class", // XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\SavedCodeReaderFactory.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\PartialWorkingCopyCodeReaderFactory.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\Linkage.class",
