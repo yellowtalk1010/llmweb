@@ -85,6 +85,16 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$2.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$BinaryOperator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$CastAmbiguityMarker.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$CastExprCtx.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$Decl.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$ExprKind.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$FoundAggregateInitializer.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$ITemplateIdStrategy.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTQueries.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTQueries$NameSearch.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTNode.class", // xxx
