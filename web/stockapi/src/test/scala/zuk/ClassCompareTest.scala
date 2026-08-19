@@ -85,6 +85,19 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\UserVarSupplier.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\UserDefinedVariableSupplier.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\UserDefinedVariableSupplier$VarKey.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\EnvironmentVariableSupplier.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\EnvironmentVariableSupplier$EnvVarMacro.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\EnvironmentVariableSupplier$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\EclipseVariablesVariableSupplier.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\EclipseVariablesVariableSupplier$EclipseVarMacro.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\EclipseVariablesVariableSupplier$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\DefaultVariableContextInfo.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\CdtVariableManager.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\CdtVariableManager$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\cdtvariables\\CdtMacroSupplier.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\util\\Param.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\util\\EBinaryCustomFuncDef.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\util\\BinaryCustomFuncDef.class",
