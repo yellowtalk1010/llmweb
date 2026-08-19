@@ -94,7 +94,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$ExprKind.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$FoundAggregateInitializer.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser$ITemplateIdStrategy.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\AbstractGNUSourceCodeParser.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTQueries.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTQueries$NameSearch.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\ASTNode.class", // xxx
