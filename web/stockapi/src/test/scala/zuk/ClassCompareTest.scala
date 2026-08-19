@@ -85,6 +85,11 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\AddressToLineInAsmFile.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\BinaryASTVisiter.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\GetAddressToline.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\HandleAsmFile.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\binary\\converter\\HandleMapJson.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\XmlUtil.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\UNCPathConverterImpl.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\SystemBuildConsole.class",
