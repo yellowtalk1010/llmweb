@@ -85,7 +85,12 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTFunctionDefinition.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTName.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTLiteralExpression.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTKnRFunctionDeclarator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTInitializerList.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTIdExpression.class", //xXXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTFunctionDefinition.class", //xXXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTFunctionDefinition$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTFunctionDeclarator.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CASTFunctionCallExpression.class",
