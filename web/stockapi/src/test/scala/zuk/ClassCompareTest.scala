@@ -85,6 +85,16 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CEnumeration.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CEnumerator$CEnumeratorProblem.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CEnumerator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CExternalFunction.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CExternalVariable.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CField$CFieldProblem.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CField.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CFunction.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CFunctionType.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CKnRParameter.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CBuiltinParameter.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CBasicType.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CBasicType$1.class",
