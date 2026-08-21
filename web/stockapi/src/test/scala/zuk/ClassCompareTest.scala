@@ -105,7 +105,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CParameter$CParameterProblem.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CNodeFactory.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CLabel.class",
-
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CEnumeration.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CEnumerator$CEnumeratorProblem.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CEnumerator.class",
