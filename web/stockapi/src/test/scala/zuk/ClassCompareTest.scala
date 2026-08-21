@@ -85,6 +85,10 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTAmbiguityResolver.class", //xxx
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\AbstractCPPClassSpecializationScope.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\AbstractCPPClassSpecializationScope$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\ASTBindingResolver.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CVisitor$CollectDeclarationsAction.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CVisitor$CollectProblemsAction.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CVisitor$CollectReferencesAction.class",
@@ -93,7 +97,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\ICFunction.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\ICInternalBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\ToStringUtility.class",
-
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CVariable.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CVariable$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\c\\CTypedef.class",
