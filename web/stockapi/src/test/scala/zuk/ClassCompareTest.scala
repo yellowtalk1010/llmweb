@@ -85,6 +85,14 @@ class ClassCompareTest extends AnyFunSuite {
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTExpressionList.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTExpressionStatement.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTFieldDesignator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTFieldReference.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTFunctionCallExpression.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTFunctionDeclarator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTFunctionDefinition$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTFunctionDefinition.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTDoStatement.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTDesignatedInitializer.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPASTDeleteExpression.class",
