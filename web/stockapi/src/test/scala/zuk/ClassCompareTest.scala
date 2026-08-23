@@ -99,7 +99,7 @@ class ClassCompareTest extends AnyFunSuite {
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\GNUCPPSourceParser$BinaryExprCtx.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\GNUCPPSourceParser$DtorStrategy.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\GNUCPPSourceParser.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\GNUCPPSourceParser.class",  //xxx
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\ICPPInternalBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\ICPPInternalClassTypeMixinHost.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\ICPPInternalSpecialization.class",
