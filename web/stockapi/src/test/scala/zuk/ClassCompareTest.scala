@@ -96,7 +96,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\CPPSemantics$LookupMode.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\CPPSemantics$NameMatcherPredicate.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\CPPSemantics$RecursionResolvingBindingFilter.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\CPPSemantics.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\CPPSemantics.class",  //xxx
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\AutoTypeResolver.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\CPPDependentEvaluation$DeferredResolutionBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\CPPDependentEvaluation.class",
