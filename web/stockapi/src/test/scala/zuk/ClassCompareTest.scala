@@ -109,7 +109,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\ClassTypeHelper$MethodKind.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\ClassTypeHelper.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CppPdomToAstConverter$NameKind.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CppPdomToAstConverter.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CppPdomToAstConverter.class",  //xxx
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPUnaryTypeTransformation.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPUnknownBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\CPPUnknownClassInstance.class",
