@@ -99,7 +99,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\Cost$DeferredUDC.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\Cost$Rank.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\Cost$ReferenceBinding.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\Cost.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\Cost.class",  //xxx
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\DestructorCallCollector$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\DestructorCallCollector$DestructorCollector.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\dom\\parser\\cpp\\semantics\\DestructorCallCollector$LocalVariablesDestructorCollector.class",
