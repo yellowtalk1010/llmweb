@@ -138,7 +138,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\IIndexFragmentBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\IIndexFragment.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\DeclaredBindingsFilter.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\CPPTypedefClone.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\index\\CPPTypedefClone.class",  //xxx
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\inclusion\\InclusionGraph.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\inclusion\\InclusionGraphUtils.class",
