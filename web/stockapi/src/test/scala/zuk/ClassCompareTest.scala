@@ -143,7 +143,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\inclusion\\InclusionGraph.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\inclusion\\InclusionGraphUtils.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\inclusion\\InclusionNode.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\envvar\\BuildSystemEnvironmentSupplier$ExtensionEnvVarProvider$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\envvar\\BuildSystemEnvironmentSupplier$ExtensionEnvVarProvider.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\envvar\\BuildSystemEnvironmentSupplier.class",
