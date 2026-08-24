@@ -105,7 +105,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\model\\CElement.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\model\\CContainerInfo.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\model\\CContainer.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\model\\BinaryContainer.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\model\\BinaryElement.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\model\\BinaryModule.class",
