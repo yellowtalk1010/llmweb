@@ -109,13 +109,13 @@ class ClassCompareTest extends AnyFunSuite {
       "",
       "",
       "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Lexer$LexerOptions.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Lexer.class",  //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LineMacro.class",  //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationCtx.class", //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationCtxContainer.class",  //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationCtxFile.class",  //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationCtxMacroExpansion.class",  //XXX
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ExpressionEvaluator$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ExpressionEvaluator$EvalException.class",
@@ -136,7 +136,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\DateMacro.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\DependencyTree.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\DynamicMacro.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTBuiltinName.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTDirectiveWithCondition.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTElif.class",
