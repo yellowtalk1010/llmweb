@@ -147,7 +147,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\MultiMacroExpansionExplorer$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\MultiMacroExpansionExplorer$ASTFileLocation.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\MultiMacroExpansionExplorer.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Lexer$LexerOptions.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Lexer.class",  //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LineMacro.class",  //XXX
