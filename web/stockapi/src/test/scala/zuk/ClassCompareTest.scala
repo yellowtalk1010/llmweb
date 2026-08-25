@@ -130,8 +130,8 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPragma.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPragmaOperator.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPreprocessorDefinition.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPreprocessorName.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPreprocessorNode.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPreprocessorName.class",   //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPreprocessorNode.class",   //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTUndef.class",
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\natives\\CNativePlugin.class",
