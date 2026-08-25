@@ -131,7 +131,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\WritablePDOM$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\WritablePDOM.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\YieldableIndexLock.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMProxy.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMSetupJob.class",   //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMStatic.class",   //XXX
