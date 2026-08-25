@@ -116,7 +116,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationCtxContainer.class",  //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationCtxFile.class",  //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\LocationCtxMacroExpansion.class",  //XXX
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ExpressionEvaluator$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ExpressionEvaluator$EvalException.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ExpressionEvaluator.class",
@@ -129,7 +128,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\IncludeSearchPathElement.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\InternalFileContentProvider$DependsOnOutdatedFileException.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\InternalFileContentProvider.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CharArray.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CompilationErrorHandler.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\CounterMacro.class",
@@ -162,7 +160,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPreprocessorName.class",   //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTPreprocessorNode.class",   //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ASTUndef.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\natives\\CNativePlugin.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\CobotFilesProvider$CompilerType.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\CobotFilesProvider.class",
