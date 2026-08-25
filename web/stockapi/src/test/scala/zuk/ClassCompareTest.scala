@@ -134,7 +134,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\TimeMacro.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Token$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Token$Counter.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Token.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\Token.class",   //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\TokenList.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\UndefinedMacro.class",
       "",
