@@ -121,7 +121,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOM$DebugLockInfo.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOM$IListener.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOM.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\CModelListener$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\CModelListener.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\CProjectDescriptionListener$1.class",
