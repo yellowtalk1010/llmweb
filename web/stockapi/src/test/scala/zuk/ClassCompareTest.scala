@@ -91,16 +91,16 @@ class ClassCompareTest extends AnyFunSuite {
       "",
       "",
       "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMProxy.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMSetupJob.class",   //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMStatic.class",   //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMUtility.class",   //XXX
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMWriter$1.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMWriter$Data.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMWriter$FileContext.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMWriter$FileInAST.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMWriter$Symbols.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMWriter.class",   //XXX
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMASTProcessorManager.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\PDOMFileSet.class",
