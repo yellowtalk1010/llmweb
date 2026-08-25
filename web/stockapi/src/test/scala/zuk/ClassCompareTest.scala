@@ -119,7 +119,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$MessageKind.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$UnusedHeaderStrategy.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$UpdateKind.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask.class",   //XXX
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ObjectStyleMacro.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\PreprocessorMacro.class",   //XXX
