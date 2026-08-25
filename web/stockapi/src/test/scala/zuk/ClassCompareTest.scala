@@ -132,7 +132,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\LanguageMappingChangeListener.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\LanguageSettingsChangeListener.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\NotifyCModelManagerTask.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$FileVersionTask.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$IndexFileContent.class",
@@ -142,7 +141,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$UnusedHeaderStrategy.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask$UpdateKind.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\AbstractIndexerTask.class",   //XXX
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ObjectStyleMacro.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\PreprocessorMacro.class",   //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\parser\\scanner\\ScannerContext$1.class",
