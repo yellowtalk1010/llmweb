@@ -97,10 +97,10 @@ class ClassCompareTest extends AnyFunSuite {
       "",
       "",
       "",
-      "",
-      "",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\TodoTaskParser$Task.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\TodoTaskParser.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\PotentialTranslationUnit.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\ProjectIndexerIncludeResolutionHeuristics.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\ProjectIndexerIncludeResolutionHeuristics.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\ProjectIndexerInputAdapter.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\TodoTaskUpdater$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\indexer\\TodoTaskUpdater$1TaskList.class",
