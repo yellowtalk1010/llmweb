@@ -107,14 +107,14 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPArgumentList.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPBase$PDOMCPPBaseClone.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPBase.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPBinding.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPBinding.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPClassInstance.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPClassScope$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPClassScope$PopulateMap.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPClassScope.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\CPPFindBinding$CPPBindingBTreeComparator.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\CPPFindBinding$CPPFindBindingVisitor.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\CPPFindBinding.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\CPPFindBinding.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\IPDOMCPPTemplateParameter.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPAliasTemplate.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\TypeMarshalBuffer.class",
