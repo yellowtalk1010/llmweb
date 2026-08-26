@@ -104,7 +104,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCEnumeration.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCEnumerator.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCField.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCFunction.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCFunction.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCLinkage.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCLinkageFactory.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCParameter.class",
@@ -112,7 +112,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCStructure$FindField.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCStructure$GetFields.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCStructure.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCTypedef.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCTypedef.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCVariable.class",
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\MacroContainerCollector.class",
