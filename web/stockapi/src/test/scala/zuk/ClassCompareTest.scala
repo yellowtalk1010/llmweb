@@ -115,7 +115,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPEnumeration.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPEnumerationSpecialization$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPEnumerationSpecialization.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPEnumerator.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPEnumerator.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPEnumeratorSpecialization.class",
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPConstructor.class",
