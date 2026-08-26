@@ -113,7 +113,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCStructure$GetFields.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCStructure.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCTypedef.class", //XXX
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCVariable.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCVariable.class", //XXX
       "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\MacroContainerCollector.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\MacroContainerFinder.class",
@@ -135,7 +135,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMNamedNode.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMNode.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\PDOMProjectIndexLocationConverter.class", //XXX
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\ApplyVisitor.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\BindingCollector.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\FindBinding$DefaultBindingBTreeComparator.class",
