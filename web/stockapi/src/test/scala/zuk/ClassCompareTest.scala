@@ -119,7 +119,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPTypeList.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPTypedef.class",  //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPTypedefSpecialization.class",  //XXX
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPNamespace$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPNamespace$2.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPNamespace.class",
@@ -127,7 +126,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPParameter.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPParameterSpecialization.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPSpecialization.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPLinkageFactory.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPMemberBlock.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPMethod.class", //XXX
