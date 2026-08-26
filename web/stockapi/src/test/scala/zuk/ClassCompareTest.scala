@@ -131,7 +131,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPUsingDeclarationSpecialization$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPUsingDeclarationSpecialization.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPUsingDirective.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPVariable.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMCPPVariable.class",  //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMClassUtil$ConstructorCollector.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMClassUtil$FieldCollector.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\cpp\\PDOMClassUtil$MethodCollector.class",
