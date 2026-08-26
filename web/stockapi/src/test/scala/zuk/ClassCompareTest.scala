@@ -101,7 +101,7 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\TypeMarshalBuffer.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCBinding.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCEnumeration$1.class",
-      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCEnumeration.class",
+      "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCEnumeration.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCEnumerator.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCField.class", //XXX
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\dom\\c\\PDOMCFunction.class", //XXX
