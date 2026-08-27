@@ -146,7 +146,6 @@ class ClassCompareTest extends AnyFunSuite {
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\resources\\ResourceLookupTree$Extensions.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\resources\\ResourceLookupTree$Node.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\resources\\ResourceLookupTree.class",
-      "",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\tag\\BTreeIterable$1.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\tag\\BTreeIterable$BTreeIterator.class",
       "cn\\net\\cobot\\parsers\\cparser\\internal\\core\\pdom\\tag\\BTreeIterable$Descriptor.class",
