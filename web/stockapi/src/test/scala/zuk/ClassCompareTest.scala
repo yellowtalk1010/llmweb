@@ -91,7 +91,7 @@ class ClassCompareTest extends AnyFunSuite {
    * 3缺少文件：cn\net\cobot\parsers\cparser\internal\core\dom\parser\cpp\AbstractCPPClassSpecializationScope$1.class
    * 4缺少文件：cn\net\cobot\parsers\cparser\internal\core\dom\parser\cpp\AbstractCPPClassSpecializationScope.class
    * 5缺少文件：cn\net\cobot\parsers\cparser\internal\core\model\Binary.class  ok
-   * 6缺少文件：cn\net\cobot\parsers\cparser\internal\core\parser\scanner\ASTMacroExpansionLocation.class
+   * 6缺少文件：cn\net\cobot\parsers\cparser\internal\core\parser\scanner\ASTMacroExpansionLocation.class  ok
    * 7缺少文件：cn\net\cobot\parsers\cparser\internal\core\pdom\dom\PDOMInclude.class  ok
    * @return
    */
