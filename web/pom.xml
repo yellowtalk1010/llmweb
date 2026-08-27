@@ -33,6 +33,7 @@
         <module>graalvm_nativeimage</module>
         <module>web_proxy</module>
         <module>playwright</module>
+        <module>kotlin_demo</module>
     </modules>
 
     <dependencies>
