@@ -43,9 +43,11 @@ class ClassCompareTest extends AnyFunSuite {
     val num = new AtomicInteger(0)
     val num1 = new AtomicInteger(0)
     val num2 = new AtomicInteger(0)
-    jarClassPathFiles.asScala.filter(p=> !p.toString.contains("utils\\linetracker")  ).filter(p=>{
-      this.ignoreFiles().filter(f=>f.endsWith(p.toString)).size == 0
-    }).foreach(p=>{
+    jarClassPathFiles.asScala.filter(p=> !p.toString.contains("utils\\linetracker")  )
+      .filter(p=>{
+//        this.ignoreFiles().filter(f=>f.endsWith(p.toString)).size == 0
+        true
+      }).foreach(p=>{
       val path = targetClassPathMap.get(p.toString)
       if(path==null){
         println(s"${num.addAndGet(1)}缺少文件：cn\\${p.toString}")
@@ -82,6 +84,17 @@ class ClassCompareTest extends AnyFunSuite {
 
     println()
   }
+
+  /***
+   * 1缺少文件：cn\net\cobot\parsers\cparser\core\CProjectNature.class
+   * 2缺少文件：cn\net\cobot\parsers\cparser\core\dom\ast\INodeFactory.class
+   * 3缺少文件：cn\net\cobot\parsers\cparser\internal\core\dom\parser\cpp\AbstractCPPClassSpecializationScope$1.class
+   * 4缺少文件：cn\net\cobot\parsers\cparser\internal\core\dom\parser\cpp\AbstractCPPClassSpecializationScope.class
+   * 5缺少文件：cn\net\cobot\parsers\cparser\internal\core\model\Binary.class
+   * 6缺少文件：cn\net\cobot\parsers\cparser\internal\core\parser\scanner\ASTMacroExpansionLocation.class
+   * 7缺少文件：cn\net\cobot\parsers\cparser\internal\core\pdom\dom\PDOMInclude.class
+   * @return
+   */
 
   private def ignoreFiles(): Set[String] = {
     Set[String](
