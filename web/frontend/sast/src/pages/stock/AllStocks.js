@@ -45,6 +45,7 @@ useEffect(() => {
 
 
   const [allStocksData, setAllStocksData] = useState([]);
+  const [keywordData, setKeywordData] = useState(""); //关键字
 
   // 输入框内容
   const [inputKeyword, setInputKeyword] = useState("");
@@ -69,6 +70,8 @@ useEffect(() => {
             ? result.data
             : []
         );
+
+        setKeywordData(result.keyword)
 
       }
 
@@ -197,6 +200,11 @@ useEffect(() => {
 
       </div>
 
+      <div className="text-red-500">
+          {
+            keywordData
+          }
+      </div>
       <div className="overflow-x-auto rounded-xl shadow">
         <table className="w-full text-sm border-collapse bg-white">
 

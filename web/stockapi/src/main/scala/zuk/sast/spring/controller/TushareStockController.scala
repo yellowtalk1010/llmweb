@@ -10,7 +10,7 @@ import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
-import zuk.tu_share.utils.TopInstUtil
+import zuk.tu_share.utils.{HanLPUtil, TopInstUtil}
 
 import java.text.SimpleDateFormat
 import java.util
@@ -327,12 +327,13 @@ class TushareStockController {
       case "ma8" =>
         this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case _=>
-        new util.ArrayList[StockResultJson]()
+        new util.ArrayList[TushareStockControllerDTO]()
     }
 
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
     map.put("data", list)
+    map.put("keyword", HanLPUtil.createFenCi(list.asScala.map(e=>e.concept).toList))
 
     map
   }
