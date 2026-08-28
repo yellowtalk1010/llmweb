@@ -270,8 +270,28 @@ class TushareStockController {
       .filter(!_.isEmpty)
       .map(_.get)
       .filter(e=>{
-        if(StringUtils.isNotBlank(selectedDateStart)){
+        if(StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)){
+          val start = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong){
+            selectedDateStart.trim.toLong
+          }
+          else {
+            selectedDateEnd.trim.toLong
+          }
+
+          val end = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong) {
+            selectedDateEnd.trim.toLong
+          }
+          else {
+            selectedDateStart.trim.toLong
+          }
+
+          start <= e.createtime.trim.toLong && e.createtime.trim.toLong <= end
+        }
+        else if (StringUtils.isNotBlank(selectedDateStart)) {
           e.createtime.trim.equals(selectedDateStart.trim)
+        }
+        else if (StringUtils.isNotBlank(selectedDateEnd)) {
+          e.createtime.trim.equals(selectedDateEnd.trim)
         }
         else {
           true
