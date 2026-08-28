@@ -57,6 +57,12 @@
             <version>1.16.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>zuk.sast</groupId>
+            <artifactId>kotlin_demo</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+
     </dependencies>
 
 
