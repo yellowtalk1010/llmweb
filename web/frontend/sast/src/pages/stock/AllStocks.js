@@ -14,7 +14,8 @@ function AllStocks() {
    */
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState("my");
-  const [selectedDate, setSelectedDate] = useState("")
+  const [selectedDateStart, setSelectedDateStart] = useState("")
+  const [selectedDateEnd, setSelectedDateEnd] = useState("")
 
   /***
    * 拉取模型类型数据
@@ -54,7 +55,7 @@ useEffect(() => {
     try {
 
       const response = await fetch(
-        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${selectedModule}&tradedate=${selectedDate}`
+        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${selectedModule}&selectedDateEnd=${selectedDateEnd}&selectedDateStart=${selectedDateStart}`
       );
 
       const result = await response.json();
@@ -147,11 +148,17 @@ useEffect(() => {
 
       {/* 检索区域 */}
       <div className="mb-4 flex gap-2">
-
         <input
           type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
+          value={selectedDateStart}
+          onChange={(e) => setSelectedDateStart(e.target.value)}
+          className="border rounded px-3 py-2"
+        />
+        <span className="flex items-center px-1 bg-white text-gray-500">至</span>
+        <input
+          type="date"
+          value={selectedDateEnd}
+          onChange={(e) => setSelectedDateEnd(e.target.value)}
           className="border rounded px-3 py-2"
         />
         <select

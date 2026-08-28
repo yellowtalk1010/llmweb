@@ -209,8 +209,8 @@ class TushareStockController {
 
   }
 
-  def getMa7(maStr: String, tradedate: String): java.util.List[TushareStockControllerDTO] = {
-    log.info(s"getMa7, maStr:${maStr}, tradedate:${tradedate}")
+  def getMa7(maStr: String, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
+    log.info(s"getMa7, maStr:${maStr}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
     //购买的股票
     val buySet = getAllBuy()
     //关注的股票
@@ -270,8 +270,8 @@ class TushareStockController {
       .filter(!_.isEmpty)
       .map(_.get)
       .filter(e=>{
-        if(StringUtils.isNotBlank(tradedate)){
-          e.createtime.trim.equals(tradedate.trim)
+        if(StringUtils.isNotBlank(selectedDateStart)){
+          e.createtime.trim.equals(selectedDateStart.trim)
         }
         else {
           true
@@ -290,8 +290,8 @@ class TushareStockController {
    * 索取全部股票
    */
   @GetMapping(value = Array("all"))
-  def all(desc: String, status: String, tradedate: String): util.Map[String, Object] = {
-    log.info(s"索取全部股票:desc:${desc}, status:${status}, tradedate:${tradedate}")
+  def all(desc: String, status: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
+    log.info(s"索取全部股票:desc:${desc}, status:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
 
     val list = status match {
       case "my" =>
@@ -299,13 +299,13 @@ class TushareStockController {
       case "all" =>
         this.getAll(desc)
       case "ma4" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, tradedate.replaceAll("-",""))
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case "ma5" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, tradedate.replaceAll("-",""))
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case "ma7" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, tradedate.replaceAll("-",""))
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case "ma8" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR, tradedate.replaceAll("-",""))
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case _=>
         new util.ArrayList[StockResultJson]()
     }
