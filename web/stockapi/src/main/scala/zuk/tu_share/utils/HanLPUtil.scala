@@ -16,8 +16,8 @@ object HanLPUtil {
       termList.asScala
     })
     val ls1 = ls.filter(doFilter(_)).map(_.word).groupBy(e=>e).toList.sortBy(_._2.size).reverse
-    (if(ls1.size>30){
-      ls1.take(30)
+    (if(ls1.size>50){
+      ls1.take(50)
     }
     else {
       ls1
@@ -27,7 +27,7 @@ object HanLPUtil {
   }
 
   private def doFilter(term: Term): Boolean = {
-    val set = Set[String]("概念", "一级", "二级", "三级", "行业", "名称", "任务", "板块", "股票", "所属", "设备", "其他", "技术", "开发")
+    val set = Set[String]("概念", "一级", "二级", "三级", "行业", "名称", "任务", "板块", "股票", "所属", "其他")
     term.word.size > 1 && !set.contains(term.word)
   }
 
