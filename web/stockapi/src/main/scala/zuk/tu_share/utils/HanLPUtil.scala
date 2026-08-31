@@ -16,8 +16,8 @@ object HanLPUtil {
       termList.asScala
     })
     val ls1 = ls.filter(doFilter(_)).map(_.word).groupBy(e=>e).toList.sortBy(_._2.size).reverse
-    (if(ls1.size>50){
-      ls1.take(50)
+    (if(ls1.size>100){
+      ls1.take(100)
     }
     else {
       ls1
