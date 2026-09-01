@@ -74,10 +74,10 @@ class MA7_Model extends IModel {
 
   override def run(days1: List[ModuleDay]): Unit = {
 
-    num = days1.length
     val head = days1.head
 
-    val list = MA7_Model.modelBlackTestResultMap.get(head.ts_code)
+    val ma7BlackTestMap = MA7_Model.modelBlackTestResultMap
+    val list = ma7BlackTestMap.get(head.ts_code)
     val days = if(list!= null && list.size > 0){
       val ls = days1.filter(e=>{
         !list.map(_.tradedate).contains(e.trade_date)
