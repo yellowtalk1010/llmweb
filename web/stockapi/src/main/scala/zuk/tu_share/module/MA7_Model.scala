@@ -111,7 +111,7 @@ class MA7_Model extends IModel {
     val recentVolRate = new BigDecimal(head.vol).divide(new BigDecimal(recentAvgVol), 2, RoundingMode.UP).floatValue() //
 
     if(downRate.floatValue() > 0.4 //跌超4个点
-      && upRate.floatValue() < 0.5 //涨幅小于5个点
+//      && upRate.floatValue() < 0.5 //涨幅小于5个点
       && recentVolRate > 2.0 //放量2倍
       && ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma30.floatValue()))
       && ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma20.floatValue()))
