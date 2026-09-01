@@ -77,11 +77,13 @@ class MA7_Model extends IModel {
     val head = days1.head
 
     val ma7BlackTestMap = MA7_Model.modelBlackTestResultMap
-    val list = ma7BlackTestMap.get(head.ts_code)
+    val list = ma7BlackTestMap.get(head.ts_code) //从历史回测数据中获取数据
+
     val days = if(list!= null && list.size > 0){
       val ls = days1.filter(e=>{
         !list.map(_.tradedate).contains(e.trade_date)
       })
+      //移除回测数据中的交易日
       ls
     }
     else{
