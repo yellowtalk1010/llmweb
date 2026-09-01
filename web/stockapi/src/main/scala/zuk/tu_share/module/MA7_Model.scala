@@ -116,8 +116,8 @@ class MA7_Model extends IModel {
     if(downRate.floatValue() > 0.4 //相比历史最高价，跌超4个点
       && upRate.floatValue() < 0.5 //相比历史最低价，涨幅小于5个点
       && recentVolRate > 2.0 //相比历史平均交易量，放量2倍
-      && ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma30.floatValue()))
-      && ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma20.floatValue()))
+      && (ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma30.floatValue()))
+      || ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma20.floatValue())))
       && head.ma.ma30.floatValue() > head.ma.ma20.floatValue()
       //      && head.ma.ma20.floatValue() > List(head.ma.ma10.floatValue(), head.ma.ma5.floatValue()).max
       && head.change.toFloat > 2.0
