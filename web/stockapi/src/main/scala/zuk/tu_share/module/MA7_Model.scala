@@ -67,13 +67,14 @@ object MA7_Model {
  */
 class MA7_Model extends IModel {
 
-  val num = 60
+  var num = 60
   var stockDto: StockDto = _
 
   override def getStockDto(): StockDto = stockDto
 
   override def run(days1: List[ModuleDay]): Unit = {
 
+    num = days1.length
     val head = days1.head
 
     val list = MA7_Model.modelBlackTestResultMap.get(head.ts_code)
