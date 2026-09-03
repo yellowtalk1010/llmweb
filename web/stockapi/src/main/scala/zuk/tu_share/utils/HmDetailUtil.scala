@@ -23,7 +23,7 @@ object HmDetailUtil {
     if(hmDetailMap.size>0){
       return hmDetailMap
     }
-    val hmDetailPath = "D:/development/github/tushare/111/tushare/hm/hm_detail/"
+    val hmDetailPath = "D:/development/github/tushare/111/gitee_zuktushare/hm/hm_detail/"
     val hmDetailFile = new File(hmDetailPath)
     var files = hmDetailFile.listFiles().sortBy(_.getName).reverse
     if (files.size>SIZE){
