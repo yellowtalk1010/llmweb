@@ -30,6 +30,10 @@ class TushareTopInstController {
   def init(): Unit = {
     val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath + File.separator + "2026"
     log.info(s"加载龙虎榜数据，路径:${stockHmTopInstPath}")
+    if(!new File(stockHmTopInstPath).exists()){
+      log.info("龙虎榜数据路径不存在")
+      System.exit(0)
+    }
     TopInstUtil.loadData(stockHmTopInstPath)
   }
 
