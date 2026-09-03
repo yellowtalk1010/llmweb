@@ -28,8 +28,8 @@ class TushareTopInstController {
 
   @PostConstruct
   def init(): Unit = {
-    log.info("加载龙虎榜数据")
     val stockHmTopInstPath = applicationProperties.getStockDatasourceBuildSystem_stockHmTopInstPath + File.separator + "2026"
+    log.info(s"加载龙虎榜数据，路径:${stockHmTopInstPath}")
     TopInstUtil.loadData(stockHmTopInstPath)
   }
 
