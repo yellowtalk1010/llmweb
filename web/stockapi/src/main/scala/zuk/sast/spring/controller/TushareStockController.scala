@@ -324,6 +324,8 @@ class TushareStockController {
         this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case "ma7" =>
         this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
+      case "ma7_1" =>
+        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case "ma8" =>
         this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case _=>
@@ -372,6 +374,11 @@ class TushareStockController {
     ma7Map.put("cls", "ma7")
     ma7Map.put("name", "ma7")
     list.append(ma7Map)
+
+    val ma7_1_Map = new util.HashMap[String, String]()
+    ma7_1_Map.put("cls", "ma7_1")
+    ma7_1_Map.put("name", "ma7_1")
+    list.append(ma7_1_Map)
 
     val ma8Map = new util.HashMap[String, String]()
     ma8Map.put("cls", "ma8")
