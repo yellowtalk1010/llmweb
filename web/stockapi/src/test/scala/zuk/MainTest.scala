@@ -12,13 +12,13 @@ import scala.jdk.CollectionConverters.*
 class MainTest extends AnyFunSuite {
 
   test("main推荐测试"){
-    val args = Array("-path", "D:\\development\\github\\stockapi\\", "-json")
+    val args = Array("-path", "D:\\development\\github\\tushare\\111\\gitee_stockapi\\", "-json")
     zuk.Main.main(args)
   }
 
   test("main回测测试") {
 //    PassFactory.models = List(new MA7_Model)
-    val args = Array("-path", "D:\\development\\github\\stockapi\\", "-json", "-back")
+    val args = Array("-path", "D:\\development\\github\\tushare\\111\\gitee_stockapi\\", "-json", "-back")
     zuk.Main.main(args)
   }
 
