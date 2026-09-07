@@ -149,7 +149,7 @@ class MA7_1_Model extends IModel {
 
 
 
-  override def desc(): String = "底部放巨量"
+  override def desc(): String = "底部放巨量（只看量）"
 
   override def winRate: Float = {
     val v = DataFrame.properties.get(classOf[MA7_Model].getSimpleName.toUpperCase)
