@@ -114,7 +114,7 @@ class MA7_Model extends IModel {
     val recentVolRate = new BigDecimal(head.vol).divide(new BigDecimal(recentAvgVol), 2, RoundingMode.UP).floatValue() //
 
     if(downRate.floatValue() > 0.4 //相比历史最高价，跌超4个点
-      && upRate.floatValue() < 0.5 //相比历史最低价，涨幅小于5个点
+      && upRate.floatValue() < 0.5 //相比历史最低价，涨幅小于5个点，（这样还有比较大的获益空间，获利盘比较小，抛压也比较小）
       && recentVolRate > 2.0 //相比历史平均交易量，放量2倍
       && (ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma30.floatValue()))
       || ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma20.floatValue())))
