@@ -10,6 +10,8 @@ import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
+import zuk.tu_share.module.MA4_Model
+import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.{HanLPUtil, TopInstUtil}
 
 import java.text.SimpleDateFormat
@@ -313,23 +315,23 @@ class TushareStockController {
   def all(desc: String, status: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
     log.info(s"索取全部股票:desc:${desc}, status:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
 
+
+
     val list = status match {
       case "my" =>
         this.getMy()
       case "all" =>
         this.getAll(desc)
-      case "ma4" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
-      case "ma5" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
-      case "ma7" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
-      case "ma7_1" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
-      case "ma8" =>
-        this.getMa7(TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case _=>
-        new util.ArrayList[TushareStockControllerDTO]()
+        val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e=>{
+          e.equals(status)
+        })
+        if(ls.size>0){
+          this.getMa7(ls.head, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
+        }
+        else {
+          new util.ArrayList[TushareStockControllerDTO]()
+        }
     }
 
     val map = new util.HashMap[String, Object]()
@@ -360,30 +362,37 @@ class TushareStockController {
     allMap.put("name", "全部")
     list.append(allMap)
 
-    val ma4Map = new util.HashMap[String, String]()
-    ma4Map.put("cls", "ma4")
-    ma4Map.put("name", "ma4")
-    list.append(ma4Map)
+    PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{
+      val map = new util.HashMap[String, String]()
+      map.put("cls", clsName)
+      map.put("name", clsName)
+      list.append(map)
+    })
 
-    val ma5Map = new util.HashMap[String, String]()
-    ma5Map.put("cls", "ma5")
-    ma5Map.put("name", "ma5")
-    list.append(ma5Map)
-
-    val ma7Map = new util.HashMap[String, String]()
-    ma7Map.put("cls", "ma7")
-    ma7Map.put("name", "ma7")
-    list.append(ma7Map)
-
-    val ma7_1_Map = new util.HashMap[String, String]()
-    ma7_1_Map.put("cls", "ma7_1")
-    ma7_1_Map.put("name", "ma7_1")
-    list.append(ma7_1_Map)
-
-    val ma8Map = new util.HashMap[String, String]()
-    ma8Map.put("cls", "ma8")
-    ma8Map.put("name", "ma8")
-    list.append(ma8Map)
+//    val ma4Map = new util.HashMap[String, String]()
+//    ma4Map.put("cls", "ma4")
+//    ma4Map.put("name", "ma4")
+//    list.append(ma4Map)
+//
+//    val ma5Map = new util.HashMap[String, String]()
+//    ma5Map.put("cls", "ma5")
+//    ma5Map.put("name", "ma5")
+//    list.append(ma5Map)
+//
+//    val ma7Map = new util.HashMap[String, String]()
+//    ma7Map.put("cls", "ma7")
+//    ma7Map.put("name", "ma7")
+//    list.append(ma7Map)
+//
+//    val ma7_1_Map = new util.HashMap[String, String]()
+//    ma7_1_Map.put("cls", "ma7_1")
+//    ma7_1_Map.put("name", "ma7_1")
+//    list.append(ma7_1_Map)
+//
+//    val ma8Map = new util.HashMap[String, String]()
+//    ma8Map.put("cls", "ma8")
+//    ma8Map.put("name", "ma8")
+//    list.append(ma8Map)
 
 
     val map = new util.HashMap[String, Object]()
