@@ -114,10 +114,12 @@ class MA7_1_Model extends IModel {
     val recentVolRate = new BigDecimal(head.vol).divide(new BigDecimal(recentAvgVol), 2, RoundingMode.UP).floatValue() //
 
     if(
-      (downRate.floatValue() > 0.4 //相比历史最高价，跌超4个点
-      || upRate.floatValue() > 0.5 //相比历史最低价，涨幅小于5个点
+      (
+//        downRate.floatValue() > 0.4 //相比历史最高价，跌超4个点
+//      ||
+        upRate.floatValue() > 0.5 //相比历史最低价，涨幅小于5个点
         )
-        && !(downRate.floatValue() > 0.4 && upRate.floatValue() > 0.5)
+//        && !(downRate.floatValue() > 0.4 && upRate.floatValue() > 0.5)
       && recentVolRate > 2.0 //相比历史平均交易量，放量2倍
 //      && (ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma30.floatValue()))
 //      || ListOrderCheck.isDecreasing(recentDays.reverse.map(_.ma.ma20.floatValue()))
@@ -152,7 +154,7 @@ class MA7_1_Model extends IModel {
   override def desc(): String = "底部放巨量（只看量，没有走势）"
 
   override def winRate: Float = {
-    val v = DataFrame.properties.get(classOf[MA7_Model].getSimpleName.toUpperCase)
+    val v = DataFrame.properties.get(classOf[MA7_1_Model].getSimpleName.toUpperCase)
     if (v != null) {
       v.toString.toFloat
     }
