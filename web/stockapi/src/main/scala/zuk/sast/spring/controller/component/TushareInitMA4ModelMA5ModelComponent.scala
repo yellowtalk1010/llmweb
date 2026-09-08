@@ -13,6 +13,7 @@ import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.TsStock
+import zuk.tu_share.module.{MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model}
 
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -33,11 +34,11 @@ object TushareInitMA4ModelMA5ModelComponent {
   @Deprecated
   val eliminate_str: String = "eliminate" //淘汰
 
-  val MA4_MODEL_STR: String = "MA4_MODEL"
-  val MA5_MODEL_STR: String = "MA5_MODEL"
-  val MA7_MODEL_STR: String = "MA7_MODEL"
-  val MA7_1_MODEL_STR: String = "MA7_1_MODEL"
-  val MA8_MODEL_STR: String = "MA8_MODEL"
+  val MA4_MODEL_STR: String = classOf[MA4_Model].getSimpleName.toUpperCase() //"MA4_MODEL"
+  val MA5_MODEL_STR: String = classOf[MA5_Model].getSimpleName.toUpperCase() //"MA5_MODEL"
+  val MA7_MODEL_STR: String = classOf[MA7_Model].getSimpleName.toUpperCase() //"MA7_MODEL"
+  val MA7_1_MODEL_STR: String = classOf[MA7_1_Model].getSimpleName.toUpperCase() //"MA7_1_MODEL"
+  val MA8_MODEL_STR: String = classOf[MA8_Model].getSimpleName.toUpperCase() //"MA8_MODEL"
 
 
   /** *
