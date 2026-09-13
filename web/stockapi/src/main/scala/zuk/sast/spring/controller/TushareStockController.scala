@@ -325,7 +325,7 @@ class TushareStockController {
         this.getAll(desc)
       case "limit_up" =>
         //涨停的股票
-        this.getLimitUp(selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
+        this.getLimitUp(selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
       case _=>
         val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e=>{
           e.equals(status)
@@ -353,20 +353,41 @@ class TushareStockController {
    * @return
    */
   private def getLimitUp(selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    val list = TushareAllStocks.allStocks.map(_.ts_code).filter(e=>TushareStockDailyDataComponent.getDailyDataList(e)!=null).map(stockCode=>{
-      val ls1 = TushareStockDailyDataComponent.getDailyDataList(stockCode)
-      val ls = ls1.filter(e=>e.trade_date.equals(selectedDateStart) || e.trade_date.equals(selectedDateEnd))
-      if(ls!=null && ls.size>0){
-        Some(ls.head)
-      }
-      else {
-        Option.empty
-      }
-    }).filter(!_.isEmpty)
-      .map(_.get)
-      .filter(e=>{
-        e.change.toFloat > 9.8
-      })
+    val list = TushareAllStocks.allStocks.map(_.ts_code)
+      .filter(e=>TushareStockDailyDataComponent.getDailyDataList(e)!=null)
+      .flatMap(stockCode=>{
+        val ls = TushareStockDailyDataComponent.getDailyDataList(stockCode)
+        val filterList = if(StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)){
+          val start = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong){
+            selectedDateStart.trim.toLong
+          }
+          else {
+            selectedDateEnd.trim.toLong
+          }
+
+          val end = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong) {
+            selectedDateEnd.trim.toLong
+          }
+          else {
+            selectedDateStart.trim.toLong
+          }
+
+          ls.sortBy(e=>e.trade_date.toFloat).reverse.filter(e=> start <= e.trade_date.toLong && e.trade_date.toLong <= end)
+
+        }
+        else if (StringUtils.isNotBlank(selectedDateStart)) {
+          ls.filter(e=> e.trade_date.equals(selectedDateStart))
+        }
+        else if (StringUtils.isNotBlank(selectedDateEnd)) {
+          ls.filter(e=> e.trade_date.equals(selectedDateEnd))
+        }
+        else {
+          List.empty
+        }
+        filterList
+      }).filter(e=>{
+          e.change.toFloat > 9.8
+        })
     
     //
     list.map(e=>{
