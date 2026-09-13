@@ -393,6 +393,7 @@ class TushareStockController {
     //
     list.map(e=>{
       val dto = new TushareStockControllerDTO
+      dto.selectModel = "涨停"
       dto.tradedate = e.trade_date
       dto.stockCode = e.ts_code
       dto.name = e.name
