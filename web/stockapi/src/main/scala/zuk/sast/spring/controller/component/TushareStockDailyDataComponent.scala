@@ -32,6 +32,7 @@ case class StockDailyData() {
   @BeanProperty var high: String = ""
   @BeanProperty var low: String = ""
   @BeanProperty var close: String = ""
+  @BeanProperty var change: String = ""
 }
 
 object TushareStockDailyDataComponent {
@@ -39,6 +40,21 @@ object TushareStockDailyDataComponent {
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
   private val DAY_NUM = 120 //过去6个交易日
+
+  /***
+   *
+   * @param stockCode
+   * @return
+   */
+  def getDailyDataList(stockCode: String): List[StockDailyData] = {
+    val list = StockHistoryDailyDataMap.get(stockCode)
+    if (list != null) {
+      if (StockRtkDataMap.get(stockCode) != null) {
+        list.toBuffer.prepend(StockRtkDataMap.get(stockCode))
+      }
+    }
+    list
+  }
 
   /***
    *
@@ -186,6 +202,7 @@ class TushareStockDailyDataComponent {
           stockDailyData.high = record.get("high")
           stockDailyData.low = record.get("low")
           stockDailyData.close = record.get("close")
+          stockDailyData.change = record.get("change")
           stockDailyData
         })
         .toList
