@@ -353,11 +353,11 @@ class TushareStockController {
    * @return
    */
   private def getLimitUp(selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    val list = TushareAllStocks.allStocks.map(_.ts_code).map(stockCode=>{
-      val ls = TushareStockDailyDataComponent.getDailyDataList(stockCode)
+    val list = TushareAllStocks.allStocks.map(_.ts_code).filter(e=>TushareStockDailyDataComponent.getDailyDataList(e)!=null).map(stockCode=>{
+      val ls1 = TushareStockDailyDataComponent.getDailyDataList(stockCode)
+      val ls = ls1.filter(e=>e.trade_date.equals(selectedDateStart) || e.trade_date.equals(selectedDateEnd))
       if(ls!=null && ls.size>0){
-        val ls1 = ls.filter(e=>e.trade_date.equals(selectedDateStart) || e.trade_date.equals(selectedDateEnd))
-        Some(ls1.head)
+        Some(ls.head)
       }
       else {
         Option.empty
