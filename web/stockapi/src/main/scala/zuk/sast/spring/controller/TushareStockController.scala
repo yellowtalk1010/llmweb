@@ -357,6 +357,7 @@ class TushareStockController {
       .filter(e=>TushareStockDailyDataComponent.getDailyDataList(e)!=null)
       .flatMap(stockCode=>{
         val ls = TushareStockDailyDataComponent.getDailyDataList(stockCode)
+        //开始过滤时间
         val filterList = if(StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)){
           val start = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong){
             selectedDateStart.trim.toLong
@@ -382,7 +383,7 @@ class TushareStockController {
           ls.filter(e=> e.trade_date.equals(selectedDateEnd))
         }
         else {
-          List.empty
+          Array(ls.head).toList
         }
         filterList
       }).filter(e=>{
