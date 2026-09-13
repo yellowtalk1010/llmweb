@@ -313,15 +313,19 @@ class TushareStockController {
    */
   @GetMapping(value = Array("all"))
   def all(desc: String, status: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
+
     log.info(s"索取全部股票:desc:${desc}, status:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
-
-
 
     val list = status match {
       case "my" =>
+        //购买和关注的股票
         this.getMy()
       case "all" =>
+        //A股全量股票
         this.getAll(desc)
+      case "limit_up" =>
+        //涨停的股票
+        this.getLimitUp(selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
       case _=>
         val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e=>{
           e.equals(status)
@@ -340,6 +344,49 @@ class TushareStockController {
     map.put("keyword", HanLPUtil.createFenCi(list.asScala.map(e=>e.concept).toList))
 
     map
+  }
+
+  /***
+   * 涨停的股票
+   * @param selectedDateStart
+   * @param selectedDateEnd
+   * @return
+   */
+  private def getLimitUp(selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
+    val list = TushareAllStocks.allStocks.map(_.ts_code).map(stockCode=>{
+      val ls = TushareStockDailyDataComponent.getDailyDataList(stockCode)
+      if(ls!=null && ls.size>0){
+        val ls1 = ls.filter(e=>e.trade_date.equals(selectedDateStart) || e.trade_date.equals(selectedDateEnd))
+        Some(ls1.head)
+      }
+      else {
+        Option.empty
+      }
+    }).filter(!_.isEmpty)
+      .map(_.get)
+      .filter(e=>{
+        e.change.toFloat > 9.8
+      })
+    
+    //
+    list.map(e=>{
+      val dto = new TushareStockControllerDTO
+      dto.tradedate = e.trade_date
+      dto.stockCode = e.ts_code
+      dto.name = e.name
+      if (dto.stockCode.startsWith("688")) {
+        dto.name = s"${dto.name}【科创】"
+      }
+      else if (dto.stockCode.startsWith("920")) {
+        dto.name = s"${dto.name}【北交所】"
+      }
+      dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
+      val tsStock = new TsStock(dto.stockCode)
+      dto.eastmoneyURL = tsStock.eastmoneyURL
+      dto.conceptURL = tsStock.conceptURL
+      dto
+    }).asJava
+    
   }
 
   /** *
@@ -361,6 +408,11 @@ class TushareStockController {
     allMap.put("cls", "all")
     allMap.put("name", "全部")
     list.append(allMap)
+
+    val limitUpMap = new util.HashMap[String, String]()
+    limitUpMap.put("cls", "limit_up")
+    limitUpMap.put("name", "涨停")
+    list.append(limitUpMap)
 
     PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{
       val map = new util.HashMap[String, String]()
