@@ -143,7 +143,7 @@ class TushareStockDailyDataComponent {
         val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date)
         list.map(e=>{
           e.trade_date = dateStr
-          e.change = new BigDecimal(e.close.toFloat - e.pre_close.toFloat).divide(new BigDecimal(e.pre_close), 2, RoundingMode.DOWN).multiply(new BigDecimal(100)).floatValue().toString
+          e.change = new BigDecimal(e.close.toFloat - e.pre_close.toFloat).divide(new BigDecimal(e.pre_close), 4, RoundingMode.DOWN).multiply(new BigDecimal(100)).floatValue().toString
           TushareStockDailyDataComponent.StockRtkDataMap.put(e.ts_code, e)
         })
 
