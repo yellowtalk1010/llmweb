@@ -383,7 +383,13 @@ class TushareStockController {
           ls.filter(e=> e.trade_date.equals(selectedDateEnd))
         }
         else {
-          Array(ls.head).toList
+          if(ls.size>0){
+            Array(ls.head).toList  
+          }
+          else {
+            List.empty
+          }
+          
         }
         filterList
       }).filter(e=>{
