@@ -28,6 +28,7 @@ case class StockDailyData() {
   @BeanProperty var ts_code: String = ""
   @BeanProperty var name: String = ""
   @BeanProperty var trade_date: String = ""
+  @BeanProperty var pre_close: String = ""
   @BeanProperty var open: String = ""
   @BeanProperty var high: String = ""
   @BeanProperty var low: String = ""
@@ -194,15 +195,25 @@ class TushareStockDailyDataComponent {
           if(record.isMapped("trade_date")){
             stockDailyData.trade_date = record.get("trade_date")
           }
+          else if(all_stocks_file.getName.endsWith("rt_k.csv")){
+            val sdf = new SimpleDateFormat("yyyyMMdd")
+            stockDailyData.trade_date = sdf.format(new Date())
+          }
           else {
             stockDailyData.trade_date = ""
           }
-
+            
+          stockDailyData.pre_close = record.get("pre_close")
           stockDailyData.open = record.get("open")
           stockDailyData.high = record.get("high")
           stockDailyData.low = record.get("low")
           stockDailyData.close = record.get("close")
-          stockDailyData.change = record.get("change")
+          if(record.isMapped("change")){
+            stockDailyData.change = record.get("change")  
+          }
+          else {
+            stockDailyData.change = new BigDecimal(stockDailyData.close.toFloat - stockDailyData.pre_close.toFloat).divide(new BigDecimal(stockDailyData.pre_close), 2, RoundingMode.DOWN).floatValue().toString
+          }
           stockDailyData
         })
         .toList
