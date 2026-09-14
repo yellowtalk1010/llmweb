@@ -48,13 +48,16 @@ object TushareStockDailyDataComponent {
    * @return
    */
   def getDailyDataList(stockCode: String): List[StockDailyData] = {
-    val list = StockHistoryDailyDataMap.get(stockCode)
+    val list = new ListBuffer[StockDailyData]()
+    if(StockHistoryDailyDataMap.get(stockCode)!=null) {
+      list ++= StockHistoryDailyDataMap.get(stockCode)
+    }
     if (list != null) {
       if (StockRtkDataMap.get(stockCode) != null) {
-        list.toBuffer.prepend(StockRtkDataMap.get(stockCode))
+        list.prepend(StockRtkDataMap.get(stockCode))
       }
     }
-    list
+    list.toList
   }
 
   /***
