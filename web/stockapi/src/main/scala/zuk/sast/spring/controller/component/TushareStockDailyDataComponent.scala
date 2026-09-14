@@ -125,16 +125,22 @@ class TushareStockDailyDataComponent {
       if(rtkFile.exists() && rtkFile.isFile){
         log.info(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")
         val list = loadAllStocks(rtkFile).filter(e=>{
-          //过滤掉停牌的数据
-          val isTingPai = new BigDecimal(e.close).compareTo(java.math.BigDecimal.ZERO) == 0
-            || new BigDecimal(e.low).compareTo(java.math.BigDecimal.ZERO) == 0
-            || new BigDecimal(e.high).compareTo(java.math.BigDecimal.ZERO) == 0
-            || new BigDecimal(e.open).compareTo(java.math.BigDecimal.ZERO) == 0
-          !isTingPai
+          try {
+            //过滤掉停牌的数据
+            val isTingPai = new BigDecimal(e.close).compareTo(java.math.BigDecimal.ZERO) == 0
+              || new BigDecimal(e.low).compareTo(java.math.BigDecimal.ZERO) == 0
+              || new BigDecimal(e.high).compareTo(java.math.BigDecimal.ZERO) == 0
+              || new BigDecimal(e.open).compareTo(java.math.BigDecimal.ZERO) == 0
+            !isTingPai
+          }
+          catch {
+            case exception: Exception => false
+          }
         })
         val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date)
         list.map(e=>{
           e.trade_date = dateStr
+          e.change = new BigDecimal(e.close.toFloat - e.pre_close.toFloat).divide(new BigDecimal(e.pre_close), 2, RoundingMode.DOWN).multiply(new BigDecimal(100)).floatValue().toString
           TushareStockDailyDataComponent.StockRtkDataMap.put(e.ts_code, e)
         })
 
@@ -195,10 +201,6 @@ class TushareStockDailyDataComponent {
           if(record.isMapped("trade_date")){
             stockDailyData.trade_date = record.get("trade_date")
           }
-          else if(all_stocks_file.getName.endsWith("rt_k.csv")){
-            val sdf = new SimpleDateFormat("yyyyMMdd")
-            stockDailyData.trade_date = sdf.format(new Date())
-          }
           else {
             stockDailyData.trade_date = ""
           }
@@ -210,9 +212,6 @@ class TushareStockDailyDataComponent {
           stockDailyData.close = record.get("close")
           if(record.isMapped("change")){
             stockDailyData.change = record.get("change")  
-          }
-          else {
-            stockDailyData.change = new BigDecimal(stockDailyData.close.toFloat - stockDailyData.pre_close.toFloat).divide(new BigDecimal(stockDailyData.pre_close), 2, RoundingMode.DOWN).floatValue().toString
           }
           stockDailyData
         })
