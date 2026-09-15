@@ -2,7 +2,9 @@ package zuk.tu_share.utils
 
 import com.hankcs.hanlp.HanLP
 import com.hankcs.hanlp.seg.common.Term
+import org.apache.commons.io.FileUtils
 
+import java.io.File
 import scala.jdk.CollectionConverters.*
 /***
  * 分词
@@ -16,6 +18,8 @@ object HanLPUtil {
       termList
     })
 
+    saveTerm(ls)
+    
     val ls1 = ls.filter(doFilter(_)).map(_.word).groupBy(e=>e).toList.sortBy(_._2.size).reverse
 
     val str = (if(ls1.size>100){
@@ -34,6 +38,12 @@ object HanLPUtil {
     //忽略分词关键字
     val ignoreSet = Set[String]("概念", "一级", "二级", "三级", "行业", "名称", "任务", "板块", "股票", "所属", "其他", "设备", "建设", "500", "重仓", "国企", "改革", "通用")
     term.word.size > 1 && !ignoreSet.contains(term.word)
+  }
+  
+  private def saveTerm(terms: List[Term]): Unit = {
+    val ignoreKeywordFile = new File("ignoreKeyword.txt")
+    val keywords = FileUtils.readLines(ignoreKeywordFile, "UTF-8").asScala.toSet.toList
+    FileUtils.writeLines(ignoreKeywordFile, (keywords ++ terms.map(_.word)).filter(_.trim.size>1).toSet.toList.asJava)
   }
 
 }
