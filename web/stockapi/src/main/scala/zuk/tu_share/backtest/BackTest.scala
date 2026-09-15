@@ -149,7 +149,7 @@ object BackTest {
       val sdf = new SimpleDateFormat("yyyy-MM-dd")
       val dateStr = sdf.format(new Date())
       output = new FileOutputStream(DataFrame.config_properties)
-      DataFrame.properties.store(output, s"${dateStr} stock config")
+      DataFrame.properties.store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
     }
     catch
       case exception: Exception =>
