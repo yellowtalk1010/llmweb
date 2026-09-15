@@ -132,7 +132,7 @@ class TusharePushStockController {
     try {
       val properties = new Properties()
       
-      val propertiesPath = this.applicationProperties.getStockAnalysisSystemPath + File.separator + "stock_config.properties"
+      val propertiesPath = this.applicationProperties.getStockAnalysisSystem_stock_config_properties
       properties.load(new FileInputStream(propertiesPath))
 
       val moduleSortList = properties.entrySet().asScala.toList.filter(e => PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).contains(e.getKey))
