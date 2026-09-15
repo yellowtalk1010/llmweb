@@ -125,7 +125,7 @@ class TusharePushStockController {
 
 
   /***
-   * 根据历史胜率排序
+   * 根据模型的胜率排序
    * @return
    */
   private def getModuleSortList: List[IModel] = {
