@@ -14,6 +14,7 @@ import zuk.sast.spring.controller.component.{ApplicationProperties, TushareAllSt
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
+import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.{HanLPUtil, TopInstUtil}
 
@@ -123,34 +124,57 @@ class TusharePushStockController {
 
 
   /***
+   * 根据历史胜率排序
+   * @return
+   */
+  private def getModuleSortList: List[IModel] = {
+
+    try {
+      val properties = new Properties()
+      
+      val propertiesPath = this.applicationProperties.getStockAnalysisSystemPath + File.separator + "stock_config.properties"
+      properties.load(new FileInputStream(propertiesPath))
+
+      val moduleSortList = properties.entrySet().asScala.toList.filter(e => PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).contains(e.getKey))
+        .sortBy(e => e.getValue.toString.toFloat)
+        .reverse
+        .map(e => {
+          val modelClsName = e.getKey
+          val winRate = e.getValue
+          val ls = PassFactory.moduleList().filter(_.getClass.getSimpleName.toUpperCase.equals(modelClsName))
+          if (ls.size > 0) {
+            Some(ls.head)
+          }
+          else {
+            Option.empty
+          }
+        }).filter(!_.isEmpty).map(_.get)
+
+      moduleSortList
+    }
+    catch {
+      case exception: Exception => exception.printStackTrace()
+        List.empty
+    }
+    
+  }
+
+
+  /***
    * 获取模型列表
    * @return
    */
   @GetMapping(value = Array("moduleList"))
   def moduleList(): util.Map[String, Object] = {
-
-    val properties = new Properties()
-    try {
-      val propertiesPath = this.applicationProperties.getStockAnalysisSystemPath + File.separator + "stock_config.properties"
-      properties.load(new FileInputStream(propertiesPath))
-    }
-    catch {
-      case exception: Exception => exception.printStackTrace()
-    }
-
-    val list = PassFactory.moduleList().map(e=>{
+    
+    val list = getModuleSortList.map(e=>{
 
       val map = util.HashMap[String, String]()
       val cls = e.getClass.getSimpleName
-      //胜率
-      val winRate = if(StringUtils.isEmpty(properties.getProperty(cls.toUpperCase)))
-        ""
-      else
-        properties.getProperty(cls.toUpperCase)
 
       val name = e.desc()
       map.put("cls", cls)
-      map.put("name", s"${cls}：${winRate}, ${e.desc()}")
+      map.put("name", s"${cls}： ${e.desc()}")
       map
     }).toBuffer
 
