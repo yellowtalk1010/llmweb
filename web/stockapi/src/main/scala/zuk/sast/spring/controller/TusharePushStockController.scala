@@ -148,8 +148,9 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("moduleList"))
   def moduleList(): util.Map[String, Object] = {
-
-    val list = getModuleSortList.map(e=>{
+    
+    val sortedModels = getModuleSortList
+    val list = sortedModels.map(e=>{
 
       val map = util.HashMap[String, String]()
       val cls = e.getClass.getSimpleName
