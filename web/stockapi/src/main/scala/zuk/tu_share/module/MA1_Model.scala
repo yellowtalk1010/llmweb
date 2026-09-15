@@ -59,16 +59,6 @@ class MA1_Model extends IModel {
     "主力行为：1.炸板，2.次日缩量上涨；3.缩量上涨（尾盘买入）；4. 涨跌都必须卖出。因为如果下跌，会一直下跌。 "
   }
 
-  override def winRate: Float = {
-    val v = DataFrame.properties.get(classOf[MA1_Model].getSimpleName.toUpperCase)
-    if(v!=null){
-      v.toString.toFloat
-    }
-    else {
-      0.9296
-    }
-  }
-
   override def reference: Float = 0.0
 
   override def warnUpperShadow: Boolean = this.stockDto.warningUpperShadow

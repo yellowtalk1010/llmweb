@@ -109,10 +109,6 @@ class MA8_Model extends IModel {
     "龙虎榜净卖出为负，缩量上涨"
   }
 
-  override def winRate: Float = {
-    0.8308
-  }
-
   override def reference: Float = {
     0.0
   }

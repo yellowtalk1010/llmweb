@@ -68,16 +68,6 @@ class MA3_3_Model extends IModel {
 
   override def desc(): String = "反包两日阴线后继续上升（下引线最好涵盖在上一个交易日的柱子里面）。赶紧入手。优先无上影线"
 
-  override def winRate: Float = {
-    val v = DataFrame.properties.get(classOf[MA3_3_Model].getSimpleName.toUpperCase)
-    if (v != null) {
-      v.toString.toFloat
-    }
-    else {
-      0.9246
-    }
-  }
-
   override def reference: Float = 0.00
 
   override def warnUpperShadow: Boolean = this.stockDto.warningUpperShadow

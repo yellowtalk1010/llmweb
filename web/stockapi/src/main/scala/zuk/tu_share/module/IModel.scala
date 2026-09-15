@@ -1,5 +1,6 @@
 package zuk.tu_share.module
 
+import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 
 import java.math
@@ -20,7 +21,15 @@ trait IModel {
   //买入理由
   def buyReason(): String = ""
 
-  def winRate: Float
+  def winRate: Float = {
+    val v = DataFrame.properties.get(this.getClass.getSimpleName.toUpperCase)
+    if (v != null) {
+      v.toString.toFloat
+    }
+    else {
+      0.00
+    }
+  }
 
   def reference: Float
 

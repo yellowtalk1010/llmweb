@@ -113,16 +113,6 @@ class MA6_Model extends IModel {
 
   override def desc(): String = "超越MA30"
 
-  override def winRate: Float = {
-    val v = DataFrame.properties.get(classOf[MA5_Model].getSimpleName.toUpperCase)
-    if (v != null) {
-      v.toString.toFloat
-    }
-    else {
-      0.8818
-    }
-  }
-
   override def reference: Float = 0.0
 
   override def warnUpperShadow: Boolean = false

@@ -59,16 +59,6 @@ class MA4_Model extends IModel {
 
   override def desc(): String = "日线、周线开口上扬"
 
-  override def winRate: Float = {
-    val v = DataFrame.properties.get(classOf[MA4_Model].getSimpleName.toUpperCase)
-    if (v != null) {
-      v.toString.toFloat
-    }
-    else {
-      0.8818
-    }
-  }
-
   override def reference: Float = 0.0
 
   override def warnUpperShadow: Boolean = false

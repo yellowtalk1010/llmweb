@@ -63,16 +63,6 @@ class MA1_1_Model extends IModel {
     "合力炸板，主力强势介入，缩量上涨，优先无上影线"
   }
 
-  override def winRate: Float = {
-    val v = DataFrame.properties.get(classOf[MA1_1_Model].getSimpleName.toUpperCase)
-    if(v!=null){
-      v.toString.toFloat
-    }
-    else {
-      0.9311
-    }
-  }
-
   override def reference: Float = 0.0
 
   override def warnUpperShadow: Boolean = this.stockDto.warningUpperShadow
