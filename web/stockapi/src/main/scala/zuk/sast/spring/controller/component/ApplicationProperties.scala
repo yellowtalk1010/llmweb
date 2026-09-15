@@ -18,19 +18,20 @@ class ApplicationProperties {
    */
   @Value("${stock.analysis.system.path}")
   private var stock_analysis_system_path: String = null
-  //股票分析系统路径
+  //股票分析引擎系统路径
   def getStockAnalysisSystemPath: String = this.stock_analysis_system_path
-  //股票分析系统结果存储路径
+  //股票分析引擎系统结果存储路径
   def getStockAnalysisSystem_resultJsonSavePath: String = this.stock_analysis_system_path + File.separator + "result_json"
-  //股票分析系统待分析的股票详情
+  //股票分析引擎系统待分析的股票详情
   def getStockAnalysisSystem_allStocksCsvPath: String = this.stock_analysis_system_path + File.separator + "all_stocks.csv"
-  //股票分析系统，股票所属板块和概念路径
+  //股票分析引擎系统，股票所属板块和概念路径
   def getStockAnalysisSystem_conceptPath: String = this.stock_analysis_system_path + File.separator + "concept"
-  //股票分析系统，及时股票信息路径
+  //股票分析引擎系统，及时股票信息路径
   def getStockAnalysisSystem_rtkPath: String = this.stock_analysis_system_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
-  //股票分析系统，回测结果路径
+  //股票分析引擎系统，回测结果路径
   def getStockAanlysisSystem_backTestResultPath: String = this.stock_analysis_system_path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
-
+  //股票分析引擎系统，获取模型胜率
+  def getStockAnalysisSystem_stock_config_properties: String = this.stock_analysis_system_path + File.separator + "stock_config.properties"
 
   /***
    * 股票数据源构建系统路径
