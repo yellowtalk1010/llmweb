@@ -135,7 +135,7 @@ class TusharePushStockController {
       PassFactory.moduleList().sortBy(_.winRate).reverse
     }
     catch {
-      case exception: Exception => 
+      case exception: Exception =>
         exception.printStackTrace()
         List.empty
     }
@@ -148,7 +148,7 @@ class TusharePushStockController {
    */
   @GetMapping(value = Array("moduleList"))
   def moduleList(): util.Map[String, Object] = {
-    
+
     val list = getModuleSortList.map(e=>{
 
       val map = util.HashMap[String, String]()
@@ -156,7 +156,7 @@ class TusharePushStockController {
 
       val name = e.desc()
       map.put("cls", cls)
-      map.put("name", s"${cls}： ${e.desc()}")
+      map.put("name", s"${cls}：${e.winRate} ${e.desc()}")
       map
     }).toBuffer
 
