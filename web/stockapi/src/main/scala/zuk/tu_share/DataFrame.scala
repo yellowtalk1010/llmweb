@@ -22,7 +22,7 @@ import java.util.Properties
 
 object DataFrame {
 
-  val properties = new Properties()
+  private val properties = new Properties()
   val turnover = "turnover"
   val change = "change"
   val config_properties = "stock_config.properties"
@@ -30,7 +30,7 @@ object DataFrame {
   /**
    * STOCKS_MAP 中 Key 为 ts_code
    */
-  val STOCKS_MAP= new mutable.HashMap[String, TsStock]()
+  val STOCKS_MAP = new mutable.HashMap[String, TsStock]()
 
 
   /***
@@ -152,22 +152,22 @@ object DataFrame {
     })
   }
 
-  private def loadProperties() = {
+  def getProperties(configProperties: String = config_properties): Properties = {
     try{
-      val configFile = new File(config_properties)
-      println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
-      if (!configFile.exists()) {
-        val output = new FileOutputStream(config_properties)
-        properties.put(turnover, "100")
-        properties.put(change, "100")
-        properties.store(output, "stock config")
-        output.close()
+      if(properties.size() == 0){
+        val configFile = new File(configProperties)
+        println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
+        if (configFile.exists()) {
+          properties.load(new FileReader(configFile))
+          println(properties.toString)
+        }
       }
-      properties.load(new FileReader(configFile))
-      println(properties.toString)
+      properties
     }
     catch
-      case exception: Exception =>
+      case exception: Exception => 
+        exception.printStackTrace()
+        properties
   }
 
   /***
@@ -178,7 +178,7 @@ object DataFrame {
    */
   def load(path: String): mutable.HashMap[String, List[ModuleDay]] = {
 
-    loadProperties()
+    getProperties()
 
     //加载股票信息
     val all_stocks_path = path + File.separator + "all_stocks.csv"

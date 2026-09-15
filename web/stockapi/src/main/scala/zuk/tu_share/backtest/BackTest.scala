@@ -114,7 +114,7 @@ object BackTest {
         //计算胜率
         val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.filter(_.sells.size>0).size), 4, RoundingMode.UP)
         //胜率保存到properties中
-        zuk.tu_share.DataFrame.properties.put(clsName.toUpperCase, victoryRate.toString)
+        zuk.tu_share.DataFrame.getProperties().put(clsName.toUpperCase, victoryRate.toString)
         val line = s"${clsName}胜率：${victoryRate}, ${ls.head.desc()}"
         lines += line
         println(line)
@@ -149,7 +149,7 @@ object BackTest {
       val sdf = new SimpleDateFormat("yyyy-MM-dd")
       val dateStr = sdf.format(new Date())
       output = new FileOutputStream(DataFrame.config_properties)
-      DataFrame.properties.store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
+      DataFrame.getProperties().store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
     }
     catch
       case exception: Exception =>

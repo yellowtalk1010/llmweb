@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 import zuk.sast.spring.controller.component.{ApplicationProperties, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
@@ -128,35 +129,16 @@ class TusharePushStockController {
    * @return
    */
   private def getModuleSortList: List[IModel] = {
-
     try {
-      val properties = new Properties()
-      
       val propertiesPath = this.applicationProperties.getStockAnalysisSystem_stock_config_properties
-      properties.load(new FileInputStream(propertiesPath))
-
-      val moduleSortList = properties.entrySet().asScala.toList.filter(e => PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).contains(e.getKey))
-        .sortBy(e => e.getValue.toString.toFloat)
-        .reverse
-        .map(e => {
-          val modelClsName = e.getKey
-          val winRate = e.getValue
-          val ls = PassFactory.moduleList().filter(_.getClass.getSimpleName.toUpperCase.equals(modelClsName))
-          if (ls.size > 0) {
-            Some(ls.head)
-          }
-          else {
-            Option.empty
-          }
-        }).filter(!_.isEmpty).map(_.get)
-
-      moduleSortList
+      val properties = DataFrame.getProperties(propertiesPath)
+      PassFactory.moduleList().sortBy(_.winRate).reverse
     }
     catch {
-      case exception: Exception => exception.printStackTrace()
+      case exception: Exception => 
+        exception.printStackTrace()
         List.empty
     }
-    
   }
 
 
