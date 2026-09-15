@@ -152,6 +152,11 @@ object DataFrame {
     })
   }
 
+  /***
+   * 创建并获取 properties 数据
+   * @param configProperties
+   * @return
+   */
   def getProperties(configProperties: String = config_properties): Properties = {
     try{
       if(properties.size() == 0){
