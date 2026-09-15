@@ -22,7 +22,7 @@ trait IModel {
   def buyReason(): String = ""
 
   def winRate: Float = {
-    val v = DataFrame.properties.get(this.getClass.getSimpleName.toUpperCase)
+    val v = DataFrame.getProperties().get(this.getClass.getSimpleName.toUpperCase)
     if (v != null) {
       v.toString.toFloat
     }
