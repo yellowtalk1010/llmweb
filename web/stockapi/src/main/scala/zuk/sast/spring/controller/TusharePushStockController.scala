@@ -183,6 +183,7 @@ class TusharePushStockController {
     response.put("code", s"success")
     response.put("time", s"${System.currentTimeMillis()}")
 
+    //判断结果路径是否存在
     val file: File = getStockResultJsonPath()
     if(!file.exists() || !file.isDirectory){
       log.info(s"分析引擎结果路径不存在: ${file.getAbsolutePath}")
