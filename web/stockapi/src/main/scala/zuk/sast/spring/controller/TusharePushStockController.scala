@@ -179,15 +179,13 @@ class TusharePushStockController {
 
     log.info(s"选择模型:${modType}")
 
-    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
-
     val response = new util.HashMap[String, Object]()
     response.put("code", s"success")
     response.put("time", s"${System.currentTimeMillis()}")
 
     val file: File = getStockResultJsonPath()
     if(!file.exists() || !file.isDirectory){
-      log.info(s"路径不存在: ${stockResultJsonPath}")
+      log.info(s"分析引擎结果路径不存在: ${file.getAbsolutePath}")
       return response
     }
 
