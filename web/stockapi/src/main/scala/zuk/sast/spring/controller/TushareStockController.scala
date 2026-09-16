@@ -325,7 +325,10 @@ class TushareStockController {
         this.getAll(desc)
       case "limit_up" =>
         //涨停的股票
-        this.getLimitUp(selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
+        this.getLimit_up_down (1, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
+      case "limit_down" =>
+        //跌停的股票
+        this.getLimit_up_down(-1, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
       case _=>
         val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e=>{
           e.equals(status)
@@ -346,6 +349,91 @@ class TushareStockController {
     map
   }
 
+
+  /** *
+   * 涨停、跌停的股票
+   * 
+   * @param up_down_type 1,涨停，-1跌停
+   * @param selectedDateStart
+   * @param selectedDateEnd
+   * @return
+   */
+  private def getLimit_up_down (up_down_type: Int = 1, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
+    val list = TushareAllStocks.allStocks.map(_.ts_code)
+      .filter(e => TushareStockDailyDataComponent.getDailyDataList(e) != null)
+      .flatMap(stockCode => {
+        val ls = TushareStockDailyDataComponent.getDailyDataList(stockCode)
+        //开始过滤时间
+        val filterList = if (StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)) {
+          val start = if (selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong) {
+            selectedDateStart.trim.toLong
+          }
+          else {
+            selectedDateEnd.trim.toLong
+          }
+
+          val end = if (selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong) {
+            selectedDateEnd.trim.toLong
+          }
+          else {
+            selectedDateStart.trim.toLong
+          }
+
+          ls.sortBy(e => e.trade_date.toFloat).reverse.filter(e => start <= e.trade_date.toLong && e.trade_date.toLong <= end)
+
+        }
+        else if (StringUtils.isNotBlank(selectedDateStart)) {
+          ls.filter(e => e.trade_date.equals(selectedDateStart))
+        }
+        else if (StringUtils.isNotBlank(selectedDateEnd)) {
+          ls.filter(e => e.trade_date.equals(selectedDateEnd))
+        }
+        else {
+          if (ls.size > 0) {
+            Array(ls.head).toList
+          }
+          else {
+            List.empty
+          }
+
+        }
+        filterList
+      }).filter(e => {
+        if(up_down_type==1){
+          e.change.toFloat > 9.8
+        }
+        else {
+          e.change.toFloat < -9.8
+        }
+      })
+
+    //
+    list.map(e => {
+      val dto = new TushareStockControllerDTO
+      dto.selectModel = if(up_down_type==1){
+        "涨停"
+      }
+      else {
+        "跌停"
+      }
+      dto.tradedate = e.trade_date
+      dto.stockCode = e.ts_code
+      dto.name = e.name
+      if (dto.stockCode.startsWith("688")) {
+        dto.name = s"${dto.name}【科创】"
+      }
+      else if (dto.stockCode.startsWith("920")) {
+        dto.name = s"${dto.name}【北交所】"
+      }
+      dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
+      val tsStock = new TsStock(dto.stockCode)
+      dto.eastmoneyURL = tsStock.eastmoneyURL
+      dto.conceptURL = tsStock.conceptURL
+      dto
+    }).asJava
+
+  }
+  
   /***
    * 涨停的股票
    * @param selectedDateStart
@@ -442,39 +530,21 @@ class TushareStockController {
     limitUpMap.put("cls", "limit_up")
     limitUpMap.put("name", "涨停")
     list.append(limitUpMap)
+    
+    val limitDownMap = new util.HashMap[String, String]()
+    limitDownMap.put("cls", "limit_down")
+    limitDownMap.put("name", "跌停")
+    list.append(limitDownMap)
 
+    /**
+     * 模型
+     */
     PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{
       val map = new util.HashMap[String, String]()
       map.put("cls", clsName)
       map.put("name", clsName)
       list.append(map)
     })
-
-//    val ma4Map = new util.HashMap[String, String]()
-//    ma4Map.put("cls", "ma4")
-//    ma4Map.put("name", "ma4")
-//    list.append(ma4Map)
-//
-//    val ma5Map = new util.HashMap[String, String]()
-//    ma5Map.put("cls", "ma5")
-//    ma5Map.put("name", "ma5")
-//    list.append(ma5Map)
-//
-//    val ma7Map = new util.HashMap[String, String]()
-//    ma7Map.put("cls", "ma7")
-//    ma7Map.put("name", "ma7")
-//    list.append(ma7Map)
-//
-//    val ma7_1_Map = new util.HashMap[String, String]()
-//    ma7_1_Map.put("cls", "ma7_1")
-//    ma7_1_Map.put("name", "ma7_1")
-//    list.append(ma7_1_Map)
-//
-//    val ma8Map = new util.HashMap[String, String]()
-//    ma8Map.put("cls", "ma8")
-//    ma8Map.put("name", "ma8")
-//    list.append(ma8Map)
-
 
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
