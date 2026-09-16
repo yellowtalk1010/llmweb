@@ -192,7 +192,7 @@ class TusharePushStockController {
 
     //获取选择的模型集合
     val modSet = if(PassFactory.moduleList().map(_.getClass.getSimpleName).contains(modType)) {
-      Array(modType, "MA1_1_MODEL").toSet
+      Array(modType, "MA1_1_MODEL").toSet  //默认输出 MA1-1 模型
     }
     else {
       //全部模型集合
