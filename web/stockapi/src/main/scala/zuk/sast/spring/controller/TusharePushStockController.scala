@@ -174,6 +174,13 @@ class TusharePushStockController {
     map
   }
 
+  /***
+   * 输出模型推荐的结果
+   * 
+   * @param tradedate 交易日期
+   * @param modType 选择的模型名称
+   * @return
+   */
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
