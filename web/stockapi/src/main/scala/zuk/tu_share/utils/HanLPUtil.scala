@@ -18,7 +18,7 @@ object HanLPUtil {
       termList
     })
 
-    saveTerm(ls)
+//    saveTerm(ls)
     
     val ls1 = ls.filter(doFilter(_)).map(_.word).groupBy(e=>e).toList.sortBy(_._2.size).reverse
 
@@ -36,7 +36,8 @@ object HanLPUtil {
 
   private def doFilter(term: Term): Boolean = {
     //忽略分词关键字
-    val ignoreSet = Set[String]("概念", "一级", "二级", "三级", "行业", "名称", "任务", "板块", "股票", "所属", "其他", "设备", "建设", "500", "重仓", "国企", "改革", "通用")
+    val ignoreKeywordFile = new File("ignoreKeyword.txt")
+    val ignoreSet = FileUtils.readLines(ignoreKeywordFile, "UTF-8").asScala.toSet
     term.word.size > 1 && !ignoreSet.contains(term.word)
   }
   
