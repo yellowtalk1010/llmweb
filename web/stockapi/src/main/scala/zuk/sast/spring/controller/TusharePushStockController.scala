@@ -157,7 +157,7 @@ class TusharePushStockController {
 
       val name = e.desc()
       map.put("cls", cls)
-      map.put("name", s"${cls}：${e.winRate} ${e.desc()}")
+      map.put("name", s"${cls}：${e.winRate} ${e.desc()}") //输出模型名称，胜率，模型描述
       map
     }).toBuffer
 
