@@ -206,14 +206,16 @@ class TusharePushStockController {
       PassFactory.moduleList().map(_.getClass.getSimpleName).toSet
     }
 
-    val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+    /***
+     * 列出今天模型推荐的全部结果文件集
+     */
     val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
+    val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
+    val dateStr = simpleDateFormat.format(new Date())
+    val todayModelAdviseJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
+    log.info(s"输出今日模型推荐的全部结果json文件：${todayModelAdviseJsonFiles.map(_.getName).mkString("; ")}")
 
-    var dateStr = simpleDateFormat.format(new Date())
-    val filterJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
-    log.info(s"json文件：${filterJsonFiles.map(_.getName).mkString("; ")}")
-
-    val stockResultJsonList = filterJsonFiles.map(file=>{
+    val stockResultJsonList = todayModelAdviseJsonFiles.map(file=>{
       val fileJsonResultArray = JSONArray.parseArray(FileUtils.readFileToString(file, Charset.forName("UTF-8")), classOf[StockResultJson])
       fileJsonResultArray.asScala.map(e=>{
         val stockModleType = e.modClsName
@@ -251,7 +253,7 @@ class TusharePushStockController {
       .groupBy(_.modClsName)
       .filter(e=>modSet.map(_.toUpperCase).contains(e._1.toUpperCase))
       .map(e=>(e._1, e._2.toList.head)).toList
-      .sortBy(_._2.modWinRate).reverse
+      .sortBy(_._2.modWinRate).reverse //根据胜率排序
       .map(e=>(e._1, e._2.modWinRate))
 
     log.info(s"胜率：${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("; ")}")
