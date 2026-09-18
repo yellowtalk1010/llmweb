@@ -355,7 +355,14 @@ class TusharePushStockController {
     }).asJava
 
 
-    response.put("data", maplist)
+    if(maplist.size() == 0){
+      val emptyMap = new util.HashMap[String, Object]()
+      emptyMap.put("time", "无")
+      response.put("data", Array(emptyMap).toList.asJava)
+    }
+    else {
+      response.put("data", maplist)
+    }
 
     response
 
