@@ -13,4 +13,5 @@ class StockEntity {
   @BeanProperty var createtime: String = null
   @BeanProperty var remark: String = null
 
+  @BeanProperty var historyHitCount: Integer = 0 //历史出现的次数
 }

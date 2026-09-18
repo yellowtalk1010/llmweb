@@ -295,12 +295,14 @@ class TusharePushStockController {
       TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR)
       .foreach(modelStr=>{
         val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
-        pushStocks.filter(_._1.equals(modelStr)).flatMap(e=>e._2 ++ e._3).map(e=>{
+        pushStocks.filter(_._1.equals(modelStr)).flatMap(e=>e._2 ++ e._3).foreach(e=>{
           val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
           e.name = if(size==0){
+            e.historyHitCount = 0
             s"${e.name}"
           }
           else{
+            e.historyHitCount = size
             s"${e.name}【历史出现${size}次】"
           }
         })
@@ -310,47 +312,45 @@ class TusharePushStockController {
     val allBuyCodes = tushareStockController.getAllBuy() //全部购买的股票
     val eliminateCodes = tushareStockController.getAllEliminate() //全部淘汰的股票
     
-    val maplist = pushStocks.map(e=>{
-      
-      val conceptList = new ListBuffer[String]() //
-      val fenci = HanLPUtil.createFenCi((e._2 ++ e._3).map(_.concept).toList)
-
-      (e._2 ++ e._3).foreach(e=>{
-        if(e.ts_code.startsWith("688")){
-          e.name = e.name + "【科创】"
-        }
-        else if (e.ts_code.startsWith("920")) {
-          e.name = s"${e.name}【北交所】"
-        }
-
-        //是否出现在龙虎榜中
-        e.topInstitutions = TopInstUtil.existTopInst(e.ts_code)
+    val maplist = pushStocks
+      .map(e=>(e._1, 
+        e._2.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")), 
+        e._3.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")))
+      ).map(e=>{
         
-        //
-        if(allAttentionCodes.contains(e.ts_code)){
-          e.attention = "已关注"
-        }
-        if(allBuyCodes.contains(e.ts_code)){
-          e.buy = "已购买"
-        }
-        if (eliminateCodes.contains(e.ts_code)) {
-          e.eliminate = "已淘汰"
-        }
-      })
-
-      val head = (e._2 ++ e._3).head
-      val map = new util.HashMap[String, Object]()
-      map.put("time", s"${head.file.getName}-----${fenci}")
-      map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
-      map.put("heads", e._2.filter(e=> {
-        !e.name.toUpperCase.contains("ST")
-//            && e.turnoverRate.toFloat >= 0.3
-      }).toList.asJava) //移除股票名称中带ST的股票
-      map.put("histories", e._3.filter(e=> {
-        !e.name.toUpperCase.contains("ST")
-//            && e.turnoverRate.toFloat >= 0.3
-      }).sortBy(_.turnoverRate).reverse.asJava) //移除股票名称中带ST的股票
-      map
+        val conceptList = new ListBuffer[String]() //
+        val fenci = HanLPUtil.createFenCi((e._2 ++ e._3).map(_.concept).toList)
+  
+        (e._2 ++ e._3).foreach(e=>{
+          if(e.ts_code.startsWith("688")){
+            e.name = e.name + "【科创】"
+          }
+          else if (e.ts_code.startsWith("920")) {
+            e.name = s"${e.name}【北交所】"
+          }
+  
+          //是否出现在龙虎榜中
+          e.topInstitutions = TopInstUtil.existTopInst(e.ts_code)
+          
+          //
+          if(allAttentionCodes.contains(e.ts_code)){
+            e.attention = "已关注"
+          }
+          if(allBuyCodes.contains(e.ts_code)){
+            e.buy = "已购买"
+          }
+          if (eliminateCodes.contains(e.ts_code)) {
+            e.eliminate = "已淘汰"
+          }
+        })
+  
+        val head = (e._2 ++ e._3).head
+        val map = new util.HashMap[String, Object]()
+        map.put("time", s"${head.file.getName}-----${fenci}")
+        map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
+        map.put("heads", e._2.asJava)
+        map.put("histories", e._3.asJava)
+        map
     }).asJava
 
 
