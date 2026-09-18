@@ -297,12 +297,11 @@ class TusharePushStockController {
         val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
         pushStocks.filter(_._1.equals(modelStr)).flatMap(e=>e._2 ++ e._3).foreach(e=>{
           val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
+          e.historyHitCount = size
           e.name = if(size==0){
-            e.historyHitCount = 0
             s"${e.name}"
           }
           else{
-            e.historyHitCount = size
             s"${e.name}【历史出现${size}次】"
           }
         })
