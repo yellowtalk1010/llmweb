@@ -232,23 +232,11 @@ class TusharePushStockController {
         e.concept = concept
         e.remark = optionTp3.get._4 + concept
 
-        if(Array(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR, TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR).contains(stockModleType.toUpperCase)){
-          val closePrice = optionTp3.get._1
-          if(closePrice >= 110.0){
-            //如果当前价格大于200，不显示
-//            Some(e)
-            Option.empty
-          }
-          else{
-            Some(e)
-          }
-        }
-        else {
-          Some(e)
-        }
-      }).filter(!_.isEmpty).map(_.get).sortBy(_.modWinRate).reverse
+        e
+      }).sortBy(_.modWinRate).reverse
     })
 
+    //
     val modWinRateClsNames = stockResultJsonList.flatMap(e=>e)
       .groupBy(_.modClsName)
       .filter(e=>modSet.map(_.toUpperCase).contains(e._1.toUpperCase))
@@ -286,7 +274,7 @@ class TusharePushStockController {
 //    pushStocks.filter(!_._1.equals("MA4_MODEL")).flatMap(e => e._2 ++ e._3).filter(e => ma4Set.contains(e.ts_code)).foreach(e => {
 //      e.name = s"${e.name}【击中MA4】"
 //    })
-    
+
     //计算历史上出现的次数
     List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, 
