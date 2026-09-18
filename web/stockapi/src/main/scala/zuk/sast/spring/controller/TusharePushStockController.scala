@@ -314,14 +314,14 @@ class TusharePushStockController {
     val eliminateCodes = tushareStockController.getAllEliminate() //全部淘汰的股票
     
     val maplist = pushStocks
-      .map(e=>(e._1, 
-        e._2.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")), 
+      .map(e=>(e._1,
+        e._2.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")),
         e._3.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")))
       ).map(e=>{
-        
+
         val conceptList = new ListBuffer[String]() //
         val fenci = HanLPUtil.createFenCi((e._2 ++ e._3).map(_.concept).toList)
-  
+
         (e._2 ++ e._3).foreach(e=>{
           if(e.ts_code.startsWith("688")){
             e.name = e.name + "【科创】"
@@ -329,10 +329,10 @@ class TusharePushStockController {
           else if (e.ts_code.startsWith("920")) {
             e.name = s"${e.name}【北交所】"
           }
-  
+
           //是否出现在龙虎榜中
           e.topInstitutions = TopInstUtil.existTopInst(e.ts_code)
-          
+
           //
           if(allAttentionCodes.contains(e.ts_code)){
             e.attention = "已关注"
@@ -344,7 +344,7 @@ class TusharePushStockController {
             e.eliminate = "已淘汰"
           }
         })
-  
+
         val head = (e._2 ++ e._3).head
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}-----${fenci}")
