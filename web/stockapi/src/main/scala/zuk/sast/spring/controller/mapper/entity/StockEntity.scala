@@ -12,6 +12,4 @@ class StockEntity {
   @BeanProperty var stockType: String = null //类型： buy，attention， eliminate, MA4_MODEL
   @BeanProperty var createtime: String = null
   @BeanProperty var remark: String = null
-
-  @BeanProperty var historyHitCount: Integer = 0 //历史出现的次数
 }
