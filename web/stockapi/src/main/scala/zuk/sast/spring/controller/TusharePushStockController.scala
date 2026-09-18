@@ -281,48 +281,39 @@ class TusharePushStockController {
         .reverse
       (clsName, headList, historyList)
     })
-
-    //获取MA4_MODEL分析到的股票代码
-    val stockModel4EntityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR)
-    val ma4Set = pushStocks.filter(_._1.equals("MA4_MODEL")).flatMap(e=>e._2 ++ e._3).map(e=>{
-      e.name = s"${e.name}【${stockModel4EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
-      e.ts_code
-    }).toSet
+    
     //非MA4_MODEL模块击中MA4股票
-    pushStocks.filter(!_._1.equals("MA4_MODEL")).flatMap(e => e._2 ++ e._3).filter(e => ma4Set.contains(e.ts_code)).foreach(e => {
-      e.name = s"${e.name}【击中MA4】"
-    })
-
-    val stockModel5EntityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR)
-    val ma5Set = pushStocks.filter(_._1.equals("MA5_MODEL")).flatMap(e => e._2 ++ e._3).map(e => {
-      e.name = s"${e.name}【${stockModel5EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size}次】"
-      e.ts_code
-    }).toSet
-
-    val stockModel7EntityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR)
-    val ma7Set = pushStocks.filter(_._1.equals("MA7_MODEL")).flatMap(e => e._2 ++ e._3).map(e => {
-      val size = stockModel7EntityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
-      e.name = if(size==0){
-        s"${e.name}"
-      }
-      else{
-        s"${e.name}【历史出现${size}次】"
-      }
-      e.ts_code
-    }).toSet
-
+//    pushStocks.filter(!_._1.equals("MA4_MODEL")).flatMap(e => e._2 ++ e._3).filter(e => ma4Set.contains(e.ts_code)).foreach(e => {
+//      e.name = s"${e.name}【击中MA4】"
+//    })
+    
+    //计算历史上出现的次数
+    List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
+      TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, 
+      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, 
+      TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR, 
+      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR)
+      .foreach(modelStr=>{
+        val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
+        pushStocks.filter(_._1.equals(modelStr)).flatMap(e=>e._2 ++ e._3).map(e=>{
+          val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
+          e.name = if(size==0){
+            s"${e.name}"
+          }
+          else{
+            s"${e.name}【历史出现${size}次】"
+          }
+        })
+      })
+    
     val allAttentionCodes = tushareStockController.getAllAttention() //全部关注的股票
     val allBuyCodes = tushareStockController.getAllBuy() //全部购买的股票
     val eliminateCodes = tushareStockController.getAllEliminate() //全部淘汰的股票
-
-
-
+    
     val maplist = pushStocks.map(e=>{
-
-
+      
       val conceptList = new ListBuffer[String]() //
       val fenci = HanLPUtil.createFenCi((e._2 ++ e._3).map(_.concept).toList)
-
 
       (e._2 ++ e._3).foreach(e=>{
         if(e.ts_code.startsWith("688")){
@@ -334,8 +325,7 @@ class TusharePushStockController {
 
         //是否出现在龙虎榜中
         e.topInstitutions = TopInstUtil.existTopInst(e.ts_code)
-
-
+        
         //
         if(allAttentionCodes.contains(e.ts_code)){
           e.attention = "已关注"
