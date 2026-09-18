@@ -295,16 +295,18 @@ class TusharePushStockController {
       TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR)
       .foreach(modelStr=>{
         val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
-        pushStocks.filter(_._1.equals(modelStr)).flatMap(e=>e._2 ++ e._3).foreach(e=>{
-          val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
-          e.historyHitCount = size
-          e.name = if(size==0){
-            s"${e.name}"
-          }
-          else{
-            s"${e.name}【历史出现${size}次】"
-          }
-        })
+        pushStocks.filter(_._1.equals(modelStr))
+          .flatMap(e=>e._2 ++ e._3)
+          .foreach(e=>{
+            val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
+            e.historyHitCount = size
+            e.name = if(size==0){
+              s"${e.name}"
+            }
+            else{
+              s"${e.name}【历史出现${size}次】"
+            }
+          })
       })
     
     val allAttentionCodes = tushareStockController.getAllAttention() //全部关注的股票
