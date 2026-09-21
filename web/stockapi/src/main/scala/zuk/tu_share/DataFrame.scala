@@ -25,7 +25,6 @@ object DataFrame {
   private val properties = new Properties()
   val turnover = "turnover"
   val change = "change"
-  val config_properties = "stock_config.properties"
 
   /**
    * STOCKS_MAP 中 Key 为 ts_code
@@ -158,7 +157,7 @@ object DataFrame {
    */
   def getProperties(): Properties = {
     try{
-      val configProperties: String = ParseCammandParam.param.path + File.separator + config_properties
+      val configProperties: String = ParseCammandParam.param.stock_config_properties_file
       if(properties.size() == 0){
         val configFile = new File(configProperties)
         println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
@@ -181,7 +180,7 @@ object DataFrame {
   def storeProperties() = {
     var output: FileOutputStream = null
     try {
-      val configProperties: String = ParseCammandParam.param.path + File.separator + config_properties
+      val configProperties: String = ParseCammandParam.param.stock_config_properties_file
       println(s"保存properties路径：${configProperties}")
       import zuk.tu_share.DataFrame
       val sdf = new SimpleDateFormat("yyyy-MM-dd")
