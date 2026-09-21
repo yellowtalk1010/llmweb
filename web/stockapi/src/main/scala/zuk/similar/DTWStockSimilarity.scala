@@ -1,5 +1,7 @@
 package zuk.similar
 
+import zuk.tu_share.DataFrame
+
 /***
  * 核心思路
  * 既然你要找的是“近5日涨跌 + 交易量”的相似形态，特征向量的设计很关键。不能直接用原始价格和成交量，因为不同股票的绝对数值差异巨大。
@@ -80,6 +82,9 @@ object DTWStockSimilarity {
   }
 
   def main(args: Array[String]): Unit = {
+
+    val map = DataFrame.load("D:\\development\\github\\tushare\\111\\gitee_stockapi")
+    println()
     
   }
   
