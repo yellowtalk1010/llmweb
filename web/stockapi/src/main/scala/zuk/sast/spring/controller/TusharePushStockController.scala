@@ -17,7 +17,7 @@ import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{HanLPUtil, TopInstUtil}
+import zuk.tu_share.utils.{HanLPUtil, Dataset_top_Inst_dir}
 
 import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
@@ -312,7 +312,7 @@ class TusharePushStockController {
           }
 
           //是否出现在龙虎榜中
-          e.topInstitutions = TopInstUtil.existTopInst(e.ts_code)
+          e.topInstitutions = Dataset_top_Inst_dir.existTopInst(e.ts_code)
 
           //
           if(allAttentionCodes.contains(e.ts_code)){

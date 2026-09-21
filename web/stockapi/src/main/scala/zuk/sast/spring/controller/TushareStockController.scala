@@ -12,7 +12,7 @@ import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, HanLPUtil, TopInstUtil}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, HanLPUtil, Dataset_top_Inst_dir}
 
 import java.text.SimpleDateFormat
 import java.util
@@ -125,7 +125,7 @@ class TushareStockController {
         }
 
         //龙虎榜
-        dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
+        dto.topInstitutions = Dataset_top_Inst_dir.existTopInst(dto.stockCode)
 
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRateDescription(dto.stockCode)
         dto.remark = optionTp3.get._4
@@ -246,7 +246,7 @@ class TushareStockController {
         //
         dto.tradedate = entity.createtime
 
-        dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
+        dto.topInstitutions = Dataset_top_Inst_dir.existTopInst(dto.stockCode)
 
         val optionTp3 = TushareStockDailyDataComponent.getIncreateRateDescription(dto.stockCode)
 

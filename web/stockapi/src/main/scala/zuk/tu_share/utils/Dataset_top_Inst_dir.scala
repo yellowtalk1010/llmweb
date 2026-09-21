@@ -14,7 +14,7 @@ import scala.jdk.CollectionConverters.*
 /***
  * 龙虎榜机构交易单
  */
-object TopInstUtil {
+object Dataset_top_Inst_dir {
 
   val SIZE = 20 //只考虑过去10个交易日的龙虎榜
 

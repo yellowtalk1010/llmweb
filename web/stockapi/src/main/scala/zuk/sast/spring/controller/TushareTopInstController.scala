@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.tu_share.dto.TopInst
-import zuk.tu_share.utils.TopInstUtil
+import zuk.tu_share.utils.Dataset_top_Inst_dir
 
 import java.util
 import scala.beans.BeanProperty
@@ -30,7 +30,7 @@ class TushareTopInstController {
       log.info("龙虎榜数据路径不存在")
       System.exit(0)
     }
-    TopInstUtil.loadData(stockHmTopInstPath)
+    Dataset_top_Inst_dir.loadData(stockHmTopInstPath)
   }
 
   /**
@@ -56,13 +56,13 @@ class TushareTopInstController {
 
     val ls = if(StringUtils.isNotBlank(search)){
       //如果输入了查询数据
-      TopInstUtil.topInstMap.toList.sortBy(e => e._1).reverse.flatMap(_._2.asScala).filter(e => {
+      Dataset_top_Inst_dir.topInstMap.toList.sortBy(e => e._1).reverse.flatMap(_._2.asScala).filter(e => {
         scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.exalter).filter(s => s != null && s.contains(search)).size > 0
       })
     }
     else {
       //如果没有输入查询数据
-      TopInstUtil.topInstMap.toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala)
+      Dataset_top_Inst_dir.topInstMap.toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala)
     }
 
     log.info(s"根据条件获取龙虎榜总数据:${ls.size}")

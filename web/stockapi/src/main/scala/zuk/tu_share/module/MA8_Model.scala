@@ -3,7 +3,7 @@ package zuk.tu_share.module
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.{ModuleDay, TopInst}
-import zuk.tu_share.utils.TopInstUtil
+import zuk.tu_share.utils.Dataset_top_Inst_dir
 
 import java.io.File
 import java.nio.file.{Path, Paths}
@@ -36,7 +36,7 @@ object MA8_Model {
 
       val mapList = topInstFiles.flatMap(file=>{
 //          println(file.getName)
-          val topInstList = TopInstUtil.loadData(file)
+          val topInstList = Dataset_top_Inst_dir.loadData(file)
           topInstList.asScala
         }).groupBy(e=>createKey(e)) //日期 + 股票代码
         .map(tp2=>(tp2._1, tp2._2.filter(e=>StringUtils.isNotBlank(e.sell) && StringUtils.isNotBlank(e.buy) && StringUtils.isNotBlank(e.net_buy))))
