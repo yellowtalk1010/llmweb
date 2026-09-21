@@ -72,9 +72,9 @@ object DataFrame {
         moduleDay.change = record.get("change")
         moduleDay.vol = record.get("vol")
         moduleDay.amount = record.get("amount")
-        moduleDay.turnover_rate = record.get("turnover_rate")
-        moduleDay.float_share = record.get("float_share")
-        moduleDay.total_mv = record.get("total_mv")
+        moduleDay.turnover_rate = record.get("turnover_rate") //换手率 成交量/无限售流通股数
+        moduleDay.float_share = record.get("float_share")     //流通股本 (最新)
+        moduleDay.total_mv = record.get("total_mv")           //总市值 收盘价*总股本
         moduleDay.limit = record.get("limit")
 
         moduleDay

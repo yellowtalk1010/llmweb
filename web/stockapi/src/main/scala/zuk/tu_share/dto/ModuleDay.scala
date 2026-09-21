@@ -22,12 +22,12 @@ class ModuleDay {
   @BeanProperty var change: String = _
   @BeanProperty var vol: String = _
   @BeanProperty var amount: String = _
-  @BeanProperty var turnover_rate: String = _
-  @BeanProperty var float_share: String = _
-  @BeanProperty var total_mv: String = _
+  @BeanProperty var turnover_rate: String = _     //换手率 成交量/无限售流通股数
+  @BeanProperty var float_share: String = _       //流通股本 (最新)
+  @BeanProperty var total_mv: String = _          //总市值 收盘价*总股本//
   @BeanProperty var limit: String = ModuleDay.N   //D跌停，U涨停，Z炸板
 
   @BeanProperty var ma: MA = _
-  @BeanProperty var priceLimit: PriceLimit = _ //涨跌停价
+  @BeanProperty var priceLimit: PriceLimit = _    //涨跌停价
 
 }
