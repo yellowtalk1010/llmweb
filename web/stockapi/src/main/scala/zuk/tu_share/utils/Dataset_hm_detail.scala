@@ -11,7 +11,7 @@ import scala.jdk.CollectionConverters.*
 /***
  * 龙游资交易每日明细
  */
-object HmDetailUtil {
+object Dataset_hm_detail {
 
 
   val SIZE = 10 //只考虑过去10个交易日的龙虎榜

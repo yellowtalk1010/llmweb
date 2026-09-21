@@ -66,11 +66,11 @@ object TopInstUtil {
           }
           //额外计算
           topInst.splitTsCode(topInst.ts_code)
-          val ls = HmDetailUtil.loadData().flatMap(_._2).filter(_.ts_code.equals(topInst.ts_code))
+          val ls = Dataset_hm_detail.loadData().flatMap(_._2).filter(_.ts_code.equals(topInst.ts_code))
           if (ls.size > 0) {
             topInst.ts_name = ls.head.ts_name
           }
-          val ls1 = HmDetailUtil.loadData().flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
+          val ls1 = Dataset_hm_detail.loadData().flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
           if (ls1.size > 0) {
             topInst.hm_name = ls1.head.hm_name
           }
