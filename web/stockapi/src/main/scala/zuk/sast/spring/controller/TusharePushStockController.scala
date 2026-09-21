@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.{DataFrame, ParseCammandParam}
@@ -219,7 +219,7 @@ class TusharePushStockController {
 
         e.file = file
         e.fileName = file.getName
-        val optionTp3 = TushareStockDailyDataComponent.getIncreateRateDescription(e.ts_code)
+        val optionTp3 = zuk.sast.spring.controller.component.TushareStockDailyDataComponent.getIncreateRateDescription(e.ts_code)
 
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
         e.concept = concept

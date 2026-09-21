@@ -13,18 +13,20 @@ import java.util.concurrent.ConcurrentHashMap
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
-class Dataset_stock_dailydata_dir {
+import zuk.tu_share.dto.StockDailyData
+
+object Dataset_stock_dailydata_dir {
 
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
   
   /** *
-   *
+   * 
    * @param stockCode
    * @return
    */
   def getDailyDataList(stockCode: String): List[StockDailyData] = {
-    load_history_stock_daily_data()
+    refresh_stock_daily_data()
     refresh_rtk()
     
     val list = new ListBuffer[StockDailyData]()
@@ -81,7 +83,7 @@ class Dataset_stock_dailydata_dir {
   /** *
    * 加载历史股票日线数据
    */
-  private def load_history_stock_daily_data(): Unit = synchronized {
+  private def refresh_stock_daily_data(): Unit = synchronized {
     try {
       if(StockHistoryDailyDataMap.size() > 5000){
         return
