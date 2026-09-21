@@ -10,6 +10,9 @@ import java.nio.charset.Charset
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
+/***
+ * 加载 all_stocks.csv 文件
+ */
 object Load_all_stocks_csv_file_Util {
 
   private val tsStockList = ListBuffer[TsStock]()
