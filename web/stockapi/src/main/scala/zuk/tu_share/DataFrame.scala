@@ -156,8 +156,9 @@ object DataFrame {
    * @param configProperties
    * @return
    */
-  def getProperties(configProperties: String = config_properties): Properties = {
+  def getProperties(): Properties = {
     try{
+      val configProperties: String = ParseCammandParam.param.path + File.separator + config_properties
       if(properties.size() == 0){
         val configFile = new File(configProperties)
         println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
@@ -172,6 +173,30 @@ object DataFrame {
       case exception: Exception => 
         exception.printStackTrace()
         properties
+  }
+
+  /***
+   * 保存到文件中
+   */
+  def storeProperties() = {
+    var output: FileOutputStream = null
+    try {
+      val configProperties: String = ParseCammandParam.param.path + File.separator + config_properties
+      println(s"保存properties路径：${configProperties}")
+      import zuk.tu_share.DataFrame
+      val sdf = new SimpleDateFormat("yyyy-MM-dd")
+      val dateStr = sdf.format(new Date())
+      output = new FileOutputStream(configProperties)
+      DataFrame.getProperties().store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
+    }
+    catch
+      case exception: Exception =>
+        println("保存properties路径")
+    finally {
+      if(output!=null){
+        output.close()
+      }
+    }
   }
 
   /***

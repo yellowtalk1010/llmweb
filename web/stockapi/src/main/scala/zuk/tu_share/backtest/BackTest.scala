@@ -122,9 +122,9 @@ object BackTest {
         linesMap.put(clsName, lines)
     })
 
-    storeProperties()
-
-
+    //保存胜率
+    DataFrame.storeProperties()
+    
     FileUtils.writeLines(new File("MODEL_BACK_TEST_RESULT.txt"), backTestMapList.map(m => {
       val l = JSONObject.toJSONString(m, Feature.LargeObject)
 //      println(s"txtLine.map:${l}")
@@ -137,28 +137,6 @@ object BackTest {
       sendMail(key, lines.mkString("<br>\n"))
     })
 
-  }
-
-  /***
-   * 保存到文件中
-   */
-  private def storeProperties() = {
-    var output: FileOutputStream = null
-    try {
-      import zuk.tu_share.DataFrame
-      val sdf = new SimpleDateFormat("yyyy-MM-dd")
-      val dateStr = sdf.format(new Date())
-      output = new FileOutputStream(DataFrame.config_properties)
-      DataFrame.getProperties().store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
-    }
-    catch
-      case exception: Exception =>
-        println("backTestFail.")
-    finally {
-      if(output!=null){
-        output.close()
-      }
-    }
   }
 
   private def sendMail(clsName: String, htmlContent: String) = {
