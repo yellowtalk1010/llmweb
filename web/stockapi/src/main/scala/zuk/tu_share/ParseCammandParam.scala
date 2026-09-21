@@ -60,10 +60,10 @@ class ParseCammandParam {
  * @param engine_path 引擎所在路径
  */
 class EngineInfo(engine_path: String) {
-  var all_stocks_csv_file: String           = engine_path + File.separator + "all_stocks.csv"
-  var rtk_file: String                      = engine_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
-  var MODEL_BACK_TEST_RESULT_file: String   = engine_path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
-  var stock_config_properties_file: String  = engine_path + File.separator + "stock_config.properties"
-  var concept_dir: String                   = engine_path + File.separator + "concept"
-  var result_json_dir: String               = engine_path + File.separator + "result_json"
+  var all_stocks_csv_file: String             = engine_path + File.separator + "all_stocks.csv"
+  var rtk_file: String                        = engine_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
+  var MODEL_BACK_TEST_RESULT_file: String     = engine_path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
+  var stock_config_properties_file: String    = engine_path + File.separator + "stock_config.properties"
+  var concept_dir: String                     = engine_path + File.separator + "concept"
+  var result_json_dir: String                 = engine_path + File.separator + "result_json"
 }
