@@ -9,7 +9,7 @@ import java.nio.charset.Charset
 import scala.jdk.CollectionConverters.*
 
 /***
- * 龙虎龙虎榜数据
+ * 龙游资交易每日明细
  */
 object HmDetailUtil {
 
