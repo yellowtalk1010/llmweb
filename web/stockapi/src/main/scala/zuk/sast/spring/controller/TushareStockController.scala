@@ -12,7 +12,7 @@ import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, HanLPUtil, Dataset_top_Inst_dir}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, FenCi_Util, Dataset_top_Inst_dir}
 
 import java.text.SimpleDateFormat
 import java.util
@@ -341,7 +341,7 @@ class TushareStockController {
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
     map.put("data", list)
-    map.put("keyword", HanLPUtil.createFenCi(list.asScala.map(e=>e.concept).toList))
+    map.put("keyword", FenCi_Util.createFenCi(list.asScala.map(e=>e.concept).toList))
 
     map
   }

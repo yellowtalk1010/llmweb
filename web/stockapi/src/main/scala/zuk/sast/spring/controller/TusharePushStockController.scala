@@ -17,7 +17,7 @@ import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{HanLPUtil, Dataset_top_Inst_dir}
+import zuk.tu_share.utils.{FenCi_Util, Dataset_top_Inst_dir}
 
 import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
@@ -301,7 +301,7 @@ class TusharePushStockController {
       ).map(e=>{
 
         val conceptList = new ListBuffer[String]() //
-        val fenci = HanLPUtil.createFenCi((e._2 ++ e._3).map(_.concept).toList)
+        val fenci = FenCi_Util.createFenCi((e._2 ++ e._3).map(_.concept).toList)
 
         (e._2 ++ e._3).foreach(e=>{
           if(e.ts_code.startsWith("688")){

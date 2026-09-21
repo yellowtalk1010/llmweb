@@ -10,7 +10,7 @@ import scala.jdk.CollectionConverters.*
 /***
  * 分词
  */
-object HanLPUtil {
+object FenCi_Util {
 
   def createFenCi(textList: List[String]): String = {
     //"概念：DeepSeek概念，低空经济，商业航天，一带一路，央国企改革\n一级行业：建筑装饰\n二级行业：工程咨询服务Ⅱ\n三级行业：工程咨询服务Ⅲ"
