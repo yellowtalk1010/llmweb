@@ -1,38 +1,23 @@
 package zuk.tu_share.utils
 
-import jakarta.annotation.PostConstruct
 import org.apache.commons.csv.CSVFormat
-import org.apache.commons.lang3.StringUtils
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.{Autowired, Value}
-import org.springframework.stereotype.Component
-import zuk.sast.spring.controller.TushareStockController
-import zuk.sast.spring.controller.mapper.StockMapper
-import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.sast.spring.controller.component.*
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}
-import java.nio.charset.Charset
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.concurrent.{ConcurrentHashMap, Executors}
-import scala.beans.BeanProperty
-import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.concurrent.ConcurrentHashMap
 import scala.collection.mutable.ListBuffer
-import scala.math
-
-import zuk.sast.spring.controller.component.*
+import scala.jdk.CollectionConverters.*
 
 class Dataset_stock_dailydata_dir {
 
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
-
-
+  
   /** *
    *
    * @param stockCode
