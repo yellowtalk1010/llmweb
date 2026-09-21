@@ -176,17 +176,17 @@ object DataFrame {
   }
 
   /***
-   * 加载待分析数据
+   * 加载模型分析数据集
    *
    * @param path 数据路径
    * @return map中的key是股票代码， list是组装的股票数据
    */
-  def load(path: String): mutable.HashMap[String, List[ModuleDay]] = {
-
+  def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleDay]] = {
+    
     getProperties()
 
     //加载股票信息
-    val all_stocks_path = path + File.separator + "all_stocks.csv"
+    val all_stocks_path = ParseCammandParam.param.path + File.separator + "all_stocks.csv"
     val allStocksFile = new File(all_stocks_path)
     println(s"加载all_stocks.csv文件路径:${allStocksFile.getAbsolutePath}，${allStocksFile.exists()}")
     if (!allStocksFile.exists()) {
@@ -201,7 +201,7 @@ object DataFrame {
     })
 
     //加载实时日K
-    val rt_k_path = path + File.separator + "rt_k"
+    val rt_k_path = ParseCammandParam.param.path + File.separator + "rt_k"
     val rtks = loadRTK(rt_k_path)
 
     val dayMap = new mutable.HashMap[String, List[ModuleDay]]

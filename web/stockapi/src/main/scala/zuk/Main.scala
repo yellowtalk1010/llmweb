@@ -27,7 +27,7 @@ object Main {
     }
     if (ParseCammandParam.param.back){
       //回测
-      val map = DataFrame.load(ParseCammandParam.param.path)
+      val map = DataFrame.loadModelAnalysisDataSet
       for (i <- 0 to ParseCammandParam.param.back_step) {
         PassFactory.doModule(map, i)
         println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
@@ -37,7 +37,7 @@ object Main {
     }
     else {
       //加载数据
-      val map = DataFrame.load(ParseCammandParam.param.path)
+      val map = DataFrame.loadModelAnalysisDataSet
       //分析
       PassFactory.doModule(map)
     }
