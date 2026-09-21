@@ -130,7 +130,7 @@ class TushareStockController {
         //龙虎榜
         dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
 
-        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+        val optionTp3 = TushareStockDailyDataComponent.getIncreateRateDescription(dto.stockCode)
         dto.remark = optionTp3.get._4
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
         dto.eastmoneyURL = e.get.eastmoneyURL
@@ -251,7 +251,7 @@ class TushareStockController {
 
         dto.topInstitutions = TopInstUtil.existTopInst(dto.stockCode)
 
-        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(dto.stockCode)
+        val optionTp3 = TushareStockDailyDataComponent.getIncreateRateDescription(dto.stockCode)
 
         dto.remark = optionTp3.get._4
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)

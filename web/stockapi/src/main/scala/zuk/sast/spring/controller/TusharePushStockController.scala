@@ -226,7 +226,7 @@ class TusharePushStockController {
 
         e.file = file
         e.fileName = file.getName
-        val optionTp3 = TushareStockDailyDataComponent.getIncreateRate(e.ts_code)
+        val optionTp3 = TushareStockDailyDataComponent.getIncreateRateDescription(e.ts_code)
 
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
         e.concept = concept
