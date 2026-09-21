@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
+import zuk.tu_share.ParseCammandParam
+
 case class MoneyflowDCDto() {
 
   @BeanProperty var trade_date: String = "" // str 交易日期
@@ -47,7 +49,7 @@ class TushareMoneyFlowComponent {
 
   @PostConstruct
   def init(): Unit = {
-    val moneyflowPath = zuk.tu_share.ParseCammandParam.param.datasetInfo.moneyflowPath
+    val moneyflowPath = ParseCammandParam.param.datasetInfo.moneyflowPath
     log.info(s"东方财富资金流路径：${moneyflowPath}")
     if(StringUtils.isEmpty(moneyflowPath)){
       log.error(s"东方财富资金流路径${moneyflowPath}，错误")
