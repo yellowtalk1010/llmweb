@@ -31,9 +31,13 @@ object ParseCammandParam {
 }
 
 class ParseCammandParam {
-  //股票分析系统路径
-//  var path: String = "."
+  
+  //股票引擎分析系统路径
   var engine_path: String = "D:\\development\\github\\tushare\\111\\gitee_stockapi"
+  
+  //数据集路径
+  var dataset_path: String = "D:/development/github/tushare/111/gitee_zuktushare/"
+  
   //密码
   var pwd: String = ""
   //是否执行回测
@@ -48,6 +52,7 @@ class ParseCammandParam {
   var wrate: Float = 1.00
 
   var engineInfo: EngineInfo = new EngineInfo(engine_path)
+  var datasetInfo: DatasetInfo = new DatasetInfo(dataset_path)
 
   override def toString: String = {
     s"CammandParam=path:${engine_path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"
@@ -66,4 +71,17 @@ class EngineInfo(engine_path: String) {
   var stock_config_properties_file: String    = engine_path + File.separator + "stock_config.properties"              //回测模型胜率保存结果文件
   var concept_dir: String                     = engine_path + File.separator + "concept"                              //股票概念路径
   var result_json_dir: String                 = engine_path + File.separator + "result_json"                          //引擎分析结果保存路径
+}
+
+
+/***
+ * 股票原始数据集信息
+ * 
+ * @param data_path
+ */
+class DatasetInfo(data_path: String) {
+  
+  val stockHmTopInstPath: String               = data_path + "/hm/top_inst/"                      //龙虎榜数据路径
+  val moneyflowPath: String                    = data_path + "/moneyflow/data/moneyflow_dc/"      //资金流向路径
+  
 }
