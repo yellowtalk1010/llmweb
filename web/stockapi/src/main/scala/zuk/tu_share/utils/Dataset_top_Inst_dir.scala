@@ -2,13 +2,17 @@ package zuk.tu_share.utils
 
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.{TopInst, TsStock}
+import zuk.tu_share.module.MA8_Model
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
+import java.nio.file.Paths
 import java.util
 import java.util.List
 import scala.collection.immutable
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 /***
@@ -18,7 +22,11 @@ object Dataset_top_Inst_dir {
 
   val SIZE = 20 //只考虑过去10个交易日的龙虎榜
 
-  val topInstMap = scala.collection.mutable.HashMap[String, List[TopInst]]()
+  /***
+   * String 格式 yyyyMMdd
+   * 
+   */
+  private val topInstMap = java.util.HashMap[String, List[TopInst]]()
 
 
   /***
@@ -27,7 +35,7 @@ object Dataset_top_Inst_dir {
    * @return
    */
   def existTopInst(tscode: String, tradedate: String = null): String = {
-    val ls = topInstMap.toList.flatMap(_._2.asScala).filter(e=>{
+    val ls = topInstMap.asScala.flatMap(_._2.asScala).filter(e=>{
       if(StringUtils.isBlank(tradedate)){
         e.ts_code.equals(tscode)
       }
@@ -47,8 +55,34 @@ object Dataset_top_Inst_dir {
     }
   }
 
+  /***
+   * 
+   * @return
+   */
+  def load(): java.util.HashMap[String, List[TopInst]] = synchronized {
+    
+    if(topInstMap.size > 0){
+      return topInstMap
+    }
+    //
+    val topInstDirPath = Paths.get(ParseCammandParam.param.datasetInfo.top_inst_dir)
+    val topInstFiles = new ListBuffer[File]
+    topInstDirPath.toFile.listFiles().toList.sortBy(e => e.getName).reverse.foreach(yearDir => {
+      for (f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size <= 100) {
+        topInstFiles += f
+      }
+    })
+    topInstFiles.foreach(file => {
+      val topInstList = Dataset_top_Inst_dir.loadData(file)
+      if(topInstList!=null && topInstList.size()>0){
+        topInstMap.put(topInstList.asScala.head.trade_date, topInstList)
+      }
+    })
+    topInstMap
+  }
 
-  def loadData(csvFile: File): List[TopInst] = synchronized {
+
+  private def loadData(csvFile: File): List[TopInst] = synchronized {
     try {
       val in = new FileReader(csvFile.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
@@ -107,47 +141,6 @@ object Dataset_top_Inst_dir {
 
     }
   }
-
-  /***
-   * 龙虎榜机构交易单
-   *
-   * 最近30天
-   *
-   * @return key 是交易日
-   */
-  def loadData(topInstPath: String): scala.collection.mutable.HashMap[String, List[TopInst]] = synchronized {
-    if(topInstMap.size>0){
-      return topInstMap
-    }
-//    val topInstPath = s"tushare/hm/top_inst/"
-    val topInstFile = new File(topInstPath)
-    var files = topInstFile.listFiles().sortBy(_.getName).reverse
-    if (files.size > SIZE) {
-      files = files.take(SIZE)
-    }
-    files.map(_.getAbsolutePath).foreach(println)
-    files.zipWithIndex.foreach(e=>{
-      try{
-        val topInstFile = e._1
-        //路径存在
-        println(s"龙虎榜文件路径${e._2 + 1}/${files.size}:${topInstFile.getAbsolutePath}")
-//        val in = new FileReader(topInstFile.getAbsolutePath, Charset.forName("UTF-8"))
-//        val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
-        val codes = loadData(topInstFile)
-
-        val tradedate = getTradedate(topInstFile.getName)
-        topInstMap.put(tradedate, codes.asScala.sortBy(_.count).reverse.asJava)
-      }
-      catch {
-        case exception: Exception =>
-          exception.printStackTrace()
-      }
-    })
-
-    topInstMap
-  }
-
-
 
   private def getTradedate(filename: String): String = {
     filename.replace("_top_inst", "").replace(".csv","")

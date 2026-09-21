@@ -25,27 +25,16 @@ object MA8_Model {
 
   def load(): Unit = synchronized {
     if(topInstMap==null || topInstMap.isEmpty){
-      
-      val topInstDirPath = Paths.get(ParseCammandParam.param.datasetInfo.top_inst_dir)
-//      println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
-      val topInstFiles = new ListBuffer[File]
-      topInstDirPath.toFile.listFiles().toList.sortBy(e=>e.getName).reverse.foreach(yearDir=>{
-        for(f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size<=100) {
-          topInstFiles += f
-        }
-      })
-
-      val mapList = topInstFiles.flatMap(file=>{
-//          println(file.getName)
-          val topInstList = Dataset_top_Inst_dir.loadData(file)
-          topInstList.asScala
-        }).groupBy(e=>createKey(e)) //日期 + 股票代码
+  
+      val mapList = Dataset_top_Inst_dir.load().asScala.toList.flatMap(_._2.asScala)
+        .groupBy(e=>createKey(e)) //根据 （日期 + 股票代码） 分组
         .map(tp2=>(tp2._1, tp2._2.filter(e=>StringUtils.isNotBlank(e.sell) && StringUtils.isNotBlank(e.buy) && StringUtils.isNotBlank(e.net_buy))))
         .filter(_._2.size>0)
         .toList
         .sortBy(_._1)
         .reverse
         .map(ls=>{
+          //合并列表
           val head = ls._2.head
           val topInst = new TopInst
           topInst.ts_code = head.ts_code
@@ -62,7 +51,7 @@ object MA8_Model {
         topInstMap.put(tp2._1, tp2._2)
       })
 
-//      println(s"股票总数:${topInstMap.size}")
+      println(s"股票总数:${topInstMap.size}")
 
     }
   }

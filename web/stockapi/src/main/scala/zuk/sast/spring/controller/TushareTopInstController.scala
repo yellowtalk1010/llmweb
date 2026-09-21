@@ -22,17 +22,6 @@ class TushareTopInstController {
 
   private val log = LoggerFactory.getLogger(classOf[TushareTopInstController])
 
-  @PostConstruct
-  def init(): Unit = {
-    val stockHmTopInstPath = zuk.tu_share.ParseCammandParam.param.datasetInfo.top_inst_dir + File.separator + "2026"
-    log.info(s"加载龙虎榜数据，路径:${stockHmTopInstPath}")
-    if(!new File(stockHmTopInstPath).exists()){
-      log.info("龙虎榜数据路径不存在")
-      System.exit(0)
-    }
-    Dataset_top_Inst_dir.loadData(stockHmTopInstPath)
-  }
-
   /**
    * 龙虎榜机构交易单
    * top_inst
@@ -56,13 +45,13 @@ class TushareTopInstController {
 
     val ls = if(StringUtils.isNotBlank(search)){
       //如果输入了查询数据
-      Dataset_top_Inst_dir.topInstMap.toList.sortBy(e => e._1).reverse.flatMap(_._2.asScala).filter(e => {
+      Dataset_top_Inst_dir.load().asScala.toList.sortBy(e => e._1).reverse.flatMap(_._2.asScala).filter(e => {
         scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.exalter).filter(s => s != null && s.contains(search)).size > 0
       })
     }
     else {
       //如果没有输入查询数据
-      Dataset_top_Inst_dir.topInstMap.toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala)
+      Dataset_top_Inst_dir.load().asScala.toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala)
     }
 
     log.info(s"根据条件获取龙虎榜总数据:${ls.size}")
