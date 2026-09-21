@@ -15,6 +15,9 @@ import scala.jdk.CollectionConverters.*
 
 import zuk.tu_share.dto.StockDailyData
 
+/***
+ * 获取给模型分析的数据，包含历史数据，rtk数据
+ */
 object Dataset_stock_dailydata_dir {
 
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
