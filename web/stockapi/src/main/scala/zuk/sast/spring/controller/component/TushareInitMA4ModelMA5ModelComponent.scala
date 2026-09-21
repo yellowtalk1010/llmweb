@@ -70,9 +70,6 @@ class TushareInitMA4ModelMA5ModelComponent {
   @Autowired
   private var stockMapper: StockMapper = _
 
-  @Autowired
-  private var applicationProperties: ApplicationProperties = _
-
   @PostConstruct
   def init(): Unit = {
 

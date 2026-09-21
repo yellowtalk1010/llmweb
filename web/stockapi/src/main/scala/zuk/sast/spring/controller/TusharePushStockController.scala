@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.spring.controller.component.{ApplicationProperties, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.{DataFrame, ParseCammandParam}
@@ -49,9 +49,6 @@ class TusharePushStockController {
 
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
-
-  @Autowired
-  val applicationProperties: ApplicationProperties = null
 
   @PostConstruct
   def init(): Unit = {

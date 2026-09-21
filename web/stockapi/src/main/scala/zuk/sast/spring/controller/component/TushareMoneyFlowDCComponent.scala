@@ -45,12 +45,9 @@ class TushareMoneyFlowComponent {
 
   private val MAP = new ConcurrentHashMap[String, List[MoneyflowDCDto]]()
 
-  @Autowired
-  private var applicationProperties: ApplicationProperties = null
-
   @PostConstruct
   def init(): Unit = {
-    val moneyflowPath = applicationProperties.getStockDatasourceBuildSystem_moneyflowPath
+    val moneyflowPath = zuk.tu_share.ParseCammandParam.param.datasetInfo.moneyflowPath
     log.info(s"东方财富资金流路径：${moneyflowPath}")
     if(StringUtils.isEmpty(moneyflowPath)){
       log.error(s"东方财富资金流路径${moneyflowPath}，错误")

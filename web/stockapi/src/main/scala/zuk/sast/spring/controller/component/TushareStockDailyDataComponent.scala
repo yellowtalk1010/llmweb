@@ -111,9 +111,6 @@ class TushareStockDailyDataComponent {
   private val log = LoggerFactory.getLogger(classOf[TushareStockDailyDataComponent])
 
   @Autowired
-  private var applicationProperties: ApplicationProperties = null
-
-  @Autowired
   private var stockMapper: StockMapper = null
 
   private val executor = Executors.newSingleThreadExecutor()

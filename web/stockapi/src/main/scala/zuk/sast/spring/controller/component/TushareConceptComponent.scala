@@ -31,9 +31,6 @@ class TushareConceptComponent {
   @Autowired
   var stockInfoMapper: StockInfoMapper = null
 
-  @Autowired
-  var applicationProperties: ApplicationProperties = null
-
   var executor = Executors.newSingleThreadExecutor()
 
   var stockInfoEntityList = new ListBuffer[StockInfoEntity]
