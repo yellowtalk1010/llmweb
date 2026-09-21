@@ -7,8 +7,9 @@ import scala.beans.BeanProperty
  */
 class TopInst extends TsCodeSplit{
 
+  //
   @BeanProperty var trade_date: String = _  //交易日期
-  @BeanProperty var ts_code: String = _     //TS代码
+  @BeanProperty var ts_code: String = _     //TS股票代码
   @BeanProperty var exalter: String = _     //营业部名称
   @BeanProperty var buy: String = _         //买入额（万）
   @BeanProperty var buy_rate: String = _    //买入占总成交比例

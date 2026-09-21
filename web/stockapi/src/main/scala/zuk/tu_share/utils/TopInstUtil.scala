@@ -11,6 +11,9 @@ import java.util.List
 import scala.collection.immutable
 import scala.jdk.CollectionConverters.*
 
+/***
+ * 龙虎榜机构交易单
+ */
 object TopInstUtil {
 
   val SIZE = 20 //只考虑过去10个交易日的龙虎榜
