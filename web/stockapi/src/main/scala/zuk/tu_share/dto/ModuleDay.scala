@@ -23,6 +23,7 @@ class ModuleDay {
   @BeanProperty var vol: String = _               //交易量
   @BeanProperty var amount: String = _            //交易金额
   @BeanProperty var turnover_rate: String = _     //换手率 成交量/无限售流通股数
+  //可以用来计算换手率
   @BeanProperty var float_share: String = _       //流通股本 (最新)
   @BeanProperty var total_mv: String = _          //总市值 收盘价*总股本//
   @BeanProperty var limit: String = ModuleDay.N   //D跌停，U涨停，Z炸板
