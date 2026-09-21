@@ -182,7 +182,7 @@ object DataFrame {
    * @return map中的key是股票代码， list是组装的股票数据
    */
   def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleDay]] = {
-    
+
     getProperties()
 
     //加载股票信息
@@ -210,7 +210,7 @@ object DataFrame {
       println("没有计算rt_k")
       stocks.foreach(stock=>{
         try{
-          val historyDays = loadModules(path, stock.ts_code)
+          val historyDays = loadModules(ParseCammandParam.param.path, stock.ts_code)
           dayMap.put(stock.ts_code, historyDays)
           count = count + 1
           println(s"st:${count}/${stocks.size}")
@@ -247,7 +247,7 @@ object DataFrame {
       //加载模型数据
       rtks.foreach(rtk => {
         try {
-          val historyDays = loadModules(path, rtk.ts_code)
+          val historyDays = loadModules(ParseCammandParam.param.path, rtk.ts_code)
           if (historyDays != null && historyDays.size > 0) {
 
             val preTradeDay0 = historyDays.head //上一个交易日信息
