@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 import zuk.sast.spring.controller.TushareStockController
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}
@@ -133,7 +134,7 @@ class TushareStockDailyDataComponent {
    */
   private def refresh_rtk(): Unit = {
     try {
-      val path = applicationProperties.getStockAnalysisSystem_rtkPath
+      val path = ParseCammandParam.param.rtk_file
       val rtkFile = new File(path)
       if(rtkFile.exists() && rtkFile.isFile){
         log.info(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")

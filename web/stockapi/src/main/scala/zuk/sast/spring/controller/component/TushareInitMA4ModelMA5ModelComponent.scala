@@ -11,6 +11,7 @@ import TushareInitMA4ModelMA5ModelComponent.{MA4_MODEL_STR, MA5_MODEL_STR}
 import zuk.sast.spring.controller.StockResultJson
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.{MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model}
@@ -167,7 +168,7 @@ class TushareInitMA4ModelMA5ModelComponent {
    * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
    */
   def init_MODEL_BACK_TEST_RESULT(): Unit = synchronized {
-    val file = new File(this.applicationProperties.getStockAanlysisSystem_backTestResultPath)
+    val file = new File(ParseCammandParam.param.MODEL_BACK_TEST_RESULT_file)
     if(!file.exists()){
       log.info(s"${file.getAbsolutePath} 不存在")
       return
