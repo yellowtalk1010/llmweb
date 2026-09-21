@@ -25,7 +25,8 @@ object MA8_Model {
 
   def load(): Unit = synchronized {
     if(topInstMap==null || topInstMap.isEmpty){
-      val topInstDirPath = Paths.get("D:\\development\\github\\tushare\\111\\gitee_zuktushare\\hm\\top_inst\\")
+      
+      val topInstDirPath = Paths.get(ParseCammandParam.param.datasetInfo.top_inst_dir)
 //      println(s"龙虎榜路径:${topInstDirPath.toFile.getAbsoluteFile}, ${topInstDirPath.toFile.exists()}")
       val topInstFiles = new ListBuffer[File]
       topInstDirPath.toFile.listFiles().toList.sortBy(e=>e.getName).reverse.foreach(yearDir=>{

@@ -31,13 +31,13 @@ object ParseCammandParam {
 }
 
 class ParseCammandParam {
-  
+
   //股票引擎分析系统路径
   var engine_path: String = "D:\\development\\github\\tushare\\111\\gitee_stockapi"
-  
+
   //数据集路径
   var dataset_path: String = "D:/development/github/tushare/111/gitee_zuktushare/"
-  
+
   //密码
   var pwd: String = ""
   //是否执行回测
@@ -76,13 +76,13 @@ class EngineInfo(engine_path: String) {
 
 /***
  * 股票原始数据集信息
- * 
+ *
  * @param data_path
  */
 class DatasetInfo(data_path: String) {
-  
-  val hm_detail_dir: String                    = data_path + "/hm/hm_detail/"                         //龙游资交易每日明细
-  val stockHmTopInstPath: String               = data_path + "/hm/top_inst/"                          //龙虎榜机构交易单
-  val moneyflow_dc_dir: String                 = data_path + "/moneyflow/data/moneyflow_dc/"          //资金流向路径
-  
+
+  val hm_detail_dir: String                     = data_path + "/hm/hm_detail/"                         //龙游资交易每日明细
+  val top_inst_dir: String                      = data_path + "/hm/top_inst/"                          //龙虎榜机构交易单
+  val moneyflow_dc_dir: String                  = data_path + "/moneyflow/data/moneyflow_dc/"          //资金流向路径
+
 }

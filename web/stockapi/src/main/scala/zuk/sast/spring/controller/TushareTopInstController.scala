@@ -24,7 +24,7 @@ class TushareTopInstController {
 
   @PostConstruct
   def init(): Unit = {
-    val stockHmTopInstPath = zuk.tu_share.ParseCammandParam.param.datasetInfo.stockHmTopInstPath + File.separator + "2026"
+    val stockHmTopInstPath = zuk.tu_share.ParseCammandParam.param.datasetInfo.top_inst_dir + File.separator + "2026"
     log.info(s"加载龙虎榜数据，路径:${stockHmTopInstPath}")
     if(!new File(stockHmTopInstPath).exists()){
       log.info("龙虎榜数据路径不存在")
