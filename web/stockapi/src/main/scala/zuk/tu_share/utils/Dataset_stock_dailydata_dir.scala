@@ -33,6 +33,27 @@ class Dataset_stock_dailydata_dir {
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
 
 
+  /** *
+   *
+   * @param stockCode
+   * @return
+   */
+  def getDailyDataList(stockCode: String): List[StockDailyData] = {
+    refresh_rtk()
+    
+    val list = new ListBuffer[StockDailyData]()
+    if (StockHistoryDailyDataMap.get(stockCode) != null) {
+      list ++= StockHistoryDailyDataMap.get(stockCode)
+    }
+    if (list != null) {
+      if (StockRtkDataMap.get(stockCode) != null) {
+        list.prepend(StockRtkDataMap.get(stockCode))
+      }
+    }
+    list.toList
+  }
+
+
   private def refresh_rtk(): Unit = {
     try {
       val path = ParseCammandParam.param.engineInfo.rtk_file
