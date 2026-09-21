@@ -24,7 +24,7 @@ object MA7_Model {
 
   def load(): Unit = synchronized {
     if(modelBlackTestResultList==null || modelBlackTestResultList.isEmpty){
-      val modelBlckTestResultPath = ParseCammandParam.param.MODEL_BACK_TEST_RESULT_file
+      val modelBlckTestResultPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file
       val modelBlckTestResultFile = new File(modelBlckTestResultPath)
       val lines = FileUtils.readLines(modelBlckTestResultFile, Charset.forName("UTF-8"))
       lines.asScala.foreach(line=>{

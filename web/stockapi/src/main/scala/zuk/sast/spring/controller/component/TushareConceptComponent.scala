@@ -77,7 +77,7 @@ class TushareConceptComponent {
     cacheStockInfoList.foreach(stockInfo=>{
       val stockCode = stockInfo.stockCode
       val stockName = stockInfo.stockName
-      val stockConceptPath = ParseCammandParam.param.concept_dir + File.separator + stockCode + ".txt"
+      val stockConceptPath = ParseCammandParam.param.engineInfo.concept_dir + File.separator + stockCode + ".txt"
       val stockConceptFile = new File(stockConceptPath)
       println(s"${stockCode},${stockName},${stockConceptFile.getAbsolutePath}")
       FileUtils.writeStringToFile(stockConceptFile, stockInfo.concept, "UTF-8")

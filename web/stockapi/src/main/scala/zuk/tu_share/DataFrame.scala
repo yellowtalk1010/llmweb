@@ -103,7 +103,7 @@ object DataFrame {
    */
   private def loadRTK_DataSet: List[ModuleDay] = {
 
-    val rt_k_file = new File(ParseCammandParam.param.rtk_file)
+    val rt_k_file = new File(ParseCammandParam.param.engineInfo.rtk_file)
     println(s"加载实时日线数据:${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
     if(!rt_k_file.exists()){
       println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
@@ -159,7 +159,7 @@ object DataFrame {
    */
   def getProperties(): Properties = {
     try{
-      val configProperties: String = ParseCammandParam.param.stock_config_properties_file
+      val configProperties: String = ParseCammandParam.param.engineInfo.stock_config_properties_file
       if(properties.size() == 0){
         val configFile = new File(configProperties)
         println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
@@ -182,7 +182,7 @@ object DataFrame {
   def storeProperties() = {
     var output: FileOutputStream = null
     try {
-      val configProperties: String = ParseCammandParam.param.stock_config_properties_file
+      val configProperties: String = ParseCammandParam.param.engineInfo.stock_config_properties_file
       println(s"保存properties路径：${configProperties}")
       import zuk.tu_share.DataFrame
       val sdf = new SimpleDateFormat("yyyy-MM-dd")
