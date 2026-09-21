@@ -64,21 +64,19 @@ object TopInstUtil {
           topInst.net_buy = record.get("net_buy")
           topInst.side = record.get("side")
           topInst.reason = record.get("reason")
-          if (!Dataset_all_stocks_csv_file.getTsStock(topInst.ts_code).isEmpty) {
-            topInst.ts_name = Dataset_all_stocks_csv_file.getTsStock(topInst.ts_code).get.name
-          }
+  
           //额外计算
           topInst.splitTsCode(topInst.ts_code)
-          val ls = Dataset_hm_detail_dir.loadData().flatMap(_._2).filter(_.ts_code.equals(topInst.ts_code))
-          if (ls.size > 0) {
-            topInst.ts_name = ls.head.ts_name
-          }
-          val ls1 = Dataset_hm_detail_dir.loadData().flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim))
-          if (ls1.size > 0) {
-            topInst.hm_name = ls1.head.hm_name
+          //股票名称
+          topInst.ts_name = Dataset_all_stocks_csv_file.getTsStock(topInst.ts_code).getOrElse(new TsStock()).name 
+
+          //获取机构获取，或者游资名称
+          val ls1 = Dataset_hm_detail_dir.loadData().flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim)) 
+          topInst.hm_name = if (ls1.size > 0) {
+            ls1.head.hm_name
           }
           else {
-            topInst.hm_name = "unknow"
+            "unknow"
           }
 
           topInst.easyMoneyURL = new TsStock(topInst.ts_code).eastmoneyURL
