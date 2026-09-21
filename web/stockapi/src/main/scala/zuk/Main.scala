@@ -11,8 +11,10 @@ import java.util.Locale
 
 object Main {
 
-  def main(args: Array[String]): Unit = {
+  def main(args1: Array[String]): Unit = {
 
+    val args = args1 ++ Array("-path", "D:\\development\\github\\tushare\\111\\gitee_stockapi")
+    
     // 设置默认编码
     fixWindowsConsole()
     //参数解析
@@ -34,8 +36,9 @@ object Main {
       BackTest.analysis()
     }
     else {
-      //分析
+      //加载数据
       val map = DataFrame.load(ParseCammandParam.param.path)
+      //分析
       PassFactory.doModule(map)
     }
 
