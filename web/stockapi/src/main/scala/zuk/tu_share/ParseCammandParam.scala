@@ -71,6 +71,7 @@ class EngineInfo(engine_path: String) {
   var stock_config_properties_file: String    = engine_path + File.separator + "stock_config.properties"              //回测模型胜率保存结果文件
   var concept_dir: String                     = engine_path + File.separator + "concept"                              //股票概念路径
   var result_json_dir: String                 = engine_path + File.separator + "result_json"                          //引擎分析结果保存路径
+  var stock_module_dir: String                 = engine_path + File.separator + "module"                              //引擎分析的预备数据
 }
 
 
