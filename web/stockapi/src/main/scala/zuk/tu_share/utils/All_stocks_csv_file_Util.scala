@@ -1,11 +1,11 @@
 package zuk.tu_share.utils
 
 import org.apache.commons.csv.CSVFormat
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
-
 import scala.jdk.CollectionConverters.*
 
 object All_stocks_csv_file_Util {
@@ -16,7 +16,8 @@ object All_stocks_csv_file_Util {
    * @param all_stocks_csv
    * @return
    */
-  def load(all_stocks_csv: String = "all_stocks.csv"): List[TsStock]  = {
+  def load: List[TsStock]  = {
+    val all_stocks_csv = ParseCammandParam.param.path + File.separator + "all_stocks.csv"
     val all_stocks_file = new File(all_stocks_csv)
     println(s"加载all_stocks.csv文件，路径：${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
