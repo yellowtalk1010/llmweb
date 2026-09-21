@@ -61,8 +61,8 @@ object TopInstUtil {
           topInst.net_buy = record.get("net_buy")
           topInst.side = record.get("side")
           topInst.reason = record.get("reason")
-          if (!Load_all_stocks_csv_file_Util.getTsStock(topInst.ts_code).isEmpty) {
-            topInst.ts_name = Load_all_stocks_csv_file_Util.getTsStock(topInst.ts_code).get.name
+          if (!Dataset_all_stocks_csv_file.getTsStock(topInst.ts_code).isEmpty) {
+            topInst.ts_name = Dataset_all_stocks_csv_file.getTsStock(topInst.ts_code).get.name
           }
           //额外计算
           topInst.splitTsCode(topInst.ts_code)

@@ -3,7 +3,7 @@ package zuk.tu_share
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.{ModuleDay, TsStock}
-import zuk.tu_share.utils.Load_all_stocks_csv_file_Util
+import zuk.tu_share.utils.Dataset_all_stocks_csv_file
 
 import java.io.{File, FileOutputStream, FileReader, InputStream}
 import java.math
@@ -211,7 +211,7 @@ object DataFrame {
     getProperties()
 
     //加载股票信息
-    val stocks = Load_all_stocks_csv_file_Util.load
+    val stocks = Dataset_all_stocks_csv_file.load
 
     stocks.foreach(e => {
       //转成MAP格式

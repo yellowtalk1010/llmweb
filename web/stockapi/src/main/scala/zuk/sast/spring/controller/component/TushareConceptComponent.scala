@@ -11,7 +11,7 @@ import zuk.token.TaskHandleFactory
 import zuk.token.providers.tasks.Task_EasymoneyConcept
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
-import zuk.tu_share.utils.Load_all_stocks_csv_file_Util
+import zuk.tu_share.utils.Dataset_all_stocks_csv_file
 
 import java.io.File
 import java.util.UUID
@@ -81,7 +81,7 @@ class TushareConceptComponent {
     })
 
     //全量股票概念数据获取任务
-    val lls = Load_all_stocks_csv_file_Util.load.map(e=>{
+    val lls = Dataset_all_stocks_csv_file.load.map(e=>{
       val stock = new StockEntity
       stock.name = e.name
       stock.stockCode = e.ts_code

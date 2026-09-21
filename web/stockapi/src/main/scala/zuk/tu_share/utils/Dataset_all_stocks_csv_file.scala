@@ -13,7 +13,7 @@ import scala.jdk.CollectionConverters.*
 /***
  * 加载 all_stocks.csv 文件
  */
-object Load_all_stocks_csv_file_Util {
+object Dataset_all_stocks_csv_file {
 
   private val tsStockList = ListBuffer[TsStock]()
 
@@ -22,7 +22,7 @@ object Load_all_stocks_csv_file_Util {
       Option.empty
     }
     else {
-      val ls = Load_all_stocks_csv_file_Util.load.filter(_.ts_code.equals(tsCode))
+      val ls = Dataset_all_stocks_csv_file.load.filter(_.ts_code.equals(tsCode))
       if (ls.size > 0) {
         Some(ls.head)
       }
