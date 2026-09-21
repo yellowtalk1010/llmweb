@@ -49,7 +49,7 @@ class TushareMoneyFlowComponent {
 
   @PostConstruct
   def init(): Unit = {
-    val moneyflowPath = ParseCammandParam.param.datasetInfo.moneyflowPath
+    val moneyflowPath = ParseCammandParam.param.datasetInfo.moneyflow_dc_dir
     log.info(s"东方财富资金流路径：${moneyflowPath}")
     if(StringUtils.isEmpty(moneyflowPath)){
       log.error(s"东方财富资金流路径${moneyflowPath}，错误")

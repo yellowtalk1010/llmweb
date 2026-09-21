@@ -1,6 +1,7 @@
 package zuk.tu_share.utils
 
 import org.apache.commons.csv.CSVFormat
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.HmDetail
 
 import java.io.{File, FileReader}
@@ -28,7 +29,7 @@ object HmDetailUtil {
     if(hmDetailMap.size>0){
       return hmDetailMap
     }
-    val hmDetailPath = "D:/development/github/tushare/111/gitee_zuktushare/hm/hm_detail/"
+    val hmDetailPath = ParseCammandParam.param.datasetInfo.hm_detail_dir
     val hmDetailFile = new File(hmDetailPath)
     var files = hmDetailFile.listFiles().sortBy(_.getName).reverse
     if (files.size>SIZE){

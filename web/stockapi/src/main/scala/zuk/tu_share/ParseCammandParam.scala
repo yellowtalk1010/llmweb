@@ -81,7 +81,8 @@ class EngineInfo(engine_path: String) {
  */
 class DatasetInfo(data_path: String) {
   
-  val stockHmTopInstPath: String               = data_path + "/hm/top_inst/"                      //龙虎榜数据路径
-  val moneyflowPath: String                    = data_path + "/moneyflow/data/moneyflow_dc/"      //资金流向路径
+  val hm_detail_dir: String                    = data_path + "/hm/hm_detail/"                         //龙游资交易每日明细
+  val stockHmTopInstPath: String               = data_path + "/hm/top_inst/"                          //龙虎榜机构交易单
+  val moneyflow_dc_dir: String                 = data_path + "/moneyflow/data/moneyflow_dc/"          //资金流向路径
   
 }
