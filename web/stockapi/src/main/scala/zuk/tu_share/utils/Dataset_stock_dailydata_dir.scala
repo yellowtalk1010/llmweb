@@ -32,6 +32,45 @@ class Dataset_stock_dailydata_dir {
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
 
+
+  private def refresh_rtk(): Unit = {
+    try {
+      val path = ParseCammandParam.param.engineInfo.rtk_file
+      val rtkFile = new File(path)
+      if (rtkFile.exists() && rtkFile.isFile) {
+        println(s"实时股票基本数据路径:${rtkFile.getAbsolutePath}")
+        val list = loadAllStocks(rtkFile).filter(e => {
+          try {
+            //过滤掉停牌的数据
+            val isTingPai = new BigDecimal(e.close).compareTo(java.math.BigDecimal.ZERO) == 0
+              || new BigDecimal(e.low).compareTo(java.math.BigDecimal.ZERO) == 0
+              || new BigDecimal(e.high).compareTo(java.math.BigDecimal.ZERO) == 0
+              || new BigDecimal(e.open).compareTo(java.math.BigDecimal.ZERO) == 0
+            !isTingPai
+          }
+          catch {
+            case exception: Exception => false
+          }
+        })
+        val dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date)
+        list.map(e => {
+          e.trade_date = dateStr
+          e.change = new BigDecimal(e.close.toFloat - e.pre_close.toFloat).divide(new BigDecimal(e.pre_close), 4, RoundingMode.DOWN).multiply(new BigDecimal(100)).floatValue().toString
+          StockRtkDataMap.put(e.ts_code, e)
+        })
+
+      }
+      else {
+        //log.error(s"不存在实时股票基本数据路径:${rtkFile.getAbsolutePath}")
+      }
+    }
+    catch {
+      case exception: Exception =>
+        exception.printStackTrace()
+    }
+  }
+  
+
   /** *
    * 加载历史股票日线数据
    */
@@ -47,12 +86,12 @@ class Dataset_stock_dailydata_dir {
           val path = ParseCammandParam.param.engineInfo.stock_module_dir + File.separator + filename
           val file = new File(path)
           if (file.isFile && file.exists()) {
-            log.info(s"加载股票历史日线基本数据，路径:${file.getAbsolutePath}")
+            println(s"加载股票历史日线基本数据，路径:${file.getAbsolutePath}")
             val list = loadAllStocks(file)
             StockHistoryDailyDataMap.put(stockCode, list)
           }
           else {
-            log.error(s"不存在加载股票基本数据路径:${file.getAbsolutePath}")
+            println(s"不存在加载股票基本数据路径:${file.getAbsolutePath}")
           }
         })
 
