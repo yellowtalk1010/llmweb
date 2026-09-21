@@ -17,7 +17,7 @@ import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{FenCi_Util, Dataset_top_Inst_dir}
+import zuk.tu_share.utils.{Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
 
 import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
@@ -219,7 +219,7 @@ class TusharePushStockController {
 
         e.file = file
         e.fileName = file.getName
-        val optionTp3 = zuk.sast.spring.controller.component.TushareStockDailyDataComponent.getIncreateRateDescription(e.ts_code)
+        val optionTp3 = IncreateDecreateRateDescUtil.getDescription(e.ts_code)
 
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
         e.concept = concept

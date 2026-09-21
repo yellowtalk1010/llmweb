@@ -1,4 +1,4 @@
-package zuk.sast.spring.controller.component
+package zuk.tu_share.utils
 
 import jakarta.annotation.PostConstruct
 import org.apache.commons.csv.CSVFormat
@@ -26,7 +26,7 @@ import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 import scala.math
 
-object TushareStockDailyDataComponent {
+object IncreateDecreateRateDescUtil {
   
   /***
    * 相比最高跌去多少，相比最低涨了多少
@@ -34,7 +34,7 @@ object TushareStockDailyDataComponent {
    * @param stockCode
    * @return (最近收盘价，较最近低位涨了多少，较最近最高位跌去多少，字符串描述)
    */
-  def getIncreateRateDescription(stockCode: String): Option[(Float, Float, Float, String)] = {
+  def getDescription(stockCode: String): Option[(Float, Float, Float, String)] = {
     val list = Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
     if(list!=null && list.size > 0) {
       val DAY_NUM = 120 //过去6个交易日
