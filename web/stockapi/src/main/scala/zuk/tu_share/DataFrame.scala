@@ -269,9 +269,10 @@ object DataFrame {
 
             println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
 
+            //将整理的rtk数据写入数据集中
             dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
             count = count + 1
-            println(s"rt:${count}/${rtks.size}")
+            println(s"完成rtk数据整理(换手率/涨跌幅/交易量):${count}/${rtks.size}")
           }
         } catch
           case exception: Exception => exception.printStackTrace()
