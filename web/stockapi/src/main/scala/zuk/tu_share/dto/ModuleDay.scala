@@ -20,8 +20,8 @@ class ModuleDay {
   @BeanProperty var close: String = _
   @BeanProperty var pre_close: String = _
   @BeanProperty var change: String = _
-  @BeanProperty var vol: String = _
-  @BeanProperty var amount: String = _
+  @BeanProperty var vol: String = _               //交易量
+  @BeanProperty var amount: String = _            //交易金额
   @BeanProperty var turnover_rate: String = _     //换手率 成交量/无限售流通股数
   @BeanProperty var float_share: String = _       //流通股本 (最新)
   @BeanProperty var total_mv: String = _          //总市值 收盘价*总股本//
