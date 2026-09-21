@@ -16,47 +16,35 @@ import scala.collection.mutable.ListBuffer
 
 object TushareAllStocks {
 
-  val ALL_STOCKS_FILE: String = "all_stocks.csv"
 
   val allStocks = ListBuffer[TsStock]()
 
-  private val allStockMap = new ConcurrentHashMap[String, TsStock]()
+  initAllStocksCSV()
 
-  initAllStocksCSV(ALL_STOCKS_FILE)
-
-  def initAllStocksCSV(all_stocks_csv_path: String = ALL_STOCKS_FILE): List[TsStock] = synchronized {
-    val file = new File(all_stocks_csv_path)
-    println(s"TushareAllStocks在Object中加载全量股票数据文件:${file.getAbsolutePath},${file.exists()}")
-    if(file.exists()){
-      if(allStocks.size < 5000){
-        val list = All_stocks_csv_file_Util.load
-        allStocks.clear()
-        allStocks ++= list
-        allStocks.foreach(e=>{
-          allStockMap.put(e.ts_code, e)
-        })
-      }
-      allStocks.toList
-    }
-    else {
-      List.empty
-    }
+  def initAllStocksCSV(): List[TsStock] = synchronized {
+    allStocks.clear()
+    allStocks ++= All_stocks_csv_file_Util.load
+    allStocks.toList
   }
 
   def getTsStock(tsCode: String): Option[TsStock] = {
-    val tsStock = allStockMap.get(tsCode)
-    if (tsStock!=null) {
-      Some(tsStock)
+    if(StringUtils.isEmpty(tsCode)){
+      Option.empty
     }
     else {
-      Option.empty
+      val ls = All_stocks_csv_file_Util.load.filter(_.ts_code.equals(tsCode))
+      if(ls.size > 0){
+        Some(ls.head)
+      }
+      else {
+        Option.empty
+      }
     }
   }
 
   def getAll(): List[TsStock] = {
-    TushareAllStocks.allStocks.toList
+    All_stocks_csv_file_Util.load
   }
-
 
 }
 
@@ -78,7 +66,7 @@ class TushareAllStocksCSVComponent {
 
     if(TushareAllStocks.allStocks.size < 5000){
       log.info("")
-      val list = TushareAllStocks.initAllStocksCSV(all_stocks_csv_path)
+      val list = TushareAllStocks.initAllStocksCSV()
       TushareAllStocks.allStocks.clear()
       TushareAllStocks.allStocks ++= list
     }
