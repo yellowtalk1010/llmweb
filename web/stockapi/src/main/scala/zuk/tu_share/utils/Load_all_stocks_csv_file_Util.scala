@@ -10,7 +10,7 @@ import java.nio.charset.Charset
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
-object All_stocks_csv_file_Util {
+object Load_all_stocks_csv_file_Util {
 
   private val tsStockList = ListBuffer[TsStock]()
 
@@ -19,7 +19,7 @@ object All_stocks_csv_file_Util {
       Option.empty
     }
     else {
-      val ls = All_stocks_csv_file_Util.load.filter(_.ts_code.equals(tsCode))
+      val ls = Load_all_stocks_csv_file_Util.load.filter(_.ts_code.equals(tsCode))
       if (ls.size > 0) {
         Some(ls.head)
       }
