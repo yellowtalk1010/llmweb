@@ -28,6 +28,6 @@ class ModuleDay {
   @BeanProperty var limit: String = ModuleDay.N   //D跌停，U涨停，Z炸板
 
   @BeanProperty var ma: MA = _
-  @BeanProperty var priceLimit: PriceLimit = _
+  @BeanProperty var priceLimit: PriceLimit = _ //涨跌停价
 
 }

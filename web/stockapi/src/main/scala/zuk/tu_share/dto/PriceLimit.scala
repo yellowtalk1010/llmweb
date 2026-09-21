@@ -3,6 +3,9 @@ package zuk.tu_share.dto
 import java.math.BigDecimal
 import scala.beans.BeanProperty
 
+/***
+ * 涨跌停
+ */
 class PriceLimit {
   
   @BeanProperty var priceLimitUp: BigDecimal = _    //涨停价
