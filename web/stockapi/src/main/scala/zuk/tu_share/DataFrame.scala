@@ -103,7 +103,7 @@ object DataFrame {
    */
   private def loadRTK_DataSet: List[ModuleDay] = {
 
-    val rt_k_file = new File(ParseCammandParam.param.path + File.separator + "rt_k" + File.separator + "rt_k.csv")
+    val rt_k_file = new File(ParseCammandParam.param.rtk_file)
     println(s"加载实时日线数据:${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
     if(!rt_k_file.exists()){
       println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
