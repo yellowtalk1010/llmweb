@@ -2,8 +2,6 @@ package zuk.stock.test
 
 import org.scalatest.funsuite.AnyFunSuite
 import zuk.Main
-import zuk.tu_share.module.HM_MOD
-import zuk.tu_share.module.HM_MOD.handule
 
 
 class Tushare_MA3_0_Model_Test extends AnyFunSuite {
@@ -19,9 +17,6 @@ class Tushare_MA3_0_Model_Test extends AnyFunSuite {
     Main.main(args)
   }
 
-  test("龙虎榜复盘") {
-    HM_MOD.handule()
-  }
 
   test("计算") {
     var bj = 200000.0d
