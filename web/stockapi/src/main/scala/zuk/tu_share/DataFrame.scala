@@ -35,7 +35,7 @@ object DataFrame {
 
   /***
    * 加载股票的模型数据
-   * 
+   *
    * @param
    */
   private def loadModules(ts_code: String): List[ModuleDay] = {
@@ -210,14 +210,7 @@ object DataFrame {
     getProperties()
 
     //加载股票信息
-    val all_stocks_path = ParseCammandParam.param.path + File.separator + "all_stocks.csv"
-    val allStocksFile = new File(all_stocks_path)
-    println(s"加载all_stocks.csv文件路径:${allStocksFile.getAbsolutePath}，${allStocksFile.exists()}")
-    if (!allStocksFile.exists()) {
-      System.exit(1)
-    }
-
-    val stocks = All_stocks_csv_file_Util.load(allStocksFile.getAbsolutePath)
+    val stocks = All_stocks_csv_file_Util.load
 
     stocks.foreach(e => {
       //转成MAP格式
@@ -250,12 +243,12 @@ object DataFrame {
           val v = STOCKS_MAP.get(rtk.ts_code)
           if (v.isEmpty) {
             //股票中不存在
-            println(s"${rtk.ts_code}, ${rtk.name} 在 ${all_stocks_path} 中不存在")
+            println(s"rtk中的股票 ${rtk.ts_code}, ${rtk.name} 本地中不存在")
           }
           else {
             if (!v.get.name.replace(" ","").equals(rtk.name.replace(" ",""))) {
               //股票名称不一致
-              println(s"${rtk.ts_code}名称将【${v.get.name.trim}】改为【${rtk.name.trim}】在${all_stocks_path} ")
+              println(s"${rtk.ts_code}名称将【${v.get.name.trim}】改为【${rtk.name.trim}】")
               v.get.name = rtk.name.replace(" ","")
             }
             else {
