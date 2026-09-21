@@ -22,7 +22,7 @@ object Dataset_hm_detail {
    * 游资交易每日明细
    *
    * 最近30天
-   * 
+   *
    * @return String 是交易日期yyyyMMdd， list是龙虎榜数据
    */
   def loadData(): scala.collection.mutable.HashMap[String, List[HmDetail]] = synchronized {
