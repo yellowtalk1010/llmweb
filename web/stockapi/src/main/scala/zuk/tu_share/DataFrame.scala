@@ -34,9 +34,12 @@ object DataFrame {
 
 
   /***
-   * 加载模型数据
+   * 加载股票的模型数据
+   * 
+   * @param
    */
-  private def loadModules(path: String, ts_code: String): List[ModuleDay] = {
+  private def loadModules(ts_code: String): List[ModuleDay] = {
+    val path = ParseCammandParam.param.path
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
@@ -99,7 +102,7 @@ object DataFrame {
    * 加载实时日线
    */
   private def loadRTK_DataSet: List[ModuleDay] = {
-    
+
     val rt_k_file = new File(ParseCammandParam.param.path + File.separator + "rt_k" + File.separator + "rt_k.csv")
     if(!rt_k_file.exists()){
       println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
@@ -205,7 +208,7 @@ object DataFrame {
       println("没有计算rt_k")
       stocks.foreach(stock=>{
         try{
-          val historyDays = loadModules(ParseCammandParam.param.path, stock.ts_code)
+          val historyDays = loadModules(stock.ts_code)
           dayMap.put(stock.ts_code, historyDays)
           count = count + 1
           println(s"st:${count}/${stocks.size}")
@@ -242,7 +245,7 @@ object DataFrame {
       //加载模型数据
       rtks.foreach(rtk => {
         try {
-          val historyDays = loadModules(ParseCammandParam.param.path, rtk.ts_code)
+          val historyDays = loadModules(rtk.ts_code)
           if (historyDays != null && historyDays.size > 0) {
 
             val preTradeDay0 = historyDays.head //上一个交易日信息
