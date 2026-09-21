@@ -1,6 +1,7 @@
 package zuk.tu_share.utils
 
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 
@@ -12,6 +13,21 @@ import scala.jdk.CollectionConverters.*
 object All_stocks_csv_file_Util {
 
   private val tsStockList = ListBuffer[TsStock]()
+
+  def getTsStock(tsCode: String): Option[TsStock] = {
+    if (StringUtils.isEmpty(tsCode)) {
+      Option.empty
+    }
+    else {
+      val ls = All_stocks_csv_file_Util.load.filter(_.ts_code.equals(tsCode))
+      if (ls.size > 0) {
+        Some(ls.head)
+      }
+      else {
+        Option.empty
+      }
+    }
+  }
   
   /**
    * 加载 all_stocks.csv 中的数据
