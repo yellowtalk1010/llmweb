@@ -98,15 +98,11 @@ object DataFrame {
   /** *
    * 加载实时日线
    */
-  private def loadRTK(rt_k_path: String): List[ModuleDay] = {
-    val rt_k_file = new File(rt_k_path)
+  private def loadRTK_DataSet: List[ModuleDay] = {
+    
+    val rt_k_file = new File(ParseCammandParam.param.path + File.separator + "rt_k" + File.separator + "rt_k.csv")
     if(!rt_k_file.exists()){
       println(s"${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
-      return List.empty
-    }
-    val files = rt_k_file.listFiles().filter(_.getName.endsWith(".csv")).sortBy(_.getName).reverse
-    if(files==null || files.size==0){
-      println("rt_k文件为空")
       return List.empty
     }
 
@@ -116,7 +112,7 @@ object DataFrame {
     val stockDayVoList = new ListBuffer[ModuleDay]
     try {
       //读取文件中的数据
-      val in = new FileReader(files.head.getAbsolutePath, Charset.forName("UTF-8"))
+      val in = new FileReader(rt_k_file, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
       val ls: List[ModuleDay] = records.asScala.map(record => {
         // ts_code	name	pre_close	high	open	low	close	vol	amount	num
@@ -201,8 +197,7 @@ object DataFrame {
     })
 
     //加载实时日K
-    val rt_k_path = ParseCammandParam.param.path + File.separator + "rt_k"
-    val rtks = loadRTK(rt_k_path)
+    val rtks = loadRTK_DataSet
 
     val dayMap = new mutable.HashMap[String, List[ModuleDay]]
     var count = 0
