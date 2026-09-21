@@ -64,7 +64,7 @@ class JsonFile extends ISend {
         val json = JSONObject.toJSONString(arr, Feature.PrettyFormat)
         val sdf = new SimpleDateFormat("yyyyMMdd_HH_mm_ss")
         val sdf1 = new SimpleDateFormat("yyyyMMdd")
-        val filepath = s"${ParseCammandParam.param.path}/result_json/${sdf1.format(new Date())}/${sdf.format(new Date)}.json"
+        val filepath = s"${ParseCammandParam.param.engine_path}/result_json/${sdf1.format(new Date())}/${sdf.format(new Date)}.json"
         println(s"写入结果到:${filepath}")
         FileUtils.write(new File(filepath), json, "UTF-8")
 

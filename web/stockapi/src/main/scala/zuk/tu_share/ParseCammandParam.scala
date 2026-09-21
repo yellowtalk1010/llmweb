@@ -9,8 +9,8 @@ object ParseCammandParam {
     for (i <- 0 until args.size) {
       val v = args(i).toLowerCase
       v match
-        case "-path" =>
-          ParseCammandParam.param.path = args(i + 1)
+        case "-engine_path" =>
+          ParseCammandParam.param.engine_path = args(i + 1)
         case "-pwd" =>
           ParseCammandParam.param.pwd = args(i + 1)
         case "-back" =>
@@ -33,7 +33,7 @@ object ParseCammandParam {
 class ParseCammandParam {
   //股票分析系统路径
 //  var path: String = "."
-  var path: String = "D:\\development\\github\\tushare\\111\\gitee_stockapi"
+  var engine_path: String = "D:\\development\\github\\tushare\\111\\gitee_stockapi"
   //密码
   var pwd: String = ""
   //是否执行回测
@@ -47,15 +47,15 @@ class ParseCammandParam {
   //回测涨幅: 1.0%
   var wrate: Float = 1.00
 
-  var all_stocks_csv_file = ParseCammandParam.param.path + File.separator + "all_stocks.csv"
-  var rtk_file: String = path + File.separator + "rt_k" + File.separator + "rt_k.csv"
-  var MODEL_BACK_TEST_RESULT_file: String = path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
-  var stock_config_properties_file: String = path + File.separator + "stock_config.properties"
-  var concept_dir: String = path + File.separator + "concept"
-  var result_json_dir: String = path + File.separator + "result_json"
+  var all_stocks_csv_file = ParseCammandParam.param.engine_path + File.separator + "all_stocks.csv"
+  var rtk_file: String = engine_path + File.separator + "rt_k" + File.separator + "rt_k.csv"
+  var MODEL_BACK_TEST_RESULT_file: String = engine_path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
+  var stock_config_properties_file: String = engine_path + File.separator + "stock_config.properties"
+  var concept_dir: String = engine_path + File.separator + "concept"
+  var result_json_dir: String = engine_path + File.separator + "result_json"
   
 
   override def toString: String = {
-    s"CammandParam=path:${path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"
+    s"CammandParam=path:${engine_path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"
   }
 }

@@ -38,7 +38,7 @@ object DataFrame {
    * @param
    */
   private def loadStockHistoryData(ts_code: String): List[ModuleDay] = {
-    val path = ParseCammandParam.param.path
+    val path = ParseCammandParam.param.engine_path
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
