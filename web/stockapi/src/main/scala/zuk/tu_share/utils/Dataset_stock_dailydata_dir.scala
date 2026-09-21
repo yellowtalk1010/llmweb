@@ -39,6 +39,7 @@ class Dataset_stock_dailydata_dir {
    * @return
    */
   def getDailyDataList(stockCode: String): List[StockDailyData] = {
+    load_history_stock_daily_data()
     refresh_rtk()
     
     val list = new ListBuffer[StockDailyData]()
@@ -95,11 +96,13 @@ class Dataset_stock_dailydata_dir {
   /** *
    * 加载历史股票日线数据
    */
-  private def load_history_stock_daily_data(): ConcurrentHashMap[String, List[StockDailyData]] = synchronized {
+  private def load_history_stock_daily_data(): Unit = synchronized {
     try {
       if(StockHistoryDailyDataMap.size() > 5000){
-        return StockHistoryDailyDataMap
+        return
       }
+      
+      StockHistoryDailyDataMap.clear()
       
       Dataset_all_stocks_csv_file.load.map(_.ts_code).toSet
         .foreach(stockCode=>{
@@ -116,12 +119,10 @@ class Dataset_stock_dailydata_dir {
           }
         })
 
-      return StockHistoryDailyDataMap
     }
     catch {
       case exception: Exception =>
         exception.printStackTrace()
-        return StockHistoryDailyDataMap
     }
     
   }
