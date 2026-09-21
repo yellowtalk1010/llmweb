@@ -130,8 +130,7 @@ class TusharePushStockController {
    */
   private def getModuleSortList: List[IModel] = {
     try {
-      val propertiesPath = this.applicationProperties.getStockAnalysisSystem_stock_config_properties
-      val properties = DataFrame.getProperties(propertiesPath)
+      val properties = DataFrame.getProperties()
       PassFactory.moduleList().sortBy(_.winRate).reverse
     }
     catch {
