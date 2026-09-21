@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.{DataFrame, ParseCammandParam}
-import zuk.tu_share.DataFrame.config_properties
 import zuk.tu_share.module.IModel
 import zuk.utils.SendMail
 
