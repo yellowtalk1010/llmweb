@@ -36,12 +36,9 @@ object TushareStockDailyDataComponent {
    */
   def getIncreateRateDescription(stockCode: String): Option[(Float, Float, Float, String)] = {
     val list = Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
-    if(list!=null){
+    if(list!=null && list.size > 0) {
       val DAY_NUM = 120 //过去6个交易日
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
-      if(ls.size==0){
-        return Some((0,0,0,""))
-      }
       val head = ls.head
       val lowest = ls.sortBy(_.close.toFloat).reverse.last //过去60个交易日最低价
       val highest = ls.sortBy(_.close.toFloat).last //过去60个交易日最高价
