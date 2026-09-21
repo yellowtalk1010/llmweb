@@ -9,6 +9,7 @@ import zuk.sast.spring.controller.mapper.{StockInfoMapper, StockMapper}
 import zuk.sast.spring.controller.mapper.entity.{StockEntity, StockInfoEntity}
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.tasks.Task_EasymoneyConcept
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.utils.All_stocks_csv_file_Util
 
@@ -76,7 +77,7 @@ class TushareConceptComponent {
     cacheStockInfoList.foreach(stockInfo=>{
       val stockCode = stockInfo.stockCode
       val stockName = stockInfo.stockName
-      val stockConceptPath = this.applicationProperties.getStockAnalysisSystem_conceptPath + File.separator + stockCode + ".txt"
+      val stockConceptPath = ParseCammandParam.param.concept_dir + File.separator + stockCode + ".txt"
       val stockConceptFile = new File(stockConceptPath)
       println(s"${stockCode},${stockName},${stockConceptFile.getAbsolutePath}")
       FileUtils.writeStringToFile(stockConceptFile, stockInfo.concept, "UTF-8")

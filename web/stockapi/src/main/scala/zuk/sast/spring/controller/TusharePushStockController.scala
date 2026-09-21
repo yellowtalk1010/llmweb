@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 import zuk.sast.spring.controller.component.{ApplicationProperties, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.tu_share.DataFrame
+import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
@@ -55,7 +55,7 @@ class TusharePushStockController {
 
   @PostConstruct
   def init(): Unit = {
-    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
+    val stockResultJsonPath = ParseCammandParam.param.result_json_dir
     log.info(s"tushare推荐结果存储路径：${stockResultJsonPath}")
     if(!new File(stockResultJsonPath).exists()){
       log.error(s"tushare推荐结果存储路径：${stockResultJsonPath}。错误")
@@ -112,7 +112,7 @@ class TusharePushStockController {
    * @return
    */
   private def getStockResultJsonPath(): File = {
-    val stockResultJsonPath = applicationProperties.getStockAnalysisSystem_resultJsonSavePath
+    val stockResultJsonPath = ParseCammandParam.param.result_json_dir
     val sdf = new SimpleDateFormat("yyyyMMdd")
 //    val pro = System.getProperties
     log.info(s"stock result json path: ${stockResultJsonPath}")

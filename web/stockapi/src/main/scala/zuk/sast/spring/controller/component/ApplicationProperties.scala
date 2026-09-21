@@ -13,23 +13,8 @@ import scala.beans.BeanProperty
 class ApplicationProperties {
 
   private val log = LoggerFactory.getLogger(classOf[ApplicationProperties])
-
-  /***
-   * 股票分析系统路径
-   */
-  //股票分析引擎系统路径
-  def getStockAnalysisSystemPath: String = ParseCammandParam.param.path
-  //股票分析引擎系统结果存储路径
-  def getStockAnalysisSystem_resultJsonSavePath: String = ParseCammandParam.param.result_json_dir
-  //股票分析引擎系统，股票所属板块和概念路径
-  def getStockAnalysisSystem_conceptPath: String = ParseCammandParam.param.concept_dir
-  //股票分析引擎系统，及时股票信息路径
-  def getStockAnalysisSystem_rtkPath: String = ParseCammandParam.param.rtk_file
-  //股票分析引擎系统，回测结果路径
-  def getStockAanlysisSystem_backTestResultPath: String = ParseCammandParam.param.MODEL_BACK_TEST_RESULT_file
-  //股票分析引擎系统，获取模型胜率
-  def getStockAnalysisSystem_stock_config_properties: String = ParseCammandParam.param.stock_config_properties_file
-
+  
+  
   /***
    * 股票数据源构建系统路径
    */

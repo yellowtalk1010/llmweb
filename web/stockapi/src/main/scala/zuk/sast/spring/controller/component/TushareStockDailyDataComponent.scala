@@ -180,7 +180,7 @@ class TushareStockDailyDataComponent {
         .filter(e=>TushareStockDailyDataComponent.StockHistoryDailyDataMap.get(e)==null)
         .foreach(stockCode=>{
           val filename = stockCode.replaceAll("\\.", "_") + ".csv"
-          val stock_daily_data_path: String = applicationProperties.getStockAnalysisSystemPath
+          val stock_daily_data_path: String = ParseCammandParam.param.path
           val path = stock_daily_data_path + File.separator + "module" + File.separator + filename
           val file = new File(path)
           if(file.isFile && file.exists()){
