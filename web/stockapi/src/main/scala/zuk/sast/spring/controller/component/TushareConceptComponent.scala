@@ -10,6 +10,7 @@ import zuk.sast.spring.controller.mapper.entity.{StockEntity, StockInfoEntity}
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.tasks.Task_EasymoneyConcept
 import zuk.tu_share.dto.TsStock
+import zuk.tu_share.utils.All_stocks_csv_file_Util
 
 import java.io.File
 import java.util.UUID
@@ -28,9 +29,6 @@ class TushareConceptComponent {
 
   @Autowired
   var stockInfoMapper: StockInfoMapper = null
-
-  @Autowired
-  var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
   @Autowired
   var applicationProperties: ApplicationProperties = null
@@ -85,7 +83,7 @@ class TushareConceptComponent {
     })
 
     //全量股票概念数据获取任务
-    val lls = TushareAllStocks.allStocks.map(e=>{
+    val lls = All_stocks_csv_file_Util.load.map(e=>{
       val stock = new StockEntity
       stock.name = e.name
       stock.stockCode = e.ts_code

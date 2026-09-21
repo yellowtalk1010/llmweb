@@ -12,7 +12,7 @@ import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{HanLPUtil, TopInstUtil}
+import zuk.tu_share.utils.{All_stocks_csv_file_Util, HanLPUtil, TopInstUtil}
 
 import java.text.SimpleDateFormat
 import java.util
@@ -51,9 +51,6 @@ class TushareStockControllerDTO extends StockEntity {
 class TushareStockController {
 
   private val log = LoggerFactory.getLogger(classOf[TushareStockController])
-
-  @Autowired
-  private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
   @Autowired
   private var stockMapper: StockMapper = null
@@ -112,7 +109,7 @@ class TushareStockController {
     val ma5List = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
 
     val tsStockList = sets.toList.map(e=>{
-        TushareAllStocks.getTsStock(e)
+        All_stocks_csv_file_Util.getTsStock(e)
     }).filter(!_.isEmpty)
       .map(e=>{
         val dto = new TushareStockControllerDTO
@@ -156,7 +153,7 @@ class TushareStockController {
   private def getAll(desc: String): java.util.List[TushareStockControllerDTO] = {
 
 
-    val allList = TushareAllStocks.getAll().map(e=>{
+    val allList = All_stocks_csv_file_Util.load.map(e=>{
       val dto = new TushareStockControllerDTO
       dto.selectModel = "全部"
       dto.stockCode = e.ts_code
@@ -359,7 +356,7 @@ class TushareStockController {
    * @return
    */
   private def getLimit_up_down (up_down_type: Int = 1, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    val list = TushareAllStocks.allStocks.map(_.ts_code)
+    val list = All_stocks_csv_file_Util.load.map(_.ts_code)
       .filter(e => TushareStockDailyDataComponent.getDailyDataList(e) != null)
       .flatMap(stockCode => {
         val ls = TushareStockDailyDataComponent.getDailyDataList(stockCode)
@@ -441,7 +438,7 @@ class TushareStockController {
    * @return
    */
   private def getLimitUp(selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    val list = TushareAllStocks.allStocks.map(_.ts_code)
+    val list = All_stocks_csv_file_Util.load.map(_.ts_code)
       .filter(e=>TushareStockDailyDataComponent.getDailyDataList(e)!=null)
       .flatMap(stockCode=>{
         val ls = TushareStockDailyDataComponent.getDailyDataList(stockCode)
@@ -559,7 +556,7 @@ class TushareStockController {
   def delete_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
                    @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
 
-    log.info(s"删除${stockType}, ${tsCode}, ${TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"删除${stockType}, ${tsCode}, ${All_stocks_csv_file_Util.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
     stockType match {
       case TushareInitMA4ModelMA5ModelComponent.buy_str =>
@@ -586,7 +583,7 @@ class TushareStockController {
   @GetMapping(value = Array("add_stock"))
   def add_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
                 @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
-    log.info(s"添加${stockType}, ${tsCode}, ${TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"添加${stockType}, ${tsCode}, ${All_stocks_csv_file_Util.getTsStock(tsCode).getOrElse(new TsStock).name}")
 
     stockType match {
       case TushareInitMA4ModelMA5ModelComponent.buy_str =>
@@ -623,12 +620,12 @@ class TushareStockController {
    */
   private def add(tsCode: String, stockType: String): Unit = synchronized {
 
-    log.info(s"添加${stockType}, ${tsCode}, ${TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"添加${stockType}, ${tsCode}, ${All_stocks_csv_file_Util.getTsStock(tsCode).getOrElse(new TsStock).name}")
     if(this.stockMapper.selectByCode(tsCode).asScala.filter(s=>s.stockType.equals(stockType)).size == 0){
       val stockEntity: StockEntity = new StockEntity
       stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
       stockEntity.stockCode = tsCode
-      stockEntity.name = TushareAllStocks.getTsStock(tsCode).getOrElse(new TsStock).name
+      stockEntity.name = All_stocks_csv_file_Util.getTsStock(tsCode).getOrElse(new TsStock).name
       stockEntity.stockType = stockType
       stockEntity.createtime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date)
       stockMapper.insert(stockEntity)

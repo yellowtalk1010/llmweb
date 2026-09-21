@@ -43,9 +43,6 @@ class TushareMoneyFlowComponent {
 
   private val log = LoggerFactory.getLogger(classOf[TushareMoneyFlowComponent])
 
-  @Autowired
-  private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
-
   private val MAP = new ConcurrentHashMap[String, List[MoneyflowDCDto]]()
 
   @Autowired

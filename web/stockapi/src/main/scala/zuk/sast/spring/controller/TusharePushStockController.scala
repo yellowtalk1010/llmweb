@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.spring.controller.component.{ApplicationProperties, TushareAllStocksCSVComponent, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
+import zuk.sast.spring.controller.component.{ApplicationProperties, TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent, TushareStockDailyDataComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.DataFrame
@@ -40,9 +40,6 @@ class TusharePushStockController {
   private val log = LoggerFactory.getLogger(classOf[TusharePushStockController])
 
   private val Executor_Service = Executors.newCachedThreadPool()
-
-  @Autowired
-  private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = null
 
   @Autowired
   private var tushareStockController: TushareStockController = null

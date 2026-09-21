@@ -70,9 +70,6 @@ class TushareInitMA4ModelMA5ModelComponent {
   private var stockMapper: StockMapper = _
 
   @Autowired
-  private var tushareAllStocksCSVComponent: TushareAllStocksCSVComponent = _
-
-  @Autowired
   private var applicationProperties: ApplicationProperties = _
 
   @PostConstruct
