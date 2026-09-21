@@ -28,7 +28,7 @@ object All_stocks_csv_file_Util {
       }
     }
   }
-  
+
   /**
    * 加载 all_stocks.csv 中的数据
    *
@@ -36,12 +36,12 @@ object All_stocks_csv_file_Util {
    * @return
    */
   def load: List[TsStock] = synchronized {
-    
+
     if(tsStockList.size > 5000){
       return tsStockList.toList
     }
-    
-    val all_stocks_csv = ParseCammandParam.param.path + File.separator + "all_stocks.csv"
+
+    val all_stocks_csv = ParseCammandParam.param.all_stocks_csv_file
     val all_stocks_file = new File(all_stocks_csv)
     println(s"加载all_stocks.csv文件，路径：${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
@@ -70,7 +70,7 @@ object All_stocks_csv_file_Util {
 
     tsStockList.clear()
     tsStockList ++= list
-    
+
     tsStockList.toList
   }
 

@@ -47,6 +47,7 @@ class ParseCammandParam {
   //回测涨幅: 1.0%
   var wrate: Float = 1.00
 
+  var all_stocks_csv_file = ParseCammandParam.param.path + File.separator + "all_stocks.csv"
   var rtk_file: String = path + File.separator + "rt_k" + File.separator + "rt_k.csv"
   var MODEL_BACK_TEST_RESULT_file: String = path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
   var stock_config_properties_file: String = path + File.separator + "stock_config.properties"

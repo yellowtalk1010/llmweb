@@ -124,7 +124,7 @@ object BackTest {
     //保存胜率
     DataFrame.storeProperties()
     
-    FileUtils.writeLines(new File(ParseCammandParam.param.path + File.separator + "MODEL_BACK_TEST_RESULT.txt"), backTestMapList.map(m => {
+    FileUtils.writeLines(new File(ParseCammandParam.param.MODEL_BACK_TEST_RESULT_file), backTestMapList.map(m => {
       val l = JSONObject.toJSONString(m, Feature.LargeObject)
 //      println(s"txtLine.map:${l}")
       l
