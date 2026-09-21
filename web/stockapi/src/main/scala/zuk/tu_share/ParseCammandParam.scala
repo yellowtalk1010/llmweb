@@ -30,7 +30,8 @@ object ParseCammandParam {
 
 class ParseCammandParam {
   //股票分析系统路径
-  var path: String = "."
+//  var path: String = "."
+  var path: String = "D:\\development\\github\\tushare\\111\\gitee_stockapi"
   //密码
   var pwd: String = ""
   //是否执行回测
