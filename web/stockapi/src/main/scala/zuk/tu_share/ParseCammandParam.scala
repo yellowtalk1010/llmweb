@@ -1,5 +1,7 @@
 package zuk.tu_share
 
+import java.io.File
+
 object ParseCammandParam {
   val param = new ParseCammandParam()
 
@@ -45,6 +47,9 @@ class ParseCammandParam {
   //回测涨幅: 1.0%
   var wrate: Float = 1.00
 
+  var rtk_file: String = path + File.separator + "rt_k" + File.separator + "rt_k.csv"
+  var MODEL_BACK_TEST_RESULT_file: String = path + File.separator + "MODEL_BACK_TEST_RESULT.txt"
+  var stock_config_properties_file: String = path + File.separator + "stock_config.properties"
 
   override def toString: String = {
     s"CammandParam=path:${path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"
