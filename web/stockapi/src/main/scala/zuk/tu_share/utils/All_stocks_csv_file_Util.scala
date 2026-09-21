@@ -6,17 +6,25 @@ import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object All_stocks_csv_file_Util {
 
+  private val tsStockList = ListBuffer[TsStock]()
+  
   /**
    * 加载 all_stocks.csv 中的数据
    *
    * @param all_stocks_csv
    * @return
    */
-  def load: List[TsStock]  = {
+  def load: List[TsStock] = synchronized {
+    
+    if(tsStockList.size > 5000){
+      return tsStockList.toList
+    }
+    
     val all_stocks_csv = ParseCammandParam.param.path + File.separator + "all_stocks.csv"
     val all_stocks_file = new File(all_stocks_csv)
     println(s"加载all_stocks.csv文件，路径：${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
@@ -27,7 +35,7 @@ object All_stocks_csv_file_Util {
     val in = new FileReader(all_stocks_file.getAbsolutePath, Charset.forName("UTF-8"))
     val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
 
-    val codes = records.asScala.map(record => {
+    val list = records.asScala.map(record => {
         //股票代码
         val stockCode = record.get("ts_code")
         val stockName = record.get("name")
@@ -42,9 +50,12 @@ object All_stocks_csv_file_Util {
       })
       .toList
     in.close()
-    println(s"${codes.size}")
+    println(s"${list.size}")
 
-    codes
+    tsStockList.clear()
+    tsStockList ++= list
+    
+    tsStockList.toList
   }
 
 }
