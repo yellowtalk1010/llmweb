@@ -11,6 +11,7 @@ import java.nio.charset.Charset
 import java.nio.file.Paths
 import java.util
 import java.util.List
+import java.util.concurrent.ConcurrentHashMap
 import scala.collection.immutable
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -24,10 +25,11 @@ object Dataset_top_Inst_dir {
 
   /***
    * String 格式 yyyyMMdd
-   * 
+   *
    */
-  private val topInstMap = java.util.HashMap[String, List[TopInst]]()
+  private val topInstMap = new ConcurrentHashMap[String, List[TopInst]]()
 
+  load()
 
   /***
    * 是否出现在龙虎榜中
@@ -55,15 +57,14 @@ object Dataset_top_Inst_dir {
     }
   }
 
+
+  def getData(): java.util.HashMap[String, List[TopInst]] = topInstMap
+  
   /***
-   * 
+   *
    * @return
    */
-  def load(): java.util.HashMap[String, List[TopInst]] = synchronized {
-    
-    if(topInstMap.size > 0){
-      return topInstMap
-    }
+  private def load(): java.util.HashMap[String, List[TopInst]] = synchronized {
     //
     val topInstDirPath = Paths.get(ParseCammandParam.param.datasetInfo.top_inst_dir)
     val topInstFiles = new ListBuffer[File]
@@ -84,6 +85,7 @@ object Dataset_top_Inst_dir {
 
   private def loadData(csvFile: File): List[TopInst] = synchronized {
     try {
+      println(s"加载龙虎榜数据，路径：${csvFile.getAbsolutePath}")
       val in = new FileReader(csvFile.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
       val codes = records.asScala.map(record => {

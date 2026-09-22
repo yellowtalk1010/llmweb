@@ -45,13 +45,13 @@ class TushareTopInstController {
 
     val ls = if(StringUtils.isNotBlank(search)){
       //如果输入了查询数据
-      Dataset_top_Inst_dir.load().asScala.toList.sortBy(e => e._1).reverse.flatMap(_._2.asScala).filter(e => {
+      Dataset_top_Inst_dir.getData().asScala.toList.sortBy(e => e._1).reverse.flatMap(_._2.asScala).filter(e => {
         scala.collection.mutable.ListBuffer(e.ts_code, e.ts_name, e.hm_name, e.exalter).filter(s => s != null && s.contains(search)).size > 0
       })
     }
     else {
       //如果没有输入查询数据
-      Dataset_top_Inst_dir.load().asScala.toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala)
+      Dataset_top_Inst_dir.getData().asScala.toList.sortBy(e=>e._1).reverse.flatMap(_._2.asScala)
     }
 
     log.info(s"根据条件获取龙虎榜总数据:${ls.size}")

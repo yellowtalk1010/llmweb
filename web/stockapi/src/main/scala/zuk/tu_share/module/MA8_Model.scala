@@ -26,7 +26,7 @@ object MA8_Model {
   def load(): Unit = synchronized {
     if(topInstMap==null || topInstMap.isEmpty){
   
-      val mapList = Dataset_top_Inst_dir.load().asScala.toList.flatMap(_._2.asScala)
+      val mapList = Dataset_top_Inst_dir.getData().asScala.toList.flatMap(_._2.asScala)
         .groupBy(e=>createKey(e)) //根据 （日期 + 股票代码） 分组
         .map(tp2=>(tp2._1, tp2._2.filter(e=>StringUtils.isNotBlank(e.sell) && StringUtils.isNotBlank(e.buy) && StringUtils.isNotBlank(e.net_buy))))
         .filter(_._2.size>0)
