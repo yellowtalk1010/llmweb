@@ -9,10 +9,9 @@ import java.math.{BigDecimal, RoundingMode}
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.{ConcurrentHashMap, Executors}
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
-
 import zuk.tu_share.dto.StockDailyData
 
 /***
@@ -22,6 +21,21 @@ object Dataset_stock_dailydata_dir {
 
   private val StockHistoryDailyDataMap = new ConcurrentHashMap[String, List[StockDailyData]]()
   private val StockRtkDataMap = new ConcurrentHashMap[String, StockDailyData]()
+  private val executor = Executors.newSingleThreadExecutor()
+  executor.submit(new Runnable {
+    override def run(): Unit = {
+      while (true) {
+        try {
+          refresh_stock_daily_data()
+          refresh_rtk()
+          Thread.sleep(1000 * 60 * 1)
+        }
+        catch {
+          case exception: Exception =>
+        }
+      }
+    }
+  })
   
   /** *
    * 
@@ -29,9 +43,6 @@ object Dataset_stock_dailydata_dir {
    * @return
    */
   def getDailyDataList(stockCode: String): List[StockDailyData] = {
-    refresh_stock_daily_data()
-    refresh_rtk()
-    
     val list = new ListBuffer[StockDailyData]()
     if (StockHistoryDailyDataMap.get(stockCode) != null) {
       list ++= StockHistoryDailyDataMap.get(stockCode)
