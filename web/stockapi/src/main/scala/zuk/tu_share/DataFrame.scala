@@ -18,7 +18,7 @@ import scala.collection.*
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 import java.util.Properties
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.{ConcurrentHashMap, Executors}
 
 
 object DataFrame {
@@ -34,6 +34,27 @@ object DataFrame {
    * rtk 实时日线数据
    */
   var RTK_MAP = new ConcurrentHashMap[String, ModuleDay]()
+
+  /***
+   * 历史日线数据
+   */
+  var HISTORY_MAP = new ConcurrentHashMap[String, List[ModuleDay]]()
+  
+  var execute = Executors.newSingleThreadExecutor()
+  execute.submit(new Runnable {
+    override def run(): Unit = {
+      while (true) {
+        try {
+          loadRTK_DataSet
+          println("完成定时更新rtk数据")
+          Thread.sleep(1000 * 60 * 2) //每两分钟更新一次rtk
+        }
+        catch {
+          case exception: Exception =>
+        }
+      }
+    }
+  })
 
 
   /***
@@ -95,15 +116,19 @@ object DataFrame {
     getProperties()
 
     //CSV文件中加载股票信息
-    if(STOCKS_MAP.size > 5000){
+    if(STOCKS_MAP.size < 5000){
       Dataset_all_stocks_csv_file.load.foreach(e => {
         //转成MAP格式
         STOCKS_MAP.put(e.ts_code, e)
       })
     }
+    
+    if(RTK_MAP.size() < 5000){
+      loadRTK_DataSet
+    }
 
     //加载实时日K
-    val rtks = loadRTK_DataSet
+    val rtks = RTK_MAP.asScala.toList.map(_._2)
 
     val dayMap = new mutable.HashMap[String, List[ModuleDay]]
     var count = 0
@@ -190,7 +215,12 @@ object DataFrame {
    *
    * @param
    */
-  private def loadStockHistoryData(ts_code: String): List[ModuleDay] = {
+  private def loadStockHistoryData(ts_code: String): List[ModuleDay] = synchronized {
+    
+    if(HISTORY_MAP.get(ts_code) != null){
+      return HISTORY_MAP.get(ts_code)
+    }
+    
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
@@ -247,13 +277,18 @@ object DataFrame {
 //          || new BigDecimal(e.close).compareTo(math.BigDecimal.ZERO)==0
 //        !tingPai
 //      })
+    
+    //保存
+    HISTORY_MAP.put(ts_code, sorted)
+    
     sorted
+    
   }
 
   /** *
    * 加载实时日线
    */
-  private def loadRTK_DataSet: List[ModuleDay] = {
+  private def loadRTK_DataSet: List[ModuleDay] = synchronized {
 
     val rt_k_file = new File(ParseCammandParam.param.engineInfo.rtk_file)
     println(s"加载实时日线数据:${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
@@ -294,7 +329,7 @@ object DataFrame {
     catch
       case exception: Exception => exception.printStackTrace()
 
-    stockDayVoList.toList.filter(rtk=>{
+    val rtkList = stockDayVoList.toList.filter(rtk=>{
       //移除停牌股票
       val tingPai = new BigDecimal(rtk.open).compareTo(math.BigDecimal.ZERO)==0
         || new BigDecimal(rtk.high).compareTo(math.BigDecimal.ZERO)==0
@@ -302,6 +337,13 @@ object DataFrame {
         || new BigDecimal(rtk.close).compareTo(math.BigDecimal.ZERO)==0
       !tingPai
     })
+
+    rtkList.foreach(e=>{
+      RTK_MAP.put(e.ts_code, e)
+    })
+    println(s"完成RTK日线数据加载:${RTK_MAP.size()}")
+    
+    rtkList
   }
 
 
