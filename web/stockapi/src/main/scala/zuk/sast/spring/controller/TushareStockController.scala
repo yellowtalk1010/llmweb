@@ -217,6 +217,7 @@ class TushareStockController {
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
+    println(s"TushareInitMA4ModelMA5ModelComponent.getStockEntityList：${TushareInitMA4ModelMA5ModelComponent.getStockEntityList.size}")
     val ls = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(maStr))
     val list = if(ls.size>1000){
       ls.take(1000)
@@ -264,12 +265,12 @@ class TushareStockController {
           dto.buy = "已购买"
         }
         dto.createtime = entity.createtime
-        Some(dto)
-
+//        Some(dto)
+        dto
       })
-      .filter(!_.isEmpty)
-      .map(_.get)
-      .filter(e=>{
+//      .filter(!_.isEmpty)
+//      .map(_.get)
+    val list2 = list1.filter(e=>{
         if(StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)){
           val start = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong){
             selectedDateStart.trim.toLong
@@ -299,11 +300,11 @@ class TushareStockController {
       })
       .asJava
 
-    if(list1.size()>0){
-      log.info(s"时间范围:${list1.asScala.head.createtime}至${list1.asScala.last.createtime}")
+    if(list2.size()>0){
+      log.info(s"时间范围:${list2.asScala.head.createtime}至${list2.asScala.last.createtime}")
     }
 
-    list1
+    list2
   }
 
   /***
