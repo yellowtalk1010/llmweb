@@ -75,11 +75,19 @@ object Dataset_top_Inst_dir {
    * @return
    */
   private def load(): Unit = synchronized {
+    
+    val num = if(ParseCammandParam.param.back){
+      //回测时龙虎榜回溯 
+      110
+    }
+    else {
+      20
+    }
     //
     val topInstDirPath = Paths.get(ParseCammandParam.param.datasetInfo.top_inst_dir)
     val topInstFiles = new ListBuffer[File]
     topInstDirPath.toFile.listFiles().toList.sortBy(e => e.getName).reverse.foreach(yearDir => {
-      for (f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size <= 20) {
+      for (f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size <= num) {
         topInstFiles += f
       }
     })
