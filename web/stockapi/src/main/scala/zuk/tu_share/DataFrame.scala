@@ -39,7 +39,7 @@ object DataFrame {
    * rtk 实时日线数据
    */
   var RTK_MAP = new ConcurrentHashMap[String, ModuleDay]()
-  var RTK_START_UPDATE = false
+  
   
   var execute = Executors.newSingleThreadExecutor()
   execute.submit(new Runnable {
@@ -116,7 +116,6 @@ object DataFrame {
     else {
       ls1
     }
-    
     list
   }
 
@@ -138,65 +137,46 @@ object DataFrame {
       })
     }
     
+    if(HISTORY_MAP.size() < 5000){
+      //加载历史日线数据
+      STOCKS_MAP.values().asScala.foreach(stock=>{
+        loadStockHistoryData(stock.ts_code)  
+      })
+    }
+    
     if(RTK_MAP.size() < 5000){
+      //加载RTK数据
       loadRTK_DataSet
     }
 
-    //加载实时日K
-    val rtks = RTK_MAP.asScala.toList.map(_._2)
 
     val dayMap = new mutable.HashMap[String, List[ModuleDay]]
      
-    if(rtks.isEmpty){
+    if(RTK_MAP.size() == 0){
+      
       println("没有计算rt_k")
-      val count = new AtomicInteger(0)
-      STOCKS_MAP.values.asScala.toList.foreach(stock=>{
-        try{
-          val historyDays = loadStockHistoryData(stock.ts_code)
-          dayMap.put(stock.ts_code, historyDays)
-          println(s"st:${count.incrementAndGet()}/${STOCKS_MAP.size}")
-        }
-        catch
-          case exception: Exception => exception.printStackTrace()
+      STOCKS_MAP.values.asScala.toList.filter(stock=>{
+        //股票需要出现历史数据中
+        val ls = HISTORY_MAP.get(stock.ts_code)
+        ls !=null && ls.size > 0
+      }).foreach(stock=>{
+        val historyDays = loadStockHistoryData(stock.ts_code)
+        dayMap.put(stock.ts_code, historyDays)
       })
     }
     else {
+
+      println("有计算rt_k")
       
-      //加载模型数据
-      rtks.filter(rtk=>{
-        StringUtils.isBlank(rtk.turnover_rate) || StringUtils.isBlank(rtk.change) || StringUtils.isBlank(rtk.vol)
-      }).zipWithIndex.foreach((rtk, index) => {
-        try {
-          val historyDays = loadStockHistoryData(rtk.ts_code)
-          if (historyDays != null && historyDays.size > 0) {
-
-            val preTradeDay0 = historyDays.head //上一个交易日信息
-
-            // 计算换手率
-            val turnover_rate = new BigDecimal(rtk.vol)
-              .divide(new BigDecimal(preTradeDay0.float_share)
-                .multiply(new BigDecimal(properties.getProperty("turnover","100").toFloat)), 4, RoundingMode.DOWN)
-            rtk.turnover_rate = turnover_rate.toString
-
-            //计算涨跌幅
-            val change =((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close)))
-              .multiply(new BigDecimal(properties.getProperty("change", "100").toFloat)))
-              .divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
-            rtk.change = change.toString
-
-            val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
-            rtk.vol = vol.toString
-
-            println(s"${index+1}/${rtks.size}，完成rtk数据整理(换手率/涨跌幅/交易量)：${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
-          }
-        } catch
-          case exception: Exception => exception.printStackTrace()
-      })
-      
-      
-      rtks.foreach(rtk=>{
-        val historyDays = loadStockHistoryData(rtk.ts_code)
-        dayMap.put(rtk.ts_code, List(rtk) ++ historyDays) //将整理的rtk数据写入数据集中
+      STOCKS_MAP.values().asScala.toList.filter(stock=>{
+        val ls = HISTORY_MAP.get(stock.ts_code)
+        ls !=null && ls.size > 0
+      }).filter(stock=>{
+        RTK_MAP.get(stock.ts_code) != null
+      }).foreach(stock=>{
+        val rtk = RTK_MAP.get(stock.ts_code)
+        val historyDays = loadStockHistoryData(stock.ts_code)
+        dayMap.put(stock.ts_code, List(rtk) ++ historyDays)
       })
       
     }
@@ -286,7 +266,7 @@ object DataFrame {
   /** *
    * 加载实时日线
    */
-  private def loadRTK_DataSet: List[ModuleDay] = synchronized {
+  private def loadRTK_DataSet: Unit = synchronized {
 
     val rt_k_file = new File(ParseCammandParam.param.engineInfo.rtk_file)
     println(s"加载实时日线数据:${rt_k_file.getAbsolutePath}, ${rt_k_file.exists()}")
@@ -336,13 +316,53 @@ object DataFrame {
       !tingPai
     })
 
-    rtkList.foreach(e=>{
-      RTK_MAP.put(e.ts_code, e)
-    })
+    rtkList.foreach(this.updateRTK)  //更新rtk的涨跌幅等数据，并写入RTK_MAP中
+    
     println(s"完成RTK日线数据加载:${RTK_MAP.size()}")
-    RTK_START_UPDATE = true //开启定时更新
-    rtkList
+    
+    
   }
 
+
+  /***
+   * 因为RTK数据很多缺失，因此需要重新计算： 换手率， 涨跌幅， 交易量。然后写入到RTK_MAP 数据中
+   * 
+   * @param rtk
+   */
+  private def updateRTK(rtk: ModuleDay): Unit = {
+    if(StringUtils.isBlank(rtk.turnover_rate)   //换手率
+      || StringUtils.isBlank(rtk.change)        //涨跌幅 
+      || StringUtils.isBlank(rtk.vol))          //交易量 
+    { 
+      try {
+        val historyDays = loadStockHistoryData(rtk.ts_code)
+        if (historyDays != null && historyDays.size > 0) {
+
+          val preTradeDay0 = historyDays.head //上一个交易日信息
+
+          // 计算换手率
+          val turnover_rate = new BigDecimal(rtk.vol)
+            .divide(new BigDecimal(preTradeDay0.float_share)
+              .multiply(new BigDecimal(properties.getProperty("turnover", "100").toFloat)), 4, RoundingMode.DOWN)
+          rtk.turnover_rate = turnover_rate.toString
+
+          //计算涨跌幅
+          val change = ((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close)))
+            .multiply(new BigDecimal(properties.getProperty("change", "100").toFloat)))
+            .divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
+          rtk.change = change.toString
+
+          val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
+          rtk.vol = vol.toString
+
+          println(s"完成rtk数据整理(换手率/涨跌幅/交易量)：${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
+          
+          RTK_MAP.put(rtk.ts_code, rtk)
+        }
+      } catch
+        case exception: Exception => 
+          exception.printStackTrace()
+    }
+  }
 
 }
