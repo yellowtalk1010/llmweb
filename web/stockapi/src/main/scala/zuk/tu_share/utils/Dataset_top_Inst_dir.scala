@@ -78,7 +78,7 @@ object Dataset_top_Inst_dir {
     
     val num = if(ParseCammandParam.param.back){
       //回测时龙虎榜回溯 
-      110
+      130
     }
     else {
       20
