@@ -34,6 +34,7 @@ object DataFrame {
    * rtk 实时日线数据
    */
   var RTK_MAP = new ConcurrentHashMap[String, ModuleDay]()
+  var RTK_START_UPDATE = false
 
   /***
    * 历史日线数据
@@ -45,7 +46,11 @@ object DataFrame {
     override def run(): Unit = {
       while (true) {
         try {
-          loadRTK_DataSet
+          if(RTK_START_UPDATE){
+            //开始定时更新
+            loadRTK_DataSet  
+          }
+          
           println("完成定时更新rtk数据")
           Thread.sleep(1000 * 60 * 2) //每两分钟更新一次rtk
         }
@@ -342,7 +347,7 @@ object DataFrame {
       RTK_MAP.put(e.ts_code, e)
     })
     println(s"完成RTK日线数据加载:${RTK_MAP.size()}")
-    
+    RTK_START_UPDATE = true //开启定时更新
     rtkList
   }
 
