@@ -139,8 +139,9 @@ object DataFrame {
     
     if(HISTORY_MAP.size() < 5000){
       //加载历史日线数据
-      STOCKS_MAP.values().asScala.foreach(stock=>{
-        loadStockHistoryData(stock.ts_code)  
+      STOCKS_MAP.values().asScala.zipWithIndex.foreach((stock, index)=>{
+        loadStockHistoryData(stock.ts_code)
+        println(s"加载历史日线数据:${index+1}/${STOCKS_MAP.size()}")
       })
     }
     
@@ -160,7 +161,7 @@ object DataFrame {
         val ls = HISTORY_MAP.get(stock.ts_code)
         ls !=null && ls.size > 0
       }).foreach(stock=>{
-        val historyDays = loadStockHistoryData(stock.ts_code)
+        val historyDays = HISTORY_MAP.get(stock.ts_code)
         dayMap.put(stock.ts_code, historyDays)
       })
     }
@@ -175,7 +176,7 @@ object DataFrame {
         RTK_MAP.get(stock.ts_code) != null
       }).foreach(stock=>{
         val rtk = RTK_MAP.get(stock.ts_code)
-        val historyDays = loadStockHistoryData(stock.ts_code)
+        val historyDays = HISTORY_MAP.get(stock.ts_code)
         dayMap.put(stock.ts_code, List(rtk) ++ historyDays)
       })
       
@@ -335,7 +336,7 @@ object DataFrame {
       || StringUtils.isBlank(rtk.vol))          //交易量 
     { 
       try {
-        val historyDays = loadStockHistoryData(rtk.ts_code)
+        val historyDays = HISTORY_MAP.get(rtk.ts_code)
         if (historyDays != null && historyDays.size > 0) {
 
           val preTradeDay0 = historyDays.head //上一个交易日信息

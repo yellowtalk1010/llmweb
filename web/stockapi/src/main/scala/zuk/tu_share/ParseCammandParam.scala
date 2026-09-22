@@ -55,7 +55,7 @@ class ParseCammandParam {
   var datasetInfo: DatasetInfo = new DatasetInfo(dataset_path)
 
   override def toString: String = {
-    s"CammandParam=path:${engine_path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"
+    s"CammandParam参数：engine_path:${engine_path}, pwd:******, back: ${back}, back_step:${back_step}, json:${json}, wrate:${wrate}"
   }
 }
 

@@ -28,18 +28,18 @@ object Dataset_top_Inst_dir {
    *
    */
   private val topInstMap = new ConcurrentHashMap[String, List[TopInst]]()
-
-  private val executor = Executors.newSingleThreadExecutor()
-  executor.execute(new Runnable {
-    override def run(): Unit = {
-      try {
-        load()    
-      }
-      catch {
-        case exception: Exception =>
-      }
-    }
-  })
+  load()
+//  private val executor = Executors.newSingleThreadExecutor()
+//  executor.execute(new Runnable {
+//    override def run(): Unit = {
+//      try {
+//        load()    
+//      }
+//      catch {
+//        case exception: Exception =>
+//      }
+//    }
+//  })
 
   /***
    * 是否出现在龙虎榜中

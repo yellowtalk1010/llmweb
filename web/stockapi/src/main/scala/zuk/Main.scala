@@ -11,15 +11,13 @@ import java.util.Locale
 
 object Main {
 
-  def main(args1: Array[String]): Unit = {
-
-    val args = args1 ++ Array("-path", "D:\\development\\github\\tushare\\111\\gitee_stockapi")
+  def main(args: Array[String]): Unit = {
     
     // 设置默认编码
     fixWindowsConsole()
     //参数解析
     ParseCammandParam.parse(args)
-    println(s"path:${ParseCammandParam.param.toString}")
+    println(s"${ParseCammandParam.param.toString}")
     //许可密码校验
     if(!LicenseUtil.checkPwd()){
       println("pwd err")
