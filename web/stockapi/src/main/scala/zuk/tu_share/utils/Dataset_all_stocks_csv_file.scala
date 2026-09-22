@@ -59,7 +59,7 @@ object Dataset_all_stocks_csv_file {
         val stockCode = record.get("ts_code")
         val stockName = record.get("name")
 
-        val tsStock = new TsStock(stockCode, stockName)
+        val tsStock = new TsStock(stockCode.trim, stockName.trim)
         tsStock.symbol = record.get("symbol")
         tsStock.area = record.get("area")
         tsStock.industry = record.get("industry")

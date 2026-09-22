@@ -44,7 +44,7 @@ object DataFrame {
   var execute = Executors.newSingleThreadExecutor()
   execute.submit(new Runnable {
     override def run(): Unit = {
-      while (true) {
+      while (false) {
         try {
           if(RTK_START_UPDATE){
             //开始定时更新
@@ -52,7 +52,7 @@ object DataFrame {
             println(s"完成定时更新rtk数据:${RTK_MAP.size()}")
           }
           
-          Thread.sleep(1000 * 60 * 2) //每两分钟更新一次rtk
+          Thread.sleep(1000 * 60 * 5) //每两分钟更新一次rtk
         }
         catch {
           case exception: Exception =>
@@ -136,47 +136,26 @@ object DataFrame {
     val rtks = RTK_MAP.asScala.toList.map(_._2)
 
     val dayMap = new mutable.HashMap[String, List[ModuleDay]]
-    var count = 0
+     
     if(rtks.isEmpty){
       println("没有计算rt_k")
-      STOCKS_MAP.values.asScala.foreach(stock=>{
+      val count = new AtomicInteger(0)
+      STOCKS_MAP.values.asScala.toList.foreach(stock=>{
         try{
           val historyDays = loadStockHistoryData(stock.ts_code)
           dayMap.put(stock.ts_code, historyDays)
-          count = count + 1
-          println(s"st:${count}/${STOCKS_MAP.size}")
+          println(s"st:${count.incrementAndGet()}/${STOCKS_MAP.size}")
         }
         catch
           case exception: Exception => exception.printStackTrace()
       })
     }
     else {
-
-      //比较股票的名称
-      rtks.foreach(rtk=>{
-        try {
-          val v = STOCKS_MAP.get(rtk.ts_code)
-          if (v==null) {
-            //股票中不存在，应该是新股
-            println(s"rtk中的股票 ${rtk.ts_code}, ${rtk.name} 本地中不存在，应该是新股上市")
-          }
-          else {
-            if (!v.name.replace(" ","").equals(rtk.name.replace(" ",""))) {
-              //股票名称不一致
-              println(s"${rtk.ts_code}名称将【${v.name.trim}】改为【${rtk.name.trim}】")
-              v.name = rtk.name.replace(" ","")
-            }
-            else {
-              //去掉空格是一致的
-            }
-          }
-        }
-        catch
-          case exception: Exception =>
-      })
-
+      
       //加载模型数据
-      rtks.foreach(rtk => {
+      rtks.filter(rtk=>{
+        StringUtils.isBlank(rtk.turnover_rate) || StringUtils.isBlank(rtk.change) || StringUtils.isBlank(rtk.vol)
+      }).zipWithIndex.foreach((rtk, index) => {
         try {
           val historyDays = loadStockHistoryData(rtk.ts_code)
           if (historyDays != null && historyDays.size > 0) {
@@ -197,17 +176,19 @@ object DataFrame {
 
             val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
             rtk.vol = vol.toString
-
-            println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
-
-            //将整理的rtk数据写入数据集中
-            dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
-            count = count + 1
-            println(s"完成rtk数据整理(换手率/涨跌幅/交易量):${count}/${rtks.size}")
+            
+            println(s"${index+1}/${rtks.size}，完成rtk数据整理(换手率/涨跌幅/交易量)：${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
           }
         } catch
           case exception: Exception => exception.printStackTrace()
       })
+      
+      
+      rtks.foreach(rtk=>{
+        val historyDays = loadStockHistoryData(rtk.ts_code)
+        dayMap.put(rtk.ts_code, List(rtk) ++ historyDays) //将整理的rtk数据写入数据集中
+      })
+      
     }
 
     dayMap.filter(_._2.size>100) //只返回日线记录超过100的
@@ -234,10 +215,12 @@ object DataFrame {
     val ts_code_path = ts_code.replace(".", "_")
     val module_path = ParseCammandParam.param.engineInfo.stock_module_dir + File.separator + s"${ts_code_path}.csv"
     val module_file = new File(module_path)
-    println(s"加载股票${ts_code}的预备数据:${module_file.getAbsolutePath}, ${module_file.exists()}")
+    println(s"加载股票${ts_code}，${Dataset_all_stocks_csv_file.getTsStock(ts_code).getOrElse(new TsStock()).name}，的预备数据:${module_file.getAbsolutePath}, ${module_file.exists()}")
     if(!module_file.exists()){
       //判断模型路径是否存在
       //println(s"${module_file.getAbsolutePath}，${module_file.exists()}")
+      println("上市交易天数不足120天")
+      HISTORY_MAP.put(ts_code, List.empty)
       return List.empty
     }
 
