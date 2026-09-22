@@ -79,7 +79,7 @@ object Dataset_top_Inst_dir {
     val topInstDirPath = Paths.get(ParseCammandParam.param.datasetInfo.top_inst_dir)
     val topInstFiles = new ListBuffer[File]
     topInstDirPath.toFile.listFiles().toList.sortBy(e => e.getName).reverse.foreach(yearDir => {
-      for (f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size <= 50) {
+      for (f <- yearDir.listFiles().sortBy(_.getName).reverse if topInstFiles.size <= 20) {
         topInstFiles += f
       }
     })
