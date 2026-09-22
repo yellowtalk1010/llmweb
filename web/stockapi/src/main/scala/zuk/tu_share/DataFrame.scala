@@ -28,7 +28,7 @@ object DataFrame {
   /**
    * STOCKS_MAP 中 Key 为 ts_code
    */
-  val STOCKS_MAP = new mutable.HashMap[String, TsStock]()
+  val STOCKS_MAP = new ConcurrentHashMap[String, TsStock]()
 
   /***
    * rtk 实时日线数据
@@ -48,10 +48,10 @@ object DataFrame {
         try {
           if(RTK_START_UPDATE){
             //开始定时更新
-            loadRTK_DataSet  
+            loadRTK_DataSet
+            println(s"完成定时更新rtk数据:${RTK_MAP.size()}")
           }
           
-          println("完成定时更新rtk数据")
           Thread.sleep(1000 * 60 * 2) //每两分钟更新一次rtk
         }
         catch {
@@ -139,12 +139,12 @@ object DataFrame {
     var count = 0
     if(rtks.isEmpty){
       println("没有计算rt_k")
-      stocks.foreach(stock=>{
+      STOCKS_MAP.values.asScala.foreach(stock=>{
         try{
           val historyDays = loadStockHistoryData(stock.ts_code)
           dayMap.put(stock.ts_code, historyDays)
           count = count + 1
-          println(s"st:${count}/${stocks.size}")
+          println(s"st:${count}/${STOCKS_MAP.size}")
         }
         catch
           case exception: Exception => exception.printStackTrace()
@@ -156,15 +156,15 @@ object DataFrame {
       rtks.foreach(rtk=>{
         try {
           val v = STOCKS_MAP.get(rtk.ts_code)
-          if (v.isEmpty) {
-            //股票中不存在
-            println(s"rtk中的股票 ${rtk.ts_code}, ${rtk.name} 本地中不存在")
+          if (v==null) {
+            //股票中不存在，应该是新股
+            println(s"rtk中的股票 ${rtk.ts_code}, ${rtk.name} 本地中不存在，应该是新股上市")
           }
           else {
-            if (!v.get.name.replace(" ","").equals(rtk.name.replace(" ",""))) {
+            if (!v.name.replace(" ","").equals(rtk.name.replace(" ",""))) {
               //股票名称不一致
-              println(s"${rtk.ts_code}名称将【${v.get.name.trim}】改为【${rtk.name.trim}】")
-              v.get.name = rtk.name.replace(" ","")
+              println(s"${rtk.ts_code}名称将【${v.name.trim}】改为【${rtk.name.trim}】")
+              v.name = rtk.name.replace(" ","")
             }
             else {
               //去掉空格是一致的

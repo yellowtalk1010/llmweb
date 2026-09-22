@@ -130,7 +130,7 @@ class MA7_1_Model extends IModel {
       && head.change.toFloat > 5.0 //涨跌2个点
     ){
 
-      val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
+      val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
       val head = days.head
       stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       stockDto.warningUpperShadow = super.upperShadow(days)

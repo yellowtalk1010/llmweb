@@ -85,7 +85,7 @@ class MA8_Model extends IModel {
           && head.vol.toFloat < second.vol.toFloat
           && divideValue > 0.3
         ){
-          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
+          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
       }

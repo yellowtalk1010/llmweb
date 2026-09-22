@@ -33,7 +33,7 @@ class MA3_1_Model extends IModel {
       ) {
         //缩量上涨
         //ST不推荐
-        val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
+        val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code)
         if (tsStock != null) {
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), changeUpRate)
           stockDto.warningUpperShadow = super.upperShadow(days)

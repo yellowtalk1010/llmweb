@@ -39,19 +39,20 @@ class MA1_1_Model extends IModel {
           && list(0).vol.toFloat < list(1).vol.toFloat
           && list(0).change.toFloat > 0
         ) {
-            reason = zList.reverse.map(_.trade_date).mkString("至")
-            val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
-            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
-            stockDto.warningUpperShadow = super.upperShadow(days)
-            if (StringUtils.isNotBlank(head.total_mv)) {
-              stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
-              stockDto.preChangeRate = new BigDecimal(head.change).setScale(2, RoundingMode.HALF_UP).floatValue()
-            }
-            else {
-              stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
-              stockDto.preChangeRate = new BigDecimal(days(1).change).setScale(2, RoundingMode.HALF_UP).floatValue()
-            }
+          reason = zList.reverse.map(_.trade_date).mkString("至")
+          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
+        
+          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+          stockDto.warningUpperShadow = super.upperShadow(days)
+          if (StringUtils.isNotBlank(head.total_mv)) {
+            stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = new BigDecimal(head.change).setScale(2, RoundingMode.HALF_UP).floatValue()
           }
+          else {
+            stockDto.totalMV = new BigDecimal(days(1).total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
+            stockDto.preChangeRate = new BigDecimal(days(1).change).setScale(2, RoundingMode.HALF_UP).floatValue()
+          }
+        }
       }
 
     }

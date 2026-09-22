@@ -46,7 +46,7 @@ class MA3_3_Model extends IModel {
 
       ) {
         //缩量上涨
-        val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
+        val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code)
         if(tsStock != null){
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           stockDto.warningUpperShadow = super.upperShadow(days)

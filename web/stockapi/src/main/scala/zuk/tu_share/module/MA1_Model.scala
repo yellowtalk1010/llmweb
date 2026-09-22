@@ -33,7 +33,7 @@ class MA1_Model extends IModel {
           && list(0).low.toFloat > list(1).low.toFloat    //
           && list(0).vol.toFloat < list(1).vol.toFloat
         ) {
-          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
+          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           stockDto.warningUpperShadow = super.upperShadow(days)
           if (StringUtils.isNotBlank(head.total_mv)) {

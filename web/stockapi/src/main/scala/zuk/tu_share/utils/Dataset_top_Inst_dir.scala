@@ -11,7 +11,7 @@ import java.nio.charset.Charset
 import java.nio.file.Paths
 import java.util
 import java.util.List
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.{ConcurrentHashMap, Executors}
 import scala.collection.immutable
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -29,7 +29,17 @@ object Dataset_top_Inst_dir {
    */
   private val topInstMap = new ConcurrentHashMap[String, List[TopInst]]()
 
-  load()
+  private val executor = Executors.newSingleThreadExecutor()
+  executor.execute(new Runnable {
+    override def run(): Unit = {
+      try {
+        load()    
+      }
+      catch {
+        case exception: Exception =>
+      }
+    }
+  })
 
   /***
    * 是否出现在龙虎榜中
@@ -73,8 +83,11 @@ object Dataset_top_Inst_dir {
         topInstFiles += f
       }
     })
-    topInstFiles.foreach(file => {
-      val topInstList = Dataset_top_Inst_dir.loadData(file)
+    topInstFiles.zipWithIndex.foreach(tp2 => {
+      val file = tp2._1
+      val index = tp2._2
+      val topInstList = loadData(file)
+      println(s"${index+1}/${topInstFiles.size}完成龙虎榜数据加载:${file.getAbsolutePath}, 总计${topInstList.size()}")
       if(topInstList!=null && topInstList.size()>0){
         topInstMap.put(topInstList.asScala.head.trade_date, topInstList)
       }
@@ -84,7 +97,6 @@ object Dataset_top_Inst_dir {
 
   private def loadData(csvFile: File): List[TopInst] = synchronized {
     try {
-      println(s"加载龙虎榜数据，路径：${csvFile.getAbsolutePath}")
       val in = new FileReader(csvFile.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
       val codes = records.asScala.map(record => {

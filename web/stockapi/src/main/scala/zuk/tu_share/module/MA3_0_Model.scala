@@ -25,7 +25,7 @@ class MA3_0_Model extends IModel {
           && new BigDecimal(head.change).compareTo(BigDecimal(7)) <= 0  //涨幅度
           && List(list(1).change.toFloat, list(2).change.toFloat).min < 0
       ) {
-        val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code).getOrElse(null)
+        val tsStock = DataFrame.STOCKS_MAP.get(head.ts_code)
         if(tsStock!=null){
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           stockDto.warningUpperShadow = super.upperShadow(days)

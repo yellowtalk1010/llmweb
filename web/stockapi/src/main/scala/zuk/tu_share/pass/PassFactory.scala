@@ -103,11 +103,11 @@ object PassFactory {
           case exception: Exception =>
             exception.printStackTrace()
       })
-      
+
       finishModules ++= modules.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
                             .sortBy(e=>(e.getStockDto().turnoverRate, e.getStockDto().tsStock.ts_code))
                             .reverse
-      
+
     })
 
     println(s"完成模型分析:${PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).mkString(", ")}")

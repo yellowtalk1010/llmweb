@@ -95,7 +95,7 @@ class TushareTopInstController {
 
     log.info(s"过滤日期龙虎榜总数据:${dataList.size}")
 
-    log.info(s"龙虎榜聚合输出:\n${dataList.asScala.map(e => s"${e.ts_code}, ${e.ts_name}, ${e.easyMoneyURL}").toSet.toList.sorted.mkString("\n")}")
+    //log.info(s"龙虎榜聚合输出:\n${dataList.asScala.map(e => s"${e.ts_code}, ${e.ts_name}, ${e.easyMoneyURL}").toSet.toList.sorted.mkString("\n")}")
 
 
 

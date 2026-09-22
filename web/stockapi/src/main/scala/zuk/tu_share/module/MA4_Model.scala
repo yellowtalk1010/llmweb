@@ -36,7 +36,7 @@ class MA4_Model extends IModel {
       && head.change.toFloat > 0
     })
 
-    val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code).getOrElse(null)
+    val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
     if(ls.size == num
       && tsStock != null
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma5.floatValue())) //ma5是递增的
