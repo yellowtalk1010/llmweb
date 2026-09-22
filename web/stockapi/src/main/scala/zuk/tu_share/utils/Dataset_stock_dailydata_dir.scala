@@ -28,7 +28,7 @@ object Dataset_stock_dailydata_dir {
         try {
           refresh_stock_daily_data()
           refresh_rtk()
-          Thread.sleep(1000 * 60 * 1)
+          Thread.sleep(1000 * 60 * 1) //每分钟轮训一遍
         }
         catch {
           case exception: Exception =>
