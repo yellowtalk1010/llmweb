@@ -125,7 +125,7 @@ object DataFrame {
    * @param path 数据路径
    * @return map中的key是股票代码， list是组装的股票数据
    */
-  def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleDay]] = {
+  def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleDay]] = synchronized {
 
     getProperties()
 
