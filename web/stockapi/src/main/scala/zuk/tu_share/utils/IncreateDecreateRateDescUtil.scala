@@ -15,7 +15,7 @@ object IncreateDecreateRateDescUtil {
    */
   def getDescription(stockCode: String): Option[(Float, Float, Float, String)] = {
     val map = DataFrame.loadModelAnalysisDataSet.get(stockCode)
-    if(map.get!=null && !map.get.isEmpty && map.get.size > 0) {
+    if(!map.isEmpty && map.get!=null && map.get.size > 0) {
       val list = map.get
       val DAY_NUM = 120 //过去6个交易日
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
