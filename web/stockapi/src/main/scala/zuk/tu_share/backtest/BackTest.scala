@@ -47,8 +47,8 @@ object BackTest {
         val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse.filter(mod=>{
             if(mod.sells.size==0){
               val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
-              val name = if(!tsStock.isEmpty){
-                val url = tsStock.get.eastmoneyURL
+              val name = if(tsStock!=null){
+                val url = tsStock.eastmoneyURL
                 val href = s"<a href='${url}'>${mod.buy.name}</a>"
                 href
               }
@@ -86,8 +86,8 @@ object BackTest {
             val ok = if (st) "" else "X"
 
             val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
-            val name = if (!tsStock.isEmpty) {
-              val url = tsStock.get.eastmoneyURL
+            val name = if (tsStock!=null) {
+              val url = tsStock.eastmoneyURL
               val href = s"<a href='${url}'>${mod.buy.name}</a>"
               href
             }
