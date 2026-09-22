@@ -29,29 +29,27 @@ object DataFrame {
    * STOCKS_MAP 中 Key 为 ts_code
    */
   val STOCKS_MAP = new ConcurrentHashMap[String, TsStock]()
-
-  /***
-   * rtk 实时日线数据
-   */
-  var RTK_MAP = new ConcurrentHashMap[String, ModuleDay]()
-  var RTK_START_UPDATE = false
-
+  
   /***
    * 历史日线数据
    */
   var HISTORY_MAP = new ConcurrentHashMap[String, List[ModuleDay]]()
+
+  /** *
+   * rtk 实时日线数据
+   */
+  var RTK_MAP = new ConcurrentHashMap[String, ModuleDay]()
+  var RTK_START_UPDATE = false
   
   var execute = Executors.newSingleThreadExecutor()
   execute.submit(new Runnable {
     override def run(): Unit = {
-      while (false) {
+      while (true) {
         try {
-          if(RTK_START_UPDATE){
-            //开始定时更新
-            loadRTK_DataSet
-            println(s"完成定时更新rtk数据:${RTK_MAP.size()}")
-          }
-          
+          loadModelAnalysisDataSet
+          //开始定时更新
+          loadRTK_DataSet
+          println(s"完成定时更新rtk数据:${RTK_MAP.size()}")
           Thread.sleep(1000 * 60 * 5) //每两分钟更新一次rtk
         }
         catch {
@@ -107,6 +105,16 @@ object DataFrame {
       if(output!=null){
         output.close()
       }
+    }
+  }
+  
+  def getDataForSelect(tsCode: String): List[ModuleDay] = {
+    val ls1 = HISTORY_MAP.get(tsCode)
+    if(RTK_MAP.get(tsCode)!=null){
+      List(RTK_MAP.get(tsCode)) ++ ls1
+    }    
+    else {
+      ls1
     }
   }
 
