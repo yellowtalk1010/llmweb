@@ -58,13 +58,13 @@ object Dataset_top_Inst_dir {
   }
 
 
-  def getData(): java.util.HashMap[String, List[TopInst]] = topInstMap
+  def getData(): ConcurrentHashMap[String, List[TopInst]] = topInstMap
   
   /***
    *
    * @return
    */
-  private def load(): java.util.HashMap[String, List[TopInst]] = synchronized {
+  private def load(): Unit = synchronized {
     //
     val topInstDirPath = Paths.get(ParseCammandParam.param.datasetInfo.top_inst_dir)
     val topInstFiles = new ListBuffer[File]
@@ -79,7 +79,6 @@ object Dataset_top_Inst_dir {
         topInstMap.put(topInstList.asScala.head.trade_date, topInstList)
       }
     })
-    topInstMap
   }
 
 
