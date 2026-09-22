@@ -164,7 +164,7 @@ class TushareInitMA4ModelMA5ModelComponent {
   /***
    * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
    */
-  def init_MODEL_BACK_TEST_RESULT(): Unit = synchronized {
+  private def init_MODEL_BACK_TEST_RESULT(): Unit = synchronized {
     val file = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file)
     if(!file.exists()){
       log.info(s"${file.getAbsolutePath} 不存在")
