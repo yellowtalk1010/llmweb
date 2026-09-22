@@ -110,12 +110,14 @@ object DataFrame {
   
   def getDataForSelect(tsCode: String): List[ModuleDay] = {
     val ls1 = HISTORY_MAP.get(tsCode)
-    if(RTK_MAP.get(tsCode)!=null){
+    val list = if(RTK_MAP.get(tsCode)!=null){
       List(RTK_MAP.get(tsCode)) ++ ls1
     }    
     else {
       ls1
     }
+    
+    list
   }
 
   /***
@@ -184,7 +186,7 @@ object DataFrame {
 
             val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
             rtk.vol = vol.toString
-            
+
             println(s"${index+1}/${rtks.size}，完成rtk数据整理(换手率/涨跌幅/交易量)：${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
           }
         } catch
@@ -304,19 +306,19 @@ object DataFrame {
       val ls: List[ModuleDay] = records.asScala.map(record => {
         // ts_code	name	pre_close	high	open	low	close	vol	amount	num
 
-        val moduleDay = new ModuleDay()
-        moduleDay.ts_code = record.get("ts_code")
-        moduleDay.name = record.get("name")
-        moduleDay.trade_date = trade_date
-        moduleDay.open = record.get("open")
-        moduleDay.high = record.get("high")
-        moduleDay.low = record.get("low")
-        moduleDay.close = record.get("close")
-        moduleDay.pre_close = record.get("pre_close")
-        moduleDay.vol = record.get("vol")
-        moduleDay.amount = record.get("amount")
+        val rtk = new ModuleDay()
+        rtk.ts_code = record.get("ts_code")
+        rtk.name = record.get("name")
+        rtk.trade_date = trade_date
+        rtk.open = record.get("open")
+        rtk.high = record.get("high")
+        rtk.low = record.get("low")
+        rtk.close = record.get("close")
+        rtk.pre_close = record.get("pre_close")
+        rtk.vol = record.get("vol")
+        rtk.amount = record.get("amount")
 
-        moduleDay
+        rtk
 
       }).toList
       in.close()
