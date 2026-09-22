@@ -38,14 +38,13 @@ object DataFrame {
    * @param
    */
   private def loadStockHistoryData(ts_code: String): List[ModuleDay] = {
-    val path = ParseCammandParam.param.engine_path
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
     val moduleDays = new ListBuffer[ModuleDay]
 
     val ts_code_path = ts_code.replace(".", "_")
-    val module_path = path + File.separator + "module" + File.separator + s"${ts_code_path}.csv"
+    val module_path = ParseCammandParam.param.engineInfo.stock_module_dir + File.separator + s"${ts_code_path}.csv"
     val module_file = new File(module_path)
     println(s"加载股票${ts_code}的预备数据:${module_file.getAbsolutePath}, ${module_file.exists()}")
     if(!module_file.exists()){
