@@ -18,6 +18,7 @@ import scala.collection.*
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 import java.util.Properties
+import java.util.concurrent.ConcurrentHashMap
 
 
 object DataFrame {
@@ -28,6 +29,160 @@ object DataFrame {
    * STOCKS_MAP 中 Key 为 ts_code
    */
   val STOCKS_MAP = new mutable.HashMap[String, TsStock]()
+
+  /***
+   * rtk 实时日线数据
+   */
+  var RTK_MAP = new ConcurrentHashMap[String, ModuleDay]()
+
+
+  /***
+   * 创建并获取 properties 数据
+   * @param configProperties
+   * @return
+   */
+  def getProperties(): Properties = {
+    try{
+      val configProperties: String = ParseCammandParam.param.engineInfo.stock_config_properties_file
+      if(properties.size() == 0){
+        val configFile = new File(configProperties)
+        println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
+        if (configFile.exists()) {
+          properties.load(new FileReader(configFile))
+          println(properties.toString)
+        }
+      }
+      properties
+    }
+    catch
+      case exception: Exception =>
+        exception.printStackTrace()
+        properties
+  }
+
+  /***
+   * 保存到文件中
+   */
+  def storeProperties() = {
+    var output: FileOutputStream = null
+    try {
+      val configProperties: String = ParseCammandParam.param.engineInfo.stock_config_properties_file
+      println(s"保存properties路径：${configProperties}")
+      import zuk.tu_share.DataFrame
+      val sdf = new SimpleDateFormat("yyyy-MM-dd")
+      val dateStr = sdf.format(new Date())
+      output = new FileOutputStream(configProperties)
+      DataFrame.getProperties().store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
+    }
+    catch
+      case exception: Exception =>
+        println("保存properties路径")
+    finally {
+      if(output!=null){
+        output.close()
+      }
+    }
+  }
+
+  /***
+   * 加载模型分析数据集
+   *
+   * @param path 数据路径
+   * @return map中的key是股票代码， list是组装的股票数据
+   */
+  def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleDay]] = {
+
+    getProperties()
+
+    //CSV文件中加载股票信息
+    if(STOCKS_MAP.size > 5000){
+      Dataset_all_stocks_csv_file.load.foreach(e => {
+        //转成MAP格式
+        STOCKS_MAP.put(e.ts_code, e)
+      })
+    }
+
+    //加载实时日K
+    val rtks = loadRTK_DataSet
+
+    val dayMap = new mutable.HashMap[String, List[ModuleDay]]
+    var count = 0
+    if(rtks.isEmpty){
+      println("没有计算rt_k")
+      stocks.foreach(stock=>{
+        try{
+          val historyDays = loadStockHistoryData(stock.ts_code)
+          dayMap.put(stock.ts_code, historyDays)
+          count = count + 1
+          println(s"st:${count}/${stocks.size}")
+        }
+        catch
+          case exception: Exception => exception.printStackTrace()
+      })
+    }
+    else {
+
+      //比较股票的名称
+      rtks.foreach(rtk=>{
+        try {
+          val v = STOCKS_MAP.get(rtk.ts_code)
+          if (v.isEmpty) {
+            //股票中不存在
+            println(s"rtk中的股票 ${rtk.ts_code}, ${rtk.name} 本地中不存在")
+          }
+          else {
+            if (!v.get.name.replace(" ","").equals(rtk.name.replace(" ",""))) {
+              //股票名称不一致
+              println(s"${rtk.ts_code}名称将【${v.get.name.trim}】改为【${rtk.name.trim}】")
+              v.get.name = rtk.name.replace(" ","")
+            }
+            else {
+              //去掉空格是一致的
+            }
+          }
+        }
+        catch
+          case exception: Exception =>
+      })
+
+      //加载模型数据
+      rtks.foreach(rtk => {
+        try {
+          val historyDays = loadStockHistoryData(rtk.ts_code)
+          if (historyDays != null && historyDays.size > 0) {
+
+            val preTradeDay0 = historyDays.head //上一个交易日信息
+
+            // 计算换手率
+            val turnover_rate = new BigDecimal(rtk.vol)
+              .divide(new BigDecimal(preTradeDay0.float_share)
+                .multiply(new BigDecimal(properties.getProperty("turnover","100").toFloat)), 4, RoundingMode.DOWN)
+            rtk.turnover_rate = turnover_rate.toString
+
+            //计算涨跌幅
+            val change =((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close)))
+              .multiply(new BigDecimal(properties.getProperty("change", "100").toFloat)))
+              .divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
+            rtk.change = change.toString
+
+            val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
+            rtk.vol = vol.toString
+
+            println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
+
+            //将整理的rtk数据写入数据集中
+            dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
+            count = count + 1
+            println(s"完成rtk数据整理(换手率/涨跌幅/交易量):${count}/${rtks.size}")
+          }
+        } catch
+          case exception: Exception => exception.printStackTrace()
+      })
+    }
+
+    dayMap.filter(_._2.size>100) //只返回日线记录超过100的
+
+  }
 
 
   /***
@@ -149,152 +304,5 @@ object DataFrame {
     })
   }
 
-  /***
-   * 创建并获取 properties 数据
-   * @param configProperties
-   * @return
-   */
-  def getProperties(): Properties = {
-    try{
-      val configProperties: String = ParseCammandParam.param.engineInfo.stock_config_properties_file
-      if(properties.size() == 0){
-        val configFile = new File(configProperties)
-        println(s"加载stock_config.properties文件:${configFile.getAbsolutePath}, ${configFile.exists()}")
-        if (configFile.exists()) {
-          properties.load(new FileReader(configFile))
-          println(properties.toString)
-        }
-      }
-      properties
-    }
-    catch
-      case exception: Exception => 
-        exception.printStackTrace()
-        properties
-  }
-
-  /***
-   * 保存到文件中
-   */
-  def storeProperties() = {
-    var output: FileOutputStream = null
-    try {
-      val configProperties: String = ParseCammandParam.param.engineInfo.stock_config_properties_file
-      println(s"保存properties路径：${configProperties}")
-      import zuk.tu_share.DataFrame
-      val sdf = new SimpleDateFormat("yyyy-MM-dd")
-      val dateStr = sdf.format(new Date())
-      output = new FileOutputStream(configProperties)
-      DataFrame.getProperties().store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
-    }
-    catch
-      case exception: Exception =>
-        println("保存properties路径")
-    finally {
-      if(output!=null){
-        output.close()
-      }
-    }
-  }
-
-  /***
-   * 加载模型分析数据集
-   *
-   * @param path 数据路径
-   * @return map中的key是股票代码， list是组装的股票数据
-   */
-  def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleDay]] = {
-
-    getProperties()
-
-    //加载股票信息
-    val stocks = Dataset_all_stocks_csv_file.load
-
-    stocks.foreach(e => {
-      //转成MAP格式
-      STOCKS_MAP.put(e.ts_code, e)
-    })
-
-    //加载实时日K
-    val rtks = loadRTK_DataSet
-
-    val dayMap = new mutable.HashMap[String, List[ModuleDay]]
-    var count = 0
-    if(rtks.isEmpty){
-      println("没有计算rt_k")
-      stocks.foreach(stock=>{
-        try{
-          val historyDays = loadStockHistoryData(stock.ts_code)
-          dayMap.put(stock.ts_code, historyDays)
-          count = count + 1
-          println(s"st:${count}/${stocks.size}")
-        }
-        catch
-          case exception: Exception => exception.printStackTrace()
-      })
-    }
-    else {
-
-      //比较股票的名称
-      rtks.foreach(rtk=>{
-        try {
-          val v = STOCKS_MAP.get(rtk.ts_code)
-          if (v.isEmpty) {
-            //股票中不存在
-            println(s"rtk中的股票 ${rtk.ts_code}, ${rtk.name} 本地中不存在")
-          }
-          else {
-            if (!v.get.name.replace(" ","").equals(rtk.name.replace(" ",""))) {
-              //股票名称不一致
-              println(s"${rtk.ts_code}名称将【${v.get.name.trim}】改为【${rtk.name.trim}】")
-              v.get.name = rtk.name.replace(" ","")
-            }
-            else {
-              //去掉空格是一致的
-            }
-          }
-        }
-        catch
-          case exception: Exception =>
-      })
-
-      //加载模型数据
-      rtks.foreach(rtk => {
-        try {
-          val historyDays = loadStockHistoryData(rtk.ts_code)
-          if (historyDays != null && historyDays.size > 0) {
-
-            val preTradeDay0 = historyDays.head //上一个交易日信息
-
-            // 计算换手率
-            val turnover_rate = new BigDecimal(rtk.vol)
-              .divide(new BigDecimal(preTradeDay0.float_share)
-                .multiply(new BigDecimal(properties.getProperty("turnover","100").toFloat)), 4, RoundingMode.DOWN)
-            rtk.turnover_rate = turnover_rate.toString
-
-            //计算涨跌幅
-            val change =((new BigDecimal(rtk.close).subtract(new BigDecimal(rtk.pre_close)))
-              .multiply(new BigDecimal(properties.getProperty("change", "100").toFloat)))
-              .divide(new BigDecimal(rtk.pre_close), 4, RoundingMode.UP)
-            rtk.change = change.toString
-
-            val vol = new BigDecimal(rtk.vol).divide(new BigDecimal(properties.getProperty("vol"))).setScale(2, RoundingMode.DOWN)
-            rtk.vol = vol.toString
-
-            println(s"${rtk.ts_code}, ${rtk.name},close:${rtk.close}, change:${rtk.change}, trunover:${rtk.turnover_rate}, vol:${rtk.vol}")
-
-            //将整理的rtk数据写入数据集中
-            dayMap.put(rtk.ts_code, List(rtk) ++ historyDays)
-            count = count + 1
-            println(s"完成rtk数据整理(换手率/涨跌幅/交易量):${count}/${rtks.size}")
-          }
-        } catch
-          case exception: Exception => exception.printStackTrace()
-      })
-    }
-
-    dayMap.filter(_._2.size>100) //只返回日线记录超过100的
-
-  }
 
 }
