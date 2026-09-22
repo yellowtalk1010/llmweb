@@ -358,21 +358,13 @@ class TushareStockController {
    * @return
    */
   private def getLimit_up_down (up_down_type: Int = 1, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    val map = DataFrame.loadModelAnalysisDataSet
     val list = Dataset_all_stocks_csv_file.load.map(_.ts_code)
       .filter(e => {
-        val list = map.get(e)
-        val st = list != null && !list.isEmpty && list.get.size > 0
-        st
-//        !DataFrame.loadModelAnalysisDataSet.get(e).isEmpty
-//        val list = DataFrame.loadModelAnalysisDataSet.get(e).get
-//        list != null
-        //zuk.tu_share.utils.Dataset_stock_dailydata_dir.getDailyDataList(e) != null
-        
+        val list = DataFrame.getDataForSelect(e)
+        list!=null && list.size>0
       })
       .flatMap(stockCode => {
-        //val ls = zuk.tu_share.utils.Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
-        val ls = map.get(stockCode).get
+        val ls = DataFrame.getDataForSelect(stockCode)
         //开始过滤时间
         val filterList = if (StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)) {
           val start = if (selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong) {
@@ -453,13 +445,11 @@ class TushareStockController {
   private def getLimitUp(selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
     val list = Dataset_all_stocks_csv_file.load.map(_.ts_code)
       .filter(e=>{
-        val list = DataFrame.loadModelAnalysisDataSet.get(e).get
-        list!=null
-//        zuk.tu_share.utils.Dataset_stock_dailydata_dir.getDailyDataList(e) != null
+        val list = DataFrame.getDataForSelect(e)
+        list!=null && list.size > 0
       })
       .flatMap(stockCode=>{
-//        val ls = zuk.tu_share.utils.Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
-        val ls = DataFrame.loadModelAnalysisDataSet.get(stockCode).get
+        val ls = DataFrame.getDataForSelect(stockCode)
         //开始过滤时间
         val filterList = if(StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)){
           val start = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong){
