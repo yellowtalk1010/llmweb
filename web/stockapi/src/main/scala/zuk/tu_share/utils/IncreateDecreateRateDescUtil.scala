@@ -14,9 +14,8 @@ object IncreateDecreateRateDescUtil {
    * @return (最近收盘价，较最近低位涨了多少，较最近最高位跌去多少，字符串描述)
    */
   def getDescription(stockCode: String): Option[(Float, Float, Float, String)] = {
-    val map = DataFrame.loadModelAnalysisDataSet.get(stockCode)
-    if(!map.isEmpty && map.get!=null && map.get.size > 0) {
-      val list = map.get
+    val list = DataFrame.getDataForSelect(stockCode)
+    if(list != null && list.size > 0) {
       val DAY_NUM = 120 //过去6个交易日
       val ls = if(list.size > DAY_NUM) list.take(DAY_NUM) else list
       val head = ls.head
