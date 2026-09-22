@@ -23,9 +23,7 @@ import java.util.Properties
 object DataFrame {
 
   private val properties = new Properties()
-  val turnover = "turnover"
-  val change = "change"
-
+  
   /**
    * STOCKS_MAP 中 Key 为 ts_code
    */
