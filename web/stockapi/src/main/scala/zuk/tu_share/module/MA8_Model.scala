@@ -82,7 +82,7 @@ class MA8_Model extends IModel {
         if(head.high.toFloat > second.close.toFloat
 //          && head.change.toFloat > 0
 //          && second.change.toFloat > 0
-          && head.vol.toFloat < second.vol.toFloat
+          && head.vol.toFloat < second.vol.toFloat //缩量越多越好
           && divideValue > 0.3
         ){
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
