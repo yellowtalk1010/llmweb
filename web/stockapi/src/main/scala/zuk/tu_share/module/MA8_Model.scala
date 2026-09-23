@@ -96,7 +96,7 @@ class MA8_Model extends IModel {
 
 
   override def desc(): String = {
-    "龙虎榜净卖出为负，缩量上涨"
+    "龙虎榜净卖出为负，缩量上涨（关键在缩量越大越好）"
   }
 
   override def reference: Float = {
