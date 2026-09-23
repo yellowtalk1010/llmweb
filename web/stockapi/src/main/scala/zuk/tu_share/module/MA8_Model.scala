@@ -34,7 +34,7 @@ object MA8_Model {
         .sortBy(_._1)
         .reverse
         .map(ls=>{
-          //合并列表
+          //将当天股票的游资明细聚合计算
           val head = ls._2.head
           val topInst = new TopInst
           topInst.ts_code = head.ts_code
@@ -72,15 +72,22 @@ class MA8_Model extends IModel {
     val head = days.head
     val second = days(1)
     val topInstList = MA8_Model.topInstMap.get(second.ts_code)
-    if(topInstList!=null && topInstList.size>0 && topInstList.head.trade_date.equals(second.trade_date)){
+    if(topInstList!=null 
+      && topInstList.size>0
+    ){
+      val preList = topInstList.filter(_.trade_date.equals(second.trade_date))
+      if(preList.size == 0 ){
+        return 
+      }
       println(s"${second.ts_code}, ${second.name}, ${second.trade_date}")
-      val topInstHead = topInstList.head
+      
+      val topInstHead = preList.head
       if(topInstHead.net_buy.toFloat<0){
         //如果上一个交易日，龙虎榜卖出为负
         val min = List(Math.abs(topInstHead.buy.toFloat), Math.abs(topInstHead.sell.toFloat)).min
         val divideValue = new BigDecimal(Math.abs(topInstHead.net_buy.toFloat)).divide(new BigDecimal(min), 4, RoundingMode.UP).floatValue()
         if(head.high.toFloat > second.close.toFloat
-//          && head.change.toFloat > 0
+          && head.change.toFloat > 0
 //          && second.change.toFloat > 0
           && head.vol.toFloat < second.vol.toFloat //缩量越多越好
           && divideValue > 0.3
