@@ -49,7 +49,7 @@ class DTWStockSimilarityController {
     // 3. 两种写法 
     val t2 = System.nanoTime()
     val resB = DTWStockSimilarity_B.findSimilarImperative(targetBars, allStocks, windowSize)
-    val filterResB = resB.sortBy(_.distance).take(100)
+    val filterResB = resB.sortBy(_.distance).filter(e=>e.distance < 1).take(100)
     val t3 = System.nanoTime()
 
 
@@ -71,7 +71,7 @@ class DTWStockSimilarityController {
         && e.change.toDouble > 1
       ).size > 0
 
-      println(f"  ${res.stockCode}  截至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
+      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
 
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
