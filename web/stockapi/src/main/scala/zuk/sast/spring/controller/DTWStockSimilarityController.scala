@@ -56,7 +56,7 @@ class DTWStockSimilarityController {
     println("=== 写法 B: 命令式 for 循环 ===")
     var hitsTotal = 0
     var stTotal = 0
-    filterResB.foreach(res => {
+    filterResB.map(res => {
       val hits = ListBuffer[ModuleDay]()
       val ls = DataFrame.getDataForSelect(res.stockCode)
       for (i <- 0 until ls.size) {
@@ -68,14 +68,17 @@ class DTWStockSimilarityController {
           }
         }
       }
-
-
+      (res, hits)
+    }).filter(tp2=>tp2._2.size>0).foreach(tp2=>{
+      val res = tp2._1
+      val hits = tp2._2
+      
       val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
         && e.change.toDouble > 1
       ).size > 0
 
       hitsTotal = hitsTotal + 1
-      if(hits.size > 0 && st) {
+      if(st) {
         stTotal = stTotal + 1
       }
 
