@@ -7,6 +7,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 import scala.jdk.CollectionConverters.*
+import java.math.{BigDecimal, RoundingMode}
 
 
 // ============ 数据模型：完整K线 ============
@@ -19,21 +20,24 @@ case class Bar(
                 volume: Double
               ) {
   /** 振幅：(high - low) / 昨收，这里用当日 open 近似，或用外部传入 */
-  def amplitude: Double = if (open == 0) 0 else (high - low) / open
-
+  // def amplitude: Double = if (open == 0) 0 else (high - low) / open
+  def amplitude: Double = new BigDecimal(if (open == 0) 0 else (high - low)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
+  
   /** 实体幅度：(close - open) / open */
-  def bodyRatio: Double = if (open == 0) 0 else (close - open) / open
+  def bodyRatio: Double = new BigDecimal(if (open == 0) 0 else (close - open)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
 
   /** 上影线比例 */
   def upperShadow: Double = {
     val top = math.max(open, close)
-    if (open == 0) 0 else (high - top) / open
+    // if (open == 0) 0 else (high - top) / open
+    new BigDecimal(if (open == 0) 0 else (high - top)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
   }
 
   /** 下影线比例 */
   def lowerShadow: Double = {
     val bottom = math.min(open, close)
-    if (open == 0) 0 else (bottom - low) / open
+//    if (open == 0) 0 else (bottom - low) / open
+    new BigDecimal(if (open == 0) 0 else (bottom - low)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
   }
 
   /** 是否阳线 */
@@ -49,7 +53,7 @@ case class FeaturePoint(
                        )
 
 case class SimilarResult(stockCode: String, endDate: String, distance: Double)
- 
+
 /***
  * 根据形态确定买、卖点
  */
@@ -169,7 +173,7 @@ object DTWStockSimilarity {
     }
     bars.toSeq
   }
-  
+
   def getTargetBars(stockCode: String): Seq[Bar] = {
     val ls = DataFrame.loadModelAnalysisDataSet.get(stockCode).get.map(e=>{
       val bar = Bar(
@@ -182,7 +186,7 @@ object DTWStockSimilarity {
       )
       bar
     })
-    
+
     if(ls.size>6){
       ls.take(6)
     }
@@ -190,7 +194,7 @@ object DTWStockSimilarity {
       List.empty
     }
   }
-  
+
   def getAllBars(stockCode: String): Seq[Bar] = {
     if(DataFrame.getDataForSelect(stockCode)==null || DataFrame.getDataForSelect(stockCode).size > 0){
       return List.empty
@@ -229,7 +233,7 @@ object DTWStockSimilarity {
 
 //    DataFrame.STOCKS_MAP.values().asScala.filter(!_.ts_code.equals(tsCode)).foreach(e=>{
 //      val allStocks= getAllBars(e.ts_code)
-//      
+//
 //      val t2 = System.nanoTime()
 //      val resB = findSimilarImperative(targetFeatures, allStocks, windowSize, topK)
 //      val t3 = System.nanoTime()
@@ -237,16 +241,16 @@ object DTWStockSimilarity {
 //      println("=== 写法 B: 命令式 for 循环 ===")
 //      resB.foreach(r => println(f"  ${r.stockCode}  截至 ${r.endDate}  距离=${r.distance}%.6f"))
 //      println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
-//      
+//
 //    })
-    
-    
-    
+
+
+
     // 2. 模拟全市场
     val allStocks: Map[String, Seq[Bar]] = (1 to 20).map { i =>
       f"STOCK$i%02d" -> genBars(s"STOCK$i", 200, seed = i.toLong * 1000)
     }.toMap
-    
+
 //    val allStocks: Map[String, Seq[Bar]] = DataFrame.STOCKS_MAP.values().asScala
 //      .map(e=>{
 //        e.ts_code -> getAllBars(e.ts_code)
