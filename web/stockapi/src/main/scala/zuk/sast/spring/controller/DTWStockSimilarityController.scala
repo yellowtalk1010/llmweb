@@ -68,16 +68,18 @@ class DTWStockSimilarityController {
           }
         }
       }
-
-      hitsTotal = hitsTotal + hits.size
+      
 
       val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
         && e.change.toDouble > 1
-      ).size
+      ).size > 0
 
-      stTotal = stTotal + st
+      hitsTotal = hitsTotal + 1
+      if(st) {
+        stTotal = stTotal + 1
+      }
 
-      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st > 0}") //相似度越小越相似
+      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
 
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
