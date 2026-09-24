@@ -126,11 +126,11 @@ object DTWStockSimilarity_B {
     val results = ArrayBuffer[SimilarResult]()
 
     for ((stock_code, bars) <- allStocks) {
-      for (start <- 0 until bars.size - 10) {
-        val windowBars = bars.slice(start, start + windowSize + 1)
-
+      for (start <- 0 until bars.size - 6) {
+        
+        val windowBars = bars.slice(start, start + windowSize)
         val dis = dtwDistance(target.map(_.feature), windowBars.map(_.feature))
-        results += SimilarResult(stock_code, s" ${windowBars.last.date} -- ${windowBars.head.date}", new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())
+        results += SimilarResult(s"${stock_code}， ${DataFrame.STOCKS_MAP.get(stock_code).name} ", s" ${windowBars.last.date} -- ${windowBars.head.date}", new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())
 
       }
     }
@@ -192,7 +192,7 @@ object DTWStockSimilarity_B {
 
     // 1. 目标股票
     val tsCode = "000001.SZ"
-    val targetBars = getTargetBars(tsCode)
+    val targetBars = getTargetBars(tsCode).take(windowSize)
     val targetFeatures = targetBars.toList.map(_.feature)
 
     println("=== 目标形态（近5日特征）===")
