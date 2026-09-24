@@ -147,7 +147,7 @@ object DTWStockSimilarity_B {
   }
 
   def getTargetBars(stockCode: String): Seq[Bar] = {
-    val ls = DataFrame.loadModelAnalysisDataSet.get(stockCode).get.map(e=>{
+    val ls = DataFrame.getDataForSelect(stockCode).map(e=>{
       val bar = Bar(
         e.trade_date,
         e.open.toDouble,
