@@ -130,7 +130,7 @@ object DTWStockSimilarity_B {
         val windowBars = bars.slice(start, start + windowSize + 1)
 
         val dis = dtwDistance(target.map(_.feature), windowBars.map(_.feature))
-        results += SimilarResult(stock_code, s" ${windowBars.last.date} -- ${windowBars.head.date}", dis)
+        results += SimilarResult(stock_code, s" ${windowBars.last.date} -- ${windowBars.head.date}", new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())
 
       }
     }
@@ -188,7 +188,7 @@ object DTWStockSimilarity_B {
 
   def main(args: Array[String]): Unit = {
     val windowSize = 5 //滑动的窗口
-    val topK = 5 //返回前5个相似的
+    val topK = 10 //返回前5个相似的
 
     // 1. 目标股票
     val tsCode = "000001.SZ"
