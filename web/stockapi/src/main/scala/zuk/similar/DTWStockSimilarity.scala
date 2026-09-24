@@ -10,6 +10,15 @@ import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
 
 
+case class Feature(prev: Bar, curr: Bar) {
+
+  //  涨跌幅 (今收-昨收)/昨收
+  val ret = new BigDecimal(curr.close - prev.close).divide(new BigDecimal(prev.close), 4, RoundingMode.UP).doubleValue()
+  
+  //  成交量变化率
+  val volChg = new BigDecimal(curr.volume - prev.volume).divide(new BigDecimal(prev.volume), 4, RoundingMode.UP).doubleValue()
+}  
+
 // ============ 数据模型：完整K线 ============
 case class Bar(
                 date: String,
@@ -19,8 +28,11 @@ case class Bar(
                 close: Double,
                 volume: Double
               ) {
+  
+  //其他特征
+  var other_feature: Feature = null
+  
   /** 振幅：(high - low) / 昨收，这里用当日 open 近似，或用外部传入 */
-  // def amplitude: Double = if (open == 0) 0 else (high - low) / open
   def amplitude: Double = new BigDecimal(if (open == 0) 0 else (high - low)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
   
   /** 实体幅度：(close - open) / open */
@@ -29,14 +41,12 @@ case class Bar(
   /** 上影线比例 */
   def upperShadow: Double = {
     val top = math.max(open, close)
-    // if (open == 0) 0 else (high - top) / open
     new BigDecimal(if (open == 0) 0 else (high - top)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
   }
 
   /** 下影线比例 */
   def lowerShadow: Double = {
     val bottom = math.min(open, close)
-//    if (open == 0) 0 else (bottom - low) / open
     new BigDecimal(if (open == 0) 0 else (bottom - low)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
   }
 
@@ -71,9 +81,15 @@ object DTWStockSimilarity {
       (1 to windowSize).map { i =>
         val prev = bars(i - 1)
         val curr = bars(i)
-        val ret = (curr.close - prev.close) / prev.close
-        val volChg = (curr.volume - prev.volume) / prev.volume
-        FeaturePoint(ret, volChg, curr.amplitude, curr.bodyRatio)
+        //  涨跌幅 (今收-昨收)/昨收
+        //val ret = (curr.close - prev.close) / prev.close
+        val ret = new BigDecimal(curr.close - prev.close).divide(new BigDecimal(prev.close), 4, RoundingMode.UP).doubleValue()
+        //  成交量变化率
+        //val volChg = (curr.volume - prev.volume) / prev.volume
+        val volChg = new BigDecimal(curr.volume-prev.volume).divide(new BigDecimal(prev.volume), 4, RoundingMode.UP).doubleValue()
+        
+        val fp = FeaturePoint(ret, volChg, curr.amplitude, curr.bodyRatio)
+        fp
       }
     }
   }
@@ -103,25 +119,7 @@ object DTWStockSimilarity {
     }
     dp(n - 1)(m - 1)
   }
-
-  /** 写法 A: for ... yield */
-  def findSimilarFunctional(
-                             target: Seq[FeaturePoint],
-                             allStocks: Map[String, Seq[Bar]],
-                             windowSize: Int,
-                             topK: Int
-                           ): Seq[SimilarResult] = {
-
-    val results = for {
-      (code, bars) <- allStocks.toSeq
-      start <- 0 to (bars.size - windowSize - 1)
-      window = bars.slice(start, start + windowSize + 1)
-      features = extractFeatures(window, windowSize)
-      if features.size == windowSize
-    } yield SimilarResult(code, bars(start + windowSize).date, dtwDistance(target, features))
-
-    results.sortBy(_.distance).take(topK)
-  }
+ 
 
   /** 写法 B: 命令式 for 循环 */
   def findSimilarImperative(
@@ -256,26 +254,16 @@ object DTWStockSimilarity {
 //        e.ts_code -> getAllBars(e.ts_code)
 //      }).toMap.filter(_._2.size>10)
 
-    // 3. 两种写法
-    val t1 = System.nanoTime()
-    val resA = findSimilarFunctional(targetFeatures, allStocks, windowSize, topK)
+    // 3. 两种写法 
     val t2 = System.nanoTime()
     val resB = findSimilarImperative(targetFeatures, allStocks, windowSize, topK)
     val t3 = System.nanoTime()
-
-    println("=== 写法 A: for ... yield ===")
-    resA.foreach(r => println(f"  ${r.stockCode}  截至 ${r.endDate}  距离=${r.distance}%.6f"))
-    println(f"  耗时: ${(t2 - t1) / 1e6}%.2f ms\n")
+ 
 
     println("=== 写法 B: 命令式 for 循环 ===")
     resB.foreach(r => println(f"  ${r.stockCode}  截至 ${r.endDate}  距离=${r.distance}%.6f"))
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
-
-    val same = resA.zip(resB).forall { case (a, b) =>
-      a.stockCode == b.stockCode && a.endDate == b.endDate &&
-        math.abs(a.distance - b.distance) < 1e-9
-    }
-    println(s"两种写法结果是否一致: $same")
+ 
 
     // 4. 额外：打印目标窗口的完整K线，方便肉眼核对
     println("\n=== 目标窗口原始K线 ===")
