@@ -22,7 +22,7 @@ class DTWStockSimilarityController {
 
   @GetMapping(value = Array("getTsCode"))
   def getTsCode(tsCode: String): java.util.Map[String, Object] = {
-    
+
     val windowSize = 5 //滑动的窗口
 
     // 1. 目标股票
@@ -46,7 +46,7 @@ class DTWStockSimilarityController {
         e.ts_code -> DTWStockSimilarity_B.getAllBars(e.ts_code)
       }).toMap.filter(_._2.size > 10)
 
-    // 3. 两种写法 
+    // 3. 两种写法
     val t2 = System.nanoTime()
     val resB = DTWStockSimilarity_B.findSimilarImperative(targetBars, allStocks, windowSize)
     val filterResB = resB.sortBy(_.distance).filter(e=>e.distance < 1).take(100)
@@ -54,6 +54,8 @@ class DTWStockSimilarityController {
 
 
     println("=== 写法 B: 命令式 for 循环 ===")
+    var hitsTotal = 0
+    var stTotal = 0
     filterResB.foreach(res => {
       val hits = ListBuffer[ModuleDay]()
       val ls = DataFrame.getDataForSelect(res.stockCode)
@@ -67,17 +69,21 @@ class DTWStockSimilarityController {
         }
       }
 
+      hitsTotal = hitsTotal + hits.size
+
       val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
         && e.change.toDouble > 1
       ).size
-      
-      val rate = new BigDecimal(st).divide(new BigDecimal(hits.size), 2, RoundingMode.UP)
 
-      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${rate}") //相似度越小越相似
+      stTotal = stTotal + st
+
+      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st > 0}") //相似度越小越相似
 
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
-
+  
+    val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
+    println(rate)
 
 
     val list = new ListBuffer[String]
@@ -85,7 +91,7 @@ class DTWStockSimilarityController {
     result.put("data", list.asJava)
     result.put("code", "success")
     result
-    
+
   }
 
 }
