@@ -1,6 +1,7 @@
 package zuk.similar
 
 import zuk.tu_share.DataFrame
+import zuk.tu_share.utils.IncreateDecreateRateDescUtil
 
 /***
  * 核心思路
@@ -81,11 +82,13 @@ object DTWStockSimilarity {
     results.sortBy(_.distance).take(topK)
   }
 
-  def main(args: Array[String]): Unit = {
+//  def run(): Unit = {
+//    val stocks = TushareAllStocks.allStocks
+//    stocks.foreach(stock=>{
+//      val stockCode = stock.ts_code
+//      val stockDailyDataList = TushareStockDailyDataComponent.getDailyDataList(stockCode)
+//      println(stockDailyDataList.size)
+//    })
+//  }
 
-    val map = DataFrame.load("D:\\development\\github\\tushare\\111\\gitee_stockapi")
-    println()
-    
-  }
-  
 }
