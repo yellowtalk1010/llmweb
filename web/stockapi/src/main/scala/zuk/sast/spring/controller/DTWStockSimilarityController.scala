@@ -68,14 +68,14 @@ class DTWStockSimilarityController {
           }
         }
       }
-      
+
 
       val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
         && e.change.toDouble > 1
       ).size > 0
 
       hitsTotal = hitsTotal + 1
-      if(st) {
+      if(hits.size > 0 && st) {
         stTotal = stTotal + 1
       }
 
@@ -83,7 +83,7 @@ class DTWStockSimilarityController {
 
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
-  
+
     val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
     println(rate)
 
