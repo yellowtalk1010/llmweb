@@ -52,6 +52,10 @@ case class FeaturePoint(
                          amplitude: Double,      // 振幅 (高-低)/开
                          bodyRatio: Double       // 实体 (收-开)/开
                        )
+{
+  var prevDate: String = ""
+  var currDate: String = ""
+}
 
 case class SimilarResult(stockCode: String, endDate: String, distance: Double)
 
@@ -74,6 +78,9 @@ object DTWStockSimilarity_B {
     val volChg = new BigDecimal(curr.volume-prev.volume).divide(new BigDecimal(prev.volume), 4, RoundingMode.UP).doubleValue()
     
     val fp = FeaturePoint(ret, volChg, curr.amplitude, curr.bodyRatio)
+    
+    fp.prevDate = prev.date
+    fp.currDate = curr.date
     
     curr.feature = fp
     
@@ -150,7 +157,7 @@ object DTWStockSimilarity_B {
       extractFeatures(prev, cur)
     }
   
-    ls
+    ls.slice(0, ls.size - 1)
   
   }
 
@@ -176,7 +183,7 @@ object DTWStockSimilarity_B {
       extractFeatures(prev, cur)
     }
     
-    ls
+    ls.slice(0, ls.size - 1)
   }
 
   def main(args: Array[String]): Unit = {
