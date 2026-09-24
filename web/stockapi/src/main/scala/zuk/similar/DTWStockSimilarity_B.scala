@@ -61,7 +61,7 @@ case class FeaturePoint(
 case class SimilarResult(stockCode: String,
                          stockName: String,
                          startDate: String,
-                         endDate: String, 
+                         endDate: String,
                          distance: Double)
 
 /***
@@ -131,13 +131,13 @@ object DTWStockSimilarity_B {
 
     for ((stock_code, bars) <- allStocks) {
       for (start <- 0 until bars.size - windowSize - 1) {
-        
+
         val windowBars = bars.slice(start, start + windowSize)
         val dis = dtwDistance(target.map(_.feature), windowBars.map(_.feature))
         results += SimilarResult(
-          stock_code, 
-          DataFrame.STOCKS_MAP.get(stock_code).name, 
-          windowBars.last.date, 
+          stock_code,
+          DataFrame.STOCKS_MAP.get(stock_code).name,
+          windowBars.last.date,
           windowBars.head.date,
           new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())
       }
@@ -238,16 +238,16 @@ object DTWStockSimilarity_B {
           }
         }
       }
-      
+
       val st = hits.filter(e=>e.high.toDouble > e.pre_close.toDouble 
         && e.change.toDouble > 1
       ).size > 0
 
       println(f"  ${res.stockCode}  截至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}")
-      
+
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
- 
+
 
   }
 
