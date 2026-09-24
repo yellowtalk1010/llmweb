@@ -69,21 +69,21 @@ object DTWStockSimilarity_B {
    * 注意：第 i 天的涨跌幅需要昨收，所以除了当日 Bar 还要传入前一日收盘价
    */
   def extractFeatures(prev: Bar, curr: Bar): Unit = {
- 
+
     //  涨跌幅 (今收-昨收)/昨收
     //val ret = (curr.close - prev.close) / prev.close
     val ret = new BigDecimal(curr.close - prev.close).divide(new BigDecimal(prev.close), 4, RoundingMode.UP).doubleValue()
     //  成交量变化率
     //val volChg = (curr.volume - prev.volume) / prev.volume
     val volChg = new BigDecimal(curr.volume-prev.volume).divide(new BigDecimal(prev.volume), 4, RoundingMode.UP).doubleValue()
-    
+
     val fp = FeaturePoint(ret, volChg, curr.amplitude, curr.bodyRatio)
-    
+
     fp.prevDate = prev.date
     fp.currDate = curr.date
-    
+
     curr.feature = fp
-    
+
   }
 
   private def pointDist(a: FeaturePoint, b: FeaturePoint): Double = {
@@ -91,7 +91,7 @@ object DTWStockSimilarity_B {
     val dv = a.volumeChange - b.volumeChange
     val da = a.amplitude - b.amplitude
     val db = a.bodyRatio - b.bodyRatio
-    
+
     //目前是4维，可以扩充到5,6,7,8维
     math.sqrt(dr * dr + dv * dv + da * da + db * db)
   }
@@ -131,7 +131,7 @@ object DTWStockSimilarity_B {
 
         val dis = dtwDistance(target.map(_.feature), windowBars.map(_.feature))
         results += SimilarResult(stock_code, s" ${windowBars.last.date} -- ${windowBars.head.date}", dis)
-        
+
       }
     }
 
@@ -150,19 +150,19 @@ object DTWStockSimilarity_B {
       )
       bar
     })
-    
+
     for(i <- 0 until ls.size - 1) {
       val cur = ls(i)
       val prev = ls(i + 1)
       extractFeatures(prev, cur)
     }
-  
+
     ls.slice(0, ls.size - 1)
-  
+
   }
 
   def getAllBars(stockCode: String): Seq[Bar] = {
-    if(DataFrame.getDataForSelect(stockCode)==null || DataFrame.getDataForSelect(stockCode).size > 0){
+    if(DataFrame.getDataForSelect(stockCode)==null || DataFrame.getDataForSelect(stockCode).size == 0){
       return List.empty
     }
     val ls = DataFrame.getDataForSelect(stockCode).map(e=>{
@@ -182,7 +182,7 @@ object DTWStockSimilarity_B {
       val prev = ls(i + 1)
       extractFeatures(prev, cur)
     }
-    
+
     ls.slice(0, ls.size - 1)
   }
 
@@ -194,7 +194,7 @@ object DTWStockSimilarity_B {
     val tsCode = "000001.SZ"
     val targetBars = getTargetBars(tsCode)
     val targetFeatures = targetBars.toList.map(_.feature)
-    
+
     println("=== 目标形态（近5日特征）===")
     println("日期         涨跌幅    量变     振幅     实体")
     targetBars.toList.zipWithIndex.foreach {tp2 =>
@@ -220,7 +220,7 @@ object DTWStockSimilarity_B {
     println("=== 写法 B: 命令式 for 循环 ===")
     resB.foreach(r => println(f"  ${r.stockCode}  截至 ${r.endDate}  距离=${r.distance}%.6f"))
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
-  
+
   }
 
 }
