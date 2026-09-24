@@ -1,10 +1,11 @@
 package zuk.similar
 
 import zuk.tu_share.DataFrame
+import zuk.tu_share.dto.ModuleDay
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.util.Random
 import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
@@ -57,7 +58,11 @@ case class FeaturePoint(
   var currDate: String = ""
 }
 
-case class SimilarResult(stockCode: String, endDate: String, distance: Double)
+case class SimilarResult(stockCode: String,
+                         stockName: String,
+                         startDate: String,
+                         endDate: String, 
+                         distance: Double)
 
 /***
  * 根据形态确定买、卖点
@@ -119,23 +124,26 @@ object DTWStockSimilarity_B {
   def findSimilarImperative(
                              target: Seq[Bar],
                              allStocks: Map[String, Seq[Bar]],
-                             windowSize: Int,
-                             topK: Int
-                           ): Seq[SimilarResult] = {
+                             windowSize: Int
+                           ): List[SimilarResult] = {
 
-    val results = ArrayBuffer[SimilarResult]()
+    val results = ListBuffer[SimilarResult]()
 
     for ((stock_code, bars) <- allStocks) {
-      for (start <- 0 until bars.size - 6) {
+      for (start <- 0 until bars.size - windowSize - 1) {
         
         val windowBars = bars.slice(start, start + windowSize)
         val dis = dtwDistance(target.map(_.feature), windowBars.map(_.feature))
-        results += SimilarResult(s"${stock_code}， ${DataFrame.STOCKS_MAP.get(stock_code).name} ", s" ${windowBars.last.date} -- ${windowBars.head.date}", new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())
-
+        results += SimilarResult(
+          stock_code, 
+          DataFrame.STOCKS_MAP.get(stock_code).name, 
+          windowBars.last.date, 
+          windowBars.head.date,
+          new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())
       }
     }
 
-    results.sortBy(_.distance).take(topK).toSeq
+    results.toList
   }
 
   def getTargetBars(stockCode: String): Seq[Bar] = {
@@ -188,7 +196,6 @@ object DTWStockSimilarity_B {
 
   def main(args: Array[String]): Unit = {
     val windowSize = 5 //滑动的窗口
-    val topK = 10 //返回前5个相似的
 
     // 1. 目标股票
     val tsCode = "000001.SZ"
@@ -213,13 +220,34 @@ object DTWStockSimilarity_B {
 
     // 3. 两种写法 
     val t2 = System.nanoTime()
-    val resB = findSimilarImperative(targetBars, allStocks, windowSize, topK)
+    val resB = findSimilarImperative(targetBars, allStocks, windowSize)
+    val filterResB = resB.sortBy(_.distance).take(100)
     val t3 = System.nanoTime()
- 
+
 
     println("=== 写法 B: 命令式 for 循环 ===")
-    resB.foreach(r => println(f"  ${r.stockCode}  截至 ${r.endDate}  距离=${r.distance}%.6f"))
+    filterResB.foreach(res=>{
+      val hits = ListBuffer[ModuleDay]()
+      val ls = DataFrame.getDataForSelect(res.stockCode)
+      for(i <- 0 until ls.size){
+        if(ls(i).trade_date.equals(res.endDate)){
+          var count = 0
+          for(ii <- i to 0 by -1 if count < 3){
+            count = count + 1
+            hits += ls(ii)
+          }
+        }
+      }
+      
+      val st = hits.filter(e=>e.high.toDouble > e.pre_close.toDouble 
+        && e.change.toDouble > 1
+      ).size > 0
+
+      println(f"  ${res.stockCode}  截至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}")
+      
+    })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
+ 
 
   }
 
