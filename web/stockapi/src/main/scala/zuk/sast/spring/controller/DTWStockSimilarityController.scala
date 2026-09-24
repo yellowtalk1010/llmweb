@@ -69,9 +69,11 @@ class DTWStockSimilarityController {
 
       val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
         && e.change.toDouble > 1
-      ).size > 0
+      ).size
+      
+      val rate = new BigDecimal(st).divide(new BigDecimal(hits.size), 2, RoundingMode.UP)
 
-      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
+      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${rate}") //相似度越小越相似
 
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
