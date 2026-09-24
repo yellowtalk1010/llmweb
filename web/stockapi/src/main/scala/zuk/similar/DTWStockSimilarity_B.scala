@@ -243,7 +243,7 @@ object DTWStockSimilarity_B {
         && e.change.toDouble > 1
       ).size > 0
 
-      println(f"  ${res.stockCode}  截至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}")
+      println(f"  ${res.stockCode}  截至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
 
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
