@@ -32,12 +32,16 @@ object Main {
       }
 
       BackTest.analysis()
+      println("完成回测分析")
+      System.exit(1)
     }
     else {
       //加载数据
       val map = DataFrame.loadModelAnalysisDataSet
       //分析
       PassFactory.doModule(map)
+      println("完成分析")
+      System.exit(1)
     }
 
   }
