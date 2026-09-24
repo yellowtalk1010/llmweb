@@ -21,10 +21,17 @@ class TushareMoneyFlowDCController {
 
   @Autowired
   private var tushareMoneyFlowComponent: TushareMoneyFlowComponent = null
+  
+  @Autowired
+  private var dtwStockSimilarityController: DTWStockSimilarityController = null
 
   @GetMapping(value = Array("getTsCode"))
   def getTsCode(tsCode: String): util.Map[String, Object] = {
     log.info(s"查询：${tsCode}")
+
+    dtwStockSimilarityController.getTsCode(tsCode)
+    
+    
     val list = tushareMoneyFlowComponent.getTsCode(tsCode).toBuffer
 
     try {
