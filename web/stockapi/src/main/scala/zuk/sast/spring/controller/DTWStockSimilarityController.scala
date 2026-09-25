@@ -22,7 +22,7 @@ import zuk.similar.*
 class DTWStockSimilarityController {
 
   private var trade_date = "999999999"
-  
+
   //http://localhost:8080/stock_similar/getTsCode?tsCode=000001.SZ&tradeDate=20260924
 
   @GetMapping(value = Array("getTsCode"))
@@ -103,6 +103,7 @@ class DTWStockSimilarityController {
     else {
       val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
       println(s"胜率 ${stTotal}/${hitsTotal}：" + rate)
+      //样本要足够多，胜率足够大
     }
 
     val list = new ListBuffer[String]
