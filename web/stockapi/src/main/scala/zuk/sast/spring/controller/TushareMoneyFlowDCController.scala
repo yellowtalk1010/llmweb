@@ -29,7 +29,7 @@ class TushareMoneyFlowDCController {
   def getTsCode(tsCode: String): util.Map[String, Object] = {
     log.info(s"查询：${tsCode}")
 
-    dtwStockSimilarityController.getTsCode(tsCode)
+    dtwStockSimilarityController.getTsCode(tsCode, "")
     
     
     val list = tushareMoneyFlowComponent.getTsCode(tsCode).toBuffer
