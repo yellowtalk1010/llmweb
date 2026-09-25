@@ -186,6 +186,7 @@ class TusharePushStockController {
     //判断结果路径是否存在
     val file: File = getStockResultJsonPath()
     if(!file.exists() || !file.isDirectory){
+      response.put("data", Array(new util.HashMap[String, Object]()).toList.asJava)
       log.info(s"分析引擎结果路径不存在: ${file.getAbsolutePath}")
       return response
     }
