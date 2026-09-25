@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.similar.SimilartyUtil
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.IModel
@@ -239,6 +240,8 @@ class TusharePushStockController {
         e.concept = concept
         e.remark = optionTp3.get._4 + concept
 
+        e.similarity = SimilartyUtil.getTsCode(tsStock.ts_code, trade_date) //相似度计算
+        
         e
       }).sortBy(_.modWinRate).reverse
     })

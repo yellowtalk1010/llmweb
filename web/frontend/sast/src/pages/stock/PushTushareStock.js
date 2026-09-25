@@ -69,7 +69,7 @@ useEffect(() => {
 
   const interval = setInterval(() => {
     fetchData(selectedModule);
-  }, 10000);
+  }, 1000 * 60 * 2); //刷新频率跳转为2分钟
 
   return () => clearInterval(interval);
 
@@ -114,6 +114,13 @@ useEffect(() => {
             </option>
           ))}
         </select>
+
+        <button
+          onClick={() => fetchData(selectedModule)}
+          className="ml-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          查询
+        </button>
       </div>
 
       {data.map((moduleItem, index) => (
