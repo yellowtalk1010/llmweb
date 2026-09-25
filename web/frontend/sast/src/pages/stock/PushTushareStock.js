@@ -17,11 +17,12 @@ function PushTushareStock() {
    */
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState("ALL_MODEL");
+  const [tradedate, setTradedate] = useState("")
 
   const fetchData = async (modType = "") => {
     try {
       setLoading(true);
-      const response = await fetch("/push_stocks/list?modType=" + modType);
+      const response = await fetch("/push_stocks/list?modType=" + modType + "&tradedate=" + tradedate);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -72,7 +73,7 @@ useEffect(() => {
 
   return () => clearInterval(interval);
 
-}, [selectedModule]);
+}, [selectedModule, tradedate]);
 
   const toggleModule = (index) => {
     setExpandedModules((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -83,8 +84,17 @@ useEffect(() => {
   return (
     <div className="p-6 space-y-6">
 
-
       <div className="mb-4">
+      <label className="mr-2 font-medium">
+          交易日：
+      </label>
+      <input
+          type="date"
+          value={tradedate}
+          onChange={(e) => setTradedate(e.target.value)}
+          className="border rounded px-3 py-2"
+        />
+
         <label className="mr-2 font-medium">
           模型：
         </label>
