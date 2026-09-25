@@ -25,7 +25,7 @@ function PushTushareStock() {
   const fetchData = async (modType = "") => {
     try {
       setLoading(true);
-      const response = await fetch("/push_stocks/list?modType=" + modType + "&tradedate=" + tradedate + "&group" + group);
+      const response = await fetch("/push_stocks/list?modType=" + modType + "&tradedate=" + tradedate + "&group=" + group);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
