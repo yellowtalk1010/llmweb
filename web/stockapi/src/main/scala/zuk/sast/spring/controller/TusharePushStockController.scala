@@ -110,8 +110,8 @@ class TusharePushStockController {
    * @return
    */
   private def getStockResultJsonPath(tradeDate: String = ""): File = {
-    
-    
+
+
     if(StringUtils.isNotBlank(tradeDate)){
       val file = new File(s"${ParseCammandParam.param.engineInfo.result_json_dir}${File.separator}${tradeDate}")
       file
@@ -119,9 +119,9 @@ class TusharePushStockController {
     else {
       val sdf = new SimpleDateFormat("yyyyMMdd")
       val file = new File(s"${ParseCammandParam.param.engineInfo.result_json_dir}${File.separator}${sdf.format(new Date())}")
-      file  
+      file
     }
-    
+
   }
 
 
@@ -188,8 +188,8 @@ class TusharePushStockController {
     val response = new util.HashMap[String, Object]()
     response.put("code", s"success")
     response.put("time", s"${System.currentTimeMillis()}")
-    
-    val trade_date = if(StringUtils.isNotBlank(tradedate)) 
+
+    val trade_date = if(StringUtils.isNotBlank(tradedate))
       tradedate.replaceAll("-", "")
     else {
       val sdf = new SimpleDateFormat("yyyyMMdd")
@@ -219,7 +219,7 @@ class TusharePushStockController {
      * 列出今天模型推荐的全部结果文件集
      */
     val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
- 
+
     val todayModelAdviseJsonFiles = jsonfiles.filter(_.getName.startsWith(trade_date)).sortBy(_.getName).reverse
     log.info(s"输出今日模型推荐的全部结果json文件：${todayModelAdviseJsonFiles.map(_.getName).mkString("; ")}")
 
@@ -239,7 +239,7 @@ class TusharePushStockController {
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
         e.concept = concept
         e.remark = optionTp3.get._4 + concept
-        
+
         e
       }).sortBy(_.modWinRate).reverse
     })
@@ -342,10 +342,10 @@ class TusharePushStockController {
         })
 
         e._2.zipWithIndex.foreach(tp2=>{
-          tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date) //相似度计算
+          tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date).desc //相似度计算
           println(s"=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")
         })
-        
+
         val head = (e._2 ++ e._3).head
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}-----${fenci}")
