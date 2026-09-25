@@ -16,13 +16,15 @@ import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
 import zuk.similar.*
 
-class SimilartyDto(stockCode: String){
-  var stockName: String = ""
-  var tradeDate: String = ""
-  var sampleNumber: Int = 0                       //样本数量
-  var winate: Float = 0.0                   //胜率
-  var desc: String = ""                     //描述
-  val sampleList = new ListBuffer[String]   //样本详情
+import scala.beans.BeanProperty
+
+class SimilartyDto(@BeanProperty stockCode: String){
+  @BeanProperty var stockName: String = ""
+  @BeanProperty var tradeDate: String = ""
+  @BeanProperty var sampleNumber: Int = 0                       //样本数量
+  @BeanProperty var winate: Float = 0.0                   //胜率
+  @BeanProperty var desc: String = ""                     //描述
+  @BeanProperty val sampleList = new java.util.ArrayList[String]   //样本详情
 }
 
 
@@ -34,6 +36,8 @@ object SimilartyUtil {
   def getTsCode(tsCode: String, tradeDate: String): SimilartyDto = {
     
     val similartyDto = new SimilartyDto(tsCode)
+    similartyDto.stockName = DataFrame.STOCKS_MAP.get(tsCode).name
+    similartyDto.tradeDate = tradeDate
 
     var trade_date = "999999999"
     
@@ -102,7 +106,7 @@ object SimilartyUtil {
       }
 
       val str = f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}"
-      similartyDto.sampleList += str
+      similartyDto.sampleList.add(str)
       println(str) //相似度越小越相似
 
     })
