@@ -3,19 +3,13 @@ package zuk.sast.spring.controller
 import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-
-import scala.collection.mutable.ListBuffer
-import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
-import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
-
-import scala.collection.mutable
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
-import scala.util.Random
-import scala.jdk.CollectionConverters.*
-import java.math.{BigDecimal, RoundingMode}
 import zuk.similar.*
 
+/***
+ * 1、 样本足够足够多，50以上
+ * 2、 样本的距离值足够小；
+ * 3、 胜率 95%以上
+ */
 @RestController
 @RequestMapping(value = Array("stock_similar"))
 @Component

@@ -63,17 +63,17 @@ useEffect(() => {
   fetchModules();
 }, []);
 
-// useEffect(() => {
+useEffect(() => {
 
-//   fetchData(selectedModule);
+  fetchData(selectedModule);
 
-//   const interval = setInterval(() => {
-//     fetchData(selectedModule);
-//   }, 1000 * 60 * 2); //刷新频率跳转为2分钟
+  const interval = setInterval(() => {
+    fetchData(selectedModule);
+  }, 1000 * 60 * 5); //刷新频率跳转为5分钟
 
-//   return () => clearInterval(interval);
+  return () => clearInterval(interval);
 
-// }, [selectedModule, tradedate]);
+}, [selectedModule, tradedate]);
 
   const toggleModule = (index) => {
     setExpandedModules((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -353,8 +353,7 @@ function StockTable({ list, refresh  }) {
               <td className="p-2">{item.ts_code}</td>
               <td className="p-2 text-green-600">{item.modWinRate}</td>
               <td className="p-2">
-                  
-                  <a href={`/pages/Similarity?tsCode=${item.ts_code}&tradeDate=${item.tradeDate}`}
+                <a href={`/pages/Similarity?tsCode=${item.ts_code}&tradeDate=${item.tradeDate}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 underline"
