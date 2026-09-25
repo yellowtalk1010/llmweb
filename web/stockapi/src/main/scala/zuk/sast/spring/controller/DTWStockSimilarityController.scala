@@ -1,5 +1,6 @@
 package zuk.sast.spring.controller
 
+import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 
@@ -20,23 +21,32 @@ import zuk.similar.*
 @Component
 class DTWStockSimilarityController {
 
+  //http://localhost:8080/stock_similar/getTsCode?tsCode=000001.SZ&tradeDate=20260924
+  
   @GetMapping(value = Array("getTsCode"))
-  def getTsCode(tsCode: String): java.util.Map[String, Object] = {
+  def getTsCode(tsCode: String, tradeDate: String): java.util.Map[String, Object] = {
 
     val windowSize = 5 //滑动的窗口
 
     // 1. 目标股票
 //    val tsCode = "000001.SZ"
-    val targetBars = DTWStockSimilarity_B.getTargetBars(tsCode).take(windowSize)
+    val trade_date = "999999999"
+    if (StringUtils.isNotBlank(tradeDate)){
+      trade_date = tradeDate
+    }
+    println(s"tsCode: ${tsCode}, tradeDate:${tradeDate}")
+    val targetBars = DTWStockSimilarity_B.getTargetBars(tsCode)
+      .filter(_.date.toLong <= trade_date.toLong)
+      .take(windowSize)
     val targetFeatures = targetBars.toList.map(_.feature)
 
     println("=== 目标形态（近5日特征）===")
-    println("日期         涨跌幅    量变     振幅     实体")
+    println("股票代码    股票名称    日期         涨跌幅    量变     振幅     实体")
     targetBars.toList.zipWithIndex.foreach { tp2 =>
       val bar = tp2._1
       val f = bar.feature
       val i = tp2._2
-      println(f"${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%")
+      println(f"${bar.stockCode}  ${bar.stockName}  ${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%")
     }
 
     // 2. 模拟全市场
@@ -49,7 +59,7 @@ class DTWStockSimilarityController {
     // 3. 两种写法
     val t2 = System.nanoTime()
     val resB = DTWStockSimilarity_B.findSimilarImperative(targetBars, allStocks, windowSize)
-    val filterResB = resB.sortBy(_.distance).filter(e=> 0 < e.distance && e.distance < 0.6).take(100)
+    val filterResB = resB.sortBy(_.distance).filter(e=> 0 < e.distance && e.distance < 0.5).take(100)
     val t3 = System.nanoTime()
 
 

@@ -40,7 +40,11 @@ class TushareStockControllerDTO extends StockEntity {
   //龙虎榜
   @BeanProperty var topInstitutions: String = null
 
+  //交易日期
   @BeanProperty var tradedate: String = ""
+  
+  //相似度
+  @BeanProperty var similarity: String = ""
 }
 
 /***
