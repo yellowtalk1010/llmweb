@@ -316,6 +316,14 @@ useEffect(() => {
 
                   <td>
                     {item.remark}
+                    <br/>
+                    <a href={`/pages/Similarity?tsCode=${item.stockCode}&tradeDate=${item.tradedate}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                      >
+                      <span>【相似度计算】</span>
+                    </a>
                   </td>
 
                   <td>
