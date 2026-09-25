@@ -102,7 +102,7 @@ class DTWStockSimilarityController {
     }
     else {
       val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
-      println("胜率 ${stTotal}/${hitsTotal}：" + rate)
+      println(s"胜率 ${stTotal}/${hitsTotal}：" + rate)
     }
 
     val list = new ListBuffer[String]
