@@ -92,7 +92,6 @@ object SimilartyUtil {
       println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
 
     })
-    println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
 
 
     val desc = if (hitsTotal == 0) {
@@ -104,6 +103,8 @@ object SimilartyUtil {
       //样本要足够多，胜率足够大
     }
 
+    println(f" ${desc} 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
+    
     desc
   }
   
