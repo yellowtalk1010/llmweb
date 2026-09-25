@@ -149,6 +149,11 @@ object DTWStockSimilarity_B {
     results.toList
   }
 
+  /***
+   * 获取待分析的目标图形
+   * @param stockCode
+   * @return
+   */
   def getTargetBars(stockCode: String): Seq[Bar] = {
     val ls = DataFrame.getDataForSelect(stockCode).map(e=>{
       val bar = Bar(
@@ -176,6 +181,11 @@ object DTWStockSimilarity_B {
 
   }
 
+  /***
+   * 获取全量图形
+   * @param stockCode
+   * @return
+   */
   def getAllBars(stockCode: String): Seq[Bar] = {
     if(DataFrame.getDataForSelect(stockCode)==null || DataFrame.getDataForSelect(stockCode).size == 0){
       return List.empty
@@ -205,61 +215,61 @@ object DTWStockSimilarity_B {
     ls.slice(0, ls.size - 1)
   }
 
-  def main(args: Array[String]): Unit = {
-    val windowSize = 5 //滑动的窗口
-
-    // 1. 目标股票
-    val tsCode = "000001.SZ"
-    val targetBars = getTargetBars(tsCode).take(windowSize)
-    val targetFeatures = targetBars.toList.map(_.feature)
-
-    println("=== 目标形态（近5日特征）===")
-    println("日期         涨跌幅    量变     振幅     实体")
-    targetBars.toList.zipWithIndex.foreach {tp2 =>
-      val bar = tp2._1
-      val f = bar.feature
-      val i = tp2._2
-      println(f"${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%")
-    }
-
-    // 2. 模拟全市场
-
-    val allStocks: Map[String, Seq[Bar]] = DataFrame.STOCKS_MAP.values().asScala
-      .map(e=>{
-        e.ts_code -> getAllBars(e.ts_code)
-      }).toMap.filter(_._2.size>10)
-
-    // 3. 两种写法 
-    val t2 = System.nanoTime()
-    val resB = findSimilarImperative(targetBars, allStocks, windowSize)
-    val filterResB = resB.sortBy(_.distance).take(100)
-    val t3 = System.nanoTime()
-
-
-    println("=== 写法 B: 命令式 for 循环 ===")
-    filterResB.foreach(res=>{
-      val hits = ListBuffer[ModuleDay]()
-      val ls = DataFrame.getDataForSelect(res.stockCode)
-      for(i <- 0 until ls.size){
-        if(ls(i).trade_date.equals(res.endDate)){
-          var count = 0
-          for(ii <- i to 0 by -1 if count < 3){
-            count = count + 1
-            hits += ls(ii)
-          }
-        }
-      }
-
-      val st = hits.filter(e=>e.high.toDouble > e.pre_close.toDouble 
-        && e.change.toDouble > 1
-      ).size > 0
-
-      println(f"  ${res.stockCode}  截至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
-
-    })
-    println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
-
-
-  }
+//  def main(args: Array[String]): Unit = {
+//    val windowSize = 5 //滑动的窗口
+//
+//    // 1. 目标股票
+//    val tsCode = "000001.SZ"
+//    val targetBars = getTargetBars(tsCode).take(windowSize)
+//    val targetFeatures = targetBars.toList.map(_.feature)
+//
+//    println("=== 目标形态（近5日特征）===")
+//    println("日期         涨跌幅    量变     振幅     实体")
+//    targetBars.toList.zipWithIndex.foreach {tp2 =>
+//      val bar = tp2._1
+//      val f = bar.feature
+//      val i = tp2._2
+//      println(f"${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%")
+//    }
+//
+//    // 2. 模拟全市场
+//
+//    val allStocks: Map[String, Seq[Bar]] = DataFrame.STOCKS_MAP.values().asScala
+//      .map(e=>{
+//        e.ts_code -> getAllBars(e.ts_code)
+//      }).toMap.filter(_._2.size>10)
+//
+//    // 3. 两种写法 
+//    val t2 = System.nanoTime()
+//    val resB = findSimilarImperative(targetBars, allStocks, windowSize)
+//    val filterResB = resB.sortBy(_.distance).take(100)
+//    val t3 = System.nanoTime()
+//
+//
+//    println("=== 写法 B: 命令式 for 循环 ===")
+//    filterResB.foreach(res=>{
+//      val hits = ListBuffer[ModuleDay]()
+//      val ls = DataFrame.getDataForSelect(res.stockCode)
+//      for(i <- 0 until ls.size){
+//        if(ls(i).trade_date.equals(res.endDate)){
+//          var count = 0
+//          for(ii <- i to 0 by -1 if count < 3){
+//            count = count + 1
+//            hits += ls(ii)
+//          }
+//        }
+//      }
+//
+//      val st = hits.filter(e=>e.high.toDouble > e.pre_close.toDouble 
+//        && e.change.toDouble > 1
+//      ).size > 0
+//
+//      println(f"  ${res.stockCode}  截至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
+//
+//    })
+//    println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
+//
+//
+//  }
 
 }
