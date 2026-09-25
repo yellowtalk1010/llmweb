@@ -16,12 +16,24 @@ import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
 import zuk.similar.*
 
+class SimilartyDto(stockCode: String){
+  var stockName: String = ""
+  var tradeDate: String = ""
+  var sampleNumber: Int = 0                       //样本数量
+  var winate: Float = 0.0                   //胜率
+  var desc: String = ""                     //描述
+  val sampleList = new ListBuffer[String]   //样本详情
+}
+
+
 /***
- * 
+ * 图形相似度
  */
 object SimilartyUtil {
 
-  def getTsCode(tsCode: String, tradeDate: String): String = {
+  def getTsCode(tsCode: String, tradeDate: String): SimilartyDto = {
+    
+    val similartyDto = new SimilartyDto(tsCode)
 
     var trade_date = "999999999"
     
@@ -89,23 +101,28 @@ object SimilartyUtil {
         stTotal = stTotal + 1
       }
 
-      println(f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}") //相似度越小越相似
+      val str = f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}"
+      similartyDto.sampleList += str
+      println(str) //相似度越小越相似
 
     })
 
 
-    val desc = if (hitsTotal == 0) {
+    similartyDto.desc = if (hitsTotal == 0) {
       s"无相似数据"
     }
     else {
       val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
+      similartyDto.winate = rate.floatValue() //样本胜率
+      similartyDto.sampleNumber = hitsTotal //样本数量
       s"${stTotal}/${hitsTotal}=" + rate
       //样本要足够多，胜率足够大
     }
 
-    println(f"\n=====================================【${tsCode} ${DataFrame.STOCKS_MAP.get(tsCode).name}  胜率：${desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
     
-    desc
+    println(f"\n=====================================【${tsCode} ${DataFrame.STOCKS_MAP.get(tsCode).name}  胜率：${similartyDto.desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
+
+    similartyDto
   }
   
 }
