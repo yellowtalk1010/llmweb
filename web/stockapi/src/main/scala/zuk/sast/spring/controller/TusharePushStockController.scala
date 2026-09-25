@@ -239,7 +239,7 @@ class TusharePushStockController {
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
         e.concept = concept
         e.remark = optionTp3.get._4 + concept
-
+        e.tradeDate = trade_date
         e
       }).sortBy(_.modWinRate).reverse
     })

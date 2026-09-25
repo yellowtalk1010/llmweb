@@ -35,6 +35,7 @@ case class StockResultJson(){
   @BeanProperty var historyHitCount: Int = 0 //历史出现过的次数
   
   @BeanProperty var similarity: String = "" //相似度胜率信息
+  @BeanProperty var tradeDate: String = "" //交易日期
 
 }
 

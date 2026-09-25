@@ -268,9 +268,8 @@ function StockTable({ list, refresh  }) {
           <th className="p-2 text-left border border-gray-200">龙虎榜</th>
           <th className="p-2 text-left border border-gray-200">代码</th>
           <th className="p-2 text-left border border-gray-200">胜率</th>
+          <th className="p-2 text-left border border-gray-200">相似率</th>
           <th className="p-2 text-left border border-gray-200">活跃率</th>
-          <th className="p-2 text-left border border-gray-200">涨停</th>
-          <th className="p-2 text-left border border-gray-200">跌停</th>
           <th className="p-2 text-left border border-gray-200">风险</th>
           <th className="p-2 text-left border border-gray-200">来源</th>
         </tr>
@@ -281,7 +280,11 @@ function StockTable({ list, refresh  }) {
                 className="border-b group"
             >
 
-              <td>{idx + 1}</td>
+              <td>
+                {idx + 1}
+                <br/>
+                {item.tradeDate}
+              </td>
               <td className="p-2">
                 {
                       item.attention?(
@@ -314,8 +317,6 @@ function StockTable({ list, refresh  }) {
                   >
                     资金
                   </a>
-                  <br/>
-                  <span>{item.similarity}</span>
               </td>  
              
               <td className="p-2"  style={{ minWidth: "400px" }}>{item.remark}</td>
@@ -350,9 +351,23 @@ function StockTable({ list, refresh  }) {
               </td>
               <td className="p-2">{item.ts_code}</td>
               <td className="p-2 text-green-600">{item.modWinRate}</td>
-              <td className="p-2">{item.turnoverRate}</td>
-              <td className="p-2 text-red-500">{item.limitUp}</td>
-              <td className="p-2 text-blue-500">{item.limitDown}</td>
+              <td className="p-2">
+                  
+                  <a href={`/pages/Similarity?tsCode=${item.ts_code}&tradeDate=${item.tradeDate}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                  >
+                  <span>{item.similarity}</span>
+                </a>
+              </td>
+              <td className="p-2">
+                {item.turnoverRate}
+                <br/>
+                {item.limitUp}
+                <br/>
+                {item.limitDown}
+              </td>
               <td className="p-2">{item.upperShadow}</td>
               <td className="p-2">{item.fileName}</td>
             </tr>
