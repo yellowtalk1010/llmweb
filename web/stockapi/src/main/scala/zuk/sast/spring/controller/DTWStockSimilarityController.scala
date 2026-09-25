@@ -59,7 +59,7 @@ class DTWStockSimilarityController {
     // 3. 两种写法
     val t2 = System.nanoTime()
     val resB = DTWStockSimilarity_B.findSimilarImperative(targetBars, allStocks, windowSize)
-    val filterResB = resB.sortBy(_.distance).filter(e=> 0 < e.distance && e.distance < 0.5).take(100)
+    val filterResB = resB.sortBy(_.distance).filter(e=> e.distance < 0.5).take(100)
     val t3 = System.nanoTime()
 
 
@@ -72,7 +72,7 @@ class DTWStockSimilarityController {
       for (i <- 0 until ls.size) {
         if (ls(i).trade_date.equals(res.endDate)) {
           var count = 0
-          for (ii <- i to 0 by -1 if count < 3) {
+          for (ii <- i to 0 by -1 if count < 3) { //预测未来3天的结果
             count = count + 1
             hits += ls(ii)
           }
@@ -84,7 +84,7 @@ class DTWStockSimilarityController {
       val hits = tp2._2
       
       val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
-        && e.change.toDouble > 1
+        && e.change.toDouble > 1 //涨幅大于1个点
       ).size > 0
 
       hitsTotal = hitsTotal + 1
@@ -97,9 +97,13 @@ class DTWStockSimilarityController {
     })
     println(f"  耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
 
-    val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
-    println(rate)
-
+    if(hitsTotal == 0){
+      println("无相似数据")
+    }
+    else {
+      val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
+      println("胜率 ${stTotal}/${hitsTotal}：" + rate)  
+    }
 
     val list = new ListBuffer[String]
     val result = new java.util.HashMap[String, Object]()
