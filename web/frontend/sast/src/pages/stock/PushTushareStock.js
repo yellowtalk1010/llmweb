@@ -83,6 +83,9 @@ useEffect(() => {
 
   return (
     <div className="p-6 space-y-6">
+      
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">Error: {error}</p>}
 
       <div className="mb-4">
       <label className="mr-2 font-medium">
@@ -184,8 +187,6 @@ useEffect(() => {
         </div>
       ))}
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">Error: {error}</p>}
     </div>
   );
 }

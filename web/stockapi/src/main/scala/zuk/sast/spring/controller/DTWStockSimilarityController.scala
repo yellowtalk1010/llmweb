@@ -21,15 +21,20 @@ import zuk.similar.*
 @Component
 class DTWStockSimilarityController {
 
-  private var trade_date = "999999999"
+  private val trade_date = "999999999"
 
   //http://localhost:8080/stock_similar/getTsCode?tsCode=000001.SZ&tradeDate=20260924
 
   @GetMapping(value = Array("getTsCode"))
   def getTsCode(tsCode: String, tradeDate: String): java.util.Map[String, Object] = {
- 
-    val dto = SimilartyUtil.getTsCode(tsCode, tradeDate.replaceAll("-", ""))
-    
+    val date = if(StringUtils.isNotBlank(tradeDate)){
+      tradeDate
+    }
+    else {
+      trade_date
+    }
+    val dto = SimilartyUtil.getTsCode(tsCode, date.replaceAll("-", ""))
+
     val result = new java.util.HashMap[String, Object]()
     result.put("data", dto)
     result.put("code", "success")
