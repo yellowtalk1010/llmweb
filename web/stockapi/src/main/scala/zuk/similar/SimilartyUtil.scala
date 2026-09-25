@@ -21,7 +21,7 @@ import zuk.similar.*
  */
 object SimilartyUtil {
 
-  def getTsCode(tsCode: String, tradeDate: String): String = {
+  def getTsCode(tsCode: String, trade_date: String): String = {
 
     val windowSize = 5 //滑动的窗口
 
