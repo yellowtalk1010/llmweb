@@ -239,8 +239,6 @@ class TusharePushStockController {
         val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
         e.concept = concept
         e.remark = optionTp3.get._4 + concept
-
-        e.similarity = SimilartyUtil.getTsCode(tsStock.ts_code, trade_date) //相似度计算
         
         e
       }).sortBy(_.modWinRate).reverse
@@ -343,6 +341,10 @@ class TusharePushStockController {
           }
         })
 
+        e._2.foreach(e=>{
+          e.similarity = SimilartyUtil.getTsCode(e.ts_code, trade_date) //相似度计算
+        })
+        
         val head = (e._2 ++ e._3).head
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}-----${fenci}")

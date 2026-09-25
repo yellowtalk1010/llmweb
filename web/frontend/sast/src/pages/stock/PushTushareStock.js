@@ -16,7 +16,7 @@ function PushTushareStock() {
    * 下来菜单中选择项
    */
   const [modules, setModules] = useState([]);
-  const [selectedModule, setSelectedModule] = useState("ALL_MODEL");
+  const [selectedModule, setSelectedModule] = useState("MA8_Model"); // ALL_MODEL
   const [tradedate, setTradedate] = useState("")
 
   const fetchData = async (modType = "") => {
@@ -63,17 +63,17 @@ useEffect(() => {
   fetchModules();
 }, []);
 
-useEffect(() => {
+// useEffect(() => {
 
-  fetchData(selectedModule);
+//   fetchData(selectedModule);
 
-  const interval = setInterval(() => {
-    fetchData(selectedModule);
-  }, 1000 * 60 * 2); //刷新频率跳转为2分钟
+//   const interval = setInterval(() => {
+//     fetchData(selectedModule);
+//   }, 1000 * 60 * 2); //刷新频率跳转为2分钟
 
-  return () => clearInterval(interval);
+//   return () => clearInterval(interval);
 
-}, [selectedModule, tradedate]);
+// }, [selectedModule, tradedate]);
 
   const toggleModule = (index) => {
     setExpandedModules((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -314,6 +314,8 @@ function StockTable({ list, refresh  }) {
                   >
                     资金
                   </a>
+                  <br/>
+                  <span>{item.similarity}</span>
               </td>  
              
               <td className="p-2"  style={{ minWidth: "400px" }}>{item.remark}</td>
