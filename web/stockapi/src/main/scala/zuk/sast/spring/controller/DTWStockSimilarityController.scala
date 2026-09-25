@@ -21,16 +21,16 @@ import zuk.similar.*
 @Component
 class DTWStockSimilarityController {
 
-  //http://localhost:8080/stock_similar/getTsCode?tsCode=000001.SZ&tradeDate=20260924
+  private var trade_date = "999999999"
   
+  //http://localhost:8080/stock_similar/getTsCode?tsCode=000001.SZ&tradeDate=20260924
+
   @GetMapping(value = Array("getTsCode"))
   def getTsCode(tsCode: String, tradeDate: String): java.util.Map[String, Object] = {
 
     val windowSize = 5 //滑动的窗口
 
     // 1. 目标股票
-//    val tsCode = "000001.SZ"
-    val trade_date = "999999999"
     if (StringUtils.isNotBlank(tradeDate)){
       trade_date = tradeDate
     }
@@ -102,7 +102,7 @@ class DTWStockSimilarityController {
     }
     else {
       val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
-      println("胜率 ${stTotal}/${hitsTotal}：" + rate)  
+      println("胜率 ${stTotal}/${hitsTotal}：" + rate)
     }
 
     val list = new ListBuffer[String]
