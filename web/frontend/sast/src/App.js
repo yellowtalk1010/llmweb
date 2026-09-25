@@ -17,6 +17,7 @@ import AllStocks from "./pages/stock/AllStocks";
 import TopInst from "./pages/stock/TopInst";
 import PushTushareStock from "./pages/stock/PushTushareStock";
 import Moneyflow from "./pages/stock/Moneyflow";
+import Similarity from "./pages/stock/Similarity";
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/pages/TopInst" element={<TopInst/>} />
           <Route path="/pages/PushTushareStock" element={<PushTushareStock/>} />
           <Route path="/pages/Moneyflow" element= {<Moneyflow/>}/>
+          <Route path="/pages/Similarity" element= {<Similarity/>}/>
 
         </Routes>
       </BrowserRouter>
