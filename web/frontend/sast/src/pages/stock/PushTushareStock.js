@@ -12,6 +12,9 @@ function PushTushareStock() {
   const [error, setError] = useState(null);
   const [expandedModules, setExpandedModules] = useState({});
 
+  // 是否集中计算相似
+  const [group, setGroup] = useState(false);
+
   /**
    * 下来菜单中选择项
    */
@@ -22,7 +25,7 @@ function PushTushareStock() {
   const fetchData = async (modType = "") => {
     try {
       setLoading(true);
-      const response = await fetch("/push_stocks/list?modType=" + modType + "&tradedate=" + tradedate);
+      const response = await fetch("/push_stocks/list?modType=" + modType + "&tradedate=" + tradedate + "&group" + group);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -117,6 +120,15 @@ useEffect(() => {
             </option>
           ))}
         </select>
+
+        <label className="  items-center gap-1">
+            <input
+                type="checkbox"
+                checked={group}
+                onChange={(e) => setGroup(e.target.checked)}
+            />
+            集算
+        </label>
 
         <button
           onClick={() => fetchData(selectedModule)}

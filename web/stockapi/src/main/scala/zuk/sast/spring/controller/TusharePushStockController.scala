@@ -182,7 +182,7 @@ class TusharePushStockController {
    * @return
    */
   @GetMapping(value = Array("list"))
-  def list(tradedate: String, modType: String): util.Map[String, Object] = {
+  def list(tradedate: String, modType: String, group: Boolean): util.Map[String, Object] = {
 
 
     val response = new util.HashMap[String, Object]()
@@ -342,8 +342,13 @@ class TusharePushStockController {
         })
 
         e._2.zipWithIndex.foreach(tp2=>{
-          tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date).desc //相似度计算
-          println(s"=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")
+          if(group){
+            tp2._1.similarity = "相似度计算"
+          }
+          else {
+            tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date).desc //相似度计算
+            println(s"=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")  
+          }
         })
 
         val head = (e._2 ++ e._3).head
