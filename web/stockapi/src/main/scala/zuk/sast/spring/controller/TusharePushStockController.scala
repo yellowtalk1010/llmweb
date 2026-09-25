@@ -108,13 +108,19 @@ class TusharePushStockController {
    * 获取结果文件路径
    * @return
    */
-  private def getStockResultJsonPath(): File = {
-    val stockResultJsonPath = ParseCammandParam.param.engineInfo.result_json_dir
-    val sdf = new SimpleDateFormat("yyyyMMdd")
-//    val pro = System.getProperties
-    log.info(s"stock result json path: ${stockResultJsonPath}")
-    val file = new File(s"${stockResultJsonPath}${File.separator}${sdf.format(new Date())}")
-    file
+  private def getStockResultJsonPath(tradeDate: String = ""): File = {
+    
+    
+    if(StringUtils.isNotBlank(tradeDate)){
+      val file = new File(s"${ParseCammandParam.param.engineInfo.result_json_dir}${File.separator}${tradeDate}")
+      file
+    }
+    else {
+      val sdf = new SimpleDateFormat("yyyyMMdd")
+      val file = new File(s"${ParseCammandParam.param.engineInfo.result_json_dir}${File.separator}${sdf.format(new Date())}")
+      file  
+    }
+    
   }
 
 
@@ -177,15 +183,23 @@ class TusharePushStockController {
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String): util.Map[String, Object] = {
 
-    log.info(s"选择模型:${modType}")
 
     val response = new util.HashMap[String, Object]()
     response.put("code", s"success")
     response.put("time", s"${System.currentTimeMillis()}")
+    
+    val trade_date = if(StringUtils.isNotBlank(tradedate)) 
+      tradedate.replaceAll("-", "")
+    else {
+      val sdf = new SimpleDateFormat("yyyyMMdd")
+      sdf.format(new Date())
+    }
 
+    log.info(s"选择模型:${modType}， 交易日期：${trade_date}")
     //判断结果路径是否存在
-    val file: File = getStockResultJsonPath()
-    if(!file.exists() || !file.isDirectory){
+    val file: File = new File(s"${ParseCammandParam.param.engineInfo.result_json_dir}${File.separator}${trade_date}")
+    log.info(s"推荐结构路径:${file.getAbsolutePath}, ${file.exists()}")
+    if(!file.exists()){
       response.put("data", Array(new util.HashMap[String, Object]()).toList.asJava)
       log.info(s"分析引擎结果路径不存在: ${file.getAbsolutePath}")
       return response
@@ -204,9 +218,8 @@ class TusharePushStockController {
      * 列出今天模型推荐的全部结果文件集
      */
     val jsonfiles = file.listFiles().filter(_.getName.endsWith(".json"))
-    val simpleDateFormat = new SimpleDateFormat("yyyyMMdd")
-    val dateStr = simpleDateFormat.format(new Date())
-    val todayModelAdviseJsonFiles = jsonfiles.filter(_.getName.startsWith(dateStr)).sortBy(_.getName).reverse
+ 
+    val todayModelAdviseJsonFiles = jsonfiles.filter(_.getName.startsWith(trade_date)).sortBy(_.getName).reverse
     log.info(s"输出今日模型推荐的全部结果json文件：${todayModelAdviseJsonFiles.map(_.getName).mkString("; ")}")
 
     val stockResultJsonList = todayModelAdviseJsonFiles.map(file=>{
