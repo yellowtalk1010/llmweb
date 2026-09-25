@@ -80,32 +80,44 @@ object SimilartyUtil {
     var hitsTotal = 0
     var stTotal = 0
     filterResB.map(res => {
+      //验证相似的图形的胜率
       val hits = ListBuffer[ModuleDay]()
       val ls = DataFrame.getDataForSelect(res.stockCode)
       for (i <- 0 until ls.size) {
         if (ls(i).trade_date.equals(res.endDate)) {
           var count = 0
-          for (ii <- i to 0 by -1 if count < 3) { //预测未来3天的结果
+          for (ii <- i to 0 by -1 if count < 4) { //预测未来3天的结果
             count = count + 1
             hits += ls(ii)
           }
         }
       }
-      (res, hits)
-    }).filter(tp2 => tp2._2.size > 0).foreach(tp2 => {
+      (res, hits) //hits 中包含了需要比较的自己，在head中
+    }).filter(tp2 => tp2._2.size >= 2).foreach(tp2 => {
       val res = tp2._1
       val hits = tp2._2
-
-      val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
-        && e.change.toDouble > 1 //涨幅大于1个点
-      ).size > 0
+      
+      val self = hits.head
+      val compareList = hits.slice(1, hits.size)
+      var changeList = ListBuffer[Double]()
+      val st = compareList.filter(e=>{
+        //涨跌幅
+        val change = new BigDecimal((e.high.toDouble - self.close.toDouble) * 100).divide(new BigDecimal(self.close.toDouble), 4, RoundingMode.UP).doubleValue()
+        changeList += change
+        val st = e.high.toDouble > self.close.toDouble && change > 1
+        st
+      }).size > 0
+      
+//      val st = hits.filter(e => e.high.toDouble > e.pre_close.toDouble
+//        && e.change.toDouble > 1 //涨幅大于1个点
+//      ).size > 0
 
       hitsTotal = hitsTotal + 1
       if (st) {
         stTotal = stTotal + 1
       }
 
-      val str = f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st}"
+      val str = f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st},  涨幅=${changeList.map(_.toString).mkString(", ")}"
       similartyDto.sampleList.add(str)
       println(str) //相似度越小越相似
 

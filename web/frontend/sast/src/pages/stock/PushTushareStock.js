@@ -76,7 +76,7 @@ useEffect(() => {
 
   // return () => clearInterval(interval);
 
-}, [selectedModule, tradedate]);
+}, []);
 
   const toggleModule = (index) => {
     setExpandedModules((prev) => ({ ...prev, [index]: !prev[index] }));

@@ -344,7 +344,7 @@ class TusharePushStockController {
         e._2.zipWithIndex.foreach(tp2=>{
           if(group){
             tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date).desc //相似度计算
-            println(s"=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")
+            println(s"${tp2._1.modClsName}=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")
           }
           else {
             tp2._1.similarity = "相似度计算"
