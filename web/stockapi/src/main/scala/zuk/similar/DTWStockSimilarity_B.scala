@@ -24,6 +24,9 @@ case class Bar(
   //其他特征
   var feature: FeaturePoint = null
   
+  var stockCode: String = ""
+  var stockName: String = ""
+  
   /** 振幅：(high - low) / 昨收，这里用当日 open 近似，或用外部传入 */
   def amplitude: Double = new BigDecimal(if (open == 0) 0 else (high - low)).divide(new BigDecimal(open), 4, RoundingMode.UP).doubleValue()
   
@@ -156,6 +159,10 @@ object DTWStockSimilarity_B {
         e.close.toDouble,
         e.vol.toDouble
       )
+      
+      bar.stockCode = e.ts_code
+      bar.stockName = e.name
+      
       bar
     })
 
@@ -182,6 +189,10 @@ object DTWStockSimilarity_B {
         e.close.toDouble,
         e.vol.toDouble
       )
+
+      bar.stockCode = e.ts_code
+      bar.stockName = e.name
+      
       bar
     })
 
