@@ -99,11 +99,11 @@ object SimilartyUtil {
     }
     else {
       val rate = new BigDecimal(stTotal).divide(new BigDecimal(hitsTotal), 2, RoundingMode.UP)
-      s"胜率 ${stTotal}/${hitsTotal}：" + rate
+      s"${stTotal}/${hitsTotal}=" + rate
       //样本要足够多，胜率足够大
     }
 
-    println(f"\n=====================================【${tsCode} ${DataFrame.STOCKS_MAP.get(tsCode).name}  ${desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
+    println(f"\n=====================================【${tsCode} ${DataFrame.STOCKS_MAP.get(tsCode).name}  胜率：${desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
     
     desc
   }

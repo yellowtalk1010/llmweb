@@ -341,8 +341,9 @@ class TusharePushStockController {
           }
         })
 
-        e._2.foreach(e=>{
-          e.similarity = SimilartyUtil.getTsCode(e.ts_code, trade_date) //相似度计算
+        e._2.zipWithIndex.foreach(tp2=>{
+          tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date) //相似度计算
+          println(s"=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")
         })
         
         val head = (e._2 ++ e._3).head
