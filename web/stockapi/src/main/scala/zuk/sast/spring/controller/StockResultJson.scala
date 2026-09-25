@@ -33,6 +33,8 @@ case class StockResultJson(){
   @BeanProperty var topInstitutions: String = ""//龙虎榜信息
   
   @BeanProperty var historyHitCount: Int = 0 //历史出现过的次数
+  
+  @BeanProperty var similarity: String = 0 //相似度胜率信息
 
 }
 
