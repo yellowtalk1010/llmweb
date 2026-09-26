@@ -137,7 +137,6 @@ object ConsolidationScanner {
    println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}")
 
    for (subIndex <- 0 until allBars.size - windowNumber) {
-     val resList = new ListBuffer[Bar]
      val intervalBars = allBars.slice(subIndex, subIndex + windowNumber)
      val barRes = new BarRes(intervalBars)
 
@@ -150,7 +149,6 @@ object ConsolidationScanner {
        val small = isSmallSteps(window)
 
        val flag = if (consolidated && up && small) {
-         resList += intervalBars(i - 1)
          barRes.hitBars += intervalBars(i - 1) //记录结果
          " ← 符合条件"
        } else {
