@@ -167,7 +167,7 @@ object ConsolidationScanner {
     
     println("over")
     val map = new util.HashMap[String, String]()
-    list.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size>=10).foreach(ls=>{
+    list.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).foreach(ls=>{
       val stockCode = ls.head.stockCode
       val endDateMax = ls.head.date
       val startDateMin = ls.last.date
