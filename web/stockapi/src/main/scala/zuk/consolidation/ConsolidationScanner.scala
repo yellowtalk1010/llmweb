@@ -8,6 +8,7 @@ import zuk.tu_share.DataFrame
 
 import java.math.RoundingMode
 import java.util
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -122,12 +123,12 @@ object ConsolidationScanner {
   }
   
  def doIt(bars: Seq[Bar]): Unit = {
-   
+
  }
 
   def main(args: Array[String]): Unit = {
     val rndBars = genBars(60, 42L)
-    
+
     
     val barsList = DataFrame.loadModelAnalysisDataSet.values.filter(_.size > 60).map(ls=>{
       val bars = ls.map(e=>{
@@ -147,11 +148,12 @@ object ConsolidationScanner {
         //.take(60)
         .sortBy(_.date) //在最近的60个交易日的时间窗口里，然后依次滑动这个60大小的窗口
     })
-    
+
+    val allMap = new ConcurrentHashMap[String, ListBuffer[util.HashMap[String, String]]]()
     val count = new AtomicInteger(0)
     barsList.foreach(allBars=>{
       println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}")
-      
+
       for (subIndex <- 0 until allBars.size - 60) {
         val list = new ListBuffer[Bar]
         val bars = allBars.slice(subIndex, subIndex + 60)
@@ -185,30 +187,32 @@ object ConsolidationScanner {
           val frequency = new BigDecimal(ls.size).divide(new BigDecimal(stockList.size), 2, RoundingMode.DOWN).doubleValue()
           if (frequency > 0.5) {
             val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${startDateMin}至${endDateMax} ${ls.size}/${stockList.size}=${frequency}" //计算时间跨度， 黏合频率
-            //println(s)  
+            //println(s)
             map.put(frequency.toString, s)
           }
         })
 
         import scala.jdk.CollectionConverters.*
-        
+
         if(map.size() > 0){
-          map.asScala.toList.sortBy(_._1.toDouble).reverse.map(_._2).foreach(println)  
+          map.asScala.toList.sortBy(_._1.toDouble).reverse.map(_._2).foreach(println)
+          if(allMap.get(allBars.head.stockCode)!=null){
+            allMap.get(allBars.head.stockCode) += map
+          }
+          else {
+            val l = new ListBuffer[util.HashMap[String, String]]
+            l += map
+            allMap.put(allBars.head.stockCode, l)
+          }
         }
-        
-
         println(s"完成${count.incrementAndGet()}/${barsList.size} ${allBars.head.stockCode} ${allBars.head.stockName}")
-        
-        
-        
-        
       }
-
-
     })
     
     println("over")
     
+    
+
     
     System.exit(1)
     
