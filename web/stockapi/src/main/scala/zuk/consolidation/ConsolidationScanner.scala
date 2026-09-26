@@ -143,7 +143,11 @@ object ConsolidationScanner {
         val up = isTrendingUp(window)
         val small = isSmallSteps(window)
 
-        val flag = if (consolidated && up && small) " ← 符合条件" else ""
+        val flag = if (consolidated && up && small) {
+          " ← 符合条件"
+        } else {
+          ""
+        }
         val date = bars(i - 1).date
         println(f"${bars.head.stockCode}  ${bars.head.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
       }
