@@ -121,12 +121,13 @@ object ConsolidationScanner {
     bars.toSeq
   }
   
- 
+ def doIt(bars: Seq[Bar]): Unit = {
+   
+ }
 
   def main(args: Array[String]): Unit = {
-    val bars = genBars(60, 42L)
+    val rndBars = genBars(60, 42L)
     
-    val list = new ListBuffer[Bar]
     
     val barsList = DataFrame.loadModelAnalysisDataSet.values.filter(_.size > 60).map(ls=>{
       val bars = ls.map(e=>{
@@ -142,48 +143,60 @@ object ConsolidationScanner {
         bar.stockName = e.name
         bar
       })
-      bars.take(60).sortBy(_.date) //在最近的60个交易日的时间窗口里，然后依次滑动这个60大小的窗口
+      bars
+        //.take(60)
+        .sortBy(_.date) //在最近的60个交易日的时间窗口里，然后依次滑动这个60大小的窗口
     })
+    
     val count = new AtomicInteger(0)
-    barsList.foreach(bars=>{
-      for (i <- 20 to bars.size) {
-        val window = bars.take(i)
-        val consolidated = isConsolidated(window)
-        val up = isTrendingUp(window)
-        val small = isSmallSteps(window)
+    barsList.foreach(allBars=>{
+      println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}")
+      val list = new ListBuffer[Bar]
+      for (subIndex <- 0 until allBars.size - 60) {
+        val bars = allBars.slice(subIndex, subIndex + 60)
+        println(s"${bars.head.stockCode}  ${bars.head.stockName} 时间区间： ${bars.head.date}至${bars.last.date}")
 
-        val flag = if (consolidated && up && small) {
-          list += bars(i-1)
-          " ← 符合条件"
-        } else {
-          ""
+        for (i <- 20 to bars.size) {
+          val window = bars.take(i)
+          val consolidated = isConsolidated(window)
+          val up = isTrendingUp(window)
+          val small = isSmallSteps(window)
+
+          val flag = if (consolidated && up && small) {
+            list += bars(i - 1)
+            " ← 符合条件"
+          } else {
+            ""
+          }
+          val date = bars(i - 1).date
+          println(f"${bars.head.stockCode}  ${bars.head.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
         }
-        val date = bars(i - 1).date
-        println(f"${bars.head.stockCode}  ${bars.head.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
       }
 
-      println(s"完成${count.incrementAndGet()}/${barsList.size}")
+      val map = new util.HashMap[String, String]()
+      list.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size >= 2).foreach(ls => {
+        val stockCode = ls.head.stockCode
+        val endDateMax = ls.head.date
+        val startDateMin = ls.last.date
+        val stockList = DataFrame.getDataForSelect(stockCode).filter(e => e.trade_date.toLong <= endDateMax.toLong && e.trade_date.toLong >= startDateMin.toLong)
+
+        import java.math.BigDecimal
+        val frequency = new BigDecimal(ls.size).divide(new BigDecimal(stockList.size), 2, RoundingMode.DOWN).doubleValue()
+        if (frequency > 0.5) {
+          val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${startDateMin}至${endDateMax} ${ls.size}/${stockList.size}=${frequency}" //计算时间跨度， 黏合频率
+          //println(s)  
+          map.put(frequency.toString, s)
+        }
+      })
+
+      import scala.jdk.CollectionConverters.*
+      map.asScala.toList.sortBy(_._1.toDouble).reverse.map(_._2).foreach(println)
+      
+      println(s"完成${count.incrementAndGet()}/${barsList.size} ${allBars.head.stockCode} ${allBars.head.stockName}")
     })
     
     println("over")
-    val map = new util.HashMap[String, String]()
-    list.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size>=2).foreach(ls=>{
-      val stockCode = ls.head.stockCode
-      val endDateMax = ls.head.date
-      val startDateMin = ls.last.date
-      val stockList = DataFrame.getDataForSelect(stockCode).filter(e=>e.trade_date.toLong <= endDateMax.toLong && e.trade_date.toLong >= startDateMin.toLong)
-       
-      import java.math.BigDecimal
-      val frequency = new BigDecimal(ls.size).divide(new BigDecimal(stockList.size), 2, RoundingMode.DOWN).doubleValue()
-      if(frequency > 0.5){
-        val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${startDateMin}至${endDateMax} ${ls.size}/${stockList.size}=${frequency}" //计算时间跨度， 黏合频率
-        //println(s)  
-        map.put(frequency.toString, s)
-      }
-    })
     
-    import scala.jdk.CollectionConverters.*
-    map.asScala.toList.sortBy(_._1.toDouble).reverse.map(_._2).foreach(println)
     
     System.exit(1)
     
