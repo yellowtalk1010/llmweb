@@ -26,6 +26,12 @@ case class Bar(
   
 }
 
+case class BarRes(intervalBars: List[Bar]) {
+  var stockCode = intervalBars.head.stockCode
+  var stockName = intervalBars.head.stockName
+  var hitBars = ListBuffer[Bar]
+}
+
 object ConsolidationScanner {
 
   /** 最近 n 根 bar 的收盘价均值（均线） */
@@ -124,32 +130,39 @@ object ConsolidationScanner {
   
  def doIt(allBars: Seq[Bar]): Unit = {
 
+   val windowNumber = 60 //窗口大小60
+   if(allBars.size < windowNumber){
+     return 
+   }
    println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}")
 
-   for (subIndex <- 0 until allBars.size - 60) {
-     val list = new ListBuffer[Bar]
-     val bars = allBars.slice(subIndex, subIndex + 60)
-     println(s"${bars.head.stockCode}  ${bars.head.stockName} 时间区间： ${bars.head.date}至${bars.last.date}")
+   for (subIndex <- 0 until allBars.size - windowNumber) {
+     val resList = new ListBuffer[Bar]
+     val intervalBars = allBars.slice(subIndex, subIndex + windowNumber)
+     val barRes = new BarRes(intervalBars)
+     
+     println(s"${barRes.stockCode}  ${barRes.stockName} 时间区间： ${barRes.intervalBars.head.date}至${barRes.intervalBars.last.date}")
 
-     for (i <- 20 to bars.size) {
-       val window = bars.take(i)
+     for (i <- 20 to intervalBars.size) {
+       val window = intervalBars.take(i)
        val consolidated = isConsolidated(window)
        val up = isTrendingUp(window)
        val small = isSmallSteps(window)
 
        val flag = if (consolidated && up && small) {
-         list += bars(i - 1)
+         resList += bars(i - 1)
+         barRes.hitBars += intervalBars(i - 1) //记录结果
          " ← 符合条件"
        } else {
          ""
        }
-       val date = bars(i - 1).date
-       println(f"${bars.head.stockCode}  ${bars.head.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
+       val date = intervalBars(i - 1).date
+       println(f"${barRes.stockCode}  ${barRes.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
      }
 
 
      val map = new util.HashMap[String, String]()
-     list.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size >= 2).foreach(ls => {
+     resList.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size >= 2).foreach(ls => {
        val stockCode = ls.head.stockCode
        val endDateMax = ls.head.date
        val startDateMin = ls.last.date
