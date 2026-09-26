@@ -1,7 +1,10 @@
-package zuk.similar
+package zuk.consolidation
 
 // 文件名: ConsolidationScanner.scala
 // 运行: scala ConsolidationScanner.scala
+
+import zuk.similar.Bar
+import zuk.tu_share.DataFrame
 
 import scala.util.Random
 
@@ -12,7 +15,11 @@ case class Bar(
                 low: Double,
                 close: Double,
                 volume: Double
-              )
+              ) {
+  var stockCode = ""
+  var stockName = ""
+  
+}
 
 object ConsolidationScanner {
 
@@ -109,20 +116,51 @@ object ConsolidationScanner {
     }
     bars.toSeq
   }
+  
+ 
 
   def main(args: Array[String]): Unit = {
     val bars = genBars(60, 42L)
+    DataFrame.loadModelAnalysisDataSet.values.map(ls=>{
+      val bars = ls.map(e=>{
+        val bar = Bar(
+          e.trade_date, 
+          e.open.toDouble,
+          e.high.toDouble,
+          e.low.toDouble,
+          e.close.toDouble,
+          e.vol.toDouble
+        )
+        bar.stockCode = e.ts_code
+        bar.stockName = e.name
+        bar
+      })
+      bars.take(60).sortBy(_.date)
+    }).foreach(bars=>{
+      for (i <- 20 to bars.size) {
+        val window = bars.take(i)
+        val consolidated = isConsolidated(window)
+        val up = isTrendingUp(window)
+        val small = isSmallSteps(window)
 
-    // 从第 20 天开始逐日判断
-    for (i <- 20 to bars.size) {
-      val window = bars.take(i)
-      val consolidated = isConsolidated(window)
-      val up           = isTrendingUp(window)
-      val small        = isSmallSteps(window)
-
-      val flag = if (consolidated && up && small) " ← 符合条件" else ""
-      val date = bars(i - 1).date
-      println(f"$date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
-    }
+        val flag = if (consolidated && up && small) " ← 符合条件" else ""
+        val date = bars(i - 1).date
+        println(f"${bars.head.stockCode}  ${bars.head.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
+      }
+    })
+    
+//    val bars = genBars(60, 42L)
+//
+//    // 从第 20 天开始逐日判断
+//    for (i <- 20 to bars.size) {
+//      val window = bars.take(i)
+//      val consolidated = isConsolidated(window)
+//      val up           = isTrendingUp(window)
+//      val small        = isSmallSteps(window)
+//
+//      val flag = if (consolidated && up && small) " ← 符合条件" else ""
+//      val date = bars(i - 1).date
+//      println(f"$date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
+//    }
   }
 }
