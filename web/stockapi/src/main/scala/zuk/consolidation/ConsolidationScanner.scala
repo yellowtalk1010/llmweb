@@ -132,7 +132,7 @@ object ConsolidationScanner {
 
    val windowNumber = 60 //窗口大小60
    if(allBars.size < windowNumber){
-     return 
+     return
    }
    println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}")
 
@@ -140,7 +140,7 @@ object ConsolidationScanner {
      val resList = new ListBuffer[Bar]
      val intervalBars = allBars.slice(subIndex, subIndex + windowNumber)
      val barRes = new BarRes(intervalBars)
-     
+
      println(s"${barRes.stockCode}  ${barRes.stockName} 时间区间： ${barRes.intervalBars.head.date}至${barRes.intervalBars.last.date}")
 
      for (i <- 20 to intervalBars.size) {
@@ -150,7 +150,7 @@ object ConsolidationScanner {
        val small = isSmallSteps(window)
 
        val flag = if (consolidated && up && small) {
-         resList += bars(i - 1)
+         resList += intervalBars(i - 1)
          barRes.hitBars += intervalBars(i - 1) //记录结果
          " ← 符合条件"
        } else {
@@ -162,7 +162,7 @@ object ConsolidationScanner {
 
 
      val map = new util.HashMap[String, String]()
-     resList.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size >= 2).foreach(ls => {
+     barRes.hitBars.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size >= 2).foreach(ls => {
        val stockCode = ls.head.stockCode
        val endDateMax = ls.head.date
        val startDateMin = ls.last.date
@@ -190,7 +190,7 @@ object ConsolidationScanner {
 //         allMap.put(allBars.head.stockCode, l)
 //       }
      }
-     
+
    }
  }
 
@@ -226,8 +226,8 @@ object ConsolidationScanner {
     })
     
     println("over")
-    
+
     System.exit(1)
-    
+
   }
 }
