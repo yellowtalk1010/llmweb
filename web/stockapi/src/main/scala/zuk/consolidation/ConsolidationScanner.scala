@@ -142,10 +142,10 @@ object ConsolidationScanner {
         bar.stockName = e.name
         bar
       })
-      bars.take(60).sortBy(_.date)
+      bars.take(60).sortBy(_.date) //在最近的60个交易日的时间窗口里，然后依次滑动这个60大小的窗口
     })
     val count = new AtomicInteger(0)
-    barsList.filter(! _.head.stockCode.contains("601827")).foreach(bars=>{
+    barsList.foreach(bars=>{
       for (i <- 20 to bars.size) {
         val window = bars.take(i)
         val consolidated = isConsolidated(window)
