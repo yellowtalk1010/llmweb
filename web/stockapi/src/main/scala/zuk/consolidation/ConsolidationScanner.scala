@@ -6,6 +6,9 @@ package zuk.consolidation
 import zuk.similar.Bar
 import zuk.tu_share.DataFrame
 
+import java.math.RoundingMode
+import java.util.concurrent.atomic.AtomicInteger
+import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 case class Bar(
@@ -121,7 +124,10 @@ object ConsolidationScanner {
 
   def main(args: Array[String]): Unit = {
     val bars = genBars(60, 42L)
-    DataFrame.loadModelAnalysisDataSet.values.map(ls=>{
+    
+    val list = new ListBuffer[Bar]
+    
+    val barsList = DataFrame.loadModelAnalysisDataSet.values.filter(_.size > 60).map(ls=>{
       val bars = ls.map(e=>{
         val bar = Bar(
           e.trade_date, 
@@ -136,7 +142,9 @@ object ConsolidationScanner {
         bar
       })
       bars.take(60).sortBy(_.date)
-    }).foreach(bars=>{
+    })
+    val count = new AtomicInteger(0)
+    barsList.filter(! _.head.stockCode.contains("601827")).foreach(bars=>{
       for (i <- 20 to bars.size) {
         val window = bars.take(i)
         val consolidated = isConsolidated(window)
@@ -144,6 +152,7 @@ object ConsolidationScanner {
         val small = isSmallSteps(window)
 
         val flag = if (consolidated && up && small) {
+          list += bars(i-1)
           " ← 符合条件"
         } else {
           ""
@@ -151,7 +160,26 @@ object ConsolidationScanner {
         val date = bars(i - 1).date
         println(f"${bars.head.stockCode}  ${bars.head.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
       }
+
+      println(s"完成${count.incrementAndGet()}/${barsList.size}")
     })
+    
+    println("over")
+    list.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size>=10).foreach(ls=>{
+      val stockCode = ls.head.stockCode
+      val endDateMax = ls.head.date
+      val startDateMin = ls.last.date
+      val stockList = DataFrame.getDataForSelect(stockCode).filter(e=>e.trade_date.toLong <= endDateMax.toLong && e.trade_date.toLong >= startDateMin.toLong)
+       
+      import java.math.BigDecimal
+      val frequency = new BigDecimal(ls.size).divide(new BigDecimal(stockList.size), 2, RoundingMode.DOWN).doubleValue()
+      if(frequency > 0.5){
+        val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${startDateMin}至${endDateMax} ${ls.size}/${stockList.size}=${frequency}" //计算时间跨度， 黏合频率
+        println(s)  
+      }
+      
+    })
+    
     
 //    val bars = genBars(60, 42L)
 //
