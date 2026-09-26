@@ -7,6 +7,7 @@ import zuk.similar.Bar
 import zuk.tu_share.DataFrame
 
 import java.math.RoundingMode
+import java.util
 import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -165,6 +166,7 @@ object ConsolidationScanner {
     })
     
     println("over")
+    val map = new util.HashMap[String, String]()
     list.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size>=10).foreach(ls=>{
       val stockCode = ls.head.stockCode
       val endDateMax = ls.head.date
@@ -175,10 +177,13 @@ object ConsolidationScanner {
       val frequency = new BigDecimal(ls.size).divide(new BigDecimal(stockList.size), 2, RoundingMode.DOWN).doubleValue()
       if(frequency > 0.5){
         val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${startDateMin}至${endDateMax} ${ls.size}/${stockList.size}=${frequency}" //计算时间跨度， 黏合频率
-        println(s)  
+        //println(s)  
+        map.put(frequency.toString, s)
       }
-      
     })
+    
+    import scala.jdk.CollectionConverters.*
+    map.asScala.toList.sortBy(_._1.toDouble).reverse.map(_._2).foreach(println)
     
     
 //    val bars = genBars(60, 42L)
