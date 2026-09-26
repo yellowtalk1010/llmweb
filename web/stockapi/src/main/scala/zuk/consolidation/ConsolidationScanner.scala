@@ -185,6 +185,8 @@ object ConsolidationScanner {
     import scala.jdk.CollectionConverters.*
     map.asScala.toList.sortBy(_._1.toDouble).reverse.map(_._2).foreach(println)
     
+    System.exit(1)
+    
     
 //    val bars = genBars(60, 42L)
 //
