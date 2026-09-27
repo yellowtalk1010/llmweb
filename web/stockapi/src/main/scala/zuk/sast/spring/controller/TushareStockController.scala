@@ -1,6 +1,7 @@
 package zuk.sast.spring.controller
 
 import jakarta.annotation.PostConstruct
+import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +16,7 @@ import zuk.tu_share.module.MA4_Model
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
 
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util
 import java.util.concurrent.Executors
@@ -151,6 +153,55 @@ class TushareStockController {
     tsStockList
   }
 
+
+
+  private def getConsolidation(): java.util.List[TushareStockControllerDTO] = {
+
+    val dtoList = new ListBuffer[TushareStockControllerDTO]
+    
+    val exampleFile = new File("stockapi/target/example.txt")
+    println(s"样例：${exampleFile.getAbsolutePath}, ${exampleFile.exists()}")
+    if(exampleFile.exists()){
+      val lines = FileUtils.readLines(exampleFile, "UTF-8")
+      dtoList ++= lines.asScala.map(l=>{
+        val array = l.split(" ").filter(e=>StringUtils.isNotBlank(e.trim))
+        val stockCode = array(0)
+        val stockName = array(1)
+        val remark = array(2)
+        val dto = new TushareStockControllerDTO
+        dto.stockCode = stockCode
+        dto.name = stockName
+        dto.remark = remark
+        dto.selectModel = "样例"
+        dto.concept = ""
+        dto.eastmoneyURL = new TsStock(stockCode, stockName).eastmoneyURL
+        dto
+      })
+    }
+    
+    val futureFile = new File("stockapi/target/future.txt")
+    println(s"预测：${futureFile.getAbsolutePath}， ${futureFile.exists()}")
+    if(futureFile.exists()){
+      val lines = FileUtils.readLines(futureFile, "UTF-8")
+      dtoList ++= lines.asScala.map(l=>{
+        val array = l.split(" ").filter(e=>StringUtils.isNotBlank(e.trim))
+        val stockCode = array(0)
+        val stockName = array(1)
+        val remark = array(2)
+        val dto = new TushareStockControllerDTO
+        dto.stockCode = stockCode
+        dto.name = stockName
+        dto.remark = remark
+        dto.selectModel = "预测"
+        dto.concept = ""
+        dto.eastmoneyURL = new TsStock(stockCode, stockName).eastmoneyURL
+        dto
+      })
+    }
+    
+    dtoList.asJava
+  }
+  
   /***
    * 获取全部股票信息
    * @return
@@ -332,6 +383,8 @@ class TushareStockController {
       case "limit_down" =>
         //跌停的股票
         this.getLimit_up_down(-1, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
+      case "consolidation" =>
+        this.getConsolidation()
       case _=>
         val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e=>{
           e.equals(status)
