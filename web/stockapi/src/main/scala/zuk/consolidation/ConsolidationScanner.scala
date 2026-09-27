@@ -26,7 +26,6 @@ case class Bar(
   var stockCode = ""
   var stockName = ""
   var group: String = "1"
-  var backTestDataList = new util.HashMap[String, List[ModuleDay]]()  //每组的回测数据，key是group，value是回测数据
   
 }
 
@@ -34,6 +33,7 @@ case class BarRes(intervalBars: List[Bar]) {
   var stockCode = intervalBars.head.stockCode
   var stockName = intervalBars.head.stockName
   val hitBars = new ListBuffer[Bar]
+  var backTestDataMap = new util.HashMap[String, List[ModuleDay]]()  //每组的回测数据，key是group，value是回测数据
 }
 
 object ConsolidationScanner {
@@ -264,8 +264,15 @@ object ConsolidationScanner {
         }  
       }
 
-      resBar.hitBars.groupBy(_.group).filter(_._2.size > 5).map(_._2).foreach(ls=>{
-        println()
+      //添加分段后的回测数据
+      resBar.hitBars.groupBy(_.group).filter(_._2.size > 5).foreach((group, ls)=>{
+        val backtestList = DataFrame.getDataForSelect(resBar.stockCode).filter(e=> e.trade_date.toLong > ls.last.date.toLong)
+        if(backtestList.size >= 10){
+          resBar.backTestDataMap.put(group, backtestList.take(10))
+        }
+        else {
+          resBar.backTestDataMap.put(group, backtestList)
+        }
       })
       
       println(s"完成${count.incrementAndGet()}/${barsList.size} ${resBar.stockCode} ${resBar.stockName}")
