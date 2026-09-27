@@ -224,6 +224,7 @@ object ConsolidationScanner {
         //.take(60)
         .sortBy(_.date) //在最近的60个交易日的时间窗口里，然后依次滑动这个60大小的窗口
     })
+      .filter(_.head.stockCode.contains("601169"))
 
     val barResList = new ListBuffer[BarRes]
     val count = new AtomicInteger(0)
@@ -266,10 +267,12 @@ object ConsolidationScanner {
       }
 
       //添加分段后的回测数据
-      resBar.hitBars.groupBy(_.group).foreach((group, ls)=>{
+      resBar.hitBars.groupBy(_.group).foreach(tp2=>{
+        val group = tp2._1
+        val ls = tp2._2
         val backtestList = DataFrame.getDataForSelect(resBar.stockCode).filter(e=> e.trade_date.toLong > ls.last.date.toLong)
         if(backtestList.size >= 10){
-          resBar.backTestDataMap.put(group, backtestList.take(10))
+          resBar.backTestDataMap.put(group, backtestList.reverse.take(10).reverse)
         }
         else {
           resBar.backTestDataMap.put(group, backtestList)
