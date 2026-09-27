@@ -544,6 +544,11 @@ class TushareStockController {
     limitDownMap.put("cls", "limit_down")
     limitDownMap.put("name", "跌停")
     list.append(limitDownMap)
+    
+    val consolidationMap = new util.HashMap[String, String]()
+    consolidationMap.put("cls", "consolidation")
+    consolidationMap.put("name", "黏合预测")
+    list.append(consolidationMap)
 
     /**
      * 模型
