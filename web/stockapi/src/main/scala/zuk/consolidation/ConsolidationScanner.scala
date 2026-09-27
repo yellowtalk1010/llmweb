@@ -327,7 +327,7 @@ object ConsolidationScanner {
     barResList.foreach(barRes => {
       barRes.hitBars.groupBy(_.group).filter(_._2.size > LENGHT).foreach((group, ls) => {
         val selectList = DataFrame.getDataForSelect(ls.head.stockCode)
-        val tradeDate = selectList.take(12).last.trade_date
+        val tradeDate = selectList.take(6).last.trade_date
         if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong >= tradeDate.toLong)
           || ls.head.date.toLong >= tradeDate.toLong){
           val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${ls.head.date}至${ls.last.date}"
