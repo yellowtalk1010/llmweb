@@ -290,9 +290,10 @@ object ConsolidationScanner {
     val okCount_3 = new AtomicInteger(0) //符合条件的总数
     val okCount_4 = new AtomicInteger(0) //符合条件的总数
     val okCount_5 = new AtomicInteger(0) //符合条件的总数
+    val okCount_5_List = new ListBuffer[List[Bar]]
 
     barResList.foreach(barRes=>{
-      barRes.hitBars.groupBy(_.group).filter(_._2.size > 5).foreach((group, ls)=> {
+      barRes.hitBars.groupBy(_.group).filter(_._2.size > 6).foreach((group, ls)=> {
         //计数总组数
         groupCount.incrementAndGet()
 
@@ -315,6 +316,7 @@ object ConsolidationScanner {
         }
         if (change >= 5.0) {
           okCount_5.incrementAndGet()
+          okCount_5_List += ls.toList
         }
        
       })
@@ -330,6 +332,12 @@ object ConsolidationScanner {
     println(s"rate3胜率:${rate3}")
     println(s"rate4胜率:${rate4}")
     println(s"rate5胜率:${rate5}")
+    
+    okCount_5_List.foreach(ls=>{
+      val code = ls.head.stockCode
+      val name = ls.head.stockName
+      println(s"${code}  ${name}  ${ls.head.date}至${ls.last.date}")
+    })
 
 
     System.exit(1)
