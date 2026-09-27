@@ -296,14 +296,14 @@ object ConsolidationScanner {
     val okCount_5_List = new ListBuffer[List[Bar]]
 
     barResList.foreach(barRes=>{
-      barRes.hitBars.groupBy(_.group).filter(_._2.size > 6).foreach((group, ls)=> {
+      barRes.hitBars.groupBy(_.group).filter(_._2.size > 5).foreach((group, ls)=> {
         //计数总组数
         groupCount.incrementAndGet()
 
         //获取回测数据
         val backtestDataList = barRes.backTestDataMap.get(group)
         val maxHigh = backtestDataList.map(_.high.toDouble).max
-      
+
         val change = new BigDecimal((maxHigh - ls.last.close) * 100).divide(new BigDecimal(ls.last.close), 4, RoundingMode.DOWN).floatValue()
         if(change >= 1.0){
           okCount_1.incrementAndGet()
@@ -321,7 +321,7 @@ object ConsolidationScanner {
           okCount_5.incrementAndGet()
           okCount_5_List += ls.toList
         }
-       
+
       })
     })
 
@@ -335,7 +335,7 @@ object ConsolidationScanner {
     println(s"rate3胜率:${rate3}")
     println(s"rate4胜率:${rate4}")
     println(s"rate5胜率:${rate5}")
-    
+
     println("样例......")
     okCount_5_List.foreach(ls=>{
       val code = ls.head.stockCode
@@ -349,7 +349,7 @@ object ConsolidationScanner {
       barRes.hitBars.groupBy(_.group).filter(_._2.size > 6).foreach((group, ls) => {
         val selectList = DataFrame.getDataForSelect(ls.head.stockCode)
         val tradeDate = selectList.take(12).last.trade_date
-        if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong >= tradeDate.toLong) 
+        if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong >= tradeDate.toLong)
           || ls.head.date.toLong >= tradeDate.toLong){
           println(s"${ls.head.stockCode}  ${ls.head.stockName}  ${ls.head.date}至${ls.last.date}")
         }
