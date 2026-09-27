@@ -224,7 +224,7 @@ object ConsolidationScanner {
         //.take(60)
         .sortBy(_.date) //在最近的60个交易日的时间窗口里，然后依次滑动这个60大小的窗口
     })
-      .filter(_.head.stockCode.contains("601169"))
+//      .filter(_.head.stockCode.contains("601169"))
 
     val barResList = new ListBuffer[BarRes]
     val count = new AtomicInteger(0)
