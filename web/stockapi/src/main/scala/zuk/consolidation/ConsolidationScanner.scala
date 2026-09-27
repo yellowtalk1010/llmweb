@@ -337,7 +337,7 @@ object ConsolidationScanner {
     println(s"rate5胜率:${rate5}")
 
     println("样例......")
-    okCount_5_List.foreach(ls=>{
+    okCount_5_List.sortBy(_.head.stockCode).foreach(ls=>{
       val code = ls.head.stockCode
       val name = ls.head.stockName
       println(s"${code}  ${name}  ${ls.head.date}至${ls.last.date}")
