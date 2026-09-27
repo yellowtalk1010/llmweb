@@ -295,8 +295,10 @@ object ConsolidationScanner {
     val okCount_5 = new AtomicInteger(0) //符合条件的总数
     val okCount_5_List = new ListBuffer[List[Bar]]
 
+    val LENGHT = 5
+    
     barResList.foreach(barRes=>{
-      barRes.hitBars.groupBy(_.group).filter(_._2.size > 5).foreach((group, ls)=> {
+      barRes.hitBars.groupBy(_.group).filter(_._2.size > LENGHT).foreach((group, ls)=> {
         //计数总组数
         groupCount.incrementAndGet()
 
@@ -346,7 +348,7 @@ object ConsolidationScanner {
 
     println("预测......")
     barResList.foreach(barRes => {
-      barRes.hitBars.groupBy(_.group).filter(_._2.size > 6).foreach((group, ls) => {
+      barRes.hitBars.groupBy(_.group).filter(_._2.size > LENGHT).foreach((group, ls) => {
         val selectList = DataFrame.getDataForSelect(ls.head.stockCode)
         val tradeDate = selectList.take(12).last.trade_date
         if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong >= tradeDate.toLong)
