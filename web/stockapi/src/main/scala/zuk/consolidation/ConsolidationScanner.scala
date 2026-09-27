@@ -5,6 +5,7 @@ package zuk.consolidation
 
 import zuk.similar.Bar
 import zuk.tu_share.DataFrame
+import zuk.tu_share.dto.ModuleDay
 
 import java.math.RoundingMode
 import java.util
@@ -25,6 +26,7 @@ case class Bar(
   var stockCode = ""
   var stockName = ""
   var group: String = "1"
+  var backTestDataList = new util.HashMap[String, List[ModuleDay]]()  //每组的回测数据，key是group，value是回测数据
   
 }
 
