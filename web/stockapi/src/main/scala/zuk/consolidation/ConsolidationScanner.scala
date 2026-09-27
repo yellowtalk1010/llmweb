@@ -248,7 +248,7 @@ object ConsolidationScanner {
         for (i <- 0 until resBar.hitBars.size - 1) {
           val cur = resBar.hitBars(i)
           val next = resBar.hitBars(i + 1)
-          val ls =DataFrame.getDataForSelect(resBar.stockCode).filter(e => cur.date.toLong <= e.trade_date.toLong && e.trade_date.toLong <= next.date.toLong)
+          val ls = DataFrame.getDataForSelect(resBar.stockCode).filter(e => cur.date.toLong <= e.trade_date.toLong && e.trade_date.toLong <= next.date.toLong)
           if(cur.date.toLong + 1 == next.date.toLong  //连续
             || ls.size <= 3 //间隔1天
           ){
@@ -261,9 +261,12 @@ object ConsolidationScanner {
           }
         }  
       }
+
+      resBar.hitBars.groupBy(_.group).filter(_._2.size > 5).map(_._2).foreach(ls=>{
+        println()
+      })
       
-      
-      println(s"完成${count.incrementAndGet()}/${barsList.size} ${allBars.head.stockCode} ${allBars.head.stockName}")
+      println(s"完成${count.incrementAndGet()}/${barsList.size} ${resBar.stockCode} ${resBar.stockName}")
     })
     
     println("over")
