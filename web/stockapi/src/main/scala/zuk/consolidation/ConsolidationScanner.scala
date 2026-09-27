@@ -333,12 +333,25 @@ object ConsolidationScanner {
     println(s"rate4胜率:${rate4}")
     println(s"rate5胜率:${rate5}")
     
+    println("样例......")
     okCount_5_List.foreach(ls=>{
       val code = ls.head.stockCode
       val name = ls.head.stockName
       println(s"${code}  ${name}  ${ls.head.date}至${ls.last.date}")
     })
 
+
+    println("预测......")
+    barResList.foreach(barRes => {
+      barRes.hitBars.groupBy(_.group).filter(_._2.size > 6).foreach((group, ls) => {
+        val selectList = DataFrame.getDataForSelect(ls.head.stockCode)
+        val tradeDate = selectList.slice(selectList.size - 12, selectList.size).head.trade_date
+        if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong <= tradeDate.toLong) 
+          || tradeDate.toLong <= ls.head.date.toLong){
+          println(s"${ls.head.stockCode}  ${ls.head.stockName}  ${ls.head.date}至${ls.last.date}")
+        }
+      })
+    })
 
     System.exit(1)
 
