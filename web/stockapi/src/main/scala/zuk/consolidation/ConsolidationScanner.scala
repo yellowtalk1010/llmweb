@@ -24,7 +24,7 @@ case class Bar(
               ) {
   var stockCode = ""
   var stockName = ""
-  var group: String = ""
+  var group: String = "1"
   
 }
 
@@ -245,14 +245,12 @@ object ConsolidationScanner {
       //结果集分段
       if(resBar.hitBars.size > 1){
         
-        resBar.hitBars(0).group = 1.toString //设置为第1组
-        
         for (i <- 0 until resBar.hitBars.size - 1) {
           val cur = resBar.hitBars(i)
           val next = resBar.hitBars(i + 1)
           val ls =DataFrame.getDataForSelect(resBar.stockCode).filter(e => cur.date.toLong <= e.trade_date.toLong && e.trade_date.toLong <= next.date.toLong)
           if(cur.date.toLong + 1 == next.date.toLong  //连续
-            || ls.size <= 2 //间隔1天
+            || ls.size <= 3 //间隔1天
           ){
             //连续，设置为一个组
             next.group = cur.group
