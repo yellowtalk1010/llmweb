@@ -136,7 +136,7 @@ object ConsolidationScanner {
      return List.empty
    }
    println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}")
-   
+
    val resList = new ListBuffer[BarRes]
 
    for (subIndex <- 0 until allBars.size - windowNumber) {
@@ -160,9 +160,9 @@ object ConsolidationScanner {
        val date = intervalBars(i - 1).date
        println(f"${barRes.stockCode}  ${barRes.stockName}  $date  黏合=$consolidated  向上=$up  小碎步=$small$flag")
      }
-     
+
      resList += barRes
-     
+
 //     val map = new util.HashMap[String, String]()
 //     barRes.hitBars.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size >= 2).foreach(ls => {
 //       val stockCode = ls.head.stockCode
@@ -224,9 +224,12 @@ object ConsolidationScanner {
     val allMap = new ConcurrentHashMap[String, ListBuffer[util.HashMap[String, String]]]()
     val count = new AtomicInteger(0)
     barsList.foreach(allBars=>{
-      println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}")
-      val resList = doIt(allBars)
+      println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}  ${allBars.head.date}至${allBars.last.date}")
       
+      //通过滑动窗口的形式计算
+      val resList = doIt(allBars)
+
+      //去除重复日期
       val map = new util.HashMap[String, Bar]()
       resList.filter(_.hitBars.size>0).foreach(e=>{
         e.hitBars.foreach(e1=>{
@@ -234,8 +237,11 @@ object ConsolidationScanner {
         })
       })
 
+      //去除重复日期后，重新构建结果集
       val resBar = BarRes(allBars)
       resBar.hitBars ++= map.values().asScala.toList.sortBy(_.date.toLong)
+
+      //结果集分段
       
       println(s"完成${count.incrementAndGet()}/${barsList.size} ${allBars.head.stockCode} ${allBars.head.stockName}")
     })
