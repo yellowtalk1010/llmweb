@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
 import scala.jdk.CollectionConverters.*
+import java.math.BigDecimal
 
 case class Bar(
                 date: String,
@@ -224,7 +225,7 @@ object ConsolidationScanner {
         .sortBy(_.date) //在最近的60个交易日的时间窗口里，然后依次滑动这个60大小的窗口
     })
 
-    val allMap = new ConcurrentHashMap[String, ListBuffer[util.HashMap[String, String]]]()
+    val barResList = new ListBuffer[BarRes]
     val count = new AtomicInteger(0)
     barsList.foreach(allBars=>{
       println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}  ${allBars.head.date}至${allBars.last.date}")
@@ -265,7 +266,7 @@ object ConsolidationScanner {
       }
 
       //添加分段后的回测数据
-      resBar.hitBars.groupBy(_.group).filter(_._2.size > 5).foreach((group, ls)=>{
+      resBar.hitBars.groupBy(_.group).foreach((group, ls)=>{
         val backtestList = DataFrame.getDataForSelect(resBar.stockCode).filter(e=> e.trade_date.toLong > ls.last.date.toLong)
         if(backtestList.size >= 10){
           resBar.backTestDataMap.put(group, backtestList.take(10))
@@ -274,11 +275,61 @@ object ConsolidationScanner {
           resBar.backTestDataMap.put(group, backtestList)
         }
       })
+
+      barResList += resBar
       
       println(s"完成${count.incrementAndGet()}/${barsList.size} ${resBar.stockCode} ${resBar.stockName}")
     })
     
     println("over")
+
+
+    val groupCount = new AtomicInteger(0) //分组的总数
+    val okCount_1 = new AtomicInteger(0) //符合条件的总数
+    val okCount_2 = new AtomicInteger(0) //符合条件的总数
+    val okCount_3 = new AtomicInteger(0) //符合条件的总数
+    val okCount_4 = new AtomicInteger(0) //符合条件的总数
+    val okCount_5 = new AtomicInteger(0) //符合条件的总数
+    
+    barResList.foreach(barRes=>{
+      barRes.hitBars.groupBy(_.group).filter(_._2.size > 5).foreach((group, ls)=> {
+        //计数总组数
+        groupCount.incrementAndGet()
+        
+        //获取回测数据
+        val backtestDataList = barRes.backTestDataMap.get(group)
+        backtestDataList.map(_.high.toDouble).foreach(high=>{
+          val change = new BigDecimal((high - ls.last.close) * 100).divide(new BigDecimal(ls.last.close), 4, RoundingMode.DOWN).floatValue()
+          if(change >= 1.0){
+            okCount_1.incrementAndGet()
+          }
+          if (change >= 2.0) {
+            okCount_2.incrementAndGet()
+          }
+          if (change >= 3.0) {
+            okCount_3.incrementAndGet()
+          }
+          if (change >= 4.0) {
+            okCount_4.incrementAndGet()
+          }
+          if (change >= 5.0) {
+            okCount_5.incrementAndGet()
+          }
+        })
+      })
+    })
+    
+    val rate1 = new BigDecimal(okCount_1.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
+    val rate2 = new BigDecimal(okCount_2.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
+    val rate3 = new BigDecimal(okCount_3.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
+    val rate4 = new BigDecimal(okCount_4.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
+    val rate5 = new BigDecimal(okCount_5.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
+    println(s"rate1胜率:${rate1}")
+    println(s"rate2胜率:${rate2}")
+    println(s"rate3胜率:${rate3}")
+    println(s"rate4胜率:${rate4}")
+    println(s"rate5胜率:${rate5}")
+    
 
     System.exit(1)
 
