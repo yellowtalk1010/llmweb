@@ -252,7 +252,7 @@ object ConsolidationScanner {
           val next = resBar.hitBars(i + 1)
           val ls =DataFrame.getDataForSelect(resBar.stockCode).filter(e => cur.date.toLong <= e.trade_date.toLong && e.trade_date.toLong <= next.date.toLong)
           if(cur.date.toLong + 1 == next.date.toLong  //连续
-            || ls.size==2 //间隔1天
+            || ls.size <= 2 //间隔1天
           ){
             //连续，设置为一个组
             next.group = cur.group
