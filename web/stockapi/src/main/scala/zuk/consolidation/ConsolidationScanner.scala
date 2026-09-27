@@ -229,7 +229,7 @@ object ConsolidationScanner {
     val count = new AtomicInteger(0)
     barsList.foreach(allBars=>{
       println(s"分析股票：${allBars.head.stockCode}  ${allBars.head.stockName}  ${allBars.head.date}至${allBars.last.date}")
-      
+
       //通过滑动窗口的形式计算
       val resList = doIt(allBars)
 
@@ -247,7 +247,7 @@ object ConsolidationScanner {
 
       //结果集分段
       if(resBar.hitBars.size > 1){
-        
+
         for (i <- 0 until resBar.hitBars.size - 1) {
           val cur = resBar.hitBars(i)
           val next = resBar.hitBars(i + 1)
@@ -262,7 +262,7 @@ object ConsolidationScanner {
             //不连续，设置为新租
             next.group = (cur.group.toInt + 1).toString
           }
-        }  
+        }
       }
 
       //添加分段后的回测数据
@@ -277,7 +277,7 @@ object ConsolidationScanner {
       })
 
       barResList += resBar
-      
+
       println(s"完成${count.incrementAndGet()}/${barsList.size} ${resBar.stockCode} ${resBar.stockName}")
     })
     
@@ -290,35 +290,36 @@ object ConsolidationScanner {
     val okCount_3 = new AtomicInteger(0) //符合条件的总数
     val okCount_4 = new AtomicInteger(0) //符合条件的总数
     val okCount_5 = new AtomicInteger(0) //符合条件的总数
-    
+
     barResList.foreach(barRes=>{
       barRes.hitBars.groupBy(_.group).filter(_._2.size > 5).foreach((group, ls)=> {
         //计数总组数
         groupCount.incrementAndGet()
-        
+
         //获取回测数据
         val backtestDataList = barRes.backTestDataMap.get(group)
-        backtestDataList.map(_.high.toDouble).foreach(high=>{
-          val change = new BigDecimal((high - ls.last.close) * 100).divide(new BigDecimal(ls.last.close), 4, RoundingMode.DOWN).floatValue()
-          if(change >= 1.0){
-            okCount_1.incrementAndGet()
-          }
-          if (change >= 2.0) {
-            okCount_2.incrementAndGet()
-          }
-          if (change >= 3.0) {
-            okCount_3.incrementAndGet()
-          }
-          if (change >= 4.0) {
-            okCount_4.incrementAndGet()
-          }
-          if (change >= 5.0) {
-            okCount_5.incrementAndGet()
-          }
-        })
+        val maxHigh = backtestDataList.map(_.high.toDouble).max
+      
+        val change = new BigDecimal((maxHigh - ls.last.close) * 100).divide(new BigDecimal(ls.last.close), 4, RoundingMode.DOWN).floatValue()
+        if(change >= 1.0){
+          okCount_1.incrementAndGet()
+        }
+        if (change >= 2.0) {
+          okCount_2.incrementAndGet()
+        }
+        if (change >= 3.0) {
+          okCount_3.incrementAndGet()
+        }
+        if (change >= 4.0) {
+          okCount_4.incrementAndGet()
+        }
+        if (change >= 5.0) {
+          okCount_5.incrementAndGet()
+        }
+       
       })
     })
-    
+
     val rate1 = new BigDecimal(okCount_1.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
     val rate2 = new BigDecimal(okCount_2.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
     val rate3 = new BigDecimal(okCount_3.get()).divide(new BigDecimal(groupCount.get()), 4, RoundingMode.DOWN).floatValue()
@@ -329,7 +330,7 @@ object ConsolidationScanner {
     println(s"rate3胜率:${rate3}")
     println(s"rate4胜率:${rate4}")
     println(s"rate5胜率:${rate5}")
-    
+
 
     System.exit(1)
 
