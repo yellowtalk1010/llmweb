@@ -168,35 +168,6 @@ object ConsolidationScanner {
 
      resList += barRes
 
-//     val map = new util.HashMap[String, String]()
-//     barRes.hitBars.groupBy(_.stockCode).map(_._2.sortBy(_.date.toLong).reverse).filter(_.size >= 2).foreach(ls => {
-//       val stockCode = ls.head.stockCode
-//       val endDateMax = ls.head.date
-//       val startDateMin = ls.last.date
-//       val stockList = DataFrame.getDataForSelect(stockCode).filter(e => e.trade_date.toLong <= endDateMax.toLong && e.trade_date.toLong >= startDateMin.toLong)
-//
-//       import java.math.BigDecimal
-//       val frequency = new BigDecimal(ls.size).divide(new BigDecimal(stockList.size), 2, RoundingMode.DOWN).doubleValue()
-//       if (frequency > 0.5) {
-//         val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${startDateMin}至${endDateMax} ${ls.size}/${stockList.size}=${frequency}" //计算时间跨度， 黏合频率
-//         //println(s)
-//         map.put(frequency.toString, s)
-//       }
-//     })
-//
-//     import scala.jdk.CollectionConverters.*
-//
-//     if (map.size() > 0) {
-//       map.asScala.toList.sortBy(_._1.toDouble).reverse.map(_._2).foreach(println)
-////       if (allMap.get(allBars.head.stockCode) != null) {
-////         allMap.get(allBars.head.stockCode) += map
-////       }
-////       else {
-////         val l = new ListBuffer[util.HashMap[String, String]]
-////         l += map
-////         allMap.put(allBars.head.stockCode, l)
-////       }
-//     }
 
    }
 
