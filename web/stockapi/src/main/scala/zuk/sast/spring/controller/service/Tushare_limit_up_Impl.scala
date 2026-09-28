@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import zuk.sast.spring.controller.TushareStockControllerDTO
 
 import java.util
+import scala.jdk.CollectionConverters.*
 
 object Tushare_limit_up_Impl {
   val limit_up = "limit_up"
@@ -12,7 +13,10 @@ object Tushare_limit_up_Impl {
 
 @Service
 class Tushare_limit_up_Impl extends ITushareStockService {
-  override def getType(): String = 
+  override def getType(): String = Tushare_limit_up_Impl.limit_up
 
-  override def getStocks(dto: QuerTushareStockDto): util.List[TushareStockControllerDTO] = ???
+  override def getStocks(dto: QuerTushareStockDto): util.List[TushareStockControllerDTO] = {
+    
+    List.empty.asJava
+  }
 }
