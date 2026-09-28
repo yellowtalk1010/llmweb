@@ -12,11 +12,10 @@ object Tushare_limit_up_Impl {
 }
 
 @Service
-class Tushare_limit_up_Impl extends ITushareStockService {
+class Tushare_limit_up_Impl extends Tushare_limit_up_down with ITushareStockService {
   override def getType(): String = Tushare_limit_up_Impl.limit_up
 
   override def getStocks(dto: QuerTushareStockDto): util.List[TushareStockControllerDTO] = {
-    
-    List.empty.asJava
+    super.getLimit_up_down(1, dto.selectedDateStart, dto.selectedDateEnd)
   }
 }
