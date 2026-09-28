@@ -3,11 +3,17 @@ package zuk.sast.spring.controller.service
 import zuk.sast.spring.controller.TushareStockControllerDTO
 import zuk.sast.spring.controller.component.TushareInitMA4ModelMA5ModelComponent
 
+case class QuerTushareStockDto(desc: String,
+                               status: String,
+                               selectedDateStart: String,
+                               selectedDateEnd: String
+                              )
+
 trait ITushareStockService {
 
   def getType(): String
   
-  def getStocks(): java.util.List[TushareStockControllerDTO]
+  def getStocks(dto: QuerTushareStockDto = null): java.util.List[TushareStockControllerDTO]
 
   /** *
    * 获取购买股票

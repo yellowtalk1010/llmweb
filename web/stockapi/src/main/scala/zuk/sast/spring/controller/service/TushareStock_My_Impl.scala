@@ -22,7 +22,7 @@ class TushareStock_My_Impl extends ITushareStockService {
   
   override def getType(): String = TushareStock_My_Impl.MY
 
-  override def getStocks(): util.List[TushareStockControllerDTO] = {
+  override def getStocks(dto: QuerTushareStockDto = null): util.List[TushareStockControllerDTO] = {
 
     //购买的股票
     val buySet = super.getAllBuy()

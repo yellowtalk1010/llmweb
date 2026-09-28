@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.{ITushareStockService, TushareStock_My_Impl}
+import zuk.sast.spring.controller.service.{ITushareStockService, TushareStock_My_Impl, Tushare_All_Impl}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
@@ -167,68 +167,6 @@ class TushareStockController {
     dtoList.asJava
   }
 
-  /***
-   * 获取全部股票信息
-   * @return
-   */
-  private def getAll(desc: String): java.util.List[TushareStockControllerDTO] = {
-
-
-    val allList = Dataset_all_stocks_csv_file.load.map(e=>{
-      val dto = new TushareStockControllerDTO
-      dto.selectModel = "全部"
-      dto.stockCode = e.ts_code
-      dto.name = e.name
-      dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-      dto.eastmoneyURL = e.eastmoneyURL
-      dto.conceptURL = e.conceptURL
-      dto.attention = ""
-      dto
-    })
-
-    val splits = desc.split("&").map(_.trim)
-    //
-    val list = if (StringUtils.isNotBlank(desc)) {
-      allList.filter(e => {
-        val size = splits.filter(s=>{
-          e.stockCode.contains(s) || e.name.contains(s) || e.concept.contains(s)
-        }).size
-        size == splits.size
-//        e.stockCode.contains(desc) || e.name.contains(desc) || e.concept.contains(desc)
-      })
-    }
-    else {
-      allList
-    }
-
-    val num = 100
-    val res = if (list.size > num) {
-      list.take(num)
-    }
-    else {
-      list
-    }
-
-
-    val attentionSet = getAllAttention()
-    val buySet = getAllBuy()
-
-    res.foreach(e => {
-
-      if (attentionSet.contains(e.stockCode)) {
-        e.attention = "已关注"
-      }
-      e.buy = ""
-      if (buySet.contains(e.stockCode)) {
-        e.buy = "已购买"
-      }
-      e
-    })
-
-    res.asJava
-
-  }
-
   def getMa7(maStr: String, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
     log.info(s"getMa7, maStr:${maStr}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
     //购买的股票
@@ -339,9 +277,9 @@ class TushareStockController {
       case TushareStock_My_Impl.MY =>
         //购买和关注的股票
         this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.MY)).head.getStocks()
-      case "all" =>
+      case Tushare_All_Impl.ALL =>
         //A股全量股票
-        this.getAll(desc)
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_All_Impl.ALL)).head.getStocks()
       case "limit_up" =>
         //涨停的股票
         this.getLimit_up_down (1, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
