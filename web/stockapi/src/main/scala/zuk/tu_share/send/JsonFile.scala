@@ -57,6 +57,7 @@ class JsonFile extends ISend {
           map.put("modClsName", modClsName)
 
           map.put("upperShadow", if(dto.warningUpperShadow) "上影线警告" else  "")
+          map.put("tradeDate", new SimpleDateFormat("yyyyMMdd").format(new Date())) //添加交易日期
 
           map
         }).asJava
