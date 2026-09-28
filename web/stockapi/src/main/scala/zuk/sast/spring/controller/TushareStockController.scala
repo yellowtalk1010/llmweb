@@ -107,6 +107,7 @@ class TushareStockController {
         //黏合预测
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_consolidation_Impl.consolidation)).head.getStocks(dto)
       case _=>
+        //模型回测的历史数据
         this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_module_Impl.module)).head.getStocks(dto)
     }
 
