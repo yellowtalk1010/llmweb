@@ -226,7 +226,6 @@ class TushareStockController {
         //跌停的股票
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_limit_down_Impl.limit_down)).head.getStocks(dto)
       case Tushare_consolidation_Impl.consolidation =>
-        this.getConsolidation()
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_consolidation_Impl.consolidation)).head.getStocks(dto)
       case _=>
         val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e=>{
