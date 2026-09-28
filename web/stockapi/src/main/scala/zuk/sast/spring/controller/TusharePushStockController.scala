@@ -43,9 +43,6 @@ class TusharePushStockController {
   private val Executor_Service = Executors.newCachedThreadPool()
 
   @Autowired
-  private var tushareStockController: TushareStockController = null
-
-  @Autowired
   private var tushareInitMA4ModelMA5ModelComponent: TushareInitMA4ModelMA5ModelComponent = _
 
   @Autowired
@@ -172,6 +169,33 @@ class TusharePushStockController {
     map.put("code", "success")
     map.put("data", list.asJava)
     map
+  }
+
+  /** *
+   * 获取关注股票
+   *
+   * @return
+   */
+  def getAllAttention(): Set[String] = {
+    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.attention_str)).map(_.stockCode).toSet
+  }
+
+  /**
+   * 获取淘汰股票
+   *
+   * @return
+   */
+  def getAllEliminate(): Set[String] = {
+    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str)).map(_.stockCode).toSet
+  }
+
+  /** *
+   * 获取购买股票
+   *
+   * @return
+   */
+  def getAllBuy(): Set[String] = {
+    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.buy_str)).map(_.stockCode).toSet
   }
 
   /***
@@ -305,9 +329,9 @@ class TusharePushStockController {
           })
       })
     
-    val allAttentionCodes = tushareStockController.getAllAttention() //全部关注的股票
-    val allBuyCodes = tushareStockController.getAllBuy() //全部购买的股票
-    val eliminateCodes = tushareStockController.getAllEliminate() //全部淘汰的股票
+    val allAttentionCodes = getAllAttention() //全部关注的股票
+    val allBuyCodes = getAllBuy() //全部购买的股票
+    val eliminateCodes = getAllEliminate() //全部淘汰的股票
     
     val maplist = pushStocks
       .map(e=>(e._1,
