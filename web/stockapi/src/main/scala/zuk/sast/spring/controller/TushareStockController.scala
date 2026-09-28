@@ -91,10 +91,10 @@ class TushareStockController {
     val dto = QuerTushareStockDto(desc, status, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
 
     val list = status match {
-      case TushareStock_My_Impl.`my` =>
+      case TushareStock_My_Impl.my =>
         //购买和关注的股票
         this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.my)).head.getStocks(dto)
-      case Tushare_All_Impl.`all` =>
+      case Tushare_All_Impl.all =>
         //A股全量股票
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_All_Impl.all)).head.getStocks(dto)
       case _limit_up_Impl.limit_up =>
