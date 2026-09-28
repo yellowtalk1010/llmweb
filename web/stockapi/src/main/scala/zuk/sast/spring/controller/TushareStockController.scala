@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.sast.spring.controller.service.{ITushareStockService, TushareStock_My_Impl}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
@@ -64,6 +65,9 @@ class TushareStockController {
 
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
+  
+  @Autowired
+  private var tushareStockServiceList: java.util.List[ITushareStockService] = null
 
   private val Executor_Service = Executors.newCachedThreadPool()
 
@@ -100,59 +104,7 @@ class TushareStockController {
   def getAllBuy(): Set[String] = {
     TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.buy_str)).map(_.stockCode).toSet
   }
-
-  /***
-   * 索取全部关注和购买的股票
-   */
-  def getMy(): util.List[TushareStockControllerDTO] = {
-
-    //购买的股票
-    val buySet = getAllBuy()
-    //关注的股票
-    val attentionSet = getAllAttention()
-    val sets = buySet ++ attentionSet
-
-    //ma4次数
-    val ma5List = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
-
-    val tsStockList = sets.toList.map(e=>{
-        Dataset_all_stocks_csv_file.getTsStock(e)
-    }).filter(!_.isEmpty)
-      .map(e=>{
-        val dto = new TushareStockControllerDTO
-        dto.selectModel = "我的"
-        dto.stockCode = e.get.ts_code
-        val codeList = ma5List.filter(_.stockCode.equals(e.get.ts_code)).sortBy(_.createtime).reverse
-        dto.name = if(codeList.size==0) e.get.name else s"${e.get.name}【${codeList.size}次】${codeList.head.createtime}"
-        if(dto.stockCode.startsWith("688")){
-          dto.name = s"${dto.name}【科创】"
-        }
-        else if (dto.stockCode.startsWith("920")) {
-          dto.name = s"${dto.name}【北交所】"
-        }
-
-        //龙虎榜
-        dto.topInstitutions = Dataset_top_Inst_dir.existTopInst(dto.stockCode)
-
-        val optionTp3 = IncreateDecreateRateDescUtil.getDescription(dto.stockCode)
-        dto.remark = optionTp3.get._4
-        dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-        dto.eastmoneyURL = e.get.eastmoneyURL
-        dto.conceptURL = e.get.conceptURL
-        if (attentionSet.contains(dto.stockCode)) {
-          dto.attention = "已关注"
-        }
-        if(buySet.contains(dto.stockCode)){
-          dto.buy = "已购买"
-        }
-        dto
-      }).sortBy(e=>(e.buy, e.stockCode)).reverse.asJava
-
-    tsStockList
-  }
-
-
-
+  
   private def getConsolidation(): java.util.List[TushareStockControllerDTO] = {
 
     val dtoList = new ListBuffer[TushareStockControllerDTO]
@@ -380,13 +332,13 @@ class TushareStockController {
    */
   @GetMapping(value = Array("all"))
   def all(desc: String, status: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
-
+    
     log.info(s"索取全部股票:desc:${desc}, status:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
 
     val list = status match {
-      case "my" =>
+      case TushareStock_My_Impl.MY =>
         //购买和关注的股票
-        this.getMy()
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.MY)).head.getStocks()
       case "all" =>
         //A股全量股票
         this.getAll(desc)
@@ -592,8 +544,8 @@ class TushareStockController {
     val list = ListBuffer[util.HashMap[String, String]]()
 
     val myMap = new util.HashMap[String, String]()
-    myMap.put("cls", "my")
-    myMap.put("name", "我的")
+    myMap.put("cls", TushareStock_My_Impl.MY)
+    myMap.put("name", TushareStock_My_Impl.MY_DESC)
     list.append(myMap)
 
     val allMap = new util.HashMap[String, String]()
