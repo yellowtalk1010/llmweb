@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.{ITushareStockService, TushareStock_My_Impl, Tushare_All_Impl}
+import zuk.sast.spring.controller.service.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, Tushare_All_Impl}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
@@ -272,14 +272,15 @@ class TushareStockController {
   def all(desc: String, status: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
     
     log.info(s"索取全部股票:desc:${desc}, status:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
+    val dto = QuerTushareStockDto(desc, status, selectedDateStart, selectedDateEnd)
 
     val list = status match {
       case TushareStock_My_Impl.MY =>
         //购买和关注的股票
-        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.MY)).head.getStocks()
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.MY)).head.getStocks(dto)
       case Tushare_All_Impl.ALL =>
         //A股全量股票
-        this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_All_Impl.ALL)).head.getStocks()
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_All_Impl.ALL)).head.getStocks(dto)
       case "limit_up" =>
         //涨停的股票
         this.getLimit_up_down (1, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
@@ -396,80 +397,6 @@ class TushareStockController {
 
   }
   
-  /***
-   * 涨停的股票
-   * @param selectedDateStart
-   * @param selectedDateEnd
-   * @return
-   */
-  private def getLimitUp(selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    val list = Dataset_all_stocks_csv_file.load.map(_.ts_code)
-      .filter(e=>{
-        val list = DataFrame.getDataForSelect(e)
-        list!=null && list.size > 0
-      })
-      .flatMap(stockCode=>{
-        val ls = DataFrame.getDataForSelect(stockCode)
-        //开始过滤时间
-        val filterList = if(StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)){
-          val start = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong){
-            selectedDateStart.trim.toLong
-          }
-          else {
-            selectedDateEnd.trim.toLong
-          }
-
-          val end = if(selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong) {
-            selectedDateEnd.trim.toLong
-          }
-          else {
-            selectedDateStart.trim.toLong
-          }
-
-          ls.sortBy(e=>e.trade_date.toFloat).reverse.filter(e=> start <= e.trade_date.toLong && e.trade_date.toLong <= end)
-
-        }
-        else if (StringUtils.isNotBlank(selectedDateStart)) {
-          ls.filter(e=> e.trade_date.equals(selectedDateStart))
-        }
-        else if (StringUtils.isNotBlank(selectedDateEnd)) {
-          ls.filter(e=> e.trade_date.equals(selectedDateEnd))
-        }
-        else {
-          if(ls.size>0){
-            Array(ls.head).toList  
-          }
-          else {
-            List.empty
-          }
-          
-        }
-        filterList
-      }).filter(e=>{
-          e.change.toFloat > 9.8
-        })
-    
-    //
-    list.map(e=>{
-      val dto = new TushareStockControllerDTO
-      dto.selectModel = "涨停"
-      dto.tradedate = e.trade_date
-      dto.stockCode = e.ts_code
-      dto.name = e.name
-      if (dto.stockCode.startsWith("688")) {
-        dto.name = s"${dto.name}【科创】"
-      }
-      else if (dto.stockCode.startsWith("920")) {
-        dto.name = s"${dto.name}【北交所】"
-      }
-      dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-      val tsStock = new TsStock(dto.stockCode)
-      dto.eastmoneyURL = tsStock.eastmoneyURL
-      dto.conceptURL = tsStock.conceptURL
-      dto
-    }).asJava
-    
-  }
 
   /** *
    * 获取模型列表
@@ -487,8 +414,8 @@ class TushareStockController {
     list.append(myMap)
 
     val allMap = new util.HashMap[String, String]()
-    allMap.put("cls", "all")
-    allMap.put("name", "全部")
+    allMap.put("cls", Tushare_All_Impl.ALL)
+    allMap.put("name", Tushare_All_Impl.ALL_DESC)
     list.append(allMap)
 
     val limitUpMap = new util.HashMap[String, String]()
