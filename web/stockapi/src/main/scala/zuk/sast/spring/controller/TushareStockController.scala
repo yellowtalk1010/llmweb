@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, Tushare_All_Impl, Tushare_consolidation_Impl, _limit_down_Impl, _limit_up_Impl}
+import zuk.sast.spring.controller.service.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, TushareStock_module_Impl, Tushare_All_Impl, Tushare_consolidation_Impl, _limit_down_Impl, _limit_up_Impl}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
@@ -229,15 +229,7 @@ class TushareStockController {
         //黏合预测
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_consolidation_Impl.consolidation)).head.getStocks(dto)
       case _=>
-        val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e=>{
-          e.equals(status)
-        })
-        if(ls.size>0){
-          this.getMa7(ls.head, selectedDateStart.replaceAll("-",""), selectedDateEnd.replaceAll("-",""))
-        }
-        else {
-          new util.ArrayList[TushareStockControllerDTO]()
-        }
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_module_Impl.module)).head.getStocks(dto)
     }
 
     val map = new util.HashMap[String, Object]()
