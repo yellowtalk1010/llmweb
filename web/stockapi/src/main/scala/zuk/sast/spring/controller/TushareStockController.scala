@@ -157,7 +157,7 @@ class TushareStockController {
     /**
      * 模型
      */
-    PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{
+    TushareStock_module_Impl.module_names.foreach(clsName=>{
       val map = new util.HashMap[String, String]()
       map.put("cls", clsName)
       map.put("name", clsName)

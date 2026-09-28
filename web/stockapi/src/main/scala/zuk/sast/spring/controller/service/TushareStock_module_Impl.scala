@@ -15,6 +15,7 @@ import scala.jdk.CollectionConverters.*
 
 object TushareStock_module_Impl {
   val module = "module"
+  val module_names = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase)
 }
 
 @Service
