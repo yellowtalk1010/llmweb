@@ -10,8 +10,8 @@ import java.util
 import scala.jdk.CollectionConverters.*
 
 object TushareStock_My_Impl {
-  val MY = "my"
-  val MY_DESC = "我的"
+  val my = "my"
+  val my_desc = "我的"
 }
 
 @Service
@@ -19,8 +19,8 @@ class TushareStock_My_Impl extends ITushareStockService {
 
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
-  
-  override def getType(): String = TushareStock_My_Impl.MY
+
+  override def getType(): String = TushareStock_My_Impl.my
 
   override def getStocks(dto: QuerTushareStockDto = null): util.List[TushareStockControllerDTO] = {
 
@@ -67,9 +67,9 @@ class TushareStock_My_Impl extends ITushareStockService {
       }).sortBy(e => (e.buy, e.stockCode)).reverse.asJava
 
     tsStockList
-    
+
   }
 
 
-  
+
 }

@@ -275,12 +275,12 @@ class TushareStockController {
     val dto = QuerTushareStockDto(desc, status, selectedDateStart, selectedDateEnd)
 
     val list = status match {
-      case TushareStock_My_Impl.MY =>
+      case TushareStock_My_Impl.`my` =>
         //购买和关注的股票
-        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.MY)).head.getStocks(dto)
-      case Tushare_All_Impl.ALL =>
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.my)).head.getStocks(dto)
+      case Tushare_All_Impl.`all` =>
         //A股全量股票
-        this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_All_Impl.ALL)).head.getStocks(dto)
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_All_Impl.all)).head.getStocks(dto)
       case "limit_up" =>
         //涨停的股票
         this.getLimit_up_down (1, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
@@ -409,13 +409,13 @@ class TushareStockController {
     val list = ListBuffer[util.HashMap[String, String]]()
 
     val myMap = new util.HashMap[String, String]()
-    myMap.put("cls", TushareStock_My_Impl.MY)
-    myMap.put("name", TushareStock_My_Impl.MY_DESC)
+    myMap.put("cls", TushareStock_My_Impl.my)
+    myMap.put("name", TushareStock_My_Impl.my_desc)
     list.append(myMap)
 
     val allMap = new util.HashMap[String, String]()
-    allMap.put("cls", Tushare_All_Impl.ALL)
-    allMap.put("name", Tushare_All_Impl.ALL_DESC)
+    allMap.put("cls", Tushare_All_Impl.all)
+    allMap.put("name", Tushare_All_Impl.all_desc)
     list.append(allMap)
 
     val limitUpMap = new util.HashMap[String, String]()

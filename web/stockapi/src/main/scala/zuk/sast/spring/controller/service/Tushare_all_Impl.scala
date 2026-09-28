@@ -11,8 +11,8 @@ import java.util
 import scala.jdk.CollectionConverters.*
 
 object Tushare_All_Impl {
-  val ALL = "all"
-  val ALL_DESC = "全部"
+  val all = "all"
+  val all_desc = "全部"
 }
 
 @Service
@@ -20,11 +20,11 @@ class Tushare_All_Impl extends ITushareStockService {
 
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
-  
-  override def getType(): String = Tushare_All_Impl.ALL
+
+  override def getType(): String = Tushare_All_Impl.all
 
   override def getStocks(dto: QuerTushareStockDto): util.List[TushareStockControllerDTO] = {
-    
+
     val allList = Dataset_all_stocks_csv_file.load.map(e=>{
       val dto = new TushareStockControllerDTO
       dto.selectModel = "全部"
@@ -36,7 +36,7 @@ class Tushare_All_Impl extends ITushareStockService {
       dto.attention = ""
       dto
     })
-    
+
     //
     val list = if (StringUtils.isNotBlank(dto.desc)) {
       val splits = dto.desc.split("&").map(_.trim)
@@ -59,7 +59,7 @@ class Tushare_All_Impl extends ITushareStockService {
     else {
       list
     }
-    
+
     val attentionSet = super.getAllAttention()
     val buySet = super.getAllBuy()
 
@@ -76,7 +76,7 @@ class Tushare_All_Impl extends ITushareStockService {
     })
 
     res.asJava
-    
+
   }
-  
+
 }
