@@ -12,7 +12,7 @@ import zuk.tu_share.utils.Dataset_all_stocks_csv_file
 import scala.jdk.CollectionConverters.*
 
 @Service
-abstract class Tushare_limit_up_down {
+abstract class TushareStock_limit_up_down {
 
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
