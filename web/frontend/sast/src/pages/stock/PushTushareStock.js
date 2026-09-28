@@ -31,6 +31,7 @@ function PushTushareStock() {
       }
       const result = await response.json();
       if (result.code === "success") {
+        setGroup(false)
         setData(result.data);
       }
       setError(null);
@@ -94,7 +95,10 @@ useEffect(() => {
       <input
           type="date"
           value={tradedate}
-          onChange={(e) => setTradedate(e.target.value)}
+          onChange={(e) => {
+            setGroup(false)
+            setTradedate(e.target.value)
+          }}
           className="border rounded px-3 py-2"
         />
 
@@ -104,7 +108,10 @@ useEffect(() => {
 
         <select
           value={selectedModule}
-          onChange={(e) => setSelectedModule(e.target.value)}
+          onChange={(e) => {
+            setGroup(false)
+            setSelectedModule(e.target.value)
+          }}
           className="border rounded px-3 py-2"
         >
           {modules.map((item) => (
