@@ -55,6 +55,7 @@ class TushareTopInstController {
     }
 
     log.info(s"根据条件获取龙虎榜总数据:${ls.size}")
+    log.info(s"\n${ls.map(e=>s"${e.trade_date}, ${e.ts_code}, ${e.ts_name}").mkString("\n")}")
     dateList.addAll(ls.map(_.trade_date).toSet.toList.asJava)
 
     if(StringUtils.isBlank(search) && StringUtils.isBlank(date)){

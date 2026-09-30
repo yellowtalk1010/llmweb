@@ -153,7 +153,24 @@ object Dataset_top_Inst_dir {
         c.count = countMap.get(c.ts_code).get //计算买入的游资数量
       })
 
-      codes.sortBy(_.count).reverse.asJava
+      codes.map(e=>{
+        if(StringUtils.isBlank(e.buy)){
+          e.buy = "0.0"
+        }
+        if(StringUtils.isBlank(e.sell)){
+          e.sell = "0.0"
+        }
+        if(StringUtils.isBlank(e.net_buy)){
+          e.net_buy = "0.0"
+        }
+        if(StringUtils.isBlank(e.buy_rate)){
+          e.buy_rate = "0.0"
+        }
+        if(StringUtils.isBlank(e.sell_rate)){
+          e.sell_rate = "0.0"
+        }
+        e
+      }).sortBy(_.count).reverse.asJava
     }
     catch {
       case exception: Exception =>
