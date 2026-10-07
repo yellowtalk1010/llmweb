@@ -43,7 +43,7 @@ class MA9_Model extends IModel {
         //当前成交量是历史最低成交量
         val tsStock = super.findTsStock(head.ts_code)
         if(tsStock!=null){
-          stockDto = new StockDto(tsStock)
+          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
       }
     }
