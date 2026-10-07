@@ -1,5 +1,6 @@
 package zuk.tu_share.module
 
+import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.dto.ModuleDay
 
 /***
@@ -9,6 +10,7 @@ class MA9_Model extends IModel {
 
   var stockDto: StockDto = _
   var reason = ""
+  var similartyDto: SimilartyDto = null
 
   override def buyReason(): String = this.reason
 
@@ -43,12 +45,14 @@ class MA9_Model extends IModel {
         //当前成交量是历史最低成交量
         val tsStock = super.findTsStock(head.ts_code)
         if(tsStock!=null){
-          
-          if(super.similarity(head.ts_code, head.trade_date)){
+
+          this.similartyDto = SimilartyUtil.getTsCode(head.ts_code, head.trade_date)
+          if (this.similartyDto != null 
+            && this.similartyDto.sampleNumber > 10 
+            && this.similartyDto.winate >= 0.6) {
             //添加形态验证
-            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))  
+            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           }
-          
         }
       }
     }
@@ -66,4 +70,6 @@ class MA9_Model extends IModel {
   override def warnUpperShadow: Boolean = {
     false
   }
+
+  override def getSimilartyDto(): SimilartyDto = this.similartyDto
 }
