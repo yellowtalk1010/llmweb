@@ -14,7 +14,7 @@ import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.TsStock
-import zuk.tu_share.module.{MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model}
+import zuk.tu_share.module.{MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model, MA9_Model}
 
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -40,7 +40,7 @@ object TushareInitMA4ModelMA5ModelComponent {
   val MA7_MODEL_STR: String = classOf[MA7_Model].getSimpleName.toUpperCase() //"MA7_MODEL"
   val MA7_1_MODEL_STR: String = classOf[MA7_1_Model].getSimpleName.toUpperCase() //"MA7_1_MODEL"
   val MA8_MODEL_STR: String = classOf[MA8_Model].getSimpleName.toUpperCase() //"MA8_MODEL"
-
+  val MA9_MODEL_STR: String = classOf[MA9_Model].getSimpleName.toUpperCase() //"MA9_MODEL"
 
   /** *
    * 一次性加载stock表中的全部数据
@@ -177,7 +177,8 @@ class TushareInitMA4ModelMA5ModelComponent {
       TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR,
-      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR
+      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR,
+      TushareInitMA4ModelMA5ModelComponent.MA9_MODEL_STR
     ).map(_.toUpperCase).toSet
     val allEntitys = this.stockMapper.selectAll().asScala.filter(e=>modelSet.contains(e.stockType.toUpperCase))
 
