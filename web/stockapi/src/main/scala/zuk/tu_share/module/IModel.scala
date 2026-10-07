@@ -1,5 +1,6 @@
 package zuk.tu_share.module
 
+import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.{ModuleDay, TsStock}
 
@@ -136,6 +137,17 @@ trait IModel {
     }).filter(e=>e.compareTo(new BigDecimal(0.35))>=0)
 
     rates.size>0
+  }
+  
+  
+  def similarity(tsCode: String, tradeDate: String): Boolean = {
+    val similartyDto = SimilartyUtil.getTsCode(tsCode, tradeDate)
+    if(similartyDto.sampleNumber > 10 && similartyDto.getWinate >= 0.6){
+      true
+    }
+    else {
+      false
+    }
   }
 
 }
