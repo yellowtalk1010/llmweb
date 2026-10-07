@@ -1,6 +1,7 @@
 package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
+import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
 import zuk.tu_share.utils.ListOrderCheck
@@ -10,6 +11,7 @@ import java.math.{BigDecimal, RoundingMode}
 class MA4_Model extends IModel {
 
   var stockDto: StockDto = _
+  var similartyDto: SimilartyDto = null
 
   override def getStockDto(): StockDto = stockDto
 
@@ -44,8 +46,14 @@ class MA4_Model extends IModel {
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma20.floatValue())) //ma20是递增的
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma30.floatValue())) //ma30是递增的
     ){
+
+
+      this.similartyDto = SimilartyUtil.getTsCode(head.ts_code, head.trade_date)
       
-      if(super.similarity(head.ts_code, head.trade_date)){
+      if(similartyDto != null
+        && similartyDto.sampleNumber > 0
+        && similartyDto.winate > 0.6
+      ){
         //添加形态分析
         stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         stockDto.warningUpperShadow = super.upperShadow(days)
@@ -67,4 +75,6 @@ class MA4_Model extends IModel {
   override def reference: Float = 0.0
 
   override def warnUpperShadow: Boolean = false
+
+  override def getSimilartyDto(): SimilartyDto = this.similartyDto
 }

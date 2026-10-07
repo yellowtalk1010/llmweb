@@ -18,10 +18,10 @@ trait IModel {
   def getStockDto(): StockDto
 
   def desc():String
-  
+
   //买入理由
   def buyReason(): String = ""
-  
+
   def findTsStock(tsCode: String): TsStock = {
     DataFrame.STOCKS_MAP.get(tsCode)
   }
@@ -138,16 +138,7 @@ trait IModel {
 
     rates.size>0
   }
-  
-  
-  def similarity(tsCode: String, tradeDate: String): Boolean = {
-    val similartyDto = SimilartyUtil.getTsCode(tsCode, tradeDate)
-    if(similartyDto.sampleNumber > 10 && similartyDto.winate >= 0.6){
-      true
-    }
-    else {
-      false
-    }
-  }
 
+  def getSimilartyDto(): SimilartyDto = null
+  
 }
