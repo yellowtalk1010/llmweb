@@ -19,7 +19,7 @@ class ModuleDay {
   @BeanProperty var low: String = _
   @BeanProperty var close: String = _
   @BeanProperty var pre_close: String = _
-  @BeanProperty var change: String = _
+  @BeanProperty var change: String = _            //范围：如：跌停-10.0， 涨停10.0
   @BeanProperty var vol: String = _               //交易量
   @BeanProperty var amount: String = _            //交易金额
   @BeanProperty var turnover_rate: String = _     //换手率 成交量/无限售流通股数
