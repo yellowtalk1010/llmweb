@@ -43,7 +43,6 @@ class MA9_Model extends IModel {
         //当前成交量是历史最低成交量
         val tsStock = super.findTsStock(head.ts_code)
         if(tsStock!=null){
-          this.reason = s"相比${minVolDay.ts_code}，历史最低，收盘前买入（涨跌停的不考虑）"
           stockDto = new StockDto(tsStock)
         }
       }
@@ -52,7 +51,7 @@ class MA9_Model extends IModel {
 
 
   override def desc(): String = {
-    "过去两个月最低缩量"
+    "过去两个月最低缩量（回测10天）"
   }
 
   override def reference: Float = {
