@@ -33,7 +33,8 @@ object MA7_Model {
           val jsonObj = JSONObject.parseObject(line)
           if (jsonObj != null
             && jsonObj.get("stockType") != null
-            && jsonObj.get("stockType").toString.toUpperCase.equals(classOf[MA7_Model].getSimpleName.toUpperCase)) {
+            && jsonObj.get("stockType").toString.toUpperCase.equals(classOf[MA7_1_Model].getSimpleName.toUpperCase) //从MA7_1中选择
+          ) {
             val backTestDto = new BackTestDto
             backTestDto.stockType = jsonObj.get("stockType").toString
             backTestDto.stockCode = jsonObj.get("stockCode").toString
