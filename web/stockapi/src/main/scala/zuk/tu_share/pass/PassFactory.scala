@@ -24,7 +24,8 @@ object PassFactory {
 //      //        new MA6_Model,
       new MA7_Model,
       new MA7_1_Model,
-      new MA8_Model
+      new MA8_Model,
+      new MA9_Model
     )
 
     modules
