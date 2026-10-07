@@ -93,7 +93,12 @@ class MA8_Model extends IModel {
           && divideValue > 0.3
         ){
           val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
-          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+
+          if(super.similarity(head.ts_code, head.trade_date)){
+            //添加形态分析
+            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+          }
+          
         }
       }
     }
