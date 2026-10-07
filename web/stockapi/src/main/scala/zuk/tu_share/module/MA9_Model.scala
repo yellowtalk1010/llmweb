@@ -16,22 +16,35 @@ class MA9_Model extends IModel {
     stockDto
   }
 
-  override def backTestStep: Int = 5
+  override def backTestStep: Int = 10
 
   override def run(days: List[ModuleDay]): Unit = {
-    val LEN = 20
+    val LEN = 30 //历史30个交易日
     if(days.size > LEN){
       val head = days.head
-      val minVolDay = days.slice(1, LEN-1).take(LEN).minBy(_.vol.toDouble) //最低成交
-      if(minVolDay.vol.toDouble >= head.vol.toDouble 
-        && head.change.toFloat < 9.8
-        && head.change.toFloat > -9.8
+      val preList = days.slice(1, LEN-1)
+      val pre = preList.head
+      val minVolDay = preList.minBy(_.vol.toDouble) //最低成交
+      if(minVolDay.vol.toDouble >= pre.vol.toDouble
+        && pre.change.toFloat < 9.8
+        && pre.change.toFloat > -9.8
+
+        && preList.filter(_.change.toFloat > 9.8).size >= 1 //历史出现过涨停情况
+        
+        && preList.filter(e=>e.low.toDouble > head.low.toDouble).size > preList.size / 2
+        
+        && !head.name.toUpperCase.contains("ST")
+        && head.change.toFloat > 3
+        && head.change.toFloat < 6
+        
+        && head.vol.toDouble > pre.vol.toDouble
+        && head.vol.toDouble < pre.vol.toDouble * 2
       ){
         //当前成交量是历史最低成交量
         val tsStock = super.findTsStock(head.ts_code)
         if(tsStock!=null){
           this.reason = s"相比${minVolDay.ts_code}，历史最低，收盘前买入（涨跌停的不考虑）"
-          stockDto = new StockDto(tsStock) 
+          stockDto = new StockDto(tsStock)
         }
       }
     }
