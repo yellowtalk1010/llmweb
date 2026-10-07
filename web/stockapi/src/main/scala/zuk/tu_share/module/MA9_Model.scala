@@ -26,12 +26,12 @@ class MA9_Model extends IModel {
       val pre = preList.head
       val minVolDay = preList.minBy(_.vol.toDouble) //最低成交
       if(minVolDay.vol.toDouble >= pre.vol.toDouble
-        && pre.change.toFloat < 9.8
-        && pre.change.toFloat > -9.8
+        && pre.change.toFloat < 5
+        && pre.change.toFloat > -5
 
         && preList.filter(_.change.toFloat > 9.8).size >= 1 //历史出现过涨停情况
         
-        && preList.filter(e=>e.low.toDouble > head.low.toDouble).size > preList.size / 2
+        && preList.filter(e=>e.low.toDouble > head.low.toDouble).size > preList.size / 2  //目前价格在历史上处于最低
         
         && !head.name.toUpperCase.contains("ST")
         && head.change.toFloat > 3
