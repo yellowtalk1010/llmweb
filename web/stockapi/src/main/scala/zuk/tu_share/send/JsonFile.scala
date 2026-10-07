@@ -58,6 +58,7 @@ class JsonFile extends ISend {
 
           map.put("upperShadow", if(dto.warningUpperShadow) "上影线警告" else  "")
           map.put("tradeDate", new SimpleDateFormat("yyyyMMdd").format(new Date())) //添加交易日期
+          map.put("similartyDesc", if(m.getSimilartyDto()!=null){ m.getSimilartyDto().desc} else {"形态未计算"})  //添加形态
 
           map
         }).asJava
