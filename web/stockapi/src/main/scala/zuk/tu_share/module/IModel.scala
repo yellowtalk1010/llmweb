@@ -142,7 +142,7 @@ trait IModel {
   
   def similarity(tsCode: String, tradeDate: String): Boolean = {
     val similartyDto = SimilartyUtil.getTsCode(tsCode, tradeDate)
-    if(similartyDto.sampleNumber > 10 && similartyDto.getWinate >= 0.6){
+    if(similartyDto.sampleNumber > 10 && similartyDto.winate >= 0.6){
       true
     }
     else {
