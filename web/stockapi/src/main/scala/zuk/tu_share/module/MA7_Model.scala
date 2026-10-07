@@ -3,6 +3,7 @@ package zuk.tu_share.module
 import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
+import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.ModuleDay
@@ -69,6 +70,7 @@ class MA7_Model extends IModel {
 
   var num = 60
   var stockDto: StockDto = _
+  var similartyDto: SimilartyDto = null
 
   override def getStockDto(): StockDto = stockDto
 
@@ -126,7 +128,12 @@ class MA7_Model extends IModel {
       val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
       val head = days.head
 
-      if(super.similarity(head.ts_code, head.trade_date)){
+      this.similartyDto = SimilartyUtil.getTsCode(head.ts_code, head.trade_date)
+
+      if(similartyDto != null 
+        && similartyDto.sampleNumber > 0 
+        && similartyDto.winate > 0.6
+      ){
         //添加形态分析
         stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         stockDto.warningUpperShadow = super.upperShadow(days)
@@ -153,4 +160,6 @@ class MA7_Model extends IModel {
   override def warnUpperShadow: Boolean = false
 
   override def backTestStep: Int = 5
+
+  override def getSimilartyDto(): SimilartyDto = this.similartyDto
 }
