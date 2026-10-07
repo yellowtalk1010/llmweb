@@ -17,9 +17,13 @@ trait IModel {
   def getStockDto(): StockDto
 
   def desc():String
-
+  
   //买入理由
   def buyReason(): String = ""
+  
+  def findTsStock(tsCode: String): TsStock = {
+    DataFrame.STOCKS_MAP.get(tsCode)
+  }
 
   def winRate: Float = {
     val className = this.getClass.getSimpleName
