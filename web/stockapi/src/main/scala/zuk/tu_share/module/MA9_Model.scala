@@ -30,20 +30,25 @@ class MA9_Model extends IModel {
         && pre.change.toFloat > -5
 
         && preList.filter(_.change.toFloat > 9.8).size >= 1 //历史出现过涨停情况
-        
+
         && preList.filter(e=>e.low.toDouble > head.low.toDouble).size > preList.size / 2  //目前价格在历史上处于最低
-        
+
         && !head.name.toUpperCase.contains("ST")
         && head.change.toFloat > 3
         && head.change.toFloat < 6
-        
+
         && head.vol.toDouble > pre.vol.toDouble
         && head.vol.toDouble < pre.vol.toDouble * 2
       ){
         //当前成交量是历史最低成交量
         val tsStock = super.findTsStock(head.ts_code)
         if(tsStock!=null){
-          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+          
+          if(super.similarity(head.ts_code, head.trade_date)){
+            //添加形态验证
+            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))  
+          }
+          
         }
       }
     }
