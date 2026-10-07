@@ -250,6 +250,7 @@ class TusharePushStockController {
     val stockResultJsonList = todayModelAdviseJsonFiles.map(file=>{
       val fileJsonResultArray = JSONArray.parseArray(FileUtils.readFileToString(file, Charset.forName("UTF-8")), classOf[StockResultJson])
       fileJsonResultArray.asScala.map(e=>{
+        e.similarity = e.similartyDesc //写入引擎计算的相似度数据
         val stockModleType = e.modClsName
 
         val tsStock = new TsStock(e.ts_code)
@@ -369,9 +370,6 @@ class TusharePushStockController {
           if(group){
             tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date).desc //相似度计算
             println(s"${tp2._1.modClsName}=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")
-          }
-          else {
-            tp2._1.similarity = "相似度计算"
           }
         })
 
