@@ -37,10 +37,10 @@ class MA9_Model extends IModel {
 
         && !head.name.toUpperCase.contains("ST")
         && head.change.toFloat > 3
-        && head.change.toFloat < 6
+//        && head.change.toFloat < 6
 
         && head.vol.toDouble > pre.vol.toDouble
-        && head.vol.toDouble < pre.vol.toDouble * 2
+//        && head.vol.toDouble < pre.vol.toDouble * 2
       ){
         //当前成交量是历史最低成交量
         val tsStock = super.findTsStock(head.ts_code)
