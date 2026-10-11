@@ -4,6 +4,9 @@ import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
 import zuk.consolidation.ConsolidationScanner
 
+/***
+ * 黏合递增
+ */
 @Service
 class ConsolidationImpl {
   
