@@ -1,9 +1,10 @@
-package zuk.sast.spring.controller.service
+package zuk.sast.spring.controller.service.tushareStockImpl
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import zuk.sast.spring.controller.TushareStockControllerDTO
 import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
+import zuk.sast.spring.controller.service.tushareStockImpl.TushareStock_My_Impl
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_top_Inst_dir, IncreateDecreateRateDescUtil}
 
 import java.util

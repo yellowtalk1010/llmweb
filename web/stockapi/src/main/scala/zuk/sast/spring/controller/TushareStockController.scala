@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, TushareStock_module_Impl, Tushare_All_Impl, Tushare_consolidation_Impl, _limit_down_Impl, _limit_up_Impl}
+import zuk.sast.spring.controller.service.tushareStockImpl.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, TushareStock_module_Impl, Tushare_All_Impl, Tushare_consolidation_Impl, _limit_down_Impl, _limit_up_Impl}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model

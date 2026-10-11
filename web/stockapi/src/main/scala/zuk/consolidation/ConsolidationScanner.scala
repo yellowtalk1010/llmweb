@@ -41,17 +41,6 @@ case class BarRes(intervalBars: List[Bar]) {
   var backTestDataMap = new util.HashMap[String, List[ModuleDay]]()  //每组的回测数据，key是group，value是回测数据
 }
 
-@Service
-class ConsolidationScanner {
-  
-  //在spring环境中自动处理
-  @PostConstruct
-  def init(): Unit = {
-    ConsolidationScanner.main(List.empty.toArray)
-  }
-  
-}
-
 object ConsolidationScanner {
 
   /** 最近 n 根 bar 的收盘价均值（均线） */

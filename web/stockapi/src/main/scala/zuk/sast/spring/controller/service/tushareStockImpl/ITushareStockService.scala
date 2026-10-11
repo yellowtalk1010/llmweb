@@ -1,7 +1,8 @@
-package zuk.sast.spring.controller.service
+package zuk.sast.spring.controller.service.tushareStockImpl
 
 import zuk.sast.spring.controller.TushareStockControllerDTO
 import zuk.sast.spring.controller.component.TushareInitMA4ModelMA5ModelComponent
+import zuk.sast.spring.controller.service.tushareStockImpl.QuerTushareStockDto
 
 case class QuerTushareStockDto(desc: String,
                                status: String,
