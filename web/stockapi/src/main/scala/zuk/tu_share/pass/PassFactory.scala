@@ -17,7 +17,7 @@ object PassFactory {
    * @return
    */
   def engineModuleList(): List[IModel] = {
-    var modules = List(
+    val modules = List(
 //      //        new MA1_Model,
 //      //        new MA1_1_Model, //最高胜率
 //      //        new MA3_0_Model, //上穿MA5
