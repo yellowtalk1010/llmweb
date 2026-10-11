@@ -310,7 +310,7 @@ object ConsolidationScanner {
     println(s"rate4胜率:${rate4}")
     println(s"rate5胜率:${rate5}")
 
-    println("样例......")
+    println("样例（用于学习）......")
     val exampleList = new ListBuffer[String]
     okCount_5_List.sortBy(_.head.stockCode).foreach(ls=>{
       val code = ls.head.stockCode
@@ -322,7 +322,7 @@ object ConsolidationScanner {
     FileUtils.writeLines(new java.io.File("stockapi/target/example.txt"), exampleList.asJava)
 
 
-    println("预测......")
+    println("预测（引擎推荐）......")
     val futureList = new ListBuffer[String]
     barResList.foreach(barRes => {
       barRes.hitBars.groupBy(_.group).filter(_._2.size > LENGHT).foreach((group, ls) => {
