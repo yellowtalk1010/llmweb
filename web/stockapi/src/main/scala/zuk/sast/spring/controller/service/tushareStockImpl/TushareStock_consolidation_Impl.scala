@@ -1,9 +1,11 @@
 package zuk.sast.spring.controller.service.tushareStockImpl
 
+import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import zuk.consolidation.ConsolidationScanner
 import zuk.sast.spring.controller.TushareStockControllerDTO
 import zuk.sast.spring.controller.component.TushareConceptComponent
 import zuk.sast.spring.controller.service.tushareStockImpl.Tushare_consolidation_Impl
@@ -24,6 +26,12 @@ class Tushare_consolidation_Impl extends ITushareStockService {
   
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
+
+  @PostConstruct
+  def init() = {
+    println("初始化黏合股票分析")
+    ConsolidationScanner.main(Array.empty)
+  }
   
   override def getType(): String = Tushare_consolidation_Impl.consolidation
 
