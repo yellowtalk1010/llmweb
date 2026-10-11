@@ -13,7 +13,7 @@ object PassFactory {
 
   /***
    * 额外的模型
-   * 
+   *
    * @return
    */
   def otherModuleList(): List[IModel] = {
@@ -32,14 +32,14 @@ object PassFactory {
       new MA8_Model,
       new MA9_Model
     )
-    val sets = engineModuleList().map(classOf[_].getSimpleName)
-    val mods = modules.filter(m=> !sets.contains(classOf[m].getSimpleName))
+    val sets = engineModuleList().map(_.getClass.getSimpleName)
+    val mods = modules.filter(e=> !sets.contains(e.getClass.getSimpleName))
     mods
   }
 
   /***
    * 引擎分析的模型
-   * 
+   *
    * @return
    */
   def engineModuleList(): List[IModel] = {
