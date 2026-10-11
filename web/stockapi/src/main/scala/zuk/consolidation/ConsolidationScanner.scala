@@ -8,6 +8,7 @@ import zuk.similar.Bar
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
 
+import java.io.File
 import java.math.RoundingMode
 import java.util
 import java.util.concurrent.ConcurrentHashMap
@@ -175,8 +176,16 @@ object ConsolidationScanner {
  }
 
   def main(args: Array[String]): Unit = {
+    
+    val future_txt = "stockapi/target/future.txt"
+    val example_txt= "stockapi/target/example.txt"
+    
+    if(new File(future_txt).exists() && new File(example_txt).exists()){
+      //如果结果文件存在则返回
+      return 
+    }
+    
     val rndBars = genBars(60, 42L)
-
     
     val barsList = DataFrame.loadModelAnalysisDataSet.values.filter(_.size > 60).map(ls=>{
       val bars = ls.map(e=>{
@@ -319,7 +328,8 @@ object ConsolidationScanner {
       println(s)
       exampleList += s
     })
-    FileUtils.writeLines(new java.io.File("stockapi/target/example.txt"), exampleList.asJava)
+    //将用于学习用例写入文件中
+    FileUtils.writeLines(new java.io.File(example_txt), exampleList.asJava)
 
 
     println("预测（引擎推荐）......")
@@ -336,7 +346,8 @@ object ConsolidationScanner {
         }
       })
     })
-    FileUtils.writeLines(new java.io.File("stockapi/target/future.txt"), futureList.asJava)
+    //将预测的数据写入到路径中
+    FileUtils.writeLines(new java.io.File(future_txt), futureList.asJava)
 
     System.exit(1)
 
