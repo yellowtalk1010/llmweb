@@ -11,7 +11,12 @@ import scala.jdk.CollectionConverters.*
 
 object PassFactory {
 
-  def moduleList(): List[IModel] = {
+  /***
+   * 引擎分析的模型
+   * 
+   * @return
+   */
+  def engineModuleList(): List[IModel] = {
     var modules = List(
 //      //        new MA1_Model,
 //      //        new MA1_1_Model, //最高胜率
@@ -55,7 +60,7 @@ object PassFactory {
     val finishModules = ListBuffer[IModel]()
     var count = 0
     map.foreach(e=>{
-      val modules = moduleList()
+      val modules = engineModuleList()
       modules.foreach(module=>{
         try {
 //          println(s"模型分析:${module.getClass.getSimpleName.toUpperCase}")
@@ -111,7 +116,7 @@ object PassFactory {
 
     })
 
-    println(s"完成模型分析:${PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).mkString(", ")}")
+    println(s"完成模型分析:${PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase).mkString(", ")}")
 
     ISendFactory.doSend(finishModules.toList)
 

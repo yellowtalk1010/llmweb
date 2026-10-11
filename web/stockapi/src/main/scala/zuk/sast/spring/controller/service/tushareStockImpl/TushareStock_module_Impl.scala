@@ -15,7 +15,7 @@ import scala.jdk.CollectionConverters.*
 
 object TushareStock_module_Impl {
   val module = "module"
-  val module_names = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase)
+  val module_names = PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase)
 }
 
 @Service
@@ -29,7 +29,7 @@ class TushareStock_module_Impl extends ITushareStockService {
   override def getType(): String = "module"
 
   override def getStocks(dto: QuerTushareStockDto): util.List[TushareStockControllerDTO] = {
-    val ls = PassFactory.moduleList().map(_.getClass.getSimpleName.toUpperCase).filter(e => {
+    val ls = PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase).filter(e => {
       e.equals(dto.status)
     })
     if (ls.size > 0) {
