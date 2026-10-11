@@ -3,7 +3,9 @@ package zuk.consolidation
 // 文件名: ConsolidationScanner.scala
 // 运行: scala ConsolidationScanner.scala
 
+import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
+import org.springframework.stereotype.Service
 import zuk.similar.Bar
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleDay
@@ -37,6 +39,17 @@ case class BarRes(intervalBars: List[Bar]) {
   var stockName = intervalBars.head.stockName
   val hitBars = new ListBuffer[Bar]
   var backTestDataMap = new util.HashMap[String, List[ModuleDay]]()  //每组的回测数据，key是group，value是回测数据
+}
+
+@Service
+class ConsolidationScanner {
+  
+  //在spring环境中自动处理
+  @PostConstruct
+  def init(): Unit = {
+    ConsolidationScanner.main(List.empty.toArray)
+  }
+  
 }
 
 object ConsolidationScanner {
