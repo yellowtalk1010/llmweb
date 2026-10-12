@@ -13,6 +13,7 @@ import zuk.tu_share.dto.TsStock
 
 import java.io.File
 import java.util
+import java.util.concurrent.Executors
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
@@ -27,12 +28,18 @@ class Tushare_consolidation_Impl extends ITushareStockService {
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
 
+  private val executor = Executors.newSingleThreadExecutor()
+  
   @PostConstruct
   def init() = {
-    println("初始化黏合股票分析")
-    ConsolidationScanner.main(Array.empty)
+    executor.execute(new Runnable {
+      override def run(): Unit = {
+        println("初始化黏合股票分析")
+        ConsolidationScanner.main(Array.empty)
+      }
+    })
   }
-  
+
   override def getType(): String = Tushare_consolidation_Impl.consolidation
 
   override def getStocks(dto: QuerTushareStockDto): util.List[TushareStockControllerDTO] = {
@@ -43,7 +50,7 @@ class Tushare_consolidation_Impl extends ITushareStockService {
     val buySet = getAllBuy()
     //关注的股票
     val attentionSet = getAllAttention()
-    
+
     val futureFile = new File("stockapi/target/future.txt")
     println(s"预测：${futureFile.getAbsolutePath}， ${futureFile.exists()}")
     if (futureFile.exists()) {
