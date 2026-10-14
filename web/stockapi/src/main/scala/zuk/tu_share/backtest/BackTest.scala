@@ -124,6 +124,17 @@ object BackTest {
     //保存胜率
     DataFrame.storeProperties()
     
+    backTestList.groupBy(e=>e.getClass.getSimpleName).foreach(tp2=>{
+      val clsName = tp2._1.toUpperCase
+      val btList = tp2._2.map(m=>{
+        val l = JSONObject.toJSONString(m, Feature.LargeObject)
+        l
+      }).asJava
+      val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName
+      FileUtils.writeLines(new File(btResPath), btList)
+      println(s"${clsName}模型回测结果写入路径:${btResPath}")
+    })
+    
     FileUtils.writeLines(new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file), backTestMapList.map(m => {
       val l = JSONObject.toJSONString(m, Feature.LargeObject)
 //      println(s"txtLine.map:${l}")
