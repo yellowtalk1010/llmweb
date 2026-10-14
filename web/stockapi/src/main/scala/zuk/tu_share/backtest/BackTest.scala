@@ -134,7 +134,7 @@ object BackTest {
         val l = JSONObject.toJSONString(m, Feature.LargeObject)
         l
       }).asJava
-      val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName + ".txt"
+      val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName
       FileUtils.writeLines(new File(btResPath), btList)
       println(s"${clsName}模型回测结果写入路径:${btResPath}")
     })
