@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.module.IModel
+import zuk.tu_share.pass.PassFactory
 import zuk.utils.SendMail
 
 import java.io.{File, FileOutputStream}
@@ -123,17 +124,20 @@ object BackTest {
 
     //保存胜率
     DataFrame.storeProperties()
-    
-    backTestList.groupBy(e=>e.getClass.getSimpleName).foreach(tp2=>{
-      val clsName = tp2._1.toUpperCase
-      val btList = tp2._2.map(m=>{
+
+    PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{
+      val btList = backTestMapList.filter(m=>{
+        m.get("stockType") !=null 
+          && m.get("stockType").toUpperCase.equals(clsName.toUpperCase)
+      }).map(m=>{
         val l = JSONObject.toJSONString(m, Feature.LargeObject)
         l
       }).asJava
-      val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName
+      val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName + ".txt"
       FileUtils.writeLines(new File(btResPath), btList)
       println(s"${clsName}模型回测结果写入路径:${btResPath}")
     })
+ 
     
     FileUtils.writeLines(new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file), backTestMapList.map(m => {
       val l = JSONObject.toJSONString(m, Feature.LargeObject)
