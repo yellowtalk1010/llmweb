@@ -235,7 +235,7 @@ class TushareInitMA4ModelMA5ModelComponent {
 
     })
 
-    log.info(s"${num.getAndAdd(1)}/${lines.size()}，加载回测结果文件：${file.getAbsolutePath}")
+    log.info(s"${num.getAndAdd(1)}/${lines.size()}")
 
     val delList = allEntitys.filter(e=> !tradetimes.contains(e.createtime))
     log.info(s"待删除stock表中的记录总数:${delList.size}")
