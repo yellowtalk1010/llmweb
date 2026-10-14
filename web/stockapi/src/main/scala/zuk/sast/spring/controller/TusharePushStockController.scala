@@ -338,7 +338,9 @@ class TusharePushStockController {
       .map(e=>(e._1,
         e._2.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")),
         e._3.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")))
-      ).map(e=>{
+      )
+      .filter(e=>(e._2 ++ e._3).size>0)
+      .map(e=>{
 
         val conceptList = new ListBuffer[String]() //
         val fenci = FenCi_Util.createFenCi((e._2 ++ e._3).map(_.concept).toList)
