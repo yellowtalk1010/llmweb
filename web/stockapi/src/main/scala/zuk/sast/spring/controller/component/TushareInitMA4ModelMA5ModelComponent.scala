@@ -165,11 +165,11 @@ class TushareInitMA4ModelMA5ModelComponent {
    * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
    */
   private def init_MODEL_BACK_TEST_RESULT(): Unit = synchronized {
-    val file = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file)
-    if(!file.exists()){
-      log.info(s"${file.getAbsolutePath} 不存在")
-      return
-    }
+//    val file = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file)
+//    if(!file.exists()){
+//      log.info(s"${file.getAbsolutePath} 不存在")
+//      return
+//    }
 
     //需要记录的模型
     val modelSet = List(
@@ -180,12 +180,23 @@ class TushareInitMA4ModelMA5ModelComponent {
       TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA9_MODEL_STR
     ).map(_.toUpperCase).toSet
+
+    val lines = modelSet.flatMap(m=>{
+      val f = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + m)
+      if(!f.exists()){
+        log.info(s"${f.getAbsolutePath} 不存在")
+        System.exit(1)
+      }
+      val ls = FileUtils.readLines(f, "UTF-8")
+      ls.asScala
+    }).asJava
+    
     val allEntitys = this.stockMapper.selectAll().asScala.filter(e=>modelSet.contains(e.stockType.toUpperCase))
 
     //
     val tradetimes = mutable.HashSet[String]()
 
-    val lines = FileUtils.readLines(file, "UTF-8")
+//    val lines = FileUtils.readLines(file, "UTF-8")
     val num = new AtomicLong(0)
     lines.asScala.foreach(line=>{
 
