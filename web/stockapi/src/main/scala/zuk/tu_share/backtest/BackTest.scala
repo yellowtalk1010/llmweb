@@ -125,6 +125,7 @@ object BackTest {
     //保存胜率
     DataFrame.storeProperties()
 
+    //回测结果按模型类型分别存储
     PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{
       val btList = backTestMapList.filter(m=>{
         m.get("stockType") !=null 
@@ -138,7 +139,7 @@ object BackTest {
       println(s"${clsName}模型回测结果写入路径:${btResPath}")
     })
  
-    
+    //回测结果按模型类型合并存
     FileUtils.writeLines(new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file), backTestMapList.map(m => {
       val l = JSONObject.toJSONString(m, Feature.LargeObject)
 //      println(s"txtLine.map:${l}")
