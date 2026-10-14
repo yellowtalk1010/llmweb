@@ -165,11 +165,6 @@ class TushareInitMA4ModelMA5ModelComponent {
    * 初始化历史 MA4_MODEL 和 MA5_MODEL 模型生成的历史数据
    */
   private def init_MODEL_BACK_TEST_RESULT(): Unit = synchronized {
-//    val file = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file)
-//    if(!file.exists()){
-//      log.info(s"${file.getAbsolutePath} 不存在")
-//      return
-//    }
 
     //需要记录的模型
     val modelSet = List(
@@ -195,8 +190,7 @@ class TushareInitMA4ModelMA5ModelComponent {
 
     //
     val tradetimes = mutable.HashSet[String]()
-
-//    val lines = FileUtils.readLines(file, "UTF-8")
+    
     val num = new AtomicLong(0)
     lines.asScala.foreach(line=>{
 

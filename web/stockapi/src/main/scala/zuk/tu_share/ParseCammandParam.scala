@@ -67,7 +67,7 @@ class ParseCammandParam {
 class EngineInfo(engine_path: String) {
   var all_stocks_csv_file: String             = engine_path + File.separator + "all_stocks.csv"                       //A股市场全量股票文件
   var rtk_file: String                        = engine_path + File.separator + "rt_k" + File.separator + "rt_k.csv"   //分时数据
-  var MODEL_BACK_TEST_RESULT_file: String     = engine_path + File.separator + "MODEL_BACK_TEST_RESULT.txt"           //回测结果保存路径
+//  var MODEL_BACK_TEST_RESULT_file: String     = engine_path + File.separator + "MODEL_BACK_TEST_RESULT.txt"           //回测结果保存路径
   var MODEL_BACK_TEST_RESULT_dir: String     = engine_path + File.separator + "MODEL_BACK_TEST_RESULT"                //回测结果保存文件夹
   var stock_config_properties_file: String    = engine_path + File.separator + "stock_config.properties"              //回测模型胜率保存结果文件
   var concept_dir: String                     = engine_path + File.separator + "concept"                              //股票概念路径

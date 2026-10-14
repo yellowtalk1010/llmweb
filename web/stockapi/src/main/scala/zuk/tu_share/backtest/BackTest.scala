@@ -138,13 +138,6 @@ object BackTest {
       FileUtils.writeLines(new File(btResPath), btList)
       println(s"${clsName}模型回测结果写入路径:${btResPath}")
     })
- 
-    //回测结果按模型类型合并存
-    FileUtils.writeLines(new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_file), backTestMapList.map(m => {
-      val l = JSONObject.toJSONString(m, Feature.LargeObject)
-//      println(s"txtLine.map:${l}")
-      l
-    }).asJava)
 
     linesMap.entrySet().asScala.foreach(entry=>{
       val key = entry.getKey
