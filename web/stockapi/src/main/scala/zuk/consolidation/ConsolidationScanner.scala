@@ -185,7 +185,7 @@ object ConsolidationScanner {
     
     if(new File(future_txt).exists() && new File(example_txt).exists()){
       //如果结果文件存在则返回
-      return 
+      return
     }
     
     //val rndBars = genBars(60, 42L)
@@ -344,14 +344,14 @@ object ConsolidationScanner {
         val tradeDate = selectList.take(6).last.trade_date
         if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong >= tradeDate.toLong)
           || ls.head.date.toLong >= tradeDate.toLong){
-          
+
           if(ls.last.change.toFloat > 0){
             //必须是上涨的
             val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${ls.head.date}至${ls.last.date}"
             futureList += s
-            println(s)  
+            println(s)
           }
-          
+
         }
       })
     })
