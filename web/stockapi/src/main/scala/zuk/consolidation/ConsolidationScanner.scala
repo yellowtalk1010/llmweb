@@ -30,6 +30,7 @@ case class Bar(
               ) {
   var stockCode = ""
   var stockName = ""
+  var change = ""
   var group: String = "1"
   
 }
@@ -187,7 +188,7 @@ object ConsolidationScanner {
       return 
     }
     
-    val rndBars = genBars(60, 42L)
+    //val rndBars = genBars(60, 42L)
     
     val barsList = DataFrame.loadModelAnalysisDataSet.values.filter(_.size > 60).map(ls=>{
       val bars = ls.map(e=>{
@@ -201,6 +202,7 @@ object ConsolidationScanner {
         )
         bar.stockCode = e.ts_code
         bar.stockName = e.name
+        bar.change = e.change
         bar
       })
       bars
@@ -342,9 +344,14 @@ object ConsolidationScanner {
         val tradeDate = selectList.take(6).last.trade_date
         if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong >= tradeDate.toLong)
           || ls.head.date.toLong >= tradeDate.toLong){
-          val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${ls.head.date}至${ls.last.date}"
-          futureList += s
-          println(s)
+          
+          if(ls.last.change.toFloat > 0){
+            //必须是上涨的
+            val s = s"${ls.head.stockCode}  ${ls.head.stockName}  ${ls.head.date}至${ls.last.date}"
+            futureList += s
+            println(s)  
+          }
+          
         }
       })
     })
