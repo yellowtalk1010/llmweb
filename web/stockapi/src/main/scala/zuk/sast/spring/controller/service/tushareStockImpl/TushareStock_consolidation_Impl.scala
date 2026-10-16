@@ -77,7 +77,11 @@ class Tushare_consolidation_Impl extends ITushareStockService {
         }
 
         dto
-      })
+      }).sortBy(e=>{
+        //eg: 20260101至于20260203 按截止时间排序
+        val index = e.remark.indexOf("至")
+        e.remark.substring(index)
+      }).reverse
     }
 
     val exampleFile = new File("stockapi/target/example.txt")
@@ -97,7 +101,11 @@ class Tushare_consolidation_Impl extends ITushareStockService {
         dto.concept = ""
         dto.eastmoneyURL = new TsStock(stockCode, stockName).eastmoneyURL
         dto
-      })
+      }).sortBy(e=>{
+        //eg: 20260101至于20260203 按截止时间排序
+        val index = e.remark.indexOf("至")
+        e.remark.substring(index)
+      }).reverse
     }
 
     dtoList.asJava
