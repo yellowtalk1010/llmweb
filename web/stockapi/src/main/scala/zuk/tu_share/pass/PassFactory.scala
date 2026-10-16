@@ -5,6 +5,7 @@ import zuk.tu_share.dto.ModuleDay
 import zuk.tu_share.module.*
 import zuk.tu_share.send.ISendFactory
 
+import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -77,10 +78,10 @@ object PassFactory {
   def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
 
     val finishModules = ListBuffer[IModel]()
-    var count = 0
+    var count = new AtomicInteger(0)
     map.foreach(e=>{
       val modules = engineModuleList()
-      modules.foreach(module=>{
+      modules.asJava.stream().parallel().forEach(module=>{
         try {
 //          println(s"模型分析:${module.getClass.getSimpleName.toUpperCase}")
           val stock = e._1
@@ -118,11 +119,11 @@ object PassFactory {
           }
           doPass(moduleDayList)
           module.run(moduleDayList)
-          count = count + 1
-          println(s"mod" +
-            s":${ParseCammandParam.param.back.toString.substring(0,1)}" +  //是否回测，t是，f否
-            s":${backtestLenght+1}/${ParseCammandParam.param.back_step}" + //回测进度
-            s":${count}/${map.size * modules.size}")  //进度
+          
+          println(s"mod:${module.getClass.getSimpleName}" +
+            s":testback:${ParseCammandParam.param.back.toString}" +  //是否回测，t是，f否
+            s":testbackLen:${backtestLenght+1}/${ParseCammandParam.param.back_step}" + //回测进度
+            s":count:${count.incrementAndGet()}/${map.size * modules.size}")  //进度
         }
         catch
           case exception: Exception =>
