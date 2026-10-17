@@ -221,10 +221,10 @@ class TusharePushStockController {
     }
 
     val hotConcepts = this.tushareStock_limit_up_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_up_Impl.limit_up, trade_date, trade_date)).asScala.map(_.concept).toList
-    val hotFenCiList = FenCi_Util.createFenCi(hotConcepts)._1.take(100)
+    val hotFenCiList = FenCi_Util.createFenCi(hotConcepts)._1.take(50)
 
     val coolConcepts = this.tushareStock_limit_down_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_down_Impl.limit_down, trade_date, trade_date)).asScala.map(_.concept).toList
-    val coolFenCiList = FenCi_Util.createFenCi(coolConcepts)._1.take(100)
+    val coolFenCiList = FenCi_Util.createFenCi(coolConcepts)._1.take(50)
 
     log.info(s"选择模型:${modType}， 交易日期：${trade_date}")
     //判断结果路径是否存在
@@ -356,7 +356,7 @@ class TusharePushStockController {
           }).toList
             .sortBy(_._2).reverse
             .map(e=>{
-              s"${e._1}【${e._2}】"
+              s"${e._1}【${e._2}/${hotConcepts.size}】"
             }).mkString("; ")
           //todo 关联冰点板块
           e.coolSectors = fenciSet.flatMap(w=>{
@@ -364,7 +364,7 @@ class TusharePushStockController {
           }).toList
             .sortBy(_._2).reverse
             .map(e=>{
-              s"${e._1}【${e._2}】"
+              s"${e._1}【${e._2}/${coolConcepts.size}】"
             }).mkString("; ")
 
           if(e.ts_code.startsWith("688")){
