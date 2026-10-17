@@ -247,6 +247,7 @@ class TusharePushStockController {
     val todayModelAdviseJsonFiles = jsonfiles.filter(_.getName.startsWith(trade_date)).sortBy(_.getName).reverse
     log.info(s"输出今日模型推荐的全部结果json文件：${todayModelAdviseJsonFiles.map(_.getName).mkString("; ")}")
 
+    //TODO 从推荐结果文件中读取结果对象
     val stockResultJsonList = todayModelAdviseJsonFiles.map(file=>{
       val fileJsonResultArray = JSONArray.parseArray(FileUtils.readFileToString(file, Charset.forName("UTF-8")), classOf[StockResultJson])
       fileJsonResultArray.asScala.map(e=>{
