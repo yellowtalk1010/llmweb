@@ -43,8 +43,8 @@ class TushareStock_My_Impl extends ITushareStockService {
 
         //todo 计算改股票在各模型中出现的次数
         val str = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
-          val times = tp2._2.filter(modTestbackRes=>modTestbackRes.stockCode.equals(e.get.ts_code)).size - 1  //排除自己
-          if(times <= 0){
+          val times = tp2._2.filter(modTestbackRes=>modTestbackRes.stockCode.equals(e.get.ts_code)).size
+          if(times == 0){
             ""
           }
           else {

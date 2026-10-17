@@ -312,6 +312,7 @@ class TusharePushStockController {
     })
 
     //TODO 计算历史上出现的次数
+
     pushStocks.flatMap(e=>e._2 ++ e._3).foreach(e=>{
 
       if (e.ts_code.startsWith("688")) {
@@ -322,8 +323,8 @@ class TusharePushStockController {
       }
 
       val historyTimes = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
-        val times = tp2._2.filter(_.stockCode.equals(e.ts_code)).size - 1
-        if(times <= 0){
+        val times = tp2._2.filter(_.stockCode.equals(e.ts_code)).size
+        if(times==0){
           ""
         }
         else {
