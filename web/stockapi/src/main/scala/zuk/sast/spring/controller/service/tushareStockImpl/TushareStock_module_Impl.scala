@@ -1,22 +1,62 @@
 package zuk.sast.spring.controller.service.tushareStockImpl
 
+import com.alibaba.fastjson2.JSONObject
+import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import zuk.sast.spring.controller.TushareStockControllerDTO
 import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.{Dataset_top_Inst_dir, IncreateDecreateRateDescUtil}
 
+import java.io.File
 import java.util
+import java.util.concurrent.ConcurrentHashMap
+import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
 
+/***
+ * 模型回测结果集
+ */
+case class ModelTestbackResultDto() {
+  @BeanProperty var stockCode: String = ""
+  @BeanProperty var stockName: String = ""
+  @BeanProperty var stockType: String = ""
+  @BeanProperty var tradedate: String = ""
+}
+
 object TushareStock_module_Impl {
+  
   val module = "module"
   val module_names = PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase)
+  var modelTestbackResultMap = new ConcurrentHashMap[String, List[ModelTestbackResultDto]]()
+  
+  load()
+
+  /***
+   * 加载模型回测结果数据集
+   */
+  private def load() = synchronized {
+    val dir = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir)
+    println(s"加载回测结果集路径:${dir.getAbsolutePath}, ${dir.exists()}")
+    dir.listFiles().map(f=>{
+      val fileName = f.getName
+      println(s"加载${fileName}模型的数据集:${f.getAbsolutePath}")
+      val dtos = FileUtils.readLines(f, "UTF-8").asScala.filter(l=>StringUtils.isNotBlank(l)).map(l=>{
+        val dto = JSONObject.parseObject(l, classOf[ModelTestbackResultDto])
+        dto
+      })
+      dtos
+    }).foreach(ls=>{
+      modelTestbackResultMap.put(ls.head.stockType, ls)
+    })
+  }
 }
+
 
 @Service
 class TushareStock_module_Impl extends ITushareStockService {
