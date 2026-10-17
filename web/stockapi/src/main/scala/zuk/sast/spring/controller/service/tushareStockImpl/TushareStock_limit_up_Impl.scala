@@ -2,10 +2,8 @@ package zuk.sast.spring.controller.service.tushareStockImpl
 
 import org.springframework.stereotype.Service
 import zuk.sast.spring.controller.TushareStockControllerDTO
-import zuk.sast.spring.controller.service.tushareStockImpl.TushareStock_limit_up_Impl
 
 import java.util
-import scala.jdk.CollectionConverters.*
 
 object TushareStock_limit_up_Impl {
   val limit_up = "limit_up"

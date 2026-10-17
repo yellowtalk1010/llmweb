@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.sast.spring.controller.service.tushareStockImpl.{TushareStock_limit_down_Impl, TushareStock_limit_up_Impl}
 import zuk.similar.SimilartyUtil
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
@@ -47,6 +48,14 @@ class TusharePushStockController {
 
   @Autowired
   private var tushareConceptComponent: TushareConceptComponent = null
+
+  //获取跌停
+  @Autowired
+  private var tushareStock_limit_down_Impl: TushareStock_limit_down_Impl = null
+  
+  //获取涨停
+  @Autowired
+  private var tushareStock_limit_up_Impl: TushareStock_limit_up_Impl = null
 
   @PostConstruct
   def init(): Unit = {
