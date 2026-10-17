@@ -329,7 +329,6 @@ class TusharePushStockController {
     
     val allAttentionCodes = getAllAttention() //全部关注的股票
     val allBuyCodes = getAllBuy() //全部购买的股票
-//    val eliminateCodes = getAllEliminate() //全部淘汰的股票
     
     val maplist = pushStocks
       .map(e=>(e._1,
