@@ -99,7 +99,7 @@ private abstract class limit_up_down {
       val tsStock = new TsStock(dto.stockCode)
       dto.eastmoneyURL = tsStock.eastmoneyURL
       dto.conceptURL = tsStock.conceptURL
-      dto.zjlxURL = e.get.getZjlxURL
+      dto.zjlxURL = tsStock.zjlxURL
       dto
     }).asJava
 

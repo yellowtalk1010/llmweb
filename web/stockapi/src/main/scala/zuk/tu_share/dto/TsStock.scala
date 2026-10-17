@@ -85,7 +85,7 @@ class TsStock(@BeanProperty var ts_code: String) extends TsCodeSplit{
   
   private def create_ZJLX_URL(): String = {
     try {
-      this.zjlxURL = s"https://data.eastmoney.com/zjlx/${super.s_0}.html"
+      this.zjlxURL = s"https://data.eastmoney.com/zjlx/${s_0}.html"
     }
     catch {
       case exception: Exception =>

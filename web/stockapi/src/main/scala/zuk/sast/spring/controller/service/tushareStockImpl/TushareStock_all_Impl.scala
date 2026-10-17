@@ -34,7 +34,7 @@ class Tushare_All_Impl extends ITushareStockService {
       dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
       dto.eastmoneyURL = e.eastmoneyURL
       dto.conceptURL = e.conceptURL
-      dto.zjlxURL = e.get.getZjlxURL
+      dto.zjlxURL = e.zjlxURL
       dto.attention = ""
       dto
     })
