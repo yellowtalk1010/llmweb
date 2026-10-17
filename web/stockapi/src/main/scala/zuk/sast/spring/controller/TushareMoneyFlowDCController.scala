@@ -15,6 +15,7 @@ import scala.jdk.CollectionConverters.*
 @RestController
 @RequestMapping(value = Array("money_flow"))
 @Component
+@Deprecated
 class TushareMoneyFlowDCController {
 
   private val log = LoggerFactory.getLogger(classOf[TushareMoneyFlowDCController])
