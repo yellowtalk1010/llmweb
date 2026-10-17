@@ -67,6 +67,7 @@ class Tushare_consolidation_Impl extends ITushareStockService {
         dto.selectModel = "预测"
         dto.concept = ""
         dto.eastmoneyURL = new TsStock(stockCode, stockName).eastmoneyURL
+        dto.zjlxURL = e.get.getZjlxURL
 
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
         if (attentionSet.contains(dto.stockCode)) {
@@ -100,6 +101,7 @@ class Tushare_consolidation_Impl extends ITushareStockService {
         dto.selectModel = "样例"
         dto.concept = ""
         dto.eastmoneyURL = new TsStock(stockCode, stockName).eastmoneyURL
+        dto.zjlxURL = e.get.getZjlxURL
         dto
       }).sortBy(e=>{
         //eg: 20260101至于20260203 按截止时间排序

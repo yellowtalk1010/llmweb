@@ -88,6 +88,7 @@ class TushareStock_module_Impl extends ITushareStockService {
       val tsStock = new TsStock(entity.stockCode)
       dto.eastmoneyURL = tsStock.eastmoneyURL
       dto.conceptURL = tsStock.conceptURL
+      dto.zjlxURL = e.get.getZjlxURL
       if (attentionSet.contains(dto.stockCode)) {
         dto.attention = "已关注"
       }

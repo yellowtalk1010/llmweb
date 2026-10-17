@@ -58,6 +58,7 @@ class TushareStock_My_Impl extends ITushareStockService {
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
         dto.eastmoneyURL = e.get.eastmoneyURL
         dto.conceptURL = e.get.conceptURL
+        dto.zjlxURL = e.get.getZjlxURL
         if (attentionSet.contains(dto.stockCode)) {
           dto.attention = "已关注"
         }
