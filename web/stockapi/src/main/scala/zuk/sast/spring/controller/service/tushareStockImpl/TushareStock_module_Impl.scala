@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import zuk.sast.spring.controller.TushareStockControllerDTO
-import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
+import zuk.sast.spring.controller.component.TushareConceptComponent
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.pass.PassFactory
