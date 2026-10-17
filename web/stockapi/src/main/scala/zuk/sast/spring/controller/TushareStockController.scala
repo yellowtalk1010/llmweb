@@ -87,12 +87,12 @@ class TushareStockController {
    * 索取全部股票
    */
   @GetMapping(value = Array("all"))
-  def all(desc: String, status: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
+  def all(desc: String, moduleType: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
     
-    log.info(s"索取全部股票:desc:${desc}, 类型:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
-    val dto = QuerTushareStockDto(desc, status, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
+    log.info(s"索取全部股票:desc:${desc}, 类型:${moduleType}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
+    val dto = QuerTushareStockDto(desc, moduleType, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
 
-    val list = status match {
+    val list = moduleType match {
       case TushareStock_My_Impl.my =>
         //购买和关注的股票
         this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_My_Impl.my)).head.getStocks(dto)

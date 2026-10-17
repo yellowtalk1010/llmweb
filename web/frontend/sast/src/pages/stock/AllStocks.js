@@ -56,7 +56,7 @@ useEffect(() => {
     try {
 
       const response = await fetch(
-        `/stocks/all?desc=${encodeURIComponent(desc)}&status=${selectedModule}&selectedDateEnd=${selectedDateEnd}&selectedDateStart=${selectedDateStart}`
+        `/stocks/all?desc=${encodeURIComponent(desc)}&moduleType=${selectedModule}&selectedDateEnd=${selectedDateEnd}&selectedDateStart=${selectedDateStart}`
       );
 
       const result = await response.json();
