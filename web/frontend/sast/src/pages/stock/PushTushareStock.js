@@ -283,10 +283,8 @@ function StockTable({ list, refresh  }) {
           <th>序号</th>
           <th className="p-2 text-left border border-gray-200">关注</th>
           <th className="p-2 text-left border border-gray-200">备注</th>
-          <th className="p-2 text-left border border-gray-200">名称</th>
+          <th className="p-2 text-left border border-gray-200">代码/名称</th>
           <th className="p-2 text-left border border-gray-200">龙虎榜</th>
-          <th className="p-2 text-left border border-gray-200">代码</th>
-          <th className="p-2 text-left border border-gray-200">胜率</th>
           <th className="p-2 text-left border border-gray-200">相似率</th>
           <th className="p-2 text-left border border-gray-200">活跃率</th>
           <th className="p-2 text-left border border-gray-200">风险</th>
@@ -305,7 +303,10 @@ function StockTable({ list, refresh  }) {
                 {item.tradeDate}
                 <br/>
                 {item.modClsName}
+                <br/>
+                {item.modWinRate}
               </td>
+
               <td className="p-2">
                 {
                       item.attention?(
@@ -330,14 +331,14 @@ function StockTable({ list, refresh  }) {
               </td>
           
               <td className="p-2"  style={{ minWidth: "400px" }}>
-                  <a
-                    href={item.zjlxURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    资金
-                  </a>
+                <a
+                  href={item.zjlxURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  资金
+                </a>
                 &nbsp;&nbsp;
                 <a
                   href={item.conceptURL}
@@ -351,6 +352,9 @@ function StockTable({ list, refresh  }) {
                 {item.remark}
               </td>
               <td className="p-2 font-medium">
+                {item.ts_code}
+                <br/>
+                <br/>
                 <a
                   href={item.eastmoneyURL}
                   target="_blank"
@@ -369,8 +373,6 @@ function StockTable({ list, refresh  }) {
                   {item.topInstitutions}
                 </a>
               </td>
-              <td className="p-2">{item.ts_code}</td>
-              <td className="p-2 text-green-600">{item.modWinRate}</td>
               <td className="p-2">
                 <a href={`/pages/Similarity?tsCode=${item.ts_code}&tradeDate=${item.tradeDate}`}
                   target="_blank"
