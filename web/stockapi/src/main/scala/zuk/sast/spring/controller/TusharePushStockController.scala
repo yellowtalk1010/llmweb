@@ -256,6 +256,7 @@ class TusharePushStockController {
         val tsStock = new TsStock(e.ts_code)
         e.eastmoneyURL = tsStock.eastmoneyURL
         e.conceptURL = tsStock.conceptURL
+        e.zjlxURL = tsStock.zjlxURL
 
         e.file = file
         e.fileName = file.getName

@@ -282,9 +282,7 @@ function StockTable({ list, refresh  }) {
         <tr className="border-b bg-gray-100 hover:bg-gray-100">
           <th>序号</th>
           <th className="p-2 text-left border border-gray-200">关注</th>
-          <th className="p-2 text-left border border-gray-200">资金</th>
           <th className="p-2 text-left border border-gray-200">备注</th>
-          <th className="p-2 text-left border border-gray-200">概念</th>
           <th className="p-2 text-left border border-gray-200">名称</th>
           <th className="p-2 text-left border border-gray-200">龙虎榜</th>
           <th className="p-2 text-left border border-gray-200">代码</th>
@@ -305,6 +303,8 @@ function StockTable({ list, refresh  }) {
                 {idx + 1}
                 <br/>
                 {item.tradeDate}
+                <br/>
+                {item.modClsName}
               </td>
               <td className="p-2">
                 {
@@ -328,20 +328,17 @@ function StockTable({ list, refresh  }) {
                       )
                     }
               </td>
-            
-              <td className="p-2">
+          
+              <td className="p-2"  style={{ minWidth: "400px" }}>
                   <a
-                    href={`/pages/Moneyflow?tsCode=${item.ts_code}`}
+                    href={item.zjlxURL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
                   >
                     资金
                   </a>
-              </td>  
-             
-              <td className="p-2"  style={{ minWidth: "400px" }}>{item.remark}</td>
-              <td className="p-2">
+                &nbsp;&nbsp;
                 <a
                   href={item.conceptURL}
                   target="_blank"
@@ -350,6 +347,8 @@ function StockTable({ list, refresh  }) {
                 >
                   概念
                 </a>
+                &nbsp;&nbsp;
+                {item.remark}
               </td>
               <td className="p-2 font-medium">
                 <a
