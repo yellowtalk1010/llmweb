@@ -312,27 +312,6 @@ class TusharePushStockController {
     })
 
     //TODO 计算历史上出现的次数
-//    List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
-//      TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR,
-//      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR,
-//      TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR,
-//      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR)
-//      .foreach(modelStr=>{
-//        val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
-//        pushStocks.filter(_._1.equals(modelStr))
-//          .flatMap(e=>e._2 ++ e._3)
-//          .foreach(e=>{
-//            val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
-//            e.historyHitCount = size
-//            e.name = if(size==0){
-//              s"${e.name}"
-//            }
-//            else{
-//              s"${e.name}【历史出现${size}次】"
-//            }
-//          })
-//      })
-
     pushStocks.flatMap(e=>e._2 ++ e._3).foreach(e=>{
 
       if (e.ts_code.startsWith("688")) {
@@ -348,7 +327,7 @@ class TusharePushStockController {
           ""
         }
         else {
-          s"${tp2._1}出现${times}次"
+          s"${tp2._1}(${times}次)"
         }
       }).filter(StringUtils.isNotBlank(_)).mkString(";").replaceAll("_MODEL", "")
       e.name = s"${e.name}【${historyTimes}】"

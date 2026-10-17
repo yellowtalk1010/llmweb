@@ -48,7 +48,7 @@ class TushareStock_My_Impl extends ITushareStockService {
             ""
           }
           else {
-            s"${tp2._1}模型${times}次"  
+            s"${tp2._1}(${times}次)"  
           }
         }).filter(StringUtils.isNotBlank(_)).mkString(";").replaceAll("_MODEL", "")
         if(StringUtils.isNotBlank(str)){
