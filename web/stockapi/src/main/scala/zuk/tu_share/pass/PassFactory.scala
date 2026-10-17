@@ -120,7 +120,7 @@ object PassFactory {
           doPass(moduleDayList)
           module.run(moduleDayList)
           
-          println(s"mod:${module.getClass.getSimpleName}" +
+          println(s"${module.getClass.getSimpleName}" +
             s":testback:${ParseCammandParam.param.back.toString}" +  //是否回测，t是，f否
             s":testbackLen:${backtestLenght+1}/${ParseCammandParam.param.back_step}" + //回测进度
             s":count:${count.incrementAndGet()}/${map.size * modules.size}")  //进度
