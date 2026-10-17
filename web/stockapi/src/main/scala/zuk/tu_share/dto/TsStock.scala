@@ -25,6 +25,7 @@ class TsStock(@BeanProperty var ts_code: String) extends TsCodeSplit{
   this.splitTsCode(ts_code)
   this.eastmoneyURL = createEastmoneyURL()
   this.conceptURL = createConceptURL()
+  this.zjlxURL = create_ZJLX_URL()
 
   def this() = {
     this("")
