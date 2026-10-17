@@ -1,5 +1,6 @@
 package zuk.sast.spring.controller.service.tushareStockImpl
 
+import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import zuk.sast.spring.controller.TushareStockControllerDTO
@@ -31,9 +32,6 @@ class TushareStock_My_Impl extends ITushareStockService {
     val attentionSet = super.getAllAttention()
     val sets = buySet ++ attentionSet
 
-    //ma4次数
-    val ma5List = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR))
-
     val tsStockList = sets.toList.map(e => {
         Dataset_all_stocks_csv_file.getTsStock(e)
       }).filter(!_.isEmpty)
@@ -41,8 +39,23 @@ class TushareStock_My_Impl extends ITushareStockService {
         val dto = new TushareStockControllerDTO
         dto.selectModel = "我的"
         dto.stockCode = e.get.ts_code
-        val codeList = ma5List.filter(_.stockCode.equals(e.get.ts_code)).sortBy(_.createtime).reverse
-        dto.name = if (codeList.size == 0) e.get.name else s"${e.get.name}【${codeList.size}次】${codeList.head.createtime}"
+        dto.name = e.get.name
+
+        //todo 计算改股票在各模型中出现的次数
+        val str = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
+          val times = tp2._2.filter(modTestbackRes=>modTestbackRes.stockCode.equals(e.get.ts_code)).size
+          if(times==0){
+            ""
+          }
+          else {
+            s"${tp2._1}模型${times}次"  
+          }
+        }).filter(StringUtils.isNotBlank(_)).mkString(";")
+        if(StringUtils.isNotBlank(str)){
+          dto.name = s"${dto.name}【${str}】"
+        }
+        
+        //todo 区分股票类型
         if (dto.stockCode.startsWith("688")) {
           dto.name = s"${dto.name}【科创】"
         }

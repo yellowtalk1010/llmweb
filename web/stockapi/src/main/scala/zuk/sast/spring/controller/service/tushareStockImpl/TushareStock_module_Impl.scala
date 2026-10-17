@@ -30,11 +30,11 @@ case class ModelTestbackResultDto() {
 }
 
 object TushareStock_module_Impl {
-  
+
   val module = "module"
   val module_names = PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase)
   var modelTestbackResultMap = new ConcurrentHashMap[String, List[ModelTestbackResultDto]]()
-  
+
   load()
 
   /***
@@ -42,7 +42,7 @@ object TushareStock_module_Impl {
    */
   private def load(): Unit = synchronized {
     if(modelTestbackResultMap.size() > 0){
-      return 
+      return
     }
     val dir = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir)
     println(s"加载回测结果集路径:${dir.getAbsolutePath}, ${dir.exists()}")
@@ -91,8 +91,7 @@ class TushareStock_module_Impl extends ITushareStockService {
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
-//    println(s"TushareInitMA4ModelMA5ModelComponent.getStockEntityList：${TushareInitMA4ModelMA5ModelComponent.getStockEntityList.size}")
-//    val ls = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(maStr))
+//    val ls1 = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(maStr))
     val ls = TushareStock_module_Impl.modelTestbackResultMap.get(maStr.toUpperCase)
     val list = if (ls.size > 1000) {
       ls.take(1000)
@@ -101,11 +100,11 @@ class TushareStock_module_Impl extends ITushareStockService {
       ls
     }
 
-    val list1 = list.map(entity => {
+    val list1 = list.map(modTBResDto => {
       val dto = new TushareStockControllerDTO
-      dto.selectModel = entity.stockType
-      dto.stockCode = entity.stockCode
-      dto.name = entity.stockName
+      dto.selectModel = modTBResDto.stockType
+      dto.stockCode = modTBResDto.stockCode
+      dto.name = modTBResDto.stockName
       if (dto.stockCode.startsWith("688")) {
         dto.name = s"${dto.name}【科创】"
       }
@@ -121,7 +120,7 @@ class TushareStock_module_Impl extends ITushareStockService {
       }
 
       //
-      dto.tradedate = entity.tradedate
+      dto.tradedate = modTBResDto.tradedate
 
       dto.topInstitutions = Dataset_top_Inst_dir.existTopInst(dto.stockCode)
 
@@ -129,7 +128,7 @@ class TushareStock_module_Impl extends ITushareStockService {
 
       dto.remark = optionTp3.get._4
       dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-      val tsStock = new TsStock(entity.stockCode)
+      val tsStock = new TsStock(modTBResDto.stockCode)
       dto.eastmoneyURL = tsStock.eastmoneyURL
       dto.conceptURL = tsStock.conceptURL
       dto.zjlxURL = tsStock.zjlxURL
@@ -140,7 +139,7 @@ class TushareStock_module_Impl extends ITushareStockService {
       if (buySet.contains(dto.stockCode)) {
         dto.buy = "已购买"
       }
-      dto.createtime = entity.tradedate
+      dto.createtime = modTBResDto.tradedate
       //        Some(dto)
       dto
     })

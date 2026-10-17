@@ -284,7 +284,7 @@ useEffect(() => {
                     }
                   </td>
 
-                  <td className="p-3">
+                  <td className="p-3 max-w-[200px] break-words">
                     {item.stockCode}
                     <br/>
                     <br/>
