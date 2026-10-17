@@ -139,6 +139,11 @@ trait IModel {
     rates.size>0
   }
 
+  /***
+   * 形态相似度计算
+   * 
+   * @return
+   */
   def getSimilartyDto(): SimilartyDto = null
   
 }
