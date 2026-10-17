@@ -360,9 +360,6 @@ class TusharePushStockController {
           if(allBuyCodes.contains(e.ts_code)){
             e.buy = "已购买"
           }
-//          if (eliminateCodes.contains(e.ts_code)) {
-//            e.eliminate = "已淘汰"
-//          }
         })
 
         e._2.zipWithIndex.foreach(tp2=>{
