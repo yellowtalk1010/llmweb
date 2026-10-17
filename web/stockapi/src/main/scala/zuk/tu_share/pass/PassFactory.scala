@@ -78,7 +78,7 @@ object PassFactory {
   def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
 
     val finishModules = ListBuffer[IModel]()
-    var count = new AtomicInteger(0)
+    val count = new AtomicInteger(0)
     map.foreach(e=>{
       val modules = engineModuleList()
       modules.asJava.stream().parallel().forEach(module=>{
