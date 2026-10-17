@@ -116,7 +116,7 @@ class TushareStock_module_Impl extends ITushareStockService {
       //计算历史出现的次数
       val totalList = ls.filter(_.stockCode.equals(dto.stockCode)).filter(_.tradedate.toLong < modTBResDto.tradedate.toLong).sortBy(e => e.tradedate).reverse
       val totalSize = totalList.size
-      if (totalSize > 1) {
+      if (totalSize > 0) {
         dto.name = s"${dto.name}【历史总出现${totalSize}次最近${totalList.head.tradedate}】"
       }
 
