@@ -55,7 +55,7 @@ object TushareStock_module_Impl {
       })
       dtos
     }).foreach(ls=>{
-      modelTestbackResultMap.put(ls.head.stockType, ls)
+      modelTestbackResultMap.put(ls.head.stockType, ls.toList)
     })
   }
 }
@@ -91,8 +91,9 @@ class TushareStock_module_Impl extends ITushareStockService {
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
-    println(s"TushareInitMA4ModelMA5ModelComponent.getStockEntityList：${TushareInitMA4ModelMA5ModelComponent.getStockEntityList.size}")
-    val ls = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(maStr))
+//    println(s"TushareInitMA4ModelMA5ModelComponent.getStockEntityList：${TushareInitMA4ModelMA5ModelComponent.getStockEntityList.size}")
+//    val ls = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(maStr))
+    val ls = TushareStock_module_Impl.modelTestbackResultMap.get(maStr.toUpperCase)
     val list = if (ls.size > 1000) {
       ls.take(1000)
     }
@@ -104,7 +105,7 @@ class TushareStock_module_Impl extends ITushareStockService {
       val dto = new TushareStockControllerDTO
       dto.selectModel = entity.stockType
       dto.stockCode = entity.stockCode
-      dto.name = entity.name
+      dto.name = entity.stockName
       if (dto.stockCode.startsWith("688")) {
         dto.name = s"${dto.name}【科创】"
       }
@@ -113,14 +114,14 @@ class TushareStock_module_Impl extends ITushareStockService {
       }
 
       //计算历史出现的次数
-      val totalList = list.filter(_.stockCode.equals(dto.stockCode)).sortBy(e => (e.createtime)).reverse
+      val totalList = list.filter(_.stockCode.equals(dto.stockCode)).sortBy(e => e.tradedate).reverse
       val totalSize = totalList.size
       if (totalSize > 1) {
-        dto.name = s"${dto.name}【历史总出现${totalSize}次最近${totalList.head.createtime}】"
+        dto.name = s"${dto.name}【历史总出现${totalSize}次最近${totalList.head.tradedate}】"
       }
 
       //
-      dto.tradedate = entity.createtime
+      dto.tradedate = entity.tradedate
 
       dto.topInstitutions = Dataset_top_Inst_dir.existTopInst(dto.stockCode)
 
@@ -139,7 +140,7 @@ class TushareStock_module_Impl extends ITushareStockService {
       if (buySet.contains(dto.stockCode)) {
         dto.buy = "已购买"
       }
-      dto.createtime = entity.createtime
+      dto.createtime = entity.tradedate
       //        Some(dto)
       dto
     })
