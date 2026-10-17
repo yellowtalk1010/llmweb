@@ -31,7 +31,8 @@ object PassFactory {
       new MA7_Model,
       new MA7_1_Model,
       new MA8_Model,
-      new MA9_Model
+      new MA9_Model,
+      new MA9_1_Model
     )
     val sets = engineModuleList().map(_.getClass.getSimpleName)
     val mods = modules.filter(e=> !sets.contains(e.getClass.getSimpleName))
@@ -50,7 +51,8 @@ object PassFactory {
       new MA7_Model,
       new MA7_1_Model,
       new MA8_Model,
-      new MA9_Model
+      new MA9_Model,
+      new MA9_1_Model
     )
 
     modules
