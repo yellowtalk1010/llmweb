@@ -180,14 +180,14 @@ class TusharePushStockController {
     TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.attention_str)).map(_.stockCode).toSet
   }
 
-  /**
-   * 获取淘汰股票
-   *
-   * @return
-   */
-  def getAllEliminate(): Set[String] = {
-    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str)).map(_.stockCode).toSet
-  }
+//  /**
+//   * 获取淘汰股票
+//   *
+//   * @return
+//   */
+//  def getAllEliminate(): Set[String] = {
+//    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str)).map(_.stockCode).toSet
+//  }
 
   /** *
    * 获取购买股票
@@ -279,14 +279,14 @@ class TusharePushStockController {
       .sortBy(_._2.modWinRate).reverse //根据胜率排序
       .map(e=>(e._1, e._2.modWinRate))
 
-    log.info(s"胜率：${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("; ")}")
+    log.info(s"模型胜率从高至低排序：${modWinRateClsNames.map(e=>{s"${e._1},${e._2}"}).mkString("; ")}")
 
+    //获取最新的推荐数据
     val heads = stockResultJsonList.head
+    //获取历史的推荐数据
     val histories = stockResultJsonList.slice(1, stockResultJsonList.length).flatMap(e=>e).sortBy(_.modWinRate).reverse
 
-    //保存MA4_MODEL模型数据
-    //tushareInitMA4ModelMA5ModelComponent.add_MA4_MA5_MODEL(heads.toList ++ histories.toList)
-
+    //TODO 过滤掉历史数据中重复出现的数据，仅保留最近的历史数据。并且历史数据不能在 最新的 heads 数据中
     val pushStocks = modWinRateClsNames.map(_._1).map(clsName=>{
       //最新数据
       val headList = heads.filter(_.modClsName.equals(clsName)).sortBy(_.turnoverRate).reverse
@@ -299,7 +299,7 @@ class TusharePushStockController {
           e._2.sortBy(_.file.getName).head //取最早推荐
         }
       }).toList
-        .filter(e=> !headList.map(_.ts_code).contains(e.ts_code)) //不能再headList中
+        .filter(e=> !headList.map(_.ts_code).contains(e.ts_code)) //不能在headList中
         .sortBy(_.file.getName)
         .reverse
       (clsName, headList, historyList)
@@ -310,7 +310,7 @@ class TusharePushStockController {
 //      e.name = s"${e.name}【击中MA4】"
 //    })
 
-    //计算历史上出现的次数
+    //TODO 计算历史上出现的次数
     List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
       TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, 
       TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, 
@@ -334,14 +334,14 @@ class TusharePushStockController {
     
     val allAttentionCodes = getAllAttention() //全部关注的股票
     val allBuyCodes = getAllBuy() //全部购买的股票
-    val eliminateCodes = getAllEliminate() //全部淘汰的股票
+//    val eliminateCodes = getAllEliminate() //全部淘汰的股票
     
     val maplist = pushStocks
       .map(e=>(e._1,
         e._2.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")),
         e._3.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")))
       )
-      .filter(e=>(e._2 ++ e._3).size>0)
+      .filter(e=>(e._2 ++ e._3).size > 0)
       .map(e=>{
 
         val conceptList = new ListBuffer[String]() //
@@ -365,9 +365,9 @@ class TusharePushStockController {
           if(allBuyCodes.contains(e.ts_code)){
             e.buy = "已购买"
           }
-          if (eliminateCodes.contains(e.ts_code)) {
-            e.eliminate = "已淘汰"
-          }
+//          if (eliminateCodes.contains(e.ts_code)) {
+//            e.eliminate = "已淘汰"
+//          }
         })
 
         e._2.zipWithIndex.foreach(tp2=>{

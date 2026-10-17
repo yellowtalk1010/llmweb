@@ -11,6 +11,8 @@ import scala.jdk.CollectionConverters.*
  * 分词
  */
 object FenCi_Util {
+  
+  var ignoreSet: Set[String] = null
 
   def createFenCi(textList: List[String]): String = {
     //"概念：DeepSeek概念，低空经济，商业航天，一带一路，央国企改革\n一级行业：建筑装饰\n二级行业：工程咨询服务Ⅱ\n三级行业：工程咨询服务Ⅲ"
@@ -35,11 +37,14 @@ object FenCi_Util {
     s"总词数【${ls1.size}】>>>>" + str
   }
 
-  private def doFilter(term: Term): Boolean = {
+  private def doFilter(term: Term): Boolean = synchronized {
     //忽略分词关键字
-    val ignoreKeywordFile = new File("ignoreKeyword.txt")
-    val ignoreSet = FileUtils.readLines(ignoreKeywordFile, "UTF-8").asScala.toSet
-    term.word.size > 1 && !ignoreSet.contains(term.word)
+    if(ignoreSet == null){
+      val ignoreKeywordFile = new File("ignoreKeyword.txt")
+      ignoreSet = FileUtils.readLines(ignoreKeywordFile, "UTF-8").asScala.toSet  
+    }
+    term.word.size > 1 
+      && !ignoreSet.contains(term.word)
   }
   
   private def saveTerm(terms: List[Term]): Unit = {
