@@ -91,7 +91,6 @@ class TushareStock_module_Impl extends ITushareStockService {
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
-//    val ls1 = TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(maStr))
     val ls = TushareStock_module_Impl.modelTestbackResultMap.get(maStr.toUpperCase)
     val list = if (ls.size > 1000) {
       ls.take(1000)
@@ -113,7 +112,7 @@ class TushareStock_module_Impl extends ITushareStockService {
       }
 
       //计算历史出现的次数
-      val totalList = list.filter(_.stockCode.equals(dto.stockCode)).sortBy(e => e.tradedate).reverse
+      val totalList = ls.filter(_.stockCode.equals(dto.stockCode)).filter(_.tradedate.toLong < modTBResDto.tradedate.toLong).sortBy(e => e.tradedate).reverse
       val totalSize = totalList.size
       if (totalSize > 1) {
         dto.name = s"${dto.name}【历史总出现${totalSize}次最近${totalList.head.tradedate}】"
