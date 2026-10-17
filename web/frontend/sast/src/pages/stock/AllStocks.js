@@ -213,7 +213,6 @@ useEffect(() => {
               <th className="p-3 text-left border border-gray-200">序号</th>
               <th className="p-3 text-left border border-gray-200">购买</th>
               <th className="p-3 text-left border border-gray-200">关注</th>
-              <th className="p-3 text-left border border-gray-200">资金</th>
               <th className="p-3 text-left border border-gray-200">代码</th>
               <th className="p-3 text-left border border-gray-200">代码名称</th>
               <th className="p-3 text-left border border-gray-200">备注</th>
@@ -286,17 +285,6 @@ useEffect(() => {
                     }
                   </td>
 
-                  <td className="p-2">
-                      <a
-                        href={`/pages/Moneyflow?tsCode=${item.stockCode}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline cursor-pointer"
-                      >
-                        资金
-                      </a>
-                  </td>  
-
                   <td className="p-3">
                     {item.stockCode}
                   </td>
@@ -339,6 +327,15 @@ useEffect(() => {
                   
                   <td className="p-2">
                       <a
+                        href={item.zjlxURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline cursor-pointer"
+                      >
+                        资金
+                      </a>
+                      &nbsp;&nbsp;
+                      <a
                         href={item.conceptURL}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -346,6 +343,7 @@ useEffect(() => {
                       >
                         概念
                       </a>
+                      &nbsp;&nbsp;
                       {item.concept}
                   </td>  
 
