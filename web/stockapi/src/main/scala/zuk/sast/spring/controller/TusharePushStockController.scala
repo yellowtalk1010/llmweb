@@ -219,14 +219,15 @@ class TusharePushStockController {
       val sdf = new SimpleDateFormat("yyyyMMdd")
       sdf.format(new Date())
     }
+    
+    log.info(s"选择模型:${modType}， 交易日期：${trade_date}")
 
+    //TODO 从涨停和跌停中获取涨停的板块
     val hotConcepts = this.tushareStock_limit_up_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_up_Impl.limit_up, trade_date, trade_date)).asScala.map(_.concept).toList
     val hotFenCiList = FenCi_Util.createFenCi(hotConcepts)._1.take(50)
-
     val coolConcepts = this.tushareStock_limit_down_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_down_Impl.limit_down, trade_date, trade_date)).asScala.map(_.concept).toList
     val coolFenCiList = FenCi_Util.createFenCi(coolConcepts)._1.take(50)
 
-    log.info(s"选择模型:${modType}， 交易日期：${trade_date}")
     //判断结果路径是否存在
     val file: File = new File(s"${ParseCammandParam.param.engineInfo.result_json_dir}${File.separator}${trade_date}")
     log.info(s"推荐结构路径:${file.getAbsolutePath}, ${file.exists()}")
@@ -323,7 +324,10 @@ class TusharePushStockController {
       }
 
       val historyTimes = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
-        val times = tp2._2.filter(_.stockCode.equals(e.ts_code)).size
+        val times = tp2._2.filter(_.stockCode.equals(e.ts_code))
+          .filter(_.tradedate.toLong < e.tradeDate.toLong)
+          .size
+        
         if(times==0){
           ""
         }
