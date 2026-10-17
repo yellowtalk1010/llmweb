@@ -330,7 +330,7 @@ function StockTable({ list, refresh  }) {
                     }
               </td>
           
-              <td className="p-2"  style={{ minWidth: "400px" }}>
+              <td className="p-2"  style={{ minWidth: "500px" }}>
                 <a
                   href={item.zjlxURL}
                   target="_blank"
@@ -350,6 +350,10 @@ function StockTable({ list, refresh  }) {
                 </a>
                 &nbsp;&nbsp;
                 {item.remark}
+                <hr/>
+                热点：{item.hotSectors}
+                <hr/>
+                冰点：{item.coolSectors}
               </td>
               <td className="p-2 font-medium">
                 {item.ts_code}

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.tushareStockImpl.{TushareStock_limit_down_Impl, TushareStock_limit_up_Impl}
+import zuk.sast.spring.controller.service.tushareStockImpl.{QuerTushareStockDto, TushareStock_limit_down_Impl, TushareStock_limit_up_Impl}
 import zuk.similar.SimilartyUtil
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
@@ -219,7 +219,13 @@ class TusharePushStockController {
       val sdf = new SimpleDateFormat("yyyyMMdd")
       sdf.format(new Date())
     }
-
+    
+    val hotConcepts = this.tushareStock_limit_up_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_up_Impl.limit_up, trade_date, trade_date)).asScala.map(_.concept).toList
+    val hotFenCiList = FenCi_Util.createFenCi(hotConcepts)._1.take(100)
+    
+    val coolConcepts = this.tushareStock_limit_down_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_down_Impl.limit_down, trade_date, trade_date)).asScala.map(_.concept).toList
+    val coolFenCiList = FenCi_Util.createFenCi(coolConcepts)._1.take(100)
+    
     log.info(s"选择模型:${modType}， 交易日期：${trade_date}")
     //判断结果路径是否存在
     val file: File = new File(s"${ParseCammandParam.param.engineInfo.result_json_dir}${File.separator}${trade_date}")
@@ -342,6 +348,21 @@ class TusharePushStockController {
         val fenci = FenCi_Util.createFenCi((e._2 ++ e._3).map(_.concept).toList)._2
 
         (e._2 ++ e._3).foreach(e=>{
+          
+          val fenciSet = FenCi_Util.createFenCi(List(e.concept))._1.map(_._1).toSet
+          //todo 关联热点板块
+          e.hotSectors = fenciSet.flatMap(w=>{
+            hotFenCiList.filter(hw=>hw._1.equals(w))
+          }).map(e=>{
+            s"${e._1}【${e._2}】"
+          }).mkString("; ")
+          //todo 关联冰点板块
+          e.coolSectors = fenciSet.flatMap(w=>{
+            coolFenCiList.filter(hw=>hw._1.equals(w))
+          }).map(e=>{
+            s"${e._1}【${e._2}】"
+          }).mkString("; ")
+          
           if(e.ts_code.startsWith("688")){
             e.name = e.name + "【科创】"
           }

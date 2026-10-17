@@ -89,7 +89,7 @@ class TushareStockController {
   @GetMapping(value = Array("all"))
   def all(desc: String, status: String, selectedDateStart: String, selectedDateEnd: String): util.Map[String, Object] = {
     
-    log.info(s"索取全部股票:desc:${desc}, status:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
+    log.info(s"索取全部股票:desc:${desc}, 类型:${status}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
     val dto = QuerTushareStockDto(desc, status, selectedDateStart.replaceAll("-", ""), selectedDateEnd.replaceAll("-", ""))
 
     val list = status match {

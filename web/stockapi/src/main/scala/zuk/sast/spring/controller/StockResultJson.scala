@@ -38,6 +38,9 @@ case class StockResultJson(){
   @BeanProperty var similartyDesc: String = "" //引擎计算的相似度数据
   @BeanProperty var similarity: String = "" //相似度胜率信息
   @BeanProperty var tradeDate: String = "" //交易日期
+  
+  @BeanProperty var hotSectors: String = "" //热点板块
+  @BeanProperty var coolSectors: String = "" //冰点板块
 
 }
 
