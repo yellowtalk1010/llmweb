@@ -116,7 +116,7 @@ class TushareStockController {
     val map = new util.HashMap[String, Object]()
     map.put("code", "success")
     map.put("data", list)
-    map.put("keyword", FenCi_Util.createFenCi(list.asScala.map(e=>e.concept).toList))
+    map.put("keyword", FenCi_Util.createFenCi(list.asScala.map(e=>e.concept).toList)._2)
 
     map
   }

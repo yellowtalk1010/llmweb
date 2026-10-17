@@ -345,7 +345,7 @@ class TusharePushStockController {
       .map(e=>{
 
         val conceptList = new ListBuffer[String]() //
-        val fenci = FenCi_Util.createFenCi((e._2 ++ e._3).map(_.concept).toList)
+        val fenci = FenCi_Util.createFenCi((e._2 ++ e._3).map(_.concept).toList)._2
 
         (e._2 ++ e._3).foreach(e=>{
           if(e.ts_code.startsWith("688")){
