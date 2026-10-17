@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.tushareStockImpl.{QuerTushareStockDto, TushareStock_limit_down_Impl, TushareStock_limit_up_Impl}
+import zuk.sast.spring.controller.service.tushareStockImpl.{QuerTushareStockDto, TushareStock_limit_down_Impl, TushareStock_limit_up_Impl, TushareStock_module_Impl}
 import zuk.similar.SimilartyUtil
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
@@ -312,26 +312,48 @@ class TusharePushStockController {
     })
 
     //TODO 计算历史上出现的次数
-    List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
-      TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, 
-      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, 
-      TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR, 
-      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR)
-      .foreach(modelStr=>{
-        val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
-        pushStocks.filter(_._1.equals(modelStr))
-          .flatMap(e=>e._2 ++ e._3)
-          .foreach(e=>{
-            val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
-            e.historyHitCount = size
-            e.name = if(size==0){
-              s"${e.name}"
-            }
-            else{
-              s"${e.name}【历史出现${size}次】"
-            }
-          })
-      })
+//    List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
+//      TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, 
+//      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, 
+//      TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR, 
+//      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR)
+//      .foreach(modelStr=>{
+//        val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
+//        pushStocks.filter(_._1.equals(modelStr))
+//          .flatMap(e=>e._2 ++ e._3)
+//          .foreach(e=>{
+//            val size = entityList.filter(_.stockCode.trim.equals(e.ts_code.trim)).size
+//            e.historyHitCount = size
+//            e.name = if(size==0){
+//              s"${e.name}"
+//            }
+//            else{
+//              s"${e.name}【历史出现${size}次】"
+//            }
+//          })
+//      })
+
+    pushStocks.flatMap(e=>e._2 ++ e._3).foreach(e=>{
+
+      if (e.ts_code.startsWith("688")) {
+        e.name = e.name + "【科创】"
+      }
+      else if (e.ts_code.startsWith("920")) {
+        e.name = s"${e.name}【北交所】"
+      }
+      
+      val historyTimes = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
+        val times = tp2._2.filter(_.stockCode.equals(e.ts_code)).size
+        if(times==0){
+          ""
+        }
+        else {
+          s"${tp2._1}出现${times}次"
+        }
+      }).filter(StringUtils.isNotBlank(_)).mkString(";")
+      e.name = s"${e.name}【${historyTimes}】"
+    })
+    
     
     val allAttentionCodes = getAllAttention() //全部关注的股票
     val allBuyCodes = getAllBuy() //全部购买的股票
@@ -366,13 +388,6 @@ class TusharePushStockController {
             .map(e=>{
               s"${e._1}【${e._2}/${coolConcepts.size}】"
             }).mkString("; ")
-
-          if(e.ts_code.startsWith("688")){
-            e.name = e.name + "【科创】"
-          }
-          else if (e.ts_code.startsWith("920")) {
-            e.name = s"${e.name}【北交所】"
-          }
 
           //是否出现在龙虎榜中
           e.topInstitutions = Dataset_top_Inst_dir.existTopInst(e.ts_code)

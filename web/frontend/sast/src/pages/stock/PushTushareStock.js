@@ -355,7 +355,7 @@ function StockTable({ list, refresh  }) {
                 <hr/>
                 冰点：{item.coolSectors}
               </td>
-              <td className="p-2 font-medium">
+              <td className="p-3 max-w-[200px] break-words">
                 {item.ts_code}
                 <br/>
                 <br/>
