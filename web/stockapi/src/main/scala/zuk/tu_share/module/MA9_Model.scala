@@ -48,7 +48,7 @@ class MA9_Model extends IModel {
 
           this.similartyDto = SimilartyUtil.getTsCode(head.ts_code, head.trade_date)
           if (this.similartyDto != null 
-            && this.similartyDto.sampleNumber > 10 
+            && this.similartyDto.sampleNumber > 10 //样本数量10个
             && this.similartyDto.winate >= 0.6) {
             //添加形态验证
             stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
