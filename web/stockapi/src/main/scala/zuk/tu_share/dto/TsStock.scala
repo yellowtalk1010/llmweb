@@ -8,6 +8,8 @@ import scala.beans.BeanProperty
  * @param ts_code tushare股票代码
  */
 class TsStock(@BeanProperty var ts_code: String) extends TsCodeSplit{
+  
+  splitTsCode(this.ts_code)
 
   @BeanProperty var symbol: String = _      //股票代码
   @BeanProperty var name: String = _        //名称
@@ -17,6 +19,7 @@ class TsStock(@BeanProperty var ts_code: String) extends TsCodeSplit{
 
   @BeanProperty var eastmoneyURL: String = ""     //东方财富跳转url
   @BeanProperty var conceptURL: String = ""       //东方财富股票所属概念url
+  @BeanProperty var zjlxURL: String = ""          //东方财务资金流向url
 
   //这里相当于创建类时的初始化
   this.splitTsCode(ts_code)
@@ -56,11 +59,11 @@ class TsStock(@BeanProperty var ts_code: String) extends TsCodeSplit{
 
   private def createEastmoneyURL(): String = {
     try {
-      this.eastmoneyURL = if (s_1.toUpperCase.contains("BJ")) {
-        s"https://quote.eastmoney.com/${s_1}/${s_0}.html"
+      this.eastmoneyURL = if (s_SZ_or_SH.toUpperCase.contains("BJ")) {
+        s"https://quote.eastmoney.com/${s_SZ_or_SH}/${s_0}.html"
       }
       else {
-        s"https://quote.eastmoney.com/${s_1}${s_0}.html"
+        s"https://quote.eastmoney.com/${s_SZ_or_SH}${s_0}.html"
       }
     }
     catch {
@@ -71,14 +74,23 @@ class TsStock(@BeanProperty var ts_code: String) extends TsCodeSplit{
 
   private def createConceptURL(): String = {
     try {
-      splitTsCode(this.ts_code)
-      val code: String = s"${s_1}${s_0}"
+      val code: String = s"${s_SZ_or_SH}${s_0}"
       this.conceptURL = s"https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=${code}&color=b#/hxtc/tcxq"
     }
     catch {
       case exception: Exception =>
     }
     this.conceptURL
+  }
+  
+  private def create_ZJLX_URL(): String = {
+    try {
+      this.zjlxURL = s"https://data.eastmoney.com/zjlx/${super.s_0}.html"
+    }
+    catch {
+      case exception: Exception =>
+    }
+    this.zjlxURL
   }
 
 

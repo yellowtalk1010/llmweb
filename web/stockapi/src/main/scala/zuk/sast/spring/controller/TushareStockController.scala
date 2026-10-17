@@ -27,6 +27,8 @@ import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 class TushareStockControllerDTO extends StockEntity {
+  //东方财务资金流向url
+  @BeanProperty var zjlxURL: String = null
   //概念url
   @BeanProperty var conceptURL: String = null
   //概念
