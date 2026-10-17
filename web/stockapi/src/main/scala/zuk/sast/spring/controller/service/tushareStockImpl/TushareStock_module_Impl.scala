@@ -40,7 +40,10 @@ object TushareStock_module_Impl {
   /***
    * 加载模型回测结果数据集
    */
-  private def load() = synchronized {
+  private def load(): Unit = synchronized {
+    if(modelTestbackResultMap.size() > 0){
+      return 
+    }
     val dir = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir)
     println(s"加载回测结果集路径:${dir.getAbsolutePath}, ${dir.exists()}")
     dir.listFiles().map(f=>{
