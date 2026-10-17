@@ -313,9 +313,9 @@ class TusharePushStockController {
 
     //TODO 计算历史上出现的次数
 //    List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
-//      TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR, 
-//      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR, 
-//      TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR, 
+//      TushareInitMA4ModelMA5ModelComponent.MA5_MODEL_STR,
+//      TushareInitMA4ModelMA5ModelComponent.MA7_MODEL_STR,
+//      TushareInitMA4ModelMA5ModelComponent.MA7_1_MODEL_STR,
 //      TushareInitMA4ModelMA5ModelComponent.MA8_MODEL_STR)
 //      .foreach(modelStr=>{
 //        val entityList = TushareInitMA4ModelMA5ModelComponent.get_MODEL_LIST(modelStr)
@@ -341,7 +341,7 @@ class TusharePushStockController {
       else if (e.ts_code.startsWith("920")) {
         e.name = s"${e.name}【北交所】"
       }
-      
+
       val historyTimes = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
         val times = tp2._2.filter(_.stockCode.equals(e.ts_code)).size
         if(times==0){
@@ -350,11 +350,11 @@ class TusharePushStockController {
         else {
           s"${tp2._1}出现${times}次"
         }
-      }).filter(StringUtils.isNotBlank(_)).mkString(";")
+      }).filter(StringUtils.isNotBlank(_)).mkString(";").replaceAll("_MODEL", "")
       e.name = s"${e.name}【${historyTimes}】"
     })
-    
-    
+
+
     val allAttentionCodes = getAllAttention() //全部关注的股票
     val allBuyCodes = getAllBuy() //全部购买的股票
     
