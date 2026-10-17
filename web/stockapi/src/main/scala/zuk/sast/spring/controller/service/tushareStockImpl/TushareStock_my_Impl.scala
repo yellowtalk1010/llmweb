@@ -41,6 +41,16 @@ class TushareStock_My_Impl extends ITushareStockService {
         dto.stockCode = e.get.ts_code
         dto.name = e.get.name
 
+
+        //todo 区分股票类型
+        if (dto.stockCode.startsWith("688")) {
+          dto.name = s"${dto.name}【科创】"
+        }
+        else if (dto.stockCode.startsWith("920")) {
+          dto.name = s"${dto.name}【北交所】"
+        }
+        
+
         //todo 计算改股票在各模型中出现的次数
         val str = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
           val times = tp2._2.filter(modTestbackRes=>modTestbackRes.stockCode.equals(e.get.ts_code)).size
@@ -54,14 +64,7 @@ class TushareStock_My_Impl extends ITushareStockService {
         if(StringUtils.isNotBlank(str)){
           dto.name = s"${dto.name}【${str}】"
         }
-        
-        //todo 区分股票类型
-        if (dto.stockCode.startsWith("688")) {
-          dto.name = s"${dto.name}【科创】"
-        }
-        else if (dto.stockCode.startsWith("920")) {
-          dto.name = s"${dto.name}【北交所】"
-        }
+     
 
         //龙虎榜
         dto.topInstitutions = Dataset_top_Inst_dir.existTopInst(dto.stockCode)
