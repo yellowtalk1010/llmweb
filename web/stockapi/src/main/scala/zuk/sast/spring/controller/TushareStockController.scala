@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.tushareStockImpl.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, TushareStock_module_Impl, Tushare_All_Impl, Tushare_consolidation_Impl, _limit_down_Impl, _limit_up_Impl}
+import zuk.sast.spring.controller.service.tushareStockImpl.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, TushareStock_module_Impl, Tushare_All_Impl, Tushare_consolidation_Impl, TushareStock_limit_down_Impl, TushareStock_limit_up_Impl}
 import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
@@ -99,12 +99,12 @@ class TushareStockController {
       case Tushare_All_Impl.all =>
         //A股全量股票
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_All_Impl.all)).head.getStocks(dto)
-      case _limit_up_Impl.limit_up =>
+      case TushareStock_limit_up_Impl.limit_up =>
         //涨停的股票
-        this.tushareStockServiceList.asScala.filter(_.getType().equals(_limit_up_Impl.limit_up)).head.getStocks(dto)
-      case _limit_down_Impl.limit_down =>
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_limit_up_Impl.limit_up)).head.getStocks(dto)
+      case TushareStock_limit_down_Impl.limit_down =>
         //跌停的股票
-        this.tushareStockServiceList.asScala.filter(_.getType().equals(_limit_down_Impl.limit_down)).head.getStocks(dto)
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_limit_down_Impl.limit_down)).head.getStocks(dto)
       case Tushare_consolidation_Impl.consolidation =>
         //黏合预测
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_consolidation_Impl.consolidation)).head.getStocks(dto)
@@ -143,13 +143,13 @@ class TushareStockController {
     list.append(allMap)
 
     val limitUpMap = new util.HashMap[String, String]()
-    limitUpMap.put("cls", _limit_up_Impl.limit_up)
-    limitUpMap.put("name", _limit_up_Impl.limit_up_desc)
+    limitUpMap.put("cls", TushareStock_limit_up_Impl.limit_up)
+    limitUpMap.put("name", TushareStock_limit_up_Impl.limit_up_desc)
     list.append(limitUpMap)
     
     val limitDownMap = new util.HashMap[String, String]()
-    limitDownMap.put("cls", _limit_down_Impl.limit_down)
-    limitDownMap.put("name", _limit_down_Impl.limit_down_desc)
+    limitDownMap.put("cls", TushareStock_limit_down_Impl.limit_down)
+    limitDownMap.put("name", TushareStock_limit_down_Impl.limit_down_desc)
     list.append(limitDownMap)
 
     val consolidationMap = new util.HashMap[String, String]()
