@@ -189,15 +189,6 @@ class TusharePushStockController {
     TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.attention_str)).map(_.stockCode).toSet
   }
 
-//  /**
-//   * 获取淘汰股票
-//   *
-//   * @return
-//   */
-//  def getAllEliminate(): Set[String] = {
-//    TushareInitMA4ModelMA5ModelComponent.getStockEntityList.filter(_.stockType.equals(TushareInitMA4ModelMA5ModelComponent.eliminate_str)).map(_.stockCode).toSet
-//  }
-
   /** *
    * 获取购买股票
    *
@@ -313,11 +304,6 @@ class TusharePushStockController {
         .reverse
       (clsName, headList, historyList)
     })
-    
-    //非MA4_MODEL模块击中MA4股票
-//    pushStocks.filter(!_._1.equals("MA4_MODEL")).flatMap(e => e._2 ++ e._3).filter(e => ma4Set.contains(e.ts_code)).foreach(e => {
-//      e.name = s"${e.name}【击中MA4】"
-//    })
 
     //TODO 计算历史上出现的次数
     List(TushareInitMA4ModelMA5ModelComponent.MA4_MODEL_STR,
