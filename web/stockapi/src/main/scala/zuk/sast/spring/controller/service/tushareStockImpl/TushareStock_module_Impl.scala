@@ -76,22 +76,24 @@ class TushareStock_module_Impl extends ITushareStockService {
       e.equals(dto.status)
     })
     if (ls.size > 0) {
-      this.getMa7(ls.head, dto.selectedDateStart, dto.selectedDateEnd)
+      this.getMa7(ls.head, dto.desc, dto.selectedDateStart, dto.selectedDateEnd)
     }
     else {
       new util.ArrayList[TushareStockControllerDTO]()
     }
   }
 
-  private def getMa7(maStr: String, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    log.info(s"getMa7, maStr:${maStr}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
+  private def getMa7(maStr: String, desc: String, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
+    log.info(s"getMa7, maStr:${maStr}, desc:${desc}, selectedDateStart:${selectedDateStart}, selectedDateEnd:${selectedDateEnd}")
     //购买的股票
     val buySet = getAllBuy()
     //关注的股票
     val attentionSet = getAllAttention()
 
     //仅取前1000条记录
-    val ls = TushareStock_module_Impl.modelTestbackResultMap.get(maStr.toUpperCase)
+    val ls = TushareStock_module_Impl.modelTestbackResultMap.get(maStr.toUpperCase).filter(dto=>{
+      StringUtils.isEmpty(desc) || dto.stockCode.contains(desc) || dto.stockName.contains(desc) 
+    })
     val list = if (ls.size > 1000) {
       ls.take(1000)
     }
