@@ -1,21 +1,15 @@
 import './../../index.css';
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 /***
  * 股票分析系统前端展示首页
  */
 function Stock() {
-  const pages = [
-    { id: "0", title: "sast", url: "http://localhost:8080/config"},
-    { id: "1", title: "stockapi地址", url: "https://stockapi.com.cn/" },
-    { id: "2", title: "招商地址", url: "https://xtrade.newone.com.cn/ssologin?t=jykstd" },
-    
-    { id: "3", title: "龙虎榜", url: "TopInst" },
-    { id: "4", title: "我的关注", url: "AllStocks" },
-    // { id: "5", title: "tushare资金流向", url: "Moneyflow" },
-    { id: "6", title: "股票推荐", url: "PushTushareStock" },
-  ];
+  // 从接口获取页面列表
+  const [pages, setPages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const leftPanelRef = useRef(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -25,62 +19,155 @@ function Stock() {
   const [activePageId, setActivePageId] = useState(null);
   const [iframeSrcMap, setIframeSrcMap] = useState({});
 
+  // 组件加载时请求接口
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchPages = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch("/pages/list", {
+          method: "GET",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`请求失败：HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // 兼容接口直接返回数组，或者返回 { data: [...] }
+        const pageList = Array.isArray(data) ? data : data.data;
+
+        if (!Array.isArray(pageList)) {
+          throw new Error("接口返回的数据格式不正确");
+        }
+
+        setPages(pageList);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error("获取页面列表失败：", err);
+          setError(err.message || "获取页面列表失败");
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchPages();
+
+    return () => controller.abort();
+  }, []);
+
   const toggleLeftPanel = (e) => {
     e.stopPropagation();
+
     if (collapsed) {
-      leftPanelRef.current.expand();
+      leftPanelRef.current?.expand();
     } else {
-      leftPanelRef.current.collapse();
+      leftPanelRef.current?.collapse();
     }
+
     setCollapsed(!collapsed);
   };
 
   const openPage = (page) => {
-    if (!openedPages.find((p) => p.id === page.id)) {
-      setOpenedPages([...openedPages, page]);
-      setIframeSrcMap((prev) => ({ ...prev, [page.id]: page.url }));
-    }
+    setOpenedPages((prev) =>
+      prev.some((p) => p.id === page.id) ? prev : [...prev, page]
+    );
+
+    setIframeSrcMap((prev) => ({
+      ...prev,
+      [page.id]: prev[page.id] || page.url,
+    }));
+
     setActivePageId(page.id);
   };
 
   const closePage = (id) => {
-    setOpenedPages((prev) => prev.filter((p) => p.id !== id));
+    setOpenedPages((prev) => {
+      const remaining = prev.filter((p) => p.id !== id);
+
+      if (activePageId === id) {
+        const closedIndex = prev.findIndex((p) => p.id === id);
+        const nextPage =
+          remaining[Math.min(closedIndex, remaining.length - 1)];
+
+        setActivePageId(nextPage?.id ?? null);
+      }
+
+      return remaining;
+    });
+
     setIframeSrcMap((prev) => {
       const newMap = { ...prev };
       delete newMap[id];
       return newMap;
     });
-    if (activePageId === id) {
-      setActivePageId(openedPages.length > 1 ? openedPages[0].id : null);
-    }
   };
 
   const refreshPage = (id) => {
-    setIframeSrcMap((prev) => ({
-      ...prev,
-      [id]: `${prev[id].split("?")[0]}?t=${Date.now()}`,
-    }));
+    setIframeSrcMap((prev) => {
+      const src = prev[id];
+      if (!src) return prev;
+
+      const url = new URL(src, window.location.href);
+      url.searchParams.set("_refresh", Date.now());
+
+      return {
+        ...prev,
+        [id]: url.href,
+      };
+    });
   };
 
   return (
     <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
-      <Panel ref={leftPanelRef} collapsible defaultSize={10} minSize={5}>
-        <ul style={{ margin: 0, padding: 10, listStyle: "none" }}>
-          {pages.map((page) => (
-            <li key={page.id} style={{ margin: "8px 0" }}>
-              <a
-                href="#!"
-                onClick={(e) => {
-                  e.preventDefault();
-                  openPage(page);
-                }}
-                style={{ textDecoration: "none", color: "#007bff", cursor: "pointer" }}
-              >
-                {page.title}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <Panel
+        ref={leftPanelRef}
+        collapsible
+        defaultSize={10}
+        minSize={5}
+      >
+        {loading ? (
+          <div style={{ padding: 10 }}>正在加载页面列表...</div>
+        ) : error ? (
+          <div style={{ padding: 10, color: "red" }}>
+            {error}
+            <button
+              onClick={() => window.location.reload()}
+              style={{ marginLeft: 8 }}
+            >
+              重试
+            </button>
+          </div>
+        ) : (
+          <ul style={{ margin: 0, padding: 10, listStyle: "none" }}>
+            {pages.map((page) => (
+              <li key={page.id} style={{ margin: "8px 0" }}>
+                <a
+                  href="#!"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openPage(page);
+                  }}
+                  style={{
+                    textDecoration: "none",
+                    color: "#007bff",
+                    cursor: "pointer",
+                  }}
+                >
+                  {page.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </Panel>
 
       <PanelResizeHandle
@@ -111,33 +198,58 @@ function Stock() {
       </PanelResizeHandle>
 
       <Panel defaultSize={90}>
-        <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           {/* 标签页 */}
           {openedPages.length > 0 && (
-            <div style={{ display: "flex", borderBottom: "1px solid #ccc" }}>
+            <div
+              style={{
+                display: "flex",
+                borderBottom: "1px solid #ccc",
+              }}
+            >
               {openedPages.map((page) => (
                 <div
                   key={page.id}
-                    className={`px-3 py-1 cursor-pointer border-r flex items-center ${
+                  className={`px-3 py-1 cursor-pointer border-r flex items-center ${
                     page.id === activePageId
                       ? "bg-green-100"
                       : "bg-white"
                   }`}
                 >
-                  <span onClick={() => setActivePageId(page.id)}>{page.title}</span>
+                  <span onClick={() => setActivePageId(page.id)}>
+                    {page.title}
+                  </span>
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       refreshPage(page.id);
                     }}
-                    style={{ marginLeft: 5, border: "none", background: "transparent", cursor: "pointer" }}
+                    style={{
+                      marginLeft: 5,
+                      border: "none",
+                      background: "transparent",
+                      cursor: "pointer",
+                    }}
                     title="刷新页面"
                   >
                     🔄
                   </button>
+
                   <button
                     onClick={() => closePage(page.id)}
-                    style={{ marginLeft: 5, border: "none", background: "transparent", cursor: "pointer" }}
+                    style={{
+                      marginLeft: 5,
+                      border: "none",
+                      background: "transparent",
+                      cursor: "pointer",
+                    }}
                     title="关闭页面"
                   >
                     ✕
@@ -147,7 +259,7 @@ function Stock() {
             </div>
           )}
 
-          {/* iframe 区域，全部渲染，切换显示 */}
+          {/* iframe 区域 */}
           <div style={{ flex: 1, position: "relative" }}>
             {openedPages.map((page) => (
               <iframe
@@ -155,7 +267,8 @@ function Stock() {
                 src={iframeSrcMap[page.id]}
                 title={page.title}
                 style={{
-                  display: page.id === activePageId ? "block" : "none",
+                  display:
+                    page.id === activePageId ? "block" : "none",
                   width: "100%",
                   height: "100%",
                   border: "none",
@@ -165,7 +278,14 @@ function Stock() {
                 }}
               />
             ))}
-            {openedPages.length === 0 && <div style={{ padding: 20 }}>请选择一个网页打开</div>}
+
+            {openedPages.length === 0 && (
+              <div style={{ padding: 20 }}>
+                {loading
+                  ? "正在加载页面列表..."
+                  : "请选择一个网页打开"}
+              </div>
+            )}
           </div>
         </div>
       </Panel>
