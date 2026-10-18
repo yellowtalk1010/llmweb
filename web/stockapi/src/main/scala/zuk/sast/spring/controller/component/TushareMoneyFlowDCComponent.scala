@@ -41,6 +41,7 @@ case class MoneyflowDCDto() {
  * 加载东方财富历史资金流数据
  */
 @Component
+@Deprecated
 class TushareMoneyFlowComponent {
 
   private val log = LoggerFactory.getLogger(classOf[TushareMoneyFlowComponent])
