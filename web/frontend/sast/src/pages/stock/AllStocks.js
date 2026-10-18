@@ -244,6 +244,7 @@ function AllStocks() {
                         <br />
                         {item.tradedate}
                       </td>
+                      
                       <td className="p-3">
                         {item.buy ? (
                           <span>

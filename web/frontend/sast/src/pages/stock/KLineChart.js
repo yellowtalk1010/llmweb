@@ -9,11 +9,14 @@ import {
 
 /***
  * 股票蜡烛图组件
- * 暂时使用 10 组默认数据，后续替换为 /stock/detail 接口请求
+ * 调用 /klineChart/list?stockCode=xxx&tradedate=xxx 接口
  * 主图：蜡烛图；副图：成交量柱状图；悬停显示 名称 + OHLC + vol + change + amount
- * type 为 "buy" 的蜡烛会在上方标记“买入”
+ * optType 为 "buy" 的蜡烛会在上方标记“买入”
  */
 function KLineChart({ tscode, tradedate, height = 360 }) {
+
+    console.info("tscode:" + tscode + ", tradedate:" + tradedate)
+
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const candleSeriesRef = useRef(null);
@@ -26,6 +29,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
   const [errorMsg, setErrorMsg] = useState("");
   const [hoverInfo, setHoverInfo] = useState(null);
 
+  // 初始化图表
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -44,7 +48,6 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
       timeScale: {
         borderColor: "#485c7b",
         timeVisible: true,
-        // 底部刻度显示 yyyy-MM-dd
         tickMarkFormatter: (time) => time,
       },
       rightPriceScale: {
@@ -110,8 +113,9 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         vol: extra.vol,
         change: extra.change,
         amount: extra.amount,
-        type: extra.type,
-        stockName: extra.stockName, // 新增
+        optType: extra.optType,
+        stockName: extra.stockName,
+        winChange: extra.winChange
       });
     };
 
@@ -140,32 +144,37 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
     };
   }, [height]);
 
+  // 请求接口并渲染
   useEffect(() => {
     if (!candleSeriesRef.current || !volumeSeriesRef.current) return;
+
+    const controller = new AbortController();
 
     const fetchDetail = async () => {
       try {
         setStatus("loading");
         setErrorMsg("");
 
-        const mockList = [
-          { stockName: "股票名称", time: "2023-12-30", open: 100.0, high: 105.2, low: 98.8, close: 104.1, vol: 9999, change: 1.0, amount: 30000, type: "" },
-          { stockName: "股票名称", time: "2024-01-03", open: 104.1, high: 107.5, low: 102.3, close: 103.0, vol: 11200, change: -1.1, amount: 33000, type: "buy" },
-          { stockName: "股票名称", time: "2024-01-04", open: 103.0, high: 106.8, low: 101.5, close: 105.6, vol: 12800, change: 2.5, amount: 35500, type: "" },
-          { stockName: "股票名称", time: "2024-01-05", open: 105.6, high: 109.4, low: 104.2, close: 108.3, vol: 14300, change: 2.6, amount: 38200, type: "buy" },
-          { stockName: "股票名称", time: "2024-01-08", open: 108.3, high: 110.1, low: 105.7, close: 106.4, vol: 9800, change: -1.8, amount: 31200, type: "" },
-          { stockName: "股票名称", time: "2024-01-09", open: 106.4, high: 108.9, low: 103.8, close: 104.2, vol: 10500, change: -2.1, amount: 29800, type: "" },
-          { stockName: "股票名称", time: "2024-01-10", open: 104.2, high: 107.6, low: 102.9, close: 107.1, vol: 11900, change: 2.8, amount: 34100, type: "" },
-          { stockName: "股票名称", time: "2024-01-11", open: 107.1, high: 111.3, low: 106.0, close: 110.5, vol: 15600, change: 3.2, amount: 40100, type: "" },
-          { stockName: "股票名称", time: "2024-01-12", open: 110.5, high: 112.8, low: 108.4, close: 109.2, vol: 13200, change: -1.2, amount: 36800, type: "" },
-          { stockName: "股票名称", time: "2024-01-15", open: 109.2, high: 110.6, low: 106.5, close: 107.8, vol: 10100, change: -1.3, amount: 32500, type: "" },
-        ];
+        const response = await fetch(
+          "/klineChart/list?stockCode=" + tscode + "&tradedate=" + tradedate,
+          {
+            method: "GET"
+          }
+        );
 
-        await new Promise((resolve) => setTimeout(resolve, 200));
+        if (!response.ok) {
+          throw new Error(`请求失败：HTTP ${response.status}`);
+        }
 
-        const list = mockList;
+        const result = await response.json();
 
-        if (!Array.isArray(list) || list.length === 0) {
+        if (result.code !== "success") {
+          throw new Error(result.desc || "接口返回失败");
+        }
+
+        const list = Array.isArray(result.data) ? result.data : [];
+
+        if (list.length === 0) {
           candleSeriesRef.current.setData([]);
           volumeSeriesRef.current.setData([]);
           dataMapRef.current = {};
@@ -174,9 +183,18 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           return;
         }
 
+        // 把 "20261016" 转成 "2026-10-16"
+        const formatTime = (t) => {
+          const s = String(t ?? "");
+          if (/^\d{8}$/.test(s)) {
+            return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
+          }
+          return s;
+        };
+
         const normalized = list
           .map((item) => ({
-            time: item.time,
+            time: formatTime(item.time),
             open: Number(item.open),
             high: Number(item.high),
             low: Number(item.low),
@@ -184,8 +202,9 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
             vol: Number(item.vol),
             change: item.change,
             amount: item.amount,
-            type: item.type || "",
-            stockName: item.stockName || "", // 新增
+            optType: item.optType || "",
+            stockName: item.stockName || "",
+            winChange: Number(item.winChange)
           }))
           .filter(
             (item) =>
@@ -227,8 +246,9 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           }))
         );
 
+        // 标记 optType === "buy"
         const buyMarkers = normalized
-          .filter((it) => it.type === "buy")
+          .filter((it) => it.optType === "buy")
           .map((it) => ({
             time: it.time,
             position: "aboveBar",
@@ -250,6 +270,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         chartRef.current.timeScale().fitContent();
         setStatus("ready");
       } catch (err) {
+        if (err.name === "AbortError") return;
         console.error("渲染蜡烛图失败：", err);
         setErrorMsg(err.message || "渲染蜡烛图失败");
         setStatus("error");
@@ -257,6 +278,8 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
     };
 
     fetchDetail();
+
+    return () => controller.abort();
   }, [tscode, tradedate]);
 
   const isUp =
@@ -264,7 +287,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
       ? hoverInfo.close >= hoverInfo.open
       : true;
 
-  const isBuy = hoverInfo && hoverInfo.type === "buy";
+  const isBuy = hoverInfo && hoverInfo.optType === "buy";
 
   const fmt = (v, digits = 2) =>
     v === undefined || v === null || Number.isNaN(Number(v))
@@ -304,11 +327,6 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
       >
         {hoverInfo && (
           <>
-            {hoverInfo.stockName && (
-              <span>
-                {hoverInfo.stockName}
-              </span>
-            )}
             <span>时间：{hoverInfo.time}</span>
             <span>开：{fmt(hoverInfo.open)}</span>
             <span style={{ color: isUp ? "#26a69a" : "#ef5350" }}>
@@ -343,6 +361,8 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
               </span>
             </span>
             <span>额：{fmtVol(hoverInfo.amount)}</span>
+            <span>胜：{fmt(hoverInfo.winChange)}</span>
+
             {isBuy && (
               <span style={{ color: "#f59e0b", fontWeight: 600 }}>
                 ★ 买入
