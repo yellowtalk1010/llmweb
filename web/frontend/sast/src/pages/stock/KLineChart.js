@@ -3,19 +3,26 @@ import {
   createChart,
   CrosshairMode,
   CandlestickSeries,
+  HistogramSeries,
 } from "lightweight-charts";
 
 /***
  * 股票蜡烛图组件
  * 暂时使用 10 组默认数据，后续替换为 /stock/detail 接口请求
+ * 主图：蜡烛图；副图：成交量柱状图；悬停显示 OHLC + vol + change + amount
  */
 function KLineChart({ tscode, tradedate, height = 360 }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
-  const seriesRef = useRef(null);
+  const candleSeriesRef = useRef(null);
+  const volumeSeriesRef = useRef(null);
+
+  // 保存完整原始数据：{ [time]: { open, high, low, close, vol, change, amount } }
+  const dataMapRef = useRef({});
 
   const [status, setStatus] = useState("loading");
   const [errorMsg, setErrorMsg] = useState("");
+  const [hoverInfo, setHoverInfo] = useState(null);
 
   // 初始化图表
   useEffect(() => {
@@ -37,10 +44,14 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         borderColor: "#485c7b",
         timeVisible: true,
       },
+      // 右侧价格轴：主图占上方 75%，成交量占下方 25%
+      rightPriceScale: {
+        borderColor: "#485c7b",
+      },
     });
 
-    // v5 写法：addSeries(CandlestickSeries, options)
-    const series = chart.addSeries(CandlestickSeries, {
+    // 主图：蜡烛图
+    const candleSeries = chart.addSeries(CandlestickSeries, {
       upColor: "#26a69a",
       downColor: "#ef5350",
       borderVisible: false,
@@ -48,8 +59,68 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
       wickDownColor: "#ef5350",
     });
 
+    // 副图：成交量柱状图（独立价格刻度，挂在图表下方）
+    const volumeSeries = chart.addSeries(HistogramSeries, {
+      priceFormat: { type: "volume" },
+      priceScaleId: "", // 独立刻度，不与主图共享
+      priceLineVisible: false,
+      lastValueVisible: false,
+    });
+
+    // 主图占上方 75%
+    candleSeries.priceScale().applyOptions({
+      scaleMargins: {
+        top: 0.05,
+        bottom: 0.28,
+      },
+    });
+
+    // 成交量占下方 25%
+    volumeSeries.priceScale().applyOptions({
+      scaleMargins: {
+        top: 0.75,
+        bottom: 0,
+      },
+    });
+
     chartRef.current = chart;
-    seriesRef.current = series;
+    candleSeriesRef.current = candleSeries;
+    volumeSeriesRef.current = volumeSeries;
+
+    // ===== 悬停监听 =====
+    const handleCrosshairMove = (param) => {
+      if (
+        !param ||
+        !param.time ||
+        !param.point ||
+        param.point.x < 0 ||
+        param.point.y < 0
+      ) {
+        setHoverInfo(null);
+        return;
+      }
+
+      const candle = param.seriesData.get(candleSeries);
+      if (!candle) {
+        setHoverInfo(null);
+        return;
+      }
+
+      const extra = dataMapRef.current[param.time] || {};
+
+      setHoverInfo({
+        time: param.time,
+        open: candle.open,
+        high: candle.high,
+        low: candle.low,
+        close: candle.close,
+        vol: extra.vol,
+        change: extra.change,
+        amount: extra.amount,
+      });
+    };
+
+    chart.subscribeCrosshairMove(handleCrosshairMove);
 
     const handleResize = () => {
       if (containerRef.current) {
@@ -60,15 +131,17 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      chart.unsubscribeCrosshairMove(handleCrosshairMove);
       chart.remove();
       chartRef.current = null;
-      seriesRef.current = null;
+      candleSeriesRef.current = null;
+      volumeSeriesRef.current = null;
     };
   }, [height]);
 
   // 渲染数据（暂时使用 10 组默认数据）
   useEffect(() => {
-    if (!seriesRef.current) return;
+    if (!candleSeriesRef.current || !volumeSeriesRef.current) return;
 
     const fetchDetail = async () => {
       try {
@@ -76,8 +149,6 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         setErrorMsg("");
 
         // ===== 默认数据（后续替换为接口请求）=====
-        // 接口预期格式：
-        // { time: '2024-01-02', open: 100, high: 105, low: 99, close: 104, vol: 9999, change: 1.0, amount: 30000 }
         const mockList = [
           { time: "2024-01-02", open: 100.0, high: 105.2, low: 98.8, close: 104.1, vol: 9999, change: 1.0, amount: 30000 },
           { time: "2024-01-03", open: 104.1, high: 107.5, low: 102.3, close: 103.0, vol: 11200, change: -1.1, amount: 33000 },
@@ -91,13 +162,14 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           { time: "2024-01-15", open: 109.2, high: 110.6, low: 106.5, close: 107.8, vol: 10100, change: -1.3, amount: 32500 },
         ];
 
-        // 模拟异步请求的短暂延迟，便于看到 loading 状态
         await new Promise((resolve) => setTimeout(resolve, 200));
 
         const list = mockList;
 
         if (!Array.isArray(list) || list.length === 0) {
-          seriesRef.current.setData([]);
+          candleSeriesRef.current.setData([]);
+          volumeSeriesRef.current.setData([]);
+          dataMapRef.current = {};
           setStatus("empty");
           return;
         }
@@ -109,6 +181,9 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
             high: Number(item.high),
             low: Number(item.low),
             close: Number(item.close),
+            vol: Number(item.vol),
+            change: item.change,
+            amount: item.amount,
           }))
           .filter(
             (item) =>
@@ -120,12 +195,38 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           .sort((a, b) => new Date(a.time) - new Date(b.time));
 
         if (normalized.length === 0) {
-          seriesRef.current.setData([]);
+          candleSeriesRef.current.setData([]);
+          volumeSeriesRef.current.setData([]);
+          dataMapRef.current = {};
           setStatus("empty");
           return;
         }
 
-        seriesRef.current.setData(normalized);
+        // 保存完整数据映射
+        dataMapRef.current = Object.fromEntries(
+          normalized.map((it) => [it.time, it])
+        );
+
+        // 蜡烛图只接收 OHLC
+        candleSeriesRef.current.setData(
+          normalized.map(({ time, open, high, low, close }) => ({
+            time,
+            open,
+            high,
+            low,
+            close,
+          }))
+        );
+
+        // 成交量柱状图：涨绿跌红
+        volumeSeriesRef.current.setData(
+          normalized.map((it) => ({
+            time: it.time,
+            value: Number.isNaN(it.vol) ? 0 : it.vol,
+            color: it.close >= it.open ? "#26a69a80" : "#ef535080",
+          }))
+        );
+
         chartRef.current.timeScale().fitContent();
         setStatus("ready");
       } catch (err) {
@@ -138,8 +239,87 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
     fetchDetail();
   }, [tscode, tradedate]);
 
+  const isUp =
+    hoverInfo && hoverInfo.close !== undefined && hoverInfo.open !== undefined
+      ? hoverInfo.close >= hoverInfo.open
+      : true;
+
+  const fmt = (v, digits = 2) =>
+    v === undefined || v === null || Number.isNaN(Number(v))
+      ? "-"
+      : Number(v).toFixed(digits);
+
+  const fmtVol = (v) => {
+    if (v === undefined || v === null || Number.isNaN(Number(v))) return "-";
+    const n = Number(v);
+    if (n >= 100000000) return (n / 100000000).toFixed(2) + "亿";
+    if (n >= 10000) return (n / 10000).toFixed(2) + "万";
+    return String(n);
+  };
+
   return (
     <div style={{ position: "relative", width: "100%" }}>
+      {/* 悬停信息条 */}
+      <div
+        style={{
+          position: "absolute",
+          top: 8,
+          left: 12,
+          right: 60,
+          zIndex: 10,
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "4px 14px",
+          fontSize: 12,
+          color: "#d1d4dc",
+          background: "rgba(30,30,47,0.78)",
+          padding: "4px 10px",
+          borderRadius: 4,
+          pointerEvents: "none",
+          opacity: hoverInfo ? 1 : 0,
+          transition: "opacity 0.15s",
+        }}
+      >
+        {hoverInfo && (
+          <>
+            <span>时间：{hoverInfo.time}</span>
+            <span>开：{fmt(hoverInfo.open)}</span>
+            <span style={{ color: isUp ? "#26a69a" : "#ef5350" }}>
+              收：{fmt(hoverInfo.close)}
+            </span>
+            <span>高：{fmt(hoverInfo.high)}</span>
+            <span>低：{fmt(hoverInfo.low)}</span>
+            <span>
+              量：
+              <span style={{ color: isUp ? "#26a69a" : "#ef5350" }}>
+                {fmtVol(hoverInfo.vol)}
+              </span>
+            </span>
+            <span>
+              涨跌：
+              <span
+                style={{
+                  color:
+                    hoverInfo.change === undefined
+                      ? "#d1d4dc"
+                      : Number(hoverInfo.change) >= 0
+                      ? "#26a69a"
+                      : "#ef5350",
+                }}
+              >
+                {hoverInfo.change !== undefined &&
+                hoverInfo.change !== null
+                  ? `${Number(hoverInfo.change) >= 0 ? "+" : ""}${fmt(
+                      hoverInfo.change
+                    )}%`
+                  : "-"}
+              </span>
+            </span>
+            <span>额：{fmtVol(hoverInfo.amount)}</span>
+          </>
+        )}
+      </div>
+
       <div
         ref={containerRef}
         style={{ width: "100%", borderRadius: 6, overflow: "hidden" }}
