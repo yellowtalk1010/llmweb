@@ -74,7 +74,7 @@ class TushareConceptComponent {
   
   private def load(): Unit = synchronized {
 
-    if (stockInfoEntityList.size == 0) {
+    if (stockInfoEntityList.size == DataFrame.STOCKS_MAP.size()) {
       return 
     }
     
