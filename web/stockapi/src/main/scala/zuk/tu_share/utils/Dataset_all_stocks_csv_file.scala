@@ -46,7 +46,7 @@ object Dataset_all_stocks_csv_file {
 
     val all_stocks_csv = ParseCammandParam.param.engineInfo.all_stocks_csv_file
     val all_stocks_file = new File(all_stocks_csv)
-    println(s"${this.getClass.getSimpleName}，加载all_stocks.csv文件，路径：${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}")
+    println(s"\n${this.getClass.getName}，初始化加载all_stocks.csv文件，路径：${all_stocks_file.getAbsolutePath}，${all_stocks_file.exists()}\n")
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
       System.exit(1)
     }
@@ -69,7 +69,7 @@ object Dataset_all_stocks_csv_file {
       })
       .toList
     in.close()
-    println(s"${list.size}")
+    println(s"总股票：${list.size}")
 
     tsStockList.clear()
     tsStockList ++= list
