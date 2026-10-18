@@ -6,10 +6,11 @@ import zuk.tu_share.dto.HmDetail
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
+import java.util.concurrent.atomic.AtomicInteger
 import scala.jdk.CollectionConverters.*
 
 /***
- * 龙游资交易每日明细
+ * 龙虎榜游资交易每日明细
  */
 object Dataset_hm_detail_dir {
 
@@ -35,7 +36,10 @@ object Dataset_hm_detail_dir {
     if (files.size>SIZE){
       files = files.take(SIZE)
     }
-    files.map(_.getAbsolutePath).foreach(println)
+    val count = new AtomicInteger(0)
+    files.map(_.getAbsolutePath).foreach(e=>{
+      println(s"${count.incrementAndGet()}/${files.size}游资交易每日明细：${e}")
+    })
     files.foreach(hmFile=>{
       val tradedate = getTradedate(hmFile.getName)
 
