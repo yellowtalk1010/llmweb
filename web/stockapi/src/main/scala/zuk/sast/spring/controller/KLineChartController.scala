@@ -27,6 +27,8 @@ private case class KLineChartDto() {
   @BeanProperty var change: Float = 0.0
   @BeanProperty var amount: Float = 0.0
   @BeanProperty var optType: String = "" //操作类型 buy或者sell
+  
+  @BeanProperty var winChange: Float = 0.0 //盈利比例
 }
 
 /***
