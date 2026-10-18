@@ -45,6 +45,8 @@ class TushareKLineChartController {
   @GetMapping(value = Array("list"))
   def list(stockCode: String, tradedate: String): util.Map[String, Object] = {
 
+    val LEN = 25
+    
     val stockName = DataFrame.STOCKS_MAP.get(stockCode).name
 
     log.info(s"${stockCode}, ${stockName}, ${tradedate}")
@@ -57,14 +59,14 @@ class TushareKLineChartController {
       for (index <- 0 until dailydataList.size) {
         if(dailydataList(index).trade_date.equals(tradedate)) {
           val arr = dailydataList.splitAt(index)
-          val list1 = if(arr._1.size > 20){
-            arr._1.slice(arr._1.size - 20, arr._1.length) //
+          val list1 = if(arr._1.size > LEN){
+            arr._1.slice(arr._1.size - LEN, arr._1.length) //
           }
           else {
             arr._1
           }
-          val list2 = if(arr._2.size > 20){
-            arr._2.take(20)
+          val list2 = if(arr._2.size > LEN){
+            arr._2.take(LEN)
           }
           else{
             arr._2
@@ -75,10 +77,10 @@ class TushareKLineChartController {
       ls
     }
     else {
-      dailydataList.take(40)
+      dailydataList.take(LEN * 2)
     }
 
-    val list = dailydataList.take(80).map(e=>{
+    val list = subList.map(e=>{
       val dto = KLineChartDto()
       dto.stockName = e.name
       dto.time = e.trade_date
