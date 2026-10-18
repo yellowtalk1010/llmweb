@@ -11,7 +11,7 @@ import {
  * 股票蜡烛图组件
  * 调用 /klineChart/list?stockCode=xxx&tradedate=xxx 接口
  * 主图：蜡烛图；副图：成交量柱状图；悬停显示 名称 + OHLC + vol + change + amount + winChange
- * optType 为 "buy" 的蜡烛会在上方标记“买入”
+ * optType 非空的蜡烛统一在上方用向下箭头标出 optType 内容
  * A 股配色：涨红跌绿
  */
 function KLineChart({ tscode, tradedate, height = 360 }) {
@@ -254,24 +254,24 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           }))
         );
 
-        // 标记 optType === "buy"
-        const buyMarkers = normalized
-          .filter((it) => it.optType === "buy")
+        // 标记所有 optType 非空的蜡烛：统一上方向下箭头，文字为 optType 内容
+        const optMarkers = normalized
+          .filter((it) => it.optType && it.optType.trim() !== "")
           .map((it) => ({
             time: it.time,
             position: "aboveBar",
             color: "#f59e0b",
             shape: "arrowDown",
-            text: "买入",
+            text: it.optType,
             size: 1.5,
           }));
 
         if (markersPluginRef.current) {
-          markersPluginRef.current.setMarkers(buyMarkers);
+          markersPluginRef.current.setMarkers(optMarkers);
         } else {
           markersPluginRef.current = createSeriesMarkers(
             candleSeriesRef.current,
-            buyMarkers
+            optMarkers
           );
         }
 
@@ -295,7 +295,11 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
       ? hoverInfo.close >= hoverInfo.open
       : true;
 
-  const isBuy = hoverInfo && hoverInfo.optType === "buy";
+  // optType 非空时显示原值
+  const optTypeText =
+    hoverInfo && hoverInfo.optType && String(hoverInfo.optType).trim() !== ""
+      ? String(hoverInfo.optType)
+      : "";
 
   const fmt = (v, digits = 2) =>
     v === undefined || v === null || Number.isNaN(Number(v))
@@ -396,9 +400,9 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
               </span>
             </span>
 
-            {isBuy && (
+            {optTypeText && (
               <span style={{ color: "#f59e0b", fontWeight: 600 }}>
-                ★ 买入
+                ★ {optTypeText}
               </span>
             )}
           </>

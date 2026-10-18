@@ -48,6 +48,7 @@ object Dataset_all_stocks_csv_file {
     val all_stocks_file = new File(all_stocks_csv)
     
     if (!all_stocks_file.exists() || !all_stocks_file.isFile) {
+      println("all_stocks_file文件不存在或不是文件")
       System.exit(1)
     }
     //将tushare的csv数据转成对象

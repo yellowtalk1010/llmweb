@@ -357,7 +357,7 @@ object ConsolidationScanner {
     })
     //将预测的数据写入到路径中
     FileUtils.writeLines(new java.io.File(future_txt), futureList.asJava)
-
+    println("完成黏合分析")
     System.exit(1)
 
   }
