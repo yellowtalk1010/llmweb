@@ -10,6 +10,7 @@ import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.StockDailyData
 import zuk.tu_share.utils.Dataset_stock_dailydata_dir
 
+import java.math.RoundingMode
 import java.util
 import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
@@ -27,7 +28,7 @@ private case class KLineChartDto() {
   @BeanProperty var change: Float = 0.0
   @BeanProperty var amount: Float = 0.0
   @BeanProperty var optType: String = "" //操作类型 buy或者sell
-  
+
   @BeanProperty var winChange: Float = 0.0 //盈利比例
 }
 
@@ -43,13 +44,13 @@ class KLineChartController {
 
   @GetMapping(value = Array("list"))
   def list(stockCode: String, tradedate: String): util.Map[String, Object] = {
-    
+
     val stockName = DataFrame.STOCKS_MAP.get(stockCode).name
 
     log.info(s"${stockCode}, ${stockName}, ${tradedate}")
-    
+
     val dailydataList = Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
-    
+
     val subList = if(StringUtils.isNotBlank(tradedate)){
       val ls = ListBuffer[StockDailyData]()
       //TODO 截取
@@ -76,7 +77,7 @@ class KLineChartController {
     else {
       dailydataList.take(15)
     }
-    
+
     val list = subList.map(e=>{
       val dto = KLineChartDto()
       dto.stockName = e.name
@@ -88,14 +89,25 @@ class KLineChartController {
       dto.change = e.change.toFloat
       dto.vol = e.vol.toFloat
       dto.amount = e.amount.toFloat
-      
-      if(e.trade_date.equals(tradedate)){
+
+      if(StringUtils.isNotBlank(tradedate) 
+        && e.trade_date.equals(tradedate)){
         dto.optType = "buy"
       }
-      
+
       dto
-    })
+    }).toList
     
+    //todo 计算获利比例
+    val ls = list.filter(_.optType.equals("buy"))
+    if(ls.size > 0){
+      import java.math.BigDecimal
+      val buy = ls.head.close
+      list.filter(_.time.toLong > tradedate.toLong).foreach(dto=>{
+        dto.winChange = new BigDecimal(dto.high - buy).divide(new BigDecimal(buy), 4, RoundingMode.DOWN).floatValue() * 100
+      })
+    }
+
     val result = new util.HashMap[String, Object]()
     result.put("data", list.asJava)
     result.put("code", "success")
