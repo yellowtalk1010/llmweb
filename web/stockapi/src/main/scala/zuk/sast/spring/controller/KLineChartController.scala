@@ -1,0 +1,76 @@
+package zuk.sast.spring.controller
+
+import org.apache.commons.lang3.StringUtils
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
+import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
+import zuk.sast.spring.controller.component.{MoneyflowDCDto, TushareMoneyFlowComponent}
+import zuk.tu_share.DataFrame
+import zuk.tu_share.dto.StockDailyData
+import zuk.tu_share.utils.Dataset_stock_dailydata_dir
+
+import java.util
+import scala.collection.mutable.ListBuffer
+import scala.jdk.CollectionConverters.*
+
+/***
+ * 获取蜡烛图信息列表
+ */
+@RestController
+@RequestMapping(value = Array("klineChart"))
+@Component
+class KLineChartController {
+
+  private val log = LoggerFactory.getLogger(classOf[KLineChartController])
+
+  @GetMapping(value = Array("list"))
+  def list(stockCode: String, tradedate: String): util.Map[String, Object] = {
+    
+    val stockName = DataFrame.STOCKS_MAP.get(stockCode).name
+
+    log.info(s"${stockCode}, ${stockName}, ${tradedate}")
+    
+    val dailydataList = Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
+    
+    val subList = if(StringUtils.isNotBlank(tradedate)){
+      val ls = ListBuffer[StockDailyData]()
+      //TODO 截取
+      for (index <- 0 until dailydataList.size) {
+        if(dailydataList(index).trade_date.equals(tradedate)) {
+          val arr = dailydataList.splitAt(index)
+          val list1 = if(arr._1.size > 11){
+            arr._1.slice(arr._1.size - 10)
+          }
+          else {
+            arr._1
+          }
+          val list2 = if(arr._2.size > 6){
+            arr._2.take(5)
+          }
+          else{
+            arr._2
+          }
+          ls ++= (list1 ++ list2)
+        }
+      }
+      ls
+    }
+    else {
+      dailydataList.take(15)
+    }
+    
+    
+    
+    
+    
+    
+    
+    val list = List.empty
+    val result = new util.HashMap[String, Object]()
+    result.put("data", list.asJava)
+    result.put("code", "success")
+    result
+  }
+
+}
