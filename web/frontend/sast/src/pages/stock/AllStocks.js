@@ -1,48 +1,46 @@
 import './../../index.css';
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import KLineChart from "./KLineChart";
 
 /***
  * 我的购买/关注/历史模型推荐的股票展示
  */
 function AllStocks() {
-
   const [searchParams] = useSearchParams();
 
-    /**
+  /***
    * 下来菜单中选择项
    */
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState("my");
-  const [selectedDateStart, setSelectedDateStart] = useState("")
-  const [selectedDateEnd, setSelectedDateEnd] = useState("")
+  const [selectedDateStart, setSelectedDateStart] = useState("");
+  const [selectedDateEnd, setSelectedDateEnd] = useState("");
 
   /***
    * 拉取模型类型数据
    */
   const fetchModules = async () => {
-  try {
-    const response = await fetch("/stocks/moduleList");
+    try {
+      const response = await fetch("/stocks/moduleList");
 
-    if (!response.ok) {
-      throw new Error("获取模块列表失败");
+      if (!response.ok) {
+        throw new Error("获取模块列表失败");
+      }
+
+      const result = await response.json();
+
+      if (result.code === "success") {
+        setModules(result.data || []);
+      }
+    } catch (e) {
+      console.error(e);
     }
+  };
 
-    const result = await response.json();
-
-    if (result.code === "success") {
-      setModules(result.data || []);
-    }
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-useEffect(() => {
-  fetchModules();
-}, []);
-
-
+  useEffect(() => {
+    fetchModules();
+  }, []);
 
   const [allStocksData, setAllStocksData] = useState([]);
   const [keywordData, setKeywordData] = useState(""); //关键字
@@ -50,11 +48,12 @@ useEffect(() => {
   // 输入框内容
   const [inputKeyword, setInputKeyword] = useState("");
 
+  // 记录哪些行已展开：{ [rowKey]: true }
+  const [expandedRows, setExpandedRows] = useState({});
+
   // 请求后台数据
   const fetchMoneyFlow = async (desc = "") => {
-
     try {
-
       const response = await fetch(
         `/stocks/all?desc=${encodeURIComponent(desc)}&moduleType=${selectedModule}&selectedDateEnd=${selectedDateEnd}&selectedDateStart=${selectedDateStart}`
       );
@@ -64,17 +63,9 @@ useEffect(() => {
       console.info(result);
 
       if (result.code === "success") {
-
-        setAllStocksData(
-          Array.isArray(result.data)
-            ? result.data
-            : []
-        );
-
-        setKeywordData(result.keyword)
-
+        setAllStocksData(Array.isArray(result.data) ? result.data : []);
+        setKeywordData(result.keyword);
       }
-
     } catch (e) {
       console.error(e);
     }
@@ -89,7 +80,6 @@ useEffect(() => {
   const handleSearch = () => {
     fetchMoneyFlow(inputKeyword);
   };
-
 
   /***
    * 删除购买
@@ -110,9 +100,7 @@ useEffect(() => {
       const result = await response.json();
 
       if (result.code === "success") {
-        // alert(result.desc);
-        // window.location.reload(); // 简单刷新
-        handleSearch()
+        handleSearch();
       }
     } catch (e) {
       console.error(e);
@@ -136,9 +124,7 @@ useEffect(() => {
       const result = await response.json();
 
       if (result.code === "success") {
-        // alert(result.desc);
-        // window.location.reload(); // 简单刷新
-        handleSearch()
+        handleSearch();
       }
     } catch (e) {
       console.error(e);
@@ -146,9 +132,25 @@ useEffect(() => {
     }
   };
 
+  /***
+   * 展开 / 收起某一行
+   */
+  const toggleRow = (rowKey) => {
+    setExpandedRows((prev) => {
+      const next = { ...prev };
+
+      if (next[rowKey]) {
+        delete next[rowKey];
+      } else {
+        next[rowKey] = true;
+      }
+
+      return next;
+    });
+  };
+
   return (
     <div className="p-6">
-
       {/* 检索区域 */}
       <div className="mb-4 flex gap-2">
         <input
@@ -167,17 +169,12 @@ useEffect(() => {
         <select
           value={selectedModule}
           onChange={(e) => {
-            setSelectedModule(e.target.value)
+            setSelectedModule(e.target.value);
           }}
           className="border rounded px-3 py-2"
         >
-
           {modules.map((item) => (
-            
-            <option
-              key={item.cls}
-              value={item.cls}
-            >
+            <option key={item.cls} value={item.cls}>
               {item.name}
             </option>
           ))}
@@ -197,17 +194,11 @@ useEffect(() => {
         >
           检索
         </button>
-
       </div>
 
-      <div className="text-red-500">
-          {
-            keywordData
-          }
-      </div>
+      <div className="text-red-500">{keywordData}</div>
       <div className="overflow-x-auto rounded-xl shadow">
         <table className="w-full text-sm border-collapse bg-white">
-
           <thead>
             <tr className="bg-gray-100 border-b">
               <th className="p-3 text-left border border-gray-200">序号</th>
@@ -221,147 +212,177 @@ useEffect(() => {
           </thead>
 
           <tbody>
-
             {allStocksData.length > 0 ? (
-              allStocksData.map((item, index) => (
-                <tr
-                  key={index}
-                  // 购买的行设置为绿色，其他颜色设置为灰色，鼠标划过颜色加深
-                  className={`border-b ${
+              allStocksData.map((item, index) => {
+                const rowKey = `${item.stockCode}_${item.tradedate}`;
+                const expanded = !!expandedRows[rowKey];
+
+                return (
+                  <>
+                    <tr
+                      key={rowKey}
+                      // 购买的行设置为绿色，其他颜色设置为灰色，鼠标划过颜色加深
+                      className={`border-b ${
                         item.buy
-                        ? "bg-green-100 hover:bg-green-300"
-                        : item.attention
-                        ? "bg-yellow-100 hover:bg-yellow-300"
-                        : "bg-gray-100 hover:bg-gray-300"
-                  }`}
-                >
-                  <td>
-                    {index + 1}
-                    <br/>
-                    {item.selectModel}
-                    <br/>
-                    {item.tradedate}</td>    
-                  <td className="p-3">
-                    {
-                      item.buy?(
-                        <span>
-                          {item.buy}
-                          <button
-                            onClick={() => deleteStock(item.stockCode, "buy")}
-                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          >移除</button>
-                        </span>
-                      ) : (
-                        <span>
-                          <button
-                            onClick={() => addStock(item.stockCode, "buy")}
-                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          >购买</button>
-                        </span>
-                      )
-                    }
-                  </td>
-                  <td className="p-3">
-                    {
-                      item.attention?(
-                        <span>
-                          {item.attention}
-                          <button
-                            onClick={() => deleteStock(item.stockCode, "attention")}
-                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          >移除</button>
-                        </span>
-                      )
-                      :(
-                        <span>
-                          <button
-                            onClick={() => addStock(item.stockCode, "attention")}
-                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          >关注</button>
-
-                        </span>
-                      )
-                    }
-                  </td>
-
-                  <td className="p-3 max-w-[200px] break-words">
-                    {item.stockCode}
-                    <br/>
-                    <br/>
-                    <a
-                      href={item.eastmoneyURL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
+                          ? "bg-green-100 hover:bg-green-300"
+                          : item.attention
+                          ? "bg-yellow-100 hover:bg-yellow-300"
+                          : "bg-gray-100 hover:bg-gray-300"
+                      }`}
                     >
-                      {item.name}
-                    </a>
-                    
-                  </td>
-
-                  <td>
-                    {item.remark}
-                    <br/>
-                    <a href={`/pages/Similarity?tsCode=${item.stockCode}&tradeDate=${item.tradedate}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
+                      <td
+                        className="cursor-pointer select-none"
+                        onClick={() => toggleRow(rowKey)}
+                        title={expanded ? "收起蜡烛图" : "展开蜡烛图"}
                       >
-                      <span>【相似度计算】</span>
-                    </a>
-                  </td>
+                        <span className="inline-block w-4 text-center mr-1">
+                          {expanded ? "▼" : "▶"}
+                        </span>
+                        {index + 1}
+                        <br />
+                        {item.selectModel}
+                        <br />
+                        {item.tradedate}
+                      </td>
+                      <td className="p-3">
+                        {item.buy ? (
+                          <span>
+                            {item.buy}
+                            <button
+                              onClick={() =>
+                                deleteStock(item.stockCode, "buy")
+                              }
+                              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            >
+                              移除
+                            </button>
+                          </span>
+                        ) : (
+                          <span>
+                            <button
+                              onClick={() => addStock(item.stockCode, "buy")}
+                              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            >
+                              购买
+                            </button>
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-3">
+                        {item.attention ? (
+                          <span>
+                            {item.attention}
+                            <button
+                              onClick={() =>
+                                deleteStock(item.stockCode, "attention")
+                              }
+                              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            >
+                              移除
+                            </button>
+                          </span>
+                        ) : (
+                          <span>
+                            <button
+                              onClick={() =>
+                                addStock(item.stockCode, "attention")
+                              }
+                              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            >
+                              关注
+                            </button>
+                          </span>
+                        )}
+                      </td>
 
-                  <td>
-                    <a href={`/pages/TopInst?ts_code=${item.stockCode}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
-                      >
-                      {item.topInstitutions}
-                    </a>
-                  </td>
+                      <td className="p-3 max-w-[200px] break-words">
+                        {item.stockCode}
+                        <br />
+                        <br />
+                        <a
+                          href={item.eastmoneyURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline"
+                        >
+                          {item.name}
+                        </a>
+                      </td>
 
-                  
-                  <td className="p-2">
-                      <a
-                        href={item.zjlxURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline cursor-pointer"
-                      >
-                        资金
-                      </a>
-                      &nbsp;&nbsp;
-                      <a
-                        href={item.conceptURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline cursor-pointer"
-                      >
-                        概念
-                      </a>
-                      &nbsp;&nbsp;
-                      {item.concept}
-                  </td>  
+                      <td>
+                        {item.remark}
+                        <br />
+                        <a
+                          href={`/pages/Similarity?tsCode=${item.stockCode}&tradeDate=${item.tradedate}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline"
+                        >
+                          <span>【相似度计算】</span>
+                        </a>
+                      </td>
 
-                </tr>
-              ))
+                      <td>
+                        <a
+                          href={`/pages/TopInst?ts_code=${item.stockCode}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline"
+                        >
+                          {item.topInstitutions}
+                        </a>
+                      </td>
+
+                      <td className="p-2">
+                        <a
+                          href={item.zjlxURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline cursor-pointer"
+                        >
+                          资金
+                        </a>
+                        &nbsp;&nbsp;
+                        <a
+                          href={item.conceptURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline cursor-pointer"
+                        >
+                          概念
+                        </a>
+                        &nbsp;&nbsp;
+                        {item.concept}
+                      </td>
+                    </tr>
+
+                    {expanded && (
+                      <tr key={`${rowKey}_chart`}>
+                        <td
+                          colSpan={7}
+                          className="p-2"
+                          style={{ background: "#12121c" }}
+                        >
+                          <KLineChart
+                            tscode={item.stockCode}
+                            tradedate={item.tradedate}
+                          />
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                );
+              })
             ) : (
               <tr>
-                <td
-                  colSpan="2"
-                  className="p-6 text-center text-gray-500"
-                >
+                <td colSpan="7" className="p-6 text-center text-gray-500">
                   未找到匹配数据
                 </td>
               </tr>
             )}
-
           </tbody>
-
         </table>
       </div>
-
     </div>
   );
 }
