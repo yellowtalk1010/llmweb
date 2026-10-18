@@ -33,9 +33,11 @@ class TusharePagesController {
     list += PageDto("0", "sast", "http://localhost:8080/config")
     list += PageDto("1", "stockapi地址", "https://stockapi.com.cn/")
     list += PageDto("2", "招商地址", "https://xtrade.newone.com.cn/ssologin?t=jykstd")
-    list += PageDto("3", "龙虎榜", "TopInst")
-    list += PageDto("4", "我的关注", "AllStocks")
-    list += PageDto("5", "股票推荐", "PushTushareStock")
+    list += PageDto("3", "H2", "http://localhost:1010/frame.jsp?jsessionid=31f6e75368954a14")
+    
+    list += PageDto("14", "龙虎榜", "TopInst")
+    list += PageDto("15", "我的关注", "AllStocks")
+    list += PageDto("16", "股票推荐", "PushTushareStock")
 
     val result = new util.HashMap[String, Object]()
     result.put("data", list.asJava)
