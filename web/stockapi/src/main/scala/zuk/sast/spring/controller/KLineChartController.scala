@@ -55,7 +55,7 @@ class KLineChartController {
         if(dailydataList(index).trade_date.equals(tradedate)) {
           val arr = dailydataList.splitAt(index)
           val list1 = if(arr._1.size > 11){
-            arr._1.slice(arr._1.size - 10)
+            arr._1.slice(arr._1.size - 10, arr._1.length)
           }
           else {
             arr._1
