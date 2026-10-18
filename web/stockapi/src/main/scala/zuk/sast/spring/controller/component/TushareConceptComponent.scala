@@ -5,16 +5,14 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import zuk.sast.spring.controller.mapper.{StockInfoMapper, StockMapper}
-import zuk.sast.spring.controller.mapper.entity.{StockEntity, StockInfoEntity, StockInfoEntity as stockInfoEntity}
+import zuk.sast.spring.controller.mapper.StockMapper
+import zuk.sast.spring.controller.mapper.entity.StockInfoEntity
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.tasks.Task_EasymoneyConcept
-import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
-import zuk.tu_share.utils.Dataset_all_stocks_csv_file
+import zuk.tu_share.{DataFrame, ParseCammandParam}
 
 import java.io.File
-import java.util.UUID
 import java.util.concurrent.Executors
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -65,8 +63,8 @@ class TushareConceptComponent {
    */
   private def md5(input: String): String = {
     try {
-      import java.security.MessageDigest
       import java.nio.charset.StandardCharsets
+      import java.security.MessageDigest
 
       val md = MessageDigest.getInstance("MD5")
       val digest = md.digest(input.getBytes(StandardCharsets.UTF_8))
