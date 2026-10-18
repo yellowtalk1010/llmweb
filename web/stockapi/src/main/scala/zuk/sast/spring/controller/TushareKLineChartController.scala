@@ -38,9 +38,9 @@ private case class KLineChartDto() {
 @RestController
 @RequestMapping(value = Array("klineChart"))
 @Component
-class KLineChartController {
+class TushareKLineChartController {
 
-  private val log = LoggerFactory.getLogger(classOf[KLineChartController])
+  private val log = LoggerFactory.getLogger(classOf[TushareKLineChartController])
 
   @GetMapping(value = Array("list"))
   def list(stockCode: String, tradedate: String): util.Map[String, Object] = {
@@ -57,14 +57,14 @@ class KLineChartController {
       for (index <- 0 until dailydataList.size) {
         if(dailydataList(index).trade_date.equals(tradedate)) {
           val arr = dailydataList.splitAt(index)
-          val list1 = if(arr._1.size > 11){
+          val list1 = if(arr._1.size > 20){
             arr._1.slice(arr._1.size - 10, arr._1.length)
           }
           else {
             arr._1
           }
-          val list2 = if(arr._2.size > 7){
-            arr._2.take(6)
+          val list2 = if(arr._2.size > 20){
+            arr._2.take(20)
           }
           else{
             arr._2
@@ -75,7 +75,7 @@ class KLineChartController {
       ls
     }
     else {
-      dailydataList.take(15)
+      dailydataList.take(40)
     }
 
     val list = subList.map(e=>{
