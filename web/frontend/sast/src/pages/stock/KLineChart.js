@@ -4,20 +4,23 @@ import {
   CrosshairMode,
   CandlestickSeries,
   HistogramSeries,
+  createSeriesMarkers,
 } from "lightweight-charts";
 
 /***
  * 股票蜡烛图组件
  * 暂时使用 10 组默认数据，后续替换为 /stock/detail 接口请求
  * 主图：蜡烛图；副图：成交量柱状图；悬停显示 OHLC + vol + change + amount
+ * type 为 "buy" 的蜡烛会在上方标记“买入”
  */
 function KLineChart({ tscode, tradedate, height = 360 }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const candleSeriesRef = useRef(null);
   const volumeSeriesRef = useRef(null);
+  const markersPluginRef = useRef(null); // v5 标记插件实例
 
-  // 保存完整原始数据：{ [time]: { open, high, low, close, vol, change, amount } }
+  // 保存完整原始数据：{ [time]: { open, high, low, close, vol, change, amount, type } }
   const dataMapRef = useRef({});
 
   const [status, setStatus] = useState("loading");
@@ -44,7 +47,6 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         borderColor: "#485c7b",
         timeVisible: true,
       },
-      // 右侧价格轴：主图占上方 75%，成交量占下方 25%
       rightPriceScale: {
         borderColor: "#485c7b",
       },
@@ -62,7 +64,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
     // 副图：成交量柱状图（独立价格刻度，挂在图表下方）
     const volumeSeries = chart.addSeries(HistogramSeries, {
       priceFormat: { type: "volume" },
-      priceScaleId: "", // 独立刻度，不与主图共享
+      priceScaleId: "",
       priceLineVisible: false,
       lastValueVisible: false,
     });
@@ -86,6 +88,9 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
     chartRef.current = chart;
     candleSeriesRef.current = candleSeries;
     volumeSeriesRef.current = volumeSeries;
+
+    // v5：初始化标记插件（空标记，后续数据渲染时更新）
+    markersPluginRef.current = createSeriesMarkers(candleSeries, []);
 
     // ===== 悬停监听 =====
     const handleCrosshairMove = (param) => {
@@ -117,6 +122,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         vol: extra.vol,
         change: extra.change,
         amount: extra.amount,
+        type: extra.type,
       });
     };
 
@@ -132,6 +138,13 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
     return () => {
       window.removeEventListener("resize", handleResize);
       chart.unsubscribeCrosshairMove(handleCrosshairMove);
+
+      // v5：先销毁标记插件，再销毁图表
+      if (markersPluginRef.current) {
+        markersPluginRef.current.detach();
+        markersPluginRef.current = null;
+      }
+
       chart.remove();
       chartRef.current = null;
       candleSeriesRef.current = null;
@@ -150,16 +163,16 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
 
         // ===== 默认数据（后续替换为接口请求）=====
         const mockList = [
-          { time: "2023-12-30", open: 100.0, high: 105.2, low: 98.8, close: 104.1, vol: 9999, change: 1.0, amount: 30000 },
-          { time: "2024-01-03", open: 104.1, high: 107.5, low: 102.3, close: 103.0, vol: 11200, change: -1.1, amount: 33000 },
-          { time: "2024-01-04", open: 103.0, high: 106.8, low: 101.5, close: 105.6, vol: 12800, change: 2.5, amount: 35500 },
-          { time: "2024-01-05", open: 105.6, high: 109.4, low: 104.2, close: 108.3, vol: 14300, change: 2.6, amount: 38200 },
-          { time: "2024-01-08", open: 108.3, high: 110.1, low: 105.7, close: 106.4, vol: 9800, change: -1.8, amount: 31200 },
-          { time: "2024-01-09", open: 106.4, high: 108.9, low: 103.8, close: 104.2, vol: 10500, change: -2.1, amount: 29800 },
-          { time: "2024-01-10", open: 104.2, high: 107.6, low: 102.9, close: 107.1, vol: 11900, change: 2.8, amount: 34100 },
-          { time: "2024-01-11", open: 107.1, high: 111.3, low: 106.0, close: 110.5, vol: 15600, change: 3.2, amount: 40100 },
-          { time: "2024-01-12", open: 110.5, high: 112.8, low: 108.4, close: 109.2, vol: 13200, change: -1.2, amount: 36800 },
-          { time: "2024-01-15", open: 109.2, high: 110.6, low: 106.5, close: 107.8, vol: 10100, change: -1.3, amount: 32500 },
+          { time: "2023-12-30", open: 100.0, high: 105.2, low: 98.8, close: 104.1, vol: 9999, change: 1.0, amount: 30000, type: "" },
+          { time: "2024-01-03", open: 104.1, high: 107.5, low: 102.3, close: 103.0, vol: 11200, change: -1.1, amount: 33000, type: "" },
+          { time: "2024-01-04", open: 103.0, high: 106.8, low: 101.5, close: 105.6, vol: 12800, change: 2.5, amount: 35500, type: "" },
+          { time: "2024-01-05", open: 105.6, high: 109.4, low: 104.2, close: 108.3, vol: 14300, change: 2.6, amount: 38200, type: "buy" },
+          { time: "2024-01-08", open: 108.3, high: 110.1, low: 105.7, close: 106.4, vol: 9800, change: -1.8, amount: 31200, type: "" },
+          { time: "2024-01-09", open: 106.4, high: 108.9, low: 103.8, close: 104.2, vol: 10500, change: -2.1, amount: 29800, type: "" },
+          { time: "2024-01-10", open: 104.2, high: 107.6, low: 102.9, close: 107.1, vol: 11900, change: 2.8, amount: 34100, type: "" },
+          { time: "2024-01-11", open: 107.1, high: 111.3, low: 106.0, close: 110.5, vol: 15600, change: 3.2, amount: 40100, type: "" },
+          { time: "2024-01-12", open: 110.5, high: 112.8, low: 108.4, close: 109.2, vol: 13200, change: -1.2, amount: 36800, type: "" },
+          { time: "2024-01-15", open: 109.2, high: 110.6, low: 106.5, close: 107.8, vol: 10100, change: -1.3, amount: 32500, type: "" },
         ];
 
         await new Promise((resolve) => setTimeout(resolve, 200));
@@ -170,6 +183,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           candleSeriesRef.current.setData([]);
           volumeSeriesRef.current.setData([]);
           dataMapRef.current = {};
+          markersPluginRef.current?.setMarkers([]);
           setStatus("empty");
           return;
         }
@@ -184,6 +198,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
             vol: Number(item.vol),
             change: item.change,
             amount: item.amount,
+            type: item.type || "",
           }))
           .filter(
             (item) =>
@@ -198,6 +213,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           candleSeriesRef.current.setData([]);
           volumeSeriesRef.current.setData([]);
           dataMapRef.current = {};
+          markersPluginRef.current?.setMarkers([]);
           setStatus("empty");
           return;
         }
@@ -227,6 +243,28 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           }))
         );
 
+        // ===== 标记所有 type 为 buy 的蜡烛（上方买入标记）=====
+        const buyMarkers = normalized
+          .filter((it) => it.type === "buy")
+          .map((it) => ({
+            time: it.time,
+            position: "aboveBar",   // 蜡烛上方
+            color: "#f59e0b",        // 橙色，与涨跌色区分
+            shape: "arrowDown",      // 向下箭头，指向蜡烛
+            text: "买入",
+            size: 1.5,
+          }));
+
+        // v5：通过标记插件更新，而不是 series.setMarkers
+        if (markersPluginRef.current) {
+          markersPluginRef.current.setMarkers(buyMarkers);
+        } else {
+          markersPluginRef.current = createSeriesMarkers(
+            candleSeriesRef.current,
+            buyMarkers
+          );
+        }
+
         chartRef.current.timeScale().fitContent();
         setStatus("ready");
       } catch (err) {
@@ -243,6 +281,8 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
     hoverInfo && hoverInfo.close !== undefined && hoverInfo.open !== undefined
       ? hoverInfo.close >= hoverInfo.open
       : true;
+
+  const isBuy = hoverInfo && hoverInfo.type === "buy";
 
   const fmt = (v, digits = 2) =>
     v === undefined || v === null || Number.isNaN(Number(v))
@@ -316,6 +356,11 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
               </span>
             </span>
             <span>额：{fmtVol(hoverInfo.amount)}</span>
+            {isBuy && (
+              <span style={{ color: "#f59e0b", fontWeight: 600 }}>
+                ★ 买入
+              </span>
+            )}
           </>
         )}
       </div>
