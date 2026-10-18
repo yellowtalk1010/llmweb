@@ -37,9 +37,9 @@ class TusharePagesController {
     list += PageDto("4", "大盘云图", "https://www.dapanyuntu.com/")
     list += PageDto("5", "tushare", "https://tushare.pro/document/2")
     
-    list += PageDto("14", "龙虎榜", "TopInst")
-    list += PageDto("15", "我的关注", "AllStocks")
-    list += PageDto("16", "股票推荐", "PushTushareStock")
+    list += PageDto("111", "龙虎榜", "TopInst")
+    list += PageDto("112", "我的关注", "AllStocks")
+    list += PageDto("113", "股票推荐", "PushTushareStock")
 
     val result = new util.HashMap[String, Object]()
     result.put("data", list.asJava)
