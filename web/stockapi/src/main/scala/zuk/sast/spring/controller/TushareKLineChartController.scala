@@ -12,6 +12,7 @@ import zuk.tu_share.utils.Dataset_stock_dailydata_dir
 
 import java.math.RoundingMode
 import java.util
+import java.util.concurrent.atomic.AtomicInteger
 import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -58,7 +59,7 @@ class TushareKLineChartController {
         if(dailydataList(index).trade_date.equals(tradedate)) {
           val arr = dailydataList.splitAt(index)
           val list1 = if(arr._1.size > 20){
-            arr._1.slice(arr._1.size - 10, arr._1.length)
+            arr._1.slice(arr._1.size - 20, arr._1.length) //
           }
           else {
             arr._1
@@ -103,8 +104,11 @@ class TushareKLineChartController {
     if(ls.size > 0){
       import java.math.BigDecimal
       val buy = ls.head.close
+      val count = new AtomicInteger(0)
       list.filter(_.time.toLong > tradedate.toLong).foreach(dto=>{
-        dto.winChange = new BigDecimal(dto.high - buy).divide(new BigDecimal(buy), 4, RoundingMode.DOWN).floatValue() * 100
+        if(count.incrementAndGet() <= 10){
+          dto.winChange = new BigDecimal(dto.high - buy).divide(new BigDecimal(buy), 4, RoundingMode.DOWN).floatValue() * 100  
+        }
       })
     }
 
