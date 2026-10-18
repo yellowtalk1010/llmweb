@@ -6,10 +6,10 @@ import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import zuk.sast.spring.controller.mapper.{StockInfoMapper, StockMapper}
-import zuk.sast.spring.controller.mapper.entity.{StockEntity, StockInfoEntity}
+import zuk.sast.spring.controller.mapper.entity.{StockEntity, StockInfoEntity, StockInfoEntity as stockInfoEntity}
 import zuk.token.TaskHandleFactory
 import zuk.token.providers.tasks.Task_EasymoneyConcept
-import zuk.tu_share.ParseCammandParam
+import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.utils.Dataset_all_stocks_csv_file
 
@@ -36,9 +36,11 @@ class TushareConceptComponent {
   var stockInfoEntityList = new ListBuffer[StockInfoEntity]
 
   def getStockConceptInfo(stockCode: String): String = synchronized {
-    if(stockInfoEntityList.size==0){
-      stockInfoEntityList ++= this.stockInfoMapper.selectAll().asScala
+    if(stockInfoEntityList.size == 0){
+//      stockInfoEntityList ++= this.stockInfoMapper.selectAll().asScala
+      load()
     }
+    
     val ls = this.stockInfoEntityList.filter(_.stockCode.equals(stockCode))
     if(ls.size>0 && StringUtils.isNotEmpty(ls.head.concept)){
       val concept = ls.head.concept.split("\n").filter(l=>{
@@ -54,6 +56,32 @@ class TushareConceptComponent {
       ""
     }
   }
+
+
+  /***
+   * 根据股票代码构建md5作为唯一id
+   *
+   * @param input
+   * @return
+   */
+  private def md5(input: String): String = {
+    try {
+      import java.security.MessageDigest
+      import java.nio.charset.StandardCharsets
+
+      val md = MessageDigest.getInstance("MD5")
+      val digest = md.digest(input.getBytes(StandardCharsets.UTF_8))
+      val sb = new java.lang.StringBuilder
+      for (b <- digest) {
+        sb.append(String.format("%02x", b & 0xff))
+      }
+      sb.toString
+    } catch {
+      case e: Exception =>
+        throw new RuntimeException("MD5计算失败", e)
+    }
+  }
+
 
   /***
    * 获取待处理的股票
@@ -101,10 +129,33 @@ class TushareConceptComponent {
 
 
   }
+  
+  private def load(): Unit = synchronized {
+    //todo 初始化股票的 概念和板块 信息
+    stockInfoEntityList ++=
+      DataFrame.STOCKS_MAP.asScala.map(e => {
+        val conceptFile = new File(ParseCammandParam.param.engineInfo.concept_dir + File.separator + e._2.ts_code + ".txt")
+        println(s"加载【${e._2.ts_code}, ${e._2.name}】股票的概念板块路径：${conceptFile.getAbsolutePath}, ${conceptFile.exists()}")
+        val concept = if (conceptFile.exists()) {
+          FileUtils.readFileToString(conceptFile, "UTF-8")
+        } else {
+          ""
+        }
+        val stockInfoEntity = new StockInfoEntity()
+        stockInfoEntity.stockCode = e._2.ts_code
+        stockInfoEntity.stockName = e._2.name
+        stockInfoEntity.concept = concept
+        stockInfoEntity.id = md5(stockInfoEntity.stockCode)
+        stockInfoEntity
+      })
+  }
 
   @PostConstruct
   def init(): Unit = {
- 
+
+    load()
+    
+    //AI任务引擎初始化
     if(!TaskHandleFactory.initTask()){
       return
     }
