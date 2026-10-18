@@ -33,6 +33,37 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
   const upColor = "#ef5350";   // 红 = 涨
   const downColor = "#26a69a"; // 绿 = 跌
 
+  // 让全部数据居中显示，左侧留少量边距，右侧留更多边距
+  // count：蜡烛总数
+  const centerAllData = (count) => {
+    const chart = chartRef.current;
+    if (!chart || !count) return;
+
+    const width = containerRef.current
+      ? containerRef.current.clientWidth
+      : chart.timeScale().width();
+
+    // 左侧留 8%，右侧留 16%（右侧更多）
+    const leftRatio = 0.08;
+    const rightRatio = 0.16;
+    const usableWidth = Math.max(width * (1 - leftRatio - rightRatio), 1);
+
+    // ↓↓↓ 再缩一点：用 0.6 的系数把蜡烛间距压得更小，下限降到 1
+    const rawSpacing = (usableWidth / Math.max(count - 1, 1)) * 0.6;
+    const barSpacing = Math.min(Math.max(rawSpacing, 1), 20);
+
+    chart.timeScale().applyOptions({ barSpacing });
+
+    // 左右按像素换算成逻辑空槽位
+    const leftPaddingBars = Math.round((width * leftRatio) / barSpacing);
+    const rightPaddingBars = Math.round((width * rightRatio) / barSpacing);
+
+    chart.timeScale().setVisibleLogicalRange({
+      from: -leftPaddingBars,
+      to: count - 1 + rightPaddingBars,
+    });
+  };
+
   // 初始化图表
   useEffect(() => {
     if (!containerRef.current) return;
@@ -53,6 +84,11 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
         borderColor: "#485c7b",
         timeVisible: true,
         tickMarkFormatter: (time) => time,
+        minBarSpacing: 1,     // ↓↓↓ 下限再放宽，允许缩到最小
+        maxBarSpacing: 20,
+        rightOffset: 12,
+        fixLeftEdge: false,
+        fixRightEdge: false,
       },
       rightPriceScale: {
         borderColor: "#485c7b",
@@ -130,6 +166,9 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
     const handleResize = () => {
       if (containerRef.current) {
         chart.applyOptions({ width: containerRef.current.clientWidth });
+        // 窗口变化后重新居中并留白
+        const count = Object.keys(dataMapRef.current).length;
+        if (count > 0) centerAllData(count);
       }
     };
     window.addEventListener("resize", handleResize);
@@ -281,7 +320,9 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
           );
         }
 
-        chartRef.current.timeScale().fitContent();
+        // ↓↓↓ 全部数据居中显示，左侧少量留白，右侧更多留白
+        centerAllData(normalized.length);
+
         setStatus("ready");
       } catch (err) {
         if (err.name === "AbortError") return;
