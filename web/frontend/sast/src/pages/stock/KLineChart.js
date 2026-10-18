@@ -150,7 +150,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
 
         // ===== 默认数据（后续替换为接口请求）=====
         const mockList = [
-          { time: "2024-01-02", open: 100.0, high: 105.2, low: 98.8, close: 104.1, vol: 9999, change: 1.0, amount: 30000 },
+          { time: "2023-12-30", open: 100.0, high: 105.2, low: 98.8, close: 104.1, vol: 9999, change: 1.0, amount: 30000 },
           { time: "2024-01-03", open: 104.1, high: 107.5, low: 102.3, close: 103.0, vol: 11200, change: -1.1, amount: 33000 },
           { time: "2024-01-04", open: 103.0, high: 106.8, low: 101.5, close: 105.6, vol: 12800, change: 2.5, amount: 35500 },
           { time: "2024-01-05", open: 105.6, high: 109.4, low: 104.2, close: 108.3, vol: 14300, change: 2.6, amount: 38200 },
