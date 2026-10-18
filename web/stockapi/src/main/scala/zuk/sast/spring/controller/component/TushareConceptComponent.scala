@@ -27,10 +27,9 @@ class TushareConceptComponent {
 
   var stockInfoEntityList = new ListBuffer[StockInfoEntity]
 
-  def getStockConceptInfo(stockCode: String): String = synchronized {
-    if(stockInfoEntityList.size == 0){
-      load()
-    }
+  def getStockConceptInfo(stockCode: String): String = {
+    
+    load()
     
     val ls = this.stockInfoEntityList.filter(_.stockCode.equals(stockCode))
     if(ls.size>0 && StringUtils.isNotEmpty(ls.head.concept)){
@@ -74,6 +73,11 @@ class TushareConceptComponent {
   }
   
   private def load(): Unit = synchronized {
+
+    if (stockInfoEntityList.size == 0) {
+      return 
+    }
+    
     //todo 初始化股票的 概念和板块 信息
     stockInfoEntityList ++=
       DataFrame.STOCKS_MAP.asScala.map(e => {
@@ -93,25 +97,14 @@ class TushareConceptComponent {
         stockInfoEntity
       })
 
+    //todo 重复的股票直接退出，人工处理
     this.stockInfoEntityList.toList.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls => {
       println(s"股票重复:${ls.head.stockCode}, ${ls.head.stockName}")
-      System.exit(1) //重复的股票直接退出，人工处理
+      System.exit(1)
     })
-  }
 
-  @PostConstruct
-  def init(): Unit = {
-
-    load()
-    
-    //AI任务引擎初始化启动成功
-    if(!TaskHandleFactory.initTask()){
-      return
-    }
-    
-    val list = this.stockInfoEntityList.filter(e=>StringUtils.isEmpty(e.concept))
-
-    list.foreach(e=>{
+    //todo 启动 AI 任务
+    this.stockInfoEntityList.filter(e => StringUtils.isEmpty(e.concept)).foreach(e => {
       val tsStock = new TsStock(e.stockCode)
 
       val task = new Task_EasymoneyConcept
@@ -124,7 +117,16 @@ class TushareConceptComponent {
     })
 
     println(s"任务总数：${TaskHandleFactory.TASK_QUEUE.size()}")
+  }
 
+  @PostConstruct
+  def init(): Unit = {
+    
+    //AI任务引擎初始化启动成功
+    if(!TaskHandleFactory.initTask()){
+      return
+    }
+    
     executor.execute(()=>{
       //启动
       var st = true
@@ -144,13 +146,15 @@ class TushareConceptComponent {
             val delFiles = new ListBuffer[File]
 
             //任务与结果进行匹配
-            list.foreach(entity => {
+            this.stockInfoEntityList.filter(e => StringUtils.isEmpty(e.concept)).foreach(entity => {
               val id = entity.id
+              //根据任务id判断
               filecontextList.filter(tp2=>tp2._2.contains(id)).foreach(tp2=>{
                 entity.concept = tp2._2
                 FileUtils.writeStringToFile(new File(entity.conceptFile), entity.concept, "UTF-8") //写入股票的板块和概念
                 println(s"删除${entity.stockCode}, ${entity.stockName}, ${tp2._1.getAbsolutePath}")
                 delFiles += tp2._1
+                this.stockInfoEntityList.filter(_.id.equals(entity.id)).foreach(_.concept = entity.concept)
               })
             })
             //删除结果
