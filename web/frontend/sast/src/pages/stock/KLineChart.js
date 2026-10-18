@@ -11,7 +11,7 @@ import {
  * 股票蜡烛图组件
  * 调用 /klineChart/list?stockCode=xxx&tradedate=xxx 接口
  * 主图：蜡烛图；副图：成交量柱状图；悬停显示 名称 + OHLC + vol + change + amount + winChange
- * optType 非空的蜡烛统一在上方用向下箭头标出 optType 内容
+ * optType 非空的蜡烛：上下交替标记（下方向上箭头 / 上方向下箭头）
  * A 股配色：涨红跌绿
  */
 function KLineChart({ tscode, tradedate, height = 280 }) {
@@ -254,17 +254,23 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
           }))
         );
 
-        // 标记所有 optType 非空的蜡烛：统一上方向下箭头，文字为 optType 内容
+        // 标记所有 optType 非空的蜡烛：上下交替
+        // 第 1 个：下方(belowBar) 向上箭头；第 2 个：上方(aboveBar) 向下箭头；循环交替
+        let optIndex = 0;
         const optMarkers = normalized
           .filter((it) => it.optType && it.optType.trim() !== "")
-          .map((it) => ({
-            time: it.time,
-            position: "aboveBar",
-            color: "#f59e0b",
-            shape: "arrowDown",
-            text: it.optType,
-            size: 1.5,
-          }));
+          .map((it) => {
+            const isBelow = optIndex % 2 === 0;
+            optIndex += 1;
+            return {
+              time: it.time,
+              position: isBelow ? "belowBar" : "aboveBar",
+              color: "#f59e0b",
+              shape: isBelow ? "arrowUp" : "arrowDown",
+              text: it.optType,
+              size: 1.5,
+            };
+          });
 
         if (markersPluginRef.current) {
           markersPluginRef.current.setMarkers(optMarkers);

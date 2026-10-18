@@ -78,7 +78,7 @@ class TushareKLineChartController {
       dailydataList.take(40)
     }
 
-    val list = subList.map(e=>{
+    val list = dailydataList.take(80).map(e=>{
       val dto = KLineChartDto()
       dto.stockName = e.name
       dto.time = e.trade_date
@@ -92,14 +92,14 @@ class TushareKLineChartController {
 
       if(StringUtils.isNotBlank(tradedate) 
         && e.trade_date.equals(tradedate)){
-        dto.optType = "B"//buy买入
+        dto.optType = "买"//buy买入
       }
 
       dto
     }).toList
     
     //todo 计算获利比例
-    val ls = list.filter(_.optType.equals("B"))
+    val ls = list.filter(_.optType.equals("买"))
     if(ls.size > 0){
       import java.math.BigDecimal
       val buy = ls.head.close
@@ -107,9 +107,9 @@ class TushareKLineChartController {
       val isSell = new AtomicBoolean(false)
       list.reverse.filter(_.time.toLong > tradedate.toLong).foreach(dto=>{
         if(count.incrementAndGet() <= 10){
-          dto.winChange = new BigDecimal(dto.high - buy).divide(new BigDecimal(buy), 4, RoundingMode.DOWN).floatValue() * 100
+          dto.winChange = new BigDecimal(dto.high - buy).divide(new BigDecimal(buy), 4, RoundingMode.DOWN).multiply(new BigDecimal(100)).floatValue()
           if(dto.winChange > 1.0 && !isSell.get()){
-            dto.optType = "S"//卖出
+            dto.optType = "卖" + dto.winChange   //卖出
             isSell.set(true)
           }
         }
