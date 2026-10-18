@@ -9,6 +9,7 @@ import java.math.{BigDecimal, RoundingMode}
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ConcurrentHashMap, Executors}
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -104,18 +105,19 @@ object Dataset_stock_dailydata_dir {
       
       StockHistoryDailyDataMap.clear()
       
-      Dataset_all_stocks_csv_file.load.map(_.ts_code).toSet
-        .foreach(stockCode=>{
+      val count = new AtomicInteger(0)
+      val set = Dataset_all_stocks_csv_file.load.map(_.ts_code).toSet
+      set.foreach(stockCode=>{
           val filename = stockCode.replaceAll("\\.", "_") + ".csv"
           val path = ParseCammandParam.param.engineInfo.stock_module_dir + File.separator + filename
           val file = new File(path)
           if (file.isFile && file.exists()) {
-            println(s"加载股票历史日线基本数据，路径:${file.getAbsolutePath}")
+            println(s"加载股票历史日线基本数据，${count.incrementAndGet()}/${set.size}，路径:${file.getAbsolutePath}")
             val list = loadAllStocks(file)
             StockHistoryDailyDataMap.put(stockCode, list)
           }
           else {
-            println(s"不存在加载股票基本数据路径:${file.getAbsolutePath}")
+            println(s"不存在加载股票基本数据，${count.incrementAndGet()}/${set.size}，路径:${file.getAbsolutePath}")
           }
         })
 
