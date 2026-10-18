@@ -38,7 +38,7 @@ object Dataset_hm_detail_dir {
     }
     val count = new AtomicInteger(0)
     files.map(_.getAbsolutePath).foreach(e=>{
-      println(s"${count.incrementAndGet()}/${files.size}游资交易每日明细：${e}")
+      println(s"游资交易每日明细：${count.incrementAndGet()}/${files.size}：${e}")
     })
     files.foreach(hmFile=>{
       val tradedate = getTradedate(hmFile.getName)
