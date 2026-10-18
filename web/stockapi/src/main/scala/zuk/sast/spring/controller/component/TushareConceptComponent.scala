@@ -81,54 +81,6 @@ class TushareConceptComponent {
         throw new RuntimeException("MD5计算失败", e)
     }
   }
-
-
-  /***
-   * 获取待处理的股票
-   * @return
-   */
-  private def getHandleTaskStockList(): Unit = synchronized {
-
-    //todo 删除stock_info表中重复的数据
-    this.stockInfoMapper.selectAll().asScala.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls => {
-      for (i <- 1 until ls.size) {
-        this.stockInfoMapper.deleteById(ls(i).id)
-      }
-    })
-
-    val cacheStockInfoList = this.stockInfoMapper.selectAll().asScala
-
-    //将概念数据已文件形式保存
-    cacheStockInfoList.foreach(stockInfo=>{
-      val stockCode = stockInfo.stockCode
-      val stockName = stockInfo.stockName
-      val stockConceptPath = ParseCammandParam.param.engineInfo.concept_dir + File.separator + stockCode + ".txt"
-      val stockConceptFile = new File(stockConceptPath)
-      println(s"${stockCode},${stockName},${stockConceptFile.getAbsolutePath}")
-      FileUtils.writeStringToFile(stockConceptFile, stockInfo.concept, "UTF-8")
-    })
-
-    //全量股票概念数据获取任务
-    val lls = Dataset_all_stocks_csv_file.load.map(e=>{
-      val stock = new StockEntity
-      stock.name = e.name
-      stock.stockCode = e.ts_code
-      stock
-    }).filter(e=>{
-      !cacheStockInfoList.map(_.stockCode).toSet.contains(e.stockCode)
-    })
-
-    lls.foreach(se=>{
-      val stockInfoEntity = new StockInfoEntity
-      stockInfoEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
-      stockInfoEntity.stockCode = se.stockCode
-      stockInfoEntity.stockName = se.name
-      this.stockInfoMapper.insert(stockInfoEntity)
-    })
-
-
-
-  }
   
   private def load(): Unit = synchronized {
     //todo 初始化股票的 概念和板块 信息
@@ -159,8 +111,12 @@ class TushareConceptComponent {
     if(!TaskHandleFactory.initTask()){
       return
     }
-
-    getHandleTaskStockList()
+    
+    //检查重复的股票
+    this.stockInfoEntityList.toList.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls=>{
+      println(s"股票重复:${ls.head.stockCode}, ${ls.head.stockName}")
+      System.exit(1) //重复的股票直接退出，人工处理
+    })
 
     val list = this.stockInfoMapper.selectAll().asScala.filter(e=>StringUtils.isEmpty(e.concept))
 
