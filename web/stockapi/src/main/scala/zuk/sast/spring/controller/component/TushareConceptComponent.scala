@@ -23,12 +23,6 @@ import scala.jdk.CollectionConverters.*
 @Component
 class TushareConceptComponent {
 
-  @Autowired
-  var stockMapper: StockMapper = null
-
-//  @Autowired
-//  var stockInfoMapper: StockInfoMapper = null
-
   var executor = Executors.newSingleThreadExecutor()
 
   var stockInfoEntityList = new ListBuffer[StockInfoEntity]
