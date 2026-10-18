@@ -100,6 +100,11 @@ class TushareConceptComponent {
         stockInfoEntity.id = md5(stockInfoEntity.stockCode)
         stockInfoEntity
       })
+
+    this.stockInfoEntityList.toList.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls => {
+      println(s"股票重复:${ls.head.stockCode}, ${ls.head.stockName}")
+      System.exit(1) //重复的股票直接退出，人工处理
+    })
   }
 
   @PostConstruct
@@ -107,18 +112,12 @@ class TushareConceptComponent {
 
     load()
     
-    //AI任务引擎初始化
+    //AI任务引擎初始化启动成功
     if(!TaskHandleFactory.initTask()){
       return
     }
     
-    //检查重复的股票
-    this.stockInfoEntityList.toList.groupBy(_.stockCode).filter(_._2.size > 1).map(_._2).foreach(ls=>{
-      println(s"股票重复:${ls.head.stockCode}, ${ls.head.stockName}")
-      System.exit(1) //重复的股票直接退出，人工处理
-    })
-
-    val list = this.stockInfoMapper.selectAll().asScala.filter(e=>StringUtils.isEmpty(e.concept))
+    val list = this.stockInfoEntityList.filter(e=>StringUtils.isEmpty(e.concept))
 
     list.foreach(e=>{
       val tsStock = new TsStock(e.stockCode)
