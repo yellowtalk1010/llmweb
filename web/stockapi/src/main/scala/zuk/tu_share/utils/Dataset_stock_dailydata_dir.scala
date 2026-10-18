@@ -155,6 +155,12 @@ object Dataset_stock_dailydata_dir {
           if(record.isMapped("change")){
             stockDailyData.change = record.get("change")
           }
+          if(record.isMapped("vol")){
+            stockDailyData.vol = record.get("vol")
+          }
+          if(record.isMapped("amount")){
+            stockDailyData.amount = record.get("amount")
+          }
           stockDailyData
         })
         .toList

@@ -11,8 +11,23 @@ import zuk.tu_share.dto.StockDailyData
 import zuk.tu_share.utils.Dataset_stock_dailydata_dir
 
 import java.util
+import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
+
+
+private case class KLineChartDto() {
+  @BeanProperty var stockName: String = ""
+  @BeanProperty var time: String = ""
+  @BeanProperty var open: Float = ""
+  @BeanProperty var high: Float = ""
+  @BeanProperty var low: Float = ""
+  @BeanProperty var close: Float = ""
+  @BeanProperty var vol: Float = ""
+  @BeanProperty var change: Float = ""
+  @BeanProperty var amount: Float = ""
+  @BeanProperty var optType: String = "" //操作类型 buy或者sell
+}
 
 /***
  * 获取蜡烛图信息列表
@@ -60,13 +75,25 @@ class KLineChartController {
       dailydataList.take(15)
     }
     
+    val list = subList.map(e=>{
+      val dto = KLineChartDto()
+      dto.stockName = e.name
+      dto.time = e.trade_date
+      dto.open = e.open.toFloat
+      dto.high = e.high.toFloat
+      dto.low = e.low.toFloat
+      dto.close = e.close.toFloat
+      dto.change = e.change.toFloat
+      dto.vol = e.vol.toFloat
+      dto.amount = e.amount.toFloat
+      
+      if(e.trade_date.equals(tradedate)){
+        dto.optType = "buy"
+      }
+      
+      dto
+    })
     
-    
-    
-    
-    
-    
-    val list = List.empty
     val result = new util.HashMap[String, Object]()
     result.put("data", list.asJava)
     result.put("code", "success")

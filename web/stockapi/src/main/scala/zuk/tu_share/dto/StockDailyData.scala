@@ -21,5 +21,9 @@ class StockDailyData() {
   @BeanProperty var close: String = ""
   //涨跌幅
   @BeanProperty var change: String = ""
+  //交易量
+  @BeanProperty var vol: String = ""
+  //交易金额
+  @BeanProperty var amount: String = ""
   
 }
