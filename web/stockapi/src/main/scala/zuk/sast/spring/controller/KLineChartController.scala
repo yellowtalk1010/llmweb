@@ -60,8 +60,8 @@ class KLineChartController {
           else {
             arr._1
           }
-          val list2 = if(arr._2.size > 6){
-            arr._2.take(5)
+          val list2 = if(arr._2.size > 7){
+            arr._2.take(6)
           }
           else{
             arr._2
