@@ -10,12 +10,12 @@ import {
 /***
  * 股票蜡烛图组件
  * 调用 /klineChart/list?stockCode=xxx&tradedate=xxx 接口
- * 主图：蜡烛图；副图：成交量柱状图；悬停显示 名称 + OHLC + vol + change + amount
+ * 主图：蜡烛图；副图：成交量柱状图；悬停显示 名称 + OHLC + vol + change + amount + winChange
  * optType 为 "buy" 的蜡烛会在上方标记“买入”
+ * A 股配色：涨红跌绿
  */
 function KLineChart({ tscode, tradedate, height = 360 }) {
-
-    console.info("tscode:" + tscode + ", tradedate:" + tradedate)
+  console.info("tscode:" + tscode + ", tradedate:" + tradedate);
 
   const containerRef = useRef(null);
   const chartRef = useRef(null);
@@ -28,6 +28,10 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
   const [status, setStatus] = useState("loading");
   const [errorMsg, setErrorMsg] = useState("");
   const [hoverInfo, setHoverInfo] = useState(null);
+
+  // A 股配色常量
+  const upColor = "#ef5350";   // 红 = 涨
+  const downColor = "#26a69a"; // 绿 = 跌
 
   // 初始化图表
   useEffect(() => {
@@ -55,14 +59,16 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
       },
     });
 
+    // 主图：蜡烛图（A 股：涨红跌绿）
     const candleSeries = chart.addSeries(CandlestickSeries, {
-      upColor: "#26a69a",
-      downColor: "#ef5350",
+      upColor: upColor,
+      downColor: downColor,
       borderVisible: false,
-      wickUpColor: "#26a69a",
-      wickDownColor: "#ef5350",
+      wickUpColor: upColor,
+      wickDownColor: downColor,
     });
 
+    // 副图：成交量柱状图
     const volumeSeries = chart.addSeries(HistogramSeries, {
       priceFormat: { type: "volume" },
       priceScaleId: "",
@@ -115,7 +121,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         amount: extra.amount,
         optType: extra.optType,
         stockName: extra.stockName,
-        winChange: extra.winChange
+        winChange: extra.winChange,
       });
     };
 
@@ -158,7 +164,8 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         const response = await fetch(
           "/klineChart/list?stockCode=" + tscode + "&tradedate=" + tradedate,
           {
-            method: "GET"
+            method: "GET",
+            signal: controller.signal,
           }
         );
 
@@ -204,7 +211,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
             amount: item.amount,
             optType: item.optType || "",
             stockName: item.stockName || "",
-            winChange: Number(item.winChange)
+            winChange: Number(item.winChange),
           }))
           .filter(
             (item) =>
@@ -238,11 +245,12 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
           }))
         );
 
+        // 成交量柱状图（A 股：涨红跌绿）
         volumeSeriesRef.current.setData(
           normalized.map((it) => ({
             time: it.time,
             value: Number.isNaN(it.vol) ? 0 : it.vol,
-            color: it.close >= it.open ? "#26a69a80" : "#ef535080",
+            color: it.close >= it.open ? "#ef535080" : "#26a69a80",
           }))
         );
 
@@ -327,16 +335,21 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
       >
         {hoverInfo && (
           <>
+            {hoverInfo.stockName && (
+              <span style={{ color: "#fff", fontWeight: 600 }}>
+                {hoverInfo.stockName}
+              </span>
+            )}
             <span>时间：{hoverInfo.time}</span>
             <span>开：{fmt(hoverInfo.open)}</span>
-            <span style={{ color: isUp ? "#26a69a" : "#ef5350" }}>
+            <span style={{ color: isUp ? upColor : downColor }}>
               收：{fmt(hoverInfo.close)}
             </span>
             <span>高：{fmt(hoverInfo.high)}</span>
             <span>低：{fmt(hoverInfo.low)}</span>
             <span>
               量：
-              <span style={{ color: isUp ? "#26a69a" : "#ef5350" }}>
+              <span style={{ color: isUp ? upColor : downColor }}>
                 {fmtVol(hoverInfo.vol)}
               </span>
             </span>
@@ -348,8 +361,8 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
                     hoverInfo.change === undefined
                       ? "#d1d4dc"
                       : Number(hoverInfo.change) >= 0
-                      ? "#26a69a"
-                      : "#ef5350",
+                      ? upColor
+                      : downColor,
                 }}
               >
                 {hoverInfo.change !== undefined &&
@@ -361,7 +374,27 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
               </span>
             </span>
             <span>额：{fmtVol(hoverInfo.amount)}</span>
-            <span>胜：{fmt(hoverInfo.winChange)}</span>
+            <span>
+              胜：
+              <span
+                style={{
+                  color:
+                    hoverInfo.winChange === undefined ||
+                    Number.isNaN(Number(hoverInfo.winChange))
+                      ? "#d1d4dc"
+                      : Number(hoverInfo.winChange) >= 0
+                      ? upColor
+                      : downColor,
+                }}
+              >
+                {hoverInfo.winChange !== undefined &&
+                !Number.isNaN(Number(hoverInfo.winChange))
+                  ? `${Number(hoverInfo.winChange) >= 0 ? "+" : ""}${fmt(
+                      hoverInfo.winChange
+                    )}%`
+                  : "-"}
+              </span>
+            </span>
 
             {isBuy && (
               <span style={{ color: "#f59e0b", fontWeight: 600 }}>
