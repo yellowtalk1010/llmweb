@@ -14,6 +14,10 @@ import {
  * optType 非空的蜡烛：上下交替标记（下方向上箭头 / 上方向下箭头）
  * A 股配色：涨红跌绿
  */
+
+// ↓↓↓ 只展示最近多少根蜡烛（数值越小越"缩"）
+const MAX_VISIBLE_BARS = 60;
+
 function KLineChart({ tscode, tradedate, height = 280 }) {
   console.info("tscode:" + tscode + ", tradedate:" + tradedate);
 
@@ -24,6 +28,7 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
   const markersPluginRef = useRef(null);
 
   const dataMapRef = useRef({});
+  const visibleCountRef = useRef(0);
 
   const [status, setStatus] = useState("loading");
   const [errorMsg, setErrorMsg] = useState("");
@@ -34,7 +39,7 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
   const downColor = "#26a69a"; // 绿 = 跌
 
   // 让全部数据居中显示，左侧留少量边距，右侧留更多边距
-  // count：蜡烛总数
+  // count：当前可视蜡烛总数
   const centerAllData = (count) => {
     const chart = chartRef.current;
     if (!chart || !count) return;
@@ -48,13 +53,12 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
     const rightRatio = 0.16;
     const usableWidth = Math.max(width * (1 - leftRatio - rightRatio), 1);
 
-    // ↓↓↓ 再缩一点：用 0.6 的系数把蜡烛间距压得更小，下限降到 1
+    // 系数 0.6 已到下限，这里保持 1px 极限
     const rawSpacing = (usableWidth / Math.max(count - 1, 1)) * 0.6;
     const barSpacing = Math.min(Math.max(rawSpacing, 1), 20);
 
     chart.timeScale().applyOptions({ barSpacing });
 
-    // 左右按像素换算成逻辑空槽位
     const leftPaddingBars = Math.round((width * leftRatio) / barSpacing);
     const rightPaddingBars = Math.round((width * rightRatio) / barSpacing);
 
@@ -84,7 +88,7 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
         borderColor: "#485c7b",
         timeVisible: true,
         tickMarkFormatter: (time) => time,
-        minBarSpacing: 1,     // ↓↓↓ 下限再放宽，允许缩到最小
+        minBarSpacing: 1,
         maxBarSpacing: 20,
         rightOffset: 12,
         fixLeftEdge: false,
@@ -166,9 +170,7 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
     const handleResize = () => {
       if (containerRef.current) {
         chart.applyOptions({ width: containerRef.current.clientWidth });
-        // 窗口变化后重新居中并留白
-        const count = Object.keys(dataMapRef.current).length;
-        if (count > 0) centerAllData(count);
+        if (visibleCountRef.current > 0) centerAllData(visibleCountRef.current);
       }
     };
     window.addEventListener("resize", handleResize);
@@ -270,12 +272,17 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
           return;
         }
 
+        // ↓↓↓ 只展示最近 MAX_VISIBLE_BARS 根，实现"再缩"
+        const visible = normalized.slice(-MAX_VISIBLE_BARS);
+        visibleCountRef.current = visible.length;
+
+        // dataMap 仍保留全部数据，方便跨图表联动/外部查询
         dataMapRef.current = Object.fromEntries(
           normalized.map((it) => [it.time, it])
         );
 
         candleSeriesRef.current.setData(
-          normalized.map(({ time, open, high, low, close }) => ({
+          visible.map(({ time, open, high, low, close }) => ({
             time,
             open,
             high,
@@ -286,7 +293,7 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
 
         // 成交量柱状图（A 股：涨红跌绿）
         volumeSeriesRef.current.setData(
-          normalized.map((it) => ({
+          visible.map((it) => ({
             time: it.time,
             value: Number.isNaN(it.vol) ? 0 : it.vol,
             color: it.close >= it.open ? "#ef535080" : "#26a69a80",
@@ -296,7 +303,7 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
         // 标记所有 optType 非空的蜡烛：上下交替
         // 第 1 个：下方(belowBar) 向上箭头；第 2 个：上方(aboveBar) 向下箭头；循环交替
         let optIndex = 0;
-        const optMarkers = normalized
+        const optMarkers = visible
           .filter((it) => it.optType && it.optType.trim() !== "")
           .map((it) => {
             const isBelow = optIndex % 2 === 0;
@@ -320,8 +327,8 @@ function KLineChart({ tscode, tradedate, height = 280 }) {
           );
         }
 
-        // ↓↓↓ 全部数据居中显示，左侧少量留白，右侧更多留白
-        centerAllData(normalized.length);
+        // ↓↓↓ 对可见数据居中并留白
+        centerAllData(visible.length);
 
         setStatus("ready");
       } catch (err) {
