@@ -19,13 +19,13 @@ import scala.jdk.CollectionConverters.*
 private case class KLineChartDto() {
   @BeanProperty var stockName: String = ""
   @BeanProperty var time: String = ""
-  @BeanProperty var open: Float = ""
-  @BeanProperty var high: Float = ""
-  @BeanProperty var low: Float = ""
-  @BeanProperty var close: Float = ""
-  @BeanProperty var vol: Float = ""
-  @BeanProperty var change: Float = ""
-  @BeanProperty var amount: Float = ""
+  @BeanProperty var open: Float = 0.0
+  @BeanProperty var high: Float = 0.0
+  @BeanProperty var low: Float = 0.0
+  @BeanProperty var close: Float = 0.0
+  @BeanProperty var vol: Float = 0.0
+  @BeanProperty var change: Float = 0.0
+  @BeanProperty var amount: Float = 0.0
   @BeanProperty var optType: String = "" //操作类型 buy或者sell
 }
 
