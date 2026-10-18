@@ -28,8 +28,8 @@ class TushareConceptComponent {
   @Autowired
   var stockMapper: StockMapper = null
 
-  @Autowired
-  var stockInfoMapper: StockInfoMapper = null
+//  @Autowired
+//  var stockInfoMapper: StockInfoMapper = null
 
   var executor = Executors.newSingleThreadExecutor()
 
@@ -37,7 +37,6 @@ class TushareConceptComponent {
 
   def getStockConceptInfo(stockCode: String): String = synchronized {
     if(stockInfoEntityList.size == 0){
-//      stockInfoEntityList ++= this.stockInfoMapper.selectAll().asScala
       load()
     }
     
@@ -98,6 +97,7 @@ class TushareConceptComponent {
         stockInfoEntity.stockName = e._2.name
         stockInfoEntity.concept = concept
         stockInfoEntity.id = md5(stockInfoEntity.stockCode)
+        stockInfoEntity.conceptFile = conceptFile.getAbsolutePath
         stockInfoEntity
       })
 
@@ -156,7 +156,7 @@ class TushareConceptComponent {
               val id = entity.id
               filecontextList.filter(tp2=>tp2._2.contains(id)).foreach(tp2=>{
                 entity.concept = tp2._2
-                this.stockInfoMapper.updateConceptById(tp2._2, id)
+                FileUtils.writeStringToFile(new File(entity.conceptFile), entity.concept, "UTF-8") //写入股票的板块和概念
                 println(s"删除${entity.stockCode}, ${entity.stockName}, ${tp2._1.getAbsolutePath}")
                 delFiles += tp2._1
               })

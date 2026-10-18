@@ -8,5 +8,5 @@ class StockInfoEntity {
   @BeanProperty var stockCode: String = null
   @BeanProperty var stockName: String = null
   @BeanProperty var concept: String = null
-
+  @BeanProperty var conceptFile: String = null
 }
