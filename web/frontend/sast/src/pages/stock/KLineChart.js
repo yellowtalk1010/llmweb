@@ -14,7 +14,7 @@ import {
  * optType 非空的蜡烛统一在上方用向下箭头标出 optType 内容
  * A 股配色：涨红跌绿
  */
-function KLineChart({ tscode, tradedate, height = 360 }) {
+function KLineChart({ tscode, tradedate, height = 280 }) {
   console.info("tscode:" + tscode + ", tradedate:" + tradedate);
 
   const containerRef = useRef(null);
@@ -340,7 +340,7 @@ function KLineChart({ tscode, tradedate, height = 360 }) {
         {hoverInfo && (
           <>
             {hoverInfo.stockName && (
-              <span style={{ color: "#fff", fontWeight: 600 }}>
+              <span style={{ color: "#0f0e0e", fontWeight: 600 }}>
                 {hoverInfo.stockName}
               </span>
             )}
