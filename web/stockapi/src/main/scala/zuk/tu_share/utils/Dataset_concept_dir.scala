@@ -43,7 +43,7 @@ object Dataset_concept_dir {
   }
 
   private def load(): Unit = synchronized {
-    if(map.size() < 5000){
+    if(map.size() > 5000){
       return
     }
     val conceptDir = new File(ParseCammandParam.param.engineInfo.concept_dir)
