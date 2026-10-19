@@ -245,7 +245,7 @@ class TusharePushStockController {
       //全部模型集合
       PassFactory.engineModuleList().map(_.getClass.getSimpleName).toSet
     })
-      .filter(! _.equals(classOf[MA8_Model].getSimpleName.toUpperCase))  //移除MA8，不想粘龙虎榜（思考1%收益和-5%亏损的胜率和赔率）
+      .filter(! _.equals(classOf[MA8_Model].getSimpleName))  //移除MA8，不想粘龙虎榜（思考1%收益和-5%亏损的胜率和赔率）
 
     /***
      * 列出今天模型推荐的全部结果文件集
