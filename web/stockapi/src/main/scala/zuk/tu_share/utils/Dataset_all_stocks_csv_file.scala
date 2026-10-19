@@ -18,8 +18,6 @@ object Dataset_all_stocks_csv_file {
 
   private val tsStockList = ListBuffer[TsStock]()
 
-  private val STOCKS_MAP = new ConcurrentHashMap[String, TsStock]()
-
   /***
    * 获取 all_stocks.csv 中的全量数据
    * 
@@ -85,10 +83,6 @@ object Dataset_all_stocks_csv_file {
 
     tsStockList.clear()
     tsStockList ++= list
-    
-    tsStockList.foreach(e=>{
-      STOCKS_MAP.put(e.ts_code, e)
-    })
 
     tsStockList.toList
   }
