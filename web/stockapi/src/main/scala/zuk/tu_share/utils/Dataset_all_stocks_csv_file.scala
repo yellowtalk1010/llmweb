@@ -31,12 +31,15 @@ object Dataset_all_stocks_csv_file {
   }
   
   def getTsStock(tsCode: String): TsStock = {
+    load
     val tsStock = STOCKS_MAP.get(tsCode)
     if(tsStock != null){
-      return tsStock 
+      tsStock 
     }
-    println(s"股票代码:${tsCode}，不存在，可能是转债代码")
-    new TsStock(tsCode)
+    else {
+      println(s"股票代码:${tsCode}，不存在，可能是转债代码")
+      new TsStock(tsCode)
+    }
   }
 
   /***
