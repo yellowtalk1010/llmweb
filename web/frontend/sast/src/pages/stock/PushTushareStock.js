@@ -71,11 +71,11 @@ useEffect(() => {
 
   fetchData(selectedModule);
 
-  // const interval = setInterval(() => {
-  //   fetchData(selectedModule);
-  // }, 1000 * 60 * 5); //刷新频率跳转为5分钟
+  const interval = setInterval(() => {
+    fetchData(selectedModule);
+  }, 1000 * 60); //刷新频率
 
-  // return () => clearInterval(interval);
+  return () => clearInterval(interval);
 
 }, []);
 
