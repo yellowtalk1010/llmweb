@@ -16,12 +16,23 @@ import scala.jdk.CollectionConverters.*
 object Dataset_all_stocks_csv_file {
 
   private val tsStockList = ListBuffer[TsStock]()
-  
+
+  /***
+   * 获取 all_stocks.csv 中的全量数据
+   * 
+   * @return
+   */
   def getTsStockList: List[TsStock] = {
     load
     tsStockList.toList
   }
 
+  /***
+   * 获取单一股票数据
+   * 
+   * @param tsCode
+   * @return
+   */
   def getTsStock(tsCode: String): Option[TsStock] = {
     if (StringUtils.isEmpty(tsCode)) {
       Option.empty
