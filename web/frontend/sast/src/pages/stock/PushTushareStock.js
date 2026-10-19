@@ -351,9 +351,14 @@ function StockTable({ list, refresh  }) {
                 &nbsp;&nbsp;
                 {item.remark}
                 <hr/>
-                热点：{item.hotSectors}
+                <span style={{ color: "red", fontWeight: "bold" }}>
+                  热点：{item.hotSectors}
+                </span>
                 <hr/>
-                冰点：{item.coolSectors}
+                <span>
+                  冰点：{item.coolSectors}
+                </span>
+                
               </td>
               <td className="p-3 max-w-[200px] break-words">
                 {item.ts_code}
