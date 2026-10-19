@@ -17,7 +17,7 @@ import zuk.sast.spring.controller.service.tushareStockImpl.{QuerTushareStockDto,
 import zuk.similar.SimilartyUtil
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 import zuk.tu_share.dto.TsStock
-import zuk.tu_share.module.IModel
+import zuk.tu_share.module.{IModel, MA8_Model, MA9_Model}
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.utils.{Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
 
@@ -238,13 +238,14 @@ class TusharePushStockController {
     }
 
     //获取选择的模型集合
-    val modSet = if(PassFactory.engineModuleList().map(_.getClass.getSimpleName).contains(modType)) {
-      Array(modType, "MA1_1_MODEL").toSet  //默认输出 MA1-1 模型
+    val modSet = (if(PassFactory.engineModuleList().map(_.getClass.getSimpleName).contains(modType)) {
+      Array(modType, classOf[MA9_Model].getSimpleName.toUpperCase).toSet  //默认输出 MA9 模型
     }
     else {
       //全部模型集合
       PassFactory.engineModuleList().map(_.getClass.getSimpleName).toSet
-    }
+    })
+      .filter(_.equals(classOf[MA8_Model].getSimpleName.toUpperCase))  //移除MA8，不想粘龙虎榜（思考1%收益和-5%亏损的胜率和赔率）
 
     /***
      * 列出今天模型推荐的全部结果文件集
