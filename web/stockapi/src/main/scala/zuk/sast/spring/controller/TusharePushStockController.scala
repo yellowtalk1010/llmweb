@@ -1,33 +1,29 @@
 package zuk.sast.spring.controller
 
-import com.alibaba.fastjson2.JSONWriter.Feature
 import com.alibaba.fastjson2.{JSONArray, JSONObject}
-import com.microsoft.playwright.{Page, Playwright, PlaywrightException}
+import com.microsoft.playwright.Playwright
 import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.{Autowired, Value}
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.spring.controller.component.{TushareConceptComponent, TushareInitMA4ModelMA5ModelComponent}
-import zuk.sast.spring.controller.mapper.StockMapper
-import zuk.sast.spring.controller.mapper.entity.StockEntity
+import zuk.sast.spring.controller.component.TushareInitMA4ModelMA5ModelComponent
 import zuk.sast.spring.controller.service.tushareStockImpl.{QuerTushareStockDto, TushareStock_limit_down_Impl, TushareStock_limit_up_Impl, TushareStock_module_Impl}
 import zuk.similar.SimilartyUtil
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.{IModel, MA8_Model, MA9_Model}
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
+import zuk.tu_share.utils.*
 
-import java.io.{File, FileInputStream}
+import java.io.File
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util
-import java.util.{Date, Properties, UUID}
+import java.util.Date
 import java.util.concurrent.Executors
-import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
@@ -45,9 +41,6 @@ class TusharePushStockController {
 
   @Autowired
   private var tushareInitMA4ModelMA5ModelComponent: TushareInitMA4ModelMA5ModelComponent = _
-
-  @Autowired
-  private var tushareConceptComponent: TushareConceptComponent = null
 
   //获取跌停
   @Autowired
@@ -270,8 +263,7 @@ class TusharePushStockController {
         e.file = file
         e.fileName = file.getName
         val optionTp3 = IncreateDecreateRateDescUtil.getDescription(e.ts_code)
-
-        val concept = this.tushareConceptComponent.getStockConceptInfo(e.ts_code)
+        val concept = Dataset_concept_dir.getConcept(e.ts_code)
         e.concept = concept
         e.remark = optionTp3.get._4 + concept
         e.tradeDate = trade_date
