@@ -7,6 +7,7 @@ import zuk.tu_share.dto.TsStock
 
 import java.io.{File, FileReader}
 import java.nio.charset.Charset
+import java.util.concurrent.ConcurrentHashMap
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
@@ -17,6 +18,8 @@ object Dataset_all_stocks_csv_file {
 
   private val tsStockList = ListBuffer[TsStock]()
 
+  private val STOCKS_MAP = new ConcurrentHashMap[String, TsStock]()
+
   /***
    * 获取 all_stocks.csv 中的全量数据
    * 
@@ -25,6 +28,15 @@ object Dataset_all_stocks_csv_file {
   def getTsStockList: List[TsStock] = {
     load
     tsStockList.toList
+  }
+  
+  def getTsStock(tsCode: String): TsStock = {
+    val tsStock = STOCKS_MAP.get(tsCode)
+    if(tsStock==null){
+      println(s"股票代码:${tsCode}，不存在")
+      System.exit(1)
+    }
+    tsStock
   }
 
   /***
@@ -92,6 +104,10 @@ object Dataset_all_stocks_csv_file {
 
     tsStockList.clear()
     tsStockList ++= list
+    
+    tsStockList.foreach(e=>{
+      STOCKS_MAP.put(e.ts_code, e)
+    })
 
     tsStockList.toList
   }
