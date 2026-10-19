@@ -15,9 +15,13 @@ function Stock() {
   const [collapsed, setCollapsed] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
+  // openedPages: [{ instanceKey, pageId, title, url }]
   const [openedPages, setOpenedPages] = useState([]);
-  const [activePageId, setActivePageId] = useState(null);
+  const [activeKey, setActiveKey] = useState(null);
   const [iframeSrcMap, setIframeSrcMap] = useState({});
+
+  // 用于生成实例 key 的自增计数器（useRef 避免闭包问题）
+  const instanceCounterRef = useRef(0);
 
   // 组件加载时请求接口
   useEffect(() => {
@@ -39,7 +43,6 @@ function Stock() {
 
         const data = await response.json();
 
-        // 兼容接口直接返回数组，或者返回 { data: [...] }
         const pageList = Array.isArray(data) ? data : data.data;
 
         if (!Array.isArray(pageList)) {
@@ -76,29 +79,35 @@ function Stock() {
     setCollapsed(!collapsed);
   };
 
+  // 每次点击都新建一个实例，允许重复打开同一个页面
   const openPage = (page) => {
-    setOpenedPages((prev) =>
-      prev.some((p) => p.id === page.id) ? prev : [...prev, page]
-    );
+    const instanceKey = `page-${page.id}-${++instanceCounterRef.current}`;
+
+    setOpenedPages((prev) => [
+      ...prev,
+      { instanceKey, pageId: page.id, title: page.title, url: page.url },
+    ]);
 
     setIframeSrcMap((prev) => ({
       ...prev,
-      [page.id]: prev[page.id] || page.url,
+      [instanceKey]: page.url,
     }));
 
-    setActivePageId(page.id);
+    setActiveKey(instanceKey);
   };
 
-  const closePage = (id) => {
+  const closePage = (instanceKey) => {
     setOpenedPages((prev) => {
-      const remaining = prev.filter((p) => p.id !== id);
+      const remaining = prev.filter((p) => p.instanceKey !== instanceKey);
 
-      if (activePageId === id) {
-        const closedIndex = prev.findIndex((p) => p.id === id);
+      if (activeKey === instanceKey) {
+        const closedIndex = prev.findIndex(
+          (p) => p.instanceKey === instanceKey
+        );
         const nextPage =
           remaining[Math.min(closedIndex, remaining.length - 1)];
 
-        setActivePageId(nextPage?.id ?? null);
+        setActiveKey(nextPage?.instanceKey ?? null);
       }
 
       return remaining;
@@ -106,14 +115,14 @@ function Stock() {
 
     setIframeSrcMap((prev) => {
       const newMap = { ...prev };
-      delete newMap[id];
+      delete newMap[instanceKey];
       return newMap;
     });
   };
 
-  const refreshPage = (id) => {
+  const refreshPage = (instanceKey) => {
     setIframeSrcMap((prev) => {
-      const src = prev[id];
+      const src = prev[instanceKey];
       if (!src) return prev;
 
       const url = new URL(src, window.location.href);
@@ -121,7 +130,7 @@ function Stock() {
 
       return {
         ...prev,
-        [id]: url.href,
+        [instanceKey]: url.href,
       };
     });
   };
@@ -215,21 +224,21 @@ function Stock() {
             >
               {openedPages.map((page) => (
                 <div
-                  key={page.id}
+                  key={page.instanceKey}
                   className={`px-3 py-1 cursor-pointer border-r flex items-center ${
-                    page.id === activePageId
+                    page.instanceKey === activeKey
                       ? "bg-green-100"
                       : "bg-white"
                   }`}
                 >
-                  <span onClick={() => setActivePageId(page.id)}>
+                  <span onClick={() => setActiveKey(page.instanceKey)}>
                     {page.title}
                   </span>
 
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      refreshPage(page.id);
+                      refreshPage(page.instanceKey);
                     }}
                     style={{
                       marginLeft: 5,
@@ -243,7 +252,7 @@ function Stock() {
                   </button>
 
                   <button
-                    onClick={() => closePage(page.id)}
+                    onClick={() => closePage(page.instanceKey)}
                     style={{
                       marginLeft: 5,
                       border: "none",
@@ -263,12 +272,12 @@ function Stock() {
           <div style={{ flex: 1, position: "relative" }}>
             {openedPages.map((page) => (
               <iframe
-                key={page.id}
-                src={iframeSrcMap[page.id]}
+                key={page.instanceKey}
+                src={iframeSrcMap[page.instanceKey]}
                 title={page.title}
                 style={{
                   display:
-                    page.id === activePageId ? "block" : "none",
+                    page.instanceKey === activeKey ? "block" : "none",
                   width: "100%",
                   height: "100%",
                   border: "none",

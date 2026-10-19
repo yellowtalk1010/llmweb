@@ -16,7 +16,7 @@ import {
  */
 
 // ↓↓↓ 只展示最近多少根蜡烛（数值越小越"缩"）
-const MAX_VISIBLE_BARS = 60;
+const MAX_VISIBLE_BARS = 30;
 
 function KLineChart({ tscode, tradedate, height = 280 }) {
   console.info("tscode:" + tscode + ", tradedate:" + tradedate);
