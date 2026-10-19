@@ -159,6 +159,8 @@ object Dataset_stock_dailydata_dir {
           }
           if(record.isMapped("vol")){
             stockDailyData.vol = record.get("vol")
+            //todo 转成手
+            stockDailyData.vol = new BigDecimal(stockDailyData.vol.toFloat).divide(new BigDecimal(100), 4, RoundingMode.DOWN).toString
           }
           if(record.isMapped("amount")){
             stockDailyData.amount = record.get("amount")
