@@ -45,21 +45,21 @@ object Dataset_all_stocks_csv_file {
    * @param tsCode
    * @return
    */
-  def getTsStock(tsCode: String): Option[TsStock] = {
-    if (StringUtils.isEmpty(tsCode)) {
-      Option.empty
-    }
-    else {
-      load
-      val ls = tsStockList.filter(_.ts_code.equals(tsCode))
-      if (ls.size > 0) {
-        Some(ls.head)
-      }
-      else {
-        Option.empty
-      }
-    }
-  }
+//  def getTsStock(tsCode: String): Option[TsStock] = {
+//    if (StringUtils.isEmpty(tsCode)) {
+//      Option.empty
+//    }
+//    else {
+//      load
+//      val ls = tsStockList.filter(_.ts_code.equals(tsCode))
+//      if (ls.size > 0) {
+//        Some(ls.head)
+//      }
+//      else {
+//        Option.empty
+//      }
+//    }
+//  }
 
   /**
    * 加载 all_stocks.csv 中的数据

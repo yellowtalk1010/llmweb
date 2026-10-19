@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.Dataset_module_history_rtk_dir
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
 
 import java.math.{BigDecimal, RoundingMode}
 
@@ -25,7 +25,7 @@ class MA3_0_Model extends IModel {
           && new BigDecimal(head.change).compareTo(BigDecimal(7)) <= 0  //涨幅度
           && List(list(1).change.toFloat, list(2).change.toFloat).min < 0
       ) {
-        val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(head.ts_code)
+        val tsStock = Dataset_all_stocks_csv_file.getTsStock(head.ts_code)
         if(tsStock!=null){
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           stockDto.warningUpperShadow = super.upperShadow(days)

@@ -179,7 +179,7 @@ class TushareStockController {
   def delete_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
                    @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
 
-    log.info(s"删除${stockType}, ${tsCode}, ${Dataset_all_stocks_csv_file.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"删除${stockType}, ${tsCode}, ${Dataset_all_stocks_csv_file.getTsStock(tsCode).name}")
 
     stockType match {
       case TushareInitMA4ModelMA5ModelComponent.buy_str =>
@@ -206,7 +206,7 @@ class TushareStockController {
   @GetMapping(value = Array("add_stock"))
   def add_stock(@RequestParam(value = "tsCode", required = false) tsCode: String,
                 @RequestParam(value = "stockType", required = false) stockType: String): util.Map[String, String] = synchronized {
-    log.info(s"添加${stockType}, ${tsCode}, ${Dataset_all_stocks_csv_file.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"添加${stockType}, ${tsCode}, ${Dataset_all_stocks_csv_file.getTsStock(tsCode).name}")
 
     stockType match {
       case TushareInitMA4ModelMA5ModelComponent.buy_str =>
@@ -243,12 +243,12 @@ class TushareStockController {
    */
   private def add(tsCode: String, stockType: String): Unit = synchronized {
 
-    log.info(s"添加${stockType}, ${tsCode}, ${Dataset_all_stocks_csv_file.getTsStock(tsCode).getOrElse(new TsStock).name}")
+    log.info(s"添加${stockType}, ${tsCode}, ${Dataset_all_stocks_csv_file.getTsStock(tsCode).name}")
     if(this.stockMapper.selectByCode(tsCode).asScala.filter(s=>s.stockType.equals(stockType)).size == 0){
       val stockEntity: StockEntity = new StockEntity
       stockEntity.id = UUID.randomUUID().toString.replaceAll("-", "")
       stockEntity.stockCode = tsCode
-      stockEntity.name = Dataset_all_stocks_csv_file.getTsStock(tsCode).getOrElse(new TsStock).name
+      stockEntity.name = Dataset_all_stocks_csv_file.getTsStock(tsCode).name
       stockEntity.stockType = stockType
       stockEntity.createtime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date)
       stockMapper.insert(stockEntity)

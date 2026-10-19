@@ -11,7 +11,7 @@ import zuk.token.TaskHandleFactory
 import zuk.token.providers.tasks.Task_EasymoneyConcept
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.utils.Dataset_module_history_rtk_dir
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
 
 import java.io.File
 import java.util.concurrent.Executors
@@ -75,13 +75,13 @@ class TushareConceptComponent {
   
   private def load(): Unit = synchronized {
 
-    if (stockInfoEntityList.size == Dataset_module_history_rtk_dir.STOCKS_MAP.size()) {
+    if (stockInfoEntityList.size < 5000) {
       return 
     }
     
     //todo 初始化股票的 概念和板块 信息
     stockInfoEntityList ++=
-      Dataset_module_history_rtk_dir.STOCKS_MAP.asScala.map(e => {
+      Dataset_all_stocks_csv_file.getTsStockList.map(e=>(e.ts_code, e)).map(e => {
         val conceptFile = new File(ParseCammandParam.param.engineInfo.concept_dir + File.separator + e._2.ts_code + ".txt")
         println(s"加载【${e._2.ts_code}, ${e._2.name}】股票的概念板块路径：${conceptFile.getAbsolutePath}, ${conceptFile.exists()}")
         val concept = if (conceptFile.exists()) {

@@ -138,7 +138,7 @@ object DTWStockSimilarity_B {
         val dis = dtwDistance(target.map(_.feature), windowBars.map(_.feature))
         results += SimilarResult(
           stock_code,
-          Dataset_module_history_rtk_dir.STOCKS_MAP.get(stock_code).name,
+          Dataset_all_stocks_csv_file.getTsStock(stock_code).name,
           windowBars.last.date,
           windowBars.head.date,
           new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())

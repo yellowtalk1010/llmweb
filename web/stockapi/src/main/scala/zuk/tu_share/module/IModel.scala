@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.dto.{ModuleHistoryDailyData, TsStock}
-import zuk.tu_share.utils.Dataset_module_history_rtk_dir
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
 
 import java.math
 import scala.collection.mutable.ListBuffer
@@ -23,7 +23,7 @@ trait IModel {
   def buyReason(): String = ""
 
   def findTsStock(tsCode: String): TsStock = {
-    Dataset_module_history_rtk_dir.STOCKS_MAP.get(tsCode)
+    Dataset_all_stocks_csv_file.getTsStock(tsCode)
   }
 
   def winRate: Float = {

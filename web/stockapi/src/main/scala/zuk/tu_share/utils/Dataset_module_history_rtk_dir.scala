@@ -224,7 +224,7 @@ object Dataset_module_history_rtk_dir {
     val ts_code_path = ts_code.replace(".", "_")
     val module_path = ParseCammandParam.param.engineInfo.stock_module_dir + File.separator + s"${ts_code_path}.csv"
     val module_file = new File(module_path)
-    println(s"加载股票${ts_code}，${Dataset_all_stocks_csv_file.getTsStock(ts_code).getOrElse(new TsStock()).name}，的预备数据:${module_file.getAbsolutePath}, ${module_file.exists()}")
+    println(s"加载股票${ts_code}，${Dataset_all_stocks_csv_file.getTsStock(ts_code).name}，的预备数据:${module_file.getAbsolutePath}, ${module_file.exists()}")
     if(!module_file.exists()){
       //判断模型路径是否存在
       //println(s"${module_file.getAbsolutePath}，${module_file.exists()}")

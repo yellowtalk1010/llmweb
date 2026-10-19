@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.Dataset_module_history_rtk_dir
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
 import zuk.utils.SendMail
 
 import java.io.{File, FileOutputStream}
@@ -48,7 +48,7 @@ object BackTest {
         val lines = new ListBuffer[String]()
         val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse.filter(mod=>{
             if(mod.sells.size==0){
-              val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(mod.buy.ts_code)
+              val tsStock = Dataset_all_stocks_csv_file.getTsStock(mod.buy.ts_code)
               val name = if(tsStock!=null){
                 val url = tsStock.eastmoneyURL
                 val href = s"<a href='${url}'>${mod.buy.name}</a>"
@@ -87,7 +87,7 @@ object BackTest {
 
             val ok = if (st) "" else "X"
 
-            val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(mod.buy.ts_code)
+            val tsStock = Dataset_all_stocks_csv_file.getTsStock(mod.buy.ts_code)
             val name = if (tsStock!=null) {
               val url = tsStock.eastmoneyURL
               val href = s"<a href='${url}'>${mod.buy.name}</a>"

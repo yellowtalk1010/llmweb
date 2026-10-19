@@ -7,7 +7,7 @@ import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, ListOrderCheck}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir, ListOrderCheck}
 
 import java.io.File
 import java.math.{BigDecimal, RoundingMode}
@@ -126,7 +126,7 @@ class MA7_Model extends IModel {
       && head.change.toFloat > 2.0
     ){
 
-      val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(days.head.ts_code)
+      val tsStock = Dataset_all_stocks_csv_file.getTsStock(days.head.ts_code)
       val head = days.head
 
       this.similartyDto = SimilartyUtil.getTsCode(head.ts_code, head.trade_date)

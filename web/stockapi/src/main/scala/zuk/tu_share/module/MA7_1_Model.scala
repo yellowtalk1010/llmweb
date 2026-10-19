@@ -5,7 +5,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, ListOrderCheck}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir, ListOrderCheck}
 import zuk.tu_share.ParseCammandParam
 
 import java.io.File
@@ -130,7 +130,7 @@ class MA7_1_Model extends IModel {
       && head.change.toFloat > 5.0 //涨跌2个点
     ){
 
-      val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(days.head.ts_code)
+      val tsStock = Dataset_all_stocks_csv_file.getTsStock(days.head.ts_code)
       val head = days.head
       stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       stockDto.warningUpperShadow = super.upperShadow(days)

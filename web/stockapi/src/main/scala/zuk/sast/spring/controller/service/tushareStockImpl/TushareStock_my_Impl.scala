@@ -34,12 +34,12 @@ class TushareStock_My_Impl extends ITushareStockService {
 
     val tsStockList = sets.toList.map(e => {
         Dataset_all_stocks_csv_file.getTsStock(e)
-      }).filter(!_.isEmpty)
+      })
       .map(e => {
         val dto = new TushareStockControllerDTO
         dto.selectModel = "我的"
-        dto.stockCode = e.get.ts_code
-        dto.name = e.get.name
+        dto.stockCode = e.ts_code
+        dto.name = e.name
 
 
         //todo 区分股票类型
@@ -53,7 +53,7 @@ class TushareStock_My_Impl extends ITushareStockService {
 
         //todo 计算改股票在各模型中出现的次数
         val str = TushareStock_module_Impl.modelTestbackResultMap.asScala.map(tp2 => {
-          val times = tp2._2.filter(modTestbackRes=>modTestbackRes.stockCode.equals(e.get.ts_code)).size
+          val times = tp2._2.filter(modTestbackRes=>modTestbackRes.stockCode.equals(e.ts_code)).size
           if(times == 0){
             ""
           }
@@ -72,9 +72,9 @@ class TushareStock_My_Impl extends ITushareStockService {
         val optionTp3 = IncreateDecreateRateDescUtil.getDescription(dto.stockCode)
         dto.remark = optionTp3.get._4
         dto.concept = this.tushareConceptComponent.getStockConceptInfo(dto.stockCode)
-        dto.eastmoneyURL = e.get.eastmoneyURL
-        dto.conceptURL = e.get.conceptURL
-        dto.zjlxURL = e.get.zjlxURL
+        dto.eastmoneyURL = e.eastmoneyURL
+        dto.conceptURL = e.conceptURL
+        dto.zjlxURL = e.zjlxURL
         if (attentionSet.contains(dto.stockCode)) {
           dto.attention = "已关注"
         }

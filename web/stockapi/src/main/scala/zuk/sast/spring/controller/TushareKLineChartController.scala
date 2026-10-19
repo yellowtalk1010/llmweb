@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.Dataset_module_history_rtk_dir
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
 
 import java.math.RoundingMode
 import java.util
@@ -44,7 +44,7 @@ class TushareKLineChartController {
 
     val LEN = 20
 
-    val stockName = Dataset_module_history_rtk_dir.STOCKS_MAP.get(stockCode).name
+    val stockName = Dataset_all_stocks_csv_file.getTsStock(stockCode).name
 
     log.info(s"${stockCode}, ${stockName}, ${tradedate}")
 

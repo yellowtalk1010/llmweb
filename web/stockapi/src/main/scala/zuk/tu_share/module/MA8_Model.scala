@@ -3,7 +3,7 @@ package zuk.tu_share.module
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.{ModuleHistoryDailyData, TopInst}
-import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_top_Inst_dir}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir, Dataset_top_Inst_dir}
 
 import java.io.File
 import java.nio.file.{Path, Paths}
@@ -92,7 +92,7 @@ class MA8_Model extends IModel {
           && head.vol.toFloat < second.vol.toFloat * 0.75 //缩量越多越好
           && divideValue > 0.3
         ){
-          val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(days.head.ts_code)
+          val tsStock = Dataset_all_stocks_csv_file.getTsStock(days.head.ts_code)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
       }

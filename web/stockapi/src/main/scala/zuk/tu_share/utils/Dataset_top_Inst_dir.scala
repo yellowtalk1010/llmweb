@@ -123,7 +123,7 @@ object Dataset_top_Inst_dir {
           //额外计算
           topInst.splitTsCode(topInst.ts_code)
           //股票名称
-          topInst.ts_name = Dataset_all_stocks_csv_file.getTsStock(topInst.ts_code).getOrElse(new TsStock()).name 
+          topInst.ts_name = Dataset_all_stocks_csv_file.getTsStock(topInst.ts_code).name 
 
           //获取机构获取，或者游资名称
           val ls1 = Dataset_hm_detail_dir.loadData().flatMap(_._2).filter(_.hm_orgs.trim.equals(topInst.exalter.trim)) 
