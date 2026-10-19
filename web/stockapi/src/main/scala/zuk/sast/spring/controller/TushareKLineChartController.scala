@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.sast.spring.controller.component.{MoneyflowDCDto, TushareMoneyFlowComponent}
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.StockDailyData
+import zuk.tu_share.dto.{ModuleDay, StockDailyData}
 import zuk.tu_share.utils.Dataset_stock_dailydata_dir
 
 import java.math.RoundingMode
@@ -51,10 +51,20 @@ class TushareKLineChartController {
 
     log.info(s"${stockCode}, ${stockName}, ${tradedate}")
 
-    val dailydataList = Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
+    val map = DataFrame.loadModelAnalysisDataSet
+    
+    if(map.get(stockCode).isEmpty){
+      val result = new util.HashMap[String, Object]()
+      result.put("data", List.empty.asJava)
+      result.put("code", "success")
+      return result
+    }
+
+    val dailydataList = map.get(stockCode).get
+//    val dailydataList = Dataset_stock_dailydata_dir.getDailyDataList(stockCode)
 
     val subList = if(StringUtils.isNotBlank(tradedate)){
-      val ls = ListBuffer[StockDailyData]()
+      val ls = ListBuffer[ModuleDay]()  //ModuleDay   StockDailyData
       //TODO 截取
       for (index <- 0 until dailydataList.size) {
         if(dailydataList(index).trade_date.equals(tradedate)) {
