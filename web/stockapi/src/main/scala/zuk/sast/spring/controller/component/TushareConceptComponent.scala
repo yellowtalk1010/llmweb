@@ -29,8 +29,9 @@ class TushareConceptComponent {
   var stockInfoEntityList = new ListBuffer[StockInfoEntity]
 
   def getStockConceptInfo(stockCode: String): String = {
-    
-//    val concept = Dataset_concept_dir.getConcept(stockCode)
+
+    val concept = Dataset_concept_dir.getConcept(stockCode)
+    concept
 //    concept.split("\n").filter(l=>{
 //      l.contains("概念")
 //        || l.contains("一级行业")
@@ -38,22 +39,22 @@ class TushareConceptComponent {
 //        || l.contains("三级行业")
 //    }).map(l=>s"【${l}】").mkString("")
 
-    load()
-    val ls = this.stockInfoEntityList.filter(_.stockCode.equals(stockCode))
-    if(ls.size>0 && StringUtils.isNotEmpty(ls.head.concept)){
-      val concept = ls.head.concept.split("\n").filter(l=>{
-        l.contains("概念")
-          || l.contains("一级行业")
-          || l.contains("二级行业")
-          || l.contains("三级行业")
-      }).map(l=>s"【${l}】").mkString("")
+//    load()
+//    val ls = this.stockInfoEntityList.filter(_.stockCode.equals(stockCode))
+//    if(ls.size>0 && StringUtils.isNotEmpty(ls.head.concept)){
+//      val concept = ls.head.concept.split("\n").filter(l=>{
+//        l.contains("概念")
+//          || l.contains("一级行业")
+//          || l.contains("二级行业")
+//          || l.contains("三级行业")
+//      }).map(l=>s"【${l}】").mkString("")
+//
+//      concept
+//    }
+//    else {
+//      ""
+//    }
 
-      concept
-    }
-    else {
-      ""
-    }
-    
   }
 
 
@@ -130,11 +131,13 @@ class TushareConceptComponent {
 
   @PostConstruct
   def init(): Unit = {
-    
+
     //AI任务引擎初始化启动成功
     if(!TaskHandleFactory.initTask()){
       return
     }
+    
+    load()
     
     executor.execute(()=>{
       //启动

@@ -22,12 +22,20 @@ object Dataset_concept_dir {
   def getConcept(tsCode: String): String = {
     load()
     val v = map.get(tsCode)
-    if(v==null){
+    val concept = if(v==null){
       ""
     }
     else {
       v
     }
+    
+    concept.split("\n").filter(l=>{
+      l.contains("概念")
+        || l.contains("一级行业")
+        || l.contains("二级行业")
+        || l.contains("三级行业")
+    }).map(l=>s"【${l}】").mkString("")
+    
   }
 
   /***
