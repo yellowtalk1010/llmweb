@@ -22,6 +22,9 @@ function PushTushareStock() {
   const [selectedModule, setSelectedModule] = useState("MA8_Model"); // ALL_MODEL
   const [tradedate, setTradedate] = useState("")
 
+  // 是否自动刷新
+  const [autoRefresh, setAutoRefresh] = useState(false);
+
   const fetchData = async (modType = "") => {
     try {
       setLoading(true);
@@ -71,13 +74,17 @@ useEffect(() => {
 
   fetchData(selectedModule);
 
+  if (!autoRefresh) {
+    return;
+  }
+
   const interval = setInterval(() => {
     fetchData(selectedModule);
-  }, 1000 * 60); //刷新频率
+  }, 1000 * 30); //刷新频率
 
   return () => clearInterval(interval);
 
-}, []);
+}, [autoRefresh]);
 
   const toggleModule = (index) => {
     setExpandedModules((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -134,16 +141,29 @@ useEffect(() => {
             集算
         </label>
 
+
         <button
           onClick={() => fetchData(selectedModule)}
           className="ml-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           查询  {loading && <p>Loading...</p>}
         </button>
+        
+        <label className="ml-2 items-center gap-1">
+            <input
+                type="checkbox"
+                checked={autoRefresh}
+                onChange={(e) => setAutoRefresh(e.target.checked)}
+            />
+            刷新
+        </label>
+
+        
         <label>
           {/* {loading && <p>Loading...</p>} */}
           {error && <p className="text-red-500">Error: {error}</p>}
         </label>
+
       </div>
 
       {data.map((moduleItem, index) => (
