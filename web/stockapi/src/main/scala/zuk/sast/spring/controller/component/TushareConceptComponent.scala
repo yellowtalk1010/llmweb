@@ -74,7 +74,7 @@ class TushareConceptComponent {
         stockInfoEntity.stockName = e._2.name
         stockInfoEntity.concept = Dataset_concept_dir.getConcept(e._2.ts_code)
         stockInfoEntity.id = md5(stockInfoEntity.stockCode)
-        stockInfoEntity.conceptFile = conceptFile.getAbsolutePath
+        stockInfoEntity.conceptFile = Dataset_concept_dir.getFile(e._2.ts_code)
         stockInfoEntity
       })
 

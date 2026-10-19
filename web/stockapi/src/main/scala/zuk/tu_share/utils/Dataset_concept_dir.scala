@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 object Dataset_concept_dir {
 
   private val map = new ConcurrentHashMap[String, String]()
+  private val file_map = new ConcurrentHashMap[String, String]()
 
   /***
    * 根据tscode股票代码获取概念
@@ -38,6 +39,10 @@ object Dataset_concept_dir {
     
   }
 
+  def getFile(tsCode: String): String = {
+    file_map.get(tsCode)
+  }
+
   /***
    * 保存股票的板块和概念到文件中
    *
@@ -60,6 +65,7 @@ object Dataset_concept_dir {
       val tsCode = f.getName.replaceAll("\\.txt", "")
       val concept = FileUtils.readFileToString(f, "UTF-8")
       map.put(tsCode, concept)
+      file_map.put(tsCode, f.getAbsolutePath)
       println(s"加载股票${tsCode}, ${Dataset_all_stocks_csv_file.getTsStock(tsCode).name},的板块和概念数据，路径：${f.getAbsolutePath}")
     })
   }
