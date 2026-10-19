@@ -16,13 +16,19 @@ import scala.jdk.CollectionConverters.*
 object Dataset_all_stocks_csv_file {
 
   private val tsStockList = ListBuffer[TsStock]()
+  
+  def getTsStockList: List[TsStock] = {
+    load
+    tsStockList.toList
+  }
 
   def getTsStock(tsCode: String): Option[TsStock] = {
     if (StringUtils.isEmpty(tsCode)) {
       Option.empty
     }
     else {
-      val ls = Dataset_all_stocks_csv_file.load.filter(_.ts_code.equals(tsCode))
+      load
+      val ls = tsStockList.filter(_.ts_code.equals(tsCode))
       if (ls.size > 0) {
         Some(ls.head)
       }
@@ -38,7 +44,7 @@ object Dataset_all_stocks_csv_file {
    * @param all_stocks_csv
    * @return
    */
-  def load: List[TsStock] = synchronized {
+  private def load: List[TsStock] = synchronized {
 
     if(tsStockList.size > 5000){
       return tsStockList.toList

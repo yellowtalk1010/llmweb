@@ -25,7 +25,7 @@ private abstract class limit_up_down {
    * @return
    */
   def getLimit_up_down(up_down_type: Int = 1, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
-    val list = Dataset_all_stocks_csv_file.load.map(_.ts_code)
+    val list = Dataset_all_stocks_csv_file.getTsStockList.map(_.ts_code)
       .filter(e => {
         val list = Dataset_module_history_rtk_dir.getDataForSelect(e)
         list != null && list.size > 0

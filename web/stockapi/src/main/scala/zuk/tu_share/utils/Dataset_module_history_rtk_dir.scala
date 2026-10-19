@@ -133,7 +133,7 @@ object Dataset_module_history_rtk_dir {
 
     //CSV文件中加载股票信息
     if(STOCKS_MAP.size < 5000){
-      Dataset_all_stocks_csv_file.load.foreach(e => {
+      Dataset_all_stocks_csv_file.getTsStockList.foreach(e => {
         //转成MAP格式
         STOCKS_MAP.put(e.ts_code, e)
       })

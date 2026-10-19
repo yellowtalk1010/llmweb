@@ -26,7 +26,7 @@ class Tushare_All_Impl extends ITushareStockService {
 
   override def getStocks(dto: QuerTushareStockDto): util.List[TushareStockControllerDTO] = {
 
-    val allList = Dataset_all_stocks_csv_file.load.map(e=>{
+    val allList = Dataset_all_stocks_csv_file.getTsStockList.map(e=>{
       val dto = new TushareStockControllerDTO
       dto.selectModel = "全部"
       dto.stockCode = e.ts_code
