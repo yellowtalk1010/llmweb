@@ -44,7 +44,7 @@ object Dataset_module_history_rtk_dir {
   private val RTK_MAP = new ConcurrentHashMap[String, ModuleHistoryDailyData]()
   
   
-  var execute = Executors.newSingleThreadExecutor()
+  private val execute = Executors.newSingleThreadExecutor()
   execute.submit(new Runnable {
     override def run(): Unit = {
       while (true) {
