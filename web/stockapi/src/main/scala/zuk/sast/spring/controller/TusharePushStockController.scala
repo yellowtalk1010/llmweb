@@ -15,11 +15,11 @@ import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.sast.spring.controller.service.tushareStockImpl.{QuerTushareStockDto, TushareStock_limit_down_Impl, TushareStock_limit_up_Impl, TushareStock_module_Impl}
 import zuk.similar.SimilartyUtil
-import zuk.tu_share.{DataFrame, ParseCammandParam}
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.{IModel, MA8_Model, MA9_Model}
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
+import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
 
 import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
@@ -137,7 +137,7 @@ class TusharePushStockController {
    */
   private def getModuleSortList: List[IModel] = {
     try {
-      val properties = DataFrame.getProperties()
+      val properties = Dataset_module_history_rtk_dir.getProperties()
       PassFactory.engineModuleList().sortBy(_.winRate).reverse
     }
     catch {

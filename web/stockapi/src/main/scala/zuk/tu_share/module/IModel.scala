@@ -1,8 +1,8 @@
 package zuk.tu_share.module
 
 import zuk.similar.{SimilartyDto, SimilartyUtil}
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.{ModuleHistoryDailyData, TsStock}
+import zuk.tu_share.utils.Dataset_module_history_rtk_dir
 
 import java.math
 import scala.collection.mutable.ListBuffer
@@ -23,12 +23,12 @@ trait IModel {
   def buyReason(): String = ""
 
   def findTsStock(tsCode: String): TsStock = {
-    DataFrame.STOCKS_MAP.get(tsCode)
+    Dataset_module_history_rtk_dir.STOCKS_MAP.get(tsCode)
   }
 
   def winRate: Float = {
     val className = this.getClass.getSimpleName
-    val v = DataFrame.getProperties().get(className.toUpperCase)
+    val v = Dataset_module_history_rtk_dir.getProperties().get(className.toUpperCase)
     if (v != null) {
       v.toString.toFloat
     }

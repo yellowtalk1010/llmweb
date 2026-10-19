@@ -4,9 +4,10 @@ import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
-import zuk.tu_share.{DataFrame, ParseCammandParam}
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
+import zuk.tu_share.utils.Dataset_module_history_rtk_dir
 import zuk.utils.SendMail
 
 import java.io.{File, FileOutputStream}
@@ -47,7 +48,7 @@ object BackTest {
         val lines = new ListBuffer[String]()
         val victoryList = ls.sortBy(e=>(e.buy.trade_date, e.getStockDto().preChangeRate)).reverse.filter(mod=>{
             if(mod.sells.size==0){
-              val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
+              val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(mod.buy.ts_code)
               val name = if(tsStock!=null){
                 val url = tsStock.eastmoneyURL
                 val href = s"<a href='${url}'>${mod.buy.name}</a>"
@@ -86,7 +87,7 @@ object BackTest {
 
             val ok = if (st) "" else "X"
 
-            val tsStock = DataFrame.STOCKS_MAP.get(mod.buy.ts_code)
+            val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(mod.buy.ts_code)
             val name = if (tsStock!=null) {
               val url = tsStock.eastmoneyURL
               val href = s"<a href='${url}'>${mod.buy.name}</a>"
@@ -114,7 +115,7 @@ object BackTest {
         //计算胜率
         val victoryRate = new BigDecimal(victoryList.size).divide(new BigDecimal(ls.filter(_.sells.size>0).size), 4, RoundingMode.UP)
         //胜率保存到properties中
-        zuk.tu_share.DataFrame.getProperties().put(clsName.toUpperCase, victoryRate.toString)
+        Dataset_module_history_rtk_dir.getProperties().put(clsName.toUpperCase, victoryRate.toString)
         val line = s"${clsName}胜率：${victoryRate}, ${ls.head.desc()}"
         lines += line
         println(line)
@@ -123,7 +124,7 @@ object BackTest {
     })
 
     //保存胜率
-    DataFrame.storeProperties()
+    Dataset_module_history_rtk_dir.storeProperties()
 
     //回测结果按模型类型分别存储
     PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{

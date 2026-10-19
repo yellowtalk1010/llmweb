@@ -5,9 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import zuk.sast.spring.controller.TushareStockControllerDTO
 import zuk.sast.spring.controller.component.TushareConceptComponent
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.TsStock
-import zuk.tu_share.utils.Dataset_all_stocks_csv_file
+import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_all_stocks_csv_file}
 
 import scala.jdk.CollectionConverters.*
 
@@ -28,11 +27,11 @@ private abstract class limit_up_down {
   def getLimit_up_down(up_down_type: Int = 1, selectedDateStart: String, selectedDateEnd: String): java.util.List[TushareStockControllerDTO] = {
     val list = Dataset_all_stocks_csv_file.load.map(_.ts_code)
       .filter(e => {
-        val list = DataFrame.getDataForSelect(e)
+        val list = Dataset_module_history_rtk_dir.getDataForSelect(e)
         list != null && list.size > 0
       })
       .flatMap(stockCode => {
-        val ls = DataFrame.getDataForSelect(stockCode)
+        val ls = Dataset_module_history_rtk_dir.getDataForSelect(stockCode)
         //开始过滤时间
         val filterList = if (StringUtils.isNotBlank(selectedDateStart) && StringUtils.isNotBlank(selectedDateEnd)) {
           val start = if (selectedDateStart.trim.toLong <= selectedDateEnd.trim.toLong) {

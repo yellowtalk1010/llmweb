@@ -7,8 +7,8 @@ import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
 import org.springframework.stereotype.Service
 import zuk.similar.Bar
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleHistoryDailyData
+import zuk.tu_share.utils.Dataset_module_history_rtk_dir
 
 import java.io.File
 import java.math.RoundingMode
@@ -190,7 +190,7 @@ object ConsolidationScanner {
     
     //val rndBars = genBars(60, 42L)
     
-    val barsList = DataFrame.loadModelAnalysisDataSet.values.filter(_.size > 60).map(ls=>{
+    val barsList = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.values.filter(_.size > 60).map(ls=>{
       val bars = ls.map(e=>{
         val bar = Bar(
           e.trade_date, 
@@ -237,7 +237,7 @@ object ConsolidationScanner {
         for (i <- 0 until resBar.hitBars.size - 1) {
           val cur = resBar.hitBars(i)
           val next = resBar.hitBars(i + 1)
-          val ls = DataFrame.getDataForSelect(resBar.stockCode).filter(e => cur.date.toLong <= e.trade_date.toLong && e.trade_date.toLong <= next.date.toLong)
+          val ls = Dataset_module_history_rtk_dir.getDataForSelect(resBar.stockCode).filter(e => cur.date.toLong <= e.trade_date.toLong && e.trade_date.toLong <= next.date.toLong)
           if(cur.date.toLong + 1 == next.date.toLong  //连续
             || ls.size <= 3 //间隔1天
           ){
@@ -255,7 +255,7 @@ object ConsolidationScanner {
       resBar.hitBars.groupBy(_.group).foreach(tp2=>{
         val group = tp2._1
         val ls = tp2._2
-        val backtestList = DataFrame.getDataForSelect(resBar.stockCode).filter(e=> e.trade_date.toLong > ls.last.date.toLong)
+        val backtestList = Dataset_module_history_rtk_dir.getDataForSelect(resBar.stockCode).filter(e=> e.trade_date.toLong > ls.last.date.toLong)
         if(backtestList.size >= 10){
           resBar.backTestDataMap.put(group, backtestList.reverse.take(10).reverse)
         }
@@ -340,7 +340,7 @@ object ConsolidationScanner {
     val futureList = new ListBuffer[String]
     barResList.foreach(barRes => {
       barRes.hitBars.groupBy(_.group).filter(_._2.size > LENGHT).foreach((group, ls) => {
-        val selectList = DataFrame.getDataForSelect(ls.head.stockCode)
+        val selectList = Dataset_module_history_rtk_dir.getDataForSelect(ls.head.stockCode)
         val tradeDate = selectList.take(6).last.trade_date
         if((ls.head.date.toLong <= tradeDate.toLong && ls.last.date.toLong >= tradeDate.toLong)
           || ls.head.date.toLong >= tradeDate.toLong){

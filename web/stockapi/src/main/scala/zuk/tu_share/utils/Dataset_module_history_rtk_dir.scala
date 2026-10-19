@@ -1,7 +1,8 @@
-package zuk.tu_share
+package zuk.tu_share.utils
 
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.{ModuleHistoryDailyData, TsStock}
 import zuk.tu_share.utils.Dataset_all_stocks_csv_file
 
@@ -12,16 +13,18 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Date
+import java.util.{Date, Properties}
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.{ConcurrentHashMap, Executors}
 import scala.collection.*
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
-import java.util.Properties
-import java.util.concurrent.{ConcurrentHashMap, Executors}
 
 
-object DataFrame {
+/***
+ * 加载引擎分析需要使用的模型历史数据和及时RTK数据
+ */
+object Dataset_module_history_rtk_dir {
 
   private val properties = new Properties()
   
@@ -33,12 +36,12 @@ object DataFrame {
   /***
    * 历史日线数据
    */
-  var HISTORY_MAP = new ConcurrentHashMap[String, List[ModuleHistoryDailyData]]()
+  private val HISTORY_MAP = new ConcurrentHashMap[String, List[ModuleHistoryDailyData]]()
 
   /** *
    * rtk 实时日线数据
    */
-  var RTK_MAP = new ConcurrentHashMap[String, ModuleHistoryDailyData]()
+  private val RTK_MAP = new ConcurrentHashMap[String, ModuleHistoryDailyData]()
   
   
   var execute = Executors.newSingleThreadExecutor()
@@ -92,11 +95,10 @@ object DataFrame {
     try {
       val configProperties: String = ParseCammandParam.param.engineInfo.stock_config_properties_file
       println(s"保存properties路径：${configProperties}")
-      import zuk.tu_share.DataFrame
       val sdf = new SimpleDateFormat("yyyy-MM-dd")
       val dateStr = sdf.format(new Date())
       output = new FileOutputStream(configProperties)
-      DataFrame.getProperties().store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
+      Dataset_module_history_rtk_dir.getProperties().store(output, s"${dateStr} stock config") //保存到文件中，并输出注释
     }
     catch
       case exception: Exception =>

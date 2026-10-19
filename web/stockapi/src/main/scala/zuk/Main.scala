@@ -1,9 +1,9 @@
 package zuk
 
 import zuk.tu_share.backtest.BackTest
-import zuk.tu_share.{ParseCammandParam, DataFrame}
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.LicenseUtil
+import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, LicenseUtil}
 
 import java.io.PrintStream
 import java.nio.charset.{Charset, StandardCharsets}
@@ -25,7 +25,7 @@ object Main {
     }
     if (ParseCammandParam.param.back){
       //回测
-      val map = DataFrame.loadModelAnalysisDataSet
+      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet
       for (i <- 0 to ParseCammandParam.param.back_step) {
         PassFactory.doModule(map, i)
         println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
@@ -37,7 +37,7 @@ object Main {
     }
     else {
       //加载数据
-      val map = DataFrame.loadModelAnalysisDataSet
+      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet
       //分析
       PassFactory.doModule(map)
       println("完成分析")

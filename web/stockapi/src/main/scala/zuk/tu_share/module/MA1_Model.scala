@@ -1,7 +1,7 @@
 package zuk.tu_share.module
 import org.apache.commons.lang3.StringUtils
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleHistoryDailyData
+import zuk.tu_share.utils.Dataset_module_history_rtk_dir
 
 import java.math.{BigDecimal, RoundingMode}
 /***
@@ -33,7 +33,7 @@ class MA1_Model extends IModel {
           && list(0).low.toFloat > list(1).low.toFloat    //
           && list(0).vol.toFloat < list(1).vol.toFloat
         ) {
-          val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
+          val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(days.head.ts_code)
           stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           stockDto.warningUpperShadow = super.upperShadow(days)
           if (StringUtils.isNotBlank(head.total_mv)) {

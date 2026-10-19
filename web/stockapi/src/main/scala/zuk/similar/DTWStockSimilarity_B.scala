@@ -1,8 +1,7 @@
 package zuk.similar
 
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
+import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
 
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
@@ -139,7 +138,7 @@ object DTWStockSimilarity_B {
         val dis = dtwDistance(target.map(_.feature), windowBars.map(_.feature))
         results += SimilarResult(
           stock_code,
-          DataFrame.STOCKS_MAP.get(stock_code).name,
+          Dataset_module_history_rtk_dir.STOCKS_MAP.get(stock_code).name,
           windowBars.last.date,
           windowBars.head.date,
           new BigDecimal(dis).setScale(8, RoundingMode.UP).doubleValue())
@@ -155,7 +154,7 @@ object DTWStockSimilarity_B {
    * @return
    */
   def getTargetBars(stockCode: String): Seq[Bar] = {
-    val ls = DataFrame.getDataForSelect(stockCode).map(e=>{
+    val ls = Dataset_module_history_rtk_dir.getDataForSelect(stockCode).map(e=>{
       val bar = Bar(
         e.trade_date,
         e.open.toDouble,
@@ -187,10 +186,10 @@ object DTWStockSimilarity_B {
    * @return
    */
   def getAllBars(stockCode: String): Seq[Bar] = {
-    if(DataFrame.getDataForSelect(stockCode)==null || DataFrame.getDataForSelect(stockCode).size == 0){
+    if(Dataset_module_history_rtk_dir.getDataForSelect(stockCode)==null || Dataset_module_history_rtk_dir.getDataForSelect(stockCode).size == 0){
       return List.empty
     }
-    val ls = DataFrame.getDataForSelect(stockCode).map(e=>{
+    val ls = Dataset_module_history_rtk_dir.getDataForSelect(stockCode).map(e=>{
       val bar = Bar(
         e.trade_date,
         e.open.toDouble,

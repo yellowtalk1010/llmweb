@@ -5,9 +5,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 
 import scala.collection.mutable.ListBuffer
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
+import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
 
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
@@ -36,7 +35,7 @@ object SimilartyUtil {
   def getTsCode(tsCode: String, tradeDate: String): SimilartyDto = {
     
     val similartyDto = new SimilartyDto(tsCode)
-    similartyDto.stockName = DataFrame.STOCKS_MAP.get(tsCode).name
+    similartyDto.stockName = Dataset_module_history_rtk_dir.STOCKS_MAP.get(tsCode).name
     similartyDto.tradeDate = tradeDate
 
     var trade_date = "999999999"
@@ -64,7 +63,7 @@ object SimilartyUtil {
 
     // 2. 模拟全市场
 
-    val allStocks: Map[String, Seq[Bar]] = DataFrame.STOCKS_MAP.values().asScala
+    val allStocks: Map[String, Seq[Bar]] = Dataset_module_history_rtk_dir.STOCKS_MAP.values().asScala
       .map(e => {
         e.ts_code -> DTWStockSimilarity_B.getAllBars(e.ts_code)
       }).toMap.filter(_._2.size > 10)
@@ -82,7 +81,7 @@ object SimilartyUtil {
     filterResB.map(res => {
       //验证相似的图形的胜率
       val hits = ListBuffer[ModuleHistoryDailyData]()
-      val ls = DataFrame.getDataForSelect(res.stockCode)
+      val ls = Dataset_module_history_rtk_dir.getDataForSelect(res.stockCode)
       for (i <- 0 until ls.size) {
         if (ls(i).trade_date.equals(res.endDate)) {
           var count = 0
@@ -136,7 +135,7 @@ object SimilartyUtil {
     }
 
     
-    println(f"\n=====================================【${tsCode} ${DataFrame.STOCKS_MAP.get(tsCode).name}  胜率：${similartyDto.desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
+    println(f"\n=====================================【${tsCode} ${Dataset_module_history_rtk_dir.STOCKS_MAP.get(tsCode).name}  胜率：${similartyDto.desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
 
     similartyDto
   }

@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleHistoryDailyData
+import zuk.tu_share.utils.Dataset_module_history_rtk_dir
 
 import java.math.RoundingMode
 import java.util
@@ -44,11 +44,11 @@ class TushareKLineChartController {
 
     val LEN = 20
 
-    val stockName = DataFrame.STOCKS_MAP.get(stockCode).name
+    val stockName = Dataset_module_history_rtk_dir.STOCKS_MAP.get(stockCode).name
 
     log.info(s"${stockCode}, ${stockName}, ${tradedate}")
 
-    val map = DataFrame.loadModelAnalysisDataSet
+    val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet
     
     if(map.get(stockCode).isEmpty){
       log.info("可能是新股、次新股、或者上市时间不足100天")

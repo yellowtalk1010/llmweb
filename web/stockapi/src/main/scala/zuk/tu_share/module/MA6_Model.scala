@@ -1,9 +1,8 @@
 package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
-import zuk.tu_share.DataFrame
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.ListOrderCheck
+import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, ListOrderCheck}
 
 import java.math.{BigDecimal, RoundingMode}
 
@@ -38,7 +37,7 @@ class MA6_Model extends IModel {
 //        && day.ma.ma20.compareTo(day.ma.ma30) < 0
     })
 
-    val tsStock = DataFrame.STOCKS_MAP.get(days.head.ts_code)
+    val tsStock = Dataset_module_history_rtk_dir.STOCKS_MAP.get(days.head.ts_code)
     if(ls.size == num
       && tsStock != null
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma5.floatValue())) //ma5是递增的
