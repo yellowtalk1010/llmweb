@@ -11,7 +11,7 @@ import zuk.token.TaskHandleFactory
 import zuk.token.providers.tasks.Task_EasymoneyConcept
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_concept_dir, Dataset_module_history_rtk_dir}
 
 import java.io.File
 import java.util.concurrent.Executors
@@ -30,8 +30,15 @@ class TushareConceptComponent {
 
   def getStockConceptInfo(stockCode: String): String = {
     
+//    val concept = Dataset_concept_dir.getConcept(stockCode)
+//    concept.split("\n").filter(l=>{
+//      l.contains("概念")
+//        || l.contains("一级行业")
+//        || l.contains("二级行业")
+//        || l.contains("三级行业")
+//    }).map(l=>s"【${l}】").mkString("")
+
     load()
-    
     val ls = this.stockInfoEntityList.filter(_.stockCode.equals(stockCode))
     if(ls.size>0 && StringUtils.isNotEmpty(ls.head.concept)){
       val concept = ls.head.concept.split("\n").filter(l=>{
@@ -46,6 +53,7 @@ class TushareConceptComponent {
     else {
       ""
     }
+    
   }
 
 
@@ -122,6 +130,8 @@ class TushareConceptComponent {
 
   @PostConstruct
   def init(): Unit = {
+    
+    load()
     
     //AI任务引擎初始化启动成功
     if(!TaskHandleFactory.initTask()){
