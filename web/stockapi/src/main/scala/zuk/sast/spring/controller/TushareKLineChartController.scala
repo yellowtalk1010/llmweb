@@ -51,6 +51,7 @@ class TushareKLineChartController {
     val map = DataFrame.loadModelAnalysisDataSet
     
     if(map.get(stockCode).isEmpty){
+      log.info("可能是新股、次新股、或者上市时间不足100天")
       val result = new util.HashMap[String, Object]()
       result.put("data", List.empty.asJava)
       result.put("code", "success")
