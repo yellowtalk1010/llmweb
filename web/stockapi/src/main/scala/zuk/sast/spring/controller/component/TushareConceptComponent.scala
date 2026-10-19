@@ -83,7 +83,7 @@ class TushareConceptComponent {
   
   private def load(): Unit = synchronized {
 
-    if (stockInfoEntityList.size < 5000) {
+    if (stockInfoEntityList.size > 5000) {
       return 
     }
     
@@ -130,8 +130,6 @@ class TushareConceptComponent {
 
   @PostConstruct
   def init(): Unit = {
-    
-    load()
     
     //AI任务引擎初始化启动成功
     if(!TaskHandleFactory.initTask()){
