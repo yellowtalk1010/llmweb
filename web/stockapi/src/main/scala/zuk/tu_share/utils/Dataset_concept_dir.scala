@@ -48,7 +48,7 @@ object Dataset_concept_dir {
     }
     val conceptDir = new File(ParseCammandParam.param.engineInfo.concept_dir)
     println("加载股票的板块和概念")
-    conceptDir.listFiles().filter(f=>{
+    conceptDir.listFiles().foreach(f=>{
       val tsCode = f.getName.replaceAll("\\.txt", "")
       val concept = FileUtils.readFileToString(f, "UTF-8")
       map.put(tsCode, concept)
