@@ -21,7 +21,13 @@ object Dataset_concept_dir {
    */
   def getConcept(tsCode: String): String = {
     load()
-    map.get(tsCode)
+    val v = map.get(tsCode)
+    if(v==null){
+      ""
+    }
+    else {
+      v
+    }
   }
 
   /***
