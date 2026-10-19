@@ -1,6 +1,7 @@
 package zuk.tu_share.utils
 
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.StockDailyData
 
@@ -79,6 +80,10 @@ object Dataset_stock_dailydata_dir {
         list.map(e => {
           e.trade_date = dateStr
           e.change = new BigDecimal(e.close.toFloat - e.pre_close.toFloat).divide(new BigDecimal(e.pre_close), 4, RoundingMode.DOWN).multiply(new BigDecimal(100)).floatValue().toString
+          if(StringUtils.isNotBlank(e.vol)){
+            //转成股数转成手
+            e.vol = new BigDecimal(e.vol).divide(new BigDecimal(100), 4, RoundingMode.DOWN).toString
+          }
           StockRtkDataMap.put(e.ts_code, e)
         })
 
@@ -159,8 +164,6 @@ object Dataset_stock_dailydata_dir {
           }
           if(record.isMapped("vol")){
             stockDailyData.vol = record.get("vol")
-            //todo 转成手
-            stockDailyData.vol = new BigDecimal(stockDailyData.vol.toFloat).divide(new BigDecimal(100), 4, RoundingMode.DOWN).toString
           }
           if(record.isMapped("amount")){
             stockDailyData.amount = record.get("amount")
