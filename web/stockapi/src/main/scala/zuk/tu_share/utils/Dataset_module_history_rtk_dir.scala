@@ -200,7 +200,7 @@ object Dataset_module_history_rtk_dir {
       
     }
 
-    dayMap.filter(_._2.size>100) //只返回日线记录超过100的
+    dayMap
 
   }
 

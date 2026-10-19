@@ -25,7 +25,7 @@ object Main {
     }
     if (ParseCammandParam.param.back){
       //回测
-      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet
+      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size>100)
       for (i <- 0 to ParseCammandParam.param.back_step) {
         PassFactory.doModule(map, i)
         println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
@@ -37,7 +37,7 @@ object Main {
     }
     else {
       //加载数据
-      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet
+      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size>100)
       //分析
       PassFactory.doModule(map)
       println("完成分析")
