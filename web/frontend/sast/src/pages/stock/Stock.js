@@ -15,6 +15,9 @@ function Stock() {
   const [collapsed, setCollapsed] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
+  // 打开方式：embedded = 内嵌右侧显示；external = 弹出新网页
+  const [openMode, setOpenMode] = useState("embedded");
+
   // openedPages: [{ instanceKey, pageId, title, url }]
   const [openedPages, setOpenedPages] = useState([]);
   const [activeKey, setActiveKey] = useState(null);
@@ -79,8 +82,15 @@ function Stock() {
     setCollapsed(!collapsed);
   };
 
-  // 每次点击都新建一个实例，允许重复打开同一个页面
+  // 根据当前打开方式决定：内嵌右侧 / 弹出新网页
   const openPage = (page) => {
+    if (openMode === "external") {
+      // 选项二：直接弹出新的网页，不进入右侧标签页
+      window.open(page.url, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    // 选项一：内嵌到右侧（每次点击都新建实例，允许重复打开同一页面）
     const instanceKey = `page-${page.id}-${++instanceCounterRef.current}`;
 
     setOpenedPages((prev) => [
@@ -143,6 +153,55 @@ function Stock() {
         defaultSize={10}
         minSize={5}
       >
+        {/* 打开方式选择区 */}
+        <div
+          style={{
+            padding: 10,
+            borderBottom: "1px solid #e5e7eb",
+            backgroundColor: "#f9fafb",
+            fontSize: 13,
+          }}
+        >
+        
+
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              cursor: "pointer",
+              marginBottom: 4,
+            }}
+          >
+            <input
+              type="radio"
+              name="openMode"
+              value="embedded"
+              checked={openMode === "embedded"}
+              onChange={() => setOpenMode("embedded")}
+            />
+            内嵌显示
+          </label>
+
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              cursor: "pointer",
+            }}
+          >
+            <input
+              type="radio"
+              name="openMode"
+              value="external"
+              checked={openMode === "external"}
+              onChange={() => setOpenMode("external")}
+            />
+            弹出新页
+          </label>
+        </div>
+
         {loading ? (
           <div style={{ padding: 10 }}>正在加载页面列表...</div>
         ) : error ? (
