@@ -2,7 +2,7 @@ package zuk.tu_share
 
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
-import zuk.tu_share.dto.{ModuleDay, TsStock}
+import zuk.tu_share.dto.{ModuleHistoryDailyData, TsStock}
 import zuk.tu_share.utils.Dataset_all_stocks_csv_file
 
 import java.io.{File, FileOutputStream, FileReader, InputStream}
@@ -33,12 +33,12 @@ object DataFrame {
   /***
    * 历史日线数据
    */
-  var HISTORY_MAP = new ConcurrentHashMap[String, List[ModuleDay]]()
+  var HISTORY_MAP = new ConcurrentHashMap[String, List[ModuleHistoryDailyData]]()
 
   /** *
    * rtk 实时日线数据
    */
-  var RTK_MAP = new ConcurrentHashMap[String, ModuleDay]()
+  var RTK_MAP = new ConcurrentHashMap[String, ModuleHistoryDailyData]()
   
   
   var execute = Executors.newSingleThreadExecutor()
@@ -108,7 +108,7 @@ object DataFrame {
     }
   }
   
-  def getDataForSelect(tsCode: String): List[ModuleDay] = {
+  def getDataForSelect(tsCode: String): List[ModuleHistoryDailyData] = {
     val ls1 = HISTORY_MAP.get(tsCode)
     val list = if(RTK_MAP.get(tsCode)!=null){
       List(RTK_MAP.get(tsCode)) ++ ls1
@@ -125,7 +125,7 @@ object DataFrame {
    * @param path 数据路径
    * @return map中的key是股票代码， list是组装的股票数据
    */
-  def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleDay]] = synchronized {
+  def loadModelAnalysisDataSet: mutable.HashMap[String, List[ModuleHistoryDailyData]] = synchronized {
 
     getProperties()
 
@@ -151,7 +151,7 @@ object DataFrame {
     }
 
 
-    val dayMap = new mutable.HashMap[String, List[ModuleDay]]
+    val dayMap = new mutable.HashMap[String, List[ModuleHistoryDailyData]]
      
     if(RTK_MAP.size() == 0){
       
@@ -192,7 +192,7 @@ object DataFrame {
    *
    * @param
    */
-  private def loadStockHistoryData(ts_code: String): List[ModuleDay] = synchronized {
+  private def loadStockHistoryData(ts_code: String): List[ModuleHistoryDailyData] = synchronized {
     
     if(HISTORY_MAP.get(ts_code) != null){
       return HISTORY_MAP.get(ts_code)
@@ -201,7 +201,7 @@ object DataFrame {
     val formatter = DateTimeFormatter.ofPattern("yyyyMM")
     val today = LocalDate.now
     val num = new AtomicInteger(0)
-    val moduleDays = new ListBuffer[ModuleDay]
+    val moduleDays = new ListBuffer[ModuleHistoryDailyData]
 
     val ts_code_path = ts_code.replace(".", "_")
     val module_path = ParseCammandParam.param.engineInfo.stock_module_dir + File.separator + s"${ts_code_path}.csv"
@@ -219,9 +219,9 @@ object DataFrame {
       //读取文件中的数据
       val in = new FileReader(module_file.getAbsolutePath, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
-      val ls: List[ModuleDay] = records.asScala.map(record => {
+      val ls: List[ModuleHistoryDailyData] = records.asScala.map(record => {
 
-        val moduleDay = new ModuleDay()
+        val moduleDay = new ModuleHistoryDailyData()
         moduleDay.ts_code = record.get("ts_code")
         moduleDay.name = record.get("name")
         moduleDay.trade_date = record.get("trade_date")
@@ -279,15 +279,15 @@ object DataFrame {
     val sdf = new SimpleDateFormat("yyyyMMdd")
     val trade_date = sdf.format(new Date())
 
-    val stockDayVoList = new ListBuffer[ModuleDay]
+    val stockDayVoList = new ListBuffer[ModuleHistoryDailyData]
     try {
       //读取文件中的数据
       val in = new FileReader(rt_k_file, Charset.forName("UTF-8"))
       val records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)
-      val ls: List[ModuleDay] = records.asScala.map(record => {
+      val ls: List[ModuleHistoryDailyData] = records.asScala.map(record => {
         // ts_code	name	pre_close	high	open	low	close	vol	amount	num
 
-        val rtk = new ModuleDay()
+        val rtk = new ModuleHistoryDailyData()
         rtk.ts_code = record.get("ts_code")
         rtk.name = record.get("name")
         rtk.trade_date = trade_date
@@ -330,7 +330,7 @@ object DataFrame {
    * 
    * @param rtk
    */
-  private def updateRTK(rtk: ModuleDay): Unit = {
+  private def updateRTK(rtk: ModuleHistoryDailyData): Unit = {
     if(StringUtils.isBlank(rtk.turnover_rate)   //换手率
       || StringUtils.isBlank(rtk.change)        //涨跌幅 
       || StringUtils.isBlank(rtk.vol))          //交易量 

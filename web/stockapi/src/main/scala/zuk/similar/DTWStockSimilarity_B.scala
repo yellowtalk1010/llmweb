@@ -1,7 +1,7 @@
 package zuk.similar
 
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
 
 import scala.collection.mutable

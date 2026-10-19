@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils
 import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.{DataFrame, ParseCammandParam}
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.utils.ListOrderCheck
 
 import java.io.File
@@ -75,7 +75,7 @@ class MA7_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def run(days1: List[ModuleDay]): Unit = {
+  override def run(days1: List[ModuleHistoryDailyData]): Unit = {
 
     val head = days1.head
 

@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 
 import java.math.{BigDecimal, RoundingMode}
 
@@ -17,7 +17,7 @@ class MA1_1_Model extends IModel {
 
   override def buyReason(): String = reason
 
-  override def run(days: List[ModuleDay]): Unit = {
+  override def run(days: List[ModuleHistoryDailyData]): Unit = {
     if(days.size > max){
       val head = days.head
       val list = days.take(max)
@@ -31,11 +31,11 @@ class MA1_1_Model extends IModel {
 
         val zList = zhaBanIndexList.map(_._1) //炸板列表
 
-        if (middleList.filter(e=>List(ModuleDay.D, ModuleDay.U).contains(e.limit)).size==0 //炸板中间不能出现涨停、跌停
+        if (middleList.filter(e=>List(ModuleHistoryDailyData.D, ModuleHistoryDailyData.U).contains(e.limit)).size==0 //炸板中间不能出现涨停、跌停
           && middleList.map(_.high.toFloat).max < zList.map(_.high.toFloat).max
           && middleList.map(_.low.toFloat).min > zList.map(_.low.toFloat).min
           && middleList.map(_.vol.toFloat).max < zList.map(_.vol.toFloat).min
-          && (list(1).limit.equals(ModuleDay.Z) || list(1).limit.equals(ModuleDay.U))//上一个交易日炸板
+          && (list(1).limit.equals(ModuleHistoryDailyData.Z) || list(1).limit.equals(ModuleHistoryDailyData.U))//上一个交易日炸板
           && list(0).vol.toFloat < list(1).vol.toFloat
           && list(0).change.toFloat > 0
         ) {

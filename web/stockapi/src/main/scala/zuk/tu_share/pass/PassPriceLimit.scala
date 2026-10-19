@@ -1,6 +1,6 @@
 package zuk.tu_share.pass
 import org.apache.commons.lang3.StringUtils
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 
 import java.math.{BigDecimal, RoundingMode}
 import zuk.tu_share.dto.PriceLimit
@@ -10,7 +10,7 @@ import zuk.tu_share.dto.PriceLimit
  */
 class PassPriceLimit extends IPass {
 
-  override def handle(moduleDays: List[ModuleDay]): Unit = {
+  override def handle(moduleDays: List[ModuleHistoryDailyData]): Unit = {
     moduleDays.filter(e=>StringUtils.isNotBlank(e.pre_close)).foreach(e=>{
       val tradeDate = e.trade_date
       val preClose = e.pre_close //上一个交易日的收盘价

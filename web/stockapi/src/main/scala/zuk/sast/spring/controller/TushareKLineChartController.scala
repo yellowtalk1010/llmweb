@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 
 import java.math.RoundingMode
 import java.util
@@ -61,7 +61,7 @@ class TushareKLineChartController {
     val dailydataList = map.get(stockCode).get
 
     val subList = if(StringUtils.isNotBlank(tradedate)){
-      val ls = ListBuffer[ModuleDay]()  //ModuleDay   StockDailyData
+      val ls = ListBuffer[ModuleHistoryDailyData]()  //ModuleDay   StockDailyData
       //TODO 截取
       for (index <- 0 until dailydataList.size) {
         if(dailydataList(index).trade_date.equals(tradedate)) {

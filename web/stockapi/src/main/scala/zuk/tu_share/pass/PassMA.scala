@@ -1,6 +1,6 @@
 package zuk.tu_share.pass
 import zuk.stockapi.{StockDayVo, StockMaVo}
-import zuk.tu_share.dto.{MA, ModuleDay}
+import zuk.tu_share.dto.{MA, ModuleHistoryDailyData}
 
 import java.math
 import java.math.BigDecimal
@@ -8,7 +8,7 @@ import scala.collection.mutable.ListBuffer
 
 class PassMA extends IPass{
 
-  override def handle(moduleDays: List[ModuleDay]): Unit = {
+  override def handle(moduleDays: List[ModuleHistoryDailyData]): Unit = {
     calStockMA(moduleDays)
   }
 
@@ -16,9 +16,9 @@ class PassMA extends IPass{
   /**
    * 计算MA和AVG
    */
-  def calStockMA(moduleDaySorted: List[ModuleDay]): List[ModuleDay] = {
+  def calStockMA(moduleDaySorted: List[ModuleHistoryDailyData]): List[ModuleHistoryDailyData] = {
 
-    val newModuleDayList = ListBuffer[ModuleDay]()
+    val newModuleDayList = ListBuffer[ModuleHistoryDailyData]()
     for (index <- 0 until moduleDaySorted.size - 31) {
 
       val subList = moduleDaySorted.slice(index, index + 30)
@@ -44,7 +44,7 @@ class PassMA extends IPass{
   }
 
 
-  private def cala_ma(stockDayVoList: List[ModuleDay]): BigDecimal = {
+  private def cala_ma(stockDayVoList: List[ModuleHistoryDailyData]): BigDecimal = {
     //收盘价的平均值
     val optSum = stockDayVoList.map(e=>{
       new BigDecimal(e.close)
@@ -53,7 +53,7 @@ class PassMA extends IPass{
     ma
   }
 
-  private def cala_avg(stockDayVoList: List[ModuleDay]): BigDecimal = {
+  private def cala_avg(stockDayVoList: List[ModuleHistoryDailyData]): BigDecimal = {
     //日均价
     val volume = stockDayVoList.filter(_.vol!=null).map(e=>{new BigDecimal(e.vol)}).reduceOption((a,b)=>a.add(b)).get
     val amount = stockDayVoList.filter(_.amount!=null).map(e=>{new BigDecimal(e.amount)}).reduceOption((a,b)=>a.add(b)).get

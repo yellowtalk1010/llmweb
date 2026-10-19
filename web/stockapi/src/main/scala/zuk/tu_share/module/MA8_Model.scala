@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.{DataFrame, ParseCammandParam}
-import zuk.tu_share.dto.{ModuleDay, TopInst}
+import zuk.tu_share.dto.{ModuleHistoryDailyData, TopInst}
 import zuk.tu_share.utils.Dataset_top_Inst_dir
 
 import java.io.File
@@ -67,7 +67,7 @@ class MA8_Model extends IModel {
 
   override def backTestStep: Int = 5
 
-  override def run(days: List[ModuleDay]): Unit = {
+  override def run(days: List[ModuleHistoryDailyData]): Unit = {
 //    println(MA8_Model.topInstMap.size)
     val head = days.head
     val second = days(1)

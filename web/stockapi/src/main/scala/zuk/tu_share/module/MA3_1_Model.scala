@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 
 import java.math.{BigDecimal, RoundingMode}
 
@@ -10,7 +10,7 @@ class MA3_1_Model extends IModel {
 
   var stockDto: StockDto = _
 
-  override def run(days: List[ModuleDay]): Unit = {
+  override def run(days: List[ModuleHistoryDailyData]): Unit = {
     val changeUpRate = super.changeUpRate(days) //过去30个交易日中换手率大于3.5的占比，必须大于3成
     if(days.size>=4
 //      && changeUpRate >= 0.3

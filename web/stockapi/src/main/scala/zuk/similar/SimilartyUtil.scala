@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 
 import scala.collection.mutable.ListBuffer
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
 
 import scala.collection.mutable
@@ -81,7 +81,7 @@ object SimilartyUtil {
     var stTotal = 0
     filterResB.map(res => {
       //验证相似的图形的胜率
-      val hits = ListBuffer[ModuleDay]()
+      val hits = ListBuffer[ModuleHistoryDailyData]()
       val ls = DataFrame.getDataForSelect(res.stockCode)
       for (i <- 0 until ls.size) {
         if (ls(i).trade_date.equals(res.endDate)) {

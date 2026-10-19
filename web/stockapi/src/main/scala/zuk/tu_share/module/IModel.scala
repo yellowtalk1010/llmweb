@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import zuk.similar.{SimilartyDto, SimilartyUtil}
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.{ModuleDay, TsStock}
+import zuk.tu_share.dto.{ModuleHistoryDailyData, TsStock}
 
 import java.math
 import scala.collection.mutable.ListBuffer
@@ -10,10 +10,10 @@ import java.math.{BigDecimal, RoundingMode}
 
 trait IModel {
 
-  var sells = ListBuffer[ModuleDay]()
-  var buy: ModuleDay = _
+  var sells = ListBuffer[ModuleHistoryDailyData]()
+  var buy: ModuleHistoryDailyData = _
 
-  def run(days: List[ModuleDay]): Unit //运行模型
+  def run(days: List[ModuleHistoryDailyData]): Unit //运行模型
 
   def getStockDto(): StockDto
 
@@ -45,7 +45,7 @@ trait IModel {
   //上影线警告
   def warnUpperShadow: Boolean
 
-  def filterPriceLimitUp(moduleDay: ModuleDay): Boolean = {
+  def filterPriceLimitUp(moduleDay: ModuleHistoryDailyData): Boolean = {
     if(moduleDay.priceLimit == null){
       true
     }
@@ -55,7 +55,7 @@ trait IModel {
     }
   }
 
-  def limitUp(days: List[ModuleDay]): String = {
+  def limitUp(days: List[ModuleHistoryDailyData]): String = {
     try {
       val max = 30
       //历史上30天出现过涨停次数
@@ -72,7 +72,7 @@ trait IModel {
       case exception: Exception => "0/0涨"
   }
 
-  def limitDown(days: List[ModuleDay]): String = {
+  def limitDown(days: List[ModuleHistoryDailyData]): String = {
     try {
       val max = 30
       //历史上30天出现过涨停次数
@@ -89,7 +89,7 @@ trait IModel {
       case exception: Exception => "0/0跌"
   }
 
-  def changeUpRate(days: List[ModuleDay]): Float = {
+  def changeUpRate(days: List[ModuleHistoryDailyData]): Float = {
     try{
       //换手率超过5%的比例
       if(days.size==0){
@@ -115,8 +115,8 @@ trait IModel {
    * @param days
    * @return
    */
-  def upperShadow(days: List[ModuleDay]): Boolean = {
-    val list = new ListBuffer[ModuleDay]()
+  def upperShadow(days: List[ModuleHistoryDailyData]): Boolean = {
+    val list = new ListBuffer[ModuleHistoryDailyData]()
     if(days.size==1){
       list += days.head
     }

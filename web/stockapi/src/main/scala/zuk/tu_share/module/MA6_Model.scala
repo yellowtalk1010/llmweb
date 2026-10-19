@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.utils.ListOrderCheck
 
 import java.math.{BigDecimal, RoundingMode}
@@ -17,7 +17,7 @@ class MA6_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def run(days: List[ModuleDay]): Unit = {
+  override def run(days: List[ModuleHistoryDailyData]): Unit = {
     if (days.size < num){
       return
     }
@@ -62,7 +62,7 @@ class MA6_Model extends IModel {
     }
   }
 
-  private def calaVol(list: List[ModuleDay]): Boolean = {
+  private def calaVol(list: List[ModuleHistoryDailyData]): Boolean = {
 
     val preList = list.reverse.take(7)
     val sufList = list.reverse.slice(7, list.size)
@@ -83,7 +83,7 @@ class MA6_Model extends IModel {
   /**
    * 连续上涨
    */
-  private def calaChange(list: List[ModuleDay]): Boolean = {
+  private def calaChange(list: List[ModuleHistoryDailyData]): Boolean = {
 //    val sufList = list.reverse.slice(5, list.size)
 //    val st = sufList.filter(_.change.toFloat > 0.0).size == sufList.size
 

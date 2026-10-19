@@ -1,7 +1,7 @@
 package zuk.tu_share.module
 
 import zuk.similar.{SimilartyDto, SimilartyUtil}
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 
 /***
  * 历史最低成交量
@@ -20,7 +20,7 @@ class MA9_Model extends IModel {
 
   override def backTestStep: Int = 10
 
-  override def run(days: List[ModuleDay]): Unit = {
+  override def run(days: List[ModuleHistoryDailyData]): Unit = {
     val LEN = 30 //历史30个交易日
     if(days.size > LEN){
       val head = days.head

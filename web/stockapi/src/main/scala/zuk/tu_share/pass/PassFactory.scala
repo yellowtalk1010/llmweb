@@ -1,7 +1,7 @@
 package zuk.tu_share.pass
 
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.module.*
 import zuk.tu_share.send.ISendFactory
 
@@ -65,7 +65,7 @@ object PassFactory {
     )
   }
 
-  private def doPass(moduleDays: List[ModuleDay]) = {
+  private def doPass(moduleDays: List[ModuleHistoryDailyData]) = {
     passList().foreach(pass=>{
       pass.handle(moduleDays)
     })
@@ -77,7 +77,7 @@ object PassFactory {
    * @param backtestLenght 回测数据长度
    * @return
    */
-  def doModule(map: mutable.HashMap[String, List[ModuleDay]], backtestLenght: Int = 0) = {
+  def doModule(map: mutable.HashMap[String, List[ModuleHistoryDailyData]], backtestLenght: Int = 0) = {
 
     val finishModules = ListBuffer[IModel]()
     val count = new AtomicInteger(0)

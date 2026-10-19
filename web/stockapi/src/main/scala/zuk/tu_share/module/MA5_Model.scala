@@ -2,7 +2,7 @@ package zuk.tu_share.module
 
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.utils.ListOrderCheck
 
 import java.math.{BigDecimal, RoundingMode}
@@ -13,7 +13,7 @@ class MA5_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def run(days: List[ModuleDay]): Unit = {
+  override def run(days: List[ModuleHistoryDailyData]): Unit = {
     val num = 4
     if (days.size < num){
       return

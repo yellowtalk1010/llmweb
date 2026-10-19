@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONObject
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.backtest.BackTestDto
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.utils.ListOrderCheck
 import zuk.tu_share.{DataFrame, ParseCammandParam}
 
@@ -72,7 +72,7 @@ class MA7_1_Model extends IModel {
 
   override def getStockDto(): StockDto = stockDto
 
-  override def run(days1: List[ModuleDay]): Unit = {
+  override def run(days1: List[ModuleHistoryDailyData]): Unit = {
 
     val head = days1.head
 

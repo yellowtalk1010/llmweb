@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils
 import org.springframework.stereotype.Service
 import zuk.similar.Bar
 import zuk.tu_share.DataFrame
-import zuk.tu_share.dto.ModuleDay
+import zuk.tu_share.dto.ModuleHistoryDailyData
 
 import java.io.File
 import java.math.RoundingMode
@@ -39,7 +39,7 @@ case class BarRes(intervalBars: List[Bar]) {
   var stockCode = intervalBars.head.stockCode
   var stockName = intervalBars.head.stockName
   val hitBars = new ListBuffer[Bar]
-  var backTestDataMap = new util.HashMap[String, List[ModuleDay]]()  //每组的回测数据，key是group，value是回测数据
+  var backTestDataMap = new util.HashMap[String, List[ModuleHistoryDailyData]]()  //每组的回测数据，key是group，value是回测数据
 }
 
 object ConsolidationScanner {
