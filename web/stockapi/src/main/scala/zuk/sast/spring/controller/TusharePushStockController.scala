@@ -220,18 +220,18 @@ class TusharePushStockController {
       sdf.format(new Date())
     }
     
-    log.info(s"选择模型:${modType}， 交易日期：${trade_date}")
+    log.info(s"选择模型:${modType}， 交易日期：${tradedate}转${trade_date}")
 
     //TODO 从涨停和跌停中获取涨停的板块
     val hotDtos = this.tushareStock_limit_up_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_up_Impl.limit_up, trade_date, trade_date)).asScala
     if(hotDtos!=null && hotDtos.size>0){
-      println(s"涨停的日期：${hotDtos.groupBy(_.tradedate).map(_._1).mkString(";")}")
+      log.info(s"涨停的日期：${hotDtos.groupBy(_.tradedate).map(_._1).mkString(";")}")
     }
     val hotConcepts = hotDtos.map(_.concept).toList
     val hotFenCiList = FenCi_Util.createFenCi(hotConcepts)._1.take(50)
     val coolDtos = this.tushareStock_limit_down_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_down_Impl.limit_down, trade_date, trade_date)).asScala
     if (coolDtos != null && coolDtos.size > 0) {
-      println(s"跌停的日期：${coolDtos.groupBy(_.tradedate).map(_._1).mkString(";")}")
+      log.info(s"跌停的日期：${coolDtos.groupBy(_.tradedate).map(_._1).mkString(";")}")
     }
     val coolConcepts = coolDtos.map(_.concept).toList
     val coolFenCiList = FenCi_Util.createFenCi(coolConcepts)._1.take(50)
