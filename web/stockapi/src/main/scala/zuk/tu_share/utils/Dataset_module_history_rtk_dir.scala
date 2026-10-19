@@ -31,7 +31,7 @@ object Dataset_module_history_rtk_dir {
   /**
    * STOCKS_MAP 中 Key 为 ts_code
    */
-  val STOCKS_MAP = new ConcurrentHashMap[String, TsStock]()
+  private val STOCKS_MAP = new ConcurrentHashMap[String, TsStock]()
   
   /***
    * 历史日线数据
