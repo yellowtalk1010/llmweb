@@ -43,8 +43,8 @@ object Dataset_module_history_rtk_dir {
    */
   private val RTK_MAP = new ConcurrentHashMap[String, ModuleHistoryDailyData]()
   
-  
   private val execute = Executors.newSingleThreadExecutor()
+  
   execute.submit(new Runnable {
     override def run(): Unit = {
       while (true) {
@@ -109,16 +109,32 @@ object Dataset_module_history_rtk_dir {
       }
     }
   }
+
   
+  
+  /***
+   * 获取某只股票的历史和rtk列表
+   * 
+   * @param tsCode
+   * @return
+   */
   def getDataForSelect(tsCode: String): List[ModuleHistoryDailyData] = {
+    
     val ls1 = HISTORY_MAP.get(tsCode)
-    val list = if(RTK_MAP.get(tsCode)!=null){
-      List(RTK_MAP.get(tsCode)) ++ ls1
-    }    
-    else {
-      ls1
+    
+    if(ls1 == null){
+      //如果股票不存在，返回一个空列表
+      List.empty
     }
-    list
+    else {
+      val list = if (RTK_MAP.get(tsCode) != null) {
+        List(RTK_MAP.get(tsCode)) ++ ls1
+      }
+      else {
+        ls1
+      }
+      list
+    }
   }
 
   /***
