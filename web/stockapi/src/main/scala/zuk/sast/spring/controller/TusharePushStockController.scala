@@ -403,7 +403,7 @@ class TusharePushStockController {
 
         val head = (e._2 ++ e._3).head
         val map = new util.HashMap[String, Object]()
-        map.put("time", s"${head.file.getName}-----${fenci}")
+        map.put("time", s"${head.file.getName}--${new SimpleDateFormat("HH:mm:ss").format(new Date())}---${fenci}")
         map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
         map.put("heads", e._2.asJava)
         map.put("histories", e._3.asJava)
