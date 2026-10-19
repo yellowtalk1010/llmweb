@@ -69,17 +69,10 @@ class TushareConceptComponent {
     //todo 初始化股票的 概念和板块 信息
     stockInfoEntityList ++=
       Dataset_all_stocks_csv_file.getTsStockList.map(e=>(e.ts_code, e)).map(e => {
-        val conceptFile = new File(ParseCammandParam.param.engineInfo.concept_dir + File.separator + e._2.ts_code + ".txt")
-        println(s"加载【${e._2.ts_code}, ${e._2.name}】股票的概念板块路径：${conceptFile.getAbsolutePath}, ${conceptFile.exists()}")
-        val concept = if (conceptFile.exists()) {
-          FileUtils.readFileToString(conceptFile, "UTF-8")
-        } else {
-          ""
-        }
         val stockInfoEntity = new StockInfoEntity()
         stockInfoEntity.stockCode = e._2.ts_code
         stockInfoEntity.stockName = e._2.name
-        stockInfoEntity.concept = concept
+        stockInfoEntity.concept = Dataset_concept_dir.getConcept(e._2.ts_code)
         stockInfoEntity.id = md5(stockInfoEntity.stockCode)
         stockInfoEntity.conceptFile = conceptFile.getAbsolutePath
         stockInfoEntity
