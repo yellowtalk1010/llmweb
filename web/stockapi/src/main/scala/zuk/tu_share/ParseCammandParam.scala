@@ -19,8 +19,9 @@ object ParseCammandParam {
           ParseCammandParam.param.email = true
         case "-back_step" =>
           ParseCammandParam.param.back_step = args(i + 1).toInt
+          println(s"回测跨步${ParseCammandParam.param.back_step}")
         case "-back_full" =>
-          //回测方式采用全量回测，非常耗时
+          println("全量数据回测")
           ParseCammandParam.param.back_full = true
         case "-json" =>
           ParseCammandParam.param.json = true
