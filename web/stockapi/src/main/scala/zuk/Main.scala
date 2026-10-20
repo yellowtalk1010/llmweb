@@ -25,15 +25,25 @@ object Main {
     }
     if (ParseCammandParam.param.back){
       //回测
-      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size>100)
-      for (i <- 0 to ParseCammandParam.param.back_step) {
-        PassFactory.doModule(map, i)
-        println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
+      if(ParseCammandParam.param.back_full || true){
+        //todo 全量回测
+        println("全量回测")
+        val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size > 100)
+        for (i <- 0 to ParseCammandParam.param.back_step) {
+          PassFactory.doModule(map, i)
+          println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
+        }
+
+        BackTest.analysis()
+        println("完成回测分析")
+        System.exit(1)
+        
+      }
+      else {
+        //todo 增量回测
+        println("增量回测")
       }
 
-      BackTest.analysis()
-      println("完成回测分析")
-      System.exit(1)
     }
     else {
       //加载数据
