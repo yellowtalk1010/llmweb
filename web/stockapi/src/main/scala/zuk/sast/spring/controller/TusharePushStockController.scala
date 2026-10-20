@@ -387,22 +387,24 @@ class TusharePushStockController {
           fenciResDtoList += hotFenciResDto
 
           
-          //todo 关联热点板块
-//          stockResultJson.hotSectors = fenciSet.flatMap(w=>{
-//            hotFenCiList.filter(hw=>hw._1.equals(w))
+          //todo 关联冰点板块
+          val coolFenciResDto = FenciResDto(
+            stockResultJson.ts_code,
+            stockResultJson.name,
+            fenciSet.flatMap(w=>{coolFenCiList.filter(hw=>hw._1.equals(w))}).toList.sortBy(_._2).reverse
+          )
+
+          stockResultJson.coolSectors = coolFenciResDto.fenciList.map(e=>{
+            s"${e._1}【${e._2}/${coolConcepts.size}】"
+          }).mkString("; ")
+          
+//          stockResultJson.coolSectors = fenciSet.flatMap(w=>{
+//            coolFenCiList.filter(hw=>hw._1.equals(w))
 //          }).toList
 //            .sortBy(_._2).reverse
 //            .map(e=>{
-//              s"${e._1}【${e._2}/${hotConcepts.size}】"
+//              s"${e._1}【${e._2}/${coolConcepts.size}】"
 //            }).mkString("; ")
-          //todo 关联冰点板块
-          stockResultJson.coolSectors = fenciSet.flatMap(w=>{
-            coolFenCiList.filter(hw=>hw._1.equals(w))
-          }).toList
-            .sortBy(_._2).reverse
-            .map(e=>{
-              s"${e._1}【${e._2}/${coolConcepts.size}】"
-            }).mkString("; ")
 
           //是否出现在龙虎榜中
           stockResultJson.topInstitutions = Dataset_top_Inst_dir.existTopInst(stockResultJson.ts_code)
@@ -439,7 +441,24 @@ class TusharePushStockController {
       response.put("data", Array(emptyMap).toList.asJava)
     }
     else {
+      val hotFenciTypeList = fenciResDtoList.groupBy(_.tsCode).map(_._2.head).toList.sortBy(_.fenciList.size).reverse
+      val hotFenciNumList = fenciResDtoList.groupBy(_.tsCode).map(_._2.head).toList.sortBy(_.fenciList.map(_._2).sum).reverse
+      val str1 = (if(hotFenciTypeList.size>5){
+        hotFenciTypeList.take(5)
+      }
+      else {
+        hotFenciTypeList
+      }).map(e=>s"${e.tsCode}, ${e.tsName}").mkString("; ")
+
+      val str2 = (if(hotFenciNumList.size>5){
+        hotFenciNumList.take(5)
+      }
+      else {
+        hotFenciNumList
+      }).map(e=>s"${e.tsCode}, ${e.tsName}").mkString("; ")
+      
       response.put("data", maplist)
+      response.put("hotStock", s"类型:${str1}, 数量:${str2}")
     }
 
     response
