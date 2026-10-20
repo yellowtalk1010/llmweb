@@ -30,7 +30,7 @@ case class BackTestDto() {
 object BackTest {
 
   /***
-   * 保存回测的数据
+   * 收集回测的数据
    */
   val backTestList = ListBuffer[IModel]()
 
