@@ -357,17 +357,17 @@ class TusharePushStockController {
         e._3.sortBy(_.historyHitCount).reverse.filter(! _.name.contains("ST")))
       )
       .filter(e=>(e._2 ++ e._3).size > 0)
-      .map(e=>{
+      .map(tp3=>{
 
         val conceptList = new ListBuffer[String]() //
-        val fenciTp2 = FenCi_Util.createFenCi((e._2 ++ e._3).map(_.concept).toList)
+        val fenciTp2 = FenCi_Util.createFenCi((tp3._2 ++ tp3._3).map(_.concept).toList)
         val fenci = fenciTp2._2
 
-        (e._2 ++ e._3).foreach(e=>{
+        (tp3._2 ++ tp3._3).foreach(stockResultJson=>{
 
-          val fenciSet = FenCi_Util.createFenCi(List(e.concept))._1.map(_._1).toSet
+          val fenciSet = FenCi_Util.createFenCi(List(stockResultJson.concept))._1.map(_._1).toSet
           //todo 关联热点板块
-          e.hotSectors = fenciSet.flatMap(w=>{
+          stockResultJson.hotSectors = fenciSet.flatMap(w=>{
             hotFenCiList.filter(hw=>hw._1.equals(w))
           }).toList
             .sortBy(_._2).reverse
@@ -375,7 +375,7 @@ class TusharePushStockController {
               s"${e._1}【${e._2}/${hotConcepts.size}】"
             }).mkString("; ")
           //todo 关联冰点板块
-          e.coolSectors = fenciSet.flatMap(w=>{
+          stockResultJson.coolSectors = fenciSet.flatMap(w=>{
             coolFenCiList.filter(hw=>hw._1.equals(w))
           }).toList
             .sortBy(_._2).reverse
@@ -384,30 +384,30 @@ class TusharePushStockController {
             }).mkString("; ")
 
           //是否出现在龙虎榜中
-          e.topInstitutions = Dataset_top_Inst_dir.existTopInst(e.ts_code)
+          stockResultJson.topInstitutions = Dataset_top_Inst_dir.existTopInst(stockResultJson.ts_code)
 
           //
-          if(allAttentionCodes.contains(e.ts_code)){
-            e.attention = "已关注"
+          if(allAttentionCodes.contains(stockResultJson.ts_code)){
+            stockResultJson.attention = "已关注"
           }
-          if(allBuyCodes.contains(e.ts_code)){
-            e.buy = "已购买"
+          if(allBuyCodes.contains(stockResultJson.ts_code)){
+            stockResultJson.buy = "已购买"
           }
         })
 
-        e._2.zipWithIndex.foreach(tp2=>{
+        tp3._2.zipWithIndex.foreach(tp2=>{
           if(group){
             tp2._1.similarity = SimilartyUtil.getTsCode(tp2._1.ts_code, trade_date).desc //相似度计算
-            println(s"${tp2._1.modClsName}=================相似度计算完成: ${tp2._2 + 1}/ ${e._2.size}")
+            println(s"${tp2._1.modClsName}=================相似度计算完成: ${tp2._2 + 1}/ ${tp3._2.size}")
           }
         })
 
-        val head = (e._2 ++ e._3).head
+        val head = (tp3._2 ++ tp3._3).head
         val map = new util.HashMap[String, Object]()
         map.put("time", s"${head.file.getName}---【${new SimpleDateFormat("HH:mm:ss").format(new Date())}】---${fenci}")
         map.put("module", s"【${head.modWinRate}】${head.modDesc}【${head.modClsName}】")
-        map.put("heads", e._2.asJava)
-        map.put("histories", e._3.asJava)
+        map.put("heads", tp3._2.asJava)
+        map.put("histories", tp3._3.asJava)
         map
     }).asJava
 
