@@ -19,6 +19,9 @@ object ParseCammandParam {
           ParseCammandParam.param.email = true
         case "-back_step" =>
           ParseCammandParam.param.back_step = args(i + 1).toInt
+        case "-back_full" =>
+          //回测方式采用全量回测，非常耗时
+          ParseCammandParam.param.back_full = true
         case "-json" =>
           ParseCammandParam.param.json = true
         case "-wrate" =>
@@ -44,6 +47,8 @@ class ParseCammandParam {
   var back: Boolean = false
   //回测80个交易日
   var back_step: Int = 80
+  //是否全量回测，默认增量回测
+  var back_full: Boolean = false
   //是否输出json格式
   var json: Boolean = false
   //是否发送邮件
