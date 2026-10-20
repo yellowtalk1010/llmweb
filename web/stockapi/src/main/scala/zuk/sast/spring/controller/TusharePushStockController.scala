@@ -451,14 +451,14 @@ class TusharePushStockController {
       }
       else {
         hotFenciTypeList
-      }).map(e=>s"${e.tsCode}, ${e.tsName}").mkString("; ")
+      }).map(e=>s"【${e.modCls}, ${e.tsCode}, ${e.tsName}】").mkString("; ")
 
       val str2 = (if(hotFenciNumList.size>5){
         hotFenciNumList.take(5)
       }
       else {
         hotFenciNumList
-      }).map(e=>s"${e.tsCode}, ${e.tsName}").mkString("; ")
+      }).map(e=>s"【${e.modCls}, ${e.tsCode}, ${e.tsName}】").mkString("; ")
       
       response.put("data", maplist)
       response.put("hotStock", Array(s"类型:${str1}", s"数量:${str2}").toList.asJava)
