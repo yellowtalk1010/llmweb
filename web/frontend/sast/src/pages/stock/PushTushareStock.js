@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 function PushTushareStock() {
   const [searchParams] = useSearchParams();
   const [data, setData] = useState([]);
+  const [hotStock, setHotStock] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [expandedModules, setExpandedModules] = useState({});
@@ -36,6 +37,7 @@ function PushTushareStock() {
       if (result.code === "success") {
         setGroup(false)
         setData(result.data);
+        setHotStock(result.hotStock)
       }
       setError(null);
     } catch (err) {
@@ -164,6 +166,11 @@ useEffect(() => {
           {error && <p className="text-red-500">Error: {error}</p>}
         </label>
 
+      </div>
+      <div>
+        <label>
+            {hotStock}
+        </label>
       </div>
 
       {data.map((moduleItem, index) => (

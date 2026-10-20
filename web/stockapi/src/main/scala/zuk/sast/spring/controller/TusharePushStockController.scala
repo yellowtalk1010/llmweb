@@ -32,7 +32,8 @@ import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 
-case class FenciResDto(@BeanProperty tsCode: String,
+case class FenciResDto(@BeanProperty modCls: String,
+                       @BeanProperty tsCode: String,
                        @BeanProperty tsName: String,
                        @BeanProperty fenciList: List[(String, Int)]
                       )
@@ -375,6 +376,7 @@ class TusharePushStockController {
           val fenciSet = FenCi_Util.createFenCi(List(stockResultJson.concept))._1.map(_._1).toSet
           //todo 记录热点板块
            val hotFenciResDto = FenciResDto(
+             stockResultJson.modClsName,
              stockResultJson.ts_code,
              Dataset_all_stocks_csv_file.getTsStock(stockResultJson.ts_code).name,
              fenciSet.flatMap(w=>{hotFenCiList.filter(hw=>hw._1.equals(w))}).toList.sortBy(_._2).reverse
@@ -389,6 +391,7 @@ class TusharePushStockController {
           
           //todo 关联冰点板块
           val coolFenciResDto = FenciResDto(
+            stockResultJson.modClsName,
             stockResultJson.ts_code,
             stockResultJson.name,
             fenciSet.flatMap(w=>{coolFenCiList.filter(hw=>hw._1.equals(w))}).toList.sortBy(_._2).reverse
@@ -458,7 +461,7 @@ class TusharePushStockController {
       }).map(e=>s"${e.tsCode}, ${e.tsName}").mkString("; ")
       
       response.put("data", maplist)
-      response.put("hotStock", s"类型:${str1}, 数量:${str2}")
+      response.put("hotStock", Array(s"类型:${str1}", s"数量:${str2}").toList.asJava)
     }
 
     response
