@@ -3,6 +3,12 @@ package zuk.tu_share.send
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.module.IModel
 
+import scala.collection.mutable.ListBuffer
+
+object ToBackTest {
+  val backTestList = ListBuffer[IModel]()
+}
+
 /***
  * 收集回测数据
  */
@@ -16,6 +22,7 @@ class ToBackTest extends ISend {
 
       BackTest.backTestList ++= moduleList  //收集回测数据
 
+      ToBackTest.backTestList ++= moduleList //在内存中收集引擎的分析结果
     })
 
   }
