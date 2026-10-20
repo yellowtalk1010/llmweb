@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 function PushTushareStock() {
   const [searchParams] = useSearchParams();
   const [data, setData] = useState([]);
-  const [hotStock, setHotStock] = useState(null);
+  const [hotStock, setHotStock] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [expandedModules, setExpandedModules] = useState({});
@@ -37,7 +37,8 @@ function PushTushareStock() {
       if (result.code === "success") {
         setGroup(false)
         setData(result.data);
-        setHotStock(result.hotStock)
+        
+        setHotStock(Array.isArray(result.hotStock) ? result.hotStock : []);
       }
       setError(null);
     } catch (err) {
@@ -169,7 +170,13 @@ useEffect(() => {
       </div>
       <div>
         <label>
-            {hotStock}
+            {hotStock.map((item, index)=>(
+              <div>
+                <span>
+                  {item}
+                </span>
+              </div>
+            ))}
         </label>
       </div>
 
