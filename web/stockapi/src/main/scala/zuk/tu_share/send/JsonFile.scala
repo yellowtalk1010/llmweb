@@ -21,8 +21,10 @@ class JsonFile extends ISend {
   override def doSend(list: List[IModel]): Unit = {
     try {
 
-      if(ParseCammandParam.param.json
-        && LicenseUtil.check()){
+      //todo 保存模型分析的推荐结果到json文件中
+      if(ParseCammandParam.param.json  
+        && LicenseUtil.check()  // 检查许可证
+      ) {
         //校验命令、 许可校验
 
         val arr = list.map(m => {
