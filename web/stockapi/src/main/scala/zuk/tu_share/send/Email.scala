@@ -18,6 +18,7 @@ class Email extends ISend {
   override def doSend(list: List[IModel]): Unit = {
     try {
       if(ParseCammandParam.param.email){
+        //todo 将模型引擎分析的推荐结果发送邮件出去
         doEmail(list)
       }
     }

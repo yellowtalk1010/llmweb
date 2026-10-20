@@ -52,7 +52,7 @@ class ParseCammandParam {
   var back_full: Boolean = false
   //是否输出json格式
   var json: Boolean = false
-  //是否发送邮件
+  //模型引擎的分析结果是否发送邮件（回测结果是必须发送邮件的）
   var email: Boolean = false
   //回测涨幅: 1.0%
   var wrate: Float = 1.00
