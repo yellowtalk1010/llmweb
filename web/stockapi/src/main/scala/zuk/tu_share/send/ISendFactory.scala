@@ -14,10 +14,13 @@ object ISendFactory {
 
   private def sendList: List[ISend] = {
     List(
+      //todo 必须执行
       new Console,
+      new ToBackTest,
+      
+      //todo 通过参数控制
       new Email,
       new JsonFile,
-      new ToBackTest,
     )
   }
 

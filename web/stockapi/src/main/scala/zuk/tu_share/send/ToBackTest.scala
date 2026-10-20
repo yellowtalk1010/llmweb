@@ -1,6 +1,5 @@
 package zuk.tu_share.send
 
-import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.module.IModel
 
 import scala.collection.mutable.ListBuffer
