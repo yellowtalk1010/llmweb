@@ -31,6 +31,12 @@ import scala.beans.BeanProperty
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
+
+case class FenciResDto(@BeanProperty tsCode: String,
+                       @BeanProperty tsName: String,
+                       @BeanProperty fenciList: List[(String, Int)]
+                      )
+
 /***
  * 股票推荐列表
  */
@@ -208,6 +214,7 @@ class TusharePushStockController {
   @GetMapping(value = Array("list"))
   def list(tradedate: String, modType: String, group: Boolean): util.Map[String, Object] = {
 
+    val fenciResDtoList = ListBuffer[FenciResDto]()
 
     val response = new util.HashMap[String, Object]()
     response.put("code", s"success")
@@ -366,14 +373,28 @@ class TusharePushStockController {
         (tp3._2 ++ tp3._3).foreach(stockResultJson=>{
 
           val fenciSet = FenCi_Util.createFenCi(List(stockResultJson.concept))._1.map(_._1).toSet
+          //todo 记录热点板块
+           val hotFenciResDto = FenciResDto(
+            stockResultJson.ts_code, 
+            stockResultJson.name, 
+            fenciSet.flatMap(w=>{hotFenCiList.filter(hw=>hw._1.equals(w))}).toList.sortBy(_._2).reverse
+          )
+
+          stockResultJson.hotSectors = hotFenciResDto.fenciList.map(e=>{
+            s"${e._1}【${e._2}/${hotConcepts.size}】"
+          }).mkString("; ")
+          
+          fenciResDtoList += hotFenciResDto
+
+          
           //todo 关联热点板块
-          stockResultJson.hotSectors = fenciSet.flatMap(w=>{
-            hotFenCiList.filter(hw=>hw._1.equals(w))
-          }).toList
-            .sortBy(_._2).reverse
-            .map(e=>{
-              s"${e._1}【${e._2}/${hotConcepts.size}】"
-            }).mkString("; ")
+//          stockResultJson.hotSectors = fenciSet.flatMap(w=>{
+//            hotFenCiList.filter(hw=>hw._1.equals(w))
+//          }).toList
+//            .sortBy(_._2).reverse
+//            .map(e=>{
+//              s"${e._1}【${e._2}/${hotConcepts.size}】"
+//            }).mkString("; ")
           //todo 关联冰点板块
           stockResultJson.coolSectors = fenciSet.flatMap(w=>{
             coolFenCiList.filter(hw=>hw._1.equals(w))
