@@ -19,7 +19,7 @@ import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.{IModel, MA8_Model, MA9_Model}
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir, Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
 
 import java.io.{File, FileInputStream}
 import java.nio.charset.Charset
@@ -375,10 +375,10 @@ class TusharePushStockController {
           val fenciSet = FenCi_Util.createFenCi(List(stockResultJson.concept))._1.map(_._1).toSet
           //todo 记录热点板块
            val hotFenciResDto = FenciResDto(
-            stockResultJson.ts_code, 
-            stockResultJson.name, 
-            fenciSet.flatMap(w=>{hotFenCiList.filter(hw=>hw._1.equals(w))}).toList.sortBy(_._2).reverse
-          )
+             stockResultJson.ts_code,
+             Dataset_all_stocks_csv_file.getTsStock(stockResultJson.ts_code).name,
+             fenciSet.flatMap(w=>{hotFenCiList.filter(hw=>hw._1.equals(w))}).toList.sortBy(_._2).reverse
+           )
 
           stockResultJson.hotSectors = hotFenciResDto.fenciList.map(e=>{
             s"${e._1}【${e._2}/${hotConcepts.size}】"
