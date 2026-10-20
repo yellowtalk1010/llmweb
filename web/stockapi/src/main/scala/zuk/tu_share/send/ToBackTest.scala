@@ -19,10 +19,8 @@ class ToBackTest extends ISend {
     list.groupBy(_.getClass.getSimpleName).filter(_._2.size > 0).toList.sortBy(_._2.head.winRate).reverse.foreach(tp2 => {
       val moduleName = tp2._1
       val moduleList = tp2._2
-
-      BackTest.backTestList ++= moduleList  //收集回测数据
-
-      ToBackTest.backTestList ++= moduleList //在内存中收集引擎的分析结果
+      
+      ToBackTest.backTestList ++= moduleList //在内存中收集引擎的分析结果，用于回测
     })
 
   }

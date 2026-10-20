@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.module.IModel
 import zuk.tu_share.pass.PassFactory
+import zuk.tu_share.send.ToBackTest
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
 import zuk.utils.SendMail
 
@@ -29,17 +30,12 @@ case class BackTestDto() {
 
 object BackTest {
 
-  /***
-   * 收集回测的数据
-   */
-  val backTestList = ListBuffer[IModel]()
-
   def analysis(): Unit = {
 
     val linesMap = new util.HashMap[String, ListBuffer[String]]()
     val backTestMapList = new ListBuffer[util.HashMap[String, String]]
 
-    backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
+    ToBackTest.backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
       .filter(_._2.size>0)
       .foreach(e=>{
