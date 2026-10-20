@@ -444,17 +444,18 @@ class TusharePushStockController {
       response.put("data", Array(emptyMap).toList.asJava)
     }
     else {
+      val LEN = 8
       val hotFenciTypeList = fenciResDtoList.groupBy(_.tsCode).map(_._2.head).toList.sortBy(_.fenciList.size).reverse
       val hotFenciNumList = fenciResDtoList.groupBy(_.tsCode).map(_._2.head).toList.sortBy(_.fenciList.map(_._2).sum).reverse
-      val str1 = (if(hotFenciTypeList.size>5){
-        hotFenciTypeList.take(5)
+      val str1 = (if(hotFenciTypeList.size>LEN){
+        hotFenciTypeList.take(LEN)
       }
       else {
         hotFenciTypeList
       }).map(e=>s"【${e.modCls}, ${e.tsCode}, ${e.tsName}】").mkString("; ")
 
-      val str2 = (if(hotFenciNumList.size>5){
-        hotFenciNumList.take(5)
+      val str2 = (if(hotFenciNumList.size>LEN){
+        hotFenciNumList.take(LEN)
       }
       else {
         hotFenciNumList
