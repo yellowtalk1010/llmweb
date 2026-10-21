@@ -99,10 +99,10 @@ object BackTest {
             lines += line
 
             val map = new util.HashMap[String, String]()
-            map.put("stockType", clsName.toUpperCase.trim)
-            map.put("stockCode", mod.buy.ts_code.trim)
-            map.put("stockName", mod.buy.name.trim)
-            map.put("tradedate", mod.buy.trade_date.trim)
+            map.put("stockType", clsName.toUpperCase.trim) //模型类型
+            map.put("stockCode", mod.buy.ts_code.trim)  //股票代码
+            map.put("stockName", mod.buy.name.trim)   //股票名称
+            map.put("tradedate", mod.buy.trade_date.trim)   //交易日期
             backTestMapList += map
 
             st
