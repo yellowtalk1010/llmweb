@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
+import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.module.{IModel, StockDto}
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.send.ToBackTest
@@ -17,6 +18,7 @@ import java.text.SimpleDateFormat
 import java.util
 import java.util.Date
 import scala.beans.BeanProperty
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
@@ -30,7 +32,7 @@ case class BackTestDto() {
 
 object BackTest {
   
-  def analysis_1(): Unit = {
+  def analysis_1(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
     
     val linesMap = new util.HashMap[String, ListBuffer[String]]()
     val backTestMapList = new ListBuffer[util.HashMap[String, String]]
@@ -54,7 +56,7 @@ object BackTest {
       modChooseStockList.foreach(chooseStockDto=>{
 
         if(!Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(chooseStockDto.tsStock.ts_code).isEmpty){
-          val dailyList = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(chooseStockDto.tsStock.ts_code).get
+          val dailyList = map.get(chooseStockDto.tsStock.ts_code).get
           
           //todo 构建买点
           val buy = dailyList.filter(_.trade_date.equals(chooseStockDto.tradedate)).head

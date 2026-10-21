@@ -34,7 +34,7 @@ object Main {
           println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
         }
 
-        BackTest.analysis()
+        BackTest.analysis_1(map)
         println("完成回测分析")
         System.exit(1)
         
