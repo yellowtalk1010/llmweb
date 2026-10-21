@@ -31,13 +31,25 @@ case class BackTestDto() {
 object BackTest {
   
   def analysis_1(): Unit = {
+    
+    val linesMap = new util.HashMap[String, ListBuffer[String]]()
+    val backTestMapList = new ListBuffer[util.HashMap[String, String]]
+    
+    
     val memoryList = ToBackTest.memoryBackTestList
     val modGroupMap = memoryList.groupBy(_.getClass.getSimpleName)
     modGroupMap.toList.foreach(tp2=>{
-      val modClsName = tp2._1
+      
+      val modClsName = tp2._1 //模型类名
       val iModel = PassFactory.engineModuleList().filter(_.getClass.getSimpleName.equals(modClsName)).head
+
+      val lines = new ListBuffer[String]()
+      
       val victoryList = tp2._2.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).map(_.getStockDto()).sortBy(e=>(e.tradedate, e.tsStock.ts_code)).reverse
       victoryList.foreach(victoryStockDto=>{
+
+        //todo 找到具体的股票信息
+        //val tsStock = Dataset_all_stocks_csv_file.getTsStock(victoryStockDto.tsStock.ts_code)
         
         if(!Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).isEmpty){
           val dailyList = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).get
@@ -54,6 +66,28 @@ object BackTest {
           else {
             buyFutureList
           }
+
+          
+          if(sellList.size==0){
+            
+            val name = s"<a href='${victoryStockDto.tsStock.eastmoneyURL}'>${victoryStockDto.tsStock.name}</a>"
+            val buyReason = s"<span>买入</span>"
+
+            val line = s"${modClsName}, ${victoryStockDto.tsStock.ts_code}, ${name},【${victoryStockDto.totalMV}亿，${victoryStockDto.limitUp}，${victoryStockDto.limitDown}，${victoryStockDto.turnoverRate}，涨跌${victoryStockDto.preChangeRate}】, ${victoryStockDto.tradedate}【${buyReason}】, 【未交易】"
+            lines += line
+
+            val map = new util.HashMap[String, String]()
+            map.put("stockType", modClsName.toUpperCase.trim)
+            map.put("stockCode", victoryStockDto.tsStock.ts_code.trim)
+            map.put("stockName", victoryStockDto.tsStock.name.trim)
+            map.put("tradedate", victoryStockDto.tradedate.trim)
+            backTestMapList += map
+            
+          }
+          else {
+            
+          }
+          
         }
       })
       
