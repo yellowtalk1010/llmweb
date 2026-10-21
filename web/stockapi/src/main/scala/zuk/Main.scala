@@ -35,6 +35,7 @@ object Main {
         }
 
         BackTest.analysis_1(map)
+//        BackTest.analysis()
         println("完成回测分析")
         System.exit(1)
         

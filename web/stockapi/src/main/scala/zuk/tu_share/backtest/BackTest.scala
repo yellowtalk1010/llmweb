@@ -48,19 +48,22 @@ object BackTest {
       val lines = new ListBuffer[String]()
       
       //模型筛选的股票按时间排序
-      val modChooseStockList = tp2._2.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).map(_.getStockDto()).sortBy(e=>(e.tradedate, e.tsStock.ts_code)).reverse
+      val modList = tp2._2.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).sortBy(e=>(e.getStockDto().tradedate, e.getStockDto().tsStock.ts_code)).reverse
       
       //模型筛选的股票回测成功的股票集
       val victoryStockList = ListBuffer[StockDto]()
       
-      modChooseStockList.foreach(chooseStockDto=>{
+      modList.foreach(iMod=>{
+
+        val chooseStockDto = iMod.getStockDto()
 
         if(!map.get(chooseStockDto.tsStock.ts_code).isEmpty){
           val dailyList = map.get(chooseStockDto.tsStock.ts_code).get
           
           //todo 构建买点
           val buy = dailyList.filter(_.trade_date.equals(chooseStockDto.tradedate)).head
-          val buyFutureList = dailyList.filter(_.trade_date.toLong > chooseStockDto.tradedate.toLong)
+          
+          val buyFutureList = dailyList.filter(_.trade_date.toLong > chooseStockDto.tradedate.toLong).sortBy(_.trade_date.toLong) //倒序，从小到大
           
           //todo 构建卖点
           val sellList = if(buyFutureList.size >= iModel.backTestStep){
@@ -70,7 +73,26 @@ object BackTest {
           else {
             buyFutureList
           }
-
+          
+//          //TODO 比较两个回测算法中 sell是否一致
+//          if(buy.trade_date.equals(iMod.buy.trade_date) 
+//            && buy.ts_code.equals(iMod.buy.ts_code) 
+//            && sellList.size == iMod.sells.size
+//          ){
+//            for(i <- 0 until sellList.size){
+//              if(sellList(i).trade_date.equals(iMod.sells(i).trade_date)
+//                && (sellList(i).ts_code.equals(iMod.sells(i).ts_code))
+//              ){
+//                
+//              }
+//              else {
+//                println("sell没有对齐")
+//              }
+//            }
+//          }
+//          else {
+//            println("两个回测路径有问题")
+//          }
           
           if(sellList.size==0){
             
@@ -85,7 +107,6 @@ object BackTest {
             map.put("stockCode", buy.ts_code.trim)
             map.put("stockName", buy.name.trim)
             map.put("tradedate", buy.trade_date.trim)
-            backTestMapList += map
             backTestMapList += map
             
           }
@@ -127,8 +148,12 @@ object BackTest {
         }
       })
 
+      if(victoryStockList.groupBy(e=>e.tradedate+e.tsStock.ts_code).filter(_._2.size>1).size>0){
+        println("日期股票重复计算")
+      }
+      
       //计算胜率
-      val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(modChooseStockList.size), 4, RoundingMode.UP)
+      val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(modList.size), 4, RoundingMode.UP)
       //胜率保存到properties中
       Dataset_module_history_rtk_dir.getProperties().put(modClsName.toUpperCase, victoryRate.toString)
       val line = s"${modClsName}胜率：${victoryRate}, ${iModel.desc()}"
