@@ -47,7 +47,7 @@ object Dataset_module_history_rtk_dir {
   
   execute.submit(new Runnable {
     override def run(): Unit = {
-      while (true) {
+      while (true && !ParseCammandParam.param.back) {
         try {
           loadModelAnalysisDataSet
           //开始定时更新
