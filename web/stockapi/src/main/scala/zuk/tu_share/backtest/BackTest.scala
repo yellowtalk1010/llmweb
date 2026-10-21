@@ -55,7 +55,7 @@ object BackTest {
       
       modChooseStockList.foreach(chooseStockDto=>{
 
-        if(!Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(chooseStockDto.tsStock.ts_code).isEmpty){
+        if(!map.get(chooseStockDto.tsStock.ts_code).isEmpty){
           val dailyList = map.get(chooseStockDto.tsStock.ts_code).get
           
           //todo 构建买点
