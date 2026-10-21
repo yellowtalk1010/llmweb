@@ -90,7 +90,7 @@ object PassFactory {
           //
           val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
           if (ParseCammandParam.param.back) {
-            //如果回测
+            //如果回测，则需要补全buy、sell的数据
 
             var startIndex = 0
             var isBreak = false
