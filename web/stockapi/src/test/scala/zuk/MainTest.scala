@@ -18,7 +18,7 @@ class MainTest extends AnyFunSuite {
 
   test("main回测测试") {
 //    PassFactory.models = List(new MA7_Model)
-    val args = Array("-engine_path", "D:\\development\\github\\tushare\\111\\gitee_stockapi\\", "-back")
+    val args = Array("-engine_path", "D:\\development\\github\\tushare\\111\\gitee_stockapi\\", "-back", "-back_full")
     zuk.Main.main(args)
   }
 
