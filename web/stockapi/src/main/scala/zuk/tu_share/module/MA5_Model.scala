@@ -40,7 +40,7 @@ class MA5_Model extends IModel {
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma20.floatValue())) //ma20是递增的
       && ListOrderCheck.isDecreasing(list.map(_.ma.ma30.floatValue())) //ma30是递增的
     ){
-      stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+      stockDto = new StockDto(days.head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       stockDto.warningUpperShadow = super.upperShadow(days)
       if (StringUtils.isNotBlank(head.total_mv)) {
         stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()

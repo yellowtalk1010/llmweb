@@ -51,7 +51,7 @@ class MA9_Model extends IModel {
             && this.similartyDto.sampleNumber > 10 //样本数量10个
             && this.similartyDto.winate >= 0.6) {
             //添加形态验证
-            stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+            stockDto = new StockDto(days.head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
           }
         }
       }

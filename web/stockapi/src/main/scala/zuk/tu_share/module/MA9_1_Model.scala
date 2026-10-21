@@ -45,7 +45,7 @@ class MA9_1_Model extends IModel {
         val tsStock = super.findTsStock(head.ts_code)
         if(tsStock!=null){
           //添加形态验证
-          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+          stockDto = new StockDto(days.head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
       }
     }

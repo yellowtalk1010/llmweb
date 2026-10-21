@@ -93,7 +93,7 @@ class MA8_Model extends IModel {
           && divideValue > 0.3
         ){
           val tsStock = Dataset_all_stocks_csv_file.getTsStock(days.head.ts_code)
-          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+          stockDto = new StockDto(days.head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
         }
       }
     }

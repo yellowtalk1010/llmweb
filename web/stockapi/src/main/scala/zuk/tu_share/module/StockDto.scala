@@ -4,7 +4,8 @@ import zuk.tu_share.dto.TsStock
 
 import scala.beans.BeanProperty
 
-class StockDto(@BeanProperty var tsStock: TsStock,  //个股详情
+class StockDto(@BeanProperty var tradedate: String,  //交易日期
+                @BeanProperty var tsStock: TsStock,  //个股详情
                @BeanProperty var limitUp: String,  //过去是否存在涨停情况
                @BeanProperty var limitDown: String,  //过去是否存在跌停情况
                @BeanProperty var turnoverRate: Float = 0.0  //过去30个交易日中，换手率大于3.5的比例
@@ -13,8 +14,8 @@ class StockDto(@BeanProperty var tsStock: TsStock,  //个股详情
   @BeanProperty var preChangeRate: Float = 0.0 //买入当天尾盘涨跌幅
   @BeanProperty var warningUpperShadow: Boolean = false //上影线警告
   
-  def this(tsStock: TsStock) = {
-    this(tsStock, "", "", 0.0)
-  }
+//  def this(tsStock: TsStock) = {
+//    this(tsStock, "", "", 0.0)
+//  }
   
 }

@@ -35,7 +35,7 @@ class MA3_1_Model extends IModel {
         //ST不推荐
         val tsStock = Dataset_all_stocks_csv_file.getTsStock(head.ts_code)
         if (tsStock != null) {
-          stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), changeUpRate)
+          stockDto = new StockDto(days.head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), changeUpRate)
           stockDto.warningUpperShadow = super.upperShadow(days)
           if (StringUtils.isNotBlank(head.total_mv)) {
             stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()

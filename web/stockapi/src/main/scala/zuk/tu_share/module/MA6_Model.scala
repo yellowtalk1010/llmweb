@@ -48,7 +48,7 @@ class MA6_Model extends IModel {
       && calaChange(list)
 //      && calaVol(list)
     ){
-      stockDto = new StockDto(tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+      stockDto = new StockDto(days.head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       stockDto.warningUpperShadow = super.upperShadow(days)
       if (StringUtils.isNotBlank(head.total_mv)) {
         stockDto.totalMV = new BigDecimal(head.total_mv).divide(new BigDecimal(10000), 2, RoundingMode.UP).floatValue()
