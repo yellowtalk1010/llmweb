@@ -35,7 +35,7 @@ object BackTest {
     val linesMap = new util.HashMap[String, ListBuffer[String]]()
     val backTestMapList = new ListBuffer[util.HashMap[String, String]]
 
-    ToBackTest.backTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
+    ToBackTest.memoryBackTestList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
       .filter(_._2.size>0)
       .foreach(e=>{
