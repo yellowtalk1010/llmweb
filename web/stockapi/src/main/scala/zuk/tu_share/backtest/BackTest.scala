@@ -41,9 +41,12 @@ object BackTest {
         
         if(!Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).isEmpty){
           val dailyList = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).get
+          
+          //todo 构建买点
           val buy = dailyList.filter(_.trade_date.equals(victoryStockDto.tradedate)).head
           val buyFutureList = dailyList.filter(_.trade_date.toLong > victoryStockDto.tradedate.toLong)
           
+          //todo 构建卖点
           val sellList = if(buyFutureList.size >= iModel.backTestStep){
             //如果未来长度大于模型设定的回测天数
             buyFutureList.take(iModel.backTestStep)
