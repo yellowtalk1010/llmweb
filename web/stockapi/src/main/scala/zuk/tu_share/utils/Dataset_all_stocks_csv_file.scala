@@ -37,8 +37,8 @@ object Dataset_all_stocks_csv_file {
       tsStock 
     }
     else {
-      println(s"股票代码:${tsCode}，不存在，可能是转债代码")
-      new TsStock(tsCode)
+      //println(s"股票代码:${tsCode}，不存在，可能是转债代码")
+      new TsStock(tsCode, "未知（可能是转债代码）")
     }
   }
 
