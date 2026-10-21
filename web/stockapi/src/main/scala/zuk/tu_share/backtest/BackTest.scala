@@ -29,6 +29,33 @@ case class BackTestDto() {
 }
 
 object BackTest {
+  
+  def analysis_1(): Unit = {
+    val memoryList = ToBackTest.memoryBackTestList
+    val modGroupMap = memoryList.groupBy(_.getClass.getSimpleName)
+    modGroupMap.toList.foreach(tp2=>{
+      val modClsName = tp2._1
+      val iModel = PassFactory.engineModuleList().filter(_.getClass.getSimpleName.equals(modClsName)).head
+      val victoryList = tp2._2.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).map(_.getStockDto()).sortBy(e=>(e.tradedate, e.tsStock.ts_code)).reverse
+      victoryList.foreach(victoryStockDto=>{
+        
+        if(!Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).isEmpty){
+          val dailyList = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).get
+          val buy = dailyList.filter(_.trade_date.equals(victoryStockDto.tradedate)).head
+          val buyFutureList = dailyList.filter(_.trade_date.toLong > victoryStockDto.tradedate.toLong)
+          
+          val sellList = if(buyFutureList.size >= iModel.backTestStep){
+            //如果未来长度大于模型设定的回测天数
+            buyFutureList.take(iModel.backTestStep)
+          }
+          else {
+            buyFutureList
+          }
+        }
+      })
+      
+    })
+  }
 
   def analysis(): Unit = {
 
