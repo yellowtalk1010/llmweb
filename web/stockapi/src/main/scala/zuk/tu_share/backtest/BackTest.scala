@@ -113,9 +113,9 @@ object BackTest {
           else {
             
             var st = false
-            val preClose = sellList.head.pre_close
+            
             val highStr = sellList.map(e => {
-              val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
+              val change = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
               if(change.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0){
                 st = true //算入手续费
               }
