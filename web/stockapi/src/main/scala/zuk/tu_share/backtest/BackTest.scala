@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONWriter.Feature
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.module.IModel
+import zuk.tu_share.module.{IModel, StockDto}
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.send.ToBackTest
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
@@ -45,18 +45,20 @@ object BackTest {
 
       val lines = new ListBuffer[String]()
       
-      val victoryList = tp2._2.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).map(_.getStockDto()).sortBy(e=>(e.tradedate, e.tsStock.ts_code)).reverse
-      victoryList.foreach(victoryStockDto=>{
+      //模型筛选的股票按时间排序
+      val modChooseStockList = tp2._2.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null).map(_.getStockDto()).sortBy(e=>(e.tradedate, e.tsStock.ts_code)).reverse
+      
+      //模型筛选的股票回测成功的股票集
+      val victoryStockList = ListBuffer[StockDto]()
+      
+      modChooseStockList.foreach(chooseStockDto=>{
 
-        //todo 找到具体的股票信息
-        //val tsStock = Dataset_all_stocks_csv_file.getTsStock(victoryStockDto.tsStock.ts_code)
-        
-        if(!Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).isEmpty){
-          val dailyList = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(victoryStockDto.tsStock.ts_code).get
+        if(!Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(chooseStockDto.tsStock.ts_code).isEmpty){
+          val dailyList = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.get(chooseStockDto.tsStock.ts_code).get
           
           //todo 构建买点
-          val buy = dailyList.filter(_.trade_date.equals(victoryStockDto.tradedate)).head
-          val buyFutureList = dailyList.filter(_.trade_date.toLong > victoryStockDto.tradedate.toLong)
+          val buy = dailyList.filter(_.trade_date.equals(chooseStockDto.tradedate)).head
+          val buyFutureList = dailyList.filter(_.trade_date.toLong > chooseStockDto.tradedate.toLong)
           
           //todo 构建卖点
           val sellList = if(buyFutureList.size >= iModel.backTestStep){
@@ -70,28 +72,100 @@ object BackTest {
           
           if(sellList.size==0){
             
-            val name = s"<a href='${victoryStockDto.tsStock.eastmoneyURL}'>${victoryStockDto.tsStock.name}</a>"
+            val name = s"<a href='${chooseStockDto.tsStock.eastmoneyURL}'>${chooseStockDto.tsStock.name}</a>"
             val buyReason = s"<span>买入</span>"
 
-            val line = s"${modClsName}, ${victoryStockDto.tsStock.ts_code}, ${name},【${victoryStockDto.totalMV}亿，${victoryStockDto.limitUp}，${victoryStockDto.limitDown}，${victoryStockDto.turnoverRate}，涨跌${victoryStockDto.preChangeRate}】, ${victoryStockDto.tradedate}【${buyReason}】, 【未交易】"
+            val line = s"${modClsName}, ${chooseStockDto.tsStock.ts_code}, ${name},【${chooseStockDto.totalMV}亿，${chooseStockDto.limitUp}，${chooseStockDto.limitDown}，${chooseStockDto.turnoverRate}，涨跌${chooseStockDto.preChangeRate}】, ${chooseStockDto.tradedate}【${buyReason}】, 【未交易】"
             lines += line
 
             val map = new util.HashMap[String, String]()
             map.put("stockType", modClsName.toUpperCase.trim)
-            map.put("stockCode", victoryStockDto.tsStock.ts_code.trim)
-            map.put("stockName", victoryStockDto.tsStock.name.trim)
-            map.put("tradedate", victoryStockDto.tradedate.trim)
+            map.put("stockCode", buy.ts_code.trim)
+            map.put("stockName", buy.name.trim)
+            map.put("tradedate", buy.trade_date.trim)
+            backTestMapList += map
             backTestMapList += map
             
           }
           else {
             
+            var st = false
+            val preClose = sellList.head.pre_close
+            val highStr = sellList.map(e => {
+              val change = ((new BigDecimal(e.high).subtract(new BigDecimal(preClose))).multiply(new BigDecimal(100))).divide(new BigDecimal(preClose), 4, RoundingMode.UP)
+              if(change.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0){
+                st = true //算入手续费
+              }
+              s"${e.trade_date}【${change}】【卖出】"
+            }).mkString(", ")
+
+            if(st){
+              //记录成功的
+              victoryStockList += chooseStockDto
+            }
+            
+            val ok = if (st) "" else "X"
+            
+            val name =  s"<a href='${chooseStockDto.tsStock.eastmoneyURL}'>${buy.name}</a>"
+            
+            val buyReason = s"<span>买入</span>"
+
+            val line = s"${modClsName}, ${buy.ts_code}, ${name},【${chooseStockDto.totalMV}亿，${chooseStockDto.limitUp}，${chooseStockDto.limitDown}，${chooseStockDto.turnoverRate}，涨跌${chooseStockDto.preChangeRate}】, ${chooseStockDto.tradedate}【${buyReason}】, ${highStr}, ${ok}"
+            lines += line
+
+            val map = new util.HashMap[String, String]()
+            map.put("stockType", modClsName.toUpperCase.trim) //模型类型
+            map.put("stockCode", buy.ts_code.trim)  //股票代码
+            map.put("stockName", buy.name.trim)   //股票名称
+            map.put("tradedate", buy.trade_date.trim)   //交易日期
+            backTestMapList += map
+            
           }
           
         }
       })
+
+      //计算胜率
+      val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(modChooseStockList.size), 4, RoundingMode.UP)
+      //胜率保存到properties中
+      Dataset_module_history_rtk_dir.getProperties().put(modClsName.toUpperCase, victoryRate.toString)
+      val line = s"${modClsName}胜率：${victoryRate}, ${iModel.desc()}"
+      lines += line
+      println(line)
+
+      linesMap.put(modClsName, lines)
       
     })
+
+
+    //保存胜率
+    Dataset_module_history_rtk_dir.storeProperties()
+
+    //回测结果按模型类型分别存储
+    PassFactory.engineModuleList().map(_.getClass.getSimpleName.toUpperCase).foreach(clsName=>{
+      val btList = backTestMapList.filter(m=>{
+          m.get("stockType") !=null
+            && m.get("stockType").toUpperCase.equals(clsName.toUpperCase)
+        })
+        .sortBy(m=>{
+          s"${m.get("tradedate")}-${m.get("stockCode")}"
+        })
+        .reverse
+        .map(m=>{
+          val l = JSONObject.toJSONString(m, Feature.LargeObject)
+          l
+        }).asJava
+      val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName
+      FileUtils.writeLines(new File(btResPath), btList)
+      println(s"${clsName}模型回测结果写入路径:${btResPath}")
+    })
+
+    linesMap.entrySet().asScala.foreach(entry=>{
+      val key = entry.getKey
+      val lines = entry.getValue
+      sendMail(key, lines.mkString("<br>\n"))
+    })
+
   }
 
   def analysis(): Unit = {
