@@ -10,9 +10,6 @@ import java.math.{BigDecimal, RoundingMode}
 
 trait IModel {
 
-//  var sells = ListBuffer[ModuleHistoryDailyData]()
-//  var buy: ModuleHistoryDailyData = _
-
   def run(days: List[ModuleHistoryDailyData]): Unit //运行模型
 
   def getStockDto(): StockDto
