@@ -89,36 +89,36 @@ object PassFactory {
           val stock = e._1
           //
           val moduleDayList = e._2.slice(backtestLenght, e._2.size) //取前几个交易日的数据，用于回测
-          if (ParseCammandParam.param.back) {
-            //如果回测，则需要补全buy、sell的数据
-
-            var startIndex = 0
-            var isBreak = false
-            val backTestStep = module.backTestStep //回测未来多少天的步长
-            for (i <- backTestStep to 1 by -1){
-              if(!isBreak){
-                startIndex = backtestLenght - i
-                if (startIndex < 0) {
-                  //继续
-                }
-                else {
-                  isBreak = true
-                  //中断
-                }
-              }
-            }
-
-            if (startIndex < 0) {
-              //只有当backtestLenght等于0时才会出现
-              module.sells ++= List()
-              module.buy = e._2(0)
-            }
-            else {
-              module.sells ++= e._2.slice(startIndex, backtestLenght).reverse //连续两天
-              module.buy = e._2(backtestLenght) //购买
-            }
-
-          }
+//          if (ParseCammandParam.param.back) {
+//            //如果回测，则需要补全buy、sell的数据
+//
+//            var startIndex = 0
+//            var isBreak = false
+//            val backTestStep = module.backTestStep //回测未来多少天的步长
+//            for (i <- backTestStep to 1 by -1){
+//              if(!isBreak){
+//                startIndex = backtestLenght - i
+//                if (startIndex < 0) {
+//                  //继续
+//                }
+//                else {
+//                  isBreak = true
+//                  //中断
+//                }
+//              }
+//            }
+//
+//            if (startIndex < 0) {
+//              //只有当backtestLenght等于0时才会出现
+//              module.sells ++= List()
+//              module.buy = e._2(0)
+//            }
+//            else {
+//              module.sells ++= e._2.slice(startIndex, backtestLenght).reverse //连续两天
+//              module.buy = e._2(backtestLenght) //购买
+//            }
+//
+//          }
           doPass(moduleDayList)
           module.run(moduleDayList)
           
