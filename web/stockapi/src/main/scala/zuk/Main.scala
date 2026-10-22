@@ -2,13 +2,17 @@ package zuk
 
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.module.{MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model, MA9_1_Model, MA9_Model}
+import zuk.tu_share.module.{IModel, MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model, MA9_1_Model, MA9_Model}
 import zuk.tu_share.pass.PassFactory
+import zuk.tu_share.pass.PassFactory.engineModuleList
+import zuk.tu_share.send.ISendFactory
 import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, LicenseUtil}
 
 import java.io.PrintStream
 import java.nio.charset.{Charset, StandardCharsets}
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicInteger
+import scala.collection.mutable.ListBuffer
 
 object Main {
 
@@ -67,8 +71,25 @@ object Main {
       
       //加载数据
       val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size>100)
+//      PassFactory.doModule(modNameSet, map)
       
-      PassFactory.doModule(modNameSet, map)
+      val count = new AtomicInteger(0)
+      val finishModules = ListBuffer[IModel]()
+      map.toList.foreach(tp2=>{
+        val stockCode = tp2._1
+        val stockName = tp2._2.head.name
+        //股票的数据集
+        val dataList = tp2._2
+        //输出进度
+        println(s"-----------------------------------------${stockCode}, ${stockName}, ${dataList.last.trade_date} 至 ${dataList.head.trade_date}, 共${dataList.size}条记录，进度：${count.incrementAndGet()}/${map.size}")
+        //模型分析
+        val modules = engineModuleList().filter(m => modNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
+        PassFactory.doModule_1(modules, dataList)
+        finishModules ++= modules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+      })
+      
+      //发送结果
+      ISendFactory.doSend(finishModules.toList)
       
       println("完成模型引擎分析")
       
