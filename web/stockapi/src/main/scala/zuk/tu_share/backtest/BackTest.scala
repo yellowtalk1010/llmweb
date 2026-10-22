@@ -74,26 +74,6 @@ object BackTest {
             buyFutureList
           }
           
-//          //TODO 比较两个回测算法中 sell是否一致
-//          if(buy.trade_date.equals(iMod.buy.trade_date) 
-//            && buy.ts_code.equals(iMod.buy.ts_code) 
-//            && sellList.size == iMod.sells.size
-//          ){
-//            for(i <- 0 until sellList.size){
-//              if(sellList(i).trade_date.equals(iMod.sells(i).trade_date)
-//                && (sellList(i).ts_code.equals(iMod.sells(i).ts_code))
-//              ){
-//                
-//              }
-//              else {
-//                println("sell没有对齐")
-//              }
-//            }
-//          }
-//          else {
-//            println("两个回测路径有问题")
-//          }
-          
           if(sellList.size==0){
             
             val name = s"<a href='${chooseStockDto.tsStock.eastmoneyURL}'>${chooseStockDto.tsStock.name}</a>"
