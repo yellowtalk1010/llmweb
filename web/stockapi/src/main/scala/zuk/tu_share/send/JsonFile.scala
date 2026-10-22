@@ -63,6 +63,8 @@ class JsonFile extends ISend {
           map.put("similartyDesc", if(m.getSimilartyDto()!=null){ m.getSimilartyDto().desc} else {"形态未计算"})  //添加形态
 
           map
+        }).sortBy(m=>{
+          s"${m.get("modClsName")}-${m.get("ts_code")}"
         }).asJava
 
         val json = JSONObject.toJSONString(arr, Feature.PrettyFormat)
