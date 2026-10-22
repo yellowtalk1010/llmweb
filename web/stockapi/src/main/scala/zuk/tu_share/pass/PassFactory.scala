@@ -117,4 +117,39 @@ object PassFactory {
   }
 
 
+  /** *
+   * 模型分析
+   *
+   * @param modNameSet     指定执行分析的模型类名称大写
+   * @param stockModDailyDataList  一组股票的待模型引擎分析日常数据集
+   * @return
+   */
+  def doModule_1(modNameSet: Set[String], stockModDailyDataList: List[ModuleHistoryDailyData]): Unit = {
+    
+    if(stockModDailyDataList==null || stockModDailyDataList.size == 0){
+      return 
+    }
+    
+    println(s"${stockModDailyDataList.head.ts_code}, ${stockModDailyDataList.head.name}, ${stockModDailyDataList.head.trade_date}至${stockModDailyDataList.last.trade_date}")
+    
+    doPass(stockModDailyDataList)
+    
+    val modules = engineModuleList().filter(m => modNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
+    modules.asJava.stream().parallel().forEach(module => {
+      try {
+        module.run(stockModDailyDataList)
+        println(s"${module.getClass.getSimpleName}模型分析完成")
+      }
+      catch
+        case exception: Exception =>
+          exception.printStackTrace()
+    })
+
+    //收集模型分析的结果
+    val finishModules = modules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+    
+    //发送结果
+    ISendFactory.doSend(finishModules)
+  }
+
 }
