@@ -27,19 +27,20 @@ object Main {
     if (ParseCammandParam.param.back){
       //回测 
       println("全量回测")
+      
+      //选择需要分析的模型
+      val modNameSet = Array(
+        classOf[MA4_Model],
+        classOf[MA5_Model],
+        classOf[MA7_Model],
+        classOf[MA7_1_Model],
+        classOf[MA8_Model],
+        classOf[MA9_Model],
+        classOf[MA9_1_Model]
+      ).map(_.getSimpleName.toUpperCase).toSet
+      
       val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size > 100)
       for (i <- 0 to ParseCammandParam.param.back_step) {
-        
-        //选择需要分析的模型
-        val modNameSet = Array(
-          classOf[MA4_Model], 
-          classOf[MA5_Model], 
-          classOf[MA7_Model], 
-          classOf[MA7_1_Model], 
-          classOf[MA8_Model], 
-          classOf[MA9_Model], 
-          classOf[MA9_1_Model]
-        ).map(_.getSimpleName.toUpperCase).toSet
         
         PassFactory.doModule(modNameSet, map, i)
         
@@ -52,8 +53,6 @@ object Main {
       System.exit(1)
     }
     else {
-      //加载数据
-      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size>100)
   
       //选择需要分析的模型
       val modNameSet = Array(
@@ -66,9 +65,12 @@ object Main {
         classOf[MA9_1_Model]
       ).map(_.getSimpleName.toUpperCase).toSet
       
+      //加载数据
+      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size>100)
+      
       PassFactory.doModule(modNameSet, map)
       
-      println("完成分析")
+      println("完成模型引擎分析")
       
       System.exit(1)
     }
