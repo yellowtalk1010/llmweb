@@ -76,15 +76,14 @@ object Main {
       val count = new AtomicInteger(0)
       val finishModules = ListBuffer[IModel]()
       map.toList.foreach(tp2=>{
-        val stockCode = tp2._1
-        val stockName = tp2._2.head.name
-        //股票的数据集
-        val dataList = tp2._2
+        val stockCode = tp2._1 //股票代码
+        val stockName = tp2._2.head.name //股票名称
+        val stockDataList = tp2._2 //股票数据集
         //输出进度
-        println(s"-----------------------------------------${stockCode}, ${stockName}, ${dataList.last.trade_date} 至 ${dataList.head.trade_date}, 共${dataList.size}条记录，进度：${count.incrementAndGet()}/${map.size}")
+        println(s"-----------------------------------------${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条记录，进度：${count.incrementAndGet()}/${map.size}")
         //模型分析
         val modules = engineModuleList().filter(m => modNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
-        PassFactory.doModule_1(modules, dataList)
+        PassFactory.doModule_1(modules, stockDataList)
         finishModules ++= modules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
       })
       
