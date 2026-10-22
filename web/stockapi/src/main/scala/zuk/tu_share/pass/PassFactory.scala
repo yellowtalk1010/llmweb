@@ -73,16 +73,17 @@ object PassFactory {
 
   /***
    * 模型分析
+   * @param modNameSet 指定执行分析的模型类名称大写
    * @param map key是股票代码， list是分析数据
    * @param backtestLenght 回测数据长度
    * @return
    */
-  def doModule(map: mutable.HashMap[String, List[ModuleHistoryDailyData]], backtestLenght: Int = 0) = {
+  def doModule(modNameSet: Set[String], map: mutable.HashMap[String, List[ModuleHistoryDailyData]], backtestLenght: Int = 0) = {
 
     val finishModules = ListBuffer[IModel]()
     val count = new AtomicInteger(0)
     map.foreach(e=>{
-      val modules = engineModuleList()
+      val modules = engineModuleList().filter(m=>modNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
       modules.asJava.stream().parallel().forEach(module=>{
         try {
 //          println(s"模型分析:${module.getClass.getSimpleName.toUpperCase}")

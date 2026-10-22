@@ -31,8 +31,13 @@ case class BackTestDto() {
 }
 
 object BackTest {
-  
-  def analysis_1(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
+
+  /***
+   * 全量回测
+   * 
+   * @param map
+   */
+  def analysis_full(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
     
     val linesMap = new util.HashMap[String, ListBuffer[String]]()
     val backTestMapList = new ListBuffer[util.HashMap[String, String]]
