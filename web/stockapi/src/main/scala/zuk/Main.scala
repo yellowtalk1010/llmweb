@@ -24,27 +24,17 @@ object Main {
       System.exit(0)
     }
     if (ParseCammandParam.param.back){
-      //回测
-      if(ParseCammandParam.param.back_full || true){
-        //todo 全量回测
-        println("全量回测")
-        val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size > 100)
-        for (i <- 0 to ParseCammandParam.param.back_step) {
-          PassFactory.doModule(map, i)
-          println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
-        }
-
-        BackTest.analysis_1(map)
-//        BackTest.analysis()
-        println("完成回测分析")
-        System.exit(1)
-        
-      }
-      else {
-        //todo 增量回测
-        println("增量回测")
+      //回测 
+      println("全量回测")
+      val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size > 100)
+      for (i <- 0 to ParseCammandParam.param.back_step) {
+        PassFactory.doModule(map, i)
+        println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
       }
 
+      BackTest.analysis_1(map)
+      println("完成回测分析")
+      System.exit(1)
     }
     else {
       //加载数据
