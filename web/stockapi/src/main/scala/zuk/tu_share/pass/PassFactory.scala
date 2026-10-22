@@ -126,12 +126,6 @@ object PassFactory {
    */
   def doModule_1(modNameSet: Set[String], stockModDailyDataList: List[ModuleHistoryDailyData]): Unit = {
     
-    if(stockModDailyDataList==null || stockModDailyDataList.size == 0){
-      return 
-    }
-    
-    println(s"${stockModDailyDataList.head.ts_code}, ${stockModDailyDataList.head.name}, ${stockModDailyDataList.head.trade_date}至${stockModDailyDataList.last.trade_date}")
-    
     doPass(stockModDailyDataList)
     
     val modules = engineModuleList().filter(m => modNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
