@@ -64,7 +64,7 @@ class JsonFile extends ISend {
 
           map
         }).sortBy(m=>{
-          s"${m.get("modClsName")}-${m.get("ts_code")}"
+          s"${m.get("modClsName")}-${m.get("ts_code")}" //排序输出
         }).asJava
 
         val json = JSONObject.toJSONString(arr, Feature.PrettyFormat)
