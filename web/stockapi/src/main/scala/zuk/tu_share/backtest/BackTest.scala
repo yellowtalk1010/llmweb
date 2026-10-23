@@ -180,6 +180,39 @@ object BackTest {
 
   }
 
+  /** *
+   * 保存全量分析的结果集
+   */
+  private def saveFullBacktestModuleResult(iModelList: List[IModel]): Unit = {
+    
+    iModelList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
+      .groupBy(_.getClass.getSimpleName)
+      .foreach(tp2=>{
+        val clsName = tp2._1.toUpperCase
+        val ls = tp2._2
+
+        val btList = ls.map(iMod=>{
+          val map = new util.HashMap[String, String]()
+          map.put("stockType", clsName) //模型类型
+          map.put("stockCode", iMod.getStockDto().tsStock.ts_code) //股票代码
+          map.put("stockName", iMod.getStockDto().tsStock.name) //股票名称
+          map.put("tradedate", iMod.getStockDto().tradedate) //交易日期
+          map
+        }).sortBy(m=>{
+          s"${m.get("tradedate")}-${m.get("stockCode")}"
+        }).reverse
+          .map(m => {
+            val l = JSONObject.toJSONString(m, Feature.LargeObject)
+            l
+          }).asJava
+
+        val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName
+        FileUtils.writeLines(new File(btResPath), btList)
+        println(s"${clsName}模型回测结果写入路径:${btResPath}")
+        
+    })
+  }
+
   private def sendMail(clsName: String, htmlContent: String) = {
     val mailAddress = "513283439@qq.com"
     val tradeDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date)
