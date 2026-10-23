@@ -75,8 +75,8 @@ object Main {
         
         //增量回测
         val incrementBacktestFinishModules = ListBuffer[IModel]()
-        for (i <- 0 to 10) {
-          //增量回测的模型，仅增量最近10个交易日的
+        for (i <- 0 to 30) {
+          //增量回测的模型，仅增量最近30个交易日的
           val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
           println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条")
           val incrementBacktestModNameSet = Array(
