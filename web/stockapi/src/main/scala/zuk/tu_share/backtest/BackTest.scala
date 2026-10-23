@@ -180,6 +180,26 @@ object BackTest {
 
   }
 
+  /**
+   * 保存增量分析的结果集
+   */
+  def saveIncrementBacktestModuleResult(iModelList: List[IModel]): Unit = {
+    iModelList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
+      .groupBy(_.getClass.getSimpleName)
+      .foreach(tp2=>{
+        val clsName = tp2._1.toUpperCase
+        val ls = tp2._2
+
+        val btResFile = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName)
+        println(s"读取${clsName}结果文件，路径：${btResFile.getAbsolutePath}，${btResFile.exists()}")
+        FileUtils.readLines(btResFile, "UTF-8").asScala.map(l=>{
+          val jsonObj = JSONObject.parseObject(l)
+          jsonObj
+        })
+        
+      })
+  }
+
   /** *
    * 保存全量分析的结果集
    */
