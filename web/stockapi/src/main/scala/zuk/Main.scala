@@ -100,7 +100,9 @@ object Main {
       })
       //保存增量回测分析的结果集
       BackTest.saveIncrementBacktestModuleResult(incrementBacktestFinishModules.toList)
-      
+
+      //分析胜率
+      BackTest.analysis_winRate(map)
 
       System.exit(1)
     }
