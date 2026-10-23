@@ -132,7 +132,7 @@ object PassFactory {
     modules.asJava.stream().parallel().forEach(module => {
       try {
         module.run(dataList)
-        print(s"${module.getClass.getSimpleName}; ")
+        println(s"${module.getClass.getSimpleName}; ")
       }
       catch
         case exception: Exception =>
@@ -140,7 +140,6 @@ object PassFactory {
           println(s"模型${module.getClass.getSimpleName}在分析${dataList.head.ts_code}，${dataList.head.name}异常")
     })
 
-    println()
   }
 
 }
