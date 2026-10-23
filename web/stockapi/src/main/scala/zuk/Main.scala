@@ -103,6 +103,8 @@ object Main {
         }
 
       })
+      //保存分析的结果集
+      BackTest.saveIncrementBacktestModuleResult(incrementBacktestFinishModules.toList)
       
 
       System.exit(1)
