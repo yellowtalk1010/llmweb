@@ -183,7 +183,7 @@ object BackTest {
       })
       
       //计算胜率
-      val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(jsonObjList.size), 4, RoundingMode.UP)
+      val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(count.get()), 4, RoundingMode.UP)
       //胜率保存到properties中
       Dataset_module_history_rtk_dir.getProperties().put(clsName.toUpperCase, victoryRate.toString)
       val line = s"${clsName}胜率：${victoryRate}, ${iModel.desc()}"
