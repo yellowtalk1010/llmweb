@@ -210,7 +210,7 @@ object BackTest {
         val stockName = jsonObj.get("stockName").asInstanceOf[String]
         val tradedate = jsonObj.get("tradedate").asInstanceOf[String]
         
-        val dailyList = map.get(stockType).get
+        val dailyList = map.get(stockCode).get
         //todo 寻找买点
         val buy = dailyList.filter(_.trade_date.equals(tradedate)).head
         val buy_tsStock = Dataset_all_stocks_csv_file.getTsStock(buy.ts_code)
@@ -251,7 +251,7 @@ object BackTest {
 
           val ok = if (sell != null) "" else "X"
           
-          val line = s"${stockType}, ${sell.ts_code}, ${sell.name}, ${sell.trade_date}, 【买入】, ${highStr}, ${ok}"
+          val line = s"${stockType}, ${buy.ts_code}, ${buy.name}, ${buy.trade_date}, 【买入】, ${highStr}, ${ok}"
           lines += line
 
         }
