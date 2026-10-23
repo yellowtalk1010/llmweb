@@ -189,13 +189,38 @@ object BackTest {
       .foreach(tp2=>{
         val clsName = tp2._1.toUpperCase
         val ls = tp2._2
+        
+        val mapList = ls.map(iMod=>{
+          val jsonObj = new JSONObject()
+          jsonObj.put("stockType", clsName) //模型类型
+          jsonObj.put("stockCode", iMod.getStockDto().tsStock.ts_code) //股票代码
+          jsonObj.put("stockName", iMod.getStockDto().tsStock.name) //股票名称
+          jsonObj.put("tradedate", iMod.getStockDto().tradedate) //交易日期
+          
+          val key = s"${jsonObj.get("tradedate")}-${jsonObj.get("stockCode")}"
+          (key, jsonObj)
+        })
 
         val btResFile = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName)
         println(s"读取${clsName}结果文件，路径：${btResFile.getAbsolutePath}，${btResFile.exists()}")
-        FileUtils.readLines(btResFile, "UTF-8").asScala.map(l=>{
+        val historyMap = FileUtils.readLines(btResFile, "UTF-8").asScala.map(l=>{
           val jsonObj = JSONObject.parseObject(l)
-          jsonObj
+          val key = s"${jsonObj.get("tradedate")}-${jsonObj.get("stockCode")}"
+          (key, jsonObj)
         })
+        val historyMapKeySet = historyMap.map(_._1)
+        
+        mapList.filter(e=> !historyMapKeySet.contains(e._1)).foreach(e=>{
+          historyMap += e
+        })
+
+        val btList = historyMap.toList.sortBy(_._1).reverse.map(_._2).map(jsonObj=>{
+          val e = JSONObject.toJSONString(jsonObj, Feature.LargeObject)
+          e
+        }).asJava
+
+        FileUtils.writeLines(btResFile, btList)
+        println(s"${clsName}模型回测结果写入路径:${btResFile.getAbsolutePath}")
         
       })
   }
