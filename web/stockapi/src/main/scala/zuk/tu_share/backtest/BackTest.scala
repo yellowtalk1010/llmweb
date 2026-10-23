@@ -183,7 +183,7 @@ object BackTest {
   /** *
    * 保存全量分析的结果集
    */
-  private def saveFullBacktestModuleResult(iModelList: List[IModel]): Unit = {
+  def saveFullBacktestModuleResult(iModelList: List[IModel]): Unit = {
     
     iModelList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
