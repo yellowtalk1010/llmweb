@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.module.{IModel, StockDto}
+import zuk.tu_share.module.*
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.send.ToBackTest
 import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir}
@@ -180,15 +180,82 @@ object BackTest {
 //    })
 //
 //  }
+  
+  def fullBacktest(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
+
+    val fullBacktestModNameSet = Array(
+      classOf[MA4_Model],
+      classOf[MA5_Model],
+      classOf[MA7_1_Model],
+      classOf[MA8_Model],
+      classOf[MA9_1_Model]
+    ).map(_.getSimpleName.toUpperCase).toSet
+    
+    val funllBacktestFinishModules = ListBuffer[IModel]()
+    val fullCount = new AtomicInteger(0)
+    map.toList.foreach(tp2 => {
+      val stockCode = tp2._1 //股票代码
+      val stockName = tp2._2.head.name //股票名称
+
+      //全量回测
+      for (i <- 0 to ParseCammandParam.param.back_step) {
+        val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
+        println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${fullCount.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
+
+        val fullBacktestModules = PassFactory.engineModuleList().filter(m => fullBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
+        PassFactory.doModule_1(fullBacktestModules, stockDataList)
+        funllBacktestFinishModules ++= fullBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+      }
+    })
+    //保存全量回测分析的结果集
+    BackTest.saveFullBacktestModuleResult(funllBacktestFinishModules.toList)
+    
+    this.analysis_winRate(fullBacktestModNameSet, map)
+    
+  }
+
+  /***
+   * 增量回测
+   * 
+   * @param map
+   */
+  def incrementBacktest(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
+
+    val incrementBacktestModNameSet = Array(
+      classOf[MA7_Model],
+      classOf[MA9_Model]
+    ).map(_.getSimpleName.toUpperCase).toSet
+    
+    val incrementBacktestFinishModules = ListBuffer[IModel]()
+    val incrementCount = new AtomicInteger(0)
+    map.toList.foreach(tp2 => {
+      val stockCode = tp2._1 //股票代码
+      val stockName = tp2._2.head.name //股票名称
+
+      val LEN = 10 //增量分析最近10个交易日
+      for (i <- 0 to LEN) {
+        val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
+        println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
+ 
+        val incrementBacktestModules = PassFactory.engineModuleList().filter(m => incrementBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
+        PassFactory.doModule_1(incrementBacktestModules, stockDataList)
+        incrementBacktestFinishModules ++= incrementBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+      }
+    })
+    //保存增量回测分析的结果集
+    BackTest.saveIncrementBacktestModuleResult(incrementBacktestFinishModules.toList)
+
+    this.analysis_winRate(incrementBacktestModNameSet, map)
+  }
 
   /**
    * 分析胜率
    *
    * @param map
    */
-  def analysis_winRate(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
+  def analysis_winRate(backtestModNameSet: Set[String], map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
 
-    new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir).listFiles().foreach(f=>{
+    new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir).listFiles().filter(f=>backtestModNameSet.contains(f.getName)).foreach(f=>{
       
       val clsName = f.getName
       
