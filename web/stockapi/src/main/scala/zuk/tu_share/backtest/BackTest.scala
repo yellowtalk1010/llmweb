@@ -34,7 +34,7 @@ object BackTest {
 
   /***
    * 全量回测
-   * 
+   *
    * @param map
    */
   def analysis_full(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
@@ -189,14 +189,14 @@ object BackTest {
       .foreach(tp2=>{
         val clsName = tp2._1.toUpperCase
         val ls = tp2._2
-        
+
         val mapList = ls.map(iMod=>{
           val jsonObj = new JSONObject()
           jsonObj.put("stockType", clsName) //模型类型
           jsonObj.put("stockCode", iMod.getStockDto().tsStock.ts_code) //股票代码
           jsonObj.put("stockName", iMod.getStockDto().tsStock.name) //股票名称
           jsonObj.put("tradedate", iMod.getStockDto().tradedate) //交易日期
-          
+
           val key = s"${jsonObj.get("tradedate")}-${jsonObj.get("stockCode")}"
           (key, jsonObj)
         })
@@ -209,7 +209,7 @@ object BackTest {
           (key, jsonObj)
         })
         val historyMapKeySet = historyMap.map(_._1)
-        
+
         mapList.filter(e=> !historyMapKeySet.contains(e._1)).foreach(e=>{
           historyMap += e
         })
@@ -220,8 +220,8 @@ object BackTest {
         }).asJava
 
         FileUtils.writeLines(btResFile, btList)
-        println(s"${clsName}模型回测结果写入路径:${btResFile.getAbsolutePath}")
-        
+        println(s"${clsName}模型回测结果重新写入路径:${btResFile.getAbsolutePath}")
+
       })
   }
 
@@ -229,7 +229,7 @@ object BackTest {
    * 保存全量分析的结果集
    */
   def saveFullBacktestModuleResult(iModelList: List[IModel]): Unit = {
-    
+
     iModelList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
       .foreach(tp2=>{
@@ -254,7 +254,7 @@ object BackTest {
         val btResPath = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + clsName
         FileUtils.writeLines(new File(btResPath), btList)
         println(s"${clsName}模型回测结果写入路径:${btResPath}")
-        
+
     })
   }
 
