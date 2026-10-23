@@ -53,7 +53,7 @@ object Main {
 
 
       val funllBacktestFinishModules = ListBuffer[IModel]()
-      val count = new AtomicInteger(0)
+      val fullCount = new AtomicInteger(0)
       map.toList.foreach(tp2=> {
         val stockCode = tp2._1 //股票代码
         val stockName = tp2._2.head.name //股票名称
@@ -61,7 +61,7 @@ object Main {
         //全量回测
         for (i <- 0 to ParseCammandParam.param.back_step) {
           val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
-          println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度：${count.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
+          println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度：${fullCount.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
           //全量回测的模型
           val fullBacktestModNameSet = Array(
             classOf[MA4_Model],
@@ -77,27 +77,30 @@ object Main {
       })
       //保存分析的结果集
       BackTest.saveFullBacktestModuleResult(funllBacktestFinishModules.toList)
+
       
-      
+      val incrementBacktestFinishModules = ListBuffer[IModel]()
+      val incrementCount = new AtomicInteger(0)
       map.toList.foreach(tp2 => {
         val stockCode = tp2._1 //股票代码
         val stockName = tp2._2.head.name //股票名称
 
         //增量回测
-//        val incrementBacktestFinishModules = ListBuffer[IModel]()
-//        for (i <- 0 to 30) {
-//          //增量回测的模型，仅增量最近30个交易日的
-//          val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
-//          println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条")
-//          val incrementBacktestModNameSet = Array(
-//            classOf[MA7_Model],
-//            classOf[MA9_Model]
-//          ).map(_.getSimpleName.toUpperCase).toSet
-//          val incrementBacktestModules = engineModuleList().filter(m => incrementBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
-//          PassFactory.doModule_1(incrementBacktestModules, stockDataList)
-//          incrementBacktestFinishModules ++= incrementBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
-//
-//        }
+        val incrementBacktestFinishModules = ListBuffer[IModel]()
+        val LEN = 10
+        for (i <- 0 to LEN) {
+          //增量回测的模型，仅增量最近30个交易日的
+          val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
+          println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度：${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
+          val incrementBacktestModNameSet = Array(
+            classOf[MA7_Model],
+            classOf[MA9_Model]
+          ).map(_.getSimpleName.toUpperCase).toSet
+          val incrementBacktestModules = engineModuleList().filter(m => incrementBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
+          PassFactory.doModule_1(incrementBacktestModules, stockDataList)
+          incrementBacktestFinishModules ++= incrementBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+
+        }
 
       })
       
