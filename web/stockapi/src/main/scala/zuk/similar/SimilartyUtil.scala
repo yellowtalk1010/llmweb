@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 
 import scala.collection.mutable.ListBuffer
 import zuk.tu_share.dto.ModuleHistoryDailyData
-import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_all_stocks_csv_file, IncreateDecreateRateDescUtil}
+import zuk.tu_share.utils.{Dataset_all_stocks_csv_file, Dataset_module_history_rtk_dir, IncreateDecreateRateDescUtil}
 
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
@@ -14,6 +14,7 @@ import scala.util.Random
 import scala.jdk.CollectionConverters.*
 import java.math.{BigDecimal, RoundingMode}
 import zuk.similar.*
+import zuk.tu_share.ParseCammandParam
 
 import scala.beans.BeanProperty
 
@@ -46,19 +47,19 @@ object SimilartyUtil {
     if (StringUtils.isNotBlank(tradeDate)) {
       trade_date = tradeDate
     }
-    println(s"tsCode: ${tsCode}, tradeDate:${tradeDate}")
+    println(s"近似计算：tsCode: ${tsCode}, tradeDate:${tradeDate}")
     val targetBars = DTWStockSimilarity_B.getTargetBars(tsCode)
       .filter(_.date.toLong <= trade_date.toLong)
       .take(windowSize)
     val targetFeatures = targetBars.toList.map(_.feature)
 
-    println("=== 目标形态（近5日特征）===")
-    println("股票代码    股票名称    日期         涨跌幅    量变     振幅     实体")
+    if(ParseCammandParam.param.back){ println("=== 目标形态（近5日特征）===") }
+    if(ParseCammandParam.param.back){ println("股票代码    股票名称    日期         涨跌幅    量变     振幅     实体") }
     targetBars.toList.zipWithIndex.foreach { tp2 =>
       val bar = tp2._1
       val f = bar.feature
       val i = tp2._2
-      println(f"${bar.stockCode}  ${bar.stockName}  ${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%")
+      if(ParseCammandParam.param.back){ println(f"${bar.stockCode}  ${bar.stockName}  ${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%") }
     }
 
     // 2. 模拟全市场
@@ -74,7 +75,7 @@ object SimilartyUtil {
     val t3 = System.nanoTime()
 
 
-    println("=== 写法 B: 命令式 for 循环 ===")
+    if(ParseCammandParam.param.back){ println("=== 写法 B: 命令式 for 循环 ===") }
     var hitsTotal = 0
     var stTotal = 0
     filterResB.map(res => {
@@ -117,7 +118,7 @@ object SimilartyUtil {
 
       val str = f"  ${res.stockCode} ${res.stockName} ${res.startDate}至 ${res.endDate}  距离=${res.distance}%.6f  成功=${st},  涨幅=${changeList.map(_.toString).mkString(", ")}"
       similartyDto.sampleList.add(str)
-      println(str) //相似度越小越相似
+      if(ParseCammandParam.param.back){ println(str) } //相似度越小越相似
 
     })
 
@@ -133,8 +134,7 @@ object SimilartyUtil {
       //样本要足够多，胜率足够大
     }
 
-    
-    println(f"\n=====================================【${tsCode} ${Dataset_all_stocks_csv_file.getTsStock(tsCode).name}  胜率：${similartyDto.desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n")
+    if(ParseCammandParam.param.back){ println(f"\n=====================================【${tsCode} ${Dataset_all_stocks_csv_file.getTsStock(tsCode).name}  胜率：${similartyDto.desc}】 耗时: ${(t3 - t2) / 1e6}%.2f ms\n") }
 
     similartyDto
   }

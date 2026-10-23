@@ -31,7 +31,7 @@ object Main {
     if (ParseCammandParam.param.back){
       //回测 
       println("全量回测")
-      
+
       //选择需要分析的模型
       val modNameSet = Array(
         classOf[MA4_Model],
@@ -42,22 +42,22 @@ object Main {
         classOf[MA9_Model],
         classOf[MA9_1_Model]
       ).map(_.getSimpleName.toUpperCase).toSet
-      
+
       val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size > 100)
       for (i <- 0 to ParseCammandParam.param.back_step) {
-        
+
         PassFactory.doModule(modNameSet, map, i)
-        
+
         println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
       }
 
       BackTest.analysis_full(map)
       println("完成全量回测分析")
-      
+
       System.exit(1)
     }
     else {
-  
+
       //选择需要分析的模型
       val modNameSet = Array(
         classOf[MA4_Model],
@@ -68,11 +68,11 @@ object Main {
         classOf[MA9_Model],
         classOf[MA9_1_Model]
       ).map(_.getSimpleName.toUpperCase).toSet
-      
+
       //加载数据
       val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size>100)
 //      PassFactory.doModule(modNameSet, map)
-      
+
       val count = new AtomicInteger(0)
       val finishModules = ListBuffer[IModel]()
       map.toList.foreach(tp2=>{
@@ -86,12 +86,12 @@ object Main {
         PassFactory.doModule_1(modules, stockDataList)
         finishModules ++= modules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
       })
-      
+
       //发送结果
       ISendFactory.doSend(finishModules.toList)
-      
+
       println("完成模型引擎分析")
-      
+
       System.exit(1)
     }
 
