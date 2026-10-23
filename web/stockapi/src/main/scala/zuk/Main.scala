@@ -50,6 +50,46 @@ object Main {
 
         println(s">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${i}")
       }
+      
+      map.toList.foreach(tp2=>{
+        val stockCode = tp2._1 //股票代码
+        val stockName = tp2._2.head.name //股票名称
+
+        //全量回测
+        val funllBacktestFinishModules = ListBuffer[IModel]()
+        for (i <- 0 to ParseCammandParam.param.back_step){
+          val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集 
+          println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条")
+          //全量回测的模型
+          val fullBacktestModNameSet = Array(
+            classOf[MA4_Model],
+            classOf[MA5_Model],
+            classOf[MA7_1_Model],
+            classOf[MA8_Model],
+            classOf[MA9_1_Model]
+          ).map(_.getSimpleName.toUpperCase).toSet
+          val fullBacktestModules = engineModuleList().filter(m => fullBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
+          PassFactory.doModule_1(fullBacktestModules, stockDataList)
+          funllBacktestFinishModules ++= fullBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+        }
+        
+        //增量回测
+        val incrementBacktestFinishModules = ListBuffer[IModel]()
+        for (i <- 0 to 10) {
+          //增量回测的模型，仅增量最近10个交易日的
+          val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
+          println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条")
+          val incrementBacktestModNameSet = Array(
+            classOf[MA7_Model],
+            classOf[MA9_Model]
+          ).map(_.getSimpleName.toUpperCase).toSet
+          val incrementBacktestModules = engineModuleList().filter(m => incrementBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
+          PassFactory.doModule_1(incrementBacktestModules, stockDataList)
+          incrementBacktestFinishModules ++= incrementBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+
+        }
+        
+      })
 
       BackTest.analysis_full(map)
       println("完成全量回测分析")
