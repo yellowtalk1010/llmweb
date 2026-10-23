@@ -180,7 +180,12 @@ object BackTest {
 //    })
 //
 //  }
-  
+
+  /***
+   * 全量回测
+   * 
+   * @param map
+   */
   def fullBacktest(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
 
     val fullBacktestModNameSet = Array(
