@@ -61,7 +61,7 @@ object Main {
         //全量回测
         for (i <- 0 to ParseCammandParam.param.back_step) {
           val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
-          println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度：${fullCount.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
+          println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${fullCount.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
           val fullBacktestModNameSet = Array(
             classOf[MA4_Model],
             classOf[MA5_Model],
@@ -88,7 +88,7 @@ object Main {
         val LEN = 10 //增量分析最近10个交易日
         for (i <- 0 to LEN) {
           val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
-          println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度：${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
+          println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
           val incrementBacktestModNameSet = Array(
             classOf[MA7_Model],
             classOf[MA9_Model]
