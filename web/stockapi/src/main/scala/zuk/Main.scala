@@ -80,7 +80,7 @@ object Main {
         val stockName = tp2._2.head.name //股票名称
         val stockDataList = tp2._2 //股票数据集
         //输出进度
-        println(s"-----------------------------------------${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条记录，进度：${count.incrementAndGet()}/${map.size}")
+        println(s"${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条记录，进度：${count.incrementAndGet()}/${map.size}")
         //模型分析
         val modules = engineModuleList().filter(m => modNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
         PassFactory.doModule_1(modules, stockDataList)
