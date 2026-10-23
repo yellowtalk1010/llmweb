@@ -31,7 +31,7 @@ object Main {
     if (ParseCammandParam.param.back){
       //回测 
       println("全量回测")
-      
+
       val map = Dataset_module_history_rtk_dir.loadModelAnalysisDataSet.filter(_._2.size > 100)
 //      //选择需要分析的模型
 //      val modNameSet = Array(
@@ -50,17 +50,18 @@ object Main {
 //      }
 //      BackTest.analysis_full(map)
 //      println("完成全量回测分析")
-      
-      
-      map.toList.foreach(tp2=>{
+
+
+      val funllBacktestFinishModules = ListBuffer[IModel]()
+      val count = new AtomicInteger(0)
+      map.toList.foreach(tp2=> {
         val stockCode = tp2._1 //股票代码
         val stockName = tp2._2.head.name //股票名称
 
         //全量回测
-        val funllBacktestFinishModules = ListBuffer[IModel]()
-        for (i <- 0 to ParseCammandParam.param.back_step){
-          val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集 
-          println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条")
+        for (i <- 0 to ParseCammandParam.param.back_step) {
+          val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
+          println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度：${count.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
           //全量回测的模型
           val fullBacktestModNameSet = Array(
             classOf[MA4_Model],
@@ -73,9 +74,15 @@ object Main {
           PassFactory.doModule_1(fullBacktestModules, stockDataList)
           funllBacktestFinishModules ++= fullBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
         }
-        //保存分析的结果集
-        BackTest.saveFullBacktestModuleResult(funllBacktestFinishModules.toList)
-        
+      })
+      //保存分析的结果集
+      BackTest.saveFullBacktestModuleResult(funllBacktestFinishModules.toList)
+      
+      
+      map.toList.foreach(tp2 => {
+        val stockCode = tp2._1 //股票代码
+        val stockName = tp2._2.head.name //股票名称
+
         //增量回测
 //        val incrementBacktestFinishModules = ListBuffer[IModel]()
 //        for (i <- 0 to 30) {
@@ -91,8 +98,9 @@ object Main {
 //          incrementBacktestFinishModules ++= incrementBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
 //
 //        }
-        
+
       })
+      
 
       System.exit(1)
     }
