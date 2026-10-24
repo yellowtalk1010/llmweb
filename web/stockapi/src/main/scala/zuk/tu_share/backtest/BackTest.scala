@@ -158,15 +158,16 @@ object BackTest {
           count.incrementAndGet()
           
           var sell: ModuleHistoryDailyData = null
-          val highStr = sellList.map(e => {
-            val change = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
-            if (change.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0 
+          var sellFirstWinChangeStr = "失败"
+          sellList.foreach(e => {
+            val winChange = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
+            if (winChange.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0 
               && sell == null
             ) {
               sell = e
+              sellFirstWinChangeStr = s"${e.trade_date} ${winChange}【卖出】"
             }
-            s"${e.trade_date}【卖出】"
-          }).mkString(", ")
+          })
 
           if (sell != null) {
             //记录成功的
@@ -175,7 +176,7 @@ object BackTest {
 
           val ok = if (sell != null) "" else "X"
           
-          val line = s"${stockType}, ${buy.ts_code}, ${buy.name}, ${buy.trade_date}, 【买入】, ${highStr}, ${ok}"
+          val line = s"${stockType}, ${buy.ts_code}, ${buy.name}, ${buy.trade_date}, 【买入】, ${sellFirstWinChangeStr}, ${ok}"
           lines += line
 
         }
