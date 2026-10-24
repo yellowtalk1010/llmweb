@@ -175,8 +175,9 @@ object BackTest {
           }
 
           val ok = if (sell != null) "" else "X"
-          
-          val line = s"${stockType}, ${buy.ts_code}, ${buy.name}, ${buy.trade_date}, 【买入】, ${sellFirstWinChangeStr}, ${ok}"
+
+          val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
+          val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}, 【买入】, ${sellFirstWinChangeStr}, ${ok}"
           lines += line
 
         }
