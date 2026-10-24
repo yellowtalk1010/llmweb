@@ -110,7 +110,7 @@ object BackTest {
    *
    * @param map
    */
-  def analysis_winRate(backtestModNameSet: Set[String], map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
+  private def analysis_winRate(backtestModNameSet: Set[String], map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
 
     new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir).listFiles().filter(f=>backtestModNameSet.contains(f.getName)).foreach(f=>{
       
@@ -201,7 +201,7 @@ object BackTest {
   /**
    * 保存增量分析的结果集
    */
-  def saveIncrementBacktestModuleResult(iModelList: List[IModel]): Unit = {
+  private def saveIncrementBacktestModuleResult(iModelList: List[IModel]): Unit = {
     iModelList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)
       .foreach(tp2=>{
@@ -246,7 +246,7 @@ object BackTest {
   /** *
    * 保存全量分析的结果集
    */
-  def saveFullBacktestModuleResult(iModelList: List[IModel]): Unit = {
+  private def saveFullBacktestModuleResult(iModelList: List[IModel]): Unit = {
 
     iModelList.filter(e=>e.getStockDto()!=null && e.getStockDto().tsStock!=null)
       .groupBy(_.getClass.getSimpleName)

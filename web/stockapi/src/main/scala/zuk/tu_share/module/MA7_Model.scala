@@ -160,7 +160,7 @@ class MA7_Model extends IModel {
 
   override def warnUpperShadow: Boolean = false
 
-  override def backTestStep: Int = 5
+  override def backTestStep: Int = 10
 
   override def getSimilartyDto(): SimilartyDto = this.similartyDto
 }
