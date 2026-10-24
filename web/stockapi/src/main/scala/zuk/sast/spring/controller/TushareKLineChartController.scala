@@ -115,7 +115,7 @@ class TushareKLineChartController {
       val count = new AtomicInteger(0)
       val isSell = new AtomicBoolean(false)
       list.reverse.filter(_.time.toLong > tradedate.toLong).foreach(dto=>{
-        if(count.incrementAndGet() <= 10){
+        if(count.incrementAndGet() <= 10){ //暂定10个交易日
           dto.winChange = new BigDecimal(dto.high - buy).divide(new BigDecimal(buy), 4, RoundingMode.DOWN).multiply(new BigDecimal(100)).floatValue()
           if(dto.winChange > 1.0 && !isSell.get()){
             dto.optType = "卖" + dto.winChange   //卖出
