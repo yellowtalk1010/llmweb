@@ -89,7 +89,7 @@ object BackTest {
       val stockCode = tp2._1 //股票代码
       val stockName = tp2._2.head.name //股票名称
 
-      val LEN = 10 //增量分析最近10个交易日
+      val LEN = 5 //增量分析最近10个交易日
       for (i <- 0 to LEN) {
         val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
         println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
