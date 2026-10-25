@@ -65,7 +65,7 @@ class MA8_Model extends IModel {
     stockDto
   }
 
-  override def backTestStep: Int = 5
+  override def backTestStep: Int = 10
 
   override def run(days: List[ModuleHistoryDailyData]): Unit = {
 //    println(MA8_Model.topInstMap.size)
