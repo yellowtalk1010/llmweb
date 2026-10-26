@@ -159,14 +159,20 @@ object BackTest {
           
           var sell: ModuleHistoryDailyData = null
           var sellFirstWinChangeStr = "失败"
+          val step = new AtomicInteger(1) //从买入到卖出间隔多少个交易日，今日买次日卖，至少一个交易日
           sellList.foreach(e => {
             val winChange = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
             if (winChange.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0 
               && sell == null
             ) {
               sell = e
-              sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出】"
+              sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出（${step.get()}）】"
             }
+            
+            if(sell == null){
+              step.incrementAndGet()
+            }
+            
           })
 
           if (sell != null) {
