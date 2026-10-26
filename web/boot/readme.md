@@ -13,3 +13,9 @@ or set spring.thymeleaf.check-template-location=false)
 原因： 因为target/classes中没有templates
 解决： mvn clean package -Dmaven.test.skip=true 这样在target中将生成templates文件夹
 ```
+
+## 启动
+```
+chcp 65001
+java   -Xms4g   -Xmx4g   -jar   boot-7.0.0.jar
+```
