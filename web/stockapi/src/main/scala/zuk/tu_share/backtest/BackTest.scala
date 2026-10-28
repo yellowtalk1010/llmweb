@@ -41,10 +41,10 @@ object BackTest {
   def fullBacktest(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
 
     val fullBacktestModNameSet = Array(
-//      classOf[MA4_Model],
-//      classOf[MA5_Model],
-//      classOf[MA7_1_Model],
-//      classOf[MA8_Model],
+      classOf[MA4_Model],
+      classOf[MA5_Model],
+      classOf[MA7_1_Model],
+      classOf[MA8_Model],
       classOf[MA9_1_Model]
     ).map(_.getSimpleName.toUpperCase).toSet
     
