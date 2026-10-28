@@ -53,7 +53,7 @@ class MA9_1_Model extends IModel {
 
 
   override def desc(): String = {
-    "MA9预算"
+    "MA9预算(ma5>ma10)"
   }
 
   override def reference: Float = {
