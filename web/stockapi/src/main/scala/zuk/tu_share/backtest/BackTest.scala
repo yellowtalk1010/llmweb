@@ -222,6 +222,7 @@ object BackTest {
           jsonObj.put("stockCode", iMod.getStockDto().tsStock.ts_code) //股票代码
           jsonObj.put("stockName", iMod.getStockDto().tsStock.name) //股票名称
           jsonObj.put("tradedate", iMod.getStockDto().tradedate) //交易日期
+          jsonObj.put("status", "") //状态
 
           val key = s"${jsonObj.get("tradedate")}-${jsonObj.get("stockCode")}"
           (key, jsonObj)
@@ -263,15 +264,17 @@ object BackTest {
         val ls = tp2._2
 
         val btList = ls.map(iMod=>{
-          val map = new util.HashMap[String, String]()
-          map.put("stockType", clsName) //模型类型
-          map.put("stockCode", iMod.getStockDto().tsStock.ts_code) //股票代码
-          map.put("stockName", iMod.getStockDto().tsStock.name) //股票名称
-          map.put("tradedate", iMod.getStockDto().tradedate) //交易日期
-          map
-        }).sortBy(m=>{
-          s"${m.get("tradedate")}-${m.get("stockCode")}"
-        }).reverse
+            val map = new util.HashMap[String, String]()
+            map.put("stockType", clsName) //模型类型
+            map.put("stockCode", iMod.getStockDto().tsStock.ts_code) //股票代码
+            map.put("stockName", iMod.getStockDto().tsStock.name) //股票名称
+            map.put("tradedate", iMod.getStockDto().tradedate) //交易日期
+            map.put("status", "") //状态
+            map
+          }).sortBy(m=>{
+            s"${m.get("tradedate")}-${m.get("stockCode")}"
+          })
+          .reverse
           .map(m => {
             val l = JSONObject.toJSONString(m, Feature.LargeObject)
             l
