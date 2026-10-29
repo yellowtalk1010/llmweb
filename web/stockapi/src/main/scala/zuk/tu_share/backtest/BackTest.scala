@@ -152,7 +152,7 @@ object BackTest {
           val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
           val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}【买入】, 【未交易】"
           lines += line
-          jsonObj.put("status", "") //为处理
+          jsonObj.put("status", "") //未处理
         }
         else {
 
