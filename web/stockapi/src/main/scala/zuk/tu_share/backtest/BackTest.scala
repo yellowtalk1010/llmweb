@@ -133,6 +133,12 @@ object BackTest {
         val stockCode = jsonObj.get("stockCode").asInstanceOf[String]
         val stockName = jsonObj.get("stockName").asInstanceOf[String]
         val tradedate = jsonObj.get("tradedate").asInstanceOf[String]
+        val status = if(jsonObj.get("status")==null){
+          ""
+        }
+        else {
+          jsonObj.get("status").asInstanceOf[String]
+        }
         
         val dailyList = map.get(stockCode).get
         //todo 寻找买点
@@ -242,7 +248,7 @@ object BackTest {
         })
 
         val btList = historyMap.toList.sortBy(_._1).reverse.map(_._2).map(jsonObj=>{
-          val e = JSONObject.toJSONString(jsonObj, Feature.LargeObject)
+          val e = JSONObject.toJSONString(jsonObj, Feature.LargeObject, Feature.MapSortField)
           e
         }).asJava
 
