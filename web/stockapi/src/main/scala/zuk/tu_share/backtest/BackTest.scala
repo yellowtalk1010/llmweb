@@ -133,12 +133,6 @@ object BackTest {
         val stockCode = jsonObj.get("stockCode").asInstanceOf[String]
         val stockName = jsonObj.get("stockName").asInstanceOf[String]
         val tradedate = jsonObj.get("tradedate").asInstanceOf[String]
-        val status = if(jsonObj.get("status")==null){
-          ""
-        }
-        else {
-          jsonObj.get("status").asInstanceOf[String]
-        }
         
         val dailyList = map.get(stockCode).get
         //todo 寻找买点
@@ -158,6 +152,7 @@ object BackTest {
           val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
           val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}【买入】, 【未交易】"
           lines += line
+          jsonObj.put("status", "") //为处理
         }
         else {
 
@@ -184,6 +179,10 @@ object BackTest {
           if (sell != null) {
             //记录成功的
             victoryStockList += sell
+            jsonObj.put("status", "成功")
+          }
+          else {
+            jsonObj.put("status", "失败")
           }
 
           val ok = if (sell != null) "" else "X"
@@ -207,6 +206,18 @@ object BackTest {
       Dataset_module_history_rtk_dir.storeProperties()
 
       sendMail(clsName, lines.mkString("<br>\n"))
+
+      try {
+        //todo jsonObjList重新写入文件
+        val lines = jsonObjList.map(jsonObj => {
+          val l = JSONObject.toJSONString(jsonObj, Feature.LargeObject, Feature.MapSortField)
+          l
+        }).asJava
+        FileUtils.writeLines(f, "UTF-8", lines)
+      }
+      catch {
+        case exception: Exception =>
+      }
       
     })
     
