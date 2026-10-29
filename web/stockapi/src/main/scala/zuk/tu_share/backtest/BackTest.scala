@@ -282,7 +282,7 @@ object BackTest {
           })
           .reverse
           .map(m => {
-            val l = JSONObject.toJSONString(m, Feature.LargeObject)
+            val l = JSONObject.toJSONString(m, Feature.LargeObject, Feature.MapSortField)
             l
           }).asJava
 
