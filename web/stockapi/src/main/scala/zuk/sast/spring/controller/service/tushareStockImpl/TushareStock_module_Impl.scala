@@ -27,6 +27,7 @@ case class ModelTestbackResultDto() {
   @BeanProperty var stockName: String = ""
   @BeanProperty var stockType: String = ""
   @BeanProperty var tradedate: String = ""
+  @BeanProperty var status: String = ""
 }
 
 object TushareStock_module_Impl {
@@ -112,6 +113,10 @@ class TushareStock_module_Impl extends ITushareStockService {
       else if (dto.stockCode.startsWith("920")) {
         dto.name = s"${dto.name}【北交所】"
       }
+      if(StringUtils.isNotBlank(modTBResDto.status)) {
+        dto.name = s"${dto.name}【回测${modTBResDto.status}】"
+      }
+      
 
       //计算历史出现的次数
       val totalList = ls.filter(_.stockCode.equals(dto.stockCode)).filter(_.tradedate.toLong < modTBResDto.tradedate.toLong).sortBy(e => e.tradedate).reverse

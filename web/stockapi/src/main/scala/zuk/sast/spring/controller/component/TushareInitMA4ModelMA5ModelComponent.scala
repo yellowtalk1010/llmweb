@@ -11,7 +11,6 @@ import zuk.sast.spring.controller.StockResultJson
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.backtest.BackTestDto
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.*
 
