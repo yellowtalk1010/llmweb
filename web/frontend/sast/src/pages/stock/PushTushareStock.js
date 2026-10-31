@@ -21,7 +21,7 @@ function PushTushareStock() {
    * 下来菜单中选择项
    */
   const [modules, setModules] = useState([]);
-  const [selectedModule, setSelectedModule] = useState("MA8_Model"); // ALL_MODEL
+  const [selectedModule, setSelectedModule] = useState("ALL_MODEL"); // ALL_MODEL
   const [tradedate, setTradedate] = useState("");
 
   // 是否自动刷新
