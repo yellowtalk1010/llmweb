@@ -18,20 +18,22 @@ function PushTushareStock() {
   const [group, setGroup] = useState(false);
 
   /**
-   * 下来菜单中选择项
+   * 模型多选项
    */
   const [modules, setModules] = useState([]);
-  const [selectedModule, setSelectedModule] = useState("ALL_MODEL"); // ALL_MODEL
+  const [selectedModules, setSelectedModules] = useState(["ALL_MODEL"]); // 多选（数组）
   const [tradedate, setTradedate] = useState("");
 
   // 是否自动刷新
   const [autoRefresh, setAutoRefresh] = useState(false);
 
-  const fetchData = async (modType = "") => {
+  const fetchData = async (modTypes = []) => {
     try {
       setLoading(true);
+      // 多选参数：用分号 ; 拼接后提交
+      const modTypeParam = Array.isArray(modTypes) ? modTypes.join(";") : modTypes;
       const response = await fetch(
-        "/push_stocks/list?modType=" + modType +
+        "/push_stocks/list?modType=" + encodeURIComponent(modTypeParam) +
         "&tradedate=" + tradedate +
         "&group=" + group
       );
@@ -78,21 +80,40 @@ function PushTushareStock() {
   }, []);
 
   useEffect(() => {
-    fetchData(selectedModule);
+    fetchData(selectedModules);
 
     if (!autoRefresh) {
       return;
     }
 
     const interval = setInterval(() => {
-      fetchData(selectedModule);
+      fetchData(selectedModules);
     }, 1000 * 30); //刷新频率
 
     return () => clearInterval(interval);
-  }, [autoRefresh]);
+  }, [autoRefresh, selectedModules]);
 
   const toggleModule = (index) => {
     setExpandedModules((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  /***
+   * 多选框切换逻辑
+   */
+  const toggleModuleSelect = (cls) => {
+    setGroup(false);
+    setSelectedModules((prev) => {
+      // 处理"全选"项
+      if (cls === "ALL_MODEL") {
+        return prev.includes("ALL_MODEL") ? [] : ["ALL_MODEL"];
+      }
+      // 选了具体模型时，移除 ALL_MODEL
+      const withoutAll = prev.filter((m) => m !== "ALL_MODEL");
+      if (withoutAll.includes(cls)) {
+        return withoutAll.filter((m) => m !== cls);
+      }
+      return [...withoutAll, cls];
+    });
   };
 
   return (
@@ -112,26 +133,8 @@ function PushTushareStock() {
           className="border rounded px-3 py-2"
         />
 
-        <label className="mr-2 font-medium">
-          模型：
-        </label>
-
-        <select
-          value={selectedModule}
-          onChange={(e) => {
-            setGroup(false);
-            setSelectedModule(e.target.value);
-          }}
-          className="border rounded px-3 py-2"
-        >
-          {modules.map((item) => (
-            <option key={item.cls} value={item.cls}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-
-        <label className="  items-center gap-1">
+        
+        <label className="ml-2 items-center gap-1">
           <input
             type="checkbox"
             checked={group}
@@ -141,10 +144,10 @@ function PushTushareStock() {
         </label>
 
         <button
-          onClick={() => fetchData(selectedModule)}
+          onClick={() => fetchData(selectedModules)}
           className="ml-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          查询  {loading && <p>Loading...</p>}
+          查询  {loading && <span>Loading...</span>}
         </button>
 
         <label className="ml-2 items-center gap-1">
@@ -157,9 +160,29 @@ function PushTushareStock() {
         </label>
 
         <label>
-          {/* {loading && <p>Loading...</p>} */}
           {error && <p className="text-red-500">Error: {error}</p>}
         </label>
+
+        {/* 多选框列表：描述信息用 title 呈现为 tooltip */}
+        <div className="inline-flex flex-wrap items-center gap-3 border rounded px-3 py-2 align-middle">
+          {modules.map((item) => (
+            <label
+              key={item.cls}
+              className="inline-flex items-center gap-1 cursor-pointer"
+              /* 描述信息以 tooltip 形式呈现；
+                 若模块数据里描述字段名不是 desc/description，请替换成实际字段 */
+              title={item.desc || item.description || item.name || ""}
+            >
+              <input
+                type="checkbox"
+                checked={selectedModules.includes(item.cls)}
+                onChange={() => toggleModuleSelect(item.cls)}
+              />
+              <span>{item.cls}</span>
+            </label>
+          ))}
+        </div>
+
 
       </div>
       <div>
@@ -216,7 +239,7 @@ function PushTushareStock() {
               <h3 className="font-medium mb-2">最新信号</h3>
               <StockTable
                 list={moduleItem.heads}
-                refresh={() => fetchData(selectedModule)}
+                refresh={() => fetchData(selectedModules)}
               />
             </div>
           )}
@@ -227,7 +250,7 @@ function PushTushareStock() {
               <h3 className="font-medium mb-2">历史记录</h3>
               <StockTable
                 list={moduleItem.histories}
-                refresh={() => fetchData(selectedModule)}
+                refresh={() => fetchData(selectedModules)}
               />
             </div>
           )}
