@@ -21,7 +21,7 @@ function PushTushareStock() {
    * 模型多选项
    */
   const [modules, setModules] = useState([]);
-  const [selectedModules, setSelectedModules] = useState(["ALL_MODEL"]); // 多选（数组）
+  const [selectedModules, setSelectedModules] = useState([]); // 多选（数组），默认不选中任何模型
   const [tradedate, setTradedate] = useState("");
 
   // 是否自动刷新
@@ -30,8 +30,11 @@ function PushTushareStock() {
   const fetchData = async (modTypes = []) => {
     try {
       setLoading(true);
-      // 多选参数：用分号 ; 拼接后提交
-      const modTypeParam = Array.isArray(modTypes) ? modTypes.join(";") : modTypes;
+      // 多选参数：用分号 ; 拼接后提交；未选任何模型时默认按 ALL_MODEL 查询
+      const modTypeParam =
+        Array.isArray(modTypes) && modTypes.length > 0
+          ? modTypes.join(";")
+          : "ALL_MODEL";
       const response = await fetch(
         "/push_stocks/list?modType=" + encodeURIComponent(modTypeParam) +
         "&tradedate=" + tradedate +
@@ -98,22 +101,15 @@ function PushTushareStock() {
   };
 
   /***
-   * 多选框切换逻辑
+   * 多选框切换逻辑（ALL_MODEL 与其他模型一样普通处理，不做特殊互斥）
    */
   const toggleModuleSelect = (cls) => {
     setGroup(false);
-    setSelectedModules((prev) => {
-      // 处理"全选"项
-      if (cls === "ALL_MODEL") {
-        return prev.includes("ALL_MODEL") ? [] : ["ALL_MODEL"];
-      }
-      // 选了具体模型时，移除 ALL_MODEL
-      const withoutAll = prev.filter((m) => m !== "ALL_MODEL");
-      if (withoutAll.includes(cls)) {
-        return withoutAll.filter((m) => m !== cls);
-      }
-      return [...withoutAll, cls];
-    });
+    setSelectedModules((prev) =>
+      prev.includes(cls)
+        ? prev.filter((m) => m !== cls)
+        : [...prev, cls]
+    );
   };
 
   return (
