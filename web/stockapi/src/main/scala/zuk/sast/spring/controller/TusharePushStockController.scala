@@ -229,6 +229,7 @@ class TusharePushStockController {
     }
     
     log.info(s"选择模型:${modType}， 交易日期：${tradedate}转${trade_date}")
+    val modSet = modType.split(";").toSet //切割
 
     //TODO 从涨停和跌停中获取涨停的板块
     val hotDtos = this.tushareStock_limit_up_Impl.getStocks(QuerTushareStockDto("", TushareStock_limit_up_Impl.limit_up, trade_date, trade_date)).asScala
@@ -254,14 +255,14 @@ class TusharePushStockController {
     }
 
     //获取选择的模型集合
-    val modSet = (if(PassFactory.engineModuleList().map(_.getClass.getSimpleName).contains(modType)) {
-      Array(modType, classOf[MA9_Model].getSimpleName.toUpperCase).toSet  //默认输出 MA9 模型
-    }
-    else {
-      //全部模型集合
-      PassFactory.engineModuleList().map(_.getClass.getSimpleName).toSet
-    })
-      .filter(! _.equals(classOf[MA8_Model].getSimpleName))  //移除MA8，不想粘龙虎榜（思考1%收益和-5%亏损的胜率和赔率）
+//    val modSet = (if(PassFactory.engineModuleList().map(_.getClass.getSimpleName).contains(modType)) {
+//      Array(modType, classOf[MA9_Model].getSimpleName.toUpperCase).toSet  //默认输出 MA9 模型
+//    }
+//    else {
+//      //全部模型集合
+//      PassFactory.engineModuleList().map(_.getClass.getSimpleName).toSet
+//    })
+//      .filter(! _.equals(classOf[MA8_Model].getSimpleName))  //移除MA8，不想粘龙虎榜（思考1%收益和-5%亏损的胜率和赔率）
 
     /***
      * 列出今天模型推荐的全部结果文件集
