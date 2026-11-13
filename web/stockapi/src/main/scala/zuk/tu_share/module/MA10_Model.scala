@@ -29,7 +29,7 @@ class MA10_Model extends IModel {
     val moneyflowList = Dataset_moneyflow_dir.getTsCode(day.ts_code)
     if(moneyflowList!=null && moneyflowList.size > 0){
       val list = moneyflowList.filter(_.trade_date.equals(day.trade_date))
-      if(list.size > 0 && list.head.net_amount > 0 //主力资金净流入
+      if(list.size > 0 && list.head.net_amount.toFloat > 0 //主力资金净流入
         && day.change.toFloat < 0   // 跌下降   
       ){
         return true
@@ -77,6 +77,5 @@ class MA10_Model extends IModel {
   override def warnUpperShadow: Boolean = {
     false
   }
-
-  override def getSimilartyDto(): SimilartyDto = this.similartyDto
+  
 }
