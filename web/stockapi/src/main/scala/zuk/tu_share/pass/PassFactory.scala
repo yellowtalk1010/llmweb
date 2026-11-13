@@ -17,27 +17,27 @@ object PassFactory {
    *
    * @return
    */
-  def otherModuleList(): List[IModel] = {
-    val modules = List(
-      new MA1_Model,
-      new MA1_1_Model, //最高胜率
-      new MA3_0_Model, //上穿MA5
-      new MA3_1_Model,
-      new MA3_2_Model, //反包两日阴线后继续下跌
-      new MA3_3_Model,
-      new MA4_Model,
-      new MA5_Model,
-      new MA6_Model,
-      new MA7_Model,
-      new MA7_1_Model,
-      new MA8_Model,
-      new MA9_Model,
-      new MA9_1_Model
-    )
-    val sets = engineModuleList().map(_.getClass.getSimpleName)
-    val mods = modules.filter(e=> !sets.contains(e.getClass.getSimpleName))
-    mods
-  }
+//  def otherModuleList(): List[IModel] = {
+//    val modules = List(
+//      new MA1_Model,
+//      new MA1_1_Model, //最高胜率
+//      new MA3_0_Model, //上穿MA5
+//      new MA3_1_Model,
+//      new MA3_2_Model, //反包两日阴线后继续下跌
+//      new MA3_3_Model,
+//      new MA4_Model,
+//      new MA5_Model,
+//      new MA6_Model,
+//      new MA7_Model,
+//      new MA7_1_Model,
+//      new MA8_Model,
+//      new MA9_Model,
+//      new MA9_1_Model
+//    )
+//    val sets = engineModuleList().map(_.getClass.getSimpleName)
+//    val mods = modules.filter(e=> !sets.contains(e.getClass.getSimpleName))
+//    mods
+//  }
 
   /***
    * 引擎分析的模型
