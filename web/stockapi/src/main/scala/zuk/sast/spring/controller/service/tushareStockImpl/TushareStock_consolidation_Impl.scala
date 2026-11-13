@@ -51,7 +51,7 @@ class Tushare_consolidation_Impl extends ITushareStockService {
     //关注的股票
     val attentionSet = getAllAttention()
 
-    val futureFile = new File("stockapi/target/future.txt")
+    val futureFile = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "future.txt")
     println(s"预测：${futureFile.getAbsolutePath}， ${futureFile.exists()}")
     if (futureFile.exists()) {
       val lines = FileUtils.readLines(futureFile, "UTF-8")
@@ -86,7 +86,7 @@ class Tushare_consolidation_Impl extends ITushareStockService {
       }).reverse
     }
 
-    val exampleFile = new File("stockapi/target/example.txt")
+    val exampleFile = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "example.txt")
     println(s"样例：${exampleFile.getAbsolutePath}, ${exampleFile.exists()}")
     if (exampleFile.exists()) {
       val lines = FileUtils.readLines(exampleFile, "UTF-8")

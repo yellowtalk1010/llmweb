@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct
 import org.apache.commons.io.FileUtils
 import org.springframework.stereotype.Service
 import zuk.similar.Bar
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.ModuleHistoryDailyData
 import zuk.tu_share.utils.Dataset_module_history_rtk_dir
 
@@ -180,8 +181,8 @@ object ConsolidationScanner {
 
   def main(args: Array[String]): Unit = {
     
-    val future_txt = "stockapi/target/future.txt"
-    val example_txt= "stockapi/target/example.txt"
+    val future_txt = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "future.txt"
+    val example_txt= ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "example.txt"
     
     if(new File(future_txt).exists() && new File(example_txt).exists()){
       //如果结果文件存在则返回
