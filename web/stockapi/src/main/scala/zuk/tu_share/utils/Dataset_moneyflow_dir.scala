@@ -4,7 +4,6 @@ import jakarta.annotation.PostConstruct
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
-import zuk.sast.spring.controller.component.MoneyflowDCDto
 import zuk.tu_share.ParseCammandParam
 
 import java.io.{File, FileReader}
@@ -12,6 +11,30 @@ import java.nio.charset.Charset
 import java.util.concurrent.ConcurrentHashMap
 import scala.beans.BeanProperty
 import scala.jdk.CollectionConverters.*
+
+
+case class MoneyflowDCDto() {
+
+  @BeanProperty var trade_date: String = "" // str 交易日期
+  @BeanProperty var ts_code: String = "" // str 股票代码
+  @BeanProperty var name: String = "" // str 股票名称
+
+  @BeanProperty var pct_change: String = "" // float 涨跌幅
+  @BeanProperty var close: String = "" // float 最新价
+
+  @BeanProperty var net_amount: String = "" // float 今日主力净流入额（万元）
+  @BeanProperty var net_amount_rate: String = "" // float 今日主力净流入净占比（%）
+  @BeanProperty var buy_elg_amount: String = "" // float 今日超大单净流入额（万元）
+  @BeanProperty var buy_elg_amount_rate: String = "" // float 今日超大单净流入占比（%）
+  @BeanProperty var buy_lg_amount: String = "" // float 今日大单净流入额（万元）
+  @BeanProperty var buy_lg_amount_rate: String = "" // float 今日大单净流入占比（%）
+  @BeanProperty var buy_md_amount: String = "" // float 今日中单净流入额（万元）
+  @BeanProperty var buy_md_amount_rate: String = "" // float 今日中单净流入占比（%）
+  @BeanProperty var buy_sm_amount: String = "" // float 今日小单净流入额（万元）
+  @BeanProperty var buy_sm_amount_rate: String = "" // float 今日小单净流入占比（%）
+
+}
+
 
 /***
  * 东方财富资金流向

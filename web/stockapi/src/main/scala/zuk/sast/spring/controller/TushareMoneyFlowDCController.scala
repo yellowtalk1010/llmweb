@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-import zuk.sast.spring.controller.component.{MoneyflowDCDto, TushareMoneyFlowComponent}
+import zuk.tu_share.utils.{Dataset_moneyflow_dir, MoneyflowDCDto}
 
 import java.util
 import scala.jdk.CollectionConverters.*
@@ -19,9 +19,6 @@ import scala.jdk.CollectionConverters.*
 class TushareMoneyFlowDCController {
 
   private val log = LoggerFactory.getLogger(classOf[TushareMoneyFlowDCController])
-
-  @Autowired
-  private var tushareMoneyFlowComponent: TushareMoneyFlowComponent = null
   
   @Autowired
   private var dtwStockSimilarityController: DTWStockSimilarityController = null
@@ -33,7 +30,7 @@ class TushareMoneyFlowDCController {
     dtwStockSimilarityController.getTsCode(tsCode, "")
     
     
-    val list = tushareMoneyFlowComponent.getTsCode(tsCode).toBuffer
+    val list = Dataset_moneyflow_dir.getTsCode(tsCode).toBuffer
 
     try {
       val dto = new MoneyflowDCDto
