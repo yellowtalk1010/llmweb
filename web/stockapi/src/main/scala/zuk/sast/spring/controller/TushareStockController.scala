@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 import zuk.sast.spring.controller.component.*
 import zuk.sast.spring.controller.mapper.StockMapper
 import zuk.sast.spring.controller.mapper.entity.StockEntity
-import zuk.sast.spring.controller.service.tushareStockImpl.{ITushareStockService, QuerTushareStockDto, TushareStock_My_Impl, TushareStock_module_Impl, Tushare_All_Impl, Tushare_consolidation_Impl, TushareStock_limit_down_Impl, TushareStock_limit_up_Impl}
+import zuk.sast.spring.controller.service.tushareStockImpl.*
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
 import zuk.tu_share.pass.PassFactory
@@ -107,6 +107,9 @@ class TushareStockController {
       case Tushare_consolidation_Impl.consolidation =>
         //黏合预测
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_consolidation_Impl.consolidation)).head.getStocks(dto)
+      case TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner =>
+        //主力吸筹
+        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner)).head.getStocks(dto)
       case _=>
         //模型回测的历史数据
         this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_module_Impl.module)).head.getStocks(dto)
@@ -155,6 +158,12 @@ class TushareStockController {
     consolidationMap.put("cls", Tushare_consolidation_Impl.consolidation)
     consolidationMap.put("name", Tushare_consolidation_Impl.consolidation_desc)
     list.append(consolidationMap)
+
+
+    val mainForceAccumulationScannerMap = new util.HashMap[String, String]()
+    mainForceAccumulationScannerMap.put("cls", TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner)
+    mainForceAccumulationScannerMap.put("name", TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner_desc)
+    list.append(mainForceAccumulationScannerMap)
 
     /**
      * 模型
