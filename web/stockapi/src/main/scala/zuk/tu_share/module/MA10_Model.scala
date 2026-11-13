@@ -1,0 +1,71 @@
+package zuk.tu_share.module
+
+import zuk.similar.{SimilartyDto, SimilartyUtil}
+import zuk.tu_share.dto.ModuleHistoryDailyData
+
+/***
+ * 1. 多日收盘价就是最高价（或相比最高价下跌1%个点）
+ * 2. 多日主力净流入为正，但是股票确实震荡下跌
+ */
+class MA10_Model extends IModel {
+
+  var stockDto: StockDto = _
+  var reason = ""
+  var similartyDto: SimilartyDto = null
+
+  override def buyReason(): String = this.reason
+
+  override def getStockDto(): StockDto = {
+    stockDto
+  }
+
+  override def backTestStep: Int = 10
+
+  override def run(days: List[ModuleHistoryDailyData]): Unit = {
+    val LEN = 30 //历史30个交易日
+    if(days.size > LEN){
+      val head = days.head
+      val preList = days.slice(1, LEN-1)
+      val pre = preList.head
+      val minVolDay = preList.minBy(_.vol.toDouble) //最低成交
+      if(minVolDay.vol.toDouble >= pre.vol.toDouble
+        && pre.change.toFloat < 5
+        && pre.change.toFloat > -5
+
+        && preList.filter(_.change.toFloat > 9.8).size >= 1 //历史出现过涨停情况
+
+        && preList.filter(e=>e.low.toDouble > head.low.toDouble).size > preList.size / 2  //目前价格在历史上处于最低
+
+        && !head.name.toUpperCase.contains("ST")
+        && head.change.toFloat > 1
+
+        && head.vol.toDouble > pre.vol.toDouble
+//        && head.vol.toDouble < pre.vol.toDouble * 2
+        
+        && head.ma.ma5.floatValue() > head.ma.ma10.floatValue()
+      ){
+        //当前成交量是历史最低成交量
+        val tsStock = super.findTsStock(head.ts_code)
+        if(tsStock!=null){
+          //添加形态验证
+          stockDto = new StockDto(days.head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
+        }
+      }
+    }
+  }
+
+
+  override def desc(): String = {
+    "MA9预算(ma5>ma10)"
+  }
+
+  override def reference: Float = {
+    0.0
+  }
+
+  override def warnUpperShadow: Boolean = {
+    false
+  }
+
+  override def getSimilartyDto(): SimilartyDto = this.similartyDto
+}
