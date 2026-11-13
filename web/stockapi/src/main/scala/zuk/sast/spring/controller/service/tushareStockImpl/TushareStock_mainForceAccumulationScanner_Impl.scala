@@ -82,7 +82,7 @@ class TushareStock_mainForceAccumulationScanner_Impl extends ITushareStockServic
       dto
     }).reverse
 
-    dtoList.asJava
+    dtoList.sortBy(_.tradedate).reverse.asJava
   }
   
   
