@@ -17,6 +17,9 @@ import java.util.concurrent.Executors
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
+
+import zuk.tu_share.ParseCammandParam
+
 object Tushare_consolidation_Impl {
   val consolidation = "consolidation"
   val consolidation_desc = "黏合预测"
