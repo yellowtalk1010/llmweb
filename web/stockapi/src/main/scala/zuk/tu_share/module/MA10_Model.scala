@@ -54,7 +54,7 @@ class MA10_Model extends IModel {
       val head = days.head
       val moneyflowList = Dataset_moneyflow_dir.getTsCode(head.ts_code)
       val subDays = days.filter(e=>{
-        close_equal_high(e) && moneyflow_amounNet(e)
+        close_equal_high(e) || moneyflow_amounNet(e)
       })
       
       if(new BigDecimal(subDays.size).divide(new BigDecimal(days.size), 2, RoundingMode.UP).floatValue() > 0.5){
