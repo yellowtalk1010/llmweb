@@ -36,8 +36,6 @@ class Tushare_consolidation_Impl extends ITushareStockService {
       override def run(): Unit = {
         println("初始化黏合股票分析")
         ConsolidationScanner.main(Array.empty)
-        println("预测吸筹")
-        MainForceAccumulationScanner.main(Array.empty)
       }
     })
   }

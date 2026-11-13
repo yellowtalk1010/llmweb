@@ -14,13 +14,13 @@ import scala.jdk.CollectionConverters.*
 
 object MainForceAccumulationScanner {
 
+  val ma10File = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "MA10_MODEL")
+  
   /***
    * 预计主力吸筹
    * @param args
    */
   def main(args: Array[String]): Unit = {
-
-    val ma10File = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "MA10_MODEL")
     
     if(ma10File.exists()){
       return 
