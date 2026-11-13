@@ -47,7 +47,7 @@ object TushareStock_module_Impl {
     }
     val dir = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir)
     println(s"加载回测结果集路径:${dir.getAbsolutePath}, ${dir.exists()}")
-    dir.listFiles().map(f=>{
+    dir.listFiles().filter(_.isFile).map(f=>{
       val fileName = f.getName
       println(s"加载${fileName}模型的数据集:${f.getAbsolutePath}")
       val dtos = FileUtils.readLines(f, "UTF-8").asScala.filter(l=>StringUtils.isNotBlank(l)).map(l=>{

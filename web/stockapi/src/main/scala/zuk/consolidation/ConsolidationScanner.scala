@@ -179,10 +179,12 @@ object ConsolidationScanner {
    resList.toList
  }
 
+
+  val future_txt = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "other/future.txt"
+  val example_txt = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "other/example.txt"
+
   def main(args: Array[String]): Unit = {
     
-    val future_txt = ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "future.txt"
-    val example_txt= ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "example.txt"
     
     if(new File(future_txt).exists() && new File(example_txt).exists()){
       //如果结果文件存在则返回

@@ -14,7 +14,7 @@ import scala.jdk.CollectionConverters.*
 
 object MainForceAccumulationScanner {
 
-  val ma10File = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "MA10_MODEL")
+  val ma10File = new File(ParseCammandParam.param.engineInfo.MODEL_BACK_TEST_RESULT_dir + File.separator + "other/MA10_MODEL")
   
   /***
    * 预计主力吸筹
