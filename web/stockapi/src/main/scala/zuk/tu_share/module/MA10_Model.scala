@@ -6,6 +6,8 @@ import zuk.tu_share.dto.ModuleHistoryDailyData
 /***
  * 1. 多日收盘价就是最高价（或相比最高价下跌1%个点）
  * 2. 多日主力净流入为正，但是股票确实震荡下跌
+ * 
+ * 只能当潜力股，主力吸筹股来分析
  */
 class MA10_Model extends IModel {
 
