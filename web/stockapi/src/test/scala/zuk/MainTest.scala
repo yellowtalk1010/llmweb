@@ -23,10 +23,10 @@ class MainTest extends AnyFunSuite {
     BackTest.fullBacktestModNameSet = Array(
       classOf[MA10_Model]
     ).map(_.getSimpleName.toUpperCase).toSet
-    
+
     //增量回测
-    BackTest.incrementBacktestModNameSet = Array.empty.toSet
-    
+    BackTest.incrementBacktestModNameSet = Set.empty
+
     val args = Array("-engine_path", "D:\\development\\github\\tushare\\111\\gitee_stockapi\\", "-back", "-back_full")
     zuk.Main.main(args)
   }
