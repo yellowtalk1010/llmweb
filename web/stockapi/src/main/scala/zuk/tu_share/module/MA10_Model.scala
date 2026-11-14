@@ -23,14 +23,14 @@ class MA10_Model extends IModel {
     stockDto
   }
 
-  override def backTestStep: Int = 10
+  override def backTestStep: Int = 15
 
   private def moneyflow_amounNet(day: ModuleHistoryDailyData): Boolean = {
     val moneyflowList = Dataset_moneyflow_dir.getTsCode(day.ts_code)
     if(moneyflowList!=null && moneyflowList.size > 0){
       val list = moneyflowList.filter(_.trade_date.equals(day.trade_date))
       if(list.size > 0 && list.head.net_amount.toFloat > 10 //主力资金净流入
-        && day.change.toFloat < 0   // 跌下降
+//        && day.change.toFloat < 0   // 跌下降
       ){
         return true
       }
@@ -51,7 +51,7 @@ class MA10_Model extends IModel {
   }
 
   override def run(days: List[ModuleHistoryDailyData]): Unit = {
-    val LEN = 10 //历史10个交易日
+    val LEN = 15 //历史10个交易日
     if(days.size > LEN){
       val takeDays = days.take(LEN)
       val head = takeDays.head
@@ -60,7 +60,7 @@ class MA10_Model extends IModel {
         close_equal_high(e) || moneyflow_amounNet(e)
       })
 
-      if(new BigDecimal(subDays.size).divide(new BigDecimal(takeDays.size), 2, RoundingMode.UP).floatValue() > 0.8){
+      if(new BigDecimal(subDays.size).divide(new BigDecimal(takeDays.size), 2, RoundingMode.UP).floatValue() > 0.7){
         val tsStock = super.findTsStock(head.ts_code)
         this.stockDto = new StockDto(head.trade_date, tsStock, super.limitUp(days), super.limitDown(days), super.changeUpRate(days))
       }
