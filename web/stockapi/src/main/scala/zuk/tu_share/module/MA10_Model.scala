@@ -70,7 +70,7 @@ class MA10_Model extends IModel {
 
 
   override def desc(): String = {
-    "潜在的主力吸筹"
+    "潜在的主力吸筹（15天回测）"
   }
 
   override def reference: Float = {
