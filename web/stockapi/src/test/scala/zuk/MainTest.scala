@@ -2,7 +2,8 @@ package zuk
 
 import org.apache.commons.io.FileUtils
 import org.scalatest.funsuite.AnyFunSuite
-import zuk.tu_share.module.MA7_Model
+import zuk.tu_share.backtest.BackTest
+import zuk.tu_share.module.*
 import zuk.tu_share.pass.PassFactory
 
 import java.io.File
@@ -17,7 +18,15 @@ class MainTest extends AnyFunSuite {
   }
 
   test("main回测测试") {
-//    PassFactory.models = List(new MA7_Model)
+
+    //全量回测
+    BackTest.fullBacktestModNameSet = Array(
+      classOf[MA10_Model]
+    ).map(_.getSimpleName.toUpperCase).toSet)
+    
+    //增量回测
+    BackTest.incrementBacktestModNameSet = Array.empty
+    
     val args = Array("-engine_path", "D:\\development\\github\\tushare\\111\\gitee_stockapi\\", "-back", "-back_full")
     zuk.Main.main(args)
   }
