@@ -52,7 +52,8 @@ object PassFactory {
       new MA7_1_Model,
       new MA8_Model,
       new MA9_Model,
-      new MA9_1_Model
+      new MA9_1_Model,
+      new MA10_Model
     )
 
     modules

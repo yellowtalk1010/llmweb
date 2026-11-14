@@ -48,7 +48,7 @@ object Main {
         classOf[MA5_Model],
         classOf[MA7_Model],
         classOf[MA7_1_Model],
-        classOf[MA8_Model],
+//        classOf[MA8_Model], //不做分析，只做回测
         classOf[MA9_Model],
         classOf[MA9_1_Model]
       ).map(_.getSimpleName.toUpperCase).toSet

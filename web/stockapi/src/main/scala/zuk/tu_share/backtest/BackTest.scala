@@ -43,8 +43,9 @@ object BackTest {
     classOf[MA4_Model],
     classOf[MA5_Model],
     classOf[MA7_1_Model],
-    classOf[MA8_Model],
-    classOf[MA9_1_Model]
+    classOf[MA8_Model], //这个只做回测，不做引擎分析
+    classOf[MA9_1_Model],
+    classOf[MA10_Model] //这个只做回测，不做引擎分析
   ).map(_.getSimpleName.toUpperCase).toSet
 
   /***
