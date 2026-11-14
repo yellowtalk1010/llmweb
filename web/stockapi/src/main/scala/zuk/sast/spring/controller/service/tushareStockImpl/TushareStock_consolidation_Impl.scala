@@ -5,10 +5,11 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import zuk.consolidation.{ConsolidationScanner, MainForceAccumulationScanner}
+import zuk.consolidation.ConsolidationScanner
 import zuk.sast.spring.controller.TushareStockControllerDTO
 import zuk.sast.spring.controller.component.TushareConceptComponent
 import zuk.sast.spring.controller.service.tushareStockImpl.Tushare_consolidation_Impl
+import zuk.tu_share.ParseCammandParam
 import zuk.tu_share.dto.TsStock
 
 import java.io.File
@@ -16,9 +17,6 @@ import java.util
 import java.util.concurrent.Executors
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
-
-
-import zuk.tu_share.ParseCammandParam
 
 object Tushare_consolidation_Impl {
   val consolidation = "consolidation"

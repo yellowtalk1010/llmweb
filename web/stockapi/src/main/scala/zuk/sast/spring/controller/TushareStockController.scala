@@ -14,7 +14,7 @@ import zuk.sast.spring.controller.service.tushareStockImpl.*
 import zuk.tu_share.dto.TsStock
 import zuk.tu_share.module.MA4_Model
 import zuk.tu_share.pass.PassFactory
-import zuk.tu_share.utils.{Dataset_module_history_rtk_dir, Dataset_all_stocks_csv_file, Dataset_top_Inst_dir, FenCi_Util, IncreateDecreateRateDescUtil}
+import zuk.tu_share.utils.*
 
 import java.io.File
 import java.text.SimpleDateFormat
@@ -107,10 +107,7 @@ class TushareStockController {
       case Tushare_consolidation_Impl.consolidation =>
         //黏合预测
         this.tushareStockServiceList.asScala.filter(_.getType().equals(Tushare_consolidation_Impl.consolidation)).head.getStocks(dto)
-      case TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner =>
-        //主力吸筹
-        this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner)).head.getStocks(dto)
-      case _=>
+       case _=>
         //模型回测的历史数据
         this.tushareStockServiceList.asScala.filter(_.getType().equals(TushareStock_module_Impl.module)).head.getStocks(dto)
     }
@@ -158,12 +155,6 @@ class TushareStockController {
     consolidationMap.put("cls", Tushare_consolidation_Impl.consolidation)
     consolidationMap.put("name", Tushare_consolidation_Impl.consolidation_desc)
     list.append(consolidationMap)
-
-
-    val mainForceAccumulationScannerMap = new util.HashMap[String, String]()
-    mainForceAccumulationScannerMap.put("cls", TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner)
-    mainForceAccumulationScannerMap.put("name", TushareStock_mainForceAccumulationScanner_Impl.mainForceAccumulationScanner_desc)
-    list.append(mainForceAccumulationScannerMap)
 
     /**
      * 模型
