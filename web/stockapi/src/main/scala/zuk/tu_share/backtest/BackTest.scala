@@ -32,6 +32,20 @@ case class BackTestDto() {
 }
 
 object BackTest {
+  
+  var incrementBacktestModNameSet = Array(
+    classOf[MA7_Model],
+    classOf[MA9_Model]
+  ).map(_.getSimpleName.toUpperCase).toSet
+
+
+  var fullBacktestModNameSet = Array(
+    classOf[MA4_Model],
+    classOf[MA5_Model],
+    classOf[MA7_1_Model],
+    classOf[MA8_Model],
+    classOf[MA9_1_Model]
+  ).map(_.getSimpleName.toUpperCase).toSet
 
   /***
    * 全量回测
@@ -39,14 +53,6 @@ object BackTest {
    * @param map
    */
   def fullBacktest(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
-
-    val fullBacktestModNameSet = Array(
-      classOf[MA4_Model],
-      classOf[MA5_Model],
-      classOf[MA7_1_Model],
-      classOf[MA8_Model],
-      classOf[MA9_1_Model]
-    ).map(_.getSimpleName.toUpperCase).toSet
     
     val funllBacktestFinishModules = ListBuffer[IModel]()
     val fullCount = new AtomicInteger(0)
@@ -60,8 +66,10 @@ object BackTest {
         println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${fullCount.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
 
         val fullBacktestModules = PassFactory.engineModuleList().filter(m => fullBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
-        PassFactory.doModule_1(fullBacktestModules, stockDataList)
-        funllBacktestFinishModules ++= fullBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+        if(fullBacktestModules.size > 0){
+          PassFactory.doModule_1(fullBacktestModules, stockDataList)
+          funllBacktestFinishModules ++= fullBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)  
+        }
       }
     })
     //保存全量回测分析的结果集
@@ -78,10 +86,6 @@ object BackTest {
    */
   def incrementBacktest(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
 
-    val incrementBacktestModNameSet = Array(
-      classOf[MA7_Model],
-      classOf[MA9_Model]
-    ).map(_.getSimpleName.toUpperCase).toSet
     
     val incrementBacktestFinishModules = ListBuffer[IModel]()
     val incrementCount = new AtomicInteger(0)
@@ -95,8 +99,10 @@ object BackTest {
         println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
  
         val incrementBacktestModules = PassFactory.engineModuleList().filter(m => incrementBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
-        PassFactory.doModule_1(incrementBacktestModules, stockDataList)
-        incrementBacktestFinishModules ++= incrementBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)
+        if(incrementBacktestModules.size > 0){
+          PassFactory.doModule_1(incrementBacktestModules, stockDataList)
+          incrementBacktestFinishModules ++= incrementBacktestModules.filter(e => e.getStockDto() != null && e.getStockDto().tsStock != null)  
+        }
       }
     })
     //保存增量回测分析的结果集
