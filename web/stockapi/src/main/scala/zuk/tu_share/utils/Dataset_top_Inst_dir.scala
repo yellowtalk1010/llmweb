@@ -95,7 +95,7 @@ object Dataset_top_Inst_dir {
       val file = tp2._1
       val index = tp2._2
       val topInstList = loadData(file)
-      println(s"${index+1}/${topInstFiles.size}完成龙虎榜数据加载:${file.getAbsolutePath}, 总计${topInstList.size()}")
+      println(s"${index+1}/${topInstFiles.size}龙虎榜加载:${file.getAbsolutePath}, 共${topInstList.size()}")
       if(topInstList!=null && topInstList.size()>0){
         topInstMap.put(topInstList.asScala.head.trade_date, topInstList)
       }
