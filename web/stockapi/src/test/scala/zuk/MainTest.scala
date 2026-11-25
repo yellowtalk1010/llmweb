@@ -16,6 +16,14 @@ class MainTest extends AnyFunSuite {
     val args = Array("-engine_path", "D:\\development\\github\\tushare\\111\\gitee_stockapi\\", "-json")
     zuk.Main.main(args)
   }
+  
+  test("aaabbbccc"){
+    var num = 10000.0
+    for (i <- 0 until 240) {
+      num = num + num * 0.015
+    }
+    println(num)
+  }
 
   test("main回测测试") {
 
