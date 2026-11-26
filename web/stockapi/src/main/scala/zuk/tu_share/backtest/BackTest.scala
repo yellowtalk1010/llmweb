@@ -174,7 +174,7 @@ object BackTest {
               && sell == null
             ) {
               sell = e
-              sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出，${step.get()}个交易日】"
+              sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出，${step.get()}个交易日】" //成功卖出
             }
             
             if(sell == null){
