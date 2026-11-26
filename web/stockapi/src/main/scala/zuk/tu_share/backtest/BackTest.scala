@@ -197,16 +197,16 @@ object BackTest {
               //如果第一个交易日卖出
               val openChange = new BigDecimal(sell.open.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close.toFloat), 4, RoundingMode.UP).floatValue() * 100
               if (openChange > 1.0) {
-                money * (1 + openChange / 100)
+                money * ( openChange / 100)
               }
               else {
-                money * 1.01
+                money * 0.01
               }
 
             }
             else {
               //如果不是第一个交易日卖出，直接盈利1个点即卖
-              money * 1.01
+              money * 0.01
             }
             sellFirstWinChangeStr = sellFirstWinChangeStr + s", ${winMoney}"
             moneyWinSum = moneyWinSum + winMoney
