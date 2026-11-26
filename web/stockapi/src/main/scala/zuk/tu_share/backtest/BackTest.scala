@@ -195,7 +195,7 @@ object BackTest {
             val money = 10000.0
             val winMoney = if (step.get() == 1) {
               //如果第一个交易日卖出
-              val openChange = new BigDecimal(sell.open.toFloat - sell.pre_close.toFloat).divide(new BigDecimal(sell.pre_close.toFloat), 4, RoundingMode.UP).floatValue() * 100
+              val openChange = new BigDecimal(sell.open.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close.toFloat), 4, RoundingMode.UP).floatValue() * 100
               if (openChange > 1.0) {
                 money * (1 + openChange / 100)
               }
