@@ -134,8 +134,8 @@ object BackTest {
         jsonObj
       })
 
-      var moneyWinSum = 0.0
-      var moneyFaultSum = 0.0
+      var moneyWinSum = 0.0 //总盈利
+      var moneyFaultSum = 0.0 //总亏损
 
       jsonObjList.foreach(jsonObj=>{
         
