@@ -181,26 +181,6 @@ object BackTest {
             ) {
               sell = e
               sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出，${step.get()}个交易日】" //成功卖出
-              
-              //todo 模拟本金1万块的赢钱 
-              val money = 10000.0
-              val winMoney = if (step.get() == 1) {
-                //如果第一个交易日卖出
-                val openChange = new BigDecimal(sell.open.toFloat - sell.pre_close.toFloat).divide(new BigDecimal(sell.pre_close.toFloat), 4, RoundingMode.UP).floatValue() * 100
-                if (openChange > 1.0) {
-                  money * (1 + openChange / 100)
-                }
-                else {
-                  money * 1.01
-                }
-
-              }
-              else {
-                //如果不是第一个交易日卖出，直接盈利1个点即卖
-                money * 1.01
-              }
-              moneyWinSum = moneyWinSum + winMoney
-              
             }
             
             if(sell == null){
@@ -213,9 +193,29 @@ object BackTest {
             //记录成功的
             victoryStockList += sell
             jsonObj.put("status", "成功")
+
+            //todo 模拟本金1万块的赢钱 
+            val money = 10000.0
+            val winMoney = if (step.get() == 1) {
+              //如果第一个交易日卖出
+              val openChange = new BigDecimal(sell.open.toFloat - sell.pre_close.toFloat).divide(new BigDecimal(sell.pre_close.toFloat), 4, RoundingMode.UP).floatValue() * 100
+              if (openChange > 1.0) {
+                money * (1 + openChange / 100)
+              }
+              else {
+                money * 1.01
+              }
+
+            }
+            else {
+              //如果不是第一个交易日卖出，直接盈利1个点即卖
+              money * 1.01
+            }
+            moneyWinSum = moneyWinSum + winMoney
           }
           else {
             jsonObj.put("status", "失败")
+            moneyWinSum = moneyWinSum - 1000.0 //跌超10个点卖出
           }
 
           val ok = if (sell != null) "" else "X"
