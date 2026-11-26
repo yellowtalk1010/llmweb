@@ -136,6 +136,7 @@ object BackTest {
 
       var moneyWinSum = 0.0 //总盈利
       var moneyFaultSum = 0.0 //总亏损
+      val buyDateList = new ListBuffer[String]
 
       jsonObjList.foreach(jsonObj=>{
         
@@ -147,6 +148,8 @@ object BackTest {
         val dailyList = map.get(stockCode).get
         //todo 寻找买点
         val buy = dailyList.filter(_.trade_date.equals(tradedate)).head
+        buyDateList += buy.trade_date //记录购买日期
+        
         val buy_tsStock = Dataset_all_stocks_csv_file.getTsStock(buy.ts_code)
         val buyFutureList = dailyList.filter(_.trade_date.toLong > buy.trade_date.toLong).sortBy(_.trade_date.toLong) //倒序，从小到大
         //todo 寻找回测的卖点列表
@@ -219,7 +222,7 @@ object BackTest {
       val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(count.get()), 4, RoundingMode.UP)
       //胜率保存到properties中
       Dataset_module_history_rtk_dir.getProperties().put(clsName.toUpperCase, victoryRate.toString)
-      val line = s"${clsName}胜率：${victoryRate}, ${iModel.desc()}，攒${moneyWinSum}，亏${moneyFaultSum}"
+      val line = s"${clsName}胜率：${victoryRate}，${iModel.desc()}，攒${moneyWinSum}，亏${moneyFaultSum}，最大本金${buyDateList.groupBy(e=>e).maxBy(e=>e._2.size)}"
       lines += line
       println(line)
 
