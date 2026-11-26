@@ -190,36 +190,18 @@ object BackTest {
             
           })
 
+          val winMoney = this.earnMoney(step.get(), buy, sell)
+
+          sellFirstWinChangeStr = sellFirstWinChangeStr + s", ${winMoney}"
+          
           if (sell != null) {
-            //todo 模拟本金1万块的赢钱 
-            val money = 10000.0
-            val winMoney = if (step.get() == 1) {
-              //如果第一个交易日卖出
-              val openChange = new BigDecimal(sell.open.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close.toFloat), 4, RoundingMode.UP).floatValue() * 100
-              if (openChange > 1.0) {
-                money * ( openChange / 100)
-              }
-              else {
-                money * 0.01
-              }
-
-            }
-            else {
-              //如果不是第一个交易日卖出，直接盈利1个点即卖
-              money * 0.01
-            }
-            sellFirstWinChangeStr = sellFirstWinChangeStr + s", ${winMoney}"
             moneyWinSum = moneyWinSum + winMoney
-
-
             //记录成功的
             victoryStockList += sell
             jsonObj.put("status", "成功")
           }
           else {
-            sellFirstWinChangeStr = sellFirstWinChangeStr + s", -1000"
-            moneyFaultSum = moneyFaultSum + 1000.0 //跌超10个点卖出
-            
+            moneyFaultSum = moneyFaultSum + winMoney //跌超10个点卖出
             jsonObj.put("status", "失败")
           }
 
@@ -259,6 +241,44 @@ object BackTest {
       
     })
     
+  }
+
+
+  /**
+   * 模拟攒钱
+   * 
+   * @param step
+   * @param buy
+   * @param sell
+   * @return
+   */
+  private def earnMoney(step: Integer, buy: ModuleHistoryDailyData, sell: ModuleHistoryDailyData): Float = {
+    
+    //todo 模拟本金1万块的赢钱 
+    val money = 10000.0
+    
+    val earnMoney = if (sell != null) {
+      if (step == 1) {
+        //如果第一个交易日卖出
+        val openChange = new BigDecimal(sell.open.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close.toFloat), 4, RoundingMode.UP).floatValue() * 100
+        if (openChange > 1.0) {
+          money * ( openChange / 100)
+        }
+        else {
+          money * 0.01
+        }
+      }
+      else {
+        //如果不是第一个交易日卖出，直接盈利1个点即卖
+        money * 0.01
+      }
+      
+    }
+    else {
+      -1000.0
+    }
+    
+    new BigDecimal(earnMoney).setScale(2).floatValue()
   }
   
  
