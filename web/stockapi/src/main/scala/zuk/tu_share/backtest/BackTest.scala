@@ -222,7 +222,10 @@ object BackTest {
       val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(count.get()), 4, RoundingMode.UP)
       //胜率保存到properties中
       Dataset_module_history_rtk_dir.getProperties().put(clsName.toUpperCase, victoryRate.toString)
-      val line = s"${clsName}胜率：${victoryRate}，${iModel.desc()}，攒${moneyWinSum}，亏${moneyFaultSum}，最大本金${buyDateList.groupBy(e=>e).maxBy(e=>e._2.size)}"
+      val line = s"${clsName}胜率：${victoryRate}，${iModel.desc()}，" +
+        s"攒${new BigDecimal(moneyWinSum).setScale(2, RoundingMode.UP)}，" +
+        s"亏${moneyFaultSum}，" +
+        s"最大本金${buyDateList.groupBy(e=>e).toList.sortBy(_._2.size).reverse.head._2.size }"
       lines += line
       println(line)
 
@@ -280,10 +283,10 @@ object BackTest {
 
     }
     else {
-      -1000.0
+      -1000.000
     }
 
-    new BigDecimal(earnMoney).setScale(3).floatValue()
+    new BigDecimal(earnMoney).setScale(3, RoundingMode.UP).floatValue()
   }
 
 
