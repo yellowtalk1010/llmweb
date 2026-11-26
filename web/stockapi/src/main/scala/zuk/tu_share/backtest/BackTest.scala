@@ -136,7 +136,7 @@ object BackTest {
 
       var moneyWinSum = 0.0
       var moneyFaultSum = 0.0
-      
+
       jsonObjList.foreach(jsonObj=>{
         
         val stockType = jsonObj.get("stockType").asInstanceOf[String]
@@ -157,9 +157,9 @@ object BackTest {
         else {
           buyFutureList
         }
-        
-        
-        
+
+
+
         if (sellList.size == 0) {
           val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
           val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}【买入】, 【未交易】"
@@ -173,8 +173,8 @@ object BackTest {
           var sell: ModuleHistoryDailyData = null
           var sellFirstWinChangeStr = "失败"
           val step = new AtomicInteger(1) //从买入到卖出间隔多少个交易日，今日买次日卖，至少一个交易日
-          
-          
+
+
           sellList.foreach(e => {
             val winChange = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
             if (winChange.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0 
@@ -193,7 +193,7 @@ object BackTest {
           val winMoney = this.earnMoney(step.get(), buy, sell)
 
           sellFirstWinChangeStr = sellFirstWinChangeStr + s", ${winMoney}"
-          
+
           if (sell != null) {
             moneyWinSum = moneyWinSum + winMoney
             //记录成功的
@@ -246,25 +246,27 @@ object BackTest {
 
   /**
    * 模拟攒钱
-   * 
+   *
    * @param step
    * @param buy
    * @param sell
    * @return
    */
   private def earnMoney(step: Integer, buy: ModuleHistoryDailyData, sell: ModuleHistoryDailyData): Float = {
-    
-    //todo 模拟本金1万块的赢钱 
+
+    //todo 模拟本金1万块的赢钱
     val money = 10000.0
-    
+
     val earnMoney = if (sell != null) {
       if (step == 1) {
         //如果第一个交易日卖出
         val openChange = new BigDecimal(sell.open.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close.toFloat), 4, RoundingMode.UP).floatValue() * 100
         if (openChange > 1.0) {
+          //如果开盘涨幅大于1.0
           money * ( openChange / 100)
         }
         else {
+          //如果开盘涨幅小于1.0，则直接挂1.0的卖单
           money * 0.01
         }
       }
@@ -272,16 +274,16 @@ object BackTest {
         //如果不是第一个交易日卖出，直接盈利1个点即卖
         money * 0.01
       }
-      
+
     }
     else {
       -1000.0
     }
-    
+
     new BigDecimal(earnMoney).setScale(3).floatValue()
   }
-  
- 
+
+
 
   /**
    * 保存增量分析的结果集
