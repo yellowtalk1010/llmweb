@@ -278,7 +278,7 @@ object BackTest {
       -1000.0
     }
     
-    new BigDecimal(earnMoney).setScale(2).floatValue()
+    new BigDecimal(earnMoney).setScale(3).floatValue()
   }
   
  
