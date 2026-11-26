@@ -29,7 +29,7 @@ class MainTest extends AnyFunSuite {
 
     //全量回测
     BackTest.fullBacktestModNameSet = Array(
-      classOf[MA10_Model]
+      classOf[MA11_Model]
     ).map(_.getSimpleName.toUpperCase).toSet
 
     //增量回测

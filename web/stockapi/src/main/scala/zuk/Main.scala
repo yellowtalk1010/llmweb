@@ -2,7 +2,7 @@ package zuk
 
 import zuk.tu_share.backtest.BackTest
 import zuk.tu_share.ParseCammandParam
-import zuk.tu_share.module.{IModel, MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model, MA9_1_Model, MA9_Model}
+import zuk.tu_share.module.{IModel, MA11_Model, MA4_Model, MA5_Model, MA7_1_Model, MA7_Model, MA8_Model, MA9_1_Model, MA9_Model}
 import zuk.tu_share.pass.PassFactory
 import zuk.tu_share.pass.PassFactory.engineModuleList
 import zuk.tu_share.send.ISendFactory
@@ -50,7 +50,8 @@ object Main {
         classOf[MA7_1_Model],
 //        classOf[MA8_Model], //不做分析，只做回测
         classOf[MA9_Model],
-        classOf[MA9_1_Model]
+        classOf[MA9_1_Model],
+        classOf[MA11_Model]
       ).map(_.getSimpleName.toUpperCase).toSet
 
       //加载数据
