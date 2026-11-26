@@ -133,6 +133,8 @@ object BackTest {
         val jsonObj = JSONObject.parseObject(l)
         jsonObj
       })
+
+      var moneyWinSum = 0.0
       
       jsonObjList.foreach(jsonObj=>{
         
@@ -155,6 +157,8 @@ object BackTest {
           buyFutureList
         }
         
+        
+        
         if (sellList.size == 0) {
           val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
           val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}【买入】, 【未交易】"
@@ -168,6 +172,8 @@ object BackTest {
           var sell: ModuleHistoryDailyData = null
           var sellFirstWinChangeStr = "失败"
           val step = new AtomicInteger(1) //从买入到卖出间隔多少个交易日，今日买次日卖，至少一个交易日
+          
+          
           sellList.foreach(e => {
             val winChange = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
             if (winChange.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0 
@@ -175,6 +181,26 @@ object BackTest {
             ) {
               sell = e
               sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出，${step.get()}个交易日】" //成功卖出
+              
+              //todo 模拟本金1万块的赢钱 
+              val money = 10000.0
+              val winMoney = if (step.get() == 1) {
+                //如果第一个交易日卖出
+                val openChange = new BigDecimal(sell.open.toFloat - sell.pre_close.toFloat).divide(new BigDecimal(sell.pre_close.toFloat), 4, RoundingMode.UP).floatValue() * 100
+                if (openChange > 1.0) {
+                  money * (1 + openChange / 100)
+                }
+                else {
+                  money * 1.01
+                }
+
+              }
+              else {
+                //如果不是第一个交易日卖出，直接盈利1个点即卖
+                money * 1.01
+              }
+              moneyWinSum = moneyWinSum + winMoney
+              
             }
             
             if(sell == null){
@@ -206,7 +232,7 @@ object BackTest {
       val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(count.get()), 4, RoundingMode.UP)
       //胜率保存到properties中
       Dataset_module_history_rtk_dir.getProperties().put(clsName.toUpperCase, victoryRate.toString)
-      val line = s"${clsName}胜率：${victoryRate}, ${iModel.desc()}"
+      val line = s"${clsName}胜率：${victoryRate}, ${iModel.desc()}，${moneyWinSum}"
       lines += line
       println(line)
 
