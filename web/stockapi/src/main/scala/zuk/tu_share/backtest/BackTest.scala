@@ -135,6 +135,7 @@ object BackTest {
       })
 
       var moneyWinSum = 0.0
+      var moneyFaultSum = 0.0
       
       jsonObjList.foreach(jsonObj=>{
         
@@ -190,10 +191,6 @@ object BackTest {
           })
 
           if (sell != null) {
-            //记录成功的
-            victoryStockList += sell
-            jsonObj.put("status", "成功")
-
             //todo 模拟本金1万块的赢钱 
             val money = 10000.0
             val winMoney = if (step.get() == 1) {
@@ -211,11 +208,19 @@ object BackTest {
               //如果不是第一个交易日卖出，直接盈利1个点即卖
               money * 1.01
             }
+            sellFirstWinChangeStr = sellFirstWinChangeStr + s", ${winMoney}"
             moneyWinSum = moneyWinSum + winMoney
+
+
+            //记录成功的
+            victoryStockList += sell
+            jsonObj.put("status", "成功")
           }
           else {
+            sellFirstWinChangeStr = sellFirstWinChangeStr + s", -1000"
+            moneyFaultSum = moneyFaultSum + 1000.0 //跌超10个点卖出
+            
             jsonObj.put("status", "失败")
-            moneyWinSum = moneyWinSum - 1000.0 //跌超10个点卖出
           }
 
           val ok = if (sell != null) "" else "X"
@@ -232,7 +237,7 @@ object BackTest {
       val victoryRate = new BigDecimal(victoryStockList.size).divide(new BigDecimal(count.get()), 4, RoundingMode.UP)
       //胜率保存到properties中
       Dataset_module_history_rtk_dir.getProperties().put(clsName.toUpperCase, victoryRate.toString)
-      val line = s"${clsName}胜率：${victoryRate}, ${iModel.desc()}，${moneyWinSum}"
+      val line = s"${clsName}胜率：${victoryRate}, ${iModel.desc()}，攒${moneyWinSum}，亏${moneyFaultSum}"
       lines += line
       println(line)
 
@@ -255,6 +260,8 @@ object BackTest {
     })
     
   }
+  
+ 
 
   /**
    * 保存增量分析的结果集
