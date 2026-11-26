@@ -286,7 +286,7 @@ object BackTest {
       -1000.000
     }
 
-    new BigDecimal(earnMoney).setScale(3, RoundingMode.UP).floatValue()
+    new BigDecimal(earnMoney).setScale(2, RoundingMode.UP).floatValue()
   }
 
 
