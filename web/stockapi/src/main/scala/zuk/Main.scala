@@ -36,7 +36,7 @@ object Main {
       BackTest.fullBacktest(map)
       
       println("增量回测")
-      BackTest.incrementBacktest(map)
+//      BackTest.incrementBacktest(map)
 
       System.exit(1)
     }
