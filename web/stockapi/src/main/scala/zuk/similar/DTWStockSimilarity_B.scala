@@ -217,7 +217,7 @@ object DTWStockSimilarity_B {
       ls
     }
     
-    println(s"全地形区间:${ls.last.date} 至 ${ls.head.date}")
+//    println(s"全地形区间:${ls.last.date} 至 ${ls.head.date}")
     
     for (i <- 0 until ls.size - 1) {
       val cur = ls(i)
