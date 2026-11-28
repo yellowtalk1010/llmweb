@@ -59,13 +59,16 @@ object SimilartyUtil {
       val bar = tp2._1
       val f = bar.feature
       val i = tp2._2
-      if(ParseCammandParam.param.back){ println(f"${bar.stockCode}  ${bar.stockName}  ${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%") }
+      if(ParseCammandParam.param.back){ 
+        //如果回测，则打印出来，引擎做分析的时候，不处理
+        println(f"${bar.stockCode}  ${bar.stockName}  ${bar.date}  ${f.returnRate * 100}%6.2f%%  ${f.volumeChange * 100}%6.2f%%  ${f.amplitude * 100}%6.2f%%  ${f.bodyRatio * 100}%6.2f%%") 
+      }
     }
 
     // 2. 模拟全市场
     val allStocks: Map[String, Seq[Bar]] = Dataset_all_stocks_csv_file.getTsStockList
       .map(e => {
-        e.ts_code -> DTWStockSimilarity_B.getAllBars(e.ts_code)
+        e.ts_code -> DTWStockSimilarity_B.getAllBars(e.ts_code, trade_date)
       }).toMap.filter(_._2.size > 10)
 
     // 3. 两种写法

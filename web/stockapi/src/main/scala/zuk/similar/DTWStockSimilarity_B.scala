@@ -182,14 +182,19 @@ object DTWStockSimilarity_B {
 
   /***
    * 获取全量图形
+   * 
    * @param stockCode
+   * @param tradeDate 获取小于交易日期的全量历史日期 
+   * @param range 范围120，区间仅限制在最近的120个交易日中
    * @return
    */
-  def getAllBars(stockCode: String): Seq[Bar] = {
+  def getAllBars(stockCode: String, tradeDate: String, range: Int = 120): Seq[Bar] = {
     if(Dataset_module_history_rtk_dir.getDataForSelect(stockCode)==null || Dataset_module_history_rtk_dir.getDataForSelect(stockCode).size == 0){
       return List.empty
     }
-    val ls = Dataset_module_history_rtk_dir.getDataForSelect(stockCode).map(e=>{
+    var ls = Dataset_module_history_rtk_dir.getDataForSelect(stockCode).filter(e=>{
+      e.trade_date.toFloat < tradeDate.toFloat
+    }).map(e=>{
       val bar = Bar(
         e.trade_date,
         e.open.toDouble,
@@ -205,6 +210,13 @@ object DTWStockSimilarity_B {
       bar
     })
 
+    ls = if(ls.size > range) {
+      ls.take(range)
+    }
+    else {
+      ls
+    }
+    
     for (i <- 0 until ls.size - 1) {
       val cur = ls(i)
       val prev = ls(i + 1)
