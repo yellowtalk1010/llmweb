@@ -139,82 +139,91 @@ object BackTest {
       var moneyFaultSum = 0.0 //总亏损
       val buyDateList = new ListBuffer[String]
 
-      jsonObjList.foreach(jsonObj=>{
-        
+      jsonObjList.foreach(jsonObj=> {
+
         val stockType = jsonObj.get("stockType").asInstanceOf[String]
         val stockCode = jsonObj.get("stockCode").asInstanceOf[String]
         val stockName = jsonObj.get("stockName").asInstanceOf[String]
         val tradedate = jsonObj.get("tradedate").asInstanceOf[String]
-        
+
         val dailyList = map.get(stockCode).get
         //todo 寻找买点
-        val buy = dailyList.filter(_.trade_date.equals(tradedate)).head
-        buyDateList += buy.trade_date //记录购买日期
-        
-        val buy_tsStock = Dataset_all_stocks_csv_file.getTsStock(buy.ts_code)
-        val buyFutureList = dailyList.filter(_.trade_date.toLong > buy.trade_date.toLong).sortBy(_.trade_date.toLong) //倒序，从小到大
-        //todo 寻找回测的卖点列表
-        val sellList = if (buyFutureList.size >= iModel.backTestStep) {
-          //如果未来长度大于模型设定的回测天数
-          buyFutureList.take(iModel.backTestStep)
-        }
-        else {
-          buyFutureList
-        }
-
-
-
-        if (sellList.size == 0) {
-          val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
-          val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}【买入】, 【未交易】"
-          lines += line
-          jsonObj.put("status", "") //未处理
-        }
-        else {
-
-          count.incrementAndGet()
-          
-          var sell: ModuleHistoryDailyData = null
-          var sellFirstWinChangeStr = "失败"
-          val step = new AtomicInteger(1) //从买入到卖出间隔多少个交易日，今日买次日卖，至少一个交易日
-
-
-          sellList.foreach(e => {
-            val winChange = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
-            if (winChange.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0 
-              && sell == null
-            ) {
-              sell = e
-              sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出，${step.get()}个交易日】" //成功卖出
-            }
-            
-            if(sell == null){
-              step.incrementAndGet()
-            }
-            
-          })
-
-          val winMoney = this.earnMoney(step.get(), buy, sell)
-
-          sellFirstWinChangeStr = sellFirstWinChangeStr + s", ${winMoney}"
-
-          if (sell != null) {
-            moneyWinSum = moneyWinSum + winMoney
-            //记录成功的
-            victoryStockList += sell
-            jsonObj.put("status", "成功")
+        val buylist = dailyList.filter(_.trade_date.equals(tradedate))
+        if (buylist.size > 0) {
+ 
+  
+          val buy = buylist.head
+  
+  
+          buyDateList += buy.trade_date //记录购买日期
+  
+          val buy_tsStock = Dataset_all_stocks_csv_file.getTsStock(buy.ts_code)
+          val buyFutureList = dailyList.filter(_.trade_date.toLong > buy.trade_date.toLong).sortBy(_.trade_date.toLong) //倒序，从小到大
+          //todo 寻找回测的卖点列表
+          val sellList = if (buyFutureList.size >= iModel.backTestStep) {
+            //如果未来长度大于模型设定的回测天数
+            buyFutureList.take(iModel.backTestStep)
           }
           else {
-            moneyFaultSum = moneyFaultSum + winMoney //跌超10个点卖出
-            jsonObj.put("status", "失败")
+            buyFutureList
           }
-
-          val ok = if (sell != null) "" else "X"
-
-          val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
-          val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}, 【买入】, ${sellFirstWinChangeStr}, ${ok}"
-          lines += line
-
+  
+  
+          if (sellList.size == 0) {
+            val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
+            val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}【买入】, 【未交易】"
+            lines += line
+            jsonObj.put("status", "") //未处理
+          }
+          else {
+  
+            count.incrementAndGet()
+  
+            var sell: ModuleHistoryDailyData = null
+            var sellFirstWinChangeStr = "失败"
+            val step = new AtomicInteger(1) //从买入到卖出间隔多少个交易日，今日买次日卖，至少一个交易日
+  
+  
+            sellList.foreach(e => {
+              val winChange = new BigDecimal(e.high.toFloat - buy.close.toFloat).divide(new BigDecimal(buy.close), 4, RoundingMode.UP).multiply(new BigDecimal(100))
+              if (winChange.compareTo(new BigDecimal(ParseCammandParam.param.wrate)) >= 0
+                && sell == null
+              ) {
+                sell = e
+                sellFirstWinChangeStr = s"${sell.trade_date} 【${winChange}，卖出，${step.get()}个交易日】" //成功卖出
+              }
+  
+              if (sell == null) {
+                step.incrementAndGet()
+              }
+  
+            })
+  
+            val winMoney = this.earnMoney(step.get(), buy, sell)
+  
+            sellFirstWinChangeStr = sellFirstWinChangeStr + s", ${winMoney}"
+  
+            if (sell != null) {
+              moneyWinSum = moneyWinSum + winMoney
+              //记录成功的
+              victoryStockList += sell
+              jsonObj.put("status", "成功")
+            }
+            else {
+              moneyFaultSum = moneyFaultSum + winMoney //跌超10个点卖出
+              jsonObj.put("status", "失败")
+            }
+  
+            val ok = if (sell != null) "" else "X"
+  
+            val name = s"<a href='${buy_tsStock.eastmoneyURL}'>${buy.name}</a>"
+            val line = s"${stockType}, ${buy.ts_code}, ${name}, ${buy.trade_date}, 【买入】, ${sellFirstWinChangeStr}, ${ok}"
+            lines += line
+  
+          }
+        }
+        else {
+          println(s"异常>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${stockType}, ${stockCode}, ${stockName}, ${tradedate}")
         }
         
       })
