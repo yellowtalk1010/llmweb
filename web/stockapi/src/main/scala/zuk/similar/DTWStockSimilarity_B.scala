@@ -193,7 +193,7 @@ object DTWStockSimilarity_B {
       return List.empty
     }
     var ls = Dataset_module_history_rtk_dir.getDataForSelect(stockCode).filter(e=>{
-      e.trade_date.toFloat < tradeDate.toFloat
+      e.trade_date.toFloat <= tradeDate.toFloat
     }).map(e=>{
       val bar = Bar(
         e.trade_date,
@@ -216,6 +216,8 @@ object DTWStockSimilarity_B {
     else {
       ls
     }
+    
+    println(s"全地形区间:${ls.last.date} 至 ${ls.head.date}")
     
     for (i <- 0 until ls.size - 1) {
       val cur = ls(i)
