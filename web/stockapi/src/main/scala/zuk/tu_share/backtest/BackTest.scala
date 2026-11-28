@@ -46,7 +46,9 @@ object BackTest {
     classOf[MA8_Model], //这个只做回测，不做引擎分析
     classOf[MA9_1_Model],
     classOf[MA10_Model], //这个只做回测，不做引擎分析
-    classOf[MA11_Model]
+    classOf[MA11_Model],
+//    classOf[MA7_Model],
+//    classOf[MA9_Model]
   ).map(_.getSimpleName.toUpperCase).toSet
 
   /***
@@ -65,7 +67,7 @@ object BackTest {
       //全量回测
       for (i <- 0 to ParseCammandParam.param.back_step) {
         val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
-        println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${fullCount.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
+        println(s"全量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共 ${stockDataList.size} 条, 进度= ${fullCount.incrementAndGet()}/${map.size * (ParseCammandParam.param.back_step + 1)}")
 
         val fullBacktestModules = PassFactory.engineModuleList().filter(m => fullBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
         if(fullBacktestModules.size > 0){
@@ -87,7 +89,6 @@ object BackTest {
    * @param map
    */
   def incrementBacktest(map: mutable.HashMap[String, List[ModuleHistoryDailyData]]): Unit = {
-
     
     val incrementBacktestFinishModules = ListBuffer[IModel]()
     val incrementCount = new AtomicInteger(0)
@@ -98,7 +99,7 @@ object BackTest {
       val LEN = 5 //增量分析最近10个交易日
       for (i <- 0 to LEN) {
         val stockDataList = tp2._2.slice(i, tp2._2.size) //股票数据集
-        println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共${stockDataList.size}条, 进度= ${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
+        println(s"增量回测${stockCode}, ${stockName}, ${stockDataList.last.trade_date} 至 ${stockDataList.head.trade_date}, 共 ${stockDataList.size} 条, 进度= ${incrementCount.incrementAndGet()}/${map.size * (LEN + 1)}")
  
         val incrementBacktestModules = PassFactory.engineModuleList().filter(m => incrementBacktestModNameSet.map(_.toUpperCase).contains(m.getClass.getSimpleName.toUpperCase))
         if(incrementBacktestModules.size > 0){
